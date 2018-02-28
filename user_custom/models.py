@@ -50,3 +50,4 @@ class UserProfile(models.Model):
     sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='O')
     age = models.PositiveSmallIntegerField(_('age'), blank=True, null=True)
     profile_pic = models.ImageField(_('profile picture'))  # FIXME: upload_to
+    updated_on = models.DateTimeField(auto_now=True)

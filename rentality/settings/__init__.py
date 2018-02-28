@@ -43,6 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'user_custom',
+    'landlord',
+    'tenant',
+    'house',
+    'essentials',
 ]
 
 MIDDLEWARE = [

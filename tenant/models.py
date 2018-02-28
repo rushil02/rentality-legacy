@@ -1,16 +1,41 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField, DateRangeField
 from django.utils.translation import gettext_lazy as _
 
 
-class Tenant(models.Model):
+class TenantProfile(models.Model):
+    """
+        Information particular to Tenant
+    """
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class HousePreference(models.Model):
+    tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.CASCADE)
 
     ADDITIONAL_TENANTS_INFORMATION = ['Name', 'Contact', 'Gender', 'Age']
     additional_tenants = JSONField()
 
+    max_budget = models.PositiveIntegerField()
+    locations = models.ManyToManyField('essentials.Location')
+    move_in_date = DateRangeField(null=True, blank=True)
+    move_out_date = DateRangeField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    tags = models.ManyToManyField('house.Tags')
+
+    PROPERTY_TYPE = (
+        ('R', 'Room'),
+        ('F', 'Full House'),
+        ('A', 'Any')
+    )
+
+    property_type = models.CharField(max_length=1, default='A', choices=PROPERTY_TYPE)
+    description = models.TextField(blank=True)
+
+    # TODO: use for additional_tenants
     def add_tenants(self, tenant_list):  # FIXME: Add data with validation
         keys = self.ADDITIONAL_TENANTS_INFORMATION
         for tenant in tenant_list:
