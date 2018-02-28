@@ -37,6 +37,7 @@ class User(AbstractUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     contact_num = models.CharField(
+        _('contact number'),
         blank=True,
         max_length=15,
         # validators=[contact_num_validator]  FIXME: No validator. Need custom validator
@@ -46,6 +47,6 @@ class UserProfile(models.Model):
         ('F', 'Female'),
         ('O', 'Other')
     )
-    sex = models.CharField(blank=True, max_length=1, choices=SEX_TYPE, default='O')
-    age = models.PositiveSmallIntegerField(blank=True, null=True)
-    profile_pic = models.ImageField()  # FIXME: upload_to
+    sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='O')
+    age = models.PositiveSmallIntegerField(_('age'), blank=True, null=True)
+    profile_pic = models.ImageField(_('profile picture'))  # FIXME: upload_to
