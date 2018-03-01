@@ -6,7 +6,7 @@ class House(models.Model):
     # TODO: add lazy verbose
     landlord = models.ForeignKey('landlord.LandlordProfile', on_delete=models.CASCADE)
     address = models.TextField()
-    location = models.ManyToManyField('essentials.Location')
+    location = models.ForeignKey('essentials.Location', on_delete=models.PROTECT)
 
     ROOM_TYPE = (
         ('A', 'Some room A')
