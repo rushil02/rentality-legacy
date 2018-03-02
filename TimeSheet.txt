@@ -1,3 +1,4 @@
 Date        Day         Check-in        Check-out
 29/02/18    Wednesday   ------- 5 hours ---------
 01/03/18    Thursday    15.48           16.20
+02/03/18    Friday      12.15
