@@ -1,7 +1,20 @@
+import os
+
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+class CustomUserManager(UserManager):
+    def get_sentinel_user(self):
+        return self.get_queryset().get_or_create(
+            email='deleted@deleted.del',
+            defaults={
+                'username': 'deleted',
+                'password': os.environ.get('DELETED_USER_PASS')
+            }
+        )[0]
 
 
 class User(AbstractUser):
@@ -33,6 +46,8 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    objects = CustomUserManager()
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -49,5 +64,5 @@ class UserProfile(models.Model):
     )
     sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='O')
     age = models.PositiveSmallIntegerField(_('age'), blank=True, null=True)
-    profile_pic = models.ImageField(_('profile picture'))  # FIXME: upload_to
+    profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True)  # FIXME: upload_to
     updated_on = models.DateTimeField(auto_now=True)

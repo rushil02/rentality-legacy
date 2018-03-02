@@ -1,15 +1,28 @@
 from django.contrib.postgres.fields import DateRangeField
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class House(models.Model):
+    """
+    tags -> contain many-to-many relation with model 'Tags' containing 'who-is-welcomed [rules]' or facility
+    """
     # TODO: add lazy verbose
-    landlord = models.ForeignKey('landlord.LandlordProfile', on_delete=models.CASCADE)
+    landlord = models.ForeignKey(
+        'landlord.LandlordProfile',
+        on_delete=models.CASCADE,
+        related_name='houses',
+        verbose_name=_('property owner')
+    )
     address = models.TextField()
-    location = models.ForeignKey('essentials.Location', on_delete=models.PROTECT)
+    location = models.ForeignKey(
+        'essentials.Location',
+        on_delete=models.PROTECT,
+        verbose_name=_('location')
+    )
 
     ROOM_TYPE = (
-        ('A', 'Some room A')
+        ('A', 'Some room A'),
     )
     room_type = models.CharField(max_length=1, choices=ROOM_TYPE)
 
@@ -36,10 +49,11 @@ class House(models.Model):
 
     other_people = models.PositiveSmallIntegerField(default=0)
     rent = models.PositiveSmallIntegerField(default=0)
-    facilities = models.ManyToManyField('house.Tags')  # TODO: Django level DB check on tag
+    tags = models.ManyToManyField('house.Tags')
     availability = DateRangeField()
     description = models.TextField(blank=True)
-    who_is_welcomed = models.ManyToManyField('house.Tags')
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
 
 class Image(models.Model):
@@ -61,3 +75,16 @@ class Tags(models.Model):
     tag_type = models.CharField(max_length=1, choices=TAG_TYPE)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+
+class Application(models.Model):
+    house = models.OneToOneField('house.House', on_delete=models.PROTECT)
+    tenant = models.OneToOneField('tenant.TenantProfile', on_delete=models.PROTECT)
+    landlord = models.OneToOneField('landlord.LandlordProfile', on_delete=models.PROTECT)
+    rent = models.PositiveIntegerField()
+    date = DateRangeField(verbose_name=_('stay dates'))
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('house', 'tenant', 'landlord')
