@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    <button type="submit" name="login_form">Save changes</button>
+</form>
+
+<form method="post">
+    {% csrf_token %}
+    {{ sign_up_form.as_p }}
+    <button type="submit" name="sign_up_form">Save changes</button>
+</form>
+
+</body>
+</html>

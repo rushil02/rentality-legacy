@@ -11,6 +11,9 @@ class TenantProfile(models.Model):
     """
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user
+
 
 class HousePreference(models.Model):
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.CASCADE)
@@ -24,7 +27,7 @@ class HousePreference(models.Model):
     move_out_date = DateRangeField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField('house.Tags')
+    tags = models.ManyToManyField('house.Tag')
 
     PROPERTY_TYPE = (
         ('R', 'Room'),

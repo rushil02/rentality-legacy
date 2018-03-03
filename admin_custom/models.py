@@ -62,7 +62,12 @@ class ActivityLog(models.Model):
         null=True, blank=True
     )
 
-    content_type = models.ForeignKey(ContentType, null=True, blank=True, related_name='entity')
+    content_type = models.ForeignKey(
+        ContentType,
+        null=True, blank=True,
+        related_name='entity',
+        on_delete=models.SET_NULL
+    )
     object_id = models.PositiveIntegerField(null=True, blank=True)
     entity = GenericForeignKey('content_type', 'object_id')
 

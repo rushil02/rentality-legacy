@@ -18,7 +18,6 @@ class CustomUserManager(UserManager):
 
 
 class User(AbstractUser):
-    email_validator = None  # FIXME: for google
     username = models.CharField(
         _('username'),
         max_length=150,
@@ -28,7 +27,6 @@ class User(AbstractUser):
     email = models.EmailField(
         _('email address'),
         unique=True,
-        # validators=[email_validator],  FIXME: works with django default, add for gmail
     )
 
     USER_TYPE = (
@@ -66,3 +64,6 @@ class UserProfile(models.Model):
     age = models.PositiveSmallIntegerField(_('age'), blank=True, null=True)
     profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True)  # FIXME: upload_to
     updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user

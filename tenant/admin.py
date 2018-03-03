@@ -1,3 +1,4 @@
 from django.contrib import admin
+from tenant.models import TenantProfile
 
-# Register your models here.
+admin.site.register(TenantProfile)

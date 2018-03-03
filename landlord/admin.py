@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from landlord.models import LandlordProfile
+
+admin.site.register(LandlordProfile)

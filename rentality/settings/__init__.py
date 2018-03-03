@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'user_custom',
+    'admin_custom',
+    'staff',
     'landlord',
     'tenant',
     'house',

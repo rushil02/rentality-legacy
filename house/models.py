@@ -49,11 +49,14 @@ class House(models.Model):
 
     other_people = models.PositiveSmallIntegerField(default=0)
     rent = models.PositiveSmallIntegerField(default=0)
-    tags = models.ManyToManyField('house.Tags')
+    tags = models.ManyToManyField('house.Tag')
     availability = DateRangeField()
     description = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s - %s [%s]" % (self.landlord, self.location, self.address )
 
 
 class Image(models.Model):
@@ -63,8 +66,11 @@ class Image(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return "%s" % self.image.name
 
-class Tags(models.Model):
+
+class Tag(models.Model):
     verbose = models.CharField(max_length=50)
 
     TAG_TYPE = (
@@ -76,15 +82,20 @@ class Tags(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.verbose
+
 
 class Application(models.Model):
     house = models.OneToOneField('house.House', on_delete=models.PROTECT)
     tenant = models.OneToOneField('tenant.TenantProfile', on_delete=models.PROTECT)
-    landlord = models.OneToOneField('landlord.LandlordProfile', on_delete=models.PROTECT)
     rent = models.PositiveIntegerField()
     date = DateRangeField(verbose_name=_('stay dates'))
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return "'%s' applied for %s" % (self.tenant, self.house)
+
     class Meta:
-        unique_together = ('house', 'tenant', 'landlord')
+        unique_together = ('house', 'tenant')
