@@ -1,5 +1,6 @@
-Date        Day         Check-in        Check-out
-29/02/18    Wednesday   ------- 5 hours ---------
-01/03/18    Thursday    15.48           16.20
-02/03/18    Friday      12.15           14.45
-03/03/18    Saturday    18.30           21.45
+Date        Day         Check-in        Check-out       Time
+29/02/18    Wednesday   ------- 5 hours ---------       5.00
+01/03/18    Thursday    15.48           16.20           0.32
+02/03/18    Friday      12.15           14.45           2.30
+03/03/18    Saturday    18.30           21.45           3.15
+04/03/18    Sunday      18.40
