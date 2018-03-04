@@ -1,6 +1,17 @@
+import os
+import time
+import uuid
+
 from django.contrib.postgres.fields import DateRangeField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+def get_file_path(instance, filename):
+    path = 'house_images/' + time.strftime('/%Y/%m/%d/')
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.uuid, ext)
+    return os.path.join(path, filename)
 
 
 class House(models.Model):
@@ -56,12 +67,13 @@ class House(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "%s - %s [%s]" % (self.landlord, self.location, self.address )
+        return "%s - %s [%s]" % (self.landlord, self.location, self.address)
 
 
 class Image(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)
-    image = models.ImageField()  # FIXME: upload_to
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    image = models.ImageField(upload_to=get_file_path)
     description = models.CharField(max_length=250, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
