@@ -160,13 +160,14 @@ MEDIA_URL = '/media/'
 #     ]
 # }
 
-SITE_ID = 1
+# FIX site id for all auth
+SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'
 
 # Django all-auth
 # http://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = 'custom_package.all_auth_adapter.CustomAccountAdapter'
+# ACCOUNT_ADAPTER = 'custom_package.all_auth_adapter.CustomAccountAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Login field
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # User has to click a button on the redirected page
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL  # Redirect to '/'

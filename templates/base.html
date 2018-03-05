@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block head_title %}{% endblock head_title %}</title>
+</head>
+<body>
+
+{% block body %}
+    {% block content %}
+    {% endblock content %}
+{% endblock body %}
+
+{% block extra_body %}
+{% endblock extra_body %}
+
+{% if not request.session.django_timezone %}
+    {% include 'utils/timezone.html' %}
+{% endif %}
+</body>
+</html>

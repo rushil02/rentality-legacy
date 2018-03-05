@@ -4,19 +4,25 @@ from django.db import transaction
 from django.contrib.sites.models import Site
 
 from house.models import Tag
+from django.conf import settings
 
 
-def socail_apps_info():  # TODO: Update method with actual keys
+def social_apps_info():  # TODO: Update method with actual keys
     """ Creates OAuth api token information for django-allauth """
 
-    site_obj, s_created = Site.objects.get_or_create(domain='rentality.com', name='Opuslog')
-    fb_obj, fb_created = SocialApp.objects.get_or_create(provider='facebook', name='Facebook',
-                                                         secret='some-key', client_id='some-id')
-    fb_obj.sites.add(site_obj)
+    site_obj, s_created = Site.objects.get_or_create(domain='rentality.com', name='Rentality')
 
-    gg_obj, gg_created = SocialApp.objects.get_or_create(provider='google', name='Google',
-                                                         secret='some-key', client_id='some-id')
-    gg_obj.sites.add(site_obj)
+    providers = settings.OAUTH_DETAILS
+
+    for provider in providers:
+        obj, created = SocialApp.objects.get_or_create(
+            provider=provider,
+            name=providers[provider]['verbose'],
+            secret=providers[provider]['secret'],
+            client_id=providers[provider]['client_id']
+        )
+
+        obj.sites.add(site_obj)
 
 
 def create_tags():  # TODO: Set all tags here
@@ -34,7 +40,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             with transaction.atomic():
-                socail_apps_info()
+                social_apps_info()
                 create_tags()
         except Exception as e:
             print(e)

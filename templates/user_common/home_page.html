@@ -8,13 +8,21 @@
 <form method="post">
     {% csrf_token %}
     {{ login_form.as_p }}
-    <button type="submit" name="login_form">Save changes</button>
+    <button type="submit">Save changes</button>
 </form>
+{% load socialaccount %}
+
+{#<a href="{% provider_login_url "openid" openid="https://www.google.com/accounts/o8/id" next="/success/url/" %}">Google</a>#}
+<a href="{% provider_login_url "google" %}">Google Login</a>
+<a href="{% provider_login_url "facebook" %}">Facebook Login</a>
+<a href="{% provider_login_url "instagram" %}">Instagram Login</a>
+<a href="{% provider_login_url "twitter" %}">Twitter Login</a>
+<a href="{% provider_login_url "pinterest" %}">Pinterest Login</a>
 
 <form method="post">
     {% csrf_token %}
     {{ sign_up_form.as_p }}
-    <button type="submit" name="sign_up_form">Save changes</button>
+    <button type="submit">Save changes</button>
 </form>
 
 </body>
