@@ -9,17 +9,18 @@ class TenantProfile(models.Model):
     """
         Information particular to Tenant
     """
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tenant')
+    shortlist = models.ManyToManyField('house.House', blank=True)
 
     def __str__(self):
-        return self.user
+        return "%s" % self.user
 
 
 class HousePreference(models.Model):
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.CASCADE)
 
     ADDITIONAL_TENANTS_INFORMATION = ['Name', 'Contact', 'Gender', 'Age']
-    additional_tenants = JSONField()
+    additional_tenants = JSONField(null=True, blank=True)
 
     max_budget = models.PositiveIntegerField()
     locations = models.ManyToManyField('essentials.Location')
@@ -50,3 +51,6 @@ class HousePreference(models.Model):
                     code='invalid',
                     params={'value': tenant},
                 )
+
+    def __str__(self):
+        return "%s" % self.tenant

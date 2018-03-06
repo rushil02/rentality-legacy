@@ -211,3 +211,5 @@ SOCIALACCOUNT_PROVIDERS = \
 #     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
 # }
 OAUTH_DETAILS = get_secret_var('OAUTH_DETAILS')
+
+LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'libs')

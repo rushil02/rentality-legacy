@@ -29,18 +29,6 @@ class User(AbstractUser):
         unique=True,
     )
 
-    USER_TYPE = (
-        ('T', 'Tenant'),
-        ('L', 'Landlord'),
-        ('M', 'Manager'),
-        ('A', 'Admin')
-    )
-    user_type = models.CharField(
-        max_length=1,
-        choices=USER_TYPE,
-        default='T'
-    )
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -66,4 +54,4 @@ class UserProfile(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user
+        return "%s" % self.user
