@@ -10,15 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-# SECRET KEY
-from .secret import *
-
 # BASE DIR
 from .common import *
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = get_secret_var('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -211,3 +210,4 @@ SOCIALACCOUNT_PROVIDERS = \
 #     'reset_password': 'user_custom.forms.CustomResetPasswordForm',
 #     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
 # }
+OAUTH_DETAILS = get_secret_var('OAUTH_DETAILS')
