@@ -159,7 +159,7 @@ MEDIA_URL = '/media/'
 #     ]
 # }
 
-# FIX site id for all auth
+# FIXME: site id for all auth
 SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'

@@ -8,6 +8,10 @@ SECRET_JSON_FILE = os.path.join(BASE_DIR, 'rentality', 'secret_var.json')
 
 
 def get_secret_var(var_name):
-    data = json.load(open(SECRET_JSON_FILE))
+    try:
+        data = json.load(open(SECRET_JSON_FILE))
+    except Exception as e:
+        print("========================\n\nsecret json not found\n\n========================")
+        raise e
     return data[var_name]
 
