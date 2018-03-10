@@ -19,11 +19,11 @@ from django.urls import path, include
 from rest_framework import routers
 from django.conf.urls.static import static
 
-
 router = routers.DefaultRouter()
 
 urlpatterns = [
     path('db/', admin.site.urls),
+    path('pages/', include('django.contrib.flatpages.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('accounts/', include('allauth.urls')),
     path('es/', include('elastic_search.urls')),
