@@ -16,6 +16,10 @@ from user_custom.forms import UserProfileForm, UserCreationForm
 from user_custom.serializers import UserTimezoneSerializer
 
 
+def test_templates(request):
+    return render(request, 'user_common/welcome.html', {})
+
+
 def user_details(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user.userprofile)

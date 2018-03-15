@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    {% include 'utils/navbar/anon_user.html' %}
+
+    <!-- BEGIN HOME SEARCH SECTION -->
+    <section id="home-search-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12" data-animation-direction="from-top" data-animation-delay="50">
+
+                    <h2 class="slider-title">Rentality</h2>
+                    <div class="slider-subtitle">Short to Mid-Term Rental Platform Connecting Global Residents</div>
+                </div>
+
+                <div id="home-search-buttons" class="col-sm-6 col-sm-offset-3" data-animation-direction="from-bottom"
+                     data-animation-delay="250">
+                    <button class="btn btn-default active" id="home_search_properties">Properties</button>
+                    <button class="btn btn-default" id="home_search_tenants">Tenants</button>
+
+                    <form action="" method="GET" id="home_search_form">
+                        <div class="input-group">
+                            <input type="text" placeholder="City, State, Postcode, etc..." name="query" id="home_search"
+                                   class="form-control"/>
+                            <span class="input-group-btn">
+						<button class="btn btn-default" type="submit"><i class="fa fa-search"></i>Search</button>
+					</span>
+                        </div>
+                    </form>
+
+                    {#                     <a href="#" class="advanced-search">Advanced Search</a>#}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END HOME SEARCH SECTION -->
+
+    <!-- BEGIN PROPERTIES SLIDER WRAPPER-->
+    <div class="parallax" data-stellar-background-ratio="0.5" style="background-color: #d0e5e4;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">
+                        Homes</h1>
+
+                    <div id="new-properties-slider" class="owl-carousel carousel-style1 new-properties-slider"
+                         style="margin-bottom: 50px;">
+                        {#                        # for property in recommended_properties#}
+                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
+                            <div class="image">
+                                <a href='/static/img/placeholders/apartment/default.png' class="info">
+                                    <h3>Sample 1</h3>
+                                    <span class="location"></span>
+                                </a>
+                                <img src='/static/img/placeholders/apartment/default.png'
+                                     alt=""/>
+                            </div>
+                            <ul class="amenities">
+                                <li><i class="fa fa-map-marker fa-fw"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="item" data-animation-delay="250">
+                            <div class="image">
+                                <a href='/static/img/placeholders/apartment/default.png' class="info">
+                                    <h3></h3>
+                                    <span class="location"></span>
+                                </a>
+                                <img src='/static/img/placeholders/apartment/default.png'
+                                     alt=""/>
+                            </div>
+                            <ul class="amenities">
+                                <li><i class="fa fa-map-marker fa-fw"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        {#                        # endfor#}
+                    </div>
+
+                    <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">
+                        Tenants</h1>
+
+                    <div id="new-properties-slider2" class="owl-carousel carousel-style1 new-properties-slider">
+                        # for tenant in recommended_tenants
+                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
+                            <div class="image">
+                                <a href="" class="info">
+                                    <h3>tenant.owner.get().name</h3>
+                                    <span class="location">Looking for a place</span>
+                                </a>
+                                # if tenant.profile_photo
+                                <img src="/static/img/placeholders/profile/profile1.png"
+                                     alt=""/>
+                                # else
+                                <img src="/static/img/placeholders/profile/default.png"
+                                     alt=""/>
+                                # endif
+                            </div>
+                            <ul class="amenities">
+                                <li><i class="fa fa-user fa-fw"></i> tenant.owner.get().name</li>
+                                # if tenant.preferred_suburbs
+                                <li><i class="fa fa-search fa-fw"></i>tenant.preferred_suburbs[0]</li>
+                                # else
+                                <li><i class="fa fa-search fa-fw"></i> Canberra</li>
+                                # endif
+                            </ul>
+                        </div>
+                        # endfor
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PROPERTIES SLIDER WRAPPER -->
+
+    <!-- BEGIN CONTENT WRAPPER -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- BEGIN MAIN CONTENT -->
+                <div class="main col-sm-12">
+                    <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">Why List
+                        with Us?</h1>
+
+                    <div class="feature col-xs-12 col-sm-3" data-animation-direction="from-bottom"
+                         data-animation-delay="250">
+                        <i class="fa fa-dollar"></i>
+                        <h3>It's FREE</h3>
+                        <p>Listing on Rentality is FREE.</p>
+                    </div>
+                    <div class="feature col-xs-12 col-sm-3" data-animation-direction="from-bottom"
+                         data-animation-delay="450">
+                        <i class="fa fa-paint-brush"></i>
+                        <h3>Cleaning Service</h3>
+                        <p>A cleaner will clean the property after the tenancy.</p>
+                    </div>
+                    <div class="feature col-xs-12 col-sm-3" data-animation-direction="from-bottom"
+                         data-animation-delay="650">
+                        <i class="fa fa-key"></i>
+                        <h3>Key Drop Off</h3>
+                        <p>We will pick up and drop off the key for free.</p>
+                    </div>
+                    <div class="feature col-xs-12 col-sm-3" data-animation-direction="from-bottom"
+                         data-animation-delay="850">
+                        <i class="fa fa-wrench"></i>
+                        <h3>Maintenance</h3>
+                        <p>We will find a tradesperson to repair and maintenance for you.</p>
+                    </div>
+
+                </div>
+                <!-- END MAIN CONTENT -->
+
+            </div>
+        </div>
+    </div>
+    <!-- END CONTENT WRAPPER -->
+
+
+
+    <!-- BEGIN PARTNERS WRAPPER -->
+    <div class="parallax pattern-bg" data-stellar-background-ratio="0.5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">Create an
+                        account for free</h1>
+
+                    <div id="partners">
+                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
+                            <a href="" class="btn btn-fullcolor">Sign up as a Tenant</a>
+                        </div>
+                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="450">
+                            <a href="" class="btn btn-fullcolor">Sign up as a Landlord</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PARTNERS WRAPPER -->
+{% endblock content %}
+
+
+{% block js_script %}
+
+    <script>
+        $('#home_search_properties').click(function () {
+            $('#home_search_form').attr('action', "/url/")
+        });
+        $('#home_search_tenants').click(function () {
+            $('#home_search_form').attr('action', "/url/")
+        });
+    </script>
+
+{% endblock %}

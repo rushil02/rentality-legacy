@@ -1,0 +1,75 @@
+{% extends 'utils/navbar/base.html' %}
+
+{% block user_menu %}
+
+
+    <li>
+        <a href="">
+            <span class="fa fa-fw fa-star-o"></span>
+            <span style="
+      position: absolute;
+      top: 32px;
+      left: 0;
+      font-size: 14px;
+      right: 0;
+      text-align: center;
+  ">Shortlist</span>
+        </a>
+    </li>
+
+
+
+    <li>
+        <a href="">
+            <span class="fa fa-fw fa-bell-o"></span>
+            <span style="
+      position: absolute;
+      top: 32px;
+      left: 0;
+      font-size: 14px;
+      right: 0;
+      text-align: center;
+  ">Notifications</span>
+            <span class="label label-danger">10</span>
+        </a>
+    </li>
+    <li>
+        <a href="">
+            <span class="fa fa-fw fa-comment-o"></span>
+            <span style="
+      position: absolute;
+      top: 32px;
+      left: 0;
+      font-size: 14px;
+      right: 0;
+      text-align: center;
+  ">Messages</span>
+
+            <span class="label label-danger">10</span>
+        </a>
+    </li>
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" data-hover="dropdown">
+            <span class="fa fa-fw fa-user-o"></span>
+            <span style="
+      position: absolute;
+      top: 32px;
+      left: 0;
+      font-size: 14px;
+      right: 0;
+      text-align: center;
+  ">current_user.name</span>
+            <!-- <b class="caret"></b> -->
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href=""><span class="fa fa-fw fa-dashboard"></span> Dashboard</a></li>
+            <li><a href=""><span class="fa fa-fw fa-user"></span> My Profile</a></li>
+            <li><a href=""><span class="fa fa-fw fa-cogs"></span> Account Settings</a></li>
+            <li class="divider"></li>
+            <li><a href=""><span class="fa fa-fw fa-key"></span> Admin</a></li>
+            <li class="divider"></li>
+            <li><a href=""><span class="fa fa-fw fa-sign-out"></span> Sign out</a></li>
+        </ul>
+    </li>
+
+{% endblock %}

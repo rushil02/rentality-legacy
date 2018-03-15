@@ -1,0 +1,27 @@
+<header id="header">
+
+    <div id="nav-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <a href="/" class="nav-logo"><img src="/static/theme/images/logo6.png" alt="Rentality"/></a>
+
+                    <!-- BEGIN MAIN MENU -->
+                    <nav class="navbar">
+                        <button id="nav-mobile-btn"><i class="fa fa-bars"></i></button>
+
+                        <ul class="nav navbar-nav">
+                            {% block user_menu %}
+
+                            {% endblock %}
+
+                        </ul>
+
+                    </nav>
+                    <!-- END MAIN MENU -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
