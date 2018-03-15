@@ -38,6 +38,7 @@ jps | grep Elasticsearch
 
 
 sudo apt-get install python3
+sudo pip install --upgrade pip
 
 env_path="$dir/env_py3"
 
@@ -45,6 +46,8 @@ sudo apt-get install python3-venv
 
 python3 -m venv "$env_path"
 source ${env_path}/bin/activate
+
+pip install wheel
 
 pip install -r requirements.txt
 
