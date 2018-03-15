@@ -25,9 +25,49 @@
 {% block extra_body %}
 {% endblock extra_body %}
 
+{% block footer %}
+    <footer id="footer">
+
+        <!-- BEGIN COPYRIGHT -->
+        <div id="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        {% block footer-additional-content %}
+
+                        {% endblock %}
+                        &copy; 2018 Rentality. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END COPYRIGHT -->
+
+    </footer>
+
+{% endblock %}
 {% if not request.session.django_timezone %}
     {#    {% include 'timezone.html' %}#}
 {% endif %}
+
+
+{% block base_scripts %}
+    <script src="/static/theme/js/common.js"></script>
+    <script src="/static/theme/js/jquery.prettyPhoto.js"></script>
+    <script src="/static/theme/js/owl.carousel.min.js"></script>
+    <script src="/static/theme/js/chosen.jquery.min.js"></script>
+    <!-- <script src="/static/theme/js/infobox.min.js"></script> -->
+
+    <!-- Template Scripts -->
+    <script src="/static/theme/js/variables.js"></script>
+    <script src="/static/theme/js/scripts.js"></script>
+
+    <!-- Agencies list -->
+    <script src="/static/theme/js/agencies.js"></script>
+
+
+{% endblock %}
+
 {% block js_script %}
 
 {% endblock js_script %}

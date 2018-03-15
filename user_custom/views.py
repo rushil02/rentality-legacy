@@ -12,6 +12,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from house.models import House
+from tenant.models import TenantProfile, HousePreference
 from user_custom.forms import UserProfileForm, UserCreationForm
 from user_custom.serializers import UserTimezoneSerializer
 
@@ -45,12 +47,18 @@ def redirect_user(opt):
 
 
 def check_user(request):  # FIXME
-    user = request.user
-    if user.is_active:
-        return redirect('/te')
-        # return redirect_user(user.user_type)
+    if request.user.is_authenticated:
+        return welcome(request)
     else:
-        logout(request)
+        return welcome(request)
+
+
+def welcome(request):
+    context = {
+        'house_pref': HousePreference.objects.all().order_by('-id')[:5],
+        'houses': House.objects.all().order_by('-id')[:5]
+    }
+    return render(request, 'user_common/welcome.html', context)
 
 
 class MainPage(View):
