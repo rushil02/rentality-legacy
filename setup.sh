@@ -5,11 +5,12 @@ echo "*Starting setup*"
 
 dir="$(dirname $(pwd))"
 
+sudo apt-get update
+
 read -p "Install PostgreSQL? [y/n]" opt
 
 if [ "$opt" = "y" ]; then
     echo Installing Resources
-    sudo apt-get update
     sudo apt-get install postgresql postgresql-contrib
 else
     echo "PostgreSQL not installed via script"
@@ -20,12 +21,13 @@ sudo -u postgres createdb rentality
 sudo -u postgres psql -U postgres -d postgres -c "alter user root with password 'root';"
 sudo -u postgres psql -U postgres -d postgres -c "grant all privileges on database rentality to root;"
 
+sudo apt-get install wget unzip python3
 
 lib_path="$dir/libs"
 
 zip_path="$lib_path/_zips"
 
-mkdir -p zip_path
+mkdir -p ${zip_path}
 
 es_file_path="$zip_path/elasticsearch-6.2.2.zip"
 
@@ -37,7 +39,6 @@ ${lib_path}/elasticsearch-6.2.2/bin/elasticsearch -d
 jps | grep Elasticsearch
 
 
-sudo apt-get install python3
 sudo pip install --upgrade pip
 
 env_path="$dir/env_py3"
