@@ -48,9 +48,9 @@ sudo apt-get install python3-venv
 python3 -m venv "$env_path"
 source ${env_path}/bin/activate
 
-pip install wheel
+pip3 install wheel
 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 python manage.py makemigrations
 python manage.py migrate

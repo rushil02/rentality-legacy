@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block header-nav %}
+    {% include 'utils/navbar/auth_user.html' %}
+
+{% endblock %}
+
+
+{% block in-container-content %}
+    <div class="main col-sm-8 col-md-9">
+
+
+        <!-- BEGIN ADVANCED SEARCH -->
+        <h1 class="property-title">Listing
+        </h1>
+
+        <div class="form-group">
+            <div class="row center">
+                <a href="{% url 'user:sel_listing' %}">
+                    <button type="button" class="btn btn-default-color">List my Property</button>
+                </a>
+            </div>
+            <br>
+            <div class="text-muted center">OR</div>
+            <br>
+            <div class="row center">
+                <a href="{% url 'user:home_page' %}">
+                    <button type="button" class="btn btn-default-color">List me as a Tenant</button>
+                </a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block in-container-content %}
+    <div class="row">
+
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="main col-xs-12">
+
+            <h1>Shortlist</h1>
+
+
+            {% if houses %}
+
+
+
+                <h3 class="section-title">Houses</h3>
+
+                <div id="property-listing" class="grid-style1 clearfix">
+                    <div class="row">
+                        {% for house in houses %}
+                            <div class="item col-sm-4"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="{% url 'house:info' house.uuid %}">
+                                        <span class="btn btn-default"><i class="fa fa-file-o"></i> Details</span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt="">
+                                </div>
+                                <div class="info">
+                                    <div class="pull-right">
+                                        <a href="{% url 'house:info' house.uuid %}"
+                                           class="btn btn-fullcolor">View</a>
+                                    </div>
+                                    <h3>
+                                        <a href="{% url 'house:info' house.uuid %}">{{ house.location }}</a>
+                                        <small>{{ house.address }}</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if tenants %}
+
+
+                <h3 class="section-title">Tenants</h3>
+
+
+                <div id="property-listing" class="grid-style1 clearfix">
+                    <div class="row">
+                        {% for tenant in tenants %}
+                            <div class="item col-sm-4"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="{% url 'tenant:info' house_pref_uuid=tenant.uuid %}">
+                                        <span class="btn btn-default"><i class="fa fa-file-o"></i> Details</span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt="">
+                                </div>
+                                <div class="info">
+                                    <div class="pull-right">
+                                        <a href="{% url 'tenant:info' house_pref_uuid=tenant.uuid %}"
+                                           class="btn btn-fullcolor">View</a>
+                                    </div>
+                                    <h3>
+                                        <a href="{% url 'tenant:info' house_pref_uuid=tenant.uuid %}">{{ tenant.preferred_suburbs }}</a>
+                                        <small>{{ tenant.preferred_suburbs }}</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+
+        </div>
+        <!-- END MAIN CONTENT -->
+
+    </div>
+
+{% endblock %}

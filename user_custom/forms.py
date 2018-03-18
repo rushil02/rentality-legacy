@@ -26,8 +26,8 @@ class UserCreationForm(DjangoUserCreationForm):
                                 widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'ConfirmPassword',
                                                                   'placeholder': 'Confirm Password',
                                                                   'required': 'required'}))
-    receive_newsletter = forms.BooleanField()
-    policy_agreement = forms.BooleanField(required=False)
+    receive_newsletter = forms.BooleanField(initial=True, required=False)  # FIXME: store in db
+    policy_agreement = forms.BooleanField()
 
     class Meta:
         model = get_user_model()
@@ -55,10 +55,22 @@ class UserCreationForm(DjangoUserCreationForm):
         )
 
 
-class UserProfileForm(forms.ModelForm):
+class ProfileForm1(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ['user', ]
+        exclude = ['user', 'profile_pic']
+        widgets = {
+            'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'id': 'contact_num',
+                                                    'placeholder': 'Contact number'}),
+            'dob': forms.DateInput(attrs={'class': 'form-control', 'id': 'Email',
+                                          'placeholder': 'Date of Birth'}),
+        }
+
+
+class ProfileForm2(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_pic', ]
 
 
 class LoginForm(forms.Form):

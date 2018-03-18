@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header-nav %}
+    {% include 'utils/navbar/auth_user.html' %}
+
+{% endblock %}
+
+
+{% block in-container-content %}
+    <div class="main col-sm-8 col-md-9">
+
+
+        <!-- BEGIN ADVANCED SEARCH -->
+        <h1 class="property-title">Confirm your email
+            <small class="pull-right clearfix">Page 3 of 3</small>
+        </h1>
+
+        <div class="form-group">
+            We've sent you a confirmation email. Please check and click on the link to verify your given email
+            [{{ request.user.email }}].
+        </div>
+
+        <p>&nbsp;</p>
+        <div class="clearfix">
+            <p class="pull-right clearfix">
+                <a href="{% url 'user:sel_listing' %}">
+                    <button type="button" class="btn btn-default-color">Confirm Email</button>
+                </a>
+                <a href="{% url 'user:home_page' %}">
+                    <button type="button" class="btn">I'll finish this later</button>
+                </a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
