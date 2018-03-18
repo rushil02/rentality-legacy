@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block header-nav %}
+    {% if request.user.is_authenticated %}
+        {% include 'utils/navbar/auth_user.html' %}
+    {% else %}
+        {% include 'utils/navbar/anon_user.html' %}
+    {% endif %}
+
+{% endblock %}

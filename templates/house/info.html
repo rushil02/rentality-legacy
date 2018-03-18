@@ -1,0 +1,133 @@
+{% extends 'utils/base_user_auto.html' %}
+
+{% block in-container-content %}
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h4>Want to relist your property?</h4>
+                    <p>If you want people to see your property, you relist it to be searchable.</p>
+                    <a class="btn btn-primary" href="{ url_for('listing_show', uid=listing.key.urlsafe())}}">Relist
+                        Property</a> <a class="btn btn-link" href="">Dismiss</a>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h4>Owner's Controls</h4>
+                    <hr/>
+                    <a class="btn btn-default" href="{ url_for('listing_show', uid=listing.key.urlsafe())}}">Relist
+                        Property</a>
+                    <hr/>
+                    <a class="btn btn-default"
+                       href="{ url_for('property_manage_property', uid=listing.key.urlsafe())}}">Manage Property (1
+                        tenant)</a>
+                    <hr/>
+                    <a class="btn btn-default" href="{ url_for('listing_show', uid=listing.key.urlsafe())}}">See
+                        Listing</a>
+                    <hr/>
+                    <a class="btn btn-default" href="{ url_for('listing_create', uid=listing.key.urlsafe())}}">Create
+                        listing</a>
+                </div>
+            </div>
+            <h3>My Property</h3>
+            <h4>Fully Furnished 2 Bedroom Apartment</h4>
+            <p>
+                1/17 Moore Street, Turner, ACT 2612
+            </p>
+            <p>2 <i class="fa fa-bed" aria-hidden="true"></i>
+                1 <i class="fa fa-bath" aria-hidden="true"></i>
+                1 <i class="fa fa-shower" aria-hidden="true"></i>
+                2 <i class="fa fa-car" aria-hidden="true"></i> |
+                Apartment
+            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc rutrum eros vel neque molestie laoreet. Sed
+                pretium sapien a nisi maximus blandit. Sed sapien mauris, varius et nunc ac, cursus tristique orci.
+                Mauris pretium eros a ex ultrices efficitur. Ut at odio sit amet ex posuere vehicula. Mauris dui
+                ante.</p>
+            <h4>Features</h4>
+            <ul>
+                <li>AC</li>
+                <li>Heating</li>
+                <li>Laundry</li>
+                <li>Gym</li>
+            </ul>
+            <h4>What's Nearby</h4>
+            <ul>
+                <li>Canberra Centre</li>
+                <li>Schools</li>
+                <li>Post Office</li>
+            </ul>
+            <h4>Turner Suburb Info (Stats)</h4>
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+                google.charts.load('current', {'packages': ['corechart']});
+                google.charts.setOnLoadCallback(function () {
+                    drawChart();
+                    drawChart2();
+                });
+
+                function drawChart() {
+
+                    var data = google.visualization.arrayToDataTable([
+                        ['Age Group', 'Percentage'],
+                        ['20-24', 15.5],
+                        ['24-34', 32.7],
+                        ['35-44', 13.4],
+                        ['45-54', 11.2],
+                        ['55-64', 8.3],
+                        ['Others', 19]
+                    ]);
+
+                    var options = {
+                        title: 'Age Group'
+                    };
+
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+                    chart.draw(data, options);
+                }
+
+                function drawChart2() {
+
+                    var data = google.visualization.arrayToDataTable([
+                        ['Social Marital Status', 'Hours per Day'],
+                        ['Not Married', 54.2],
+                        ['Registered Marriage', 28.3],
+                        ['Defacto Relationship', 17.5]
+                    ]);
+
+                    var options = {
+                        title: 'Social Marital Status'
+                    };
+
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+                    chart.draw(data, options);
+                }
+
+                window.addEventListener("resize", function () {
+                    drawChart();
+                    drawChart2();
+                })
+            </script>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div id="piechart" style="width: 100%; height: 500px;"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="piechart2" style="width: 100%; height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Location</h4>
+            <iframe src="//www.google.com/maps/embed/v1/place?q=Harrods,Brompton%20Rd,%20UK
+      &amp;zoom=17
+      &amp;key=AIzaSyAOhiYAlirWkes3jC_xSx2hgkzXsfNVK_g"
+                    style="border: none; width: 100%; height: 300px;">
+            </iframe>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 
+{% block header-nav %}
+    {% include 'utils/navbar/auth_user.html' %}
+{% endblock %}
 
 {% block content %}
 
@@ -80,28 +83,6 @@
     <!-- END CONTENT WRAPPER -->
 
 
-
-    <!-- BEGIN PARTNERS WRAPPER -->
-    <div class="parallax pattern-bg" data-stellar-background-ratio="0.5">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">Create an
-                        account for free</h1>
-
-                    <div id="partners">
-                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
-                            <a href="" class="btn btn-fullcolor">Sign up as a Tenant</a>
-                        </div>
-                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="450">
-                            <a href="" class="btn btn-fullcolor">Sign up as a Landlord</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END PARTNERS WRAPPER -->
 {% endblock content %}
 
 

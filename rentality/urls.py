@@ -31,7 +31,9 @@ urlpatterns = [
     path('la/', include('landlord.urls')),
     path('st/', include('staff.urls')),
     path('admin/', include('admin_custom.urls')),
-    path('', include('user_custom.urls'))
+    path('', include('user_custom.urls')),
+    path('property/', include('house.urls')),
+
 ]
 
 if settings.DEBUG:

@@ -18,36 +18,57 @@
 <body>
 
 {% block body %}
-    {% block content %}
-    {% endblock content %}
+    <div id="wrapper">
+
+        {% block header-nav %}
+            {% include 'utils/navbar/anon_user.html' %}
+        {% endblock header-nav %}
+
+
+
+        {% block content %}
+            <div class="content">
+                <div class="container">
+                    {% block notification %}
+
+                    {% endblock %}
+                    {% block in-container-content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        {% endblock content %}
+
+        {% block footer %}
+            <footer id="footer">
+
+                <!-- BEGIN COPYRIGHT -->
+                <div id="copyright">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                {% block footer-additional-content %}
+
+                                {% endblock %}
+                                &copy; 2018 Rentality. All rights reserved.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END COPYRIGHT -->
+
+            </footer>
+        {% endblock footer %}
+    </div>
+
 {% endblock body %}
 
 {% block extra_body %}
 {% endblock extra_body %}
 
-{% block footer %}
-    <footer id="footer">
 
-        <!-- BEGIN COPYRIGHT -->
-        <div id="copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 text-center">
-                        {% block footer-additional-content %}
-
-                        {% endblock %}
-                        &copy; 2018 Rentality. All rights reserved.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END COPYRIGHT -->
-
-    </footer>
-
-{% endblock %}
 {% if not request.session.django_timezone %}
-    {#    {% include 'timezone.html' %}#}
+    {% include 'utils/timezone.html' %}
 {% endif %}
 
 
@@ -65,11 +86,10 @@
     <!-- Agencies list -->
     <script src="/static/theme/js/agencies.js"></script>
 
-
 {% endblock %}
 
 {% block js_script %}
-
 {% endblock js_script %}
+
 </body>
 </html>

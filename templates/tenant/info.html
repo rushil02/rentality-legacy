@@ -1,0 +1,78 @@
+{% extends 'utils/base_user_auto.html' %}
+
+{% block in-container-content %}
+    <!-- BEGIN CONTENT WRAPPER -->
+
+
+    <!-- BEGIN MAIN CONTENT -->
+    <div class="main col-sm-4 col-md-3" style="padding-top: 15px;">
+
+        <!-- BEGIN AGENCY DETAIL -->
+        <div class="clearfix">
+            <div class="property-agent-info">
+                <div class="agent-detail col-md-12">
+                    <div class="image">
+                        <img alt="" src="/static/img/placeholders/profile/default.png">
+                    </div>
+
+                    <div class="info">
+                        <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                            <h2>{{ house_pref.tenant.user.username }}</h2>
+                        </header>
+                    </div>
+                </div>
+
+                <div class="form-style col-md-12">
+                    {# method="POST" action="{{url_for('tenant_listing_send_offer', uid=listing.key.urlsafe())}}">#}
+                    <div class="row">
+
+                        {# {{send_offer_form.csrf_token}} #}
+
+                        <div class="center">
+                            <button id="sendOfferBtn" class="btn btn-default-color">Send Offer</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- END AGENCY DETAIL -->
+    </div>
+    <!-- END MAIN CONTENT -->
+    <div class="main col-sm-8 col-md-9" style="padding-top: 15px;">
+        <div class="pull-right">
+            <a class="btn btn-fullcolor" href="{ url_for('tenant_listing_edit', uid=listing.key.urlsafe())}}">Edit</a>
+        </div>
+        <h1 class="property-title">{{ house_pref.tenant.user.username }}
+            <small>Looking for a place</small>
+        </h1>
+
+        <p>Budget: ${{ house_pref.max_budget }}/week</p>
+
+
+        <p>Preferred Length: {{ house_pref.move_in_date.lower }} to {{ house_pref.move_in_date.upper }}</p>
+        <p>Preferred Length: {{ house_pref.move_out_date.lower }} to {{ house_pref.move_out_date.upper }}</p>
+
+        <p>Preferred Suburb: {% for location in house_pref.locations.all %}
+            {{ location.suburb }};
+
+        {% endfor %}
+        </p>
+
+
+        <p>Preferred Accommodation: {{ house_pref.get_property_type_display }}</p>
+
+        <h2 class="section-title">About {{ house_pref.tenant.user.username }}</h2>
+        <p>{{ house_pref.description }}</p>
+
+
+    </div>
+
+
+
+    <!-- END CONTENT WRAPPER -->
+
+
+
+{% endblock %}

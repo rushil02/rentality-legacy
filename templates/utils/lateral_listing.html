@@ -1,0 +1,57 @@
+<!-- BEGIN PROPERTIES SLIDER WRAPPER-->
+<div class="parallax" data-stellar-background-ratio="0.5" style="background-color: #d0e5e4;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">
+                    Homes</h1>
+
+                <div id="new-properties-slider" class="owl-carousel carousel-style1 new-properties-slider"
+                     style="margin-bottom: 50px;">
+                    {% for house in houses %}
+
+                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
+                            <div class="image">
+                                <a href="{% url 'house:info' house.uuid %}" class="info">
+                                    <h3>{{ house.get_room_type_display }}</h3>
+                                    <span class="location"></span>
+                                </a>
+                                <img src='/static/img/placeholders/apartment/default.png'
+                                     alt=""/>
+                            </div>
+                            <ul class="amenities">
+                                <li><i class="fa fa-map-marker fa-fw"></i>{{ house.location }}</li>
+                            </ul>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">
+                    Tenants</h1>
+
+                <div id="new-properties-slider2" class="owl-carousel carousel-style1 new-properties-slider">
+
+                    {% for hp in house_pref %}
+                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
+                            <div class="image">
+                                <a href="{% url 'tenant:info' house_pref_uuid=hp.uuid %}" class="info">
+                                    <h3>{{ hp.tenant.user.username }}</h3>
+                                    <span class="location">Looking for a place</span>
+                                </a>
+
+                                <img src="/static/img/placeholders/profile/default.png"
+                                     alt=""/>
+                            </div>
+                            <ul class="amenities">
+                                <li><i class="fa fa-user fa-fw"></i> {{ hp.preferred_suburbs }}</li>
+                            </ul>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PROPERTIES SLIDER WRAPPER -->

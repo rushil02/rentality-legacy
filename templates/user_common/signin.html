@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!-- BEGIN CONTENT WRAPPER -->
+    <div class="content">
+        <div class="container">
+            <div class="row">
+
+                <!-- BEGIN MAIN CONTENT -->
+                <div class="main col-sm-12">
+
+                    <div class="login col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+
+
+                        <h1 class="center">Log in to your Account</h1>
+
+
+                        <div class="col-sm-12">
+                            {{ login_form.non_field_errors }}
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                {{ login_form.email.errors }}
+                                {{ login_form.email }}
+                                {{ login_form.password.errors }}
+                                {{ login_form.password }}
+                                <div class="controls">
+                                    <button type="submit" class="btn btn-block btn-lg btn-primary btn-loading">Sign in
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn-group btn-group-justified form-control-static">
+                                        <a class="btn btn-link btn-xs ellipsis" href="">Forgot
+                                            password?</a>
+                                        <a class="btn btn-link btn-xs ellipsis"
+                                           href="{% url 'user:sign_up' %}">Create new account</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <legend class="text-muted text-center">or</legend>
+
+
+                            <div class="text-center">
+                                {% load socialaccount %}
+
+                                <a href="{% provider_login_url "google" %}"><i class="fa fa-2x fa-google"></i></a>
+                                <a href="{% provider_login_url "facebook" %}"><i
+                                        class="fa fa-2x fa-facebook-official"></i></a>
+                                <a href="{% provider_login_url "instagram" %}"><i class="fa fa-2x fa-instagram"></i></a>
+                                <a href="{% provider_login_url "twitter" %}"><i class="fa fa-2x fa-twitter-square"></i></a>
+                                <a href="{% provider_login_url "pinterest" %}"><i class="fa fa-2x fa-pinterest"></i></a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- END MAIN CONTENT -->
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

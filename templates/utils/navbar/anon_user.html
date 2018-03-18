@@ -2,17 +2,17 @@
 
 {% block user_menu %}
     <li>
-        <a href="">About Us</a>
+        <a href="{% url 'django.contrib.flatpages.views.flatpage' url="/about-us/" %}">About Us</a>
     </li>
     <li>
         <a href="">Shortlist</a>
     </li>
 
     <li>
-        <a href="">Sign In</a>
+        <a href="{% url 'user:sign_in' %}">Sign In</a>
     </li>
     <li class="">
-        <a href="">Sign Up</a>
+        <a href="{% url 'user:sign_up' %}">Sign Up</a>
     </li>
 
 

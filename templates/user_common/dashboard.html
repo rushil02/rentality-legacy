@@ -1,0 +1,98 @@
+{% extends 'user_common/base_auth.html' %}
+
+{% block content %}
+    <div class="content">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="main col-xs-12">
+                    <h1 class="property-title">Pending</h1>
+                    <p>You have nothing pending currently.</p>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>Your profile is incomplete. <a href="{url_for('profile_show_account_creation')}}">Complete
+                                profile</a></p>
+                            <p>Your profile now complete, you can update your listing. <a
+                                    href="{url_for('profile_show_account_creation')}}">Update Listing</a></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                    <span class="sr-only">60% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>Your tenancy listing is incomplete. <a
+                                    href="{url_for('profile_show_account_creation')}}">Complete
+                                profile</a></p>
+                            <p>Your profile now complete, you can update your listing. <a
+                                    href="{url_for('profile_show_account_creation')}}">Update Listing</a></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                    <span class="sr-only">60% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>Your profile is incomplete. <a href="{url_for('profile_show_account_creation')}}">Complete
+                                profile</a></p>
+                            <p>Your profile now complete, you can update your listing. <a
+                                    href="{url_for('profile_show_account_creation')}}">Update Listing</a></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                    <span class="sr-only">60% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 class="property-title">My Properties</h1>
+                    # if not listings
+                    <p>No properties to show.</p>
+                    # else
+                    <div id="property-listing" class="grid-style1 clearfix">
+                        <div class="row">
+                            # for listing in listings
+                            <div class="item col-sm-4"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="{url_for('listing_show', uid=listing.key.urlsafe())}}">
+                                        <span class="btn btn-default"><i class="fa fa-file-o"></i> Details</span>
+                                    </a>
+                                    <img src="{url_for('static', filename='/img/placeholders/apartment/default.png')}}"
+                                         alt="">
+                                </div>
+                                <div class="info">
+                                    <div class="pull-right">
+                                        <a href="{url_for('listing_edit', uid=listing.key.urlsafe())}}"
+                                           class="btn btn-fullcolor">Edit</a>
+                                    </div>
+                                    <h3>
+                                        <a href="{url_for('listing_show', uid=listing.key.urlsafe())}}">{listing.address_line1
+                                            or 'Untitled Property'}}</a>
+                                        <small>{listing.address_line2 or 'Uncategorized Property'}}</small>
+                                    </h3>
+                                </div>
+                            </div>
+                            # endfor
+                        </div>
+                    </div>
+                    # endif
+                    <h1 class="property-title">Service Requests</h1>
+                    <p>Begin a lease to see service requests.</p>
+                    <h1 class="property-title">My Documents</h1>
+                    <p>You don't have any documents yet.</p>
+                    <h1 class="property-title">Reviews</h1>
+                    <p>No one has given you any reviews yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

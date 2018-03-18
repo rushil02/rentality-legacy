@@ -63,6 +63,7 @@ class House(models.Model):
     tags = models.ManyToManyField('house.Tag')
     availability = DateRangeField()
     description = models.TextField(blank=True)
+    uuid = models.UUIDField(default=uuid.uuid4(), editable=False)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model, authenticate, password_validation
 from django.contrib.auth.forms import UserCreationForm as DjangoUserCreationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -17,9 +17,26 @@ class UserCreationForm(DjangoUserCreationForm):
         'password_mismatch': _("The two password fields didn't match."),
     }
 
+    password1 = forms.CharField(strip=False,
+                                help_text=password_validation.password_validators_help_text_html(),
+                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'Password',
+                                                                  'placeholder': 'Password', 'required': 'required'}))
+    password2 = forms.CharField(strip=False,
+                                help_text=_("Enter the same password as before, for verification."),
+                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'ConfirmPassword',
+                                                                  'placeholder': 'Confirm Password',
+                                                                  'required': 'required'}))
+
     class Meta:
         model = get_user_model()
         fields = ('email', 'username')
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'id': 'username',
+                                               'placeholder': 'Username', 'required': 'required'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'id': 'Email',
+                                             'placeholder': 'Email', 'required': 'required'}),
+        }
 
     def clean_email(self):
         email = self.cleaned_data["email"]

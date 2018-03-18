@@ -1,9 +1,10 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import View
 
 from tenant.forms import HousePreferenceForm
+from tenant.models import HousePreference
 
 
 @login_required
@@ -11,7 +12,16 @@ def home(request):
     return HttpResponse("Tenant Home Page")
 
 
-class HousePreference(View):
+def info(request, house_pref_uuid):
+    try:
+        house_pref = HousePreference.objects.get(uuid=house_pref_uuid)
+    except HousePreference.DoesNotExist:
+        raise Http404("Tenant does not exist.")
+    else:
+        return render(request, 'tenant/info.html', {'house_pref': house_pref})
+
+
+class HousePreferenceCreateView(View):
     template_name = 'tenant/house_pref.html'
 
     @staticmethod
