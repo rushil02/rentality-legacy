@@ -15,3 +15,4 @@ Date        Day         Check-in        Check-out       Time
 16/03/18    Friday      17.00           18.20           1.20
 16/03/18    Friday      23.00           00.50           1.50
 17/03/18    Saturday    13.00           15.00           2.00
+18/03/18    Sunday      11.00
