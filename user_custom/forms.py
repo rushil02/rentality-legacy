@@ -26,14 +26,18 @@ class UserCreationForm(DjangoUserCreationForm):
                                 widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'ConfirmPassword',
                                                                   'placeholder': 'Confirm Password',
                                                                   'required': 'required'}))
+    receive_newsletter = forms.BooleanField()
+    policy_agreement = forms.BooleanField(required=False)
 
     class Meta:
         model = get_user_model()
-        fields = ('email', 'username')
+        fields = ('email', 'first_name', 'last_name')
 
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'id': 'username',
-                                               'placeholder': 'Username', 'required': 'required'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'id': 'first_name',
+                                                 'placeholder': 'First Name', 'required': 'required'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'id': 'last_name',
+                                                'placeholder': 'Last Name'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'id': 'Email',
                                              'placeholder': 'Email', 'required': 'required'}),
         }

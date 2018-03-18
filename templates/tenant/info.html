@@ -17,7 +17,7 @@
 
                     <div class="info">
                         <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
-                            <h2>{{ house_pref.tenant.user.username }}</h2>
+                            <h2>{{ house_pref.tenant.user.get_full_name }}</h2>
                         </header>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
         <div class="pull-right">
             <a class="btn btn-fullcolor" href="{ url_for('tenant_listing_edit', uid=listing.key.urlsafe())}}">Edit</a>
         </div>
-        <h1 class="property-title">{{ house_pref.tenant.user.username }}
+        <h1 class="property-title">{{ house_pref.tenant.user.get_full_name }}
             <small>Looking for a place</small>
         </h1>
 
@@ -63,7 +63,7 @@
 
         <p>Preferred Accommodation: {{ house_pref.get_property_type_display }}</p>
 
-        <h2 class="section-title">About {{ house_pref.tenant.user.username }}</h2>
+        <h2 class="section-title">About {{ house_pref.tenant.user.get_full_name }}</h2>
         <p>{{ house_pref.description }}</p>
 
 

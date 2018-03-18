@@ -11,26 +11,21 @@ class CustomUserManager(UserManager):
         return self.get_queryset().get_or_create(
             email='deleted@deleted.del',
             defaults={
-                'username': 'deleted',
+                'first_name': 'deleted',
                 'password': os.environ.get('DELETED_USER_PASS')
             }
         )[0]
 
 
 class User(AbstractUser):
-    username = models.CharField(
-        _('username'),
-        max_length=150,
-        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
-        validators=[AbstractUser.username_validator],
-    )
     email = models.EmailField(
         _('email address'),
         unique=True,
     )
+    username = None
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['first_name']
 
     objects = CustomUserManager()
 

@@ -28,7 +28,7 @@ class HousePreference(models.Model):
     locations = models.ManyToManyField('essentials.Location')
     move_in_date = DateRangeField(null=True, blank=True)
     move_out_date = DateRangeField(null=True, blank=True)
-    uuid = models.UUIDField(default=uuid.uuid4(), editable=False)
+    uuid = models.UUIDField(default=uuid.uuid4(), editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField('house.Tag')

@@ -86,15 +86,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">Create an
-                        account for free</h1>
+                    {#                    <h1 class="section-title" data-animation-direction="from-bottom" data-animation-delay="50">Create an#}
+                    {#                        account for free</h1>#}
 
                     <div id="partners">
                         <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
-                            <a href="" class="btn btn-fullcolor">Sign up as a Tenant</a>
-                        </div>
-                        <div class="item" data-animation-direction="from-bottom" data-animation-delay="450">
-                            <a href="" class="btn btn-fullcolor">Sign up as a Landlord</a>
+                            <a href="{% url 'user:sign_up' %}" class="btn btn-fullcolor">Create an account for free</a>
                         </div>
                     </div>
                 </div>
