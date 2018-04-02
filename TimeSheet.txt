@@ -19,3 +19,4 @@ Date        Day         Check-in        Check-out       Time
 18/03/18    Sunday      14.20           00.20          10.00
 18/03/18    Sunday      ---- Paid [@ $20.00] ----     -27.30
 20/03/18    Tuesday     14.00           16.10           2.10
+02/04/18    Monday      23.00
