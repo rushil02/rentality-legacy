@@ -1,0 +1,41 @@
+{% extends 'utils/base_auth.html' %}
+
+{% block in-container-content %}
+
+    <div class="row">
+
+
+        <!-- BEGIN SIDEBAR -->
+        <div class="sidebar gray col-sm-4 col-md-3 hidden-xs">
+
+            <div id="footer-top">
+                <div class="block">
+                    <h3>List my Property</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'house:add' 1 %}">Tell us about your property</a></li>
+                        <li><a href="{% url 'house:add' 2 %}">More Details</a></li>
+                        <li><a href="{% url 'house:add' 3 %}">Gallery &amp; Tenant
+                            Preferences</a></li>
+                        <li><a href="{% url 'house:add' 4 %}">Property Owner Details</a>
+                        </li>
+                        {#                        <li><a href="{% url 'house:add' 1 %}">All Done!</a></li>#}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- END SIDEBAR -->
+
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="main col-sm-8 col-md-9">
+
+            {% block listing-form-body %}
+
+            {% endblock %}
+
+        </div>
+        <!-- END MAIN CONTENT -->
+
+    </div>
+
+{% endblock %}
