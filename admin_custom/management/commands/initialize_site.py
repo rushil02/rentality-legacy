@@ -11,7 +11,7 @@ from house.models import Tag
 from django.conf import settings
 
 
-def social_apps_info():  # TODO: Update method with actual keys
+def social_apps_info():
     """ Creates OAuth api token information for django-allauth """
 
     site_obj, s_created = Site.objects.get_or_create(domain='rentality.com', name='Rentality')
@@ -76,7 +76,12 @@ def collect_location_data():
                     break
                 datum = line.split('\t')
                 for attr in data_key:
-                    print("%s: %s" % (attr[1],datum[attr[0]] ))
+                    print("%s: %s" % (attr[1], datum[attr[0]]))
+
+
+# TODO
+def add_flat_pages():
+    pass
 
 
 class Command(BaseCommand):
@@ -84,12 +89,28 @@ class Command(BaseCommand):
 
     help = 'Initialize website with settings and details data'
 
+    web_init_func = {
+        'Integrate OAuth info': social_apps_info,
+        'Create tags': create_tags,
+        'Integrate world location data': collect_location_data,
+        'Add flat pages': add_flat_pages
+    }
+
+    def ask_user_input(self, verbose):
+        opt = input(verbose + " ? [y/n]\n")
+        if opt in ['y', 'Y']:
+            return True
+        elif opt in ['n', 'N']:
+            return False
+        else:
+            print("Invalid option.\n")
+            return self.ask_user_input(verbose)
+
     def handle(self, *args, **options):
         try:
-            with transaction.atomic():
-                social_apps_info()
-                create_tags()
-                collect_location_data()
+            for verbose, func in self.web_init_func:
+                if self.ask_user_input(verbose):
+                    func()
         except Exception as e:
             print(e)
             raise CommandError("Some problem occurred. Rolling back changes.")

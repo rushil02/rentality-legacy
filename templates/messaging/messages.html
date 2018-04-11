@@ -1,0 +1,97 @@
+{% extends 'utils/base_auth.html' %}
+
+{% block in-container-content %}
+    <div class="row">
+
+
+        <!-- BEGIN SIDEBAR -->
+        <div class="col-sm-4 col-md-3 hidden-xs">
+
+            <div>
+                <div class="block">
+                    <div class="panel panel-default">
+                        <ul class="list-group">
+                            <li class="list-group-item clearfix" href="">
+                                <span class="list-group-item-heading">Messages</span>
+                            </li>
+
+                            <a class="list-group-item clearfix"
+                               href="">
+                                <img src="http://localhost:3000/p//img/placeholders/profile/default.png"
+                                     class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
+                                <span class="list-group-item-heading">'No Subject'</span>
+                                <p class="list-group-item-text"
+                                   style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">Hi, I'm
+                                    interested in renting your property.</p>
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- END SIDEBAR -->
+
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="col-sm-8 col-md-9">
+
+            <div class="panel panel-default">
+                <ul class="list-group">
+                    <div class="list-group-item">
+                        <img class="img-circle"
+                             src="/static/img/placeholders/profile/default.png" alt="..."
+                             style="width: 50px; margin-right: 10px;">
+                        part1, part2
+                    </div>
+                    <div class="list-group-item clearfix">
+                        <div class="pull-left">
+                            Phone Number
+                        </div>
+                        <div class="pull-right">
+                            View Listing
+                        </div>
+                    </div>
+                    <div class="list-group-item" style="padding-bottom: 50px;">
+                        <div class="text-center">
+                            <p>Re: About 50/30 Park Street</p>
+                        </div>
+                        <div class="media">
+                            <div class="media-left pull-left">
+                                <a href="#">
+                                    <img class="media-object img-circle"
+                                         src="/static/img/placeholders/profile/default.png"
+                                         alt="..." style="width: 50px;">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <div class="panel panel-default" style="margin-bottom: 0; max-width: 75%;">
+                                    <div class="panel-body bg-success">
+                                        <p>jnadjnad</p>
+                                        <p class="media-heading pull-right">
+                                            12/15/15</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <form action=""
+                              method="POST">
+                            <div class="form-group">
+                                <label class="sr-only" for="message">Amount (in dollars)</label>
+                                <textarea name="message" class="form-control" rows="3"
+                                          placeholder="Type a message..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </ul>
+            </div>
+
+        </div>
+        <!-- END MAIN CONTENT -->
+
+    </div>
+
+
+{% endblock %}

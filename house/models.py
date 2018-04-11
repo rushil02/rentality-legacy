@@ -25,47 +25,57 @@ class House(models.Model):
         related_name='houses',
         verbose_name=_('property owner')
     )
-    address = models.TextField()
+    address = models.TextField(blank=True)
     location = models.ForeignKey(
         'essentials.Location',
         on_delete=models.PROTECT,
-        verbose_name=_('location')
+        verbose_name=_('location'),
+        null=True, blank=True
     )
 
     ROOM_TYPE = (
         ('A', 'Some room A'),
     )
-    room_type = models.CharField(max_length=1, choices=ROOM_TYPE)
+    room_type = models.CharField(max_length=1, choices=ROOM_TYPE, blank=True)
 
     BEDROOMS = (
         ('1', '1'),
         ('2', '2'),
         ('3', '3+')
     )
-    bedrooms = models.CharField(max_length=1, choices=BEDROOMS)
+    bedrooms = models.CharField(max_length=1, choices=BEDROOMS, blank=True)
 
     BATHROOMS = (
         ('1', '1'),
         ('2', '2'),
         ('3', '3+')
     )
-    bathrooms = models.CharField(max_length=1, choices=BEDROOMS)
+    bathrooms = models.CharField(max_length=1, choices=BEDROOMS, blank=True)
 
     PARKING = (
         ('1', '1'),
         ('2', '2'),
         ('3', '3+')
     )
-    parking = models.CharField(max_length=1, choices=BEDROOMS)
+    parking = models.CharField(max_length=1, choices=BEDROOMS, blank=True)
 
     other_people = models.PositiveSmallIntegerField(default=0)
     rent = models.PositiveSmallIntegerField(default=0)
-    tags = models.ManyToManyField('house.Tag')
-    availability = DateRangeField()
+    tags = models.ManyToManyField('house.Tag', blank=True)
+    availability = DateRangeField(null=True, blank=True)
+    min_stay = models.PositiveSmallIntegerField(help_text=_('in days'), null=True, blank=True)
     description = models.TextField(blank=True)
     uuid = models.UUIDField(default=uuid.uuid4(), editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    def get_thumbnail(self):
+        try:
+            image = Image.objects.get(house=self, is_thumbnail=True)
+        except Image.DoesNotExist:
+            return "/static/img/placeholders/apartment/default.png"
+        else:
+            return image.image.url
 
     def __str__(self):
         return "%s - %s [%s]" % (self.landlord, self.location, self.address)
@@ -75,12 +85,20 @@ class Image(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     image = models.ImageField(upload_to=get_file_path)
+    is_thumbnail = models.BooleanField(default=False)
     description = models.CharField(max_length=250, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "%s" % self.image.name
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.is_thumbnail:
+            Image.objects.filter(house=self.house).update(is_thumbnail=False)
+        return super(Image, self).save(force_insert=False, force_update=False, using=None,
+                                       update_fields=None)
 
 
 class Tag(models.Model):

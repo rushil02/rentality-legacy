@@ -50,7 +50,9 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'django.contrib.sitemaps',
 
+    'channels',
     'rest_framework',
     'allauth',
     'allauth.account',
@@ -63,14 +65,15 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.pinterest',
 
-    'user_custom',
-    'admin_custom',
-    'staff',
-    'landlord',
-    'tenant',
-    'house',
-    'essentials',
-    'elastic_search',
+    'user_custom.apps.UserCustomConfig',
+    'admin_custom.apps.AdminCustomConfig',
+    'staff.apps.StaffConfig',
+    'landlord.apps.LandlordConfig',
+    'tenant.apps.TenantConfig',
+    'house.apps.HouseConfig',
+    'essentials.apps.EssentialsConfig',
+    'elastic_search.apps.ElasticSearchConfig',
+    'messaging.apps.MessagingConfig',
 ]
 
 MIDDLEWARE = [
@@ -193,7 +196,8 @@ SOCIALACCOUNT_PROVIDERS = \
               'timezone',
               'link',
               'gender',
-              'updated_time'],
+              'updated_time'
+          ],
           'VERIFIED_EMAIL': False,
           'VERSION': 'v2.4'},
      'google':
@@ -214,3 +218,5 @@ SOCIALACCOUNT_PROVIDERS = \
 OAUTH_DETAILS = get_secret_var('OAUTH_DETAILS')
 
 LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'libs')
+
+ASGI_APPLICATION = "rentality.routing.application"

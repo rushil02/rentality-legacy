@@ -1,0 +1,64 @@
+{% extends 'utils/base_user_auto.html' %}
+{% block in-container-content %}
+    <div class="row">
+
+
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="main col-x-12">
+
+            <h1>Notifications</h1>
+
+            You have no unread notifications.
+            <div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Date Sent</th>
+                        <th>Properties</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="active">
+                        <th scope="row">21/25/12</th>
+                        <td>JJ sent you a <a
+                                href="">tenancy
+                            application</a>.
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th scope="row">22/25/15</th>
+                        <td>You received a <a href="">tenancy offer</a>.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <!-- END MAIN CONTENT -->
+
+    </div>
+
+    <!-- END CONTENT WRAPPER -->
+
+
+{% endblock %}
+
+</div>
+<!-- END WRAPPER -->
+
+{% block js_script %}
+
+
+    <!-- Libs -->
+    <script src="/static/theme/js/common.js"></script>
+    <script src="/static/theme/js/chosen.jquery.min.js"></script>
+
+    <!-- Template Scripts -->
+    <script src="/static/theme/js/variables.js"></script>
+    <script src="/static/theme/js/scripts.js"></script>
+{% endblock %}
+
+

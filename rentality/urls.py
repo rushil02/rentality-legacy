@@ -16,10 +16,10 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
 
-router = routers.DefaultRouter()
+from rentality.sitemap import sitemaps
 
 urlpatterns = [
     path('db/', admin.site.urls),
@@ -33,6 +33,13 @@ urlpatterns = [
     path('admin/', include('admin_custom.urls')),
     path('', include('user_custom.urls')),
     path('property/', include('house.urls')),
+    path('ess/', include('essentials.urls')),
+
+    # TODO: no individual messaging urls needed ?
+    path('messaging/', include('messaging.urls')),
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap')
 
 ]
 

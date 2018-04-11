@@ -64,3 +64,6 @@ class HousePreference(models.Model):
     def get_locations_display(self):
         print(self.locations)
         return str(self.locations).join(', ')
+
+    def get_thumbnail(self):
+        return self.tenant.user.userprofile.get_profile_pic()

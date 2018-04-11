@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test Page</title>
-</head>
-<body>
-<form method="post">
-    {% csrf_token %}
-    {{ profile_form.as_p }}
-    <button type="submit">Save changes</button>
-</form>
+{% extends 'utils/base_auth.html' %}
 
-</body>
-</html>
+{% block in-container-content %}
+    {{ form1.as_p }}
+    {{ form2.as_p }}
+
+{% endblock %}

@@ -16,7 +16,7 @@
                                     <h3>{{ house.get_room_type_display }}</h3>
                                     <span class="location"></span>
                                 </a>
-                                <img src='/static/img/placeholders/apartment/default.png'
+                                <img src='{{ house.get_thumbnail }}'
                                      alt=""/>
                             </div>
                             <ul class="amenities">
@@ -40,7 +40,7 @@
                                     <span class="location">Looking for a place</span>
                                 </a>
 
-                                <img src="/static/img/placeholders/profile/default.png"
+                                <img src="{{ hp.get_thumbnail }}"
                                      alt=""/>
                             </div>
                             <ul class="amenities">

@@ -73,6 +73,18 @@ class ProfileForm2(forms.ModelForm):
         fields = ['profile_pic', ]
 
 
+class UserChangeForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name']
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ['user', 'updated_on', ]
+
+
 class LoginForm(forms.Form):
     user_cache = None
 
