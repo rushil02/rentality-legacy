@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, HousePhotosForm
+from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, HousePhotosForm, SearchForm
 from house.models import House
 
 
@@ -78,3 +78,15 @@ def add_edit_house(request, form_num, uuid=None):
         return func_di[form_num](request, uuid)
     except KeyError:
         raise HttpResponseBadRequest
+
+
+def search_house_page(request):
+    form = SearchForm()
+    context = {
+        'search_form': form,
+    }
+    return render(request, 'search/house_listing.html', context)
+
+
+def search_house_api(request):
+    return JsonResponse({"Data": "No Data"})

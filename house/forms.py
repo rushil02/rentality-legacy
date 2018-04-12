@@ -30,3 +30,21 @@ class HouseDetailsForm3(forms.ModelForm):
 class LandlordInfoForm(forms.Form):
     phone_num = forms.NumberInput()
     profile_pic = forms.ImageField()
+
+
+class SearchForm(forms.Form):
+    location = forms.CharField(
+        label='Location',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 'placeholder': 'City, State, Postcode, etc.'
+        })
+    )
+    bedrooms = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bedrooms', })
+    )
+    bathrooms = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bathrooms'})
+    )
+    max_price = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Rent'})
+    )

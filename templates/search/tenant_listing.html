@@ -1,0 +1,277 @@
+{% extends 'utils/base_user_auto.html' %}
+
+{% block content %}
+
+
+    <!-- BEGIN HOME ADVANCED SEARCH (class="gray" for a gray background) -->
+    <div id="advanced-search" class="gray open" style="text-align: left;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <form method="GET" action="">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                {{ search_form.location }}
+                            </div>
+                            <div class="col-sm-2">
+                                {{ search_form.bedrooms }}
+                            </div>
+                            <div class="col-sm-2">
+                                {{ search_form.bathrooms }}                            </div>
+
+                            <div class="col-sm-2">
+                                {{ search_form.max_price }}                            </div>
+                        </div>
+
+                        <button id='search-btn' e2type="submit" class="btn btn-fullcolor">Search</button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- END HOME ADVANCED SEARCH -->
+
+
+    <!-- BEGIN CONTENT WRAPPER -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- BEGIN MAIN CONTENT -->
+                <div class="main col-sm-12">
+
+                    <!-- BEGIN PROPERTY LISTING -->
+                    <div id="property-listing" class="grid-style1 clearfix">
+                        <div class="row">
+                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="">
+                                        <h3>asdndfjnl</h3>
+                                        <span class="location"></span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
+                                </div>
+                                <div class="info">
+                                    <h3>
+                                        <a href="">House num 1</a>
+                                        <small>Address - Suburb</small>
+                                    </h3>
+                                    <p>480
+                                        <small>/week</small>
+                                    </p>
+
+                                    <p>Available By: Enquire for details.</p>
+
+                                    <p>Rental Term: Enquire for details</p>
+
+                                    <ul class="amenities">
+                                        <li><i class="icon-bedrooms"></i> 5</li>
+                                        <li><i class="icon-bathrooms"></i> 4</li>
+                                        <li><i class="icon-garage"></i> 1</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="">
+                                        <h3>asdndfjnl</h3>
+                                        <span class="location"></span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
+                                </div>
+                                <div class="info">
+                                    <h3>
+                                        <a href="">House num 1</a>
+                                        <small>Address - Suburb</small>
+                                    </h3>
+                                    <p>480
+                                        <small>/week</small>
+                                    </p>
+
+                                    <p>Available By: Enquire for details.</p>
+
+                                    <p>Rental Term: Enquire for details</p>
+
+                                    <ul class="amenities">
+                                        <li><i class="icon-bedrooms"></i> 5</li>
+                                        <li><i class="icon-bathrooms"></i> 4</li>
+                                        <li><i class="icon-garage"></i> 1</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="">
+                                        <h3>asdndfjnl</h3>
+                                        <span class="location"></span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
+                                </div>
+                                <div class="info">
+                                    <h3>
+                                        <a href="">House num 1</a>
+                                        <small>Address - Suburb</small>
+                                    </h3>
+                                    <p>480
+                                        <small>/week</small>
+                                    </p>
+
+                                    <p>Available By: Enquire for details.</p>
+
+                                    <p>Rental Term: Enquire for details</p>
+
+                                    <ul class="amenities">
+                                        <li><i class="icon-bedrooms"></i> 5</li>
+                                        <li><i class="icon-bathrooms"></i> 4</li>
+                                        <li><i class="icon-garage"></i> 1</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="">
+                                        <h3>asdndfjnl</h3>
+                                        <span class="location"></span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
+                                </div>
+                                <div class="info">
+                                    <h3>
+                                        <a href="">House num 1</a>
+                                        <small>Address - Suburb</small>
+                                    </h3>
+                                    <p>480
+                                        <small>/week</small>
+                                    </p>
+
+                                    <p>Available By: Enquire for details.</p>
+
+                                    <p>Rental Term: Enquire for details</p>
+
+                                    <ul class="amenities">
+                                        <li><i class="icon-bedrooms"></i> 5</li>
+                                        <li><i class="icon-bathrooms"></i> 4</li>
+                                        <li><i class="icon-garage"></i> 1</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="">
+                                        <h3>asdndfjnl</h3>
+                                        <span class="location"></span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
+                                </div>
+                                <div class="info">
+                                    <h3>
+                                        <a href="">House num 1</a>
+                                        <small>Address - Suburb</small>
+                                    </h3>
+                                    <p>480
+                                        <small>/week</small>
+                                    </p>
+
+                                    <p>Available By: Enquire for details.</p>
+
+                                    <p>Rental Term: Enquire for details</p>
+
+                                    <ul class="amenities">
+                                        <li><i class="icon-bedrooms"></i> 5</li>
+                                        <li><i class="icon-bathrooms"></i> 4</li>
+                                        <li><i class="icon-garage"></i> 1</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="">
+                                        <h3>asdndfjnl</h3>
+                                        <span class="location"></span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
+                                </div>
+                                <div class="info">
+                                    <h3>
+                                        <a href="">House num 1</a>
+                                        <small>Address - Suburb</small>
+                                    </h3>
+                                    <p>480
+                                        <small>/week</small>
+                                    </p>
+
+                                    <p>Available By: Enquire for details.</p>
+
+                                    <p>Rental Term: Enquire for details</p>
+
+                                    <ul class="amenities">
+                                        <li><i class="icon-bedrooms"></i> 5</li>
+                                        <li><i class="icon-bathrooms"></i> 4</li>
+                                        <li><i class="icon-garage"></i> 1</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                                <div class="image">
+                                    <a href="">
+                                        <h3>asdndfjnl</h3>
+                                        <span class="location"></span>
+                                    </a>
+                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
+                                </div>
+                                <div class="info">
+                                    <h3>
+                                        <a href="">House num 1</a>
+                                        <small>Address - Suburb</small>
+                                    </h3>
+                                    <p>480
+                                        <small>/week</small>
+                                    </p>
+
+                                    <p>Available By: Enquire for details.</p>
+
+                                    <p>Rental Term: Enquire for details</p>
+
+                                    <ul class="amenities">
+                                        <li><i class="icon-bedrooms"></i> 5</li>
+                                        <li><i class="icon-bathrooms"></i> 4</li>
+                                        <li><i class="icon-garage"></i> 1</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- END PROPERTY LISTING -->
+
+
+                    <!-- BEGIN PAGINATION -->
+                    <div class="pagination">
+                        <ul id="previous">
+                            <li><a href="#"><i class="fa fa-chevron-left"></i></a></li>
+                        </ul>
+                        <ul>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                        </ul>
+                        <ul id="next">
+                            <li><a href="#"><i class="fa fa-chevron-right"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- END PAGINATION -->
+
+                </div>
+                <!-- END MAIN CONTENT -->
+
+            </div>
+        </div>
+    </div>
+    <!-- END CONTENT WRAPPER -->
+
+
+{% endblock %}

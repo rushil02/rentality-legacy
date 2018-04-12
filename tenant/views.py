@@ -1,9 +1,9 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import View
 
-from tenant.forms import HousePreferenceForm
+from tenant.forms import HousePreferenceForm, SearchForm
 from tenant.models import HousePreference
 
 
@@ -46,3 +46,15 @@ class HousePreferenceCreateView(View):
 def shortlisted_houses(request):
     house = request.user.tenant.shortlist.all()
     return render(request, 'tenant/shortlisted.html', {'shortlisted': house})
+
+
+def search_tenant_page(request):
+    form = SearchForm()
+    context = {
+        'search_form': form,
+    }
+    return render(request, 'search/house_listing.html', context)
+
+
+def search_tenant_api(request):
+    return JsonResponse({"Data": "No Data"})
