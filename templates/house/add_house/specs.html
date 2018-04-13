@@ -6,11 +6,23 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
-
+{# leave form.csrf_token as is, iwts a hidden field used for security stuff #}
                     {{ form.csrf_token }}
                     {#                    Access form's each field like following line#}
                     {#                    {{ form.location }}#}
-                    {{ form.as_p }}
+                    Location
+                    {{ form.location }}
+               
+                    Address
+                    {{ form.address }}
+                    Room type
+                    {{ form.room_type }}
+                    Number of Bedrooms
+                    {{ form.bedrooms }}
+                    Number of Bathrooms
+                    {{ form.bathrooms }}
+                    Number of parking spaces
+                    {{ form.parking }}
 
                 </div>
             </div>
