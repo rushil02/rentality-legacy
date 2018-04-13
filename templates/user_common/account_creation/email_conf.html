@@ -1,29 +1,49 @@
-{% extends 'utils/base_auth.html' %}
+{% extends 'base.html' %}
+
+{% block header-nav %}
+    {% include 'utils/navbar/auth_user.html' %}
+
+{% endblock %}
+
 
 {% block in-container-content %}
     <div class="main col-sm-8 col-md-9">
+        <div class="center">
+            <div class="form1-container">
+                            <!-- BEGIN ADVANCED SEARCH -->
+                <h1 class="property-title">Confirm your email
+                </h1>
 
+                <div class="form-group">
+                    We've sent you a confirmation email. Please check and click on the link to verify your given email
+                    [{{ request.user.email }}].
+                </div>
 
-        <!-- BEGIN ADVANCED SEARCH -->
-        <h1 class="property-title">Confirm your email
-            <small class="pull-right clearfix">Page 3 of 3</small>
-        </h1>
-
-        <div class="form-group">
-            We've sent you a confirmation email. Please check and click on the link to verify your given email
-            [{{ request.user.email }}].
-        </div>
-
-        <p>&nbsp;</p>
-        <div class="clearfix">
-            <p class="pull-right clearfix">
-                <a href="{% url 'user:sel_listing' %}">
-                    <button type="button" class="btn btn-default-color">Confirm Email</button>
-                </a>
-                <a href="{% url 'user:home_page' %}">
-                    <button type="button" class="btn">I'll finish this later</button>
-                </a>
-            </p>
+                <p>&nbsp;</p>
+                <div class="clearfix">
+                        <a href="{% url 'user:sel_listing' %}">
+                            <button type="button" class="btn btn-default-color">Resend Email</button>
+                        </a>
+                        <a href="{% url 'user:home_page' %}">
+                            <button type="button" class="btn">I'll finish this later</button>
+                        </a>
+                </div>
+            </div>
         </div>
     </div>
+                                <!-- BEGIN PAGINATION -->
+    <div class="pagination">
+                            <ul id="previous">
+                                <li><a href="#"><i class="fa fa-chevron-left"></i></a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li class="active"><a href="#">3</a></li>
+                            </ul>
+                            <ul id="next">
+                                <li><a href="#"><i class="fa fa-chevron-right"></i></a></li>
+                            </ul>
+                        </div>
+                             <!-- END PAGINATION -->
 {% endblock %}
