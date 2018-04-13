@@ -8,7 +8,7 @@ from house.models import House, Image
 class HouseDetailsForm1(forms.ModelForm):
     class Meta:
         model = House
-        exclude = ['landlord', 'rent', 'tags', 'availability', 'description']
+        exclude = ['landlord', 'rent', 'tags', 'availability', 'min_stay']
         widgets = {
             'location': forms.TextInput(attrs={'class': 'form-control', 'id': 'location', 'list': 'json-datalist',
                                                'placeholder': 'Suburb, City', 'required': 'required'}),
@@ -33,7 +33,7 @@ class HouseDetailsForm2(forms.ModelForm):
 
     class Meta:
         model = House
-        fields = ['rent', 'availability', 'min_stay']
+        fields = ['rent', 'availability', 'min_stay', 'description']
         widgets = {
             'rent': forms.NumberInput(attrs={'class': 'form-control', }),
             'rules': forms.SelectMultiple(attrs={'class': 'form-control', }),
@@ -41,18 +41,18 @@ class HouseDetailsForm2(forms.ModelForm):
             'tenant_prof': forms.SelectMultiple(attrs={'class': 'form-control', }),
             'availability': RangeWidget(base_widget=forms.SelectDateWidget,
                                         attrs={'class': 'form-control', }),
-            'min_stay': forms.NumberInput(attrs={'class': 'form-control', })
+            'min_stay': forms.NumberInput(attrs={'class': 'form-control', }),
+            'description': forms.Textarea(attrs={'class': 'form-control', })
         }
 
 
 class HousePhotoForm(forms.ModelForm):
     class Meta:
         model = Image
-        fields = ['image', 'description']
+        fields = ['image', ]
 
         widgets = {
             'image': forms.FileInput(attrs={'class': 'form-control', }),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
         }
 
 

@@ -76,7 +76,6 @@ class Image(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     image = models.ImageField(upload_to=get_file_path)
     is_thumbnail = models.BooleanField(default=False)
-    description = models.CharField(max_length=250, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
