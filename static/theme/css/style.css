@@ -5852,29 +5852,51 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
 .grid-style1 .item .amenities li, .grid-style2 .item .amenities li, .list-style .item .amenities li {
     display: inline-block;
     /*height: 38px;*/
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
+    margin: auto;
+    padding-left: 0px;
     border-right: 1px solid #E4E4E4;
     color: #74777c;
 
     display: inline-block;
     /* height: 38px; */
-    margin-right: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
+    margin: auto;
+    padding-left: 1px;
     border-right: 1px solid #E4E4E4;
     color: #74777c;
     line-height: 36px;
     font-size: 20px;
-    width: 30%;
-    text-align: left;
+    width: 32%;
+    text-align: center;
+}
+
+.grid-style1 .item .amenities li:nth-child(2), .grid-style2 .item .amenities li:nth-child(2), .list-style .item .amenities li:nth-child(2) {
+    display: inline-block;
+    margin: auto;
+    padding-left: 1px;
+    border-right: 1px solid #E4E4E4;
+    color: #74777c;
+
+    display: inline-block;
+    /* height: 38px; */
+    margin: auto;
+    padding-left: 10px;
+    border-right: 1px solid #E4E4E4;
+    color: #74777c;
+    line-height: 36px;
+    font-size: 20px;
+    width: 32%;
+    text-align: center;
 }
 
 .grid-style1 .item .amenities li:last-child, .grid-style2 .item .amenities li:last-child, .list-style .item .amenities li:last-child {
+    display: inline-block;
+    position: center;
+    margin: auto;
+    padding-left: 11px;
+    font-size: 20px;
+    width: 32%;
+    text-align: center;
     border-right: none;
-    margin-right: 0px;
-    padding-right: 0px;
 }
 
 .grid-style1 .item .amenities li .fa, .grid-style2 .item .amenities li .fa, .list-style .item .amenities li .fa {
@@ -5888,13 +5910,11 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
     font-size: 18px;
     margin-right: 2px;
     margin-top: -3px;
-
+    padding-left: 1px;
     color: #adb2b6;
     float: left;
     font-size: 36px;
-    margin-right: 10px;
-    margin-top: -3px;
-    margin-left: 24%;
+    text-align:center;
 }
 
 .grid-style1 .item > .amenities, .grid-style2 .item > .amenities, .list-style .item > .amenities {
@@ -8916,4 +8936,13 @@ div.cozy #pp_full_res .pp_inline, div.dark_square #pp_full_res .pp_inline {
     position: absolute;
     text-align: center;
     width: 100%;
+}
+
+.noleftspace {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.searchbarwidth{
+    width: 55.9%;
 }

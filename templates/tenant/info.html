@@ -5,39 +5,41 @@
 
 
     <!-- BEGIN MAIN CONTENT -->
-    <div class="main col-sm-4 col-md-3" style="padding-top: 15px;">
+    <div class= "row">
+        <div class="col-sm-4 col-md-3" style="padding-top: 15px;">
 
-        <!-- BEGIN AGENCY DETAIL -->
-        <div class="clearfix">
-            <div class="property-agent-info">
-                <div class="agent-detail col-md-12">
-                    <div class="image">
-                        <img alt="" src="/static/img/placeholders/profile/default.png">
-                    </div>
-
-                    <div class="info">
-                        <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
-                            <h2>{{ house_pref.tenant.user.get_full_name }}</h2>
-                        </header>
-                    </div>
-                </div>
-
-                <div class="form-style col-md-12">
-                    {# method="POST" action="{{url_for('tenant_listing_send_offer', uid=listing.key.urlsafe())}}">#}
-                    <div class="row">
-
-                        {# {{send_offer_form.csrf_token}} #}
-
-                        <div class="center">
-                            <button id="sendOfferBtn" class="btn btn-default-color">Send Offer</button>
+            <!-- BEGIN AGENCY DETAIL -->
+            <div class="clearfix">
+                <div class="property-agent-info">
+                    <div class="agent-detail col-md-12">
+                        <div class="image">
+                            <img alt="" src="/static/img/placeholders/profile/default.png">
                         </div>
 
+                        <div class="info">
+                            <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                                <h2>{{ house_pref.tenant.user.get_full_name }}</h2>
+                            </header>
+                        </div>
                     </div>
-                </div>
 
+                    <div class="form-style col-md-12">
+                        {# method="POST" action="{{url_for('tenant_listing_send_offer', uid=listing.key.urlsafe())}}">#}
+                        <div class="row">
+
+                            {# {{send_offer_form.csrf_token}} #}
+
+                            <div class="center">
+                                <button id="sendOfferBtn" class="btn btn-default-color">Send Offer</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
             </div>
+            <!-- END AGENCY DETAIL -->
         </div>
-        <!-- END AGENCY DETAIL -->
     </div>
     <!-- END MAIN CONTENT -->
     <div class="main col-sm-8 col-md-9" style="padding-top: 15px;">

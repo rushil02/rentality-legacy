@@ -7,21 +7,28 @@
     <div id="advanced-search" class="gray open" style="text-align: left;">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-md-12 col-sm-12">
                     <form method="GET" action="">
 
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-md-8 col-sm-12">
                                 {{ search_form.location }}
                             </div>
-                            <div class="col-sm-2">
-                                {{ search_form.bedrooms }}
-                            </div>
-                            <div class="col-sm-2">
-                                {{ search_form.bathrooms }}                            </div>
-
-                            <div class="col-sm-2">
-                                {{ search_form.max_price }}                            </div>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <div class="noleftspace col-md-3 col-sm-4">
+                                                {{ search_form.bedrooms }}
+                                            </div>
+                                            <div class="noleftspace col-md-3 col-sm-4">
+                                                {{ search_form.bathrooms }}                            
+                                            </div>
+                                            <div class="noleftspace col-md-3 col-sm-4">
+                                                {{ search_form.max_price }}  
+                                            </div>                          
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
 
                         <button id='search-btn' e2type="submit" class="btn btn-fullcolor">Search</button>
@@ -46,7 +53,7 @@
                     <!-- BEGIN PROPERTY LISTING -->
                     <div id="property-listing" class="grid-style1 clearfix">
                         <div class="row">
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                            <div class="item col-sm-4 col-md-3"><!-- Set width to 4 columns for grid view mode only -->
                                 <div class="image">
                                     <a href="">
                                         <h3>asdndfjnl</h3>
@@ -74,7 +81,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                            <div class="item col-sm-4 col-md-3"><!-- Set width to 4 columns for grid view mode only -->
                                 <div class="image">
                                     <a href="">
                                         <h3>asdndfjnl</h3>
@@ -84,7 +91,7 @@
                                 </div>
                                 <div class="info">
                                     <h3>
-                                        <a href="">House num 1</a>
+                                        <a href="">House num 2</a>
                                         <small>Address - Suburb</small>
                                     </h3>
                                     <p>480
@@ -102,7 +109,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                            <div class="item col-sm-4 col-md-3"><!-- Set width to 4 columns for grid view mode only -->
                                 <div class="image">
                                     <a href="">
                                         <h3>asdndfjnl</h3>
@@ -112,7 +119,7 @@
                                 </div>
                                 <div class="info">
                                     <h3>
-                                        <a href="">House num 1</a>
+                                        <a href="">House num 3</a>
                                         <small>Address - Suburb</small>
                                     </h3>
                                     <p>480
@@ -130,7 +137,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                            <div class="item col-sm-4 col-md-3"><!-- Set width to 4 columns for grid view mode only -->
                                 <div class="image">
                                     <a href="">
                                         <h3>asdndfjnl</h3>
@@ -140,7 +147,7 @@
                                 </div>
                                 <div class="info">
                                     <h3>
-                                        <a href="">House num 1</a>
+                                        <a href="">House num 4</a>
                                         <small>Address - Suburb</small>
                                     </h3>
                                     <p>480
@@ -158,7 +165,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                            <div class="item col-sm-4 col-md-3"><!-- Set width to 4 columns for grid view mode only -->
                                 <div class="image">
                                     <a href="">
                                         <h3>asdndfjnl</h3>
@@ -168,7 +175,7 @@
                                 </div>
                                 <div class="info">
                                     <h3>
-                                        <a href="">House num 1</a>
+                                        <a href="">House num 5</a>
                                         <small>Address - Suburb</small>
                                     </h3>
                                     <p>480
@@ -186,7 +193,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                            <div class="item col-sm-4 col-md-3"><!-- Set width to 4 columns for grid view mode only -->
                                 <div class="image">
                                     <a href="">
                                         <h3>asdndfjnl</h3>
@@ -196,7 +203,7 @@
                                 </div>
                                 <div class="info">
                                     <h3>
-                                        <a href="">House num 1</a>
+                                        <a href="">House num 6</a>
                                         <small>Address - Suburb</small>
                                     </h3>
                                     <p>480
@@ -214,7 +221,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
+                            <div class="item col-sm-4 col-md-3"><!-- Set width to 4 columns for grid view mode only -->
                                 <div class="image">
                                     <a href="">
                                         <h3>asdndfjnl</h3>
