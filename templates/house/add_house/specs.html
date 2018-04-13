@@ -6,17 +6,18 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
-{# leave form.csrf_token as is, iwts a hidden field used for security stuff #}
-                    {{ form.csrf_token }}
+                    {# leave form.csrf_token as is, iwts a hidden field used for security stuff #}
+                    {% csrf_token %}
                     {#                    Access form's each field like following line#}
                     {#                    {{ form.location }}#}
-                    Location
-                    {{ form.location }}
-               
-                    Address
                     {{ form.address }}
-                    Room type
+
+                    {{ form.location }}
+                    <datalist id="json-datalist"></datalist>
+
+                    Accommodation type
                     {{ form.room_type }}
+                    {{ form.other_room_type }}
                     Number of Bedrooms
                     {{ form.bedrooms }}
                     Number of Bathrooms
@@ -43,3 +44,47 @@
         </p>
     </div>
 {% endblock %}
+
+{% block js_script %}
+    <script>
+        //setup before functions
+        var typingTimer;                //timer identifier
+        var doneTypingInterval = 500;  //time in ms (5 seconds)
+
+        //on keyup, start the countdown
+        $('#location').keyup(function () {
+            clearTimeout(typingTimer);
+            if ($('#location').val()) {
+                typingTimer = setTimeout(doneTyping, doneTypingInterval);
+            }
+        });
+
+        //user is "finished typing," do something
+        function doneTyping() {
+            var val = $('#location').val();
+            var dataList = document.getElementById('json-datalist');
+            var option = document.createElement('option');
+            // Set the value using the item in the JSON array.
+            option.value = 'Suburb';
+            // Add the <option> element to the <datalist>.
+            dataList.appendChild(option);
+
+
+        }
+
+    </script>
+
+    <script>
+
+        var el = $('#id_other_room_type');
+        $("#id_room_type").change(function () {
+            if ($(this).val() === 'O') {
+                $(el).prop('type', 'text');
+            }
+        });
+
+
+    </script>
+
+{% endblock %}
+

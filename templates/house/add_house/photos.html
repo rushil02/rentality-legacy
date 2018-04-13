@@ -7,10 +7,14 @@
             <div class="row">
                 <div class="col-sm-12">
 
-                    {{ form.csrf_token }}
-                    {#                    Access form's each field like following line#}
-                    {#                    {{ form.location }}#}
-                    {{ form.as_p }}
+                    {% csrf_token %}
+                    Image
+                    {{ form.image }}
+
+                    <img id="preview" src="" alt="" width="100%" border=""/>
+
+
+                    {{ form.description }}
 
                 </div>
             </div>
@@ -30,4 +34,29 @@
             <a href="" class="btn btn-default-color">Next</a>
         </p>
     </div>
+{% endblock %}
+
+
+{% block js_script %}
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#id_image").change(function () {
+            readURL(this);
+        });
+    </script>
+
+
+
 {% endblock %}

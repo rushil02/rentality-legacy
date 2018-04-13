@@ -34,30 +34,20 @@ class House(models.Model):
     )
 
     ROOM_TYPE = (
-        ('A', 'Some room A'),
+        ('A', 'Whole Apartment'),
+        ('B', 'Whole House'),
+        ('C', 'Room in Share-house with Private bathroom'),
+        ('D', 'Room in Share-house with Shared bathroom'),
+        ('E', 'Student Accommodation'),
+        ('F', 'Home Stay'),
+        ('G', 'Granny Flat'),
+        ('O', 'Other'),
     )
     room_type = models.CharField(max_length=1, choices=ROOM_TYPE, blank=True)
-
-    BEDROOMS = (
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3+')
-    )
-    bedrooms = models.CharField(max_length=1, choices=BEDROOMS, blank=True)
-
-    BATHROOMS = (
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3+')
-    )
-    bathrooms = models.CharField(max_length=1, choices=BEDROOMS, blank=True)
-
-    PARKING = (
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3+')
-    )
-    parking = models.CharField(max_length=1, choices=BEDROOMS, blank=True)
+    other_room_type = models.TextField(blank=True)
+    bedrooms = models.PositiveSmallIntegerField(blank=True, null=True)
+    bathrooms = models.PositiveSmallIntegerField(blank=True, null=True)
+    parking = models.PositiveSmallIntegerField(blank=True, null=True)
 
     other_people = models.PositiveSmallIntegerField(default=0)
     rent = models.PositiveSmallIntegerField(default=0)

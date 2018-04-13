@@ -1,133 +1,193 @@
 {% extends 'utils/base_user_auto.html' %}
 
 {% block in-container-content %}
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h4>Want to relist your property?</h4>
-                    <p>If you want people to see your property, you relist it to be searchable.</p>
-                    <a class="btn btn-primary" href="{ url_for('listing_show', uid=listing.key.urlsafe())}}">Relist
-                        Property</a> <a class="btn btn-link" href="">Dismiss</a>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h4>Owner's Controls</h4>
-                    <hr/>
-                    <a class="btn btn-default" href="{ url_for('listing_show', uid=listing.key.urlsafe())}}">Relist
-                        Property</a>
-                    <hr/>
-                    <a class="btn btn-default"
-                       href="{ url_for('property_manage_property', uid=listing.key.urlsafe())}}">Manage Property (1
-                        tenant)</a>
-                    <hr/>
-                    <a class="btn btn-default" href="{ url_for('listing_show', uid=listing.key.urlsafe())}}">See
-                        Listing</a>
-                    <hr/>
-                    <a class="btn btn-default" href="{ url_for('listing_create', uid=listing.key.urlsafe())}}">Create
-                        listing</a>
-                </div>
-            </div>
-            <h3>My Property</h3>
-            <h4>Fully Furnished 2 Bedroom Apartment</h4>
-            <p>
-                1/17 Moore Street, Turner, ACT 2612
-            </p>
-            <p>2 <i class="fa fa-bed" aria-hidden="true"></i>
-                1 <i class="fa fa-bath" aria-hidden="true"></i>
-                1 <i class="fa fa-shower" aria-hidden="true"></i>
-                2 <i class="fa fa-car" aria-hidden="true"></i> |
-                Apartment
-            </p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc rutrum eros vel neque molestie laoreet. Sed
-                pretium sapien a nisi maximus blandit. Sed sapien mauris, varius et nunc ac, cursus tristique orci.
-                Mauris pretium eros a ex ultrices efficitur. Ut at odio sit amet ex posuere vehicula. Mauris dui
-                ante.</p>
-            <h4>Features</h4>
-            <ul>
-                <li>AC</li>
-                <li>Heating</li>
-                <li>Laundry</li>
-                <li>Gym</li>
-            </ul>
-            <h4>What's Nearby</h4>
-            <ul>
-                <li>Canberra Centre</li>
-                <li>Schools</li>
-                <li>Post Office</li>
-            </ul>
-            <h4>Turner Suburb Info (Stats)</h4>
-
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <script type="text/javascript">
-                google.charts.load('current', {'packages': ['corechart']});
-                google.charts.setOnLoadCallback(function () {
-                    drawChart();
-                    drawChart2();
-                });
-
-                function drawChart() {
-
-                    var data = google.visualization.arrayToDataTable([
-                        ['Age Group', 'Percentage'],
-                        ['20-24', 15.5],
-                        ['24-34', 32.7],
-                        ['35-44', 13.4],
-                        ['45-54', 11.2],
-                        ['55-64', 8.3],
-                        ['Others', 19]
-                    ]);
-
-                    var options = {
-                        title: 'Age Group'
-                    };
-
-                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-                    chart.draw(data, options);
-                }
-
-                function drawChart2() {
-
-                    var data = google.visualization.arrayToDataTable([
-                        ['Social Marital Status', 'Hours per Day'],
-                        ['Not Married', 54.2],
-                        ['Registered Marriage', 28.3],
-                        ['Defacto Relationship', 17.5]
-                    ]);
-
-                    var options = {
-                        title: 'Social Marital Status'
-                    };
-
-                    var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
-
-                    chart.draw(data, options);
-                }
-
-                window.addEventListener("resize", function () {
-                    drawChart();
-                    drawChart2();
-                })
-            </script>
+    <div class="content">
+        <div class="">
             <div class="row">
-                <div class="col-sm-6">
-                    <div id="piechart" style="width: 100%; height: 500px;"></div>
-                </div>
-                <div class="col-sm-6">
-                    <div id="piechart2" style="width: 100%; height: 500px;"></div>
+
+                <!-- BEGIN MAIN CONTENT -->
+                <div class="col-sm-12">
+
+                    <!-- BEGIN PROPERTY DETAIL SLIDERS WRAPPER -->
+                    <div id="property-detail-wrapper" class="style1">
+
+                        <!-- BEGIN PROPERTY DETAIL LARGE IMAGE SLIDER -->
+                        <div id="property-detail-large" class="owl-carousel">
+                            <div class="item">
+                                <img src="/static/img/placeholders/apartment/apt1.jpeg" alt=""/>
+                            </div>
+                            <div class="item">
+                                <img src="/static/img/placeholders/apartment/apt2.jpeg" alt=""/>
+                            </div>
+                            <div class="item">
+                                <img src="/static/img/placeholders/apartment/apt3.jpeg" alt=""/>
+                            </div>
+                        </div>
+                        <!-- END PROPERTY DETAIL LARGE IMAGE SLIDER -->
+
+                        <!-- BEGIN PROPERTY DETAIL THUMBNAILS SLIDER -->
+                        <div style="display: none !important;">
+                            <div id="property-detail-thumbs" class="owl-carousel">
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                                <div class="item"><img src="http://placehold.it/148x131" alt=""/></div>
+                            </div>
+                        </div>
+                        <!-- END PROPERTY DETAIL THUMBNAILS SLIDER -->
+
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
-            <h4>Location</h4>
-            <iframe src="//www.google.com/maps/embed/v1/place?q=Harrods,Brompton%20Rd,%20UK
-      &amp;zoom=17
-      &amp;key=AIzaSyAOhiYAlirWkes3jC_xSx2hgkzXsfNVK_g"
-                    style="border: none; width: 100%; height: 300px;">
-            </iframe>
+    </div>
+
+    <div class="main content" style="padding-top: 0;">
+        <div class="container">
+            <div class="row">
+
+                <!-- BEGIN MAIN CONTENT -->
+                <div class="col-sm-12">
+                    <div id="notifications">
+
+                    </div>
+                    {#                    <div class="pull-right">#}
+                    {#                        <a class="btn btn-fullcolor"#}
+                    {#                           href="">Edit</a>#}
+                    {#                    </div>#}
+                    <h1 class="property-title">Address
+                        <small>address_line2</small>
+                    </h1>
+                </div>
+                <div class="col-sm-8">
+
+                    <div class="property-topinfo">
+                        <ul class="amenities">
+                            <li><i class="icon-bedrooms"></i> bedrooms</li>
+                            <li><i class="icon-bathrooms"></i> bathrooms</li>
+                            <li><i class="icon-garage"></i>listing.parking</li>
+                        </ul>
+                    </div>
+
+                    <hr/>
+
+                    <p class="property-detail-key-detail">Date Available: Message for details</p>
+
+                    <p class="property-detail-key-detail">Length of Stay: Message for details</p>
+
+                    <p class="property-detail-key-detail">Rent: $480/week</p>
+
+
+                    <!-- BEGIN PROPERTY AMENITIES LIST -->
+                    <ul class="property-amenities-list col-md-4">
+                        <li class="enabled"> Wifi: Yes</li>
+                        <li class="enabled"> Parking: Yes</li>
+
+                        <li class="enabled"> Furnished: Yes</li>
+                    </ul>
+                    <!-- END PROPERTY AMENITIES LIST -->
+
+                    <h2 class="section-title">Description</h2>
+
+                    <p>Cras lobortis, diam et ultricies imperdiet, urna urna pharetra est, vitae euismod lectus
+                        dolor nec sapien. Morbi consectetur ut metus quis elementum. Sed condimentum dui at nulla
+                        aliquet condimentum. Nullam vitae odio a nibh scelerisque condimentum et consequat
+                        sapien.</p>
+                    <p><br/>Nullam non lectus non mauris viverra convallis ac vitae nunc. Class aptent taciti
+                        sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla congue neque
+                        et elit vulputate, nec convallis massa rutrum. Proin vel metus sit amet dolor molestie
+                        sagittis. In lacinia rhoncus pulvinar. Maecenas vitae sem nec mi suscipit malesuada a quis
+                        ligula. Phasellus varius fermentum tortor, sit amet molestie elit faucibus sed.</p>
+                    <p><br/>Cras euismod tincidunt risus, vel accumsan lacus aliquet vitae. Morbi in dignissim
+                        libero. Cras sed scelerisque est. Praesent eget ultricies lectus, vestibulum auctor sem.
+                        Vestibulum ultrices risus euismod commodo interdum. </p>
+
+                    <h2 class="section-title">Additional Rules</h2>
+
+                    <p>&nbsp;</p>
+
+                    {#                    <h2 class="section-title">Welcome</h2>#}
+                    {#                    <!-- BEGIN PROPERTY FEATURES LIST -->#}
+                    {#                    <ul class="property-features col-sm-6">#}
+                    {#                        <li><i class="fa fa-check-circle fa-fw"></i> Some tag</li>#}
+                    {#                    </ul>#}
+                    {##}
+                    {#                    <ul class="property-features col-sm-6">#}
+                    {#                        <li><i class="fa fa-check-circle fa-fw"></i>  Some tag</li>#}
+                    {#                    </ul>#}
+                    <!-- END PROPERTY FEATURES LIST -->
+
+                </div>
+                <!-- END MAIN CONTENT -->
+
+
+                <!-- BEGIN SIDEBAR -->
+                <div class="col-sm-4">
+
+                    <!-- BEGIN ADVANCED SEARCH -->
+                    <div class="property-agent-info">
+                        <div class="agent-detail col-md-12">
+                            <div class="image">
+
+                                <img alt="" src="http://placehold.it/307x307"/>
+                            </div>
+
+                            <div class="info">
+                                <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                                    <h2>Owner name
+                                        <small>Verified Email</small>
+                                    </h2>
+                                </header>
+                            </div>
+                        </div>
+                        <form class="form-style col-md-12" method="POST"
+                              action="">
+                            {#                            {{ send_application_form.csrf_token }}#}
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <textarea name="message" placeholder="Message"
+                                              class="form-control required"></textarea>
+                                </div>
+
+                                <div class="center">
+                                    <button type="submit" class="btn btn-fullcolor">Send Message</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- PROPERTY MAP HOLDER -->
+                    <div style="display: none;" id="property_location" class="map col-sm-12"></div>
+                    <!-- END ADVANCED SEARCH -->
+
+                </div>
+                <!-- END SIDEBAR -->
+
+            </div>
         </div>
+    </div>
+    <!-- END CONTENT WRAPPER -->
+
+{% endblock %}
+
+{% block extra-content %}
+    <div>
+        <iframe
+                width="100%"
+                height="600px"
+                frameborder="0" style="border:0"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyClsJFzjgJBxhY3D4HDn4V_EG9Y5FYqdqQ
+    &q=Space+Needle,Seattle+WA" allowfullscreen>
+        </iframe>
+
     </div>
 
 {% endblock %}

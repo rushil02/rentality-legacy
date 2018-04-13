@@ -2,15 +2,22 @@
 
 {% block listing-form-body %}
     <h1 class="property-title">Tell us about your property</h1>
+
     <form action="" method="POST">
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
 
-                    {{ form.csrf_token }}
-                    {#                    Access form's each field like following line#}
-                    {#                    {{ form.location }}#}
-                    {{ form.as_p }}
+                    {% csrf_token %}
+                    Rent
+                    {{ form.rent }}
+                    Facilities
+                    {{ form.tags }}
+                    Availability
+                    {{ form.availability }}
+
+                    Minimum Stay
+                    {{ form.min_stay }}
 
                 </div>
             </div>
@@ -30,4 +37,8 @@
             <a href="" class="btn btn-default-color">Next</a>
         </p>
     </div>
+{% endblock %}
+
+{% block js_script %}
+
 {% endblock %}
