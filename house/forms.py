@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.postgres.forms import DateRangeField, RangeWidget
+from django.forms import inlineformset_factory
 
 from house.models import House, Image
 
@@ -26,29 +27,36 @@ class HouseDetailsForm1(forms.ModelForm):
 
 
 class HouseDetailsForm2(forms.ModelForm):
+    facilities = forms.MultipleChoiceField(required=False)
+    rules = forms.MultipleChoiceField(required=False)
+    tenant_pref = forms.MultipleChoiceField(required=False, label='Tenant Preferences')
+
     class Meta:
         model = House
-        fields = ['rent', 'tags', 'availability', 'min_stay']
-        labels = {
-            "tags": "Facilities"
-        }
+        fields = ['rent', 'availability', 'min_stay']
         widgets = {
             'rent': forms.NumberInput(attrs={'class': 'form-control', }),
-            'tags': forms.SelectMultiple(attrs={'class': 'form-control', }),
+            'rules': forms.SelectMultiple(attrs={'class': 'form-control', }),
+            'facilities': forms.SelectMultiple(attrs={'class': 'form-control', }),
+            'tenant_prof': forms.SelectMultiple(attrs={'class': 'form-control', }),
             'availability': RangeWidget(base_widget=forms.SelectDateWidget,
                                         attrs={'class': 'form-control', }),
             'min_stay': forms.NumberInput(attrs={'class': 'form-control', })
         }
 
 
-class HousePhotosForm(forms.ModelForm):
+class HousePhotoForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['image', 'description']
+
         widgets = {
             'image': forms.FileInput(attrs={'class': 'form-control', }),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
         }
+
+
+HousePhotoFormSet = inlineformset_factory(House, Image, form=HousePhotoForm, extra=3)
 
 
 class HouseDetailsForm3(forms.ModelForm):

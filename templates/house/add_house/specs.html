@@ -28,6 +28,28 @@
                 </div>
             </div>
         </div>
+
+    </form>
+    <form action="" method="POST">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-12">
+                    {{ formset.management_form }}
+                    {% csrf_token %}
+                    {% for f in formset.forms %}
+
+
+                        Image
+                        {{ f.image }}
+
+                        <img id="preview" src="" alt="" width="100%" border=""/>
+
+
+                        {{ f.description }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
         <p>&nbsp;</p>
         <div class="clearfix">
             <p class="pull-right clearfix">
@@ -85,6 +107,30 @@
 
 
     </script>
+    <script>
+        function readURL(input) {
 
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#id_image").change(function () {
+            readURL(this);
+        });
+    </script>
+    <script type="text/javascript">
+        $('.formset_row').formset({
+            addText: 'add Image',
+            deleteText: 'remove',
+            prefix: 'image_set'
+        });
+    </script>
 {% endblock %}
 

@@ -83,6 +83,12 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ['user', 'updated_on', ]
+        widgets = {
+            'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Contact number'}),
+            'dob': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Date of Birth'}),
+            'sex': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Sex'}),
+            'profile_pic': forms.FileInput(attrs={'class': 'form-control', 'placeholder': 'Date of Birth'}),
+        }
 
 
 class LoginForm(forms.Form):
