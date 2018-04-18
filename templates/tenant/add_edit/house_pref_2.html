@@ -1,0 +1,33 @@
+{% extends 'tenant/add_edit/base.html' %}
+
+{% block listing-form-body %}
+    <h1 class="property-title">Preferences</h1>
+    <form action="" method="POST">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-12">
+
+                    {% csrf_token %}
+                    {#                    Access form's each field like following line#}
+                    {#                    {{ form.location }}#}
+                    {{ form.as_p }}
+
+                </div>
+            </div>
+        </div>
+        <p>&nbsp;</p>
+        <div class="clearfix">
+            <p class="pull-right clearfix">
+                <span class="text-muted">You have unsaved changes.</span>
+                <button type="submit" class="btn btn-default-color">Save Changes</button>
+            </p>
+        </div>
+    </form>
+    <hr/>
+    <p>&nbsp;</p>
+    <div class="clearfix">
+        <p class="pull-right clearfix">
+            <a href="" class="btn btn-default-color">Next</a>
+        </p>
+    </div>
+{% endblock %}

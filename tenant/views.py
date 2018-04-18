@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import View
 
-from tenant.forms import HousePreferenceForm, SearchForm
+from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2
 from tenant.models import HousePreference
+from user_custom.forms import EditProfileForm
 
 
 @login_required
@@ -22,7 +23,7 @@ def info(request, house_pref_uuid):
 
 
 class HousePreferenceCreateView(View):
-    template_name = 'tenant/house_pref.html'
+    template_name = 'tenant/add_edit/house_pref.html'
 
     @staticmethod
     def get_form(post_data=None):
@@ -30,7 +31,60 @@ class HousePreferenceCreateView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()
-        return render(request, self.template_name, {'form': form})
+        formset = AddTenantFormSet()
+        context = {
+            'form': form,
+            'formset': formset
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form(request.POST)
+        if form.is_valid():
+            form.instance.tenant = request.user.tenant
+            form.save()
+            return redirect('/')
+        else:
+            return render(request, self.template_name, {'form': form})
+
+
+class HousePreferenceCreateView2(View):
+    template_name = 'tenant/add_edit/house_pref_2.html'
+
+    @staticmethod
+    def get_form(post_data=None):
+        return HousePreferenceForm2(post_data)
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        context = {
+            'form': form,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form(request.POST)
+        if form.is_valid():
+            form.instance.tenant = request.user.tenant
+            form.save()
+            return redirect('/')
+        else:
+            return render(request, self.template_name, {'form': form})
+
+
+class HousePreferenceCreateView3(View):
+    template_name = 'tenant/add_edit/tenant_details.html'
+
+    @staticmethod
+    def get_form(post_data=None):
+        return EditProfileForm(post_data)
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        context = {
+            'form': form,
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form(request.POST)

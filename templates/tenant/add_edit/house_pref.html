@@ -1,0 +1,51 @@
+{% extends 'tenant/add_edit/base.html' %}
+
+{% block listing-form-body %}
+    <h1 class="property-title">Tell us who you are</h1>
+    <form action="" method="POST">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+
+                    </form>
+                    <br>
+                    <h2>Additional Tenants</h2>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+                        {% for f in formset.forms %}
+
+
+
+                            {{ f.as_p }}
+
+                        {% endfor %}
+
+
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <p>&nbsp;</p>
+        <div class="clearfix">
+            <p class="pull-right clearfix">
+                <span class="text-muted">You have unsaved changes.</span>
+                <button type="submit" class="btn btn-default-color">Save Changes</button>
+            </p>
+        </div>
+    </form>
+    <hr/>
+    <p>&nbsp;</p>
+    <div class="clearfix">
+        <p class="pull-right clearfix">
+            <a href="" class="btn btn-default-color">Next</a>
+        </p>
+    </div>
+{% endblock %}
+

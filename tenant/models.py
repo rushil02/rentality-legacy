@@ -20,10 +20,6 @@ class TenantProfile(models.Model):
 
 class HousePreference(models.Model):
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.CASCADE)
-
-    ADDITIONAL_TENANTS_INFORMATION = ['Name', 'Contact', 'Gender', 'Age']
-    additional_tenants = JSONField(null=True, blank=True)
-
     max_budget = models.PositiveIntegerField()
     locations = models.ManyToManyField('essentials.Location')
     move_in_date = DateRangeField(null=True, blank=True)
@@ -34,26 +30,18 @@ class HousePreference(models.Model):
     tags = models.ManyToManyField('house.Tag')
 
     PROPERTY_TYPE = (
-        ('R', 'Room'),
-        ('F', 'Full House'),
-        ('A', 'Any')
+        ('A', 'Whole Apartment'),
+        ('B', 'Whole House'),
+        ('C', 'Room in Share-house with Private bathroom'),
+        ('D', 'Room in Share-house with Shared bathroom'),
+        ('E', 'Student Accommodation'),
+        ('F', 'Home Stay'),
+        ('G', 'Granny Flat'),
+        ('O', 'Other'),
     )
 
     property_type = models.CharField(max_length=1, default='A', choices=PROPERTY_TYPE)
     description = models.TextField(blank=True)
-
-    # TODO: use for additional_tenants
-    def add_tenants(self, tenant_list):  # FIXME: Add data with validation
-        keys = self.ADDITIONAL_TENANTS_INFORMATION
-        for tenant in tenant_list:
-            if set(tenant.keys()) == set(keys) and len(tenant.keys()) == len(keys):
-                continue
-            else:
-                raise ValidationError(
-                    _('Invalid value: %(value)s'),
-                    code='invalid',
-                    params={'value': tenant},
-                )
 
     def __str__(self):
         return "%s" % self.tenant
@@ -67,3 +55,21 @@ class HousePreference(models.Model):
 
     def get_thumbnail(self):
         return self.tenant.user.userprofile.get_profile_pic()
+
+
+class AdditionalTenant(models.Model):
+    house_pref = models.ForeignKey('tenant.HousePreference', on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
+    contact_num = models.CharField(
+        _('contact number'),
+        blank=True,
+        max_length=15,
+        # validators=[contact_num_validator]  FIXME: No validator. Need custom validator
+    )
+    SEX_TYPE = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other')
+    )
+    sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='F')
+    dob = models.DateField(_('Date of Birth'), blank=True, null=True)

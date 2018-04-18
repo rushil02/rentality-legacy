@@ -1,0 +1,45 @@
+{% extends 'utils/base_auth.html' %}
+
+{% block in-container-content %}
+
+    <div class="row">
+
+
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="main col-sm-8 col-md-9">
+            <div class="center">
+                <div class="">
+
+                    {% block listing-form-body %}
+
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+        <!-- END MAIN CONTENT -->
+        <!-- BEGIN SIDEBAR -->
+        <div class="sidebar gray col-sm-4 col-md-3 hidden-xs">
+            <!--             <div class= "sidenav">
+             -->
+            <div id="footer-top">
+                <div class="block">
+                    <h3>List my House Preferences</h3>
+                    <ul class="footer-links">
+                        <li class="active"><a href="{% url 'tenant:house_pref' %}">Tell us who you are</a></li>
+                        <li><a href="{% url 'tenant:house_pref_2' %}">Preferences</a></li>
+                        <li><a href="{% url 'tenant:house_pref_3' %}">Before you go</a>
+                        </li>
+                        {#                        <li><a href="{% url 'house:add' 1 %}">All Done!</a></li>#}
+                    </ul>
+                </div>
+                <!--  </div> -->
+            </div>
+
+        </div>
+        <!-- END SIDEBAR -->
+
+    </div>
+
+
+{% endblock %}
