@@ -107,7 +107,7 @@ def search_tenant_page(request):
     context = {
         'search_form': form,
     }
-    return render(request, 'search/house_listing.html', context)
+    return render(request, 'search/tenant_listing.html', context)
 
 
 def search_tenant_api(request):

@@ -27,8 +27,16 @@
             </div>
         </div>
 		<div class="account_setting">
-    {{ form1.as_p }}
-    {{ form2.as_p }}
+    First name:
+    {{ form1.first_name }}
+    Last name:
+    {{ form1.last_name }}
+    {{ form2.contact_num }}
+    {{ form2.dob }}
+    {{ form2.sex }}
+    {{ form2.profile_pic }}
+
+    <div><a href="{% url 'account_change_password' %}">Change Password</a></div>
 
 {% endblock %}
 		</div>

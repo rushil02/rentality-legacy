@@ -6,11 +6,11 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
-
-                    {{ form.csrf_token }}
-                    {#                    Access form's each field like following line#}
-                    {#                    {{ form.location }}#}
-                    {{ form.as_p }}
+                    {% csrf_token %}
+                    {{ form2.contact_num }}
+                    {{ form2.dob }}
+                    {{ form2.sex }}
+                    {{ form2.profile_pic }}
 
                 </div>
             </div>

@@ -12,7 +12,7 @@
                 <button class="btn btn-default active" id="home_search_properties">Properties</button>
                 <button class="btn btn-default" id="home_search_tenants">Tenants</button>
 
-                <form action="" method="GET" id="home_search_form">
+                <form action="{% url 'house:search_house' %}" method="GET" id="home_search_form">
                     <div class="input-group">
                         <input type="text" placeholder="City, State, Postcode, etc..." name="query" id="home_search"
                                class="form-control"/>

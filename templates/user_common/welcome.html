@@ -77,13 +77,6 @@
 
 {% block js_script %}
 
-    <script>
-        $('#home_search_properties').click(function () {
-            $('#home_search_form').attr('action', "/url/")
-        });
-        $('#home_search_tenants').click(function () {
-            $('#home_search_form').attr('action', "/url/")
-        });
-    </script>
+    {% include 'search/utils/search_bar_js.html' %}
 
 {% endblock %}
