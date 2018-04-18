@@ -1,7 +1,35 @@
 {% extends 'utils/base_auth.html' %}
 
 {% block in-container-content %}
+
+<!-- BEGIN CONTENT WRAPPER -->
+
+
+    <!-- BEGIN MAIN CONTENT -->
+    <div class="main row">
+        <div class="col-sm-4 col-md-3" style="padding-top: 15px;">
+
+            <!-- BEGIN AGENCY DETAIL -->
+            <div class="clearfix">
+                <div class="property-agent-info">
+                    <div class="agent-detail col-md-12">
+                        <div class="image">
+                            <img alt="" src="/static/img/placeholders/profile/default.png">
+                        </div>
+
+                            <div class="info">
+                            <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0; text-align: center">
+                                <h2>{{ house_pref.tenant.user.get_full_name }}</h2>
+                            </header>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="account_setting">
     {{ form1.as_p }}
     {{ form2.as_p }}
 
 {% endblock %}
+		</div>
+    </div>

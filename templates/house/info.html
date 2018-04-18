@@ -63,16 +63,16 @@
                     {#                           href="">Edit</a>#}
                     {#                    </div>#}
                     <h1 class="property-title">Address
-                        <small>address_line2</small>
+                        <small>address_line2(BACKENDTOCONNECT)</small>
                     </h1>
                 </div>
                 <div class="col-sm-8">
 
                     <div class="property-topinfo">
                         <ul class="amenities">
-                            <li><i class="icon-bedrooms"></i> bedrooms</li>
-                            <li><i class="icon-bathrooms"></i> bathrooms</li>
-                            <li><i class="icon-garage"></i>listing.parking</li>
+                            <li><i class="icon-bedrooms"> <span class= "caption"></i> 3 </span></li>
+                            <li><i class="icon-bathrooms"> <span class= "caption"></i> 2 </span></li>
+                            <li><i class="icon-garage"> <span class= "caption"></i> 2 </span></li>
                         </ul>
                     </div>
 
@@ -179,15 +179,16 @@
 {% endblock %}
 
 {% block extra-content %}
+    <div class="map_spacing">
     <div>
         <iframe
                 width="100%"
-                height="600px"
+                height="750px"
                 frameborder="0" style="border:0"
                 src="https://www.google.com/maps/embed/v1/place?key=AIzaSyClsJFzjgJBxhY3D4HDn4V_EG9Y5FYqdqQ
     &q=Space+Needle,Seattle+WA" allowfullscreen>
         </iframe>
-
+    </div>
     </div>
 
 {% endblock %}

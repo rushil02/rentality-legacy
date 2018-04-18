@@ -17,7 +17,7 @@
                         </div>
 
                         <div class="info">
-                            <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                            <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0; text-align: center">
                                 <h2>{{ house_pref.tenant.user.get_full_name }}</h2>
                             </header>
                         </div>
@@ -25,11 +25,12 @@
 
                     <div class="form-style col-md-12">
                         {# method="POST" action="{{url_for('tenant_listing_send_offer', uid=listing.key.urlsafe())}}">#}
-                        <div class="row">
+                        <div class="center">
+                        <div class="row" class="center">
 
                             {# {{send_offer_form.csrf_token}} #}
 
-                            <div class="center">
+                            
                                 <button id="sendOfferBtn" class="btn btn-default-color">Send Offer</button>
                             </div>
 
@@ -65,10 +66,12 @@
 
             <p>Preferred Accommodation: {{ house_pref.get_property_type_display }}</p>
 
-            <h2 class="section-title">About {{ house_pref.tenant.user.get_full_name }}</h2>
-            <p>{{ house_pref.description }}</p>
-
-
+            <h2 class="section-title">    
+                <div class= "text_left">
+                About {{ house_pref.tenant.user.get_full_name }}
+                </h2>
+                <p>{{ house_pref.description }}</p>
+                </div>
         </div>
     </div>
 

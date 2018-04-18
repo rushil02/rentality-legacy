@@ -139,6 +139,7 @@ iframe[src="about:blank"] {
     float: none;
     text-align: center;
     margin: auto;
+    padding:auto;
 }
 
 .right {
@@ -4894,7 +4895,12 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
 
 .form-style {
     background-color: #f1f3f6;
-    padding: 40px 25px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin: auto;
+
 }
 
 .form-style .form-control {
@@ -5296,7 +5302,8 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
     width: 100%;
     text-align: left;
     margin: 0;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
+    border-style: solid;
     border: 1px solid #e3e3e3;
     background-color: #f1f3f6;
     -webkit-border-radius: 4px;
@@ -5307,25 +5314,27 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
 
 .property-topinfo .amenities {
     list-style: none;
-    padding: 8px 0;
-    margin: 0;
-    background-color: #fff;
+    padding: 15px 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    background-color: #f1f3f6;
     display: inline-block;
     border-right: 1px solid #E4E4E4;
-    -webkit-border-radius: 4px 0 0 4px;
-    -moz-border-radius: 4px 0 0 4px;
-    border-radius: 4px 0 0 4px;
+    -webkit-border-radius: 0px 0 0 0px;
+    -moz-border-radius: 0px 0 0 0px;
+    border-radius: 0px 0 0 0px;
     width: 100%;
 }
 
 .property-topinfo .amenities li {
     display: inline-block;
     /*height: 38px;*/
+    line-height: 20px;
     margin: 0;
-    padding: 10px 18px 0 18px;
+    padding: 0px 0px 0 0px;
     border-right: 1px solid #E4E4E4;
     color: #74777c;
-    font-size: 32px;
+    font-size: 24px;
     width: 32%;
     text-align: center;
 }
@@ -5364,7 +5373,7 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
 }
 
 .property-detail-key-detail {
-    font-size: 20pt;
+    font-size: 24px;
 }
 
 .show-listing .section-title {
@@ -8943,6 +8952,39 @@ div.cozy #pp_full_res .pp_inline, div.dark_square #pp_full_res .pp_inline {
     margin-left: 0;
 }
 
-.searchbarwidth{
-    width: 55.9%;
+.button__badge {
+  background-color: #fa3e3e;
+  border-radius: 1px;
+  color: white;
+  text-align: bottom;
+  padding: 1px 3px;
+  font-size: 12px;
+  
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 35%;
+  right: 30%;
+  bottom: 50%;
+  line-height: 12px;
+  width: 12px;
+
+  }
+
+.caption {
+    display:block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.map_spacing{
+    display:relative;
+    margin-bottom: 75px;
+}
+
+.text_left{
+    text-align: left;
+}
+
+.account_setting{
+    padding-top: 15px;
 }
