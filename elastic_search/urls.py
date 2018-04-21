@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework import routers
 
-from elastic_search.views import suggestions
+from elastic_search.views import suggestions, search_house
 
 # TODO: need routers?
 # router = routers.DefaultRouter()
@@ -11,5 +11,6 @@ app_name = 'es'
 
 urlpatterns = [
     path('location_sugg', suggestions, name='loc_sugg'),
+    path('house/<text>', search_house, name='house_search'),
 
 ]

@@ -77,6 +77,12 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ['first_name', 'last_name']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'id': 'first_name',
+                                                 'placeholder': 'First Name', 'required': 'required'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'id': 'last_name',
+                                                'placeholder': 'Last Name'}),
+        }
 
 
 class EditProfileForm(forms.ModelForm):
@@ -87,7 +93,7 @@ class EditProfileForm(forms.ModelForm):
             'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Contact number'}),
             'dob': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Date of Birth'}),
             'sex': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Sex'}),
-            'profile_pic': forms.FileInput(attrs={'class': 'form-control', 'placeholder': 'Date of Birth'}),
+            'profile_pic': forms.FileInput(attrs={'class': 'form-control', }),
         }
 
 

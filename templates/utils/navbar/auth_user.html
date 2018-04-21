@@ -19,22 +19,22 @@
 
 
 
+    {#    <li>#}
+    {#        <a href="http://localhost:8000/ess/notifications">#}
+    {#            <span class="fa fa-fw fa-bell-o"></span>#}
+    {#            <span style="#}
+    {#      position: absolute;#}
+    {#      top: 32px;#}
+    {#      left: 0;#}
+    {#      font-size: 14px;#}
+    {#      right: 0;#}
+    {#      text-align: center;#}
+    {#  ">Notifications</span>#}
+    {#            <span class="button__badge">1</span>#}
+    {#        </a>#}
+    {#    </li>#}
     <li>
-        <a href="http://localhost:8000/ess/notifications">
-            <span class="fa fa-fw fa-bell-o"></span>
-            <span style="
-      position: absolute;
-      top: 32px;
-      left: 0;
-      font-size: 14px;
-      right: 0;
-      text-align: center;
-  ">Notifications</span>
-            <span class="button__badge">1</span>
-        </a>
-    </li>
-    <li>
-        <a href="http://localhost:8000/messaging/msgs">
+        <a href="{% url 'messaging:messages' %}">
             <span class="fa fa-fw fa-comment-o"></span>
             <span style="
       position: absolute;

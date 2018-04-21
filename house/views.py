@@ -2,10 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.http import require_POST, require_GET
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet
 from house.models import House
+from house.serializer import HouseSerializer
 from user_custom.forms import EditProfileForm
 
 
@@ -86,13 +88,20 @@ def add_edit_house(request, form_num, uuid=None):
         return Http404()
 
 
+@require_POST
 def search_house_page(request):
-    form = SearchForm()
+    query = request.POST['query']
+    form = SearchForm(initial={'location': query})
     context = {
         'search_form': form,
+        'initial_query': query
     }
     return render(request, 'search/house_listing.html', context)
 
 
+@require_GET
 def search_house_api(request):
-    return JsonResponse({"Data": "No Data"})
+    query = request.GET['query']
+    houses = House.objects.filter(address__icontains=query)
+    serializer = HouseSerializer(houses, many=True)
+    return JsonResponse(serializer.data, safe=False)

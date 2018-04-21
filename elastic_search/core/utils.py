@@ -2,9 +2,9 @@ import importlib
 import inspect
 
 from elasticsearch_dsl.connections import connections
-from elasticsearch_dsl import Index, DocType
+from elasticsearch_dsl import Index
 
-from elastic_search.settings import *
+from elastic_search.core.settings import *
 
 ES_CONNECTION = connections.create_connection(**DATABASE_CONNECTION_INFO)
 
@@ -40,11 +40,14 @@ def get_index():
 
 
 def get_mapping_classes():
-    module = importlib.import_module('models')
+    module = importlib.import_module(DIR + '.models')
     klasses = []
-    for name, obj in inspect.getmembers(module, inspect.isclass):
-        if DocType in obj.__bases__:
-            klasses.append(name)
+    for name, klass in inspect.getmembers(module, inspect.isclass):
+        try:
+            if klass.IndexInfo.index_this_model:
+                klasses.append(klass)
+        except AttributeError:
+            continue
     return klasses
 
 

@@ -2,9 +2,11 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from django.views.decorators.http import require_POST, require_GET
 
 from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2
 from tenant.models import HousePreference
+from tenant.serializers import HousePreferenceSerializer
 from user_custom.forms import EditProfileForm
 
 
@@ -102,13 +104,22 @@ def shortlisted_houses(request):
     return render(request, 'tenant/shortlisted.html', {'shortlisted': house})
 
 
+# FIXME: check methods
+
+@require_POST
 def search_tenant_page(request):
-    form = SearchForm()
+    query = request.POST['query']
+    form = SearchForm(initial={'location': query})
     context = {
         'search_form': form,
+        'initial_query': query
     }
     return render(request, 'search/tenant_listing.html', context)
 
 
+@require_GET
 def search_tenant_api(request):
-    return JsonResponse({"Data": "No Data"})
+    query = request.GET['query']
+    hp = HousePreference.objects.filter(locations__suburb__icontains=query)
+    serializer = HousePreferenceSerializer(hp, many=True)
+    return JsonResponse(serializer.data, safe=False)

@@ -1,12 +1,13 @@
 import os
+import traceback
 import urllib.request
 import zipfile
 
 from allauth.socialaccount.models import SocialApp
 from django.core.management.base import BaseCommand, CommandError
-from django.db import transaction
 from django.contrib.sites.models import Site
 
+from elastic_search.core.utils import get_index, create_mappings
 from house.models import Tag
 from django.conf import settings
 
@@ -84,16 +85,22 @@ def add_flat_pages():
     pass
 
 
+def initialze_es():
+    get_index()
+    create_mappings()
+
+
 class Command(BaseCommand):
     """ Initialize website db with data """
 
     help = 'Initialize website with settings and details data'
 
     web_init_func = {
-        'Integrate OAuth info': social_apps_info,
-        'Create tags': create_tags,
-        'Integrate world location data': collect_location_data,
-        'Add flat pages': add_flat_pages
+        # 'Integrate OAuth info': social_apps_info,
+        # 'Create tags': create_tags,
+        # 'Integrate world location data': collect_location_data,
+        # 'Add flat pages': add_flat_pages,
+        'Initialize ElasticSearch Mappings': initialze_es,
     }
 
     def ask_user_input(self, verbose):
@@ -108,11 +115,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            for verbose, func in self.web_init_func:
+            for verbose, func in self.web_init_func.items():
                 if self.ask_user_input(verbose):
                     func()
-        except Exception as e:
+        except KeyError as e:
             print(e)
+            traceback.print_stack()
             raise CommandError("Some problem occurred. Rolling back changes.")
         else:
             self.stdout.write("Website initialized with data")

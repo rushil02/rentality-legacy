@@ -5,6 +5,7 @@ import uuid
 from django.contrib.postgres.fields import DateRangeField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from easy_thumbnails.files import get_thumbnailer
 
 
 def get_file_path(instance, filename):
@@ -55,9 +56,18 @@ class House(models.Model):
     availability = DateRangeField(null=True, blank=True)
     min_stay = models.PositiveSmallIntegerField(help_text=_('in days'), null=True, blank=True)
     description = models.TextField(blank=True)
+
+    STATUS = (
+        ('I', 'Incomplete'),
+        ('P', 'Published'),
+    )
+    status = models.CharField(max_length=1, choices=STATUS, default='I')
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
     def get_thumbnail(self):
         try:
@@ -65,7 +75,27 @@ class House(models.Model):
         except Image.DoesNotExist:
             return "/static/img/placeholders/apartment/default.png"
         else:
-            return image.image.url
+            return image.image
+
+    def get_thumbnail_2(self):
+        if self.is_thumbnail_available():
+            thumbnailer = get_thumbnailer(self.get_thumbnail())
+            url = thumbnailer.get_thumbnail({'crop': 'smart', 'size': (540, 360)})
+            return '/media/' + str(url)
+        return self.get_thumbnail()
+
+    def is_thumbnail_available(self):
+        try:
+            Image.objects.get(house=self, is_thumbnail=True)
+        except Image.DoesNotExist:
+            return False
+        else:
+            return True
+
+    def is_public(self):
+        if self.status == 'P':
+            return True
+        return False
 
     def __str__(self):
         return "%s - %s [%s]" % (self.landlord, self.location, self.address)

@@ -1,9 +1,18 @@
 import os
+import time
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+def get_file_path(instance, filename):
+    path = 'profile_pictures/' + time.strftime('/%Y/%m/%d/')
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join(path, filename)
 
 
 class CustomUserManager(UserManager):
@@ -73,7 +82,7 @@ class UserProfile(models.Model):
     )
     sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='O')
     dob = models.DateField(_('Date of Birth'), blank=True, null=True)
-    profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True)  # FIXME: upload_to
+    profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True, upload_to=get_file_path)
     updated_on = models.DateTimeField(auto_now=True)
 
     DEFAULT_PROFILE_PIC = '/static/img/placeholders/profile/default.png'
@@ -83,6 +92,6 @@ class UserProfile(models.Model):
 
     def get_profile_pic(self):
         if self.profile_pic:
-            return self.profile_pic.url
+            return self.profile_pic
         else:
             return self.DEFAULT_PROFILE_PIC

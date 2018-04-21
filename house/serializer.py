@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
-from tenant.models import HousePreference
+from house.models import House
 
 
-class HousePreferenceSerializer(serializers.ModelSerializer):
+class HouseSerializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField()
 
     class Meta:
-        model = HousePreference
-        exclude = ['tenant', ]
+        model = House
+        exclude = ['landlord', ]
 
     def get_thumbnail(self, obj):
         return obj.get_thumbnail_2()

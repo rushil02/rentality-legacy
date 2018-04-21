@@ -1,9 +1,7 @@
 {% extends 'utils/base_auth.html' %}
 
 {% block in-container-content %}
-
-<!-- BEGIN CONTENT WRAPPER -->
-
+    {% load thumbnail %}
 
     <!-- BEGIN MAIN CONTENT -->
     <div class="main row">
@@ -14,30 +12,59 @@
                 <div class="property-agent-info">
                     <div class="agent-detail col-md-12">
                         <div class="image">
-                            <img alt="" src="/static/img/placeholders/profile/default.png">
+                            <img alt="" src="
+                            {% if request.user.userprofile.profile_pic %}
+                            {% thumbnail request.user.userprofile.profile_pic 255x255 crop="smart" %}
+                            {% else %}
+                            {{ request.user.userprofile.get_profile_pic }}
+                            {% endif %}">
                         </div>
 
-                            <div class="info">
+                        <div class="info">
                             <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0; text-align: center">
-                                <h2>{{ house_pref.tenant.user.get_full_name }}</h2>
+                                {% if request.user.get_full_name %}
+                                    <h2>{{ request.user.get_full_name|title }}</h2>
+                                {% else %}
+                                    <h2>{{ request.user.email }}</h2>
+                                {% endif %}
                             </header>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-		<div class="account_setting">
-    First name:
-    {{ form1.first_name }}
-    Last name:
-    {{ form1.last_name }}
-    {{ form2.contact_num }}
-    {{ form2.dob }}
-    {{ form2.sex }}
-    {{ form2.profile_pic }}
+        <div class="col-sm-8 col-md-9">
+            <div class="account_setting">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="col-md-6" style="padding-left: 0;">
+                        {{ form1.first_name }}
+                    </div>
 
-    <div><a href="{% url 'account_change_password' %}">Change Password</a></div>
+                    <div class="col-md-6" style="padding-right: 0">
+                        {{ form1.last_name }}
+                    </div>
+
+                    {{ form2.contact_num }}
+                    {{ form2.dob }}
+                    {{ form2.sex }}
+                    {{ form2.profile_pic }}
+                    <div class="clearfix">
+                        <p class="pull-right clearfix">
+                            <button type="submit" class="btn btn-default-color">Save</button>
+                        </p>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div><a href="{% url 'account_change_password' %}">Change Password</a></div>
+
+    </div>
 
 {% endblock %}
-		</div>
-    </div>
+
+{% block js_script %}
+
+
+{% endblock %}

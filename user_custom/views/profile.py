@@ -51,8 +51,15 @@ def check_mail(request):
 
 # FIXME: not working
 def edit_profile(request):
-    form1 = UserChangeForm(instance=request.user)
-    form2 = EditProfileForm(instance=request.user.userprofile)
+    if request.method == 'POST':
+        form1 = UserChangeForm(request.POST, instance=request.user)
+        form2 = EditProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
+        if form1.is_valid() and form2.is_valid():
+            form1.save()
+            form2.save()
+    else:
+        form1 = UserChangeForm(instance=request.user)
+        form2 = EditProfileForm(instance=request.user.userprofile)
     context = {
         'form1': form1,
         'form2': form2

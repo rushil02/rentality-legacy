@@ -81,14 +81,14 @@ class SearchForm(forms.Form):
         label='Location',
         widget=forms.TextInput(attrs={
             'class': 'form-control', 'placeholder': 'City, State, Postcode, etc.'
-        })
+        }, )
     )
     bedrooms = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bedrooms', })
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bedrooms', }), required=False
     )
     bathrooms = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bathrooms'})
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bathrooms'}), required=False
     )
     max_price = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Rent'})
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Rent'}), required=False
     )

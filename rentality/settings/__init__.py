@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'easy_thumbnails',
 
     # all-auth providers
     'allauth.socialaccount.providers.facebook',

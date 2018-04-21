@@ -33,7 +33,9 @@ urlpatterns = [
     path('admin/', include('admin_custom.urls')),
     path('', include('user_custom.urls')),
     path('property/', include('house.urls')),
-    path('ess/', include('essentials.urls')),
+
+    # TODO: enable notifications
+    # path('ess/', include('essentials.urls')),
 
     # TODO: no individual messaging urls needed ?
     path('messaging/', include('messaging.urls')),

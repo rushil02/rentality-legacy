@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.postgres.fields import JSONField, DateRangeField
 from django.utils.translation import gettext_lazy as _
+from easy_thumbnails.files import get_thumbnailer
 
 
 class TenantProfile(models.Model):
@@ -46,15 +47,29 @@ class HousePreference(models.Model):
     def __str__(self):
         return "%s" % self.tenant
 
+    # FIXME: get_thumbnail and is_thumbnail_available merge methods
+
     def preferred_suburbs(self):  # FIXME
         return self.locations.all()[0]
 
     def get_locations_display(self):
-        print(self.locations)
         return str(self.locations).join(', ')
 
     def get_thumbnail(self):
         return self.tenant.user.userprofile.get_profile_pic()
+
+    def get_thumbnail_2(self):
+        if self.is_thumbnail_available():
+            thumbnailer = get_thumbnailer(self.get_thumbnail())
+            url = thumbnailer.get_thumbnail({'crop': 'smart', 'size': (360, 360)})
+            return '/media/' + str(url)
+        return self.get_thumbnail()
+
+    def is_thumbnail_available(self):
+        if self.tenant.user.userprofile.profile_pic:
+            return True
+        else:
+            return False
 
 
 class AdditionalTenant(models.Model):
