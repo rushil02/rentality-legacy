@@ -11,8 +11,11 @@
                     <form method="GET" action="">
 
                         <div class="row">
-                            <div class="col-md-8 col-sm-12">
+                            <div class="col-md-12 col-sm-12">
                                 {{ search_form.location }}
+                                <div class="move_to_end_right">
+                                <button id='search-btn' e2type="submit" class="btn btn-fullcolor">Search</button>
+                                </div> 
                             </div>
                                 <div class="container-fluid">
                                     <div class="row">
@@ -25,13 +28,11 @@
                                             </div>
                                             <div class="noleftspace col-md-3 col-sm-4">
                                                 {{ search_form.max_price }}  
-                                            </div>                          
+                                            </div>                        
                                         </div>
                                     </div>
                                 </div>
                         </div>
-
-                        <button id='search-btn' e2type="submit" class="btn btn-fullcolor">Search</button>
 
                     </form>
                 </div>

@@ -5299,7 +5299,7 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
 }
 
 .property-topinfo {
-    width: 100%;
+    width: 75%;
     text-align: left;
     margin: 0;
     margin-bottom: 0px;
@@ -6954,7 +6954,7 @@ a.tp-caption.btn-default, a.tp-caption.btn-lg {
 }
 
 #footer #copyright {
-    position: fixed;
+    position: relative;
     width: 100%;
     background-color: #D3D8DE;
     padding: 24px 0;
@@ -8978,7 +8978,8 @@ div.cozy #pp_full_res .pp_inline, div.dark_square #pp_full_res .pp_inline {
 
 .map_spacing{
     display:relative;
-    margin-bottom: 75px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
 
 .text_left{
@@ -8987,4 +8988,13 @@ div.cozy #pp_full_res .pp_inline, div.dark_square #pp_full_res .pp_inline {
 
 .account_setting{
     padding-top: 15px;
+}
+
+.move_to_end_right{
+    position: absolute;
+    right: 0;
+    top: 92%;
+    padding-right: 5px;
+    margin-bottom: 0px;
+
 }
