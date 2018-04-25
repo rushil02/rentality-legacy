@@ -1,6 +1,8 @@
 {% extends 'utils/base_auth.html' %}
 
 {% block in-container-content %}
+
+    <br>
     <div class="row">
 
 
@@ -12,38 +14,41 @@
                     <div class="panel panel-default">
                         <ul class="list-group">
                             <li class="list-group-item clearfix" href="">
-                                <span class="list-group-item-heading">Messages</span>
+                                <span class="list-group-item-heading">Messages for House</span>
                             </li>
 
-                            <a class="list-group-item clearfix"
-                               href="">
-                                <img src="http://localhost:3000/p//img/placeholders/profile/default.png"
-                                     class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
-                                <span class="list-group-item-heading">'No Subject'</span>
-                                <p class="list-group-item-text"
-                                   style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">Hi, I'm
-                                    interested in renting your property.</p>
-                            </a>
+                            {% for house_thread in house_threads %}
+                                <a class="list-group-item clearfix thread-item"
+                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}">
+                                    <img src="/static/img/placeholders/profile/default.png"
+                                         class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
+                                    <span class="list-group-item-heading">{{ house_thread.sender }}</span>
+                                    <p class="list-group-item-text"
+                                       style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">{{ house_thread.latest_msg }}</p>
+                                </a>
 
-                            <a class="list-group-item clearfix"
-                               href="">
-                                <img src="http://localhost:3000/p//img/placeholders/profile/default.png"
-                                     class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
-                                <span class="list-group-item-heading">'No Subject'</span>
-                                <p class="list-group-item-text"
-                                   style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">Hi, I'm
-                                    interested in renting your property.</p>
-                            </a>
+                            {% endfor %}
 
-                            <a class="list-group-item clearfix"
-                               href="">
-                                <img src="http://localhost:3000/p//img/placeholders/profile/default.png"
-                                     class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
-                                <span class="list-group-item-heading">'No Subject'</span>
-                                <p class="list-group-item-text"
-                                   style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">Hi, I'm
-                                    interested in renting your property.</p>
-                            </a>
+
+
+
+                            <li class="list-group-item clearfix" href="">
+                                <span class="list-group-item-heading">Messages for Stay</span>
+                            </li>
+
+                            {% for hp in hp_threads %}
+                                <a class="list-group-item clearfix"
+                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}">
+                                    <img src="/static/img/placeholders/profile/default.png"
+                                         class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
+                                    <span class="list-group-item-heading">{{ hp.sender }}</span>
+                                    <p class="list-group-item-text"
+                                       style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">{{ hp.latest_msg }}</p>
+                                </a>
+
+                            {% endfor %}
+
+
                         </ul>
                     </div>
                 </div>
@@ -57,11 +62,11 @@
 
             <div class="panel panel-default">
                 <ul class="list-group">
-                    <div class="list-group-item">
+                    <div class="list-group-item" id="thread-title">
                         <img class="img-circle"
                              src="/static/img/placeholders/profile/default.png" alt="..."
                              style="width: 50px; margin-right: 10px;">
-                        part1, part2
+                        Text here
                     </div>
                     <div class="list-group-item clearfix">
                         <div class="pull-left">
@@ -72,26 +77,12 @@
                         </div>
                     </div>
                     <div class="list-group-item" style="padding-bottom: 50px;">
-                        <div class="text-center">
-                            <p>Re: About 50/30 Park Street</p>
+                        <div class="text-center" id="thread-about">
+                            <p>Re: About</p>
                         </div>
-                        <div class="media">
-                            <div class="media-left pull-left">
-                                <a href="#">
-                                    <img class="media-object img-circle"
-                                         src="/static/img/placeholders/profile/default.png"
-                                         alt="..." style="width: 50px;">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <div class="panel panel-default" style="margin-bottom: 0; max-width: 75%;">
-                                    <div class="panel-body bg-success">
-                                        <p>jnadjnad</p>
-                                        <p class="media-heading pull-right">
-                                            12/15/15</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="media" id="msg-content">
+
+
                         </div>
                     </div>
                     <div class="list-group-item">
@@ -112,6 +103,54 @@
         <!-- END MAIN CONTENT -->
 
     </div>
+
+
+{% endblock %}
+
+
+{% block js_script %}
+    <script>
+        $('.thread-item').click(function (event) {
+            event.preventDefault();
+            var link = $(this).attr("data-url");
+            console.log(link);
+            $.ajax({
+                url: link
+            })
+                .done(function (data) {
+                        $("#msg-content").empty();
+                        $('#thread-title').text('');
+                        $('#thread-about').text('');
+                        $.each(data, function (i, item) {
+
+                            var html = "<div class=\"media\">\n" +
+                                "                            <div class=\"media-left pull-left\">\n" +
+                                "                                <a href=\"#\">\n" +
+                                "                                    <img class=\"media-object img-circle\"\n" +
+                                "                                         src=\"/static/img/placeholders/profile/default.png\"\n" +
+                                "                                         alt=\"...\" style=\"width: 50px;\">\n" +
+                                "                                </a>\n" +
+                                "                            </div>\n" +
+                                "                            <div class=\"media-body\">\n" +
+                                "                                <div class=\"panel panel-default\" style=\"margin-bottom: 0; max-width: 75%;\">\n" +
+                                "                                    <div class=\"panel-body bg-success\">\n" +
+                                "                                        <p>" + item['content'] + "</p>\n" +
+                                "                                        <p class=\"media-heading pull-right\">\n" +
+                                "                                            " + item['send_time'] + "</p>\n" +
+                                "                                    </div>\n" +
+                                "                                </div>\n" +
+                                "                            </div>\n" +
+                                "\n" +
+                                "                        </div>";
+
+                            $("#msg-content").append(html)
+
+                        })
+                    }
+                )
+
+        })
+    </script>
 
 
 {% endblock %}

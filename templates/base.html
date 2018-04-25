@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block head_title %}{% endblock head_title %}</title>
+    {% block head_title %}<title>Rentality - Short to Mid-Term Rental Platform Connecting Global
+        Residents</title>{% endblock head_title %}
     {% block head_scripts %}
         {% include 'utils/style.html' %}
 
@@ -9,7 +10,7 @@
 
     <meta charset="utf-8"/>
 
-    {#    FIXME - Chaneg meta #}
+    {#    FIXME - Change meta #}
     <meta name="keywords" content="real estate, responsive, retina ready, modern html5 template, bootstrap, css3"/>
     <meta name="description" content="Cozy - Responsive Real Estate HTML5 Template"/>
     <meta name="author" content="Wisely Themes - www.wiselythemes.com"/>
@@ -29,7 +30,15 @@
         {% block content %}
             <div class="content">
                 <div class="container">
+
                     {% block notification %}
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
                     {% endblock %}
                     {% block in-container-content %}

@@ -100,6 +100,15 @@ class House(models.Model):
     def __str__(self):
         return "%s - %s [%s]" % (self.landlord, self.location, self.address)
 
+    def get_images(self):
+        return self.image_set.all()
+
+    def get_owner(self):
+        return self.landlord.user
+
+    def get_owner_username(self):
+        return self.get_owner().email
+
 
 class Image(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)

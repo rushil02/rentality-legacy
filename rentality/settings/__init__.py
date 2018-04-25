@@ -52,7 +52,9 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.sitemaps',
 
+    'debug_toolbar',
     'channels',
+    'cities_light',
     'rest_framework',
     'allauth',
     'allauth.account',
@@ -85,6 +87,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'rentality.urls'
@@ -221,3 +224,13 @@ OAUTH_DETAILS = get_secret_var('OAUTH_DETAILS')
 LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'libs')
 
 ASGI_APPLICATION = "rentality.routing.application"
+
+# Cities-light settings
+CITIES_LIGHT_DATA_DIR = os.path.join(LIB_PATH, 'geo_data')
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['AU']
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR',
+                                   'PPLS', 'STLMT', ]
+
+# Debug toolbar settings
+INTERNAL_IPS = ['localhost', '127.0.0.1']

@@ -8,7 +8,10 @@ from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3,
     HousePhotoFormSet
 from house.models import House
 from house.serializer import HouseSerializer
+from messaging.forms import MessageForm
+from messaging.views import save_message
 from user_custom.forms import EditProfileForm
+from django.contrib import messages
 
 
 def info(request, house_uuid):
@@ -17,7 +20,21 @@ def info(request, house_uuid):
     except House.DoesNotExist:
         raise Http404("House does not exist.")
     else:
-        return render(request, 'house/info.html', {'house': house})
+        if request.method == 'POST':
+            message_form = MessageForm(request.POST)
+            if message_form.is_valid():
+                save_message(request, message_form.data['content'], house)
+                messages.add_message(request, messages.SUCCESS, 'Your message has been sent to the property owner.')
+                message_form = MessageForm()
+                context = {'house': house, 'msg_form': message_form}
+                return render(request, 'house/info.html', context)
+            else:
+                context = {'house': house, 'msg_form': message_form}
+                return render(request, 'house/info.html', context)
+        else:
+            message_form = MessageForm()
+            context = {'house': house, 'msg_form': message_form}
+            return render(request, 'house/info.html', context)
 
 
 # FIXME: how to edit houses and maintain continuation, use form wizards?
