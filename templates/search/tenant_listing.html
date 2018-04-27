@@ -11,17 +11,24 @@
                     <form method="GET" action="">
 
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-md-12 col-sm-12">
                                 {{ search_form.location }}
                             </div>
-                            <div class="col-sm-4">
-                                {{ search_form.bedrooms }}
-                            </div>
-                            <div class="col-sm-4">
-                                {{ search_form.bathrooms }}                            </div>
-
-                            <div class="col-sm-4">
-                                {{ search_form.max_price }}                            </div>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <div class="noleftspace col-md-3 col-sm-4">
+                                                {{ search_form.bedrooms }}
+                                            </div>
+                                            <div class="noleftspace col-md-3 col-sm-4">
+                                                {{ search_form.bathrooms }}
+                                            </div>
+                                            <div class="noleftspace col-md-3 col-sm-4">
+                                                {{ search_form.max_price }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
 
                         <a id='search-btn' class="btn btn-fullcolor pull-right">Search</a>
