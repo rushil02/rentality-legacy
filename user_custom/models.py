@@ -6,8 +6,16 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.contrib.postgres.operations import CreateExtension
+from django.db import migrations
 
 from messaging.models import Message
+
+
+class Migration(migrations.Migration):
+    operations = [
+        CreateExtension('postgis'),
+    ]
 
 
 def get_file_path(instance, filename):
