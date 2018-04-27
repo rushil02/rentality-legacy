@@ -18,11 +18,14 @@
                             </li>
 
                             {% for house_thread in house_threads %}
-                                <a class="list-group-item clearfix thread-item"
-                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}">
+                                <a class="list-group-item clearfix thread-item" id="{{ forloop.counter0 }}"
+                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}"
+                                   thread-link="{{ house_thread.uuid }}" thread-about="{{ house_thread.entity }}"
+                                   listing-url="{% url 'house:info' house_thread.entity.uuid %}">
                                     <img src="/static/img/placeholders/profile/default.png"
                                          class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
-                                    <span class="list-group-item-heading">{{ house_thread.sender }}</span>
+                                    <span class="list-group-item-heading"
+                                          id="chat-person-{{ forloop.counter0 }}">{{ house_thread.initiator.first_name }}</span>
                                     <p class="list-group-item-text"
                                        style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">{{ house_thread.latest_msg }}</p>
                                 </a>
@@ -38,10 +41,12 @@
 
                             {% for hp in hp_threads %}
                                 <a class="list-group-item clearfix"
-                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}">
+                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}"
+                                   thread-link="{{ hp.uuid }}" thread-about="{{ hp.entity }}">
                                     <img src="/static/img/placeholders/profile/default.png"
                                          class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
-                                    <span class="list-group-item-heading">{{ hp.sender }}</span>
+                                    <span class="list-group-item-heading"
+                                          id="chat-person">{{ hp.initiator.first_name }}</span>
                                     <p class="list-group-item-text"
                                        style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">{{ hp.latest_msg }}</p>
                                 </a>
@@ -73,12 +78,12 @@
                             Phone Number
                         </div>
                         <div class="pull-right">
-                            View Listing
+                            <a id="view-lisitng" href="">View Listing</a>
                         </div>
                     </div>
                     <div class="list-group-item" style="padding-bottom: 50px;">
                         <div class="text-center" id="thread-about">
-                            <p>Re: About</p>
+                            <p id="chat-about">Re: About</p>
                         </div>
                         <div class="media" id="msg-content">
 
@@ -88,12 +93,10 @@
                     <div class="list-group-item">
                         <form id="send-msg" action=""
                               method="POST">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label class="sr-only" for="message">Amount (in dollars)</label>
+                            <div class="form-group" id="form-container">
                                 {{ form.content }}
                             </div>
-                            <button type="submit" class="btn btn-primary" id="send-msg">Send</button>
+                            <button type="submit" class="btn btn-primary" id="send-msg-btn">Send</button>
                         </form>
                     </div>
                 </ul>
@@ -113,14 +116,17 @@
         $('.thread-item').click(function (event) {
             event.preventDefault();
             var link = $(this).attr("data-url");
-            $('form#send-msg').attr("action", link);
+            var chat_person = $('#chat-person-' + $(this).attr("id")).text();
+            var thread_about = $(this).attr("thread-about");
+            $('#view-lisitng').attr('href', $(this).attr("listing-url"));
+            $('form#send-msg').attr("action", $(this).attr("thread-link"));
             $.ajax({
                 url: link
             })
                 .done(function (data) {
                         $("#msg-content").empty();
-                        $('#thread-title').text('');
-                        $('#thread-about').text('');
+                    $('#thread-title').text(chat_person);
+                    $('#thread-about').text('Re: About ' + thread_about);
                         $.each(data, function (i, item) {
 
                             var html = "<div class=\"media\">\n" +
@@ -174,6 +180,8 @@
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
 
+        var csrftoken = getCookie('csrftoken');
+
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -183,19 +191,19 @@
         });
 
 
-        $('#send-msg').click(function (event) {
+        $('#send-msg-btn').click(function (event) {
             event.preventDefault();
             var text = $("#id_content").val();
-            var link = $("form#send-msg").val();
-            var csrftoken = getCookie('csrftoken');
-            var data = {'content': text};
+            var uuid = $("form#send-msg").attr('action');
+            {#var csrftoken = getCookie('csrftoken');#}
+            var data = {'thread_uuid': uuid, 'content': text};
             $.ajax({
                 method: "POST",
-                url: link,
+                url: '{% url 'messaging:send_message' %}',
                 data: data
             })
                 .done(function (data) {
-                    $("#id_content").empty();
+                    $("#id_content").val('');
 
                 })
         })

@@ -7,6 +7,8 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from messaging.models import Message
+
 
 def get_file_path(instance, filename):
     path = 'profile_pictures/' + time.strftime('/%Y/%m/%d/')
@@ -65,6 +67,9 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['first_name']
 
     objects = CustomUserManager()
+
+    def get_new_message_count(self):
+        return Message.objects.filter(recipient=self, read_at=None).count()
 
 
 class UserProfile(models.Model):

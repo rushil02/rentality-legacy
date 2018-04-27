@@ -45,7 +45,7 @@
       text-align: center;
   ">Messages</span>
 
-            <span class="button__badge">2</span>
+            <span class="button__badge">{{ request.user.get_new_message_count }}</span>
         </a>
     </li>
     <li class="dropdown">
