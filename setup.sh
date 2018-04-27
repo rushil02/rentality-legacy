@@ -6,6 +6,7 @@ echo "*Starting setup*"
 dir="$(dirname $(pwd))"
 
 sudo apt-get update
+sudo apt-get install python3-pip python3-dev libpq-dev nginx
 
 read -p "Install PostgreSQL? [y/n]" opt
 
@@ -39,23 +40,24 @@ ${lib_path}/elasticsearch-6.2.2/bin/elasticsearch -d
 jps | grep Elasticsearch
 
 
-sudo pip install --upgrade pip
+sudo -H pip3 install --upgrade pip
+sudo -H pip3 install virtualenv
 
 env_path="$dir/env_py3"
 
-sudo apt-get install python3-venv
 
-python3 -m venv "$env_path"
+virtualenv "$env_path"
 source ${env_path}/bin/activate
 
 pip3 install wheel
-
+pip3 install gunicorn
 pip3 install -r requirements.txt
 
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py initialize_site
+python manage.py cities --import=postal_code
 python manage.py runserver
 
 

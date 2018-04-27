@@ -42,9 +42,9 @@ def add_flat_pages():
     pass
 
 
-def initialze_es():
-    get_index()
-    create_mappings()
+# def initialze_es():
+#     get_index()
+#     create_mappings()
 
 
 class Command(BaseCommand):
@@ -53,10 +53,9 @@ class Command(BaseCommand):
     help = 'Initialize website with settings and details data'
 
     web_init_func = {
-        # 'Integrate OAuth info': social_apps_info,
-        # 'Create tags': create_tags,
-        # 'Integrate world location data': collect_location_data,
-        # 'Add flat pages': add_flat_pages,
+        'Integrate OAuth info': social_apps_info,
+        'Create tags': create_tags,
+        'Add flat pages': add_flat_pages,
         # 'Initialize ElasticSearch Mappings': initialze_es,
     }
 
