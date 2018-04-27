@@ -7,11 +7,22 @@ from django.contrib.contenttypes.models import ContentType
 
 class ThreadManager(models.Manager):
 
-    def get_by_obj(self, obj, sender):
+    def get_by_obj(self, obj, initiator):
         return self.get_queryset().get(
             content_type=ContentType.objects.get_for_model(obj),
-            object_id=obj.id, sender=sender
+            object_id=obj.id, initiator=initiator
         )
+
+    @staticmethod
+    def create_new_thread(entity, initiator):
+        thread = Thread(entity=entity, initiator=initiator)
+        thread.save()
+        recipient = thread.entity.get_owner()
+        if recipient == initiator:
+            raise AssertionError
+        ThreadUser.objects.create(thread=thread, user=recipient)
+        ThreadUser.objects.create(thread=thread, user=initiator)
+        return thread
 
 
 class Thread(models.Model):

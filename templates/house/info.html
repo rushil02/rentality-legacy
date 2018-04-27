@@ -59,8 +59,8 @@
                     {#                        <a class="btn btn-fullcolor"#}
                     {#                           href="">Edit</a>#}
                     {#                    </div>#}
-                    <h1 class="property-title">Address
-                        <small>address_line2(BACKENDTOCONNECT)</small>
+                    <h1 class="property-title">{{ house.location }}
+                        <small>{{ house.address }}</small>
                     </h1>
                 </div>
                 <div class="col-sm-8">
@@ -124,12 +124,12 @@
                         <div class="agent-detail col-md-12">
                             <div class="image">
 
-                                <img alt="" src="http://placehold.it/307x307"/>
+                                <img alt="" src="{% thumbnail house.get_owner_pic 307x307 crop="smart" %}"/>
                             </div>
 
                             <div class="info">
                                 <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
-                                    <h2>Owner name
+                                    <h2>{{ house.get_owner_username }}
                                         <small>Verified Email</small>
                                     </h2>
                                 </header>

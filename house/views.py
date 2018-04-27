@@ -23,9 +23,13 @@ def info(request, house_uuid):
         if request.method == 'POST':
             message_form = MessageForm(request.POST)
             if message_form.is_valid():
-                save_message(request, message_form.data['content'], house)
-                messages.add_message(request, messages.SUCCESS, 'Your message has been sent to the property owner.')
-                message_form = MessageForm()
+                try:
+                    save_message(request, message_form.data['content'], house)
+                except AssertionError:
+                    messages.add_message(request, messages.INFO, 'You cannot send yourself a message')
+                else:
+                    messages.add_message(request, messages.SUCCESS, 'Your message has been sent to the property owner.')
+                    message_form = MessageForm()
                 context = {'house': house, 'msg_form': message_form}
                 return render(request, 'house/info.html', context)
             else:

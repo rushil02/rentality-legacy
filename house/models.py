@@ -109,6 +109,11 @@ class House(models.Model):
     def get_owner_username(self):
         return self.get_owner().email
 
+    def get_owner_pic(self):
+        foo = self.get_owner().userprofile.get_profile_pic()
+        print(foo)
+        return foo
+
 
 class Image(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)

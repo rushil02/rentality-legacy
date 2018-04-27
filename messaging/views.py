@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Subquery, OuterRef
+from django.http import Http404
 from django.shortcuts import render
 
 from rest_framework import status
@@ -7,6 +8,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 from house.models import House
 from messaging.forms import MessageForm
@@ -70,11 +72,16 @@ def messages(request):
 def save_message(request, text, entity):
     user = request.user
     try:
-        thread = Thread.objects.get_by_obj(obj=entity, sender=user)
+        thread = Thread.objects.get_by_obj(obj=entity, initiator=user)
     except Thread.DoesNotExist:
-        thread = Thread.objects.create(entity=entity, sender=user)
+        thread = Thread.objects.create_new_thread(entity, user)
 
-    Message.objects.create(thread=thread, content=text, user=user)
+    try:
+        recipient = thread.threaduser_set.exclude(user=request.user)[0]
+    except IndexError:
+        recipient = request.user
+
+    Message.objects.create(thread=thread, content=text, sender=user, recipient=recipient)
 
 
 class MessageView(GenericAPIView, ListModelMixin):
