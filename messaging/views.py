@@ -5,6 +5,11 @@ from django.shortcuts import render
 from django.utils.safestring import mark_safe
 import json
 
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_202_ACCEPTED
+
 from house.models import House
 from messaging.forms import MessageForm
 from messaging.models import Thread, Message
@@ -22,10 +27,21 @@ def room(request, room_name):
     })
 
 
+@csrf_exempt
 def get_thread_messages(request, thread_uuid):
-    messages = Message.objects.filter(thread__uuid=thread_uuid)
-    serializer = MessageSerializer(messages, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    if request.method == 'GET':
+        messages = Message.objects.filter(thread__uuid=thread_uuid)
+        serializer = MessageSerializer(messages, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'POST':
+        thread = Thread.objects.get(uuid=thread_uuid)
+        data = JSONParser().parse(request)
+        serializer = MessageSerializer(data=data)
+        if serializer.is_valid():
+            m = Message(thread=thread, user=request.user, content=serializer.validated_data['content'])
+            m.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
 
 
 # FIXME: Reverse relation, though revise messaging model for better optimization
@@ -35,7 +51,7 @@ def messages(request):
     house_preferences = HousePreference.objects.filter(tenant__user=user)
     h_ids = [house.id for house in houses]
     hp_ids = [hp.id for hp in house_preferences]
-    context = dict()
+    context = dict(form=MessageForm())
     try:
         house_threads = Thread.objects.filter(
             content_type=ContentType.objects.get_for_model(houses[0]),

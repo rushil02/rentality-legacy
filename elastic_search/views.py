@@ -4,8 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from elastic_search.core.settings import INDEX_NAME
-from elastic_search.core.utils import create_connection
+from elastic_search.core.utils import create_connection, get_index_name
 from elastic_search.models import House
 
 
@@ -15,7 +14,7 @@ def suggestions(request):
 
     if location:
         client = create_connection()
-        s = Search(using=client, index=INDEX_NAME)
+        s = Search(using=client, index=get_index_name(House))
         s = s.source(False)
         s = s.suggest(
             'suburb_suggestions',

@@ -1,7 +1,6 @@
 from elasticsearch_dsl import Text, Completion
 
 from elastic_search.core.models import BaseModel
-from elastic_search.core.settings import INDEX_NAME
 
 
 class Location(BaseModel):
@@ -11,14 +10,9 @@ class Location(BaseModel):
             'suggester': Completion(preserve_separators=False)
         }
     )
-    print(BaseModel.__dict__)
 
     class IndexInfo:
         index_this_model = True
-
-    class Meta:
-        index = INDEX_NAME
-        doc = 'Location'
 
 
 class House(BaseModel):
@@ -27,7 +21,3 @@ class House(BaseModel):
 
     class IndexInfo:
         index_this_model = True
-
-    class Meta:
-        index = INDEX_NAME
-        doc = 'House'

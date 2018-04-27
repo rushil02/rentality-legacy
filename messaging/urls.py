@@ -10,5 +10,5 @@ urlpatterns = [
     # path('', index, name='index'),
     # path('<str:room_name>/', room, name='room'),
     path('', messages, name='messages'),
-    path('messages/<thread_uuid>', get_thread_messages, name='thread_messages')
+    path('messages/<thread_uuid>', get_thread_messages, name='thread_messages'),
 ]

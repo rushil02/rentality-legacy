@@ -36,3 +36,7 @@ Date        Day         Check-in        Check-out       Time
 24/08/18    Tuesday     19.30           23.30           4.00
 25/08/18    Wednesday   10.30           15.00           4.30
 25/08/18    Wednesday   17.00           24.00           7.00
+26/08/18    Thursday    19.00           22.30           3.30
+27/08/18    Friday      05.00           08.00           3.00
+27/08/18    Friday      13.30           16.00           2.30
+27/08/18    Friday      18.30

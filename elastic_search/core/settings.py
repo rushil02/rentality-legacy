@@ -14,6 +14,6 @@ INDEX_SETTINGS = {
 
 }
 
-INDEX_NAME = 'rentality'
+INDEX_NAME_PREFIX = 'rentality'
 
 BULK_CHUNK_SIZE = 10

@@ -5,7 +5,7 @@ from .common import *
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'rentality',
         'USER': 'root',
         'PASSWORD': 'root',

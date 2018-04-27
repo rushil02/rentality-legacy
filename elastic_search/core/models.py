@@ -3,8 +3,8 @@ import hashlib
 from elasticsearch.helpers import bulk
 from elasticsearch_dsl import DocType, Keyword, Date, Integer
 
-from elastic_search.core.settings import INDEX_NAME, BULK_CHUNK_SIZE
-from elastic_search.core.utils import create_connection
+from elastic_search.core.settings import BULK_CHUNK_SIZE
+from elastic_search.core.utils import create_connection, get_index_name
 
 
 class DuplicateHashError(Exception):
@@ -18,7 +18,9 @@ class BaseModel(DocType):
     REF_FIELD = 'obj_pk'
 
     class Meta:
-        index = INDEX_NAME
+        @property
+        def index(self):
+            return get_index_name(self.__class__.__name__)
 
     @staticmethod
     def bulk_create(docs):
