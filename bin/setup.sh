@@ -56,6 +56,7 @@ pip3 install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
+python manage.py collectstatic
 python manage.py initialize_site
 python manage.py cities --import=postal_code
 python manage.py runserver

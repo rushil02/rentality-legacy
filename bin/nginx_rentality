@@ -1,0 +1,14 @@
+server {
+    listen 8000;
+    server_name rentality.com.au www.rentality.com.au 128.199.117.242;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        alias /home/rushil/ProjectMain/static_dev/static_root/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/rushil/ProjectMain/rentality/rentality_src.sock;
+    }
+}

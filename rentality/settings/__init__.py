@@ -28,7 +28,7 @@ if DEBUG:
 else:
     from .production import *
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.rentality.com.au', '128.199.117.242']
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -231,7 +231,6 @@ CITIES_DATA_DIR = os.path.join(LIB_PATH, 'geo_data')
 CITIES_VALIDATE_POSTAL_CODES = False
 CITIES_LOCALES = ['en']
 CITIES_POSTAL_CODES = ['AU']
-
 
 # Debug toolbar settings
 INTERNAL_IPS = ['localhost', '127.0.0.1']

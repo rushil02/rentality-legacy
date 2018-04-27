@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/home/rushil/ProjectMain/rentality
+ExecStart=/home/rushil/ProjectMain/env_py3/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/rushil/ProjectMain/rentality/rentality_src.sock rentality.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
