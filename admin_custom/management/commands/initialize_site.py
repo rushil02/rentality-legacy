@@ -35,7 +35,18 @@ def create_tags():  # TODO: Set all tags here
     Tag.objects.get_or_create(verbose="Wifi included", tag_type='F')
 
 
-
+def create_room__types():
+    # ROOM_TYPE = (
+    #     ('A', 'Whole Apartment'),
+    #     ('B', 'Whole House'),
+    #     ('C', 'Room in Share-house with Private bathroom'),
+    #     ('D', 'Room in Share-house with Shared bathroom'),
+    #     ('E', 'Student Accommodation'),
+    #     ('F', 'Home Stay'),
+    #     ('G', 'Granny Flat'),
+    #     ('O', 'Other'),
+    # )
+    pass
 
 # TODO
 def add_flat_pages():

@@ -15,6 +15,13 @@ def get_file_path(instance, filename):
     return os.path.join(path, filename)
 
 
+class RoomType(models.Model):
+    name = models.TextField()
+
+    def __str__(self):
+        return "%s" % self.name
+
+
 class House(models.Model):
     """
     tags -> contain many-to-many relation with model 'Tags' containing 'who-is-welcomed [rules]' or facility
@@ -28,23 +35,13 @@ class House(models.Model):
     )
     address = models.TextField(blank=True)
     location = models.ForeignKey(
-        'essentials.Location',
+        'cities.PostalCode',
         on_delete=models.PROTECT,
         verbose_name=_('location'),
         null=True, blank=True
     )
 
-    ROOM_TYPE = (
-        ('A', 'Whole Apartment'),
-        ('B', 'Whole House'),
-        ('C', 'Room in Share-house with Private bathroom'),
-        ('D', 'Room in Share-house with Shared bathroom'),
-        ('E', 'Student Accommodation'),
-        ('F', 'Home Stay'),
-        ('G', 'Granny Flat'),
-        ('O', 'Other'),
-    )
-    room_type = models.CharField(max_length=1, choices=ROOM_TYPE, blank=True)
+    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True)
     other_room_type = models.TextField(blank=True)
     bedrooms = models.PositiveSmallIntegerField(blank=True, null=True)
     bathrooms = models.PositiveSmallIntegerField(blank=True, null=True)

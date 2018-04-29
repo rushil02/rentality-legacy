@@ -15,14 +15,13 @@ class HouseDetailsForm1(forms.ModelForm):
             'address': forms.TextInput(attrs={'class': 'form-control', 'id': 'address',
                                               'placeholder': 'Unit no., House no., Street name, etc.',
                                               }),
-            # FIXME: Styling
-            # 'room_type': forms.Select(attrs={'class': 'form-control', }),
+            'room_type': forms.Select(attrs={'class': 'form-control'}),
             'other_room_type': forms.TextInput(attrs={'class': 'form-control',
                                                       'placeholder': 'Other Accommodation Description',
                                                       'type': "hidden"}),
-            'bedrooms': forms.NumberInput(attrs={'class': 'form-control', }),
-            'bathrooms': forms.NumberInput(attrs={'class': 'form-control', }),
-            'parking': forms.NumberInput(attrs={'class': 'form-control', }),
+            'bedrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bedrooms'}),
+            'bathrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bathrooms'}),
+            'parking': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of parking spaces'}),
         }
 
 
@@ -52,7 +51,7 @@ class HousePhotoForm(forms.ModelForm):
         fields = ['image', ]
 
         widgets = {
-            'image': forms.FileInput(attrs={'class': 'form-control', }),
+            'image': forms.FileInput(attrs={'class': 'form-control image-formset-image'}),
         }
 
 

@@ -37,6 +37,7 @@ if [ "$opt" = "y" ]; then
     sudo -u postgres createdb rentality
     sudo -u postgres psql -U postgres -d postgres -c "alter user root with password 'root';"
     sudo -u postgres psql -U postgres -d postgres -c "grant all privileges on database rentality to root;"
+    postgres# ALTER ROLE <user_name> SUPERUSER;
 else
     echo "PostgreSQL not setup via script"
 fi
@@ -81,6 +82,7 @@ pip3 install wheel
 pip3 install gunicorn
 
 sudo apt-get install binutils libproj-dev gdal-bin python-gdal libgeoip1
+sudo apt-get install postgresql-9.6-postgis-scripts
 
 cd "$lib_path"
 
@@ -172,3 +174,4 @@ if [ "$opt" = "y" ]; then
 fi
 
 
+sudo systemctl daemon-reload

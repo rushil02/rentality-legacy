@@ -15,6 +15,7 @@ class UserCreationForm(DjangoUserCreationForm):
     error_messages = {
         'duplicate_email': _("A user with that email already exists"),
         'password_mismatch': _("The two password fields didn't match."),
+        'policy_agreement': _("Please accept the terms and conditions to signup and use our services.")
     }
 
     password1 = forms.CharField(strip=False,
@@ -54,11 +55,19 @@ class UserCreationForm(DjangoUserCreationForm):
             code='duplicate_email'
         )
 
+    def clean_policy_agreement(self):
+        agreement = self.cleaned_data['policy_agreement']
+        if not agreement:
+            raise forms.ValidationError(
+                self.error_messages['policy_agreement'],
+                code='Policy agreement not accepted'
+            )
+
 
 class ProfileForm1(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ['user', 'profile_pic']
+        exclude = ['user', 'profile_pic', 'receive_newsletter']
         widgets = {
             'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'id': 'contact_num',
                                                     'placeholder': 'Contact number'}),

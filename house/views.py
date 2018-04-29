@@ -1,8 +1,14 @@
+import os
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST, require_GET
+from formtools.wizard.views import SessionWizardView
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet
@@ -12,6 +18,11 @@ from messaging.forms import MessageForm
 from messaging.views import save_message
 from user_custom.forms import EditProfileForm
 from django.contrib import messages
+
+
+def add_house_main(request):
+    house = House.objects.create(landlord=request.user.landlord)
+    return redirect(reverse('house:edit', args=[1, house.uuid]))
 
 
 def info(request, house_uuid):
@@ -42,7 +53,7 @@ def info(request, house_uuid):
 
 
 # FIXME: how to edit houses and maintain continuation, use form wizards?
-def add_house_details(request, uuid, next_url, FormClass, template, FormSetClass=None):
+def add_house_details(request, uuid, next_url, FormClass, template, FormSetClass=None, instance=None):
     if uuid:
         try:
             house = House.objects.get(uuid=uuid)
@@ -51,21 +62,24 @@ def add_house_details(request, uuid, next_url, FormClass, template, FormSetClass
     else:
         house = None
 
-    form = FormClass(request.POST or None, instance=house)
+    if not instance:
+        form = FormClass(request.POST or None, request.FILES or None, instance=house)
+    else:
+        form = FormClass(request.POST or None, request.FILES or None, instance=instance)
 
     if FormSetClass:
         context = {
-            'formset': FormSetClass(request.POST or None)
+            'formset': FormSetClass(request.POST or None),
+            'house': house
         }
     else:
-        context = {}
+        context = {'house': house}
 
     if request.method == 'POST':
+        print(request.POST)
         if form.is_valid():
-            obj = form.save(commit=False)
-            if not obj.landlord:
-                obj.landlord = request.user.landlord
-            obj.save()
+            print(form)
+            obj = form.save()
 
             return redirect(reverse(next_url))
         else:
@@ -77,22 +91,23 @@ def add_house_details(request, uuid, next_url, FormClass, template, FormSetClass
         return render(request, template, context)
 
 
-def add_house_form1(request, uuid=None):
+def add_house_form1(request, uuid):
     next_url = 'house:'
     template = 'house/add_house/specs.html'
+    print(request.POST)
     return add_house_details(request, uuid, next_url, HouseDetailsForm1, template, FormSetClass=HousePhotoFormSet)
 
 
-def add_house_form2(request, uuid=None):
+def add_house_form2(request, uuid):
     next_url = 'house:'
     template = 'house/add_house/date_cost_details.html'
     return add_house_details(request, uuid, next_url, HouseDetailsForm2, template)
 
 
-def landlord_info(request, uuid=None):
+def landlord_info(request, uuid):
     next_url = ''
     template = 'house/add_house/landlord_details.html'
-    return add_house_details(request, uuid, next_url, EditProfileForm, template)
+    return add_house_details(request, uuid, next_url, EditProfileForm, template, instance=request.user.userprofile)
 
 
 @login_required
@@ -126,3 +141,4 @@ def search_house_api(request):
     houses = House.objects.filter(address__icontains=query)
     serializer = HouseSerializer(houses, many=True)
     return JsonResponse(serializer.data, safe=False)
+

@@ -1,9 +1,9 @@
 {% extends 'utils/navbar/base.html' %}
 
 {% block user_menu %}
-    <li>
-        <a href="{% url 'django.contrib.flatpages.views.flatpage' url="about-us/" %}">About Us</a>
-    </li>
+    {#    <li>#}
+    {#        <a href="{% url 'django.contrib.flatpages.views.flatpage' url="about-us/" %}">About Us</a>#}
+    {#    </li>#}
     <li>
         <a href="{% url 'user:view_shortlist' %}">Shortlist</a>
     </li>

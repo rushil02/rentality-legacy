@@ -2,52 +2,63 @@
 
 {% block listing-form-body %}
     <h1 class="property-title">Tell us about your property</h1>
-    <form action="" method="POST">
+    <form action="" method="POST" id="main-form">
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
-                    {# leave form.csrf_token as is, iwts a hidden field used for security stuff #}
+                    {{ form.non_field_errors }}
                     {% csrf_token %}
-                    {#                    Access form's each field like following line#}
-                    {#                    {{ form.location }}#}
+                    {{ form.address.errors }}
                     {{ form.address }}
-
+                    {{ form.location.errors }}
                     {{ form.location }}
                     <datalist id="json-datalist"></datalist>
-
-                    Accommodation type
+                    {{ form.room_type.label }}
+                    {{ form.room_type.errors }}
                     {{ form.room_type }}
+                    {{ form.other_room_type.errors }}
                     {{ form.other_room_type }}
-                    Number of Bedrooms
+                    {{ form.bedrooms.errors }}
                     {{ form.bedrooms }}
-                    Number of Bathrooms
+                    {{ form.bathrooms.errors }}
                     {{ form.bathrooms }}
-                    Number of parking spaces
+                    {{ form.parking.errors }}
                     {{ form.parking }}
 
                 </div>
             </div>
         </div>
 
-    </form>
 
-    <form action="" method="POST">
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
+                    <label>Upload images of your property</label>
                     {{ formset.management_form }}
                     {% csrf_token %}
-                    {% for f in formset.forms %}
-
-
-                        Image
-                        {{ f.image }}
-
-                        <img id="preview" src="" alt="" width="100%" border=""/>
-
-
-                        {{ f.description }}
-                    {% endfor %}
+                    <div class="row">
+                        {% for f in formset.forms %}
+                            <div style="display: none">
+                                {{ f.image }}
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card" style="
+                                position: relative; text-align: center; color: white;">
+                                    <a href="" id="{{ f.image.auto_id }}" class="proxy-image-formset-image"><img
+                                            id="{{ f.image.auto_id }}" class="card-img-top"
+                                            src="/static/img/placeholders/apartment/default.png"
+                                            height="100" width="auto" alt="Card image cap">
+                                        <div id="{{ f.image.auto_id }}" style="color: white;position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);"><b>Click to Add</b></div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <span>Save to add more images</span>
                 </div>
             </div>
         </div>
@@ -99,40 +110,44 @@
     </script>
 
     <script>
+        // Other room type input hide/show
 
-        var el = $('#id_other_room_type');
         $("#id_room_type").change(function () {
-            if ($(this).val() === 'O') {
-                $(el).prop('type', 'text');
+
+            if ($("#id_room_type :selected").text() === 'Other' || $("#id_room_type :selected").text() === 'other') {
+
+                $('#id_other_room_type').prop('type', 'text');
+            } else {
+                $('#id_other_room_type').prop('type', 'hidden');
             }
         });
 
 
     </script>
     <script>
-        function readURL(input) {
+        // Image upload handling
 
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+        $('.proxy-image-formset-image').click(function (event) {
+            event.preventDefault();
+            var inp_el = $('input#' + this.id);
+            inp_el.trigger('click');
+        });
 
-                reader.onload = function (e) {
-                    $('#preview').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]);
+        $('.image-formset-image').change(function (event) {
+                var output = $('img#' + this.id);
+                console.log(event);
+                output.attr('src', URL.createObjectURL(event.target.files[0]));
+                {#$('div#'+this.id).html('<a id="'+this.id+'" class="remove-tag" style="color: white;">Remove</a>');#}
             }
-        }
+        );
 
-        $("#id_image").change(function () {
-            readURL(this);
-        });
+        {#$('.remove-tag').click(function (event) {#}
+        {#    event.preventDefault();#}
+        {#    var inp_el = $('input#' + this.id);#}
+        {#    inp_el.val('');#}
+        {#    output.attr('src', 'jn');#}
+
     </script>
-    <script type="text/javascript">
-        $('.formset_row').formset({
-            addText: 'add Image',
-            deleteText: 'remove',
-            prefix: 'image_set'
-        });
-    </script>
+
 {% endblock %}
 

@@ -26,12 +26,13 @@
                 <div class="block">
                     <h3>List my Property</h3>
                     <ul class="footer-links">
-                        <li class="active"><a href="{% url 'house:add' 1 %}">Tell us about your property</a></li>
-                        <li><a href="{% url 'house:add' 2 %}">More Details</a></li>
+                        <li class="active"><a href="{% url 'house:edit' 1 house.uuid %}">Tell us about your property</a>
+                        </li>
+                        <li><a href="{% url 'house:edit' 2 house.uuid %}">More Details</a></li>
 {#                        FIXME: Photos url; should it be on a seperate page?#}
 {#                        <li><a href="{% url 'house:add' 3 %}">Photos </a></li>#}
 
-                        <li><a href="{% url 'house:add' 3 %}">Property Owner Details</a>
+                        <li><a href="{% url 'house:edit' 3 house.uuid %}">Property Owner Details</a>
                         </li>
                         {#                        <li><a href="{% url 'house:add' 1 %}">All Done!</a></li>#}
                     </ul>

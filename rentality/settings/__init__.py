@@ -22,13 +22,17 @@ SECRET_KEY = get_secret_var('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = ['.rentality.com.au', ]
+
 # Distributed settings
 if DEBUG:
     from .development import *
+
+    ALLOWED_HOSTS += ['127.0.0.1', 'localhost']
 else:
     from .production import *
 
-ALLOWED_HOSTS = ['.rentality.com.au', '128.199.117.242']
+    ALLOWED_HOSTS += ['128.199.117.242', '167.99.77.213']
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -61,6 +65,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'easy_thumbnails',
+    'formtools',
 
     # all-auth providers
     'allauth.socialaccount.providers.facebook',
@@ -73,8 +78,8 @@ INSTALLED_APPS = [
     'admin_custom.apps.AdminCustomConfig',
     'staff.apps.StaffConfig',
     'landlord.apps.LandlordConfig',
-    'tenant.apps.TenantConfig',
     'house.apps.HouseConfig',
+    'tenant.apps.TenantConfig',
     'essentials.apps.EssentialsConfig',
     'elastic_search.apps.ElasticSearchConfig',
     'messaging.apps.MessagingConfig',

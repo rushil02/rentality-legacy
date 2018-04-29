@@ -95,6 +95,7 @@ class UserProfile(models.Model):
     )
     sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='O')
     dob = models.DateField(_('Date of Birth'), blank=True, null=True)
+    receive_newsletter = models.BooleanField(default=True)
     profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True, upload_to=get_file_path)
     updated_on = models.DateTimeField(auto_now=True)
 
