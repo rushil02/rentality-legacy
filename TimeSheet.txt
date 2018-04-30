@@ -42,4 +42,6 @@ Date        Day         Check-in        Check-out       Time
 27/04/18    Friday      18.30           22.00           3.30
 28/04/18    Saturday    00.30           03.30           3.00
 28/04/18    Saturday    05.00           11.00           6.00
-30/04/18    Monday      01.00
+30/04/18    Monday      01.00           10.00           9.00
+30/04/18    Monday      12.30           14.30           2.00
+30/04/18    Monday      17.30
