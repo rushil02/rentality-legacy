@@ -88,7 +88,7 @@ class SignUpInfoWizard(SessionWizardView):
         'user_common/account_creation/form2.html'
     ]
     form_list = [ProfileForm1, ProfileForm2]
-    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'temp-wizard-storage'))
+    file_storage = FileSystemStorage(location=settings.FORMTOOLS_STORAGE_LOCATION)
 
     def get_form_instance(self, step):
         instance = self.request.user.userprofile

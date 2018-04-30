@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-gunicron deamon
-nginx deaman
-remove temp files [wizard]
+sudo systemctl daemon-reload
+sudo systemctl restart gunicorn_rentality
+sudo systemctl restart nginx

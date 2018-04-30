@@ -239,3 +239,6 @@ CITIES_POSTAL_CODES = ['AU']
 
 # Debug toolbar settings
 INTERNAL_IPS = ['localhost', '127.0.0.1']
+
+# FormTools for Wizard - file storage
+FORMTOOLS_STORAGE_LOCATION = os.path.join(MEDIA_ROOT, 'temp-wizard-storage')
