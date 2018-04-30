@@ -20,7 +20,7 @@ from .common import *
 SECRET_KEY = get_secret_var('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['.rentality.com.au', ]
 
