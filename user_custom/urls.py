@@ -21,5 +21,5 @@ urlpatterns = [
     path('shortlist/<str:entity>/<uuid:uuid>', shortlist, name='add_to_shortlist'),
     path('my-shortlist/', shortlist_view, name='view_shortlist'),
 
-    path('add-details/', SignUpInfoWizard.as_view(), name='new_user_add_details'),
+    path('add-details/', SignUpInfoWizard.as_view(), name='account_creation'),
 ]

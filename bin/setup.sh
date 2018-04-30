@@ -175,3 +175,4 @@ fi
 
 
 sudo systemctl daemon-reload
+sudo systemctl restart gunicorn_rentality
