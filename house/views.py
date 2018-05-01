@@ -61,27 +61,22 @@ def add_house_form1(request, uuid):
         raise Http404("House does not exist.")
     form = HouseDetailsForm1(request.POST or None, instance=house, prefix='detail-form-1')
     queryset = house.image_set.all()
-    print(queryset)
     formset = HousePhotoFormSet(request.POST or None, request.FILES or None, queryset=queryset)
     context = {
         'house': house,
         'form': form,
         'formset': formset
     }
-    print(request.POST)
     if request.method == 'POST':
         valid = True
         if form.is_valid():
-            print(form.cleaned_data)
             form.save()
         else:
             valid = False
         if formset.is_valid():
-            print(formset.cleaned_data)
             for formset_form in formset.forms:
                 if formset_form.is_valid():
                     if formset_form.has_changed():
-                        print("came here tpo")
                         img_obj = formset_form.save(commit=False)
                         img_obj.house = house
                         img_obj.save()

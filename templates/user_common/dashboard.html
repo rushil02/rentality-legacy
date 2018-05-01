@@ -43,7 +43,7 @@
                     </div>
 
                     <h1 class="property-title">My Preferences</h1>
-                    <a href="{% url 'tenant:house_pref' %}">ADD PREFERENCE</a>
+                    <a href="{% url 'tenant:add' %}">ADD PREFERENCE</a>
                     <br>
                     <br>
 
@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="info">
                                         <div class="pull-right">
-                                            <a href="{% url 'tenant:house_pref' %}"
+                                            <a href="{% url 'tenant:edit' 1 hp.uuid %}"
                                                class="btn btn-fullcolor">Edit</a>
                                         </div>
                                         <h3>

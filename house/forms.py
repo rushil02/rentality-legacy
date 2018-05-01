@@ -38,7 +38,7 @@ class HouseDetailsForm2(forms.ModelForm):
         fields = ['rent', 'availability', 'min_stay', 'description']
         widgets = {
             'rent': forms.NumberInput(attrs={'class': 'form-control', }),
-            'rules': forms.CheckboxSelectMultiple(attrs={'class': 'form-control', }),
+            'rules': forms.SelectMultiple(attrs={'class': 'form-control', }),
             'facilities': forms.SelectMultiple(attrs={'class': 'form-control', }),
             'tenant_prof': forms.SelectMultiple(attrs={'class': 'form-control', }),
             'availability': RangeWidget(base_widget=forms.DateInput,

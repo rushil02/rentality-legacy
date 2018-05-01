@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.views.decorators.http import require_POST, require_GET
+from django.urls import reverse
 
 from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2
 from tenant.models import HousePreference
@@ -24,78 +25,122 @@ def info(request, house_pref_uuid):
         return render(request, 'tenant/info.html', {'house_pref': house_pref})
 
 
-class HousePreferenceCreateView(View):
-    template_name = 'tenant/add_edit/house_pref.html'
-
-    @staticmethod
-    def get_form(post_data=None):
-        return HousePreferenceForm(post_data)
-
-    def get(self, request, *args, **kwargs):
-        form = self.get_form()
-        formset = AddTenantFormSet()
-        context = {
-            'form': form,
-            'formset': formset
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form(request.POST)
-        if form.is_valid():
-            form.instance.tenant = request.user.tenant
-            form.save()
-            return redirect('/')
-        else:
-            return render(request, self.template_name, {'form': form})
+@login_required
+def add_preference_main(request):
+    house_pref = HousePreference.objects.create(tenant=request.user.tenant)
+    return redirect(reverse('tenant:edit', args=[1, house_pref.uuid]))
 
 
-class HousePreferenceCreateView2(View):
-    template_name = 'tenant/add_edit/house_pref_2.html'
-
-    @staticmethod
-    def get_form(post_data=None):
-        return HousePreferenceForm2(post_data)
-
-    def get(self, request, *args, **kwargs):
-        form = self.get_form()
-        context = {
-            'form': form,
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form(request.POST)
-        if form.is_valid():
-            form.instance.tenant = request.user.tenant
-            form.save()
-            return redirect('/')
-        else:
-            return render(request, self.template_name, {'form': form})
-
-
-class HousePreferenceCreateView3(View):
+@login_required
+def tenant_info(request, uuid):
     template_name = 'tenant/add_edit/tenant_details.html'
 
-    @staticmethod
-    def get_form(post_data=None):
-        return EditProfileForm(post_data)
+    try:
+        house_pref = HousePreference.objects.get(uuid=uuid)
+    except HousePreference.DoesNotExist:
+        raise Http404("Preference does not exist.")
 
-    def get(self, request, *args, **kwargs):
-        form = self.get_form()
-        context = {
-            'form': form,
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form(request.POST)
+    form = EditProfileForm(request.POST or None, instance=request.user.userprofile)
+    context = {
+        'house_pref': house_pref,
+        'form': form,
+    }
+    if request.method == 'POST':
         if form.is_valid():
-            form.instance.tenant = request.user.tenant
             form.save()
-            return redirect('/')
+            if 'save' in request.POST:
+                return render(request, template_name, context)
+            elif 'savettolist' in request.POST:
+                house_pref.status = 'P'
+                house_pref.save()
+                return redirect(reverse('user:dashboard'))
+    return render(request, template_name, context)
+
+
+@login_required
+def add_pref_form2(request, uuid):
+    template_name = 'tenant/add_edit/house_pref_2.html'
+
+    try:
+        house_pref = HousePreference.objects.get(uuid=uuid)
+    except HousePreference.DoesNotExist:
+        raise Http404("Preference does not exist.")
+
+    form = HousePreferenceForm2(request.POST or None, instance=house_pref)
+    context = {
+        'house_pref': house_pref,
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            if 'save' in request.POST:
+                return render(request, template_name, context)
+            elif 'savetonext' in request.POST:
+                return redirect(reverse('tenant:edit', args=[3, house_pref.uuid]))
+
+    return render(request, template_name, context)
+
+
+@login_required
+def add_pref_form1(request, uuid):
+    template_name = 'tenant/add_edit/house_pref.html'
+
+    try:
+        house_pref = HousePreference.objects.get(uuid=uuid)
+    except HousePreference.DoesNotExist:
+        raise Http404("Preference does not exist.")
+
+    form = HousePreferenceForm(request.POST or None, instance=request.user.userprofile)
+    queryset = house_pref.additionaltenant_set.all()
+    formset = AddTenantFormSet(request.POST or None, queryset=queryset)
+    context = {
+        'house_pref': house_pref,
+        'form': form,
+        'formset': formset,
+    }
+    if request.method == 'POST':
+        valid = True
+        if form.is_valid():
+            form.save()
         else:
-            return render(request, self.template_name, {'form': form})
+            valid = False
+        if formset.is_valid():
+            for formset_form in formset.forms:
+                if formset_form.is_valid():
+                    if formset_form.has_changed():
+                        add_tenant = formset_form.save(commit=False)
+                        add_tenant.house_pref = house_pref
+                        add_tenant.save()
+                else:
+                    valid = False
+        else:
+            valid = False
+        if valid:
+            if 'save' in request.POST:
+                context['formset'] = AddTenantFormSet(request.POST or None,
+                                                      queryset=house_pref.additionaltenant_set.all())
+                return render(request, template_name, context)
+            elif 'savetonext' in request.POST:
+                return redirect(reverse('tenant:edit', args=[2, house_pref.uuid]))
+        else:
+            return render(request, template_name, context)
+    else:
+        return render(request, template_name, context)
+
+
+@login_required
+def add_edit_pref(request, form_num, uuid=None):
+    func_di = {
+        1: add_pref_form1,
+        2: add_pref_form2,
+        3: tenant_info,
+    }
+
+    try:
+        return func_di[form_num](request, uuid)
+    except KeyError:
+        return Http404()
 
 
 @login_required()

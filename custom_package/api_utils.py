@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from cities.models import PostalCode
+from cities.models import PostalCode, City
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
@@ -40,6 +40,28 @@ class LocationAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_result_label(self, item):
         return "%s\t%s, %s" % (item.code, item.name, item.region_name)
+
+    def get_selected_result_label(self, item):
+        return self.get_result_label(item)
+
+
+class CityLocationAutocomplete(autocomplete.Select2QuerySetView):
+    """ searches location by city name"""
+
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return City.objects.none()
+
+        qs = City.objects.all()
+        print(qs)
+        if self.q:
+            qs = City.objects.filter(name_std__startswith=self.q)
+        print(qs[:10])
+        return qs
+
+    def get_result_label(self, item):
+        return "%s" % (item.name,)
 
     def get_selected_result_label(self, item):
         return self.get_result_label(item)

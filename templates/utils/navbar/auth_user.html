@@ -2,6 +2,25 @@
 
 {% block user_menu %}
 
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" data-hover="dropdown">
+            <span class="fa fa-fw fa-plus" aria-hidden="true"></span>
+            <span style="
+                  position: absolute;
+                  top: 32px;
+                  left: 0;
+                  font-size: 14px;
+                  right: 0;
+                  text-align: center;">Add me</span>
+
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="{% url 'tenant:add' %}"><span class="fa fa-fw fa-paper-plane"></span> Tenancy</a></li>
+            <li><a href="{% url 'house:add' %}"><span class="fa fa-fw fa-home"></span> My Property</a></li>
+        </ul>
+    </li>
+
 
     <li>
         <a href="{% url 'user:view_shortlist' %}">

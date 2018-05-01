@@ -26,9 +26,10 @@
                 <div class="block">
                     <h3>List my House Preferences</h3>
                     <ul class="footer-links">
-                        <li class="active"><a href="{% url 'tenant:house_pref' %}">Tell us who you are</a></li>
-                        <li><a href="{% url 'tenant:house_pref_2' %}">Preferences</a></li>
-                        <li><a href="{% url 'tenant:house_pref_3' %}">Before you go</a>
+                        <li class="active"><a href="{% url 'tenant:edit' 1 house_pref.uuid %}">Tell us who you are</a>
+                        </li>
+                        <li><a href="{% url 'tenant:edit' 2 house_pref.uuid %}">Preferences</a></li>
+                        <li><a href="{% url 'tenant:edit' 3 house_pref.uuid %}">Before you go</a>
                         </li>
                         {#                        <li><a href="{% url 'house:add' 1 %}">All Done!</a></li>#}
                     </ul>

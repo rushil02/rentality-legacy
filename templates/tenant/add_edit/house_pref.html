@@ -1,51 +1,61 @@
 {% extends 'tenant/add_edit/base.html' %}
+{% load static %}
+
+{% block head_extra_scripts %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ form.media }}
+{% endblock %}
 
 {% block listing-form-body %}
     <h1 class="property-title">Tell us who you are</h1>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
 
-                    <form method="post" action="">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-
-
-                    </form>
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    Tags
+                    {{ form.tags.errors }}
+                    {{ form.tags }}
+                    {{ form.locations.errors }}
+                    {{ form.locations }}
                     <br>
+                    <br>
+                    {{ form.description.errors }}
+                    {{ form.description }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-12">
+
                     <h2>Additional Tenants</h2>
-                    <form method="post" action="">
-                        {% csrf_token %}
-                        {{ formset.management_form }}
-                        {% for f in formset.forms %}
+                    {{ formset.as_table }}
 
-
-
-                            {{ f.as_p }}
-
-                        {% endfor %}
-
-
-                        <input type="submit" value="Submit">
-                    </form>
                 </div>
             </div>
         </div>
         <p>&nbsp;</p>
         <div class="clearfix">
             <p class="pull-right clearfix">
-                <span class="text-muted">You have unsaved changes.</span>
-                <button type="submit" class="btn btn-default-color">Save Changes</button>
+                <input type="submit" class="btn btn-fullcolor" value="Save" name="save">
+                <input type="submit" class="btn btn-default-color" value="Save & Next" name="savetonext">
             </p>
         </div>
     </form>
-    <hr/>
-    <p>&nbsp;</p>
-    <div class="clearfix">
-        <p class="pull-right clearfix">
-            <a href="" class="btn btn-default-color">Next</a>
-        </p>
-    </div>
+
 {% endblock %}
 
+{% block js_script %}
+    <script>
+        // hide location input
+        $(document).ready(function (event) {
+            $('#id_locations_chzn').hide()
+
+        })
+    </script>
+
+{% endblock %}

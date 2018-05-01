@@ -21,28 +21,23 @@ class TenantProfile(models.Model):
 
 class HousePreference(models.Model):
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.CASCADE)
-    max_budget = models.PositiveIntegerField()
-    locations = models.ManyToManyField('essentials.Location')
-    move_in_date = DateRangeField(null=True, blank=True)
-    move_out_date = DateRangeField(null=True, blank=True)
+    max_budget = models.PositiveIntegerField(default=0)
+    locations = models.ManyToManyField('cities.City', blank=True)
+    move_in_date = DateRangeField(null=True, blank=True, verbose_name='Move-in date range')
+    move_out_date = DateRangeField(null=True, blank=True, verbose_name='Move-out date range')
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField('house.Tag')
 
-    PROPERTY_TYPE = (
-        ('A', 'Whole Apartment'),
-        ('B', 'Whole House'),
-        ('C', 'Room in Share-house with Private bathroom'),
-        ('D', 'Room in Share-house with Shared bathroom'),
-        ('E', 'Student Accommodation'),
-        ('F', 'Home Stay'),
-        ('G', 'Granny Flat'),
-        ('O', 'Other'),
-    )
-
-    property_type = models.CharField(max_length=1, default='A', choices=PROPERTY_TYPE)
+    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True, verbose_name="Property Type")
     description = models.TextField(blank=True)
+
+    STATUS = (
+        ('I', 'Incomplete'),
+        ('P', 'Published'),
+    )
+    status = models.CharField(max_length=1, choices=STATUS, default='I')
 
     def __str__(self):
         return "%s" % self.tenant
@@ -50,7 +45,7 @@ class HousePreference(models.Model):
     # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
     def preferred_suburbs(self):  # FIXME
-        return self.locations.all()[0]
+        return ', '.join(self.locations.all())
 
     def get_locations_display(self):
         return str(self.locations).join(', ')
