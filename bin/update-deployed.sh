@@ -3,6 +3,7 @@
 now=$(date +%Y%m%d%H%M%Z)
 f_name="sql_dump_$now.sql"
 pg_dump rentality > ${f_name}
+pip3 install -r requirements.txt
 python manage.py migrate
 sudo systemctl daemon-reload
 sudo systemctl restart gunicorn_rentality
