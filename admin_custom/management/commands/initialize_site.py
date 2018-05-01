@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sites.models import Site
 
 from elastic_search.core.utils import get_index, create_mappings
-from house.models import Tag
+from house.models import Tag, RoomType
 from django.conf import settings
 
 
@@ -36,17 +36,16 @@ def create_tags():  # TODO: Set all tags here
 
 
 def create_room__types():
-    # ROOM_TYPE = (
-    #     ('A', 'Whole Apartment'),
-    #     ('B', 'Whole House'),
-    #     ('C', 'Room in Share-house with Private bathroom'),
-    #     ('D', 'Room in Share-house with Shared bathroom'),
-    #     ('E', 'Student Accommodation'),
-    #     ('F', 'Home Stay'),
-    #     ('G', 'Granny Flat'),
-    #     ('O', 'Other'),
-    # )
-    pass
+    """ Creates all property types here """
+    RoomType.objects.get_or_create(name="Whole Apartment")
+    RoomType.objects.get_or_create(name="Whole House")
+    RoomType.objects.get_or_create(name="Room in Share-house with Private bathroom")
+    RoomType.objects.get_or_create(name="Room in Share-house with Shared bathroom")
+    RoomType.objects.get_or_create(name="Student Accommodation")
+    RoomType.objects.get_or_create(name="Home Stay")
+    RoomType.objects.get_or_create(name="Granny Flat")
+    RoomType.objects.get_or_create(name="Other")
+
 
 # TODO
 def add_flat_pages():
@@ -67,6 +66,7 @@ class Command(BaseCommand):
         'Integrate OAuth info': social_apps_info,
         'Create tags': create_tags,
         'Add flat pages': add_flat_pages,
+        'Create Property Type (room_type) choices': create_room__types,
         # 'Initialize ElasticSearch Mappings': initialze_es,
     }
 

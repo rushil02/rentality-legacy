@@ -1,4 +1,8 @@
 {% extends 'house/add_house/base.html' %}
+{% block head_extra_scripts %}
+    <link href="/static/css/datetimepicker.css" rel="stylesheet"/>
+
+{% endblock %}
 
 {% block listing-form-body %}
     <h1 class="property-title">More Details</h1>
@@ -20,9 +24,13 @@
                     {{ form.tenant_pref }}
 
                     Availability
-                    {{ form.availability }}
 
-                    Minimum Stay
+
+                    {{ form.availability.0 }}
+                    {{ form.availability.1 }}
+
+
+                    Minimum Stay (in days)
                     {{ form.min_stay }}
 
                     Description
@@ -34,20 +42,29 @@
         <p>&nbsp;</p>
         <div class="clearfix">
             <p class="pull-right clearfix">
-                <span class="text-muted">You have unsaved changes.</span>
-                <button type="submit" class="btn btn-default-color">Save Changes</button>
+                <span class="text-muted"></span>
+                <input type="submit" class="btn btn-fullcolor" value="Save" name="save">
+                <input type="submit" class="btn btn-default-color" value="Save & Next" name="savetonext">
             </p>
         </div>
     </form>
-    <hr/>
-    <p>&nbsp;</p>
-    <div class="clearfix">
-        <p class="pull-right clearfix">
-            <a href="" class="btn btn-default-color">Next</a>
-        </p>
-    </div>
+
 {% endblock %}
 
 {% block js_script %}
-
+    <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $('#id_availability_0').datetimepicker({
+            format: 'yyyy-mm-dd',
+            startView: 'decade',
+            autoclose: true,
+            minView: 'month'
+        });
+        $('#id_availability_1').datetimepicker({
+            format: 'yyyy-mm-dd',
+            startView: 'decade',
+            autoclose: true,
+            minView: 'month'
+        });
+    </script>
 {% endblock %}

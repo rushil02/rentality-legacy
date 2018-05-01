@@ -2,7 +2,9 @@
 <html>
 <head>
     {% block head_title %}
-        <title>Rentality - Connecting Global Residents with Medium Term Rentals</title>{% endblock head_title %}
+        <title>Rentality - Connecting Global Residents with Medium Term Rentals</title>
+    {% endblock head_title %}
+
     {% block head_scripts %}
         {% include 'utils/style.html' %}
 
@@ -15,6 +17,9 @@
     <meta name="description" content="Short to Mid-Term Rental Platform Connecting Global Residents"/>
     <meta name="author" content="Rentality"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    {% block head_extra_scripts %}
+
+    {% endblock %}
 </head>
 <body>
 

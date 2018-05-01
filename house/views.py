@@ -52,62 +52,105 @@ def info(request, house_uuid):
             return render(request, 'house/info.html', context)
 
 
-# FIXME: how to edit houses and maintain continuation, use form wizards?
-def add_house_details(request, uuid, next_url, FormClass, template, FormSetClass=None, instance=None):
-    if uuid:
-        try:
-            house = House.objects.get(uuid=uuid)
-        except House.DoesNotExist:
-            raise Http404("House does not exist.")
-    else:
-        house = None
-
-    if not instance:
-        form = FormClass(request.POST or None, request.FILES or None, instance=house)
-    else:
-        form = FormClass(request.POST or None, request.FILES or None, instance=instance)
-
-    if FormSetClass:
-        context = {
-            'formset': FormSetClass(request.POST or None),
-            'house': house
-        }
-    else:
-        context = {'house': house}
-
+@login_required
+def add_house_form1(request, uuid):
+    template = 'house/add_house/specs.html'
+    try:
+        house = House.objects.get(uuid=uuid)
+    except House.DoesNotExist:
+        raise Http404("House does not exist.")
+    form = HouseDetailsForm1(request.POST or None, instance=house, prefix='detail-form-1')
+    queryset = house.image_set.all()
+    print(queryset)
+    formset = HousePhotoFormSet(request.POST or None, request.FILES or None, queryset=queryset)
+    context = {
+        'house': house,
+        'form': form,
+        'formset': formset
+    }
+    print(request.POST)
     if request.method == 'POST':
-        print(request.POST)
+        valid = True
         if form.is_valid():
-            print(form)
-            obj = form.save()
-
-            return redirect(reverse(next_url))
+            print(form.cleaned_data)
+            form.save()
         else:
-            context.update({'form': form})
+            valid = False
+        if formset.is_valid():
+            print(formset.cleaned_data)
+            for formset_form in formset.forms:
+                if formset_form.is_valid():
+                    if formset_form.has_changed():
+                        print("came here tpo")
+                        img_obj = formset_form.save(commit=False)
+                        img_obj.house = house
+                        img_obj.save()
+                else:
+                    valid = False
+        else:
+            valid = False
+        if valid:
+            if 'save' in request.POST:
+                context['formset'] = HousePhotoFormSet(request.POST or None, request.FILES or None,
+                                                       queryset=house.image_set.all())
+                return render(request, template, context)
+            elif 'savetonext' in request.POST:
+                return redirect(reverse('house:edit', args=[2, house.uuid]))
+        else:
             return render(request, template, context)
     else:
-        context.update({'form': form})
-
         return render(request, template, context)
 
 
-def add_house_form1(request, uuid):
-    next_url = 'house:'
-    template = 'house/add_house/specs.html'
-    print(request.POST)
-    return add_house_details(request, uuid, next_url, HouseDetailsForm1, template, FormSetClass=HousePhotoFormSet)
-
-
+@login_required
 def add_house_form2(request, uuid):
-    next_url = 'house:'
     template = 'house/add_house/date_cost_details.html'
-    return add_house_details(request, uuid, next_url, HouseDetailsForm2, template)
+
+    try:
+        house = House.objects.get(uuid=uuid)
+    except House.DoesNotExist:
+        raise Http404("House does not exist.")
+
+    form = HouseDetailsForm2(request.POST or None, instance=house)
+    context = {
+        'house': house,
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            if 'save' in request.POST:
+                return render(request, template, context)
+            elif 'savetonext' in request.POST:
+                return redirect(reverse('house:edit', args=[3, house.uuid]))
+
+    return render(request, template, context)
 
 
+@login_required
 def landlord_info(request, uuid):
-    next_url = ''
     template = 'house/add_house/landlord_details.html'
-    return add_house_details(request, uuid, next_url, EditProfileForm, template, instance=request.user.userprofile)
+
+    try:
+        house = House.objects.get(uuid=uuid)
+    except House.DoesNotExist:
+        raise Http404("House does not exist.")
+
+    form = EditProfileForm(request.POST or None, instance=request.user.userprofile)
+    context = {
+        'house': house,
+        'form': form,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            if 'save' in request.POST:
+                return render(request, template, context)
+            elif 'savettolist' in request.POST:
+                house.status = 'P'
+                house.save()
+                return redirect(reverse('user:dashboard'))
+    return render(request, template, context)
 
 
 @login_required
@@ -141,4 +184,3 @@ def search_house_api(request):
     houses = House.objects.filter(address__icontains=query)
     serializer = HouseSerializer(houses, many=True)
     return JsonResponse(serializer.data, safe=False)
-

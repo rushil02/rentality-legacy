@@ -1,21 +1,23 @@
 from django import forms
 from django.contrib.postgres.forms import DateRangeField, RangeWidget
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
+from dal import autocomplete
 
-from house.models import House, Image
+from house.models import House, Image, Tag
 
 
 class HouseDetailsForm1(forms.ModelForm):
     class Meta:
         model = House
-        exclude = ['landlord', 'rent', 'tags', 'availability', 'min_stay']
+        fields = ['location', 'address', 'room_type', 'other_room_type', 'bedrooms', 'bathrooms', 'parking']
         widgets = {
-            'location': forms.TextInput(attrs={'class': 'form-control', 'id': 'location', 'list': 'json-datalist',
-                                               'placeholder': 'Suburb, City', 'required': 'required'}),
-            'address': forms.TextInput(attrs={'class': 'form-control', 'id': 'address',
+            'location': autocomplete.ModelSelect2(url='house:postal_code_api',
+                                                  attrs={'class': 'form-control', 'style': "visibility:hidden;",
+                                                         'data-placeholder': 'Enter postcode'}),
+            'address': forms.TextInput(attrs={'class': 'form-control',
                                               'placeholder': 'Unit no., House no., Street name, etc.',
                                               }),
-            'room_type': forms.Select(attrs={'class': 'form-control'}),
+            'room_type': forms.Select(attrs={'class': 'form-control', 'style': "visibility:hidden;", }),
             'other_room_type': forms.TextInput(attrs={'class': 'form-control',
                                                       'placeholder': 'Other Accommodation Description',
                                                       'type': "hidden"}),
@@ -26,19 +28,20 @@ class HouseDetailsForm1(forms.ModelForm):
 
 
 class HouseDetailsForm2(forms.ModelForm):
-    facilities = forms.MultipleChoiceField(required=False)
-    rules = forms.MultipleChoiceField(required=False)
-    tenant_pref = forms.MultipleChoiceField(required=False, label='Tenant Preferences')
+    facilities = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='F'))
+    rules = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='R'))
+    tenant_pref = forms.ModelMultipleChoiceField(required=False, label='Tenant Preferences',
+                                                 queryset=Tag.objects.filter(tag_type='T'))
 
     class Meta:
         model = House
         fields = ['rent', 'availability', 'min_stay', 'description']
         widgets = {
             'rent': forms.NumberInput(attrs={'class': 'form-control', }),
-            'rules': forms.SelectMultiple(attrs={'class': 'form-control', }),
+            'rules': forms.CheckboxSelectMultiple(attrs={'class': 'form-control', }),
             'facilities': forms.SelectMultiple(attrs={'class': 'form-control', }),
             'tenant_prof': forms.SelectMultiple(attrs={'class': 'form-control', }),
-            'availability': RangeWidget(base_widget=forms.SelectDateWidget,
+            'availability': RangeWidget(base_widget=forms.DateInput,
                                         attrs={'class': 'form-control', }),
             'min_stay': forms.NumberInput(attrs={'class': 'form-control', }),
             'description': forms.Textarea(attrs={'class': 'form-control', })
@@ -49,13 +52,12 @@ class HousePhotoForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['image', ]
-
         widgets = {
-            'image': forms.FileInput(attrs={'class': 'form-control image-formset-image'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control image-formset-image'}),
         }
 
 
-HousePhotoFormSet = inlineformset_factory(House, Image, form=HousePhotoForm, extra=3)
+HousePhotoFormSet = modelformset_factory(Image, form=HousePhotoForm, extra=3)
 
 
 class HouseDetailsForm3(forms.ModelForm):

@@ -22,19 +22,19 @@ def check_mail(request):
     return render(request, 'user_common/account_creation/email_conf.html')
 
 
-# FIXME: not working
 def edit_profile(request):
-    if request.method == 'POST':
-        form1 = UserChangeForm(request.POST, instance=request.user)
-        form2 = EditProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
-        if form1.is_valid() and form2.is_valid():
-            form1.save()
-            form2.save()
-    else:
-        form1 = UserChangeForm(instance=request.user)
-        form2 = EditProfileForm(instance=request.user.userprofile)
+    form1 = UserChangeForm(request.POST or None, instance=request.user)
+    form2 = EditProfileForm(request.POST or None, request.FILES or None, instance=request.user.userprofile)
     context = {
         'form1': form1,
         'form2': form2
     }
+    print(request.POST)
+    if request.method == 'POST':
+        if form1.is_valid() and form2.is_valid():
+            form1.save()
+            obj = form2.save(commit=False)
+            obj.profile_pic = form2.cleaned_data['profile_pic']
+            obj.save()
+
     return render(request, 'user_common/profile.html', context)

@@ -1,8 +1,14 @@
 {% extends 'house/add_house/base.html' %}
+{% load static %}
+
+{% block head_extra_scripts %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ form.media }}
+{% endblock %}
 
 {% block listing-form-body %}
     <h1 class="property-title">Tell us about your property</h1>
-    <form action="" method="POST" id="main-form">
+    <form action="" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
@@ -12,7 +18,6 @@
                     {{ form.address }}
                     {{ form.location.errors }}
                     {{ form.location }}
-                    <datalist id="json-datalist"></datalist>
                     {{ form.room_type.label }}
                     {{ form.room_type.errors }}
                     {{ form.room_type }}
@@ -29,35 +34,42 @@
             </div>
         </div>
 
-
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-12">
                     <label>Upload images of your property</label>
-                    {{ formset.management_form }}
-                    {% csrf_token %}
-                    <div class="row">
-                        {% for f in formset.forms %}
-                            <div style="display: none">
-                                {{ f.image }}
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="card" style="
-                                position: relative; text-align: center; color: white;">
-                                    <a href="" id="{{ f.image.auto_id }}" class="proxy-image-formset-image"><img
-                                            id="{{ f.image.auto_id }}" class="card-img-top"
-                                            src="/static/img/placeholders/apartment/default.png"
-                                            height="100" width="auto" alt="Card image cap">
-                                        <div id="{{ f.image.auto_id }}" style="color: white;position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);"><b>Click to Add</b></div>
-                                    </a>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <br>
+                    {{ formset.as_table }}
+                    {#                    {{ formset.non_form_errors }}#}
+                    {#                    <div class="row">#}
+                    {#                        {% for f in formset.forms %}#}
+                    {#                            {{ f.as_table }}#}
+                    {#                            {{ f.non_field_errors }}#}
+                    {#                            <div class=".image-orig-input" style="display: none">#}
+                    {#                            {{ f.image }}#}
+
+                    {#                            </div>#}
+                    {#                            {{ f.image.errors }}#}
+                    {#                            <div class="col-sm-4">#}
+                    {#                                <div class="card" style="#}
+                    {#                                position: relative; text-align: center; color: white;">#}
+                    {#                                    <a href="" id="{{ f.image.auto_id }}" class="proxy-image-formset-image"><img#}
+                    {#                                            id="{{ f.image.auto_id }}" class="card-img-top"#}
+                    {#                                            src="{% if f.instance.image %}#}
+                    {#                                                    {{ f.instance.image.url }}#}
+                    {#                                                {% else %}#}
+                    {#                                                    /static/img/placeholders/apartment/default.png#}
+                    {#                                                {% endif %}"#}
+                    {#                                            height="100" width="auto" alt="Card image cap">#}
+                    {#                                        <div id="{{ f.image.auto_id }}" style="color: white;position: absolute;#}
+                    {#    top: 50%;#}
+                    {#    left: 50%;#}
+                    {#    transform: translate(-50%, -50%);"><b>Click to Add</b></div>#}
+                    {#                                    </a>#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {#                        {% endfor %}#}
+                    {#                    </div>#}
+                    {#                    <br>#}
                     <span>Save to add more images</span>
                 </div>
             </div>
@@ -65,48 +77,23 @@
         <p>&nbsp;</p>
         <div class="clearfix">
             <p class="pull-right clearfix">
-                <span class="text-muted">You have unsaved changes.</span>
-                <button type="submit" class="btn btn-default-color">Save Changes</button>
+                <span class="text-muted"></span>
+                <input type="submit" class="btn btn-fullcolor" value="Save" name="save">
+                <input type="submit" class="btn btn-default-color" value="Save & Next" name="savetonext">
             </p>
         </div>
     </form>
-    <hr/>
-    <p>&nbsp;</p>
-    <div class="clearfix">
-        <p class="pull-right clearfix">
-            <a href="" class="btn btn-default-color">Next</a>
-        </p>
-    </div>
+
 {% endblock %}
 
 {% block js_script %}
 
     <script>
-        //setup before functions
-        var typingTimer;                //timer identifier
-        var doneTypingInterval = 500;  //time in ms (5 seconds)
+        // hide location input
+        $(document).ready(function (event) {
+            $('#id_detail_form_1_location_chzn').hide()
 
-        //on keyup, start the countdown
-        $('#location').keyup(function () {
-            clearTimeout(typingTimer);
-            if ($('#location').val()) {
-                typingTimer = setTimeout(doneTyping, doneTypingInterval);
-            }
-        });
-
-        //user is "finished typing," do something
-        function doneTyping() {
-            var val = $('#location').val();
-            var dataList = document.getElementById('json-datalist');
-            var option = document.createElement('option');
-            // Set the value using the item in the JSON array.
-            option.value = 'Suburb';
-            // Add the <option> element to the <datalist>.
-            dataList.appendChild(option);
-
-
-        }
-
+        })
     </script>
 
     <script>
@@ -124,6 +111,7 @@
 
 
     </script>
+
     <script>
         // Image upload handling
 
@@ -135,18 +123,10 @@
 
         $('.image-formset-image').change(function (event) {
                 var output = $('img#' + this.id);
-                console.log(event);
                 output.attr('src', URL.createObjectURL(event.target.files[0]));
                 {#$('div#'+this.id).html('<a id="'+this.id+'" class="remove-tag" style="color: white;">Remove</a>');#}
             }
         );
-
-        {#$('.remove-tag').click(function (event) {#}
-        {#    event.preventDefault();#}
-        {#    var inp_el = $('input#' + this.id);#}
-        {#    inp_el.val('');#}
-        {#    output.attr('src', 'jn');#}
-
     </script>
 
 {% endblock %}

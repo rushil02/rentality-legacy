@@ -40,17 +40,25 @@ def welcome(request):
 
 
 def sign_in(request):  # FIXME: only anon user allowed
-    login_form = LoginForm(request.POST or None, prefix='login_form')
-    if request.POST:
-        if login_form.is_valid():
-            user = login_form.get_user()
-            login(request, user)
+    if request.user.is_authenticated:
+        try:
+            next_page = request.GET['next']
+        except KeyError:
             return redirect('/')
         else:
-            return render(request, 'user_common/signin.html', {'login_form': login_form})
+            return redirect(next_page)
     else:
-        context = {'login_form': login_form}
-        return render(request, 'user_common/signin.html', context)
+        login_form = LoginForm(request.POST or None, prefix='login_form')
+        if request.POST:
+            if login_form.is_valid():
+                user = login_form.get_user()
+                login(request, user)
+                return sign_in(request)
+            else:
+                return render(request, 'user_common/signin.html', {'login_form': login_form})
+        else:
+            context = {'login_form': login_form}
+            return render(request, 'user_common/signin.html', context)
 
 
 def sign_up(request):  # FIXME: only anon user allowed

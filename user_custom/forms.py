@@ -102,7 +102,7 @@ class EditProfileForm(forms.ModelForm):
             'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Contact number'}),
             'dob': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Date of Birth'}),
             'sex': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Sex'}),
-            'profile_pic': forms.FileInput(attrs={'class': 'form-control', }),
+            'profile_pic': forms.ClearableFileInput(attrs={'class': 'form-control', }),
         }
 
 

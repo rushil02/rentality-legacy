@@ -20,7 +20,7 @@ from .common import *
 SECRET_KEY = get_secret_var('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = get_secret_var('DEBUG')
 
 ALLOWED_HOSTS = ['.rentality.com.au', ]
 
@@ -45,6 +45,9 @@ AUTHENTICATION_BACKENDS = (
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -177,6 +180,7 @@ MEDIA_URL = '/media/'
 SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/sign-in'
 
 # Django all-auth
 # http://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -187,6 +191,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL  # Re
 ACCOUNT_EMAIL_REQUIRED = True  # Email required for signing up
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "Rentality.com - "
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 3600  # User is blocked for this time after failure to repeatedly log in
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # TODO: add config for other providers
 # Social Account Providers setup  Docs - http://django-allauth.readthedocs.io/en/stable/providers.html

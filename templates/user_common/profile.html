@@ -1,5 +1,10 @@
 {% extends 'utils/base_auth.html' %}
 
+{% block head_extra_scripts %}
+    <link href="/static/css/datetimepicker.css" rel="stylesheet"/>
+
+{% endblock %}
+
 {% block in-container-content %}
     {% load thumbnail %}
 
@@ -22,11 +27,7 @@
 
                         <div class="info">
                             <header style="border-bottom: none; margin-bottom: 0; padding-bottom: 0; text-align: center">
-                                {% if request.user.get_full_name %}
-                                    <h2>{{ request.user.get_full_name|title }}</h2>
-                                {% else %}
-                                    <h2>{{ request.user.email }}</h2>
-                                {% endif %}
+                                <h2>{{ request.user.get_full_name|title }}</h2>
                             </header>
                         </div>
                     </div>
@@ -35,7 +36,7 @@
         </div>
         <div class="col-sm-8 col-md-9">
             <div class="account_setting">
-                <form method="POST" action="">
+                <form method="POST" action="" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="col-md-6" style="padding-left: 0;">
                         {{ form1.first_name }}
@@ -46,6 +47,7 @@
                     </div>
 
                     {{ form2.contact_num }}
+
                     {{ form2.dob }}
                     {{ form2.sex }}
                     {{ form2.profile_pic }}
@@ -65,6 +67,13 @@
 {% endblock %}
 
 {% block js_script %}
-
-
+    <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $('#id_dob').datetimepicker({
+            format: 'yyyy-mm-dd',
+            startView: 'decade',
+            autoclose: true,
+            minView: 'month'
+        });
+    </script>
 {% endblock %}

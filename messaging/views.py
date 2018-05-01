@@ -8,30 +8,12 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 from house.models import House
 from messaging.forms import MessageForm
 from messaging.models import Thread, Message
 from messaging.serializers import MessageSerializer, CreateMessageSerializer
 from tenant.models import HousePreference
-
-
-# @csrf_exempt
-# def get_thread_messages(request, thread_uuid):
-#     if request.method == 'GET':
-#         messages = Message.objects.filter(thread__uuid=thread_uuid)
-#         serializer = MessageSerializer(messages, many=True)
-#         return JsonResponse(serializer.data, safe=False)
-#     elif request.method == 'POST':
-#         thread = Thread.objects.get(uuid=thread_uuid)
-#         data = JSONParser().parse(request)
-#         serializer = MessageSerializer(data=data)
-#         if serializer.is_valid():
-#             m = Message(thread=thread, user=request.user, content=serializer.validated_data['content'])
-#             m.save()
-#             return JsonResponse(serializer.data, status=201)
-#         return JsonResponse(serializer.errors, status=400)
 
 
 # FIXME: Reverse relation, though revise messaging model for better optimization

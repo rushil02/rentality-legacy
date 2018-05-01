@@ -3,6 +3,7 @@ import time
 import uuid
 
 from django.contrib.postgres.fields import DateRangeField
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
@@ -41,7 +42,7 @@ class House(models.Model):
         null=True, blank=True
     )
 
-    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True)
+    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True, verbose_name="Property Type")
     other_room_type = models.TextField(blank=True)
     bedrooms = models.PositiveSmallIntegerField(blank=True, null=True)
     bathrooms = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -103,8 +104,8 @@ class House(models.Model):
     def get_owner(self):
         return self.landlord.user
 
-    def get_owner_username(self):
-        return self.get_owner().email
+    def get_owner_username(self):  # FIXME: FIX method name
+        return self.get_owner().first_name
 
     def get_owner_pic(self):
         foo = self.get_owner().userprofile.get_profile_pic()
@@ -125,8 +126,12 @@ class Image(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
+        qs = Image.objects.filter(house=self.house, is_thumbnail=True)
         if self.is_thumbnail:
-            Image.objects.filter(house=self.house).update(is_thumbnail=False)
+            qs.update(is_thumbnail=False)
+        else:
+            if not qs:
+                self.is_thumbnail = True
         return super(Image, self).save(force_insert=False, force_update=False, using=None,
                                        update_fields=None)
 
@@ -136,7 +141,8 @@ class Tag(models.Model):
 
     TAG_TYPE = (
         ('R', 'Rule'),
-        ('F', 'Facility')
+        ('F', 'Facility'),
+        ('T', 'Tenant Preference')
     )
 
     tag_type = models.CharField(max_length=1, choices=TAG_TYPE)
