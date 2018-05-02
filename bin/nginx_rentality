@@ -1,5 +1,5 @@
 server {
-    listen 8000;
+    listen 80;
     server_name rentality.com.au www.rentality.com.au 167.99.77.213;
 
     location = /favicon.ico { access_log off; log_not_found off; }
