@@ -45,7 +45,13 @@ class HousePreference(models.Model):
     # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
     def preferred_suburbs(self):  # FIXME
-        return ', '.join(self.locations.all())
+        return ', '.join([city.name_std for city in self.locations.all()])
+
+    def temp_location_display(self):
+        try:
+            return self.locations.all()[0]
+        except IndexError:
+            return None
 
     def get_locations_display(self):
         return str(self.locations).join(', ')

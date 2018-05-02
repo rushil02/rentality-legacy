@@ -59,37 +59,42 @@
                     {#                        <a class="btn btn-fullcolor"#}
                     {#                           href="">Edit</a>#}
                     {#                    </div>#}
-                    <h1 class="property-title">{{ house.location }}
-                        <small>{{ house.address }}</small>
+                    <h1 class="property-title">{{ house.get_location|default:"Unknown property" }}
+                        <small>{{ house.address|default:"Unknown property" }}</small>
                     </h1>
                 </div>
                 <div class="col-sm-8">
 
                     <div class="property-topinfo">
                         <ul class="amenities">
-                            <li><i class="icon-bedrooms"></i> <span class="caption"> 3 </span></li>
-                            <li><i class="icon-bathrooms"></i> <span class="caption">2 </span></li>
-                            <li><i class="icon-garage"></i> <span class="caption"> 2 </span></li>
+                            <li><i class="icon-bedrooms"></i> <span
+                                    class="caption"> {{ house.bedrooms|default:"Unknown" }} </span></li>
+                            <li><i class="icon-bathrooms"></i> <span
+                                    class="caption">{{ house.bathrooms|default:"Unknown" }} </span></li>
+                            <li><i class="icon-garage"></i> <span
+                                    class="caption"> {{ house.parking|default:"Unknown" }} </span></li>
                         </ul>
                     </div>
 
                     <hr/>
 
-                    <p class="property-detail-key-detail">Date Available: {{ house.availability.lower }}
-                        to {{ house.availability.upper }}</p>
+                    <p class="property-detail-key-detail">Date
+                        Available: {{ house.availability.lower|default:"Unknown" }}
+                        to {{ house.availability.upper|default:"Unknown" }}</p>
 
-                    <p class="property-detail-key-detail">Length of Stay: {{ house.min_stay|default_if_none:"0" }}
+                    <p class="property-detail-key-detail">Minimum length of Stay: {{ house.min_stay|default:"Unknown" }}
                         days</p>
 
-                    <p class="property-detail-key-detail">Rent: ${{ house.rent }}/week</p>
+                    <p class="property-detail-key-detail">Rent: ${{ house.rent|default:"Unknown" }}/week</p>
 
 
                     <!-- BEGIN PROPERTY AMENITIES LIST -->
                     <ul class="property-amenities-list col-md-4">
-                        <li class="enabled"> Wifi: Yes</li>
-                        <li class="enabled"> Parking: Yes</li>
-
-                        <li class="enabled"> Furnished: Yes</li>
+                        {% if house.tags_set.all %}
+                            {% for tag in house.tags_set.all %}
+                                <li class="enabled">{{ tag }} </li>
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                     <!-- END PROPERTY AMENITIES LIST -->
 

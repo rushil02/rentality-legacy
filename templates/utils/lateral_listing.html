@@ -26,7 +26,9 @@
                                      alt=""/>
                             </div>
                             <ul class="amenities">
-                                <li><i class="fa fa-map-marker fa-fw"></i>{{ house.location }}</li>
+                                <li>
+                                    <i class="fa fa-map-marker fa-fw"></i>{{ house.get_location|default:"Unknown"|title }}
+                                </li>
                             </ul>
                         </div>
                     {% endfor %}
@@ -42,7 +44,7 @@
                         <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
                             <div class="image">
                                 <a href="{% url 'tenant:info' house_pref_uuid=hp.uuid %}" class="info">
-                                    <h3>{{ hp.tenant.user.get_full_name }}</h3>
+                                    <h3>{{ hp.tenant.user.get_full_name|title }}</h3>
                                     <span class="location">Looking for a place</span>
                                 </a>
 
@@ -54,7 +56,9 @@
                                      alt=""/>
                             </div>
                             <ul class="amenities">
-                                <li><i class="fa fa-user fa-fw"></i> {{ hp.preferred_suburbs }}</li>
+                                <li>
+                                    <i class="fa fa-user fa-fw"></i> {{ hp.temp_location_display|default:"Unkown"|title }}
+                                </li>
                             </ul>
                         </div>
                     {% endfor %}

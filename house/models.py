@@ -5,6 +5,8 @@ import uuid
 from django.contrib.postgres.fields import DateRangeField
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import FileField
+from django.db.models.fields.files import ImageFieldFile
 from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 
@@ -112,6 +114,12 @@ class House(models.Model):
         print(foo)
         return foo
 
+    def get_location(self):
+        if self.location:
+            return self.location.name_full
+        else:
+            return None
+
 
 class Image(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)
@@ -150,7 +158,7 @@ class Tag(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.verbose
+        return "%s" % self.verbose
 
 
 class Application(models.Model):

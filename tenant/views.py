@@ -49,8 +49,9 @@ def tenant_info(request, uuid):
         if form.is_valid():
             form.save()
             if 'save' in request.POST:
+                context['form'] = EditProfileForm(instance=request.user.userprofile)
                 return render(request, template_name, context)
-            elif 'savettolist' in request.POST:
+            elif 'savetolist' in request.POST:
                 house_pref.status = 'P'
                 house_pref.save()
                 return redirect(reverse('user:dashboard'))
@@ -75,6 +76,7 @@ def add_pref_form2(request, uuid):
         if form.is_valid():
             form.save()
             if 'save' in request.POST:
+                context['form'] = HousePreferenceForm2(instance=house_pref)
                 return render(request, template_name, context)
             elif 'savetonext' in request.POST:
                 return redirect(reverse('tenant:edit', args=[3, house_pref.uuid]))
@@ -91,7 +93,7 @@ def add_pref_form1(request, uuid):
     except HousePreference.DoesNotExist:
         raise Http404("Preference does not exist.")
 
-    form = HousePreferenceForm(request.POST or None, instance=request.user.userprofile)
+    form = HousePreferenceForm(request.POST or None, instance=house_pref)
     queryset = house_pref.additionaltenant_set.all()
     formset = AddTenantFormSet(request.POST or None, queryset=queryset)
     context = {
@@ -118,8 +120,8 @@ def add_pref_form1(request, uuid):
             valid = False
         if valid:
             if 'save' in request.POST:
-                context['formset'] = AddTenantFormSet(request.POST or None,
-                                                      queryset=house_pref.additionaltenant_set.all())
+                context['form'] = HousePreferenceForm(instance=house_pref)
+                context['formset'] = AddTenantFormSet(queryset=house_pref.additionaltenant_set.all())
                 return render(request, template_name, context)
             elif 'savetonext' in request.POST:
                 return redirect(reverse('tenant:edit', args=[2, house_pref.uuid]))

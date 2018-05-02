@@ -27,7 +27,7 @@ def add_house_main(request):
 
 def info(request, house_uuid):
     try:
-        house = House.objects.get(uuid=house_uuid)
+        house = House.objects.prefetch_related('tags').get(uuid=house_uuid)
     except House.DoesNotExist:
         raise Http404("House does not exist.")
     else:
@@ -86,11 +86,13 @@ def add_house_form1(request, uuid):
             valid = False
         if valid:
             if 'save' in request.POST:
-                context['formset'] = HousePhotoFormSet(request.POST or None, request.FILES or None,
-                                                       queryset=house.image_set.all())
+                context['form'] = HouseDetailsForm1(instance=house, prefix='detail-form-1')
+                context['formset'] = HousePhotoFormSet(queryset=house.image_set.all())
                 return render(request, template, context)
             elif 'savetonext' in request.POST:
                 return redirect(reverse('house:edit', args=[2, house.uuid]))
+            else:
+                raise HttpResponseBadRequest
         else:
             return render(request, template, context)
     else:
@@ -115,9 +117,12 @@ def add_house_form2(request, uuid):
         if form.is_valid():
             form.save()
             if 'save' in request.POST:
+                context['form'] = HouseDetailsForm2(instance=house)
                 return render(request, template, context)
             elif 'savetonext' in request.POST:
                 return redirect(reverse('house:edit', args=[3, house.uuid]))
+            else:
+                raise HttpResponseBadRequest
 
     return render(request, template, context)
 
@@ -136,15 +141,19 @@ def landlord_info(request, uuid):
         'house': house,
         'form': form,
     }
+    print(request.POST)
     if request.method == 'POST':
         if form.is_valid():
             form.save()
             if 'save' in request.POST:
+                context['form'] = EditProfileForm(instance=request.user.userprofile)
                 return render(request, template, context)
-            elif 'savettolist' in request.POST:
+            elif 'savetolist' in request.POST:
                 house.status = 'P'
                 house.save()
                 return redirect(reverse('user:dashboard'))
+            else:
+                return HttpResponseBadRequest()
     return render(request, template, context)
 
 
