@@ -33,7 +33,6 @@ def messages(request):
     except IndexError:
         context['house_threads'] = []
     else:
-        print(house_threads[0].__dict__)
         context['house_threads'] = house_threads
 
     try:

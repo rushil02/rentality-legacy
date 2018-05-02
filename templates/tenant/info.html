@@ -55,7 +55,6 @@
 
 
             <p>Preferred Length: {{ house_pref.move_in_date.lower }} to {{ house_pref.move_in_date.upper }}</p>
-            <p>Preferred Length: {{ house_pref.move_out_date.lower }} to {{ house_pref.move_out_date.upper }}</p>
 
             <p>Preferred Suburb: {% for location in house_pref.locations.all %}
                 {{ location.suburb }};

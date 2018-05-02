@@ -7,6 +7,10 @@ server {
         alias /home/Project/static_dev/static_root/;
     }
 
+    location /media/ {
+        alias /home/Project/static_dev/media_root/;
+    }
+
     location / {
         include proxy_params;
         proxy_pass http://unix:/home/Project/rentality/rentality_src.sock;
