@@ -19,6 +19,11 @@ class TenantProfile(models.Model):
         return "%s" % self.user
 
 
+class ActiveHousePreferenceManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='P')
+
+
 class HousePreference(models.Model):
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.CASCADE)
     max_budget = models.PositiveIntegerField(default=0)
@@ -38,6 +43,9 @@ class HousePreference(models.Model):
         ('P', 'Published'),
     )
     status = models.CharField(max_length=1, choices=STATUS, default='I')
+
+    objects = models.Manager()
+    active_objects = ActiveHousePreferenceManager()
 
     def __str__(self):
         return "%s" % self.tenant

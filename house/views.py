@@ -171,9 +171,12 @@ def add_edit_house(request, form_num, uuid=None):
         return Http404()
 
 
-@require_POST
+# @require_POST FIXME
 def search_house_page(request):
-    query = request.POST['query']
+    try:
+        query = request.POST['query']
+    except:
+        query = ''
     form = SearchForm(initial={'location': query})
     context = {
         'search_form': form,
@@ -186,6 +189,6 @@ def search_house_page(request):
 def search_house_api(request):
     query = request.GET['query']
     # houses = House.objects.filter(address__icontains=query)
-    houses = House.objects.all()
+    houses = House.active_objects.all()
     serializer = HouseSerializer(houses, many=True)
     return JsonResponse(serializer.data, safe=False)

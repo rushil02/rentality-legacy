@@ -50,4 +50,4 @@ Date        Day         Check-in        Check-out       Time
 02/04/18    Wednesday   08.00           10.30           2.30
 02/04/18    Wednesday   13.00           15.00           2.00
 03/04/18    Thursday    04.15           08.00           3.45
-03/04/18    Thursday    18.00
+03/04/18    Thursday    18.00           22.15           4.15

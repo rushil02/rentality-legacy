@@ -32,12 +32,10 @@ class LocationAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:
             return PostalCode.objects.none()
 
-        qs = PostalCode.objects.all()
-
         if self.q:
-            qs = qs.filter(code__istartswith=self.q)[:10]
+            qs = PostalCode.objects.filter(code__istartswith=self.q)[:10]
         else:
-            qs = PostalCode.objects.all()[:10]
+            qs = PostalCode.objects.none()
         return qs
 
     def get_result_label(self, item):
@@ -58,7 +56,7 @@ class CityLocationAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = City.objects.filter(name__istartswith=self.q)[:10]
         else:
-            qs = City.objects.all()[:10]
+            qs = City.objects.none()
         return qs
 
     def get_result_label(self, item):

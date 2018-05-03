@@ -15,25 +15,23 @@
                                 {{ search_form.location }}
 
                             </div>
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-9 col-sm-12">
-                                            <div class="noleftspace col-md-3 col-sm-4">
-                                                {{ search_form.bedrooms }}
-                                            </div>
-                                            <div class="noleftspace col-md-3 col-sm-4">
-                                                {{ search_form.bathrooms }}                            
-                                            </div>
-                                            <div class="noleftspace col-md-3 col-sm-4">
-                                                {{ search_form.max_price }}  
-                                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-9 col-sm-12">
+                                        <div class="noleftspace col-md-3 col-sm-4">
+                                            {{ search_form.bedrooms }}
+                                        </div>
+                                        <div class="noleftspace col-md-3 col-sm-4">
+                                            {{ search_form.bathrooms }}
+                                        </div>
+                                        <div class="noleftspace col-md-3 col-sm-4">
+                                            {{ search_form.max_price }}
                                         </div>
                                     </div>
                                 </div>
-                            <div class="move_to_end_right">
-                                <button id='search-btn' type="submit" class="btn btn-fullcolor pull-right">Search
-                                </button>
                             </div>
+                            <a id='search-btn' class="btn btn-fullcolor pull-right">Search
+                            </a>
                         </div>
 
                     </form>
@@ -83,7 +81,16 @@
             }).done(function (data) {
                 $("#search-content").empty();
                 $.each(data, function (i, item) {
-                    var avail_dates = jQuery.parseJSON(item['availability']);
+                    var avail_date = jQuery.parseJSON(item['availability']);
+                    console.log(item);
+                    var avail_date_lower, avail_date_upper;
+                    if (avail_date !== null) {
+                        avail_date_lower = move_in_date['lower'];
+                        avail_date_upper = move_in_date['upper'];
+                    } else {
+                        avail_date_lower = 'Unknown';
+                        avail_date_upper = 'Unknown';
+                    }
 
                     var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
                         "                                <div class=\"image\">\n" +
@@ -102,7 +109,7 @@
                         "                                        <small>/week</small>\n" +
                         "                                    </p>\n" +
                         "\n" +
-                        "                                    <p>Availability: " + avail_dates['lower'] + " to " + avail_dates['upper'] + "</p>\n" +
+                        "                                    <p>Availability: " + avail_date_lower + " to " + avail_date_upper + "</p>\n" +
                         "\n" +
                         "                                    <p>Rental Term: Enquire for details</p>\n" +
                         "\n" +
@@ -122,16 +129,27 @@
     </script>
 
     <script>
-        $("#search-btn").click(function () {
+        $("#search-btn").click(function (e) {
+            e.preventDefault();
             $.ajax({
                 method: "GET",
                 url: "{% url 'house:search_house_api' %}",
                 data: {query: $('#id_location').val()}
             })
                 .done(function (data) {
+                    console.log(data);
                     $("#search-content").empty();
                     $.each(data, function (i, item) {
-                        var avail_dates = jQuery.parseJSON(item['availability']);
+                        var avail_date = jQuery.parseJSON(item['availability']);
+                        console.log(item);
+                        var avail_date_lower, avail_date_upper;
+                        if (avail_date !== null) {
+                            avail_date_lower = move_in_date['lower'];
+                            avail_date_upper = move_in_date['upper'];
+                        } else {
+                            avail_date_lower = 'Unknown';
+                            avail_date_upper = 'Unknown';
+                        }
 
                         var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
                             "                                <div class=\"image\">\n" +
@@ -150,7 +168,7 @@
                             "                                        <small>/week</small>\n" +
                             "                                    </p>\n" +
                             "\n" +
-                            "                                    <p>Availability: " + avail_dates['lower'] + " to " + avail_dates['upper'] + "</p>\n" +
+                            "                                    <p>Availability: " + avail_date_lower + " to " + avail_date_upper + "</p>\n" +
                             "\n" +
                             "                                    <p>Rental Term: Enquire for details</p>\n" +
                             "\n" +

@@ -8,27 +8,27 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <form method="GET" action="">
+                    <form method="POST" action="">
 
                         <div class="row">
                             <div class="col-md-12 col-sm-12">
                                 {{ search_form.location }}
                             </div>
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-9 col-sm-12">
-                                            <div class="noleftspace col-md-3 col-sm-4">
-                                                {{ search_form.bedrooms }}
-                                            </div>
-                                            <div class="noleftspace col-md-3 col-sm-4">
-                                                {{ search_form.bathrooms }}
-                                            </div>
-                                            <div class="noleftspace col-md-3 col-sm-4">
-                                                {{ search_form.max_price }}
-                                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-9 col-sm-12">
+                                        <div class="noleftspace col-md-3 col-sm-4">
+                                            {{ search_form.bedrooms }}
+                                        </div>
+                                        <div class="noleftspace col-md-3 col-sm-4">
+                                            {{ search_form.bathrooms }}
+                                        </div>
+                                        <div class="noleftspace col-md-3 col-sm-4">
+                                            {{ search_form.max_price }}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
 
                         <a id='search-btn' class="btn btn-fullcolor pull-right">Search</a>
@@ -51,35 +51,8 @@
 
                     <!-- BEGIN PROPERTY LISTING -->
                     <div id="property-listing" class="grid-style1 clearfix">
-                        <div class="row">
-                            <div class="item col-sm-3"><!-- Set width to 4 columns for grid view mode only -->
-                                <div class="image">
-                                    <a href="">
-                                        <h3>asdndfjnl</h3>
-                                        <span class="location"></span>
-                                    </a>
-                                    <img src="/static/img/placeholders/apartment/default.png" alt=""/>
-                                </div>
-                                <div class="info">
-                                    <h3>
-                                        <a href="">House num 1</a>
-                                        <small>Address - Suburb</small>
-                                    </h3>
-                                    <p>480
-                                        <small>/week</small>
-                                    </p>
+                        <div class="row" id="search-content">
 
-                                    <p>Available By: Enquire for details.</p>
-
-                                    <p>Rental Term: Enquire for details</p>
-
-                                    <ul class="amenities">
-                                        <li><i class="icon-bedrooms"></i> 5</li>
-                                        <li><i class="icon-bathrooms"></i> 4</li>
-                                        <li><i class="icon-garage"></i> 1</li>
-                                    </ul>
-                                </div>
-                            </div>
 
                         </div>
                     </div>
@@ -87,20 +60,7 @@
 
 
                     <!-- BEGIN PAGINATION -->
-                    <div class="pagination">
-                        <ul id="previous">
-                            <li><a href="#"><i class="fa fa-chevron-left"></i></a></li>
-                        </ul>
-                        <ul>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                        </ul>
-                        <ul id="next">
-                            <li><a href="#"><i class="fa fa-chevron-right"></i></a></li>
-                        </ul>
-                    </div>
+
                     <!-- END PAGINATION -->
 
                 </div>
@@ -126,8 +86,23 @@
                 $("#search-content").empty();
                 $.each(data, function (i, item) {
                     var move_in_date = jQuery.parseJSON(item['move_in_date']);
+                    var move_in_date_lower, move_in_date_upper;
+                    if (move_in_date !== null) {
+                        move_in_date_lower = move_in_date['lower'];
+                        move_in_date_upper = move_in_date['upper'];
+                    } else {
+                        move_in_date_lower = 'Unknown';
+                        move_in_date_upper = 'Unknown';
+                    }
                     var move_out_date = jQuery.parseJSON(item['move_out_date']);
-
+                    var move_out_date_lower, move_out_date_upper;
+                    if (move_out_date !== null) {
+                        move_out_date_lower = move_in_date['lower'];
+                        move_out_date_upper = move_in_date['upper'];
+                    } else {
+                        move_out_date_lower = 'Unknown';
+                        move_out_date_upper = 'Unknown';
+                    }
                     var tar_html = "<div class=\"item col-sm-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
                         "                                <div class=\"image\">\n" +
                         "                                    <a href=\"\">\n" +
@@ -145,9 +120,9 @@
                         "                                        <small>/week</small>\n" +
                         "                                    </p>\n" +
                         "\n" +
-                        "                                    <p>Move in Date: " + move_in_date['lower'] + " to " + move_in_date['upper'] + "</p>\n" +
+                        "                                    <p>Move in Date: " + move_in_date_lower + " to " + move_in_date_upper + "</p>\n" +
                         "\n" +
-                        "                                    <p>Move out date: " + move_out_date['lower'] + " to " + move_out_date['upper'] + "</p>\n" +
+                        "                                    <p>Move out date: " + move_out_date_lower + " to " + move_out_date_upper + "</p>\n" +
                         "\n" +
                         "                                </div>\n" +
                         "                            </div>";
@@ -160,7 +135,8 @@
     </script>
 
     <script>
-        $("#search-btn").click(function () {
+        $("#search-btn").click(function (e) {
+            e.preventDefault();
             $.ajax({
                 method: "GET",
                 url: "{% url 'house:search_house_api' %}",
@@ -170,8 +146,23 @@
                     $("#search-content").empty();
                     $.each(data, function (i, item) {
                         var move_in_date = jQuery.parseJSON(item['move_in_date']);
+                        var move_in_date_lower, move_in_date_upper;
+                        if (move_in_date !== null) {
+                            move_in_date_lower = move_in_date['lower'];
+                            move_in_date_upper = move_in_date['upper'];
+                        } else {
+                            move_in_date_lower = 'Unknown';
+                            move_in_date_upper = 'Unknown';
+                        }
                         var move_out_date = jQuery.parseJSON(item['move_out_date']);
-
+                        var move_out_date_lower, move_out_date_upper;
+                        if (move_out_date !== null) {
+                            move_out_date_lower = move_in_date['lower'];
+                            move_out_date_upper = move_in_date['upper'];
+                        } else {
+                            move_out_date_lower = 'Unknown';
+                            move_out_date_upper = 'Unknown';
+                        }
                         var tar_html = "<div class=\"item col-sm-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
                             "                                <div class=\"image\">\n" +
                             "                                    <a href=\"\">\n" +
@@ -189,9 +180,9 @@
                             "                                        <small>/week</small>\n" +
                             "                                    </p>\n" +
                             "\n" +
-                            "                                    <p>Move in Date: " + move_in_date['lower'] + " to " + move_in_date['upper'] + "</p>\n" +
+                            "                                    <p>Move in Date: " + move_in_date_lower + " to " + move_in_date_upper + "</p>\n" +
                             "\n" +
-                            "                                    <p>Move out date: " + move_out_date['lower'] + " to " + move_out_date['upper'] + "</p>\n" +
+                            "                                    <p>Move out date: " + move_out_date_lower + " to " + move_out_date_upper + "</p>\n" +
                             "\n" +
                             "                                </div>\n" +
                             "                            </div>";

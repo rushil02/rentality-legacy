@@ -153,9 +153,12 @@ def shortlisted_houses(request):
 
 # FIXME: check methods
 
-@require_POST
+# @require_POST FIXME
 def search_tenant_page(request):
-    query = request.POST['query']
+    try:
+        query = request.POST['query']
+    except:
+        query = ''
     form = SearchForm(initial={'location': query})
     context = {
         'search_form': form,
@@ -168,6 +171,6 @@ def search_tenant_page(request):
 def search_tenant_api(request):
     query = request.GET['query']
     # hp = HousePreference.objects.filter(locations__suburb__icontains=query)
-    hp = HousePreference.objects.all()
+    hp = HousePreference.active_objects.all()
     serializer = HousePreferenceSerializer(hp, many=True)
     return JsonResponse(serializer.data, safe=False)

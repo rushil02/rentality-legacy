@@ -25,6 +25,11 @@ class RoomType(models.Model):
         return "%s" % self.name
 
 
+class ActiveHouseManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='P')
+
+
 class House(models.Model):
     """
     tags -> contain many-to-many relation with model 'Tags' containing 'who-is-welcomed [rules]' or facility
@@ -66,6 +71,9 @@ class House(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
+    active_objects = ActiveHouseManager()
 
     # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
