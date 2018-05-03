@@ -15,6 +15,7 @@ echo "Done"
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py collectstatic
+python manage.py initialize_site
 
 echo "Reloading daemon"
 sudo systemctl daemon-reload

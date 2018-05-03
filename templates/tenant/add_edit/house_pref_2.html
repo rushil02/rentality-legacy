@@ -13,8 +13,15 @@
                 <div class="col-sm-12">
 
                     {% csrf_token %}
-
-                    {{ form.as_p }}
+                    <p>Max budget ($ AUD)</p>
+                    <p>{{ form.max_budget }}</p>
+                    <p>Move in Date Range</p>
+                    <p>{{ form.move_in_date }}</p>
+                    <p>Move out Date Range</p>
+                    <p>{{ form.move_out_date }}</p>
+                    <p>{{ form.flexible_dates }} I am flexible with dates</p>
+                    <p>Property Type</p>
+                    <p>{{ form.room_type }}</p>
 
                 </div>
             </div>
@@ -23,7 +30,7 @@
         <div class="clearfix">
             <p class="pull-right clearfix">
                 <input type="submit" class="btn btn-fullcolor" value="Save" name="save">
-                <input type="submit" class="btn btn-default-color" value="Save & Next" name="savetonext">
+                <input type="submit" class="btn btn-default-color" value="Save & List" name="savetolist">
             </p>
         </div>
     </form>

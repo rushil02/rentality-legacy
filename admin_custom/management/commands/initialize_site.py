@@ -33,6 +33,8 @@ def create_tags():  # TODO: Set all tags here
 
     Tag.objects.get_or_create(verbose="No Smoking", tag_type='R')
     Tag.objects.get_or_create(verbose="Wifi included", tag_type='F')
+    Tag.objects.get_or_create(verbose="Furnished", tag_type='F')
+    Tag.objects.get_or_create(verbose="Pets Friendly", tag_type='R')
 
 
 def create_room__types():

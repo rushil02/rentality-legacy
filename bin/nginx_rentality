@@ -15,4 +15,7 @@ server {
         include proxy_params;
         proxy_pass http://unix:/home/Project/rentality/rentality_src.sock;
     }
+
+    client_max_body_size 3m;
+
 }

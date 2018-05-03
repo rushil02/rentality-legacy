@@ -3,7 +3,7 @@
 
 {% block head_extra_scripts %}
     <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
-    {{ form.media }}
+    {{ hp_form.media }}
 {% endblock %}
 
 {% block listing-form-body %}
@@ -14,30 +14,27 @@
                 <div class="col-sm-12">
 
                     {% csrf_token %}
-                    {{ form.non_field_errors }}
-                    Tags
-                    {{ form.tags.errors }}
-                    {{ form.tags }}
-                    {{ form.locations.errors }}
-                    {{ form.locations }}
+
+
+                    {{ hp_form.non_field_errors }}
+                    {{ td_form.non_field_errors }}
+                    {{ td_form.sex }}
+                    {{ td_form.dob }}
+                    Profile picture
+                    {{ td_form.profile_pic }}
+                    <div style="color: #42a597">Preferences</div>
+                    {{ hp_form.tags.errors }}
+                    {{ hp_form.tags }}
+                    {{ hp_form.locations.errors }}
+                    {{ hp_form.locations }}
                     <br>
                     <br>
-                    {{ form.description.errors }}
-                    {{ form.description }}
+                    {{ hp_form.description.errors }}
+                    {{ hp_form.description }}
                 </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="row">
-                <div class="col-sm-12">
-
-                    <h2>Additional Tenants</h2>
-                    {{ formset.as_table }}
-
-                </div>
-            </div>
-        </div>
         <p>&nbsp;</p>
         <div class="clearfix">
             <p class="pull-right clearfix">
@@ -50,12 +47,19 @@
 {% endblock %}
 
 {% block js_script %}
+
     <script>
         // hide location input
         $(document).ready(function (event) {
-            $('#id_locations_chzn').hide()
+            $('#id_tenancy_pref_locations_chzn').hide()
+        });
 
-        })
+
+        $(document).ready(function (event) {
+            $('#id_tenancy-pref-description').attr('placeholder', 'Tell us a little bit about yourself! Why do you want a place medium term? What are you like as a tenant?')
+        });
+
+
     </script>
 
 {% endblock %}

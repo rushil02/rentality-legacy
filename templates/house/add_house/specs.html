@@ -14,6 +14,8 @@
                 <div class="col-sm-12">
                     {{ form.non_field_errors }}
                     {% csrf_token %}
+                    <div style="color: #42a597">Address</div>
+
                     {{ form.address.errors }}
                     {{ form.address }}
                     {{ form.location.errors }}

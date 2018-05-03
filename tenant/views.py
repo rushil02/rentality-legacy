@@ -31,31 +31,31 @@ def add_preference_main(request):
     return redirect(reverse('tenant:edit', args=[1, house_pref.uuid]))
 
 
-@login_required
-def tenant_info(request, uuid):
-    template_name = 'tenant/add_edit/tenant_details.html'
-
-    try:
-        house_pref = HousePreference.objects.get(uuid=uuid)
-    except HousePreference.DoesNotExist:
-        raise Http404("Preference does not exist.")
-
-    form = EditProfileForm(request.POST or None, instance=request.user.userprofile)
-    context = {
-        'house_pref': house_pref,
-        'form': form,
-    }
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            if 'save' in request.POST:
-                context['form'] = EditProfileForm(instance=request.user.userprofile)
-                return render(request, template_name, context)
-            elif 'savetolist' in request.POST:
-                house_pref.status = 'P'
-                house_pref.save()
-                return redirect(reverse('user:dashboard'))
-    return render(request, template_name, context)
+# @login_required
+# def tenant_info(request, uuid):
+#     template_name = 'tenant/add_edit/tenant_details.html'
+#
+#     try:
+#         house_pref = HousePreference.objects.get(uuid=uuid)
+#     except HousePreference.DoesNotExist:
+#         raise Http404("Preference does not exist.")
+#
+#     form = EditProfileForm(request.POST or None, instance=request.user.userprofile)
+#     context = {
+#         'house_pref': house_pref,
+#         'form': form,
+#     }
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             form.save()
+#             if 'save' in request.POST:
+#                 context['form'] = EditProfileForm(instance=request.user.userprofile)
+#                 return render(request, template_name, context)
+#             elif 'savetolist' in request.POST:
+#                 house_pref.status = 'P'
+#                 house_pref.save()
+#                 return redirect(reverse('user:dashboard'))
+#     return render(request, template_name, context)
 
 
 @login_required
@@ -78,14 +78,16 @@ def add_pref_form2(request, uuid):
             if 'save' in request.POST:
                 context['form'] = HousePreferenceForm2(instance=house_pref)
                 return render(request, template_name, context)
-            elif 'savetonext' in request.POST:
-                return redirect(reverse('tenant:edit', args=[3, house_pref.uuid]))
+            elif 'savetolist' in request.POST:
+                house_pref.status = 'P'
+                house_pref.save()
+                return redirect(reverse('user:dashboard'))
 
     return render(request, template_name, context)
 
 
 @login_required
-def add_pref_form1(request, uuid):
+def tenant_pref_detail_form_view(request, uuid):
     template_name = 'tenant/add_edit/house_pref.html'
 
     try:
@@ -93,35 +95,32 @@ def add_pref_form1(request, uuid):
     except HousePreference.DoesNotExist:
         raise Http404("Preference does not exist.")
 
-    form = HousePreferenceForm(request.POST or None, instance=house_pref)
-    queryset = house_pref.additionaltenant_set.all()
-    formset = AddTenantFormSet(request.POST or None, queryset=queryset)
+    form1 = HousePreferenceForm(request.POST or None, instance=house_pref, prefix='tenancy-pref')
+
+    form2 = EditProfileForm(request.POST or None, request.FILES or None, instance=request.user.userprofile,
+                            prefix='tenant-details')
+
     context = {
         'house_pref': house_pref,
-        'form': form,
-        'formset': formset,
+        'hp_form': form1,
+        'td_form': form2,
     }
-    if request.method == 'POST':
+
+    if request.method == "POST":
         valid = True
-        if form.is_valid():
-            form.save()
+        if form1.is_valid():
+            form1.save()
         else:
             valid = False
-        if formset.is_valid():
-            for formset_form in formset.forms:
-                if formset_form.is_valid():
-                    if formset_form.has_changed():
-                        add_tenant = formset_form.save(commit=False)
-                        add_tenant.house_pref = house_pref
-                        add_tenant.save()
-                else:
-                    valid = False
+        if form2.is_valid():
+            form2.save()
         else:
             valid = False
+
         if valid:
             if 'save' in request.POST:
-                context['form'] = HousePreferenceForm(instance=house_pref)
-                context['formset'] = AddTenantFormSet(queryset=house_pref.additionaltenant_set.all())
+                context['hp_form'] = HousePreferenceForm(instance=house_pref, prefix='tenancy-pref')
+                context['td_form'] = EditProfileForm(instance=request.user.userprofile, prefix='tenant-details')
                 return render(request, template_name, context)
             elif 'savetonext' in request.POST:
                 return redirect(reverse('tenant:edit', args=[2, house_pref.uuid]))
@@ -131,12 +130,58 @@ def add_pref_form1(request, uuid):
         return render(request, template_name, context)
 
 
+# @login_required
+# def add_pref_form1(request, uuid):
+#     template_name = 'tenant/add_edit/house_pref.html'
+#
+#     try:
+#         house_pref = HousePreference.objects.get(uuid=uuid)
+#     except HousePreference.DoesNotExist:
+#         raise Http404("Preference does not exist.")
+#
+#     form = HousePreferenceForm(request.POST or None, instance=house_pref)
+#     queryset = house_pref.additionaltenant_set.all()
+#     formset = AddTenantFormSet(request.POST or None, queryset=queryset)
+#     context = {
+#         'house_pref': house_pref,
+#         'form': form,
+#         'formset': formset,
+#     }
+#     if request.method == 'POST':
+#         valid = True
+#         if form.is_valid():
+#             form.save()
+#         else:
+#             valid = False
+#         if formset.is_valid():
+#             for formset_form in formset.forms:
+#                 if formset_form.is_valid():
+#                     if formset_form.has_changed():
+#                         add_tenant = formset_form.save(commit=False)
+#                         add_tenant.house_pref = house_pref
+#                         add_tenant.save()
+#                 else:
+#                     valid = False
+#         else:
+#             valid = False
+#         if valid:
+#             if 'save' in request.POST:
+#                 context['form'] = HousePreferenceForm(instance=house_pref)
+#                 context['formset'] = AddTenantFormSet(queryset=house_pref.additionaltenant_set.all())
+#                 return render(request, template_name, context)
+#             elif 'savetonext' in request.POST:
+#                 return redirect(reverse('tenant:edit', args=[2, house_pref.uuid]))
+#         else:
+#             return render(request, template_name, context)
+#     else:
+#         return render(request, template_name, context)
+
+
 @login_required
 def add_edit_pref(request, form_num, uuid=None):
     func_di = {
-        1: add_pref_form1,
+        1: tenant_pref_detail_form_view,
         2: add_pref_form2,
-        3: tenant_info,
     }
 
     try:
