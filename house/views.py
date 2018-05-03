@@ -185,6 +185,7 @@ def search_house_page(request):
 @require_GET
 def search_house_api(request):
     query = request.GET['query']
-    houses = House.objects.filter(address__icontains=query)
+    # houses = House.objects.filter(address__icontains=query)
+    houses = House.objects.all()
     serializer = HouseSerializer(houses, many=True)
     return JsonResponse(serializer.data, safe=False)

@@ -167,6 +167,7 @@ def search_tenant_page(request):
 @require_GET
 def search_tenant_api(request):
     query = request.GET['query']
-    hp = HousePreference.objects.filter(locations__suburb__icontains=query)
+    # hp = HousePreference.objects.filter(locations__suburb__icontains=query)
+    hp = HousePreference.objects.all()
     serializer = HousePreferenceSerializer(hp, many=True)
     return JsonResponse(serializer.data, safe=False)
