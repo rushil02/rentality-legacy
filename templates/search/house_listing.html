@@ -94,15 +94,15 @@
 
                     var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
                         "                                <div class=\"image\">\n" +
-                        "                                    <a href=\"\">\n" +
-                        "                                        <h3>asdndfjnl</h3>\n" +
+                        "                                    <a href=\"/property/info/" + item['uuid'] + "\">\n" +
+                        "                                        <h3></h3>\n" +
                         "                                        <span class=\"location\"></span>\n" +
                         "                                    </a>\n" +
                         "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/>\n" +
                         "                                </div>\n" +
                         "                                <div class=\"info\">\n" +
                         "                                    <h3>\n" +
-                        "                                        <a href=\"\">" + item['address'] + "</a>\n" +
+                        "                                        <a href=\"/property/info/" + item['uuid'] + "\">" + item['address'] + "</a>\n" +
                         "                                        <small>" + item['location'] + "</small>\n" +
                         "                                    </h3>\n" +
                         "                                    <p>" + item['rent'] + "\n" +
@@ -137,11 +137,9 @@
                 data: {query: $('#id_location').val()}
             })
                 .done(function (data) {
-                    console.log(data);
                     $("#search-content").empty();
                     $.each(data, function (i, item) {
                         var avail_date = jQuery.parseJSON(item['availability']);
-                        console.log(item);
                         var avail_date_lower, avail_date_upper;
                         if (avail_date !== null) {
                             avail_date_lower = avail_date['lower'];
@@ -153,15 +151,15 @@
 
                         var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
                             "                                <div class=\"image\">\n" +
-                            "                                    <a href=\"\">\n" +
-                            "                                        <h3>asdndfjnl</h3>\n" +
+                            "                                    <a href=\"/property/info/" + item['uuid'] + "\">\n" +
+                            "                                        <h3></h3>\n" +
                             "                                        <span class=\"location\"></span>\n" +
                             "                                    </a>\n" +
                             "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/>\n" +
                             "                                </div>\n" +
                             "                                <div class=\"info\">\n" +
                             "                                    <h3>\n" +
-                            "                                        <a href=\"\">" + item['address'] + "</a>\n" +
+                            "                                        <a href=\"/property/info/" + item['uuid'] + "\">" + item['address'] + "</a>\n" +
                             "                                        <small>" + item['location'] + "</small>\n" +
                             "                                    </h3>\n" +
                             "                                    <p>" + item['rent'] + "\n" +
