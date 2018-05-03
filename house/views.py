@@ -136,7 +136,7 @@ def landlord_info(request, uuid):
     except House.DoesNotExist:
         raise Http404("House does not exist.")
 
-    form = EditProfileForm(request.POST or None, instance=request.user.userprofile)
+    form = EditProfileForm(request.POST or None, request.FILES or None, instance=request.user.userprofile)
     context = {
         'house': house,
         'form': form,
