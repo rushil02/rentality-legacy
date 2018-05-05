@@ -30,12 +30,16 @@
                                                class="btn btn-fullcolor">Edit</a>
                                         </div>
                                         <h3>
-                                            <a href="{% url 'house:info' house.uuid %}">{{ house.location }}
+                                            <a href="{% url 'house:info' house.uuid %}">{{ house.get_location }}
                                             </a>
                                             <small>{{ house.address }}</small>
                                         </h3>
                                     </div>
                                 </div>
+                                {% if forloop.counter|divisibleby:3 %}
+                                    </div>
+                                    <div class="row">
+                                {% endif %}
 
                             {% endfor %}
 

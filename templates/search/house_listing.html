@@ -53,7 +53,7 @@
 
                     <!-- BEGIN PROPERTY LISTING -->
                     <div id="property-listing" class="grid-style1 clearfix">
-                        <div class="row" id="search-content">
+                        <div id="search-content">
 
                         </div>
                     </div>
@@ -73,62 +73,77 @@
 
 {% block js_script %}
     <script>
+
+        function addSearchData(data) {
+            var sr_div = $("#search-content");
+            sr_div.empty();
+            var length = data.length;
+            var list_html = "<div class=\"row\">";
+            $.each(data, function (i, item) {
+                console.log(item);
+                var avail_date = jQuery.parseJSON(item['availability']);
+                var avail_date_lower, avail_date_upper;
+                if (avail_date !== null) {
+                    avail_date_lower = avail_date['lower'];
+                    avail_date_upper = avail_date['upper'];
+                } else {
+                    avail_date_lower = 'Unknown';
+                    avail_date_upper = 'Unknown';
+                }
+
+                var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
+                    "                                <div class=\"image\">\n" +
+                    "                                    <a href=\"/property/info/" + item['uuid'] + "\">\n" +
+                    "                                        <h3></h3>\n" +
+                    "                                        <span class=\"location\"></span>\n" +
+                    "                                    </a>\n" +
+                    "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/>\n" +
+                    "                                </div>\n" +
+                    "                                <div class=\"info\">\n" +
+                    "                                    <h3>\n" +
+                    "                                        <a href=\"/property/info/" + item['uuid'] + "\">" + item['address'] + "</a>\n" +
+                    "                                        <small>" + item['location_name'] + "</small>\n" +
+                    "                                    </h3>\n" +
+                    "                                    <p>" + item['rent'] + "\n" +
+                    "                                        <small>/week</small>\n" +
+                    "                                    </p>\n" +
+                    "\n" +
+                    "                                    <p>Availability: " + avail_date_lower + " to " + avail_date_upper + "</p>\n" +
+                    "\n" +
+                    "                                    <p>Rental Term: Enquire for details</p>\n" +
+                    "\n" +
+                    "                                    <ul class=\"amenities\">\n" +
+                    "                                        <li><i class=\"icon-bedrooms\"></i>" + item['bedrooms'] + "</li>\n" +
+                    "                                        <li><i class=\"icon-bathrooms\"></i> " + item['bathrooms'] + "</li>\n" +
+                    "                                        <li><i class=\"icon-garage\"></i> " + item['parking'] + "</li>\n" +
+                    "                                    </ul>\n" +
+                    "                                </div>\n" +
+                    "                            </div>";
+
+
+                if ((i + 1) === length) {
+                    tar_html = tar_html + "</div>";
+                } else if ((i + 1) % 4 === 0) {
+                    tar_html = tar_html + "</div> <div class=\"row\">";
+                }
+
+                list_html += tar_html;
+
+            });
+            sr_div.append(list_html);
+
+        }
+
         $(document).ready(function () {
             $.ajax({
                 method: "GET",
                 url: "{% url 'house:search_house_api' %}",
                 data: {query: '{{ initial_query }}'}
             }).done(function (data) {
-                $("#search-content").empty();
-                $.each(data, function (i, item) {
-                    var avail_date = jQuery.parseJSON(item['availability']);
-                    console.log(item);
-                    var avail_date_lower, avail_date_upper;
-                    if (avail_date !== null) {
-                        avail_date_lower = avail_date['lower'];
-                        avail_date_upper = avail_date['upper'];
-                    } else {
-                        avail_date_lower = 'Unknown';
-                        avail_date_upper = 'Unknown';
-                    }
-
-                    var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
-                        "                                <div class=\"image\">\n" +
-                        "                                    <a href=\"/property/info/" + item['uuid'] + "\">\n" +
-                        "                                        <h3></h3>\n" +
-                        "                                        <span class=\"location\"></span>\n" +
-                        "                                    </a>\n" +
-                        "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/>\n" +
-                        "                                </div>\n" +
-                        "                                <div class=\"info\">\n" +
-                        "                                    <h3>\n" +
-                        "                                        <a href=\"/property/info/" + item['uuid'] + "\">" + item['address'] + "</a>\n" +
-                        "                                        <small>" + item['location'] + "</small>\n" +
-                        "                                    </h3>\n" +
-                        "                                    <p>" + item['rent'] + "\n" +
-                        "                                        <small>/week</small>\n" +
-                        "                                    </p>\n" +
-                        "\n" +
-                        "                                    <p>Availability: " + avail_date_lower + " to " + avail_date_upper + "</p>\n" +
-                        "\n" +
-                        "                                    <p>Rental Term: Enquire for details</p>\n" +
-                        "\n" +
-                        "                                    <ul class=\"amenities\">\n" +
-                        "                                        <li><i class=\"icon-bedrooms\"></i>" + item['bedrooms'] + "</li>\n" +
-                        "                                        <li><i class=\"icon-bathrooms\"></i> " + item['bathrooms'] + "</li>\n" +
-                        "                                        <li><i class=\"icon-garage\"></i> " + item['parking'] + "</li>\n" +
-                        "                                    </ul>\n" +
-                        "                                </div>\n" +
-                        "                            </div>";
-                    $("#search-content").append(tar_html)
-
-                })
+                addSearchData(data);
             });
         });
 
-    </script>
-
-    <script>
         $("#search-btn").click(function (e) {
             e.preventDefault();
             $.ajax({
@@ -137,48 +152,7 @@
                 data: {query: $('#id_location').val()}
             })
                 .done(function (data) {
-                    $("#search-content").empty();
-                    $.each(data, function (i, item) {
-                        var avail_date = jQuery.parseJSON(item['availability']);
-                        var avail_date_lower, avail_date_upper;
-                        if (avail_date !== null) {
-                            avail_date_lower = avail_date['lower'];
-                            avail_date_upper = avail_date['upper'];
-                        } else {
-                            avail_date_lower = 'Unknown';
-                            avail_date_upper = 'Unknown';
-                        }
-
-                        var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
-                            "                                <div class=\"image\">\n" +
-                            "                                    <a href=\"/property/info/" + item['uuid'] + "\">\n" +
-                            "                                        <h3></h3>\n" +
-                            "                                        <span class=\"location\"></span>\n" +
-                            "                                    </a>\n" +
-                            "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/>\n" +
-                            "                                </div>\n" +
-                            "                                <div class=\"info\">\n" +
-                            "                                    <h3>\n" +
-                            "                                        <a href=\"/property/info/" + item['uuid'] + "\">" + item['address'] + "</a>\n" +
-                            "                                        <small>" + item['location'] + "</small>\n" +
-                            "                                    </h3>\n" +
-                            "                                    <p>" + item['rent'] + "\n" +
-                            "                                        <small>/week</small>\n" +
-                            "                                    </p>\n" +
-                            "\n" +
-                            "                                    <p>Availability: " + avail_date_lower + " to " + avail_date_upper + "</p>\n" +
-                            "\n" +
-                            "                                    <p>Rental Term: Enquire for details</p>\n" +
-                            "\n" +
-                            "                                    <ul class=\"amenities\">\n" +
-                            "                                        <li><i class=\"icon-bedrooms\"></i>" + item['bedrooms'] + "</li>\n" +
-                            "                                        <li><i class=\"icon-bathrooms\"></i> " + item['bathrooms'] + "</li>\n" +
-                            "                                        <li><i class=\"icon-garage\"></i> " + item['parking'] + "</li>\n" +
-                            "                                    </ul>\n" +
-                            "                                </div>\n" +
-                            "                            </div>";
-                        $("#search-content").append(tar_html)
-                    })
+                    addSearchData(data)
                 });
         });
     </script>

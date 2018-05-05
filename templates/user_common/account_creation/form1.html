@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
+{% block head_extra_scripts %}
+    <link href="/static/css/datetimepicker.css" rel="stylesheet"/>
 
+{% endblock %}
 {% block header-nav %}
     {% include 'utils/navbar/auth_user.html' %}
 
@@ -61,4 +64,19 @@
     {#        </ul>#}
     {#    </div>#}
     {#    <!-- END PAGINATION -->#}
+{% endblock %}
+
+
+{% block js_script %}
+    <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $('#id_0-dob').datetimepicker({
+            format: 'yyyy-mm-dd',
+            startView: 'decade',
+            autoclose: true,
+            minView: 'month'
+        });
+    </script>
+
+
 {% endblock %}

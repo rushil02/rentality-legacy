@@ -71,7 +71,7 @@ class ProfileForm1(forms.ModelForm):
         widgets = {
             'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'id': 'contact_num',
                                                     'placeholder': 'Contact number'}),
-            'dob': forms.DateInput(attrs={'class': 'form-control', 'id': 'Email',
+            'dob': forms.DateInput(attrs={'class': 'form-control',
                                           'placeholder': 'Date of Birth'}),
         }
 

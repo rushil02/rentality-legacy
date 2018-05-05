@@ -239,8 +239,6 @@ ASGI_APPLICATION = "rentality.routing.application"
 # Django Cities settings
 CITIES_DATA_DIR = os.path.join(LIB_PATH, 'geo_data')
 CITIES_VALIDATE_POSTAL_CODES = False
-CITIES_LOCALES = ['en']
-CITIES_POSTAL_CODES = ['AU']
 
 # Debug toolbar settings
 INTERNAL_IPS = ['localhost', '127.0.0.1']
