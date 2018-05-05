@@ -108,16 +108,24 @@ def add_house_form2(request, uuid):
     except House.DoesNotExist:
         raise Http404("House does not exist.")
 
-    form = HouseDetailsForm2(request.POST or None, instance=house)
+    tags = house.tags.all()
+    form = HouseDetailsForm2(request.POST or None, instance=house,
+                             initial={'facilities': tags.filter(tag_type='F'),
+                                      'rules': tags.filter(tag_type='R'), })
     context = {
         'house': house,
         'form': form,
     }
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            obj = form.save()
+            print(*form.cleaned_data['facilities'])
+            obj.tags.add(*form.cleaned_data['facilities'])
+            obj.tags.add(*form.cleaned_data['rules'])
+
             if 'save' in request.POST:
-                context['form'] = HouseDetailsForm2(instance=house)
+                context['form'] = HouseDetailsForm2(instance=house, initial={'facilities': tags.filter(tag_type='F'),
+                                                                             'rules': tags.filter(tag_type='R'), })
                 return render(request, template, context)
             elif 'savetonext' in request.POST:
                 return redirect(reverse('house:edit', args=[3, house.uuid]))

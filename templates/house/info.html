@@ -91,8 +91,8 @@
 
                     <!-- BEGIN PROPERTY AMENITIES LIST -->
                     <ul class="property-amenities-list col-md-4">
-                        {% if house.tags_set.all %}
-                            {% for tag in house.tags_set.all %}
+                        {% if house.has_tags %}
+                            {% for tag in house.tags.all %}
                                 <li class="enabled">{{ tag }} </li>
                             {% endfor %}
                         {% endif %}

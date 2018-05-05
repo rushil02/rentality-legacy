@@ -128,6 +128,9 @@ class House(models.Model):
         else:
             return None
 
+    def has_tags(self):
+        return bool(self.tags.all())
+
 
 class Image(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)
