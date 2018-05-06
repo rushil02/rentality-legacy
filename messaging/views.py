@@ -58,8 +58,8 @@ def save_message(request, text, entity):
         thread = Thread.objects.create_new_thread(entity, user)
 
     try:
-        recipient = thread.threaduser_set.exclude(user=request.user)[0]
-    except IndexError:
+        recipient = thread.threaduser_set.exclude(user=request.user)[0].user
+    except IndexError:  # Should never come here
         recipient = request.user
 
     Message.objects.create(thread=thread, content=text, sender=user, recipient=recipient)
