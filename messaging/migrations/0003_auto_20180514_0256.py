@@ -44,13 +44,13 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
         ),
-        migrations.RemoveField(
-            model_name='thread',
-            name='initiator',
-        ),
         migrations.AlterUniqueTogether(
             name='thread',
             unique_together={('content_type', 'object_id', 'creator')},
+        ),
+        migrations.RemoveField(
+            model_name='thread',
+            name='initiator',
         ),
         migrations.AddField(
             model_name='threadusermessage',
