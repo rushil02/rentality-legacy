@@ -63,8 +63,9 @@
       right: 0;
       text-align: center;
   ">Messages</span>
-
+            {% if request.user.get_new_message_count > 0 %}
             <span class="button__badge">{{ request.user.get_new_message_count }}</span>
+            {% endif %}
         </a>
     </li>
     <li class="dropdown">
