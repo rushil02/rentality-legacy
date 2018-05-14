@@ -141,19 +141,39 @@
                                 </header>
                             </div>
                         </div>
-                        <form class="form-style col-md-12" method="POST"
-                              action="">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    {{ msg_form.content }}
-                                </div>
+                        {% if request.user.is_authenticated %}
 
-                                <div class="center">
-                                    <button type="submit" class="btn btn-fullcolor">Send Message</button>
+                            <form class="form-style col-md-12" method="POST"
+                                  action="">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        {{ msg_form.content }}
+                                    </div>
+
+                                    <div class="center">
+                                        <button type="submit" class="btn btn-fullcolor">Send Message</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        {% else %}
+                            <form class="form-style col-md-12"
+                                  action="">
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <textarea name="content" placeholder="Please login to send a message" cols="40"
+                                                  rows="10"
+                                                  class="form-control" id="id_content" disabled></textarea>
+                                    </div>
+
+                                    <div class="col-sm-12 center">
+                                        <button type="submit" class="btn btn-fullcolor" disabled>Send Message</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        {% endif %}
 
                     </div>
                     <!-- PROPERTY MAP HOLDER -->
@@ -178,7 +198,7 @@
                     height="750px"
                     frameborder="0" style="border:0"
                     src="https://www.google.com/maps/embed/v1/place?key=AIzaSyClsJFzjgJBxhY3D4HDn4V_EG9Y5FYqdqQ
-    &q={{ house.location|urlencode }}" allowfullscreen>
+    &q={{ house.get_location|urlencode }}" allowfullscreen>
             </iframe>
         </div>
     </div>

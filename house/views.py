@@ -15,7 +15,7 @@ from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3,
 from house.models import House
 from house.serializer import HouseSerializer
 from messaging.forms import MessageForm
-from messaging.views import save_message
+from messaging.views import save_message, save_new_thread
 from user_custom.forms import EditProfileForm
 from django.contrib import messages
 
@@ -36,7 +36,7 @@ def info(request, house_uuid):
             if request.user.is_authenticated:
                 if message_form.is_valid():
                     try:
-                        save_message(request, message_form.data['content'], house)
+                        save_new_thread(request, house, message=message_form.data['content'])
                     except AssertionError:
                         messages.add_message(request, messages.INFO, 'You cannot send yourself a message')
                     else:

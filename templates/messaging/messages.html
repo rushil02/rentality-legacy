@@ -14,45 +14,26 @@
                     <div class="panel panel-default">
                         <ul class="list-group">
                             <li class="list-group-item clearfix" href="">
-                                <span class="list-group-item-heading">Messages for House</span>
+                                <span class="list-group-item-heading">Messages</span>
                             </li>
 
-                            {% for house_thread in house_threads %}
+                            {% for thread in threads %}
                                 <a class="list-group-item clearfix thread-item" id="{{ forloop.counter0 }}"
-                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}"
-                                   thread-link="{{ house_thread.uuid }}" thread-about="{{ house_thread.entity }}"
-                                   listing-url="{% url 'house:info' house_thread.entity.uuid %}">
+                                   data-url="{% url 'messaging:thread_messages' thread.uuid %}"
+                                   thread-link="{{ thread.uuid }}" thread-about="{{ thread.entity }}"
+                                   listing-url="{% url 'house:info' thread.entity.uuid %}">
                                     <img src="/static/img/placeholders/profile/default.png"
                                          class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
                                     <span class="list-group-item-heading"
-                                          id="chat-person-{{ forloop.counter0 }}">{{ house_thread.initiator.first_name }}</span>
+                                          id="chat-person-{{ forloop.counter0 }}">{% for other_user in thread.other_users %}
+                                        {{ other_user.user.get_full_name }}
+                                    {% endfor %}
+                                    </span>
                                     <p class="list-group-item-text"
-                                       style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">{{ house_thread.latest_msg }}</p>
+                                       style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">{{ thread.latest_msg }}</p>
                                 </a>
 
                             {% endfor %}
-
-
-
-
-                            <li class="list-group-item clearfix" href="">
-                                <span class="list-group-item-heading">Messages for Stay</span>
-                            </li>
-
-                            {% for hp in hp_threads %}
-                                <a class="list-group-item clearfix"
-                                   data-url="{% url 'messaging:thread_messages' house_thread.uuid %}"
-                                   thread-link="{{ hp.uuid }}" thread-about="{{ hp.entity }}">
-                                    <img src="/static/img/placeholders/profile/default.png"
-                                         class="img-circle pull-left" style="height: 50px; margin-right: 10px;"/>
-                                    <span class="list-group-item-heading"
-                                          id="chat-person">{{ hp.initiator.first_name }}</span>
-                                    <p class="list-group-item-text"
-                                       style="white-space: pre; overflow: hidden; text-overflow: ellipsis;">{{ hp.latest_msg }}</p>
-                                </a>
-
-                            {% endfor %}
-
 
                         </ul>
                     </div>
@@ -112,24 +93,47 @@
 
 
 {% block js_script %}
+    <script src="/static/js/moment.js"></script>
+
     <script>
-        $('.thread-item').click(function (event) {
-            event.preventDefault();
-            var link = $(this).attr("data-url");
-            var chat_person = $('#chat-person-' + $(this).attr("id")).text();
-            var thread_about = $(this).attr("thread-about");
-            $('#view-lisitng').attr('href', $(this).attr("listing-url"));
-            $('form#send-msg').attr("action", $(this).attr("thread-link"));
+
+        function get_messages() {
+            var link = $('form#send-msg').attr("data-url");
+            var msg_ids = [];
+
             $.ajax({
                 url: link
             })
                 .done(function (data) {
-                        $("#msg-content").empty();
-                    $('#thread-title').text(chat_person);
-                    $('#thread-about').text('Re: About ' + thread_about);
-                        $.each(data, function (i, item) {
+                    $("#msg-content").empty();
+                    $.each(data, function (i, item) {
+                        var curr_user = item['current_user'];
+                        var curr_user_msg = false;
+                        msg_ids.push(item['id']);
+                        $.each(item['threadusermessage_set'], function (i, user_info) {
+                            if (user_info['sender'] === true && user_info['user_sym'] === curr_user) {
+                                curr_user_msg = true;
+                            }
+                        });
+                        var html;
 
-                            var html = "<div class=\"media\">\n" +
+                        if (curr_user_msg) {
+                            html = "<div class=\"media\">\n" +
+
+                                "                            <div class=\"media-body media-right pull-right\">\n" +
+                                "                                <div class=\"panel panel-default\" style=\"margin-bottom: 0; max-width: 75%;\">\n" +
+                                "                                    <div class=\"panel-body bg-info\">\n" +
+                                "                                        <p>" + item['content'] + "</p>\n" +
+                                "                                        <p class=\"media-heading pull-right\">\n" +
+                                "                                            " + moment(item['send_time']).format("dddd, MMMM Do YYYY, h:mm:ss a") + "</p>\n" +
+                                "                                    </div>\n" +
+                                "                                </div>\n" +
+                                "                            </div>\n" +
+                                "\n" +
+                                "                        </div>";
+
+                        } else {
+                            html = "<div class=\"media\">\n" +
                                 "                            <div class=\"media-left pull-left\">\n" +
                                 "                                <a href=\"#\">\n" +
                                 "                                    <img class=\"media-object img-circle\"\n" +
@@ -142,18 +146,46 @@
                                 "                                    <div class=\"panel-body bg-success\">\n" +
                                 "                                        <p>" + item['content'] + "</p>\n" +
                                 "                                        <p class=\"media-heading pull-right\">\n" +
-                                "                                            " + item['send_time'] + "</p>\n" +
+                                "                                            " + moment(item['send_time']).format("dddd, MMMM Do YYYY, h:mm:ss a") + "</p>\n" +
                                 "                                    </div>\n" +
                                 "                                </div>\n" +
                                 "                            </div>\n" +
                                 "\n" +
                                 "                        </div>";
 
-                            $("#msg-content").append(html)
+                        }
 
-                        })
-                    }
-                )
+
+                        $("#msg-content").append(html)
+
+                    });
+                    var uuid = $("form#send-msg").attr('action');
+
+                    var up_data = {'thread_uuid': uuid, 'messages': msg_ids};
+
+                    console.log(up_data);
+
+                    $.ajax({
+                        method: "POST",
+                        url: '{% url 'messaging:update_message' %}',
+                        data: JSON.stringify(up_data),
+                        contentType: "application/json"
+                    })
+
+                })
+        }
+
+        $('.thread-item').click(function (event) {
+            event.preventDefault();
+            $('#view-lisitng').attr('href', $(this).attr("listing-url"));
+            $('form#send-msg').attr("action", $(this).attr("thread-link"));
+            $('form#send-msg').attr("data-url", $(this).attr("data-url"));
+            var chat_person = $('#chat-person-' + $(this).attr("id")).text();
+            var thread_about = $(this).attr("thread-about");
+            $('#thread-title').text(chat_person);
+            $('#thread-about').text('Re: About ' + thread_about);
+            get_messages();
+
 
         })
     </script>
@@ -190,7 +222,9 @@
             }
         });
 
+    </script>
 
+    <script>
         $('#send-msg-btn').click(function (event) {
             event.preventDefault();
             var text = $("#id_content").val();
@@ -204,10 +238,9 @@
             })
                 .done(function (data) {
                     $("#id_content").val('');
-
+                    get_messages()
                 })
         })
-
     </script>
 
 

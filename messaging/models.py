@@ -7,21 +7,20 @@ from django.contrib.contenttypes.models import ContentType
 
 class ThreadManager(models.Manager):
 
-    def get_by_obj(self, obj, initiator):
+    def get_by_obj(self, obj, creator):
         return self.get_queryset().get(
             content_type=ContentType.objects.get_for_model(obj),
-            object_id=obj.id, initiator=initiator
+            object_id=obj.id, creator=creator
         )
 
     @staticmethod
-    def create_new_thread(entity, initiator):
-        thread = Thread(entity=entity, initiator=initiator)
-        thread.save()
-        recipient = thread.entity.get_owner()
-        if recipient == initiator:
-            raise AssertionError
-        ThreadUser.objects.create(thread=thread, user=recipient)
-        ThreadUser.objects.create(thread=thread, user=initiator)
+    def create_new_thread(entity, user_list, creator):
+        thread = Thread.objects.create(entity=entity, creator=creator)
+        obj_li = []
+        for user in user_list:
+            obj = ThreadUser(thread=thread, user=user)
+            obj_li.append(obj)
+        ThreadUser.objects.bulk_create(obj_li)
         return thread
 
 
@@ -31,17 +30,17 @@ class Thread(models.Model):
     object_id = models.PositiveIntegerField()
     entity = GenericForeignKey('content_type', 'object_id')
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    initiator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
 
     objects = ThreadManager()
 
     class Meta:
-        unique_together = ('content_type', 'object_id', 'initiator')
+        unique_together = ('content_type', 'object_id', 'creator')
 
 
 class ThreadUser(models.Model):
     thread = models.ForeignKey('messaging.Thread', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ('thread', 'user')
@@ -50,7 +49,11 @@ class ThreadUser(models.Model):
 class Message(models.Model):
     thread = models.ForeignKey('messaging.Thread', on_delete=models.CASCADE)
     content = models.TextField()
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_sender')
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_recipient')
     send_time = models.DateTimeField(auto_now_add=True)
+
+
+class ThreadUserMessage(models.Model):
+    user = models.ForeignKey('messaging.ThreadUser', on_delete=models.CASCADE)
+    message = models.ForeignKey('messaging.Message', on_delete=models.CASCADE)
     read_at = models.DateTimeField(null=True, blank=True)
+    sender = models.BooleanField(default=False)

@@ -10,6 +10,7 @@ from django.contrib.postgres.operations import CreateExtension
 from django.db import migrations
 
 from messaging.models import Message
+from messaging.views import message_count
 
 
 class Migration(migrations.Migration):
@@ -77,7 +78,10 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def get_new_message_count(self):
-        return Message.objects.filter(recipient=self, read_at=None).count()
+        return message_count(self)
+
+    def __str__(self):
+        return self.get_full_name()
 
 
 class UserProfile(models.Model):
