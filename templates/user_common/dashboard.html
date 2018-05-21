@@ -18,16 +18,22 @@
                             {% for house in houses %}
                                 <div class="item col-sm-4"><!-- Set width to 4 columns for grid view mode only -->
                                     <div class="image">
+
+
                                         <a href="{% url 'house:info' house.uuid %}">
-                                            <span class="btn btn-default"><i class="fa fa-file-o"></i> Details</span>
+                                                <span class="btn btn-default"><i
+                                                        class="fa fa-file-o"></i> Details</span>
                                         </a>
                                         <img src="{{ house.get_thumbnail_2 }}"
                                              alt="">
+
                                     </div>
                                     <div class="info">
                                         <div class="pull-right">
                                             <a href="{% url 'house:edit' 1 house.uuid %}"
                                                class="btn btn-fullcolor">Edit</a>
+                                            <a href="{% url 'house:remove_house_ask' house.uuid %}"
+                                               class="btn btn-danger btn-fullcolor">Del</a>
                                         </div>
                                         <h3>
                                             <a href="{% url 'house:info' house.uuid %}">{{ house.get_location }}
@@ -43,7 +49,7 @@
 
                             {% endfor %}
 
-                        </div>
+                            </div>
                     </div>
 
                     <h1 class="property-title">My Preferences</h1>

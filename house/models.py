@@ -27,12 +27,21 @@ class RoomType(models.Model):
 
 class ActiveHouseManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(status='P')
+        return super().get_queryset().filter(status__in=['P', 'L'])
 
 
 class House(models.Model):
     """
     tags -> contain many-to-many relation with model 'Tags' containing 'who-is-welcomed [rules]' or facility
+
+    status description ->
+    STATUS = (
+        ('I', 'Inactive'),      Not Visible to Public, 1st state of any listing
+        ('P', 'Published'),     Visible to Public
+        ('L', 'Leased'),        Visible to Public with 'Leased' tag
+        ('R', 'Removed'),       Not Visible to Public
+        ('D', 'Deleted')        Deleted from user's account visibility, still in Database
+    )
     """
     # TODO: add lazy verbose
     landlord = models.ForeignKey(
@@ -41,6 +50,7 @@ class House(models.Model):
         related_name='houses',
         verbose_name=_('property owner')
     )
+    address_hidden = models.TextField(blank=True)
     address = models.TextField(blank=True)
     location = models.ForeignKey(
         'cities.PostalCode',
@@ -63,8 +73,10 @@ class House(models.Model):
     description = models.TextField(blank=True)
 
     STATUS = (
-        ('I', 'Incomplete'),
+        ('I', 'Inactive'),
         ('P', 'Published'),
+        ('L', 'Leased'),
+        ('D', 'Deleted')
     )
     status = models.CharField(max_length=1, choices=STATUS, default='I')
 

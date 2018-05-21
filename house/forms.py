@@ -93,3 +93,27 @@ class SearchForm(forms.Form):
     max_price = forms.IntegerField(
         widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Rent'}), required=False
     )
+
+
+class HouseDeleteForm(forms.Form):
+    confirm = forms.TypedChoiceField(coerce=lambda x: x == 'True',
+                                     choices=((False, 'No'), (True, 'Yes')))
+
+
+class HouseRemoveForm(forms.Form):
+    confirm = forms.TypedChoiceField(coerce=lambda x: x == 'True',
+                                     choices=((False, 'No'), (True, 'Yes')))
+
+
+class HouseRemoveTypeForm(forms.Form):
+    remove_type = forms.ChoiceField(
+        choices=(
+            ('R', 'Remove it from public listing'),
+            ('D', 'Permanently delete the listing')
+        )
+    )
+
+
+class HouseMarkLeasedForm(forms.Form):
+    confirm = forms.TypedChoiceField(coerce=lambda x: x == 'True',
+                                     choices=((False, 'No'), (True, 'Yes')))

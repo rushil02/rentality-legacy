@@ -16,6 +16,9 @@
                                 <a href="{% url 'house:info' house.uuid %}" class="info">
                                     <h3>{{ house.get_room_type_display }}</h3>
                                     <span class="location"></span>
+                                    {% if house.status == 'L' %}
+                                        <h2 style="color: white">Leased</h2>
+                                    {% endif %}
                                 </a>
                                 <img src='
                             {% if house.is_thumbnail_available %}

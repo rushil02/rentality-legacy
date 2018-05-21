@@ -9,7 +9,7 @@ from user_custom.forms import ProfileForm1, ProfileForm2, EditProfileForm, UserC
 @login_required
 def dashboard(request):
     house_pref = HousePreference.objects.filter(tenant__user=request.user).all()
-    houses = House.objects.filter(landlord__user=request.user)
+    houses = House.objects.filter(landlord__user=request.user).exclude(status='D').all()
     context = {
         'house_pref': house_pref,
         'houses': houses

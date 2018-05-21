@@ -33,6 +33,10 @@
 
                         <li><a href="{% url 'house:edit' 3 house.uuid %}">Property Owner Details</a>
                         </li>
+                        <li class="divider"></li>
+                        <li><a style="color: cornflowerblue" href="{% url 'house:mark_leased_ask' house.uuid %}">Mark
+                            property as leased</a></li>
+
                     </ul>
                 </div>
                 <!--  </div> -->

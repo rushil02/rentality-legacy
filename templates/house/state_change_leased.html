@@ -1,0 +1,32 @@
+{% extends 'utils/base_auth.html' %}
+
+{% block in-container-content %}
+    <div class="main col-sm-8 col-md-9">
+        <div class="center">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form1-container">
+                    {% csrf_token %}
+                    <!-- BEGIN ADVANCED SEARCH -->
+                    <h4 class="property-title">Mark the listing as 'Leased'?
+                    </h4>
+
+                    <div class="form-group">
+
+                        {{ form.confirm }}
+                    </div>
+
+                    <p>&nbsp;</p>
+                    <div class="clearfix">
+                        <a>
+                            <button type="submit" class="btn btn-default-color">Submit</button>
+                        </a>
+                        <a href="{% url 'user:dashboard' %}">
+                            <button type="button" class="btn">Cancel</button>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

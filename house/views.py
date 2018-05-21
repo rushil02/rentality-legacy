@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST, require_GET
 from formtools.wizard.views import SessionWizardView
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
-    HousePhotoFormSet
+    HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm
 from house.models import House
 from house.serializer import HouseSerializer
 from messaging.forms import MessageForm
@@ -204,3 +204,95 @@ def search_house_api(request):
     houses = House.active_objects.all()
     serializer = HouseSerializer(houses, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+@login_required
+def delete_listing(request, house_uuid, house=None):
+    try:
+        if not house:
+            house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+    except House.DoesNotExist:
+        raise Http404("Bad Request")
+    form = HouseDeleteForm(request.POST or None)
+    context = {
+        'house': house,
+        'form': form,
+    }
+
+    if request.method == 'POST':
+        if form.is_valid():
+            if form.cleaned_data['confirm']:
+                house.status = 'D'
+                house.save()
+            return redirect(reverse('user:dashboard'))
+
+    return render(request, 'house/remove/confirm_delete.html', context)
+
+
+@login_required
+def remove_listing(request, house_uuid, house=None):
+    try:
+        if not house:
+            house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+    except House.DoesNotExist:
+        raise Http404("Bad Request")
+    form = HouseRemoveForm(request.POST or None)
+    context = {
+        'house': house,
+        'form': form,
+    }
+
+    if request.method == 'POST':
+        if form.is_valid():
+            if form.cleaned_data['confirm']:
+                house.status = 'I'
+                house.save()
+            return redirect(reverse('user:dashboard'))
+
+    return render(request, 'house/remove/confirm_remove.html', context)
+
+
+def remove_house_ask(request, house_uuid):
+    try:
+        house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+    except House.DoesNotExist:
+        raise Http404("Bad Request")
+    form = HouseRemoveTypeForm(request.POST or None)
+    context = {
+        'house': house,
+        'form': form,
+    }
+
+    if house.status not in ['P', 'L']:
+        return delete_listing(request, house_uuid, house=house)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            if form.cleaned_data['remove_type'] == 'R':
+                return remove_listing(request, house_uuid, house=house)
+            else:
+                return delete_listing(request, house_uuid, house=house)
+
+    return render(request, 'house/remove/remove_or_delete.html', context)
+
+
+@login_required
+def mark_as_leased(request, house_uuid):
+    try:
+        house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+    except House.DoesNotExist:
+        raise Http404("Bad Request")
+    form = HouseMarkLeasedForm(request.POST or None)
+    context = {
+        'house': house,
+        'form': form,
+    }
+
+    if request.method == 'POST':
+        if form.is_valid():
+            if form.cleaned_data['confirm']:
+                house.status = 'L'
+                house.save()
+            return redirect(reverse('user:dashboard'))
+
+    return render(request, 'house/state_change_leased.html', context)
