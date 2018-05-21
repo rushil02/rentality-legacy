@@ -1,11 +1,10 @@
 {% extends 'utils/base_user_auto.html' %}
 
-{% block title %}
-    {{ flatpage.title }}
 
-{% endblock title %}
-
-{% block content %}
-    {{ flatpage.content }}
+{% block in-container-content %}
+    <br>
+    <h1>{{ flatpage.title }}</h1>
+    <br><br>
+    {{ flatpage.content|linebreaks }}
 
 {% endblock %}
