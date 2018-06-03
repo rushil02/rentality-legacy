@@ -104,8 +104,7 @@ ROOT_URLCONF = 'rentality.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -245,3 +244,5 @@ INTERNAL_IPS = ['localhost', '127.0.0.1']
 
 # FormTools for Wizard - file storage
 FORMTOOLS_STORAGE_LOCATION = os.path.join(MEDIA_ROOT, 'temp-wizard-storage')
+
+DEFAULT_FROM_EMAIL = 'support@rentality.com.au'

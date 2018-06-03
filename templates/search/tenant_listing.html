@@ -76,118 +76,91 @@
 
 {% block js_script %}
     <script>
+
+        function addSearchData(data) {
+            var sr_div = $("#search-content");
+            sr_div.empty();
+            var length = data.length;
+            var list_html = "<div class=\"row\">";
+
+            $.each(data, function (i, item) {
+                var move_in_date = jQuery.parseJSON(item['move_in_date']);
+                var move_in_date_lower, move_in_date_upper;
+                if (move_in_date !== null) {
+                    move_in_date_lower = move_in_date['lower'];
+                    move_in_date_upper = move_in_date['upper'];
+                } else {
+                    move_in_date_lower = 'Unknown';
+                    move_in_date_upper = 'Unknown';
+                }
+                var move_out_date = jQuery.parseJSON(item['move_out_date']);
+                var move_out_date_lower, move_out_date_upper;
+                if (move_out_date !== null) {
+                    move_out_date_lower = move_in_date['lower'];
+                    move_out_date_upper = move_in_date['upper'];
+                } else {
+                    move_out_date_lower = 'Unknown';
+                    move_out_date_upper = 'Unknown';
+                }
+                var tar_html = "<div class=\"item col-sm-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
+                    "                                <div class=\"image\">\n" +
+                    "                                    <a href=\"/te/info/" + item['uuid'] + "\">\n" +
+                    "                                        <h3></h3>\n" +
+                    "                                        <span class=\"location\"></span>\n" +
+                    "                                    \n" +
+                    "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/></a>\n" +
+                    "                                </div>\n" +
+                    "                                <div class=\"info\">\n" +
+                    "                                    <h3>\n" +
+                    "                                        <a href=\"/te/info/" + item['uuid'] + "\">" + item['first_name'] + "</a>\n" +
+                    "                                        <small>" + item['locations'] + "</small>\n" +
+                    "                                    </h3>\n" +
+                    "                                    <p>" + item['max_budget'] + "\n" +
+                    "                                        <small>/week</small>\n" +
+                    "                                    </p>\n" +
+                    "\n" +
+                    "                                    <p>Move in Date: " + move_in_date_lower + " to " + move_in_date_upper + "</p>\n" +
+                    "\n" +
+                    "                                    <p>Move out date: " + move_out_date_lower + " to " + move_out_date_upper + "</p>\n" +
+                    "\n" +
+                    "                                </div>\n" +
+                    "                            </div>";
+
+                if ((i + 1) === length) {
+                    tar_html = tar_html + "</div>";
+                }
+                else if ((i + 1) % 4 === 0) {
+                    tar_html = tar_html + "</div> <div class=\"row\">";
+                }
+
+                sr_div.append(tar_html)
+            });
+
+
+        }
+
         $(document).ready(function () {
             $.ajax({
                 method: "GET",
                 url: "{% url 'tenant:search_api' %}",
                 data: {query: '{{ initial_query }}'}
             }).done(function (data) {
-                console.log(data);
-                $("#search-content").empty();
-                $.each(data, function (i, item) {
-                    var move_in_date = jQuery.parseJSON(item['move_in_date']);
-                    var move_in_date_lower, move_in_date_upper;
-                    if (move_in_date !== null) {
-                        move_in_date_lower = move_in_date['lower'];
-                        move_in_date_upper = move_in_date['upper'];
-                    } else {
-                        move_in_date_lower = 'Unknown';
-                        move_in_date_upper = 'Unknown';
-                    }
-                    var move_out_date = jQuery.parseJSON(item['move_out_date']);
-                    var move_out_date_lower, move_out_date_upper;
-                    if (move_out_date !== null) {
-                        move_out_date_lower = move_in_date['lower'];
-                        move_out_date_upper = move_in_date['upper'];
-                    } else {
-                        move_out_date_lower = 'Unknown';
-                        move_out_date_upper = 'Unknown';
-                    }
-                    var tar_html = "<div class=\"item col-sm-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
-                        "                                <div class=\"image\">\n" +
-                        "                                    <a href=\"/te/info/" + item['uuid'] + "\">\n" +
-                        "                                        <h3></h3>\n" +
-                        "                                        <span class=\"location\"></span>\n" +
-                        "                                    \n" +
-                        "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/></a>\n" +
-                        "                                </div>\n" +
-                        "                                <div class=\"info\">\n" +
-                        "                                    <h3>\n" +
-                        "                                        <a href=\"/te/info/" + item['uuid'] + "\">Sa</a>\n" +
-                        "                                        <small>" + item['locations'] + "</small>\n" +
-                        "                                    </h3>\n" +
-                        "                                    <p>" + item['max_budget'] + "\n" +
-                        "                                        <small>/week</small>\n" +
-                        "                                    </p>\n" +
-                        "\n" +
-                        "                                    <p>Move in Date: " + move_in_date_lower + " to " + move_in_date_upper + "</p>\n" +
-                        "\n" +
-                        "                                    <p>Move out date: " + move_out_date_lower + " to " + move_out_date_upper + "</p>\n" +
-                        "\n" +
-                        "                                </div>\n" +
-                        "                            </div>";
-                    $("#search-content").append(tar_html)
+                addSearchData(data);
 
-                })
             });
         });
 
-    </script>
 
-    <script>
         $("#search-btn").click(function (e) {
             e.preventDefault();
             $.ajax({
                 method: "GET",
-                url: "{% url 'house:search_house_api' %}",
+                url: "{% url 'tenant:search_api' %}",
                 data: {query: $('#id_location').val()}
             })
                 .done(function (data) {
-                    $("#search-content").empty();
-                    $.each(data, function (i, item) {
-                        var move_in_date = jQuery.parseJSON(item['move_in_date']);
-                        var move_in_date_lower, move_in_date_upper;
-                        if (move_in_date !== null) {
-                            move_in_date_lower = move_in_date['lower'];
-                            move_in_date_upper = move_in_date['upper'];
-                        } else {
-                            move_in_date_lower = 'Unknown';
-                            move_in_date_upper = 'Unknown';
-                        }
-                        var move_out_date = jQuery.parseJSON(item['move_out_date']);
-                        var move_out_date_lower, move_out_date_upper;
-                        if (move_out_date !== null) {
-                            move_out_date_lower = move_in_date['lower'];
-                            move_out_date_upper = move_in_date['upper'];
-                        } else {
-                            move_out_date_lower = 'Unknown';
-                            move_out_date_upper = 'Unknown';
-                        }
-                        var tar_html = "<div class=\"item col-sm-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
-                            "                                <div class=\"image\">\n" +
-                            "                                    <a href=\"/te/info/" + item['uuid'] + "\">\n" +
-                            "                                        <h3></h3>\n" +
-                            "                                        <span class=\"location\"></span>\n" +
-                            "                                    \n" +
-                            "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/></a>\n" +
-                            "                                </div>\n" +
-                            "                                <div class=\"info\">\n" +
-                            "                                    <h3>\n" +
-                            "                                        <a href=\"/te/info/" + item['uuid'] + "\">Sa</a>\n" +
-                            "                                        <small>" + item['locations'] + "</small>\n" +
-                            "                                    </h3>\n" +
-                            "                                    <p>" + item['max_budget'] + "\n" +
-                            "                                        <small>/week</small>\n" +
-                            "                                    </p>\n" +
-                            "\n" +
-                            "                                    <p>Move in Date: " + move_in_date_lower + " to " + move_in_date_upper + "</p>\n" +
-                            "\n" +
-                            "                                    <p>Move out date: " + move_out_date_lower + " to " + move_out_date_upper + "</p>\n" +
-                            "\n" +
-                            "                                </div>\n" +
-                            "                            </div>";
-                        $("#search-content").append(tar_html)
-                    })
+                    addSearchData(data);
+
                 });
         });
     </script>
