@@ -102,6 +102,15 @@
                     move_out_date_lower = 'Unknown';
                     move_out_date_upper = 'Unknown';
                 }
+                var locations = "";
+                var loc_length = item['location'].length;
+                $.each(item['location'], function (ii, loc) {
+                    if ((ii + 1) === loc_length) {
+                        locations += loc['name'];
+                    } else {
+                        locations += loc['name'] + ", ";
+                    }
+                });
                 var tar_html = "<div class=\"item col-sm-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
                     "                                <div class=\"image\">\n" +
                     "                                    <a href=\"/te/info/" + item['uuid'] + "\">\n" +
@@ -113,7 +122,7 @@
                     "                                <div class=\"info\">\n" +
                     "                                    <h3>\n" +
                     "                                        <a href=\"/te/info/" + item['uuid'] + "\">" + item['first_name'] + "</a>\n" +
-                    "                                        <small>" + item['locations'] + "</small>\n" +
+                    "                                        <small>" + locations + "</small>\n" +
                     "                                    </h3>\n" +
                     "                                    <p>" + item['max_budget'] + "\n" +
                     "                                        <small>/week</small>\n" +
