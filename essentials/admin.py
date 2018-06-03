@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from essentials.models import Location, Notification
+from essentials.models import Notification
 
-admin.site.register(Location)
 admin.site.register(Notification)

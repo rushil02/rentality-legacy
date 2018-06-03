@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'essentials.apps.EssentialsConfig',
     'elastic_search.apps.ElasticSearchConfig',
     'messaging.apps.MessagingConfig',
+    'cities_custom.apps.CitiesCustomConfig'
 ]
 
 MIDDLEWARE = [
