@@ -1,11 +1,13 @@
 from rest_framework import serializers
 
+from cities_custom.serializers import LocationCitySerializer
 from tenant.models import HousePreference
 
 
 class HousePreferenceSerializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField()
     first_name = serializers.SerializerMethodField()
+    locations = LocationCitySerializer(many=True, read_only=True)
 
     class Meta:
         model = HousePreference
