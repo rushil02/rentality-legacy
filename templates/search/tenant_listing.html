@@ -103,8 +103,8 @@
                     move_out_date_upper = 'Unknown';
                 }
                 var locations = "";
-                var loc_length = item['location'].length;
-                $.each(item['location'], function (ii, loc) {
+                var loc_length = item['locations'].length;
+                $.each(item['locations'], function (ii, loc) {
                     if ((ii + 1) === loc_length) {
                         locations += loc['name'];
                     } else {
