@@ -80,6 +80,9 @@ class HousePreference(models.Model):
         else:
             return False
 
+    def get_owner(self):
+        return self.tenant.user
+
 
 class AdditionalTenant(models.Model):
     house_pref = models.ForeignKey('tenant.HousePreference', on_delete=models.CASCADE)

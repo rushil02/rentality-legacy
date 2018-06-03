@@ -1,4 +1,5 @@
 {% extends 'utils/base_user_auto.html' %}
+{% load thumbnail %}
 
 {% block in-container-content %}
     <!-- BEGIN CONTENT WRAPPER -->
@@ -13,7 +14,11 @@
                 <div class="property-agent-info">
                     <div class="agent-detail col-md-12">
                         <div class="image">
-                            <img alt="" src="/static/img/placeholders/profile/default.png">
+                            <img alt="" src="{% if house_pref.is_thumbnail_available %}
+                                        {% thumbnail house_pref.get_thumbnail 368x368 crop="smart" %}
+                                        {% else %}
+                                        {{ house_pref.get_thumbnail }}
+                                        {% endif %}">
                         </div>
 
                         <div class="info">
@@ -24,17 +29,40 @@
                     </div>
 
                     <div class="form-style col-md-12">
-                        {# method="POST" action="{{url_for('tenant_listing_send_offer', uid=listing.key.urlsafe())}}">#}
-                        <div class="center">
-                        <div class="row" class="center">
+                        {% if request.user.is_authenticated %}
 
-                            {# {{send_offer_form.csrf_token}} #}
+                            <form class="form-style col-md-12" method="POST"
+                                  action="">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        {{ msg_form.content }}
+                                    </div>
 
-                            
-                                <button id="sendOfferBtn" class="btn btn-default-color">Send Offer</button>
-                            </div>
+                                    <div class="row center">
+                                        <button type="submit" class="btn btn-default-color">Send Offer</button>
+                                    </div>
+                                </div>
+                            </form>
+                        {% else %}
+                            <form class="form-style col-md-12"
+                                  action="">
 
-                        </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <textarea name="content" placeholder="Please login to send a message" cols="40"
+                                                  rows="10"
+                                                  class="form-control" id="id_content" disabled></textarea>
+                                    </div>
+
+                                    <div class="row center">
+                                        <button type="submit" class="btn btn-default-color">Send Offer</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        {% endif %}
+
                     </div>
 
                 </div>
@@ -43,10 +71,7 @@
         </div>
         <!-- END MAIN CONTENT -->
         <div class="col-sm-8 col-md-9" style="padding-top: 15px;">
-            <div class="pull-right">
-                <a class="btn btn-fullcolor"
-                   href="{ url_for('tenant_listing_edit', uid=listing.key.urlsafe())}}">Edit</a>
-            </div>
+
             <h1 class="property-title">{{ house_pref.tenant.user.get_full_name }}
                 <small>Looking for a place</small>
             </h1>
@@ -65,12 +90,12 @@
 
             <p>Preferred Accommodation: {{ house_pref.get_property_type_display }}</p>
 
-            <h2 class="section-title">    
-                <div class= "text_left">
-                About {{ house_pref.tenant.user.get_full_name }}
-                </h2>
-                <p>{{ house_pref.description }}</p>
+            <h2 class="section-title">
+                <div class="text_left">
+                    About {{ house_pref.tenant.user.get_full_name }}
                 </div>
+            </h2>
+            <p>{{ house_pref.description }}</p>
         </div>
     </div>
 

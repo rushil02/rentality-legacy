@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.contrib import messages
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -5,6 +7,8 @@ from django.views import View
 from django.views.decorators.http import require_POST, require_GET
 from django.urls import reverse
 
+from messaging.forms import MessageForm
+from messaging.views import save_new_thread
 from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2
 from tenant.models import HousePreference
 from tenant.serializers import HousePreferenceSerializer
@@ -22,7 +26,29 @@ def info(request, house_pref_uuid):
     except HousePreference.DoesNotExist:
         raise Http404("Tenant does not exist.")
     else:
-        return render(request, 'tenant/info.html', {'house_pref': house_pref})
+        if request.method == 'POST':
+            message_form = MessageForm(request.POST)
+            if request.user.is_authenticated:
+                if message_form.is_valid():
+                    try:
+                        save_new_thread(request, house_pref, message=message_form.data['content'])
+                    except AssertionError:
+                        messages.add_message(request, messages.INFO, 'You cannot send yourself a message')
+                    else:
+                        messages.add_message(request, messages.SUCCESS,
+                                             'Your message has been sent to the property owner.')
+                        message_form = MessageForm()
+                    context = {'house_pref': house_pref, 'msg_form': message_form}
+                    return render(request, 'tenant/info.html', context)
+                else:
+                    context = {'house_pref': house_pref, 'msg_form': message_form}
+                    return render(request, 'tenant/info.html', context)
+            else:
+                return redirect(settings.LOGIN_URL + '?next=' + request.get_full_path())
+        else:
+            message_form = MessageForm()
+            context = {'house_pref': house_pref, 'msg_form': message_form}
+            return render(request, 'tenant/info.html', context)
 
 
 @login_required

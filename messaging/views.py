@@ -79,6 +79,7 @@ def get_default_thread_user_list(user, entity):
     return [user, entity.get_owner()]
 
 
+# FIXME: user sending msgs themselves, No checks
 def save_new_thread(request, entity, thread_user_list=None, user=None, message=None):
     if user is None:
         user = request.user

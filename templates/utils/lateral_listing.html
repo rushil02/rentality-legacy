@@ -52,7 +52,7 @@
                                 </a>
 
                                 <img src="{% if hp.is_thumbnail_available %}
-                                        {% thumbnail hp.get_thumbnail 320x213 crop="smart" %}
+                                        {% thumbnail hp.get_thumbnail 368x368 crop="smart" %}
                                         {% else %}
                                         {{ hp.get_thumbnail }}
                                         {% endif %}"
