@@ -1,5 +1,11 @@
 {% extends 'utils/base_user_auto.html' %}
 
+
+{% block head_extra_scripts %}
+    <link href="/static/custom/style.css" rel="stylesheet"/>
+{% endblock %}
+
+
 {% block content %}
 
 
@@ -92,12 +98,18 @@
                 }
 
                 var tar_html = "<div class=\"item col-sm-4 col-md-3\"><!-- Set width to 4 columns for grid view mode only -->\n" +
+
                     "                                <div class=\"image\">\n" +
                     "                                    <a href=\"/property/info/" + item['uuid'] + "\">\n" +
                     "                                        <h3></h3>\n" +
                     "                                        <span class=\"location\"></span>\n" +
                     "                                    </a>\n" +
-                    "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/>\n" +
+                    "                            <div style=\"position: relative\">\n" +
+                    "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/>\n";
+
+                var selected_html = "<div class=\"slant-label\">Leased</div>";
+
+                var tar_html_p2 = "</div>" +
                     "                                </div>\n" +
                     "                                <div class=\"info\">\n" +
                     "                                    <h3>\n" +
@@ -120,6 +132,11 @@
                     "                                </div>\n" +
                     "                            </div>";
 
+                if (item['status'] === 'L') {
+                    tar_html = tar_html + selected_html + tar_html_p2;
+                } else {
+                    tar_html = tar_html + tar_html_p2;
+                }
 
                 if ((i + 1) === length) {
                     tar_html = tar_html + "</div>";

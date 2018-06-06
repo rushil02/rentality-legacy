@@ -1,5 +1,11 @@
 {% extends 'utils/base_user_auto.html' %}
 
+
+
+{% block head_extra_scripts %}
+    <link href="/static/custom/style.css" rel="stylesheet"/>
+{% endblock %}
+
 {% block content %}
 
 
@@ -117,7 +123,12 @@
                     "                                        <h3></h3>\n" +
                     "                                        <span class=\"location\"></span>\n" +
                     "                                    \n" +
-                    "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/></a>\n" +
+                    "                            <div style=\"position: relative\">\n" +
+                    "                                    <img src=\"" + item['thumbnail'] + "\" alt=\"\"/></a>\n";
+
+                var selected_html = "<div class=\"slant-label\">Selected</div>";
+
+                var tar_html_p2 = "</div>" +
                     "                                </div>\n" +
                     "                                <div class=\"info\">\n" +
                     "                                    <h3>\n" +
@@ -134,6 +145,12 @@
                     "\n" +
                     "                                </div>\n" +
                     "                            </div>";
+
+                if (item['status'] === 'S') {
+                    tar_html = tar_html + selected_html + tar_html_p2;
+                } else {
+                    tar_html = tar_html + tar_html_p2;
+                }
 
                 if ((i + 1) === length) {
                     tar_html = tar_html + "</div>";
