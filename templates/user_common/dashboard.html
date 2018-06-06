@@ -32,8 +32,8 @@
                                         <div class="pull-right">
                                             <a href="{% url 'house:edit' 1 house.uuid %}"
                                                class="btn btn-fullcolor">Edit</a>
-                                            <a href="{% url 'house:remove_house_ask' house.uuid %}"
-                                               class="btn btn-danger btn-fullcolor">Del</a>
+                                            <a href="{% url 'house:mark_leased_ask' house.uuid %}"
+                                               class="btn btn-info">Leased</a>
                                         </div>
                                         <h3>
                                             <a href="{% url 'house:info' house.uuid %}">{{ house.get_location }}
@@ -72,6 +72,8 @@
                                         <div class="pull-right">
                                             <a href="{% url 'tenant:edit' 1 hp.uuid %}"
                                                class="btn btn-fullcolor">Edit</a>
+                                            <a href="{% url 'tenant:mark_selected_ask' hp.uuid %}"
+                                               class="btn btn-info">Leased</a>
                                         </div>
                                         <h3>
                                             <a href="{% url 'tenant:info' hp.uuid %}">{{ hp.preferred_suburbs }}

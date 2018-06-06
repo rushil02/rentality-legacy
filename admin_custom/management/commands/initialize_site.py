@@ -40,8 +40,15 @@ def create_tags():  # TODO: Set all tags here
 
     Tag.objects.get_or_create(verbose="No Smoking", tag_type='R')
     Tag.objects.get_or_create(verbose="Wifi included", tag_type='F')
+    Tag.objects.get_or_create(verbose="Gym", tag_type='F')
+    Tag.objects.get_or_create(verbose="Pool", tag_type='F')
+    Tag.objects.get_or_create(verbose="Amenities Available", tag_type='F')
     Tag.objects.get_or_create(verbose="Furnished", tag_type='F')
-    Tag.objects.get_or_create(verbose="Pets Friendly", tag_type='R')
+    Tag.objects.get_or_create(verbose="Pet Friendly", tag_type='R')
+    Tag.objects.get_or_create(verbose="BackPacker Friendly", tag_type='R')
+    Tag.objects.get_or_create(verbose="Children Friendly", tag_type='R')
+    Tag.objects.get_or_create(verbose="LGBT+ Friendly", tag_type='R')
+    Tag.objects.get_or_create(verbose="Family OK", tag_type='R')
     Tag.objects.get_or_create(verbose="Females Only", tag_type='R')
 
 

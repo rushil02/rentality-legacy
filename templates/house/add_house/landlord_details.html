@@ -1,5 +1,10 @@
 {% extends 'house/add_house/base.html' %}
 
+{% block head_extra_scripts %}
+    <link href="/static/css/datetimepicker.css" rel="stylesheet"/>
+
+{% endblock %}
+
 {% block listing-form-body %}
     <h1 class="property-title">Property Owner Details</h1>
     <form action="" method="POST" enctype="multipart/form-data">
@@ -25,4 +30,16 @@
     <hr/>
     <p>&nbsp;</p>
 
+{% endblock %}
+
+{% block js_script %}
+    <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $('#id_dob').datetimepicker({
+            format: 'yyyy-mm-dd',
+            startView: 'decade',
+            autoclose: true,
+            minView: 'month'
+        });
+    </script>
 {% endblock %}

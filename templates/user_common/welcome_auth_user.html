@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block head_extra_scripts %}
+    <link href="/static/custom/style.css" rel="stylesheet"/>
+{% endblock %}
+
 {% block header-nav %}
     {% include 'utils/navbar/auth_user.html' %}
 {% endblock %}

@@ -21,7 +21,7 @@ class TenantProfile(models.Model):
 
 class ActiveHousePreferenceManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(status='P')
+        return super().get_queryset().filter(status__in=['P', 'S'])
 
 
 class HousePreference(models.Model):
@@ -40,6 +40,7 @@ class HousePreference(models.Model):
 
     STATUS = (
         ('I', 'Incomplete'),
+        ('S', 'Selected'),
         ('P', 'Published'),
     )
     status = models.CharField(max_length=1, choices=STATUS, default='I')
@@ -52,17 +53,14 @@ class HousePreference(models.Model):
 
     # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
-    def preferred_suburbs(self):  # FIXME
-        return ', '.join([city.name_std for city in self.locations.all()])
+    def preferred_suburbs(self):
+        return self.get_locations_display_short()
 
-    def temp_location_display(self):
-        try:
-            return self.locations.all()[0]
-        except IndexError:
-            return None
+    def get_locations_display_short(self):
+        return ", ".join([str(location.name) for location in self.locations.all()])
 
     def get_locations_display(self):
-        return str(self.locations).join(', ')
+        return ", ".join([str(location.full_name) for location in self.locations.all()])
 
     def get_thumbnail(self):
         return self.tenant.user.userprofile.get_profile_pic()

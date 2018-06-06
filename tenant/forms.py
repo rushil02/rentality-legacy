@@ -62,3 +62,8 @@ class SearchForm(forms.Form):
     max_price = forms.IntegerField(
         widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Rent'})
     )
+
+
+class MarkSelectedForm(forms.Form):
+    confirm = forms.TypedChoiceField(coerce=lambda x: x == 'True',
+                                     choices=((False, 'No'), (True, 'Yes')))

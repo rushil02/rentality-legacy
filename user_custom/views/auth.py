@@ -25,7 +25,7 @@ def check_user(request):
 @login_required
 def welcome_auth_user(request):
     context = {
-        'house_pref': HousePreference.objects.filter(status='P').order_by('-id')[:5],
+        'house_pref': HousePreference.active_objects.all().order_by('-id')[:5],
         'houses': House.active_objects.all().order_by('-id')[:5]
     }
     return render(request, 'user_common/welcome_auth_user.html', context)
@@ -33,7 +33,7 @@ def welcome_auth_user(request):
 
 def welcome(request):
     context = {
-        'house_pref': HousePreference.objects.filter(status='P').order_by('-id')[:5],
+        'house_pref': HousePreference.active_objects.all().order_by('-id')[:5],
         'houses': House.active_objects.all().order_by('-id')[:5]
     }
     return render(request, 'user_common/welcome.html', context)

@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from messaging.forms import MessageForm
 from messaging.views import save_new_thread
-from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2
+from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2, MarkSelectedForm
 from tenant.models import HousePreference
 from tenant.serializers import HousePreferenceSerializer
 from user_custom.forms import EditProfileForm
@@ -245,3 +245,25 @@ def search_tenant_api(request):
     hp = HousePreference.active_objects.all()
     serializer = HousePreferenceSerializer(hp, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+@login_required
+def mark_as_selected(request, hp_uuid):
+    try:
+        hp = HousePreference.objects.get(tenant__user=request.user, uuid=hp_uuid)
+    except HousePreference.DoesNotExist:
+        raise Http404("Bad Request")
+    form = MarkSelectedForm(request.POST or None)
+    context = {
+        'hp': hp,
+        'form': form,
+    }
+
+    if request.method == 'POST':
+        if form.is_valid():
+            if form.cleaned_data['confirm']:
+                hp.status = 'S'
+                hp.save()
+            return redirect(reverse('user:dashboard'))
+
+    return render(request, 'tenant/state_change_selected.html', context)

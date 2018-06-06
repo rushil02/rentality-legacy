@@ -97,6 +97,9 @@ class House(models.Model):
         else:
             return image.image
 
+    def get_room_type_display(self):
+        return "%s" % self.room_type.name
+
     def get_thumbnail_2(self):
         if self.is_thumbnail_available():
             thumbnailer = get_thumbnailer(self.get_thumbnail())
@@ -171,9 +174,8 @@ class Tag(models.Model):
     verbose = models.CharField(max_length=50)
 
     TAG_TYPE = (
-        ('R', 'Rule'),
+        ('R', 'Preferences'),
         ('F', 'Facility'),
-        ('T', 'Tenant Preference')
     )
 
     tag_type = models.CharField(max_length=1, choices=TAG_TYPE)

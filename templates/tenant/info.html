@@ -81,10 +81,7 @@
 
             <p>Preferred Length: {{ house_pref.move_in_date.lower }} to {{ house_pref.move_in_date.upper }}</p>
 
-            <p>Preferred Suburb: {% for location in house_pref.locations.all %}
-                {{ location.suburb }};
-
-            {% endfor %}
+            <p>Preferred Suburb: {{ house_pref.get_locations_display }}
             </p>
 
 

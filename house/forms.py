@@ -30,8 +30,6 @@ class HouseDetailsForm1(forms.ModelForm):
 class HouseDetailsForm2(forms.ModelForm):
     facilities = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='F'))
     rules = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='R'))
-    tenant_pref = forms.ModelMultipleChoiceField(required=False, label='Tenant Preferences',
-                                                 queryset=Tag.objects.filter(tag_type='T'))
 
     class Meta:
         model = House

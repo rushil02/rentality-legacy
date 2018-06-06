@@ -1,0 +1,19 @@
+.slant-label {
+    background-color: #74777C;
+    margin-top: 55px;
+    margin-left: 10px;
+    position: absolute;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    top: 0;
+    left: 0;
+    font-size: 30px; /*Use font size to adjust the size of the word lease*/
+    color: #fff;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+
+    -ms-transform: rotate(-45deg); /* IE 9 */
+    -webkit-transform: rotate(-45deg); /* Safari 3-8 */
+    transform: rotate(-45deg);
+}

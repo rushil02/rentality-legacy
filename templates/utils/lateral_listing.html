@@ -12,22 +12,30 @@
                     {% for house in houses %}
 
                         <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
-                            <div class="image">
-                                <a href="{% url 'house:info' house.uuid %}" class="info">
-                                    <h3>{{ house.get_room_type_display }}</h3>
-                                    <span class="location"></span>
-                                    {% if house.status == 'L' %}
-                                        <h2 style="color: white">Leased</h2>
-                                    {% endif %}
-                                </a>
-                                <img src='
+                            <div style="position: relative">
+
+                                <div class="image">
+
+                                    <a href="{% url 'house:info' house.uuid %}" class="info">
+                                        <h3>{{ house.get_room_type_display }}</h3>
+                                        <span class="location">{{ house.get_location|default:"Contact for Location"|title }}</span>
+
+                                    </a>
+                                    <img src='
                             {% if house.is_thumbnail_available %}
                             {% thumbnail house.get_thumbnail 320x213 crop="smart" %}
                             {% else %}
                             {{ house.get_thumbnail }}
                             {% endif %}'
-                                     alt=""/>
+                                         alt=""/>
+
+                                </div>
+                                {% if house.status == 'L' %}
+                                    <div class="slant-label">LEASED</div>
+                                {% endif %}
+
                             </div>
+
                             <ul class="amenities">
                                 <li>
                                     <i class="fa fa-map-marker fa-fw"></i>{{ house.get_location|default:"Unknown"|title }}
@@ -45,18 +53,23 @@
 
                     {% for hp in house_pref %}
                         <div class="item" data-animation-direction="from-bottom" data-animation-delay="250">
-                            <div class="image">
-                                <a href="{% url 'tenant:info' house_pref_uuid=hp.uuid %}" class="info">
-                                    <h3>{{ hp.tenant.user.get_full_name|title }}</h3>
-                                    <span class="location">Looking for a place</span>
-                                </a>
+                            <div style="position: relative">
+                                <div class="image">
+                                    <a href="{% url 'tenant:info' house_pref_uuid=hp.uuid %}" class="info">
+                                        <h3>{{ hp.tenant.user.get_full_name|title }}</h3>
+                                        <span class="location">Looking for a place</span>
+                                    </a>
 
-                                <img src="{% if hp.is_thumbnail_available %}
+                                    <img src="{% if hp.is_thumbnail_available %}
                                         {% thumbnail hp.get_thumbnail 368x368 crop="smart" %}
                                         {% else %}
                                         {{ hp.get_thumbnail }}
                                         {% endif %}"
-                                     alt=""/>
+                                         alt=""/>
+                                </div>
+                                {% if hp.status == 'S' %}
+                                    <div class="slant-label">SELECTED</div>
+                                {% endif %}
                             </div>
                             <ul class="amenities">
                                 <li>
