@@ -9,7 +9,7 @@ DATABASES = {
         'NAME': get_env_var('POSTGRES_DB'),
         'USER': get_env_var('POSTGRES_USER'),
         'PASSWORD': get_env_var('POSTGRES_PASSWORD'),
-        'HOST': 'postgres',
+        'HOST': get_env_var('POSTGRES_HOST'),
         'PORT': '5432',
     }
 }
