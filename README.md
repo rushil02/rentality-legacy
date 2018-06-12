@@ -1,5 +1,14 @@
 # Rentality
 
+## Setup
+
+**FOR DEV ONLY**
+
+- Copy `docker-compose.dev.yml` file and paste as `docker-compose.override.yml`
+
+This will keep refreshing the server as you edit the files.
+
+Otherwise make necessary changes and run `docker-compose up -d --build` to update server.
 ## Commands
 
 ```
