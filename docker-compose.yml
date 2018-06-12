@@ -30,7 +30,7 @@ services:
     ports:
       - 9200:9200
   web:
-    build: .
+    build: ./src
     environment:
       SECRET_KEY: "${SECRET_KEY}"
       DELETED_USER_PASS: "${DELETED_USER_PASS}"
