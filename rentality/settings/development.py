@@ -6,10 +6,10 @@ from .common import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'rentality',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'NAME': get_env_var('POSTGRES_DB'),
+        'USER': get_env_var('POSTGRES_USER'),
+        'PASSWORD': get_env_var('POSTGRES_PASSWORD'),
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }

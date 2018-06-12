@@ -17,10 +17,10 @@ from .common import *
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secret_var('SECRET_KEY')
+SECRET_KEY = get_env_var('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_secret_var('DEBUG')
+DEBUG = get_env_var('DEBUG')
 
 ALLOWED_HOSTS = ['.rentality.com.au', ]
 
@@ -230,7 +230,7 @@ SOCIALACCOUNT_PROVIDERS = \
 #     'reset_password': 'user_custom.forms.CustomResetPasswordForm',
 #     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
 # }
-OAUTH_DETAILS = get_secret_var('OAUTH_DETAILS')
+OAUTH_DETAILS = get_env_var('OAUTH_DETAILS')
 
 LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'libs')
 
