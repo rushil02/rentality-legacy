@@ -230,7 +230,33 @@ SOCIALACCOUNT_PROVIDERS = \
 #     'reset_password': 'user_custom.forms.CustomResetPasswordForm',
 #     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
 # }
-OAUTH_DETAILS = get_env_var('OAUTH_DETAILS')
+OAUTH_DETAILS = {
+    "facebook": {
+      "verbose": "Facebook",
+      "secret": get_env_var('OAUTH_FACEBOOK_SECRET'),
+      "client_id": get_env_var('OAUTH_FACEBOOK_CLIENT_ID')
+    },
+    "google": {
+      "verbose": "Google",
+      "secret": get_env_var('OAUTH_GOOGLE_SECRET'),
+      "client_id": get_env_var('OAUTH_GOOGLE_CLIENT_ID')
+    },
+    "twitter": {
+      "verbose": "Twitter",
+      "secret": get_env_var('OAUTH_TWITTER_SECRET'),
+      "client_id": get_env_var('OAUTH_TWITTER_CLIENT_ID')
+    },
+    "instagram": {
+      "verbose": "Instagram",
+      "secret": get_env_var('OAUTH_INSTAGRAM_SECRET'),
+      "client_id": get_env_var('OAUTH_INSTAGRAM_CLIENT_ID')
+    },
+    "pinterest": {
+      "verbose": "Pinterest",
+      "secret": get_env_var('OAUTH_PINTEREST_SECRET'),
+      "client_id": get_env_var('OAUTH_PINTEREST_CLIENT_ID')
+    }
+}
 
 LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'libs')
 
