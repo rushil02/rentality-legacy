@@ -1,0 +1,5 @@
+Date        Day         Check-in        Check-out       Time
+11/06/18    Monday      ------- 7 hours ---------       7.00
+12/06/18    Tuesday     1900            0000		    5.00
+13/06/18    Wednesday	0000		    0330		    3.30
+15/06/18    Friday      1320
