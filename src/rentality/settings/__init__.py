@@ -193,6 +193,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL  # Re
 ACCOUNT_EMAIL_REQUIRED = True  # Email required for signing up
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "Rentality.com - "
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 3600  # User is blocked for this time after failure to repeatedly log in
+ACCOUNT_LOGOUT_ON_GET=True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # TODO: add config for other providers
