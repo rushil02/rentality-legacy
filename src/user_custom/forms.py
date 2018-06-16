@@ -107,53 +107,6 @@ class EditProfileForm(forms.ModelForm):
         }
 
 
-class LoginForm(forms.Form):
-    user_cache = None
-
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control',
-                                                                           'placeholder': 'Email'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password',
-                                                                 }), required=True)
-
-    def clean(self):
-        email = self.cleaned_data.get('email')
-        password = self.cleaned_data.get('password')
-        if email and password:
-            self.user_cache = authenticate(email=email, password=password)
-            if not self.user_cache:
-                raise forms.ValidationError("Sorry, Invalid credentials. Please try again.")
-            else:
-                if not self.is_active():
-                    raise forms.ValidationError("Your account is not active. Please contact us via our Helpdesk.")
-                else:
-                    return self.cleaned_data
-        else:
-            raise forms.ValidationError("Enter Email and Password")
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        try:
-            email = clean_gmail(email)
-        except ValidationError:
-            raise forms.ValidationError(_("Enter valid email address"))
-        else:
-            return email
-
-    def get_user_id(self):
-        if self.user_cache:
-            return self.user_cache.id
-        return None
-
-    def get_user(self):
-        return self.user_cache
-
-    def is_active(self):
-        if self.user_cache:
-            return self.user_cache.is_active
-        else:
-            return False
-
-
 class CustomLoginForm(AllAuthLoginForm):
     def __init__(self, *args, **kwargs):
         super(CustomLoginForm, self).__init__(*args, **kwargs)
