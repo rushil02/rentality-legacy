@@ -17,3 +17,5 @@ DATABASES = {
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "static_root")
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "media_root")
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

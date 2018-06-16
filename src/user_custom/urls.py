@@ -2,13 +2,15 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from user_custom.views import set_timezone, check_user, \
-    sign_up, dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard
+    sign_up, dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
+    CustomSignupView
 
 app_name = 'user'
 
 urlpatterns = [
     # path('temp', TemplateView.as_view(template_name='temp-mig/thread_messages.html'), name='test_templates'),  # FIXME: remove later
     path('', check_user, name='home_page'),
+    path('accounts/signup/', CustomSignupView.as_view(), name="account_signup"),
     path('notifications', Notifications.as_view(), name='notifications'),
     path('dashboard', dashboard, name='dashboard'),
     path('sign-up', sign_up, name='sign_up'),

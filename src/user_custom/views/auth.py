@@ -13,6 +13,7 @@ from house.models import House
 from tenant.models import HousePreference
 from user_custom.forms import UserCreationForm, ProfileForm1, ProfileForm2
 from user_custom.models import UserProfile
+from allauth.account.views import SignupView as AllAuthSignupView
 
 
 def check_user(request):
@@ -83,3 +84,8 @@ class SignUpInfoWizard(SessionWizardView):
         return render(self.request, 'user_common/account_creation/email_conf.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
+
+
+class CustomSignupView(AllAuthSignupView):
+    # FIXME: Reverse URL not working
+    success_url = 'add-details/'

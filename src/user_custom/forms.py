@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from custom_package.email_validator import clean_gmail
 from user_custom.models import UserProfile
 from allauth.account.forms import LoginForm as AllAuthLoginForm
+from allauth.account.forms import SignupForm as AllAuthSignupForm
 
 
 class UserCreationForm(DjangoUserCreationForm):
@@ -114,3 +115,49 @@ class CustomLoginForm(AllAuthLoginForm):
         self.fields['login'].widget.attrs['placeholder'] = 'Email'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['placeholder'] = 'Password'
+
+
+class CustomSignupForm(AllAuthSignupForm):
+
+    first_name = forms.CharField(max_length=30,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'first_name',
+                'placeholder': 'First Name', 'required': 'required'
+            }
+        )
+    )
+
+    last_name = forms.CharField(max_length=150,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'last_name',
+                'placeholder': 'Last Name'
+            }
+        )
+    )
+
+    receive_newsletter = forms.BooleanField(initial=True, required=False)  # FIXME: store in db
+    policy_agreement = forms.BooleanField()
+
+    def __init__(self, *args, **kwargs):
+        super(CustomSignupForm, self).__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['class'] = 'form-control'
+        self.fields['email'].widget.attrs['placeholder'] = 'Email'
+        self.fields['password1'].widget.attrs['class'] = 'form-control'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Password'
+        self.fields['password2'].widget.attrs['class'] = 'form-control'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Password (again)'
+    
+    def clean_policy_agreement(self):
+        agreement = self.cleaned_data['policy_agreement']
+        if not agreement:
+            raise forms.ValidationError(
+                self.error_messages['policy_agreement'],
+                code='Policy agreement not accepted'
+            )
+    
+    def custom_signup(self, request, user):
+        UserProfile.objects.create(
+            user=user, receive_newsletter=self.cleaned_data['receive_newsletter']
+        )

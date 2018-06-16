@@ -4,4 +4,4 @@ Date        Day         Check-in        Check-out       Time
 13/06/18    Wednesday	0000		    0330		    3.30
 15/06/18    Friday      1320            1800
 16/06/18    Saturday    1140            1345
-16/06/18    Saturday    1945
+16/06/18    Saturday    1945            0300

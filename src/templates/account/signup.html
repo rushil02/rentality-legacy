@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!-- BEGIN CONTENT WRAPPER -->
+    <div class="content">
+        <div class="container">
+            <div class="row">
+
+                <!-- BEGIN MAIN CONTENT -->
+                <div class="main col-sm-12">
+
+                    <div class="login col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+
+
+                        <h1 class="center">Sign Up</h1>
+
+
+                        <div class="col-sm-12">
+                            {{ form.non_field_errors }}
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                {{ form.email.errors }}
+                                {{ form.email }}
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        {{ form.first_name.errors }}
+                                        {{ form.first_name }}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {{ form.last_name.errors }}
+                                        {{ form.last_name }}
+                                    </div>
+                                </div>
+
+
+                                {{ form.password1.errors }}
+                                {{ form.password1 }}
+                                {{ form.password2.errors }}
+                                {{ form.password2 }}
+
+
+                                <div class="checkbox">
+                                    {{ form.policy_agreement.errors }}
+                                    {{ form.policy_agreement }}
+                                    <label>
+                                        I agree to your
+                                        <a href="{% url 'django.contrib.flatpages.views.flatpage' url="tos/" %}">terms
+                                            and conditions</a>
+                                        and <a
+                                            href="{% url 'django.contrib.flatpages.views.flatpage' url="priv-policy/" %}">private
+                                        policy</a>.
+                                    </label>
+                                </div>
+
+
+                                {{ form.receive_newsletter.errors }}
+                                <div class="checkbox">
+                                    {{ form.receive_newsletter }}
+                                    <label>
+                                        I would like to receive updates via newsletter.
+                                    </label>
+                                </div>
+
+                                {% if redirect_field_value %}
+                                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                {% endif %}
+
+
+                                <div class="controls">
+                                    <button type="submit" class="btn btn-block btn-lg btn-primary btn-loading">
+                                        Sign up
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-control-static">
+                                        <a class="btn btn-block btn-link btn-xs"
+                                           href="{% url 'account_login' %}">Already have an account?</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <legend class="text-muted text-center">or</legend>
+
+
+                            <div class="text-center">
+                                {% load socialaccount %}
+
+                                <a href="{% provider_login_url "google" %}"><i class="fa fa-2x fa-google"></i></a>
+                                <a href="{% provider_login_url "facebook" %}"><i
+                                        class="fa fa-2x fa-facebook-official"></i></a>
+                                <a href="{% provider_login_url "instagram" %}"><i class="fa fa-2x fa-instagram"></i></a>
+                                <a href="{% provider_login_url "twitter" %}"><i class="fa fa-2x fa-twitter-square"></i></a>
+                                <a href="{% provider_login_url "pinterest" %}"><i class="fa fa-2x fa-pinterest"></i></a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- END MAIN CONTENT -->
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
