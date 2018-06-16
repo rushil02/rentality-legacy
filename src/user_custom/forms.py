@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from custom_package.email_validator import clean_gmail
 from user_custom.models import UserProfile
+from allauth.account.forms import LoginForm as AllAuthLoginForm
 
 
 class UserCreationForm(DjangoUserCreationForm):
@@ -151,3 +152,12 @@ class LoginForm(forms.Form):
             return self.user_cache.is_active
         else:
             return False
+
+
+class CustomLoginForm(AllAuthLoginForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomLoginForm, self).__init__(*args, **kwargs)
+        self.fields['login'].widget.attrs['class'] = 'form-control'
+        self.fields['login'].widget.attrs['placeholder'] = 'Email'
+        self.fields['password'].widget.attrs['class'] = 'form-control'
+        self.fields['password'].widget.attrs['placeholder'] = 'Password'
