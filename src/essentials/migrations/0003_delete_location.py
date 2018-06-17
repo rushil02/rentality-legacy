@@ -6,6 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
     dependencies = [
         ('essentials', '0002_notification_user'),
+        ('tenant', '0002_auto_20180430_0415'),
+        ('tenant', '0003_auto_20180501_0350')
     ]
 
     operations = [
