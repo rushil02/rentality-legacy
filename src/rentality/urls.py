@@ -25,13 +25,13 @@ urlpatterns = [
     path('db/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('accounts/', include('allauth.urls')),
     path('es/', include('elastic_search.urls')),
     path('te/', include('tenant.urls')),
     path('la/', include('landlord.urls')),
     path('st/', include('staff.urls')),
     path('admin/', include('admin_custom.urls')),
     path('', include('user_custom.urls')),
+    path('accounts/', include('allauth.urls')),
     path('property/', include('house.urls')),
 
     # TODO: enable notifications

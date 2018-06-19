@@ -1,7 +1,7 @@
 import os
 
 from django.conf import settings
-from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
@@ -11,8 +11,9 @@ from formtools.wizard.views import SessionWizardView
 
 from house.models import House
 from tenant.models import HousePreference
-from user_custom.forms import UserCreationForm, LoginForm, ProfileForm1, ProfileForm2
+from user_custom.forms import ProfileForm1, ProfileForm2
 from user_custom.models import UserProfile
+from allauth.account.views import SignupView as AllAuthSignupView
 
 
 def check_user(request):
@@ -37,52 +38,6 @@ def welcome(request):
         'houses': House.active_objects.all().order_by('-id')[:5]
     }
     return render(request, 'user_common/welcome.html', context)
-
-
-def sign_in(request):  # FIXME: only anon user allowed
-    if request.user.is_authenticated:
-        try:
-            next_page = request.GET['next']
-        except KeyError:
-            return redirect('/')
-        else:
-            return redirect(next_page)
-    else:
-        login_form = LoginForm(request.POST or None, prefix='login_form')
-        if request.POST:
-            if login_form.is_valid():
-                user = login_form.get_user()
-                login(request, user)
-                return sign_in(request)
-            else:
-                return render(request, 'user_common/signin.html', {'login_form': login_form})
-        else:
-            context = {'login_form': login_form}
-            return render(request, 'user_common/signin.html', context)
-
-
-def sign_up(request):  # FIXME: only anon user allowed
-    sign_up_form = UserCreationForm(request.POST or None, prefix='sign_up_form')
-    if request.POST:
-        if sign_up_form.is_valid():
-            user_obj = sign_up_form.save()
-            UserProfile.objects.create(user=user_obj,
-                                       receive_newsletter=sign_up_form.cleaned_data['receive_newsletter'])
-            new_user = authenticate(email=user_obj.email,
-                                    password=sign_up_form.cleaned_data['password1'])
-            login(request, new_user)
-            send_registration_email(new_user)  # FIXME
-            return redirect(reverse('user:account_creation'))
-        else:
-            return render(request, 'user_common/signup.html', {'sign_up_form': sign_up_form})
-    else:
-        return render(request, 'user_common/signup.html', {'sign_up_form': sign_up_form})
-
-
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect('/')
 
 
 def send_registration_email(user):
@@ -111,3 +66,8 @@ class SignUpInfoWizard(SessionWizardView):
         return render(self.request, 'user_common/account_creation/email_conf.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
+
+
+class CustomSignupView(AllAuthSignupView):
+    # FIXME: Reverse URL not working for reverse('user:account_creation')
+    success_url = '/add-details/'

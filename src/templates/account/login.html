@@ -17,14 +17,17 @@
 
 
                         <div class="col-sm-12">
-                            {{ login_form.non_field_errors }}
+                            {{ form.non_field_errors }}
 
-                            <form method="POST" action="">
+                            <form method="POST" action="{% url 'account_login' %}">
                                 {% csrf_token %}
-                                {{ login_form.email.errors }}
-                                {{ login_form.email }}
-                                {{ login_form.password.errors }}
-                                {{ login_form.password }}
+                                {{ form.login.errors }}
+                                {{ form.login }}
+                                {{ form.password.errors }}
+                                {{ form.password }}
+                                {% if redirect_field_value %}
+                                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                {% endif %}
                                 <div class="controls">
                                     <button type="submit" class="btn btn-block btn-lg btn-primary btn-loading">Sign in
                                     </button>
@@ -34,7 +37,7 @@
                                         <a class="btn btn-link btn-xs ellipsis" href="">Forgot
                                             password?</a>
                                         <a class="btn btn-link btn-xs ellipsis"
-                                           href="{% url 'user:sign_up' %}">Create new account</a>
+                                           href="{% url 'account_signup' %}">Create new account</a>
                                     </div>
                                 </div>
                             </form>

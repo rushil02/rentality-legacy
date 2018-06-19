@@ -180,17 +180,20 @@ MEDIA_URL = '/media/'
 SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/sign-in'
+LOGIN_URL = '/accounts/login'
 
 # Django all-auth
 # http://django-allauth.readthedocs.io/en/latest/configuration.html
 # ACCOUNT_ADAPTER = 'custom_package.all_auth_adapter.CustomAccountAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Login field
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # User has to click a button on the redirected page
+ACCOUNT_USER_MODEL_USERNAME_FIELD=None
+ACCOUNT_USERNAME_REQUIRED=False
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL  # Redirect to '/'
 ACCOUNT_EMAIL_REQUIRED = True  # Email required for signing up
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "Rentality.com - "
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 3600  # User is blocked for this time after failure to repeatedly log in
+ACCOUNT_LOGOUT_ON_GET=True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # TODO: add config for other providers
@@ -221,15 +224,15 @@ SOCIALACCOUNT_PROVIDERS = \
      }
 
 # Forms
-# ACCOUNT_FORMS = {
-#     'login': 'user_custom.forms.CustomLoginForm',
-#     'signup': 'user_custom.forms.CustomSignupForm',
+ACCOUNT_FORMS = {
+    'login': 'user_custom.forms.CustomLoginForm',
+    'signup': 'user_custom.forms.CustomSignupForm',
 #     'change_password': 'user_custom.forms.CustomChangePasswordForm',
 #     'set_password': 'user_custom.forms.CustomSetPasswordForm',
 #     'add_email': 'user_custom.forms.CustomAddEmailForm',
 #     'reset_password': 'user_custom.forms.CustomResetPasswordForm',
 #     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
-# }
+}
 OAUTH_DETAILS = {
     "facebook": {
       "verbose": "Facebook",

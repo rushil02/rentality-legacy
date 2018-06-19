@@ -17,33 +17,33 @@
 
 
                         <div class="col-sm-12">
-                            {{ sign_up_form.non_field_errors }}
+                            {{ form.non_field_errors }}
 
                             <form method="POST" action="">
                                 {% csrf_token %}
-                                {{ sign_up_form.email.errors }}
-                                {{ sign_up_form.email }}
+                                {{ form.email.errors }}
+                                {{ form.email }}
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        {{ sign_up_form.first_name.errors }}
-                                        {{ sign_up_form.first_name }}
+                                        {{ form.first_name.errors }}
+                                        {{ form.first_name }}
                                     </div>
                                     <div class="col-sm-6">
-                                        {{ sign_up_form.last_name.errors }}
-                                        {{ sign_up_form.last_name }}
+                                        {{ form.last_name.errors }}
+                                        {{ form.last_name }}
                                     </div>
                                 </div>
 
 
-                                {{ sign_up_form.password1.errors }}
-                                {{ sign_up_form.password1 }}
-                                {{ sign_up_form.password2.errors }}
-                                {{ sign_up_form.password2 }}
+                                {{ form.password1.errors }}
+                                {{ form.password1 }}
+                                {{ form.password2.errors }}
+                                {{ form.password2 }}
 
 
                                 <div class="checkbox">
-                                    {{ sign_up_form.policy_agreement.errors }}
-                                    {{ sign_up_form.policy_agreement }}
+                                    {{ form.policy_agreement.errors }}
+                                    {{ form.policy_agreement }}
                                     <label>
                                         I agree to your
                                         <a href="{% url 'django.contrib.flatpages.views.flatpage' url="tos/" %}">terms
@@ -55,13 +55,17 @@
                                 </div>
 
 
-                                {{ sign_up_form.receive_newsletter.errors }}
+                                {{ form.receive_newsletter.errors }}
                                 <div class="checkbox">
-                                    {{ sign_up_form.receive_newsletter }}
+                                    {{ form.receive_newsletter }}
                                     <label>
                                         I would like to receive updates via newsletter.
                                     </label>
                                 </div>
+
+                                {% if redirect_field_value %}
+                                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                {% endif %}
 
 
                                 <div class="controls">
@@ -72,7 +76,7 @@
                                 <div class="form-group">
                                     <div class="form-control-static">
                                         <a class="btn btn-block btn-link btn-xs"
-                                           href="{% url 'user:sign_in' %}">Already have an account?</a>
+                                           href="{% url 'account_login' %}">Already have an account?</a>
                                     </div>
                                 </div>
                             </form>
