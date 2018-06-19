@@ -61,6 +61,7 @@ class CustomLoginForm(AllAuthLoginForm):
 
 
 class CustomSignupForm(AllAuthSignupForm):
+    #FIXME: Add Gmail Checker
 
     first_name = forms.CharField(max_length=30,
         widget=forms.TextInput(
@@ -96,7 +97,7 @@ class CustomSignupForm(AllAuthSignupForm):
         agreement = self.cleaned_data['policy_agreement']
         if not agreement:
             raise forms.ValidationError(
-                self.error_messages['policy_agreement'],
+                _("Please accept the terms and conditions to signup and use our services."),
                 code='Policy agreement not accepted'
             )
     
