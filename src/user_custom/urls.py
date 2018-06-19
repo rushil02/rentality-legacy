@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from user_custom.views import set_timezone, check_user, \
-    sign_up, dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
+    dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
     CustomSignupView
 
 app_name = 'user'
@@ -13,7 +13,6 @@ urlpatterns = [
     path('accounts/signup/', CustomSignupView.as_view(), name="account_signup"),
     path('notifications', Notifications.as_view(), name='notifications'),
     path('dashboard', dashboard, name='dashboard'),
-    path('sign-up', sign_up, name='sign_up'),
     path('sel-listing', TemplateView.as_view(template_name='user_common/account_creation/select_listing.html'),
          name='sel_listing'),
     path('profile', edit_profile, name='user_details'),
