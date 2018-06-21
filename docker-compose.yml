@@ -12,7 +12,6 @@ services:
       - web
   postgres:
     image: mdillon/postgis:10-alpine
-    restart: unless-stopped
     environment:
       POSTGRES_DB: "${POSTGRES_DB}"
       POSTGRES_USER: "${POSTGRES_USER}"
@@ -31,6 +30,7 @@ services:
       - 9200:9200
   web:
     build: ./src
+    image: registry.gitlab.com/rushil0195/rentality/web:latest
     environment:
       SECRET_KEY: "${SECRET_KEY}"
       DELETED_USER_PASS: "${DELETED_USER_PASS}"

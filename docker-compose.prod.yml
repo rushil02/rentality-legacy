@@ -1,0 +1,36 @@
+version: '3'
+services:
+  postgres:
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+  web:
+    deploy:
+      # Number of Replicas in production
+      replicas: 3
+      resources:
+        # cpus: Percentage of CPU usage
+        # memory: Memory size
+        # limits: Maximum allowable resources.
+        limits:
+          cpus: '0.3'
+          memory: 200M
+        # Minimum resources that are always allocated to a container. Uncomment if needed
+        # reservations:
+        #   cpus: '0.25'
+        #   memory: 20M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3 # Default is never give up.
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+  nginx:
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
