@@ -29,8 +29,8 @@ class BaseRequest(AuthorizationInterface):
             #TODO: Exception Handling
             raise e
 
-    def get(self, path):
-        return self.__execute_request(requests.get, path)
+    def get(self, path, params=None):
+        return self.__execute_request(requests.get, path, params=params)
     
     def post(self, path, data=None):
         return self.__execute_request(requests.post, path, json=data)
