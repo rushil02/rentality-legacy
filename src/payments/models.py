@@ -47,7 +47,69 @@ class BankAccount(AssemblyUserMixin, BaseAssemblyModel):
 
 
 class AssemblyUser(BaseAssemblyModel):
-    pass
+    api_endpoint = 'users'
+    response_header = 'users'
+    allowed_methods = ['save', 'get_many', 'get_one', 'update']
+    fields = [
+        'id',
+        'first_name',
+        'email',
+        'last_name',
+        'mobile',
+        'address_line1',
+        'address_line2',
+        'city',
+        'state',
+        'zip',
+        'country',
+        'dob',
+        'government_number',
+        'drivers_license_number',
+        'drivers_license_state',
+        'ip_address',
+        'logo_url',
+        'color_1',
+        'color_2',
+        'custom_descriptor'
+    ]
+
+    @classmethod
+    def get_bank_account(cls, id):
+        response = cls.requests.get(f'{cls.api_endpoint}/{id}/bank_accounts')
+        return BankAccount.load_response_for_one_object('bank_accounts', response)
+    
+    @classmethod
+    def get_card_account(cls, id):
+        response = cls.requests.get(f'{cls.api_endpoint}/{id}/card_accounts')
+        return CardAccount.load_response_for_one_object('card_accounts', response)
+    
+    @classmethod
+    def get_paypal_account(cls, id):
+        response = cls.requests.get(f'{cls.api_endpoint}/{id}/paypal_accounts')
+        return PayPalAccount.load_response_for_one_object('paypal_accounts', response)
+    
+    @classmethod
+    def get_wallet_account(cls, id):
+        response = cls.requests.get(f'{cls.api_endpoint}/{id}/wallet_accounts')
+        return WalletAccount.load_response_for_one_object('wallet_accounts', response)
+    
+    @classmethod
+    def set_user_disbursement_account(cls, id, account_id):
+        data = {
+            'account_id': account_id
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/disbursement_account', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def get_user_items(cls, id):
+        response = cls.requests.get(f'{cls.api_endpoint}/{id}/items')
+        return Item.load_response_for_many_objects('items', response)
+    
+    @classmethod
+    def set_verified(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}?type=identity_verified')
+        return cls.load_response_for_one_object(cls.response_header, response)
 
 
 class RoutingNumber(BaseAssemblyModel):
@@ -191,7 +253,7 @@ class Fee(BaseAssemblyModel):
     ]
 
 
-class Items(BaseAssemblyModel):
+class Item(BaseAssemblyModel):
     api_endpoint = 'items'
     response_header = 'items'
     allowed_methods = ['save', 'get_many', 'get_one', 'update', 'delete']
@@ -251,6 +313,156 @@ class Items(BaseAssemblyModel):
     def get_batch_transactions(cls, id):
         response = cls.requests.get(f'{cls.api_endpoint}/{id}/batch_transactions')
         return Transaction.load_response_for_many_objects('batch_transactions', response)
+    
+    @classmethod
+    def request_payment(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_payment')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def make_payment(cls, id, account_id , ip_address, device_id):
+        data = {
+            'account_id': account_id,
+            'ip_address': ip_address,
+            'device_id': device_id
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/make_payment', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def request_release(cls, id, release_amount):
+        data = {
+            'release_amount': release_amount
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_release', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def release_payment(cls, release_amount, flag_release):
+        data = {
+            'release_amount': release_amount,
+            'flag_release': flag_release
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/release_payment', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def request_refund(cls, id, refund_amount, refund_message):
+        data = {
+            'refund_amount': refund_amount,
+            'refund_message': refund_message
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_refund', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def refund(cls, id, refund_amount, refund_message):
+        data = {
+            'refund_amount': refund_amount,
+            'refund_message': refund_message
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/refund', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def decline_refund(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/decline_refund')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+
+    @classmethod
+    def raise_dispute(cls, id, user_id):
+        data = {
+            'user_id': user_id
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/raise_dispute')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def request_dispute_resolution(cls, id, user_id, dispute_message):
+        data = {
+            'user_id': user_id,
+            'dispute_message': dispute_message
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_resolve_dispute', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def resolve_dispute(cls, id, user_id, dispute_message):
+        data = {
+            'user_id': user_id,
+            'dispute_message': dispute_message
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/resolve_dispute', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def escalate_dispute(cls, id, user_id, dispute_message):
+        data = {
+            'user_id': user_id,
+            'dispute_message': dispute_message
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/escalate_dispute', data=data)
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def acknowledge_wire_transfer(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/acknowledge_wire')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def revert_wire_transfer(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/revert_wire')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def cancel(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/cancel')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def send_tax_invoice(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/send_tax_invoice')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def request_tax_invoice(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_tax_invoice')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def authorize_payment(cls, id, account_id):
+        data = {
+            'account_id': account_id
+        }
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/authorize_payment')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def capture_payment(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/capture_payment')
+        return cls.load_response_for_one_object(cls.response_header, response)
+    
+    @classmethod
+    def void_payment(cls, id):
+        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/void_payment')
+        return cls.load_response_for_one_object(cls.response_header, response)
+
+
+class Marketplace(BaseAssemblyModel):
+    api_endpoint = 'marketplace'
+    response_header = 'marketplaces'
+    allowed_methods = ['get']
+
+
+class TokenAuth(BaseAssemblyModel):
+    api_endpoint = 'token_auths'
+    response_header = 'token_auth'
+    allowed_methods = ['save']
+    fields = [
+        'token_type',
+        'user_id'
+    ]
 
 
 class Transaction(AssemblyUserMixin, BaseAssemblyModel):
@@ -296,7 +508,7 @@ class WalletAccount(AssemblyUserMixin, BaseAssemblyModel):
             'amount': amount
         }
         response = cls.requests.post(f'{cls.api_endpoint}/{id}/withdraw', data=data)
-        return Disbursements.load_response_for_one_object('disbursements', response)
+        return Disbursement.load_response_for_one_object('disbursements', response)
     
     @classmethod
     def deposit(cls, id, account_id, amount):
@@ -305,8 +517,36 @@ class WalletAccount(AssemblyUserMixin, BaseAssemblyModel):
             'amount': amount
         }
         response = cls.requests.post(f'{cls.api_endpoint}/{id}/deposit', data=data)
-        return Disbursements.load_response_for_one_object('disbursements', response)
+        return Disbursement.load_response_for_one_object('disbursements', response)
 
 
-class Disbursements(BaseAssemblyModel):
+class Disbursement(BaseAssemblyModel):
     pass
+
+
+class Configuration(BaseAssemblyModel):
+    api_endpoint = 'configurations'
+    response_header = 'feature_configurations'
+    allowed_methods = ['save', 'get_many', 'get_one', 'update', 'delete']
+    fields = [
+        'name',
+        'enabled',
+        'user_id',
+        'country',
+        'item_id',
+        'options',
+        'min',
+        'max'
+    ]
+
+
+class PaymentRestriction(BaseAssemblyModel):
+    api_endpoint = 'payment_restrictions'
+    response_header = 'payment_restrictions'
+    allowed_methods = ['get_many', 'get_one']
+
+
+class Tools(BaseAssemblyModel):
+    api_endpoint = 'status'
+    response_header = None
+    allowed_methods = ['get']

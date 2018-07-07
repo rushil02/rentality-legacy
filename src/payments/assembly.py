@@ -95,7 +95,7 @@ class BaseAssemblyModel(object):
     @classmethod
     def get(cls):
         cls.check_for_allowed_methods('get')
-        response = cls.requests.delete(f'{cls.api_endpoint}')
+        response = cls.requests.get(f'{cls.api_endpoint}')
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
