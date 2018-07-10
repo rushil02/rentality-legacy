@@ -65,13 +65,13 @@ class BaseAssemblyModel(object):
     @classmethod
     def get_one(cls, id):
         cls.check_for_allowed_methods('get_one')
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}')
+        response = cls.requests.get('{}/{}'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def get_many(cls, **params):
         cls.check_for_allowed_methods('get_many')
-        response = cls.requests.get(f'{cls.api_endpoint}', params=params)
+        response = cls.requests.get(cls.api_endpoint, params=params)
         return cls.load_response_for_many_objects(cls.response_header, response)
     
     def get_field_data(self):
@@ -83,24 +83,24 @@ class BaseAssemblyModel(object):
     def save(self):
         cls.check_for_allowed_methods('save')
         data = self.get_field_data()
-        response = self.requests.post(f'{self.api_endpoint}/', data)
+        response = self.requests.post('{}/'.format(self.api_endpoint), data)
         return type(self).load_response_for_one_object(self.response_header, response)
     
     @classmethod
     def delete(cls, id):
         cls.check_for_allowed_methods('delete')
-        response = cls.requests.delete(f'{cls.api_endpoint}/{id}')
+        response = cls.requests.delete('{}/{}'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(None, response)
     
     @classmethod
     def get(cls):
         cls.check_for_allowed_methods('get')
-        response = cls.requests.get(f'{cls.api_endpoint}')
+        response = cls.requests.get(cls.api_endpoint)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def update(cls, id):
         cls.check_for_allowed_methods('update')
         data = self.get_field_data()
-        response = self.requests.patch(f'{self.api_endpoint}/{id}', data)
+        response = self.requests.patch('{}/{}'.format(self.api_endpoint, id), data)
         return cls.load_response_for_one_object(cls.response_header, response)

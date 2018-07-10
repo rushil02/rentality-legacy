@@ -1,4 +1,4 @@
-FROM python:alpine
+FROM python:3.5-alpine
 
 WORKDIR /rentality/libs
 # RUN apk add --no-cache linux-headers build-base
