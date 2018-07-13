@@ -1,6 +1,19 @@
 server {
     listen 80;
-    server_name rentality.com.au www.rentality.com.au 167.99.77.213;
+    server_name rentality.com.au;
+    rewrite ^/(.*) https://rentality.com.au/$1 permanent;
+}
+
+server {
+    server_name www.rentality.com.au 167.99.77.213;
+    # 301 - 'Moved permanently' is best practice for tablet, phone, desktop and SEO
+    return 301 https://rentality.com.au$request_uri;
+}
+
+
+server {
+    listen 443 ssl;
+    server_name rentality.com.au;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
@@ -17,5 +30,15 @@ server {
     }
 
     client_max_body_size 3m;
+
+    ssl_certificate /root/rentality.com.au.chained.crt;
+    ssl_certificate_key /root/rentality.com.au.key;
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+    ssl_dhparam /root/dhparam.pem;
+
+    add_header X-Frame-Options DENY;
 
 }
