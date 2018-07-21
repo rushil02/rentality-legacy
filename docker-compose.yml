@@ -3,7 +3,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "${NGINX_PORT}:80"
+      - "8000:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - static:/static
@@ -12,10 +12,8 @@ services:
       - web
   postgres:
     image: mdillon/postgis:10-alpine
-    environment:
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    env_file:
+      - ./secrets/postgres.env
     ports:
       - 5432:5432
     volumes:
@@ -31,26 +29,9 @@ services:
   web:
     build: ./src
     image: registry.gitlab.com/rushil0195/rentality/web:latest
-    environment:
-      SECRET_KEY: "${SECRET_KEY}"
-      DELETED_USER_PASS: "${DELETED_USER_PASS}"
-      SENDGRID_API_KEY: "${SENDGRID_API_KEY}"
-      DEBUG: "${DEBUG}"
-      OAUTH_DETAILS: "${OAUTH_DETAILS}"
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST: "${POSTGRES_HOST}"
-      OAUTH_FACEBOOK_SECRET: "${OAUTH_FACEBOOK_SECRET}"
-      OAUTH_FACEBOOK_CLIENT_ID: "${OAUTH_FACEBOOK_CLIENT_ID}"
-      OAUTH_GOOGLE_SECRET: "${OAUTH_GOOGLE_SECRET}"
-      OAUTH_GOOGLE_CLIENT_ID: "${OAUTH_GOOGLE_CLIENT_ID}"
-      OAUTH_TWITTER_SECRET: "${OAUTH_TWITTER_SECRET}"
-      OAUTH_TWITTER_CLIENT_ID: "${OAUTH_TWITTER_CLIENT_ID}"
-      OAUTH_INSTAGRAM_SECRET: "${OAUTH_INSTAGRAM_SECRET}"
-      OAUTH_INSTAGRAM_CLIENT_ID: "${OAUTH_INSTAGRAM_CLIENT_ID}"
-      OAUTH_PINTEREST_SECRET: "${OAUTH_PINTEREST_SECRET}"
-      OAUTH_PINTEREST_CLIENT_ID: "${OAUTH_PINTEREST_CLIENT_ID}"
+    env_file:
+      - ./secrets/web.env
+      - ./secrets/postgres.env
     volumes:
       - static:/rentality/static_dev/static_root
       - media:/rentality/static_dev/media_root
