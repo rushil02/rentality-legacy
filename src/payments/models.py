@@ -5,7 +5,7 @@ class AssemblyUserMixin(object):
     
     @classmethod
     def get_users(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/users')
+        response = cls.requests.get('{}/{}/users'.format(cls.api_endpoint, id))
         return AssemblyUser.load_response_for_one_object('users', response)
 
 
@@ -34,7 +34,7 @@ class BankAccount(AssemblyUserMixin, BaseAssemblyModel):
 
     @classmethod
     def send_penny_amount(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/penny_send')
+        response = cls.requests.patch('{}/{}/penny_send'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     def verify_penny_amount(cls, id, amount_1, amount_2):
@@ -42,7 +42,7 @@ class BankAccount(AssemblyUserMixin, BaseAssemblyModel):
             "amount_1": amount_1,
             "amount_2": amount_2
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/penny_verify', data=data)
+        response = cls.requests.patch('{}/{}/penny_verify'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
 
 
@@ -75,22 +75,22 @@ class AssemblyUser(BaseAssemblyModel):
 
     @classmethod
     def get_bank_account(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/bank_accounts')
+        response = cls.requests.get('{}/{}/bank_accounts'.format(cls.api_endpoint, id))
         return BankAccount.load_response_for_one_object('bank_accounts', response)
     
     @classmethod
     def get_card_account(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/card_accounts')
+        response = cls.requests.get('{}/{}/card_accounts'.format(cls.api_endpoint, id))
         return CardAccount.load_response_for_one_object('card_accounts', response)
     
     @classmethod
     def get_paypal_account(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/paypal_accounts')
+        response = cls.requests.get('{}/{}/paypal_accounts'.format(cls.api_endpoint, id))
         return PayPalAccount.load_response_for_one_object('paypal_accounts', response)
     
     @classmethod
     def get_wallet_account(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/wallet_accounts')
+        response = cls.requests.get('{}/{}/wallet_accounts'.format(cls.api_endpoint, id))
         return WalletAccount.load_response_for_one_object('wallet_accounts', response)
     
     @classmethod
@@ -98,17 +98,17 @@ class AssemblyUser(BaseAssemblyModel):
         data = {
             'account_id': account_id
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/disbursement_account', data=data)
+        response = cls.requests.patch('{}/{}/disbursement_account'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def get_user_items(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/items')
+        response = cls.requests.get('{}/{}/items'.format(cls.api_endpoint, id))
         return Item.load_response_for_many_objects('items', response)
     
     @classmethod
     def set_verified(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}?type=identity_verified')
+        response = cls.requests.patch('{}/{}?type=identity_verified'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
 
 
@@ -133,7 +133,7 @@ class CardAccount(AssemblyUserMixin, BaseAssemblyModel):
 
     @classmethod
     def verify(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/verify')
+        response = cls.requests.patch('{}/{}/verify'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
 
 
@@ -170,12 +170,12 @@ class Charge(BaseAssemblyModel):
 
     @classmethod
     def get_buyer(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/buyers')
+        response = cls.requests.get('{}/{}/buyers'.format(cls.api_endpoint, id))
         return AssemblyUser.load_response_for_one_object('users', response)
     
     @classmethod
     def get_charge_status(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/status')
+        response = cls.requests.get('{}/{}/status'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
 
 
@@ -198,12 +198,12 @@ class Callback(BaseAssemblyModel):
 
     @classmethod
     def get_responses(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/responses')
+        response = cls.requests.get('{}/{}/responses'.format(cls.api_endpoint, id))
         return cls.load_response_for_many_objects('callback_responses', response)
     
     @classmethod
     def get_responses(cls, id, response_id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/responses/{response_id}')
+        response = cls.requests.get('{}/{}/responses/{}'.format(cls.api_endpoint, id, response_id))
         return cls.load_response_for_one_object('callback_responses', response)
 
 
@@ -276,47 +276,47 @@ class Item(BaseAssemblyModel):
 
     @classmethod
     def get_status(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/status')
+        response = cls.requests.get('{}/{}/status'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def get_buyer(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/buyers')
+        response = cls.requests.get('{}/{}/buyers'.format(cls.api_endpoint, id))
         return AssemblyUser.load_response_for_one_object('users', response)
     
     @classmethod
     def get_seller(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/sellers')
+        response = cls.requests.get('{}/{}/sellers'.format(cls.api_endpoint, id))
         return AssemblyUser.load_response_for_one_object('users', response)
     
     @classmethod
     def get_fees(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/fees')
+        response = cls.requests.get('{}/{}/fees'.format(cls.api_endpoint, id))
         return Fee.load_response_for_many_objects('fees', response)
     
     @classmethod
     def get_wire_details(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/wire_details')
+        response = cls.requests.get('{}/{}/wire_details'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def get_bpay_details(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/bpay_details')
+        response = cls.requests.get('{}/{}/bpay_details'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def get_transactions(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/transactions')
+        response = cls.requests.get('{}/{}/transactions'.format(cls.api_endpoint, id))
         return Transaction.load_response_for_many_objects('transactions', response)
     
     @classmethod
     def get_batch_transactions(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/batch_transactions')
+        response = cls.requests.get('{}/{}/batch_transactions'.format(cls.api_endpoint, id))
         return Transaction.load_response_for_many_objects('batch_transactions', response)
     
     @classmethod
     def request_payment(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_payment')
+        response = cls.requests.patch('{}/{}/request_payment'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -326,7 +326,7 @@ class Item(BaseAssemblyModel):
             'ip_address': ip_address,
             'device_id': device_id
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/make_payment', data=data)
+        response = cls.requests.patch('{}/{}/make_payment'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -334,7 +334,7 @@ class Item(BaseAssemblyModel):
         data = {
             'release_amount': release_amount
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_release', data=data)
+        response = cls.requests.patch('{}/{}/request_release'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -343,7 +343,7 @@ class Item(BaseAssemblyModel):
             'release_amount': release_amount,
             'flag_release': flag_release
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/release_payment', data=data)
+        response = cls.requests.patch('{}/{}/release_payment'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -352,7 +352,7 @@ class Item(BaseAssemblyModel):
             'refund_amount': refund_amount,
             'refund_message': refund_message
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_refund', data=data)
+        response = cls.requests.patch('{}/{}/request_refund'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -361,12 +361,12 @@ class Item(BaseAssemblyModel):
             'refund_amount': refund_amount,
             'refund_message': refund_message
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/refund', data=data)
+        response = cls.requests.patch('{}/{}/refund'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def decline_refund(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/decline_refund')
+        response = cls.requests.patch('{}/{}/decline_refund'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
 
@@ -375,7 +375,7 @@ class Item(BaseAssemblyModel):
         data = {
             'user_id': user_id
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/raise_dispute')
+        response = cls.requests.patch('{}/{}/raise_dispute'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -384,7 +384,7 @@ class Item(BaseAssemblyModel):
             'user_id': user_id,
             'dispute_message': dispute_message
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_resolve_dispute', data=data)
+        response = cls.requests.patch('{}/{}/request_resolve_dispute'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -393,7 +393,7 @@ class Item(BaseAssemblyModel):
             'user_id': user_id,
             'dispute_message': dispute_message
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/resolve_dispute', data=data)
+        response = cls.requests.patch('{}/{}/resolve_dispute'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -402,32 +402,32 @@ class Item(BaseAssemblyModel):
             'user_id': user_id,
             'dispute_message': dispute_message
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/escalate_dispute', data=data)
+        response = cls.requests.patch('{}/{}/escalate_dispute'.format(cls.api_endpoint, id), data=data)
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def acknowledge_wire_transfer(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/acknowledge_wire')
+        response = cls.requests.patch('{}/{}/acknowledge_wire'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def revert_wire_transfer(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/revert_wire')
+        response = cls.requests.patch('{}/{}/revert_wire'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def cancel(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/cancel')
+        response = cls.requests.patch('{}/{}/cancel'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def send_tax_invoice(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/send_tax_invoice')
+        response = cls.requests.patch('{}/{}/send_tax_invoice'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def request_tax_invoice(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/request_tax_invoice')
+        response = cls.requests.patch('{}/{}/request_tax_invoice'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
@@ -435,17 +435,17 @@ class Item(BaseAssemblyModel):
         data = {
             'account_id': account_id
         }
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/authorize_payment')
+        response = cls.requests.patch('{}/{}/authorize_payment'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def capture_payment(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/capture_payment')
+        response = cls.requests.patch('{}/{}/capture_payment'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def void_payment(cls, id):
-        response = cls.requests.patch(f'{cls.api_endpoint}/{id}/void_payment')
+        response = cls.requests.patch('{}/{}/void_payment'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
 
 
@@ -472,27 +472,27 @@ class Transaction(AssemblyUserMixin, BaseAssemblyModel):
 
     @classmethod
     def get_fees(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/fees')
+        response = cls.requests.get('{}/{}/fees'.format(cls.api_endpoint, id))
         return Fee.load_response_for_one_object('fees', response)
     
     @classmethod
     def get_wallet_accounts(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/wallet_accounts')
+        response = cls.requests.get('{}/{}/wallet_accounts'.format(cls.api_endpoint, id))
         return WalletAccount.load_response_for_one_object('wallet_accounts', response)
     
     @classmethod
     def get_bank_accounts(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/bank_accounts')
+        response = cls.requests.get('{}/{}/bank_accounts'.format(cls.api_endpoint, id))
         return cls.load_response_for_one_object(cls.response_header, response)
     
     @classmethod
     def get_card_accounts(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/card_accounts')
+        response = cls.requests.get('{}/{}/card_accounts'.format(cls.api_endpoint, id))
         return CardAccount.load_response_for_one_object('card_accounts', response)
     
     @classmethod
     def get_paypal_accounts(cls, id):
-        response = cls.requests.get(f'{cls.api_endpoint}/{id}/paypal_accounts')
+        response = cls.requests.get('{}/{}/paypal_accounts'.format(cls.api_endpoint, id))
         return PayPalAccount.load_response_for_one_object('paypal_accounts', response)
 
 
@@ -507,7 +507,7 @@ class WalletAccount(AssemblyUserMixin, BaseAssemblyModel):
             'account_id': account_id,
             'amount': amount
         }
-        response = cls.requests.post(f'{cls.api_endpoint}/{id}/withdraw', data=data)
+        response = cls.requests.post('{}/{}/withdraw'.format(cls.api_endpoint, id), data=data)
         return Disbursement.load_response_for_one_object('disbursements', response)
     
     @classmethod
@@ -516,7 +516,7 @@ class WalletAccount(AssemblyUserMixin, BaseAssemblyModel):
             'account_id': account_id,
             'amount': amount
         }
-        response = cls.requests.post(f'{cls.api_endpoint}/{id}/deposit', data=data)
+        response = cls.requests.post('{}/{}/deposit'.format(cls.api_endpoint, id), data=data)
         return Disbursement.load_response_for_one_object('disbursements', response)
 
 
