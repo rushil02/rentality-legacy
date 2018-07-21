@@ -14,7 +14,7 @@ def get_env_var(var_name):
             raise FileNotFoundError
     except:
         try:
-            secret_data = dotenv_values('/run/secrets/flask_secret')
+            secret_data = dotenv_values('/run/secrets/WEB_ENV')
             return secret_data[var_name]
         except:
             return os.environ[var_name]
