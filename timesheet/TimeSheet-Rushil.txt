@@ -59,3 +59,4 @@ Date        Day         Check-in        Check-out       Time
 19/05/18    Saturday    11.00           16.30           5.30
 19/05/18    Saturday    19.00           23.30           4.30
 20/05/18    Sunday      04.00           08.30           4.30
+19/06/18    Tuesday     ---- Paid [@ $20.00] ----     -70.00
