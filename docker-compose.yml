@@ -1,9 +1,9 @@
-version: '3'
+version: '3.6'
 services:
   nginx:
     image: nginx:alpine
     ports:
-      - "${NGINX_PORT}:80"
+      - "8000:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - static:/static
@@ -12,14 +12,16 @@ services:
       - web
   postgres:
     image: mdillon/postgis:10-alpine
-    restart: unless-stopped
     environment:
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
     ports:
       - 5432:5432
     volumes:
+      - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
+      - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
+      - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
       - pgdata:/var/lib/postgresql/data
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
@@ -31,29 +33,11 @@ services:
       - 9200:9200
   web:
     build: ./src
-    environment:
-      SECRET_KEY: "${SECRET_KEY}"
-      DELETED_USER_PASS: "${DELETED_USER_PASS}"
-      SENDGRID_API_KEY: "${SENDGRID_API_KEY}"
-      DEBUG: "${DEBUG}"
-      OAUTH_DETAILS: "${OAUTH_DETAILS}"
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST: "${POSTGRES_HOST}"
-      OAUTH_FACEBOOK_SECRET: "${OAUTH_FACEBOOK_SECRET}"
-      OAUTH_FACEBOOK_CLIENT_ID: "${OAUTH_FACEBOOK_CLIENT_ID}"
-      OAUTH_GOOGLE_SECRET: "${OAUTH_GOOGLE_SECRET}"
-      OAUTH_GOOGLE_CLIENT_ID: "${OAUTH_GOOGLE_CLIENT_ID}"
-      OAUTH_TWITTER_SECRET: "${OAUTH_TWITTER_SECRET}"
-      OAUTH_TWITTER_CLIENT_ID: "${OAUTH_TWITTER_CLIENT_ID}"
-      OAUTH_INSTAGRAM_SECRET: "${OAUTH_INSTAGRAM_SECRET}"
-      OAUTH_INSTAGRAM_CLIENT_ID: "${OAUTH_INSTAGRAM_CLIENT_ID}"
-      OAUTH_PINTEREST_SECRET: "${OAUTH_PINTEREST_SECRET}"
-      OAUTH_PINTEREST_CLIENT_ID: "${OAUTH_PINTEREST_CLIENT_ID}"
+    image: registry.gitlab.com/rushil0195/rentality/web:latest
     volumes:
       - static:/rentality/static_dev/static_root
       - media:/rentality/static_dev/media_root
+      - ./secrets:/run/secrets
     depends_on:
       - postgres
       - elasticsearch
