@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# FIXME: https://docs.djangoproject.com/en/2.0/ref/contrib/gis/install/geolibs/
+
 apk add --no-cache linux-headers build-base
 wget http://download.osgeo.org/geos/geos-3.6.2.tar.bz2
 tar xjf geos-3.6.2.tar.bz2
