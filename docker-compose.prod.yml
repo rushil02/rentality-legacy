@@ -1,11 +1,49 @@
-version: '3'
+version: '3.6'
 services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - static:/static
+      - media:/media
+    depends_on:
+      - web
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
   postgres:
+    image: mdillon/postgis:10-alpine
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
+    ports:
+      - 5432:5432
+    secrets:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     deploy:
       placement:
         constraints:
           - node.role == manager
   web:
+    image: registry.gitlab.com/rushil0195/rentality/web:latest
+    volumes:
+      - static:/rentality/static_dev/static_root
+      - media:/rentality/static_dev/media_root
+    depends_on:
+      - postgres
+    secrets:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - WEB_ENV
     deploy:
       # Number of Replicas in production
       replicas: 3
@@ -29,8 +67,17 @@ services:
         parallelism: 1
         delay: 10s
         failure_action: rollback
-  nginx:
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
+secrets:
+  POSTGRES_USER:
+    file: ./secrets/POSTGRES_USER
+  POSTGRES_PASSWORD:
+    file: ./secrets/POSTGRES_PASSWORD
+  POSTGRES_DB:
+    file: ./secrets/POSTGRES_DB
+  WEB_ENV:
+    file: ./secrets/WEB_ENV
+volumes: 
+  pgdata:
+  esdata:
+  static:
+  media:
