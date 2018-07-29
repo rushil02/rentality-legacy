@@ -11,13 +11,13 @@ services:
     depends_on:
       - web
   postgres:
-    image: mdillon/postgis:10-alpine
+    image: mdillon/postgis:9.5-alpine
     environment:
       POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
       POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
     ports:
-      - 5432:5432
+      - 5431:5432
     volumes:
       - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
       - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
@@ -38,9 +38,12 @@ services:
       - static:/rentality/static_dev/static_root
       - media:/rentality/static_dev/media_root
       - ./secrets:/run/secrets
+      - ./src:/rentality/src
     depends_on:
       - postgres
       - elasticsearch
+    ports:
+      - "8001:8000"
 volumes: 
   pgdata:
   esdata:

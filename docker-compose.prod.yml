@@ -15,7 +15,7 @@ services:
         constraints:
           - node.role == manager
   postgres:
-    image: mdillon/postgis:10-alpine
+    image: mdillon/postgis:9.5-alpine
     environment:
       POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
