@@ -6,6 +6,7 @@ services:
       - 80:80
     volumes:
       - ./nginx:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
       - static:/static
       - media:/media
     depends_on:
