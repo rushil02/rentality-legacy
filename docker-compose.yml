@@ -7,8 +7,8 @@ services:
     volumes:
       - ./nginx/config/common.conf:/etc/nginx/conf.d/common.conf
       - ./nginx/config/localhost.conf:/etc/nginx/conf.d/localhost.conf
-      - static:/static
-      - media:/media
+      - ./static_dev/static_root:/static
+      - ./static_dev/media_root:/media
     depends_on:
       - web
   postgres:
@@ -36,8 +36,8 @@ services:
     build: ./src
     image: registry.gitlab.com/rushil0195/rentality/web:latest
     volumes:
-      - static:/rentality/static_dev/static_root
-      - media:/rentality/static_dev/media_root
+      - ./static_dev/static_root:/rentality/static_dev/static_root
+      - ./static_dev/media_root:/rentality/static_dev/media_root
       - ./secrets:/run/secrets
       - ./src:/rentality/src
     depends_on:
@@ -48,5 +48,3 @@ services:
 volumes: 
   pgdata:
   esdata:
-  static:
-  media:
