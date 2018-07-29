@@ -5,7 +5,8 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./nginx/config/localhost.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/config/common.conf:/etc/nginx/conf.d/common.conf
+      - ./nginx/config/localhost.conf:/etc/nginx/conf.d/localhost.conf
       - static:/static
       - media:/media
     depends_on:
