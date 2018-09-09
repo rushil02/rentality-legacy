@@ -57,7 +57,7 @@ class BaseAssemblyModel(object):
         objs = []
         for new_obj in data:
             obj = cls()
-            for key, value in data.items():
+            for key, value in new_obj.items():
                 setattr(obj, key, value)
             objs.append(obj)
         return objs
@@ -81,7 +81,7 @@ class BaseAssemblyModel(object):
         return data
 
     def save(self):
-        cls.check_for_allowed_methods('save')
+        type(self).check_for_allowed_methods('save')
         data = self.get_field_data()
         response = self.requests.post('{}/'.format(self.api_endpoint), data)
         return type(self).load_response_for_one_object(self.response_header, response)
@@ -98,9 +98,8 @@ class BaseAssemblyModel(object):
         response = cls.requests.get(cls.api_endpoint)
         return cls.load_response_for_one_object(cls.response_header, response)
     
-    @classmethod
-    def update(cls, id):
-        cls.check_for_allowed_methods('update')
+    def update(self):
+        type(self).check_for_allowed_methods('update')
         data = self.get_field_data()
-        response = self.requests.patch('{}/{}'.format(self.api_endpoint, id), data)
-        return cls.load_response_for_one_object(cls.response_header, response)
+        response = self.requests.patch('{}/{}'.format(self.api_endpoint, getattr(self, 'id')), data)
+        return type(self).load_response_for_one_object(self.response_header, response)
