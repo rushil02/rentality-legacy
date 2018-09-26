@@ -5,7 +5,8 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/config/common.conf:/etc/nginx/conf.d
+      - ./nginx/config/production.conf:/etc/nginx/conf.d
       - ./nginx/certs:/etc/nginx/certs
       - static:/static
       - media:/media
