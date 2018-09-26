@@ -2,7 +2,9 @@
 <html>
 <head>
     {% block head_title %}
-        <title>Rentality - Creating a Global Network for Medium term home rentals</title>
+        <title>{% block head_title_add %}
+
+        {% endblock head_title_add %}Rentality - Creating a Global Network for Medium term home rentals</title>
     {% endblock head_title %}
 
     {% block head_scripts %}
@@ -13,7 +15,13 @@
     <meta charset="utf-8"/>
 
     {#    FIXME - Change meta #}
-    <meta name="keywords" content="real estate, responsive, retina ready, modern html5 template, bootstrap, css3"/>
+    {% block keyword_meta_main %}
+
+        <meta name="keywords" content="real estate, rentals, houses for rent, apartments for rent, share house, flatmate,
+     homes for rent, rental homes, {% block keyword_meta_add %} {% endblock keyword_meta_add %}"/>
+
+    {% endblock keyword_meta_main %}
+
     <meta name="description" content="Creating a Global Network for Medium term home rentals"/>
     <meta name="author" content="Rentality"/>
     {#    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>#}
