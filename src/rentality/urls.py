@@ -33,6 +33,7 @@ urlpatterns = [
     path('', include('user_custom.urls')),
     path('accounts/', include('allauth.urls')),
     path('property/', include('house.urls')),
+    path('blogs/', include('blog.urls')),
 
     # TODO: enable notifications
     # path('ess/', include('essentials.urls')),

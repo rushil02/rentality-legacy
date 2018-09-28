@@ -73,7 +73,8 @@
                             </div>
                             <ul class="amenities">
                                 <li>
-                                    <i class="fa fa-user fa-fw"></i> {{ hp.temp_location_display|default:"Unkown"|title }}
+                                    {#                                    FIXME: supposed to show preferred locations#}
+                                    <i class="fa fa-user fa-fw"></i> {{ hp.tenant.user.get_full_name|default:"Unkown"|title }}
                                 </li>
                             </ul>
                         </div>
