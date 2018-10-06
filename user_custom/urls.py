@@ -22,4 +22,7 @@ urlpatterns = [
     path('my-shortlist/', shortlist_view, name='view_shortlist'),
 
     path('add-details/', SignUpInfoWizard.as_view(), name='account_creation'),
+
+    # TODO: remove later (or create seperate package, shouldn't be here; immediate requirement defies project structure
+    path('vfxr', TemplateView.as_view(template_name='others/validation_email_1.html'), name='validation_email_1')
 ]
