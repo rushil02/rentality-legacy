@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block js_script %}
-    window.onload = function() {
-    // similar behavior as an HTTP redirect
-    window.location.replace("https://rentality.com.au");
-    }
+    <script>
+        window.onload = function () {
+            // similar behavior as an HTTP redirect
+            window.location.replace("https://rentality.com.au");
+        }
+    </script>
 
 {% endblock %}
