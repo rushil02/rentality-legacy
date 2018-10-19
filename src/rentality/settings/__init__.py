@@ -184,7 +184,7 @@ LOGIN_URL = '/accounts/login'
 
 # Django all-auth
 # http://django-allauth.readthedocs.io/en/latest/configuration.html
-# ACCOUNT_ADAPTER = 'custom_package.all_auth_adapter.CustomAccountAdapter'
+ACCOUNT_ADAPTER = 'user_custom.adapter.CustomAccountAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Login field
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # User has to click a button on the redirected page
 ACCOUNT_USER_MODEL_USERNAME_FIELD=None
