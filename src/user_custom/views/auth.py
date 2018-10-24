@@ -29,7 +29,7 @@ def welcome_auth_user(request):
         'house_pref': HousePreference.active_objects.all().order_by('-id')[:5],
         'houses': House.active_objects.all().order_by('-id')[:5]
     }
-    return render(request, 'user_common/welcome_auth_user.html', context)
+    return render(request, 'user/welcome_auth.html', context)
 
 
 def welcome(request):
@@ -37,7 +37,7 @@ def welcome(request):
         'house_pref': HousePreference.active_objects.all().order_by('-id')[:5],
         'houses': House.active_objects.all().order_by('-id')[:5]
     }
-    return render(request, 'user_common/welcome.html', context)
+    return render(request, 'user/welcome.html', context)
 
 
 def send_registration_email(user):

@@ -8,7 +8,6 @@ from user_custom.views import set_timezone, check_user, \
 app_name = 'user'
 
 urlpatterns = [
-    # path('temp', TemplateView.as_view(template_name='temp-mig/thread_messages.html'), name='test_templates'),  # FIXME: remove later
     path('', check_user, name='home_page'),
     path('accounts/signup/', CustomSignupView.as_view(), name="account_signup"),
     path('notifications', Notifications.as_view(), name='notifications'),
