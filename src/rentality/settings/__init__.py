@@ -20,19 +20,23 @@ from .common import *
 SECRET_KEY = get_env_var('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_env_var('DEBUG')
+def _get_debug_val():
+    debug = get_env_var('DEBUG')
+    if debug == "True":
+        return True
+    elif debug == "False":
+        return False
+    else:
+        raise ValueError('Django DEBUG value is improperly configured')
 
-ALLOWED_HOSTS = ['.rentality.com.au', ]
+
+DEBUG = _get_debug_val()
 
 # Distributed settings
 if DEBUG:
     from .development import *
-
-    ALLOWED_HOSTS += ['127.0.0.1', 'localhost']
 else:
     from .production import *
-
-    ALLOWED_HOSTS += ['128.199.117.242', '167.99.77.213']
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -69,6 +73,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'easy_thumbnails',
     'formtools',
+    'django_summernote',
 
     # all-auth providers
     'allauth.socialaccount.providers.facebook',
@@ -106,7 +111,7 @@ ROOT_URLCONF = 'rentality.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates', 'v2')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -161,7 +166,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "static", "v2"),
 )
 
 # User Uploaded files
@@ -271,13 +276,30 @@ CITIES_DATA_DIR = os.path.join(LIB_PATH, 'geo_data')
 CITIES_VALIDATE_POSTAL_CODES = False
 
 # Debug toolbar settings
-INTERNAL_IPS = ['localhost', '127.0.0.1']
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda show_toolbar: True if DEBUG else False,
+}
 
 # FormTools for Wizard - file storage
 FORMTOOLS_STORAGE_LOCATION = os.path.join(MEDIA_ROOT, 'temp-wizard-storage')
 
 DEFAULT_FROM_EMAIL = 'support@rentality.com.au'
 
+# Payment Gateway - Assembly
 ASSEMBLY_PAYMENTS_KEY = get_env_var('ASSEMBLY_PAYMENTS_KEY')
 ASSEMBLY_PAYMENTS_SECRET = get_env_var('ASSEMBLY_PAYMENTS_SECRET')
 ASSEMBLY_PAYMENTS_IS_PROD = get_env_var('ASSEMBLY_PAYMENTS_IS_PROD')
+
+# Logging information [External logger - Sentry]
+if not DEBUG:  # only active in production
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn="https://5b4980d5a06c4ce4b0cd455fe04b8c2c@sentry.io/1291192",
+        integrations=[DjangoIntegration()],
+        debug=DEBUG
+    )
+
+# SummerNote (WYSIWYG editor)
+SUMMERNOTE_THEME = 'bs4'

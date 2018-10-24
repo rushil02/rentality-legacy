@@ -6,6 +6,9 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField, DateRangeField
 from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
+from twisted.web.proxy import Proxy
+
+from custom_package.privacy import ModelWithPrivacy
 
 
 class TenantProfile(models.Model):
@@ -24,7 +27,7 @@ class ActiveHousePreferenceManager(models.Manager):
         return super().get_queryset().filter(status__in=['P', 'S'])
 
 
-class HousePreference(models.Model):
+class HousePreference(ModelWithPrivacy):
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.CASCADE)
     max_budget = models.PositiveIntegerField(default=0)
     locations = models.ManyToManyField('cities.City', blank=True)
@@ -47,6 +50,28 @@ class HousePreference(models.Model):
 
     objects = models.Manager()
     active_objects = ActiveHousePreferenceManager()
+
+    class PrivacySetting(ModelWithPrivacy.PrivacySetting):
+        options_list = [
+            (
+                ('A', 'All'),
+                ('B', 'Application and Host'),
+                ('H', 'Host only'),
+                ('P', 'Private')
+            ),
+        ]
+
+        fields = {
+            'tags': {
+                'default': options_list[0][0],
+                'options': options_list[0],
+                'help_text': "Privacy options for tags"
+            },
+            'description': {
+                'default': options_list[0][0],
+                'options': options_list[0]
+            }
+        }
 
     def __str__(self):
         return "%s" % self.tenant

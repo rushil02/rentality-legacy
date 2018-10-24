@@ -21,10 +21,12 @@ django-filter==1.1.0
 django-formtools==2.1
 django-model-utils==3.1.1
 django-private-chat==0.1.8
+django-summernote==0.8.10.0
 djangorestframework==3.7.7
 easy-thumbnails==2.5
 elasticsearch==6.1.1
 elasticsearch-dsl==6.1.0
+gunicorn==19.9.0
 hyperlink==18.0.0
 idna==2.6
 incremental==17.5.0
@@ -41,6 +43,7 @@ python3-openid==3.1.0
 pytz==2018.4
 requests==2.18.4
 requests-oauthlib==0.8.0
+sentry-sdk==0.3.6
 six==1.11.0
 sqlparse==0.2.4
 swapper==1.1.0

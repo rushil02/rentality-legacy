@@ -25,6 +25,8 @@ urlpatterns = [
     path('db/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
     path('api-auth/', include('rest_framework.urls')),
+    path('summernote/', include('django_summernote.urls')),
+
     path('es/', include('elastic_search.urls')),
     path('te/', include('tenant.urls')),
     path('la/', include('landlord.urls')),

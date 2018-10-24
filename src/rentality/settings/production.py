@@ -19,3 +19,5 @@ DATABASES = {
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "static_root")
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "media_root")
+
+ALLOWED_HOSTS = ['.rentality.com.au', '128.199.117.242', '167.99.77.213']
