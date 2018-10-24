@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-
+from user_custom.views import not_found
 from rentality.sitemap import sitemaps
 
 urlpatterns = [
@@ -33,6 +33,8 @@ urlpatterns = [
     path('st/', include('staff.urls')),
     path('admin/', include('admin_custom.urls')),
     path('', include('user_custom.urls')),
+    path('accounts/email/', not_found),
+    path('accounts/confirm-email/', not_found),
     path('accounts/', include('allauth.urls')),
     path('property/', include('house.urls')),
     path('blogs/', include('blog.urls')),
@@ -60,3 +62,5 @@ if settings.DEBUG:
 
 admin.site.site_header = 'Rentality Administration Panel'
 admin.site.site_title = 'Rentality'
+
+handler404 = 'user_custom.views.not_found'
