@@ -1,0 +1,109 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- GA script start -->
+    {% block google_analytics %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120364249-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+
+            gtag('config', 'UA-120364249-1');
+        </script>
+    {% endblock google_analytics %}
+    <!-- GA script end -->
+
+    <!-- meta start -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    {% block head_title %}
+        <title>
+            {% block head_title_add %}
+            {% endblock head_title_add %}
+            Rentality - Creating a Global Network for Medium term home rentals
+        </title>
+    {% endblock head_title %}
+
+    <meta name="description"
+          content="{% block page_description %} {% endblock %}"
+    >
+
+    <meta name="keywords"
+          content="
+          {% block keywords_meta %}
+          rentals, houses for rent, apartments for rent, share house, flatmate,
+          homes for rent, rental homes,
+          {% block keyword_meta_add %} {% endblock keyword_meta_add %}
+          {% endblock %}"
+    >
+    <!-- meta end -->
+
+    <!-- style & scripts start -->
+    {% block head_scripts %}
+        {% block head_css %}
+            <!-- css start -->
+            <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext"
+                  rel="stylesheet"
+                  type="text/css">
+            <link href="{% static 'style/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+            <link href="{% static 'style/datepicker.min.css' %}" rel="stylesheet" type="text/css">
+            <link href="{% static 'plugin/owl-carousel/owl.carousel.min.css' %}" rel="stylesheet" type="text/css">
+            <link href="{% static 'style/application.css' %}" rel="stylesheet" type="text/css">
+            <!-- css end -->
+        {% endblock %}
+
+        {% block head_js %}
+            <!-- script start -->
+            <script src="{% static 'script/jquery-3.3.1.min.js' %}"></script>
+            <script src="{% static 'script/popper.min.js' %}"></script>
+            <script src="{% static 'script/bootstrap.min.js' %}"></script>
+            <script src="{% static 'script/datepicker.min.js' %}"></script>
+            <script src="{% static 'script/owl.carousel.min.js' %}"></script>
+            <script src="{% static 'script/application.js' %}"></script>
+            <!-- script end -->
+        {% endblock %}
+    {% endblock head_scripts %}
+    {% block additional_scripts %}
+
+    {% endblock %}
+    <!-- style & scripts start -->
+</head>
+<body>
+{% block body %}
+    <!-- navbar start -->
+    {% block navbar %}
+        {% include 'components/navbar/base.html' %}
+    {% endblock navbar %}
+    <!-- navbar end -->
+
+    <!-- content start -->
+    {% block content %}
+
+    {% endblock content %}
+    <!-- content end -->
+
+    <!-- footer start -->
+    {% block footer %}
+        {% include 'components/footer/base.html' %}
+    {% endblock footer %}
+    <!-- footer end -->
+{% endblock body %}
+
+<!-- page scripts start -->
+{% block page_scripts %}
+
+{% endblock %}
+<!-- page scripts end -->
+
+</body>
+</html>

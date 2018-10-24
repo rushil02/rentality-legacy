@@ -1,0 +1,593 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block body %}
+    <!-- mobile menu start -->
+    <div class="mobile-menu"></div>
+    <div class="mobile-menu-content"></div>
+    <!-- mobile menu end -->
+    <!-- menu start -->
+    <div class="menu">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-9 col-md-4 col-lg-3 col-xl-4 left">
+                    <a href="#" class="logo"></a>
+                </div>
+                <div class="col-3 col-md-8 col-lg-6 col-xl-5 center align-self-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
+                        <li class="list-inline-item"><a href="#">Blog</a></li>
+                        <li class="list-inline-item"><a href="#">How Its Work</a></li>
+                        <li class="list-inline-item"><a href="#">List Your Home</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-12 col-lg-3 col-xl-3 right align-self-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item message">
+                            <div class="dropdown">
+                                <a href="#" data-toggle="dropdown">Message<span>3</span></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="#" class="dropdown-item active"><img src="static/image/profile.png" alt=""
+                                                                                  src="">Jason
+                                        Bourne<span>3 days ago</span></a>
+                                    <a href="#" class="dropdown-item"><img src="static/image/profile.png" alt="" src="">Jessica
+                                        Alba<span>1 hours ago</span></a>
+                                    <a href="#" class="dropdown-item"><img src="static/image/profile.png" alt="" src="">Shakira<span>1
+                                            monts ago</span></a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-inline-item notification">
+                            <div class="dropdown">
+                                <a href="#" data-toggle="dropdown">Notification</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="#" class="dropdown-item">Your account has been
+                                        deleted.<span>3 days ago</span></a>
+                                    <a href="#" class="dropdown-item">Your account has been
+                                        approved.<span>1 hours ago</span></a>
+                                    <a href="#" class="dropdown-item">Your account has been
+                                        approved.<span>1 monts ago</span></a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-inline-item person">
+                            <a href="#">
+                                <div class="image"><img src="static/image/profile.png" class="w-100"></div>
+                                Yılmaz SATTI
+                            </a>
+                        </li>
+                        <li class="list-inline-item setting">
+                            <div class="dropdown">
+                                <a href="#" data-toggle="dropdown">Setting</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="#" class="dropdown-item">Settings</a>
+                                    <a href="#" class="dropdown-item">My Profile</a>
+                                    <a href="#" class="dropdown-item">Change Password</a>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- menu end -->
+    <!-- header start -->
+    <div class="header d-flex">
+        <div class="w-100 align-self-center">
+            <div class="container">
+                <h1 class="title">Welcome to your <span>Home<span>/</span>s</span></h1>
+                <h2 class="sub-title">Creating a Global Network for Medium Term Home Rentals</h2>
+            </div>
+        </div>
+        <div class="search">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-2"></div>
+                    <div class="col-12 col-xl-8">
+                        <div class="detail">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input type="text" name="" class="form-control marker"
+                                           placeholder="City, State, Post code">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="" class="form-control date" placeholder="Start Date"
+                                           readonly
+                                           data-toggle="datepicker">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="" class="form-control date" placeholder="End Date" readonly
+                                           data-toggle="datepicker">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-link btn-block">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cities">
+                            <div id="mobile-city">
+                                <select name="mobile-city" class="form-control">
+                                    <option value="">City</option>
+                                    <option value="">Berlin</option>
+                                    <option value="">London</option>
+                                    <option value="">Vienna</option>
+                                    <option value="">Frankfurt</option>
+                                    <option value="">Zurich</option>
+                                    <option value="">Cologne</option>
+                                    <option value="">Hamburg</option>
+                                    <option value="">Dusseldorf</option>
+                                </select>
+                            </div>
+                            <div id="city">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-link active">
+                                        <input type="radio" name="city" autocomplete="off" checked>
+                                        Berlin
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        London
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Vienna
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Frankfurt
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Zurich
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Cologne
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Hamburg
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Dusseldorf
+                                    </label>
+                                    <a href="#other-city" class="btn btn-link" data-toggle="collapse">
+                                        Other city <i class="fas fa-chevron-down"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="other-city" class="collapse">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Cologne
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Hamburg
+                                    </label>
+                                    <label class="btn btn-link">
+                                        <input type="radio" name="city" autocomplete="off">
+                                        Dusseldorf
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+    <!-- bests start -->
+    <div class="bests">
+        <div class="container">
+            <h1 class="title">Best for you</h1>
+            <div class="row">
+                <div class="col-md-8">
+                    <h2 class="sub-title">We think you might be interested. You must check these. There is really great
+                        opportunity.</h2>
+                </div>
+                <div class="col-md-4 text-right align-self-end">
+                    <a href="#" class="load-more">Load More</a>
+                </div>
+            </div>
+            <div class="lists">
+                <div class="row">
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/1.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/2.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/3.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/4.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/5.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/6.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/7.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/bests/8.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- bests end -->
+    <!-- cities start -->
+    <div class="cities">
+        <div class="container">
+            <h1 class="title">Discover City Furnish apartments</h1>
+            <h2 class="sub-title">Discover the Furnished apartments in the city you want</h2>
+            <div class="big-lists">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="#" class="big-list">
+                            <div class="image">
+                                <img src="static/image/cities/1.png" class="w-100" alt="" title="">
+                                <div class="bottom">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h1>Sdney<br>Australia</h1>
+                                        </div>
+                                        <div class="col-6 align-self-center text-right">
+                                            34533
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="big-lists-right">
+                            <a href="#" class="big-list">
+                                <div class="image">
+                                    <img src="static/image/cities/2.png" class="w-100" alt="" title="">
+                                    <div class="bottom">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h1>Melbourne<br>Australia</h1>
+                                            </div>
+                                            <div class="col-6 align-self-center text-right">
+                                                1644
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="big-list">
+                                <div class="image">
+                                    <img src="static/image/cities/3.png" class="w-100" alt="" title="">
+                                    <div class="bottom">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h1>Paris<br>France</h1>
+                                            </div>
+                                            <div class="col-6 align-self-center text-right">
+                                                2865
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="#" class="load-more">Load More</a>
+                </div>
+            </div>
+            <div class="lists">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/cities/4.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/cities/5.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="#" class="list">
+                            <div class="image">
+                                <img src="static/image/cities/6.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>180 days</span></div>
+                            <div>Rent<span>150 Aud./week</span></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- cities end -->
+    <!-- logo start -->
+    <div class="logo">
+        <div class="loop owl-carousel owl-theme">
+            <div class="item">
+                <div class="list">
+                    <img src="static/image/logo/1.png" alt="" title="">
+                </div>
+            </div>
+            <div class="item">
+                <div class="list">
+                    <img src="static/image/logo/2.png" alt="" title="">
+                </div>
+            </div>
+            <div class="item">
+                <div class="list">
+                    <img src="static/image/logo/3.png" alt="" title="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- logo end -->
+    <!-- start now start -->
+    <div class="start-now">
+        <div class="container">
+            <div class="lists">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <a href="#" class="list left">
+                            <div class="image">
+                                <img src="static/image/start-now/1.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>Rent your house.</h1>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt
+                                ut labore et dolore magna aliqua.
+                            </p>
+                            <div class="text-center">
+                                <div class="btn btn-link">Start Now</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4">
+                        <a href="#" class="list right">
+                            <div class="image">
+                                <img src="static/image/start-now/2.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>We looking for a house.</h1>
+                            <p>
+                                We have a fully functional online query handling system to assist you in using our
+                                online
+                                trading platform.
+                            </p>
+                            <div class="text-center">
+                                <div class="btn btn-link">Start Now</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- start not end -->
+    <!-- color boxes start -->
+    <div class="color-boxes">
+        <div class="container">
+            <div class="lists">
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="static/image/color-boxes/1.svg" alt="" title="">
+                            </div>
+                            <h1>Total Home</h1>
+                            <p>
+                                <span class="counter">6554</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="static/image/color-boxes/2.svg" alt="" title="">
+                            </div>
+                            <h1>Active User</h1>
+                            <p>
+                                <span class="counter">16767</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="static/image/color-boxes/3.svg" alt="" title="">
+                            </div>
+                            <h1>Total Rent</h1>
+                            <p>
+                                <span class="counter">24577</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="static/image/color-boxes/4.svg" alt="" title="">
+                            </div>
+                            <h1>Satisfied Customer</h1>
+                            <p>
+                                <span class="counter">97</span>%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- color boxes end -->
+    <!-- comment start -->
+    <div class="comment">
+        <div class="capsule">
+            <div class="loop owl-carousel owl-theme">
+                <div class="item">
+                    <div class="list d-flex">
+                        <div class="align-self-center">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="image">
+                                        <img src="static/image/comment/1.png" class="w-100 rounded-circle" alt=""
+                                             title="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <h1>Miranda Kerr / Sydney -Australia</h1>
+                                    <h2>I Recommend everyone.</h2>
+                                    <p>"Hello. Very good work! I like this writer. They answered the question fully and
+                                        had
+                                        great word choice along with great examples. The level of writing is high.</p>
+                                    <div class="star x5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="list d-flex">
+                        <div class="align-self-center">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="image">
+                                        <img src="static/image/comment/2.png" class="w-100 rounded-circle" alt=""
+                                             title="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <h1>Miranda Kerr / Sydney -Australia</h1>
+                                    <h2>I Recommend everyone.</h2>
+                                    <p>"Hello. Very good work! I like this writer. They answered the question fully and
+                                        had
+                                        great word choice along with great examples. The level of writing is high.</p>
+                                    <div class="star x5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- comment end -->
+
+    <!-- footer start -->
+    {% include 'components/footer/auth.html' %}
+    <!-- footer end -->
+{% endblock body %}
+
+{% block page_scripts %}
+    <!-- counter start -->
+    <script src="{% static 'script/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'script/jquery.counterup.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.counter').counterUp({
+                delay: 10,
+                time: 1500
+            });
+        });
+    </script>
+    <!-- counter end -->
+{% endblock page_scripts %}
