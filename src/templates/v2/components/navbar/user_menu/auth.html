@@ -1,12 +1,13 @@
+{% load static %}
 <li class="list-inline-item message">
     <div class="dropdown">
         <a href="#" data-toggle="dropdown">Message<span>3</span></a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a href="#" class="dropdown-item active"><img src="static/image/profile.png" alt=""
-                                                          src="">Jason Bourne<span>3 days ago</span></a>
-            <a href="#" class="dropdown-item"><img src="static/image/profile.png" alt="" src="">Jessica
+            <a href="#" class="dropdown-item active"><img src="/static/image/profile.png" alt=""
+            >Jason Bourne<span>3 days ago</span></a>
+            <a href="#" class="dropdown-item"><img src="/static/image/profile.png" alt="">Jessica
                 Alba<span>1 hours ago</span></a>
-            <a href="#" class="dropdown-item"><img src="static/image/profile.png" alt="" src="">Shakira<span>1
+            <a href="#" class="dropdown-item"><img src="/static/image/profile.png" alt="">Shakira<span>1
                                             monts ago</span></a>
         </div>
     </div>
@@ -25,8 +26,8 @@
 </li>
 <li class="list-inline-item person">
     <a href="#">
-        <div class="image"><img src="static/image/profile.png" class="w-100"></div>
-        Yılmaz SATTI
+        <div class="image"><img src="{% static 'image/profile.png' %}" class="w-100"></div>
+        {{ request.user.get_short_name|title }}
     </a>
 </li>
 <li class="list-inline-item setting">

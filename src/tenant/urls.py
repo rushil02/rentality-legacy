@@ -1,6 +1,6 @@
 from django.urls import path
 
-from custom_package.api_utils import CityLocationAutocomplete, LocationAutocomplete
+from utils.api_utils import CityLocationAutocomplete, LocationAutocomplete
 from tenant.views import home, shortlisted_houses, info, search_tenant_page, \
     search_tenant_api, add_preference_main, add_edit_pref, mark_as_selected
 

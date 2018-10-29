@@ -158,12 +158,23 @@ $(document).ready(function () {
 
     <!-- page detail left facility start -->
 
-    setTimeout(function () {
-        var facility = $('body > .page-detail .left > .facility');
-        var facilityNormalHeight = facility.find('.hide').css('height');
+    var facility = $('body > .page-detail .left > .facility');
+    var facilityNormalHeight, facilityFullHeight;
 
+    facilityNormalHeight = facility.find('.hide').css('height');
+
+    $(window).resize(function () {
         facility.find('.hide').css('height', 'auto');
-        var facilityFullHeight = facility.find('.hide').css('height');
+        facilityFullHeight = facility.find('.hide').css('height');
+        facility.find('.hide').css('height', facilityNormalHeight);
+
+        facility.removeClass('active')
+        facility.find('.hide').animate({height: facilityNormalHeight}, 250);
+    });
+
+    setTimeout(function () {
+        facility.find('.hide').css('height', 'auto');
+        facilityFullHeight = facility.find('.hide').css('height');
         facility.find('.hide').css('height', facilityNormalHeight);
 
         facility.find('.btn').click(function () {
@@ -181,12 +192,23 @@ $(document).ready(function () {
 
     <!-- page detail left host comment start -->
 
-    setTimeout(function () {
-        var hostComment = $('body > .page-detail .left > .host-comment');
-        var hostCommentNormalHeight = hostComment.find('.hide').css('height');
+    var hostComment = $('body > .page-detail .left > .host-comment');
+    var hostCommentNormalHeight, hostCommentFullHeight;
 
+    hostCommentNormalHeight = hostComment.find('.hide').css('height');
+
+    $(window).resize(function () {
         hostComment.find('.hide').css('height', 'auto');
-        var hostCommentFullHeight = hostComment.find('.hide').css('height');
+        hostCommentFullHeight = hostComment.find('.hide').css('height');
+        hostComment.find('.hide').css('height', hostCommentNormalHeight);
+
+        hostComment.removeClass('active')
+        hostComment.find('.hide').animate({height: hostCommentNormalHeight}, 250);
+    });
+
+    setTimeout(function () {
+        hostComment.find('.hide').css('height', 'auto');
+        hostCommentFullHeight = hostComment.find('.hide').css('height');
         hostComment.find('.hide').css('height', hostCommentNormalHeight);
 
         hostComment.find('.btn').click(function () {
@@ -218,15 +240,24 @@ $(document).ready(function () {
 
     <!-- page detail left review start -->
 
-    setTimeout(function () {
-        var review = $('body > .page-detail .left > .review');
+    var review = $('body > .page-detail .left > .review');
 
-        review.find('.btn').append(' (' + review.find('.hide').find('.row').length + ')');
+    review.find('.btn').append(' (' + review.find('.hide').find('.row').length + ')');
 
-        var reviewNormalHeight = review.find('.hide').css('height');
+    var reviewNormalHeight = review.find('.hide').css('height'), reviewFullHeight;
 
+    $(window).resize(function () {
         review.find('.hide').css('height', 'auto');
-        var reviewFullHeight = review.find('.hide').css('height');
+        reviewFullHeight = review.find('.hide').css('height');
+        review.find('.hide').css('height', reviewNormalHeight);
+
+        review.removeClass('active')
+        review.find('.hide').animate({height: reviewNormalHeight}, 250);
+    });
+
+    setTimeout(function () {
+        review.find('.hide').css('height', 'auto');
+        reviewFullHeight = review.find('.hide').css('height');
         review.find('.hide').css('height', reviewNormalHeight);
 
         review.find('.btn').click(function () {
@@ -265,26 +296,151 @@ $(document).ready(function () {
 
     <!-- page detail right amount end -->
 
+    <!-- page apply now start -->
+
+    $('.page-apply-now [data-toggle="datepicker"]').datepicker({offset: 'top'});
+    $('.page-apply-now [data-toggle="datepicker"]').on('pick.datepicker', function (e) {
+        e.preventDefault();
+
+        var date = new Date(e.date);
+        month = date.toLocaleString('en-us', {month: 'short'});
+
+        $(e.currentTarget).val(month + ' ' + ('0' + date.getDay()).slice(-2) + ' ' + date.getFullYear());
+    });
+
+    <!-- page detail right date end -->
+
+    <!-- page apply now start -->
+
+    $('body > .page-apply-now .right i[data-toggle="popover"]').popover({
+        trigger: 'hover',
+        placement: 'top'
+    });
+
+    if ($('.page-apply-now .right .gallery').length > 0) {
+        $('.page-apply-now .right .gallery .loop').owlCarousel({
+            items: 3,
+            loop: true,
+            margin: 3,
+            responsive: {
+                0: {
+                    items: 1,
+                    margin: 3
+                },
+                800: {
+                    items: 3,
+                    margin: 3
+                }
+            },
+            autoplay: true,
+            autoplayTimeout: 2000,
+            autoplayHoverPause: true,
+            dots: false
+        });
+    }
+
+    <!-- page apply now end -->
+
+    <!-- page blog start -->
+
+    if ($('.page-blog .left-slide .loop').length > 0) {
+        $('.page-blog .left-slide .loop').owlCarousel({
+            items: 1,
+            loop: true,
+            margin: 10,
+            autoplay: true,
+            autoplayTimeout: 2000,
+            autoplayHoverPause: true
+        });
+    }
+
+    if ($('.page-blog .left-detail .last .loop').length > 0) {
+        $('.page-blog .left-detail .last .loop').owlCarousel({
+            items: 1,
+            loop: true,
+            margin: 30,
+            autoplay: true,
+            autoplayTimeout: 2000,
+            autoplayHoverPause: true
+        });
+    }
+
+    $('.page-blog .left-detail .comment .rate .stars > div').hover(function () {
+        for (var i = 1; i < 6; i++) {
+            if ($(this).data('id') < i) {
+                $('.page-blog .left-detail .comment .rate .stars > div:nth-child(' + i + ')').removeClass('active');
+            } else {
+                $('.page-blog .left-detail .comment .rate .stars > div:nth-child(' + i + ')').addClass('active');
+            }
+        }
+    }, function () {
+        $('.page-blog .left-detail .comment .rate .stars > div').removeClass('active');
+    });
+
+    $('.page-blog .left-detail .comment .rate .stars > div').click(function () {
+        alert('Rated: ' + $(this).data('id'));
+    });
+
+    <!-- page blog end -->
+
+    <!-- page inbox start -->
+
+    $('.page-inbox.chat .add .btn ').click(function () {
+        if ($('.page-inbox.chat .add .message input.form-control').val() != '') {
+            var message = '                    <div class="right">\n' +
+                '                        <div class="row">\n' +
+                '                            <div class="col-10 col-md-11">\n' +
+                '                                <div class="message">\n' +
+                '                                    <p>14: 04<span>4 August 2018</span></p>\n' +
+                '                                    <p>\n' +
+                '                                       ' + $('.page-inbox.chat .add .message input.form-control').val() + '\n' +
+                '                                    </p>\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="col-2 col-md-1 align-self-center">\n' +
+                '                                <img src="static/image/page-inbox/profile.png" class="w-100 rounded-circle" alt=""\n' +
+                '                                     title="">\n' +
+                '                            </div>\n' +
+                '                        </div>\n' +
+                '                    </div>';
+
+            $('.page-inbox.chat .chat').append(message);
+            $('.page-inbox.chat .add .message input.form-control').val('');
+        }
+    });
+
+    <!-- page inbox end -->
+
     <!-- page map filter start -->
 
     $('.page-map-filter [data-toggle="datepicker"]').datepicker({offset: 'top'});
 
+    var plus_5_days = new Date;
+    plus_5_days.setDate(plus_5_days.getDate() + 5);
+    pickmeup('body > .page-map-filter .calendar', {
+        flat: true,
+        date: [
+            new Date,
+            plus_5_days
+        ],
+        mode: 'range',
+        calendars: 2
+    });
 
-    if ($('body > .page-map-filter .date').length > 0) {
-        var plus_5_days = new Date;
-        plus_5_days.setDate(plus_5_days.getDate() + 5);
-        pickmeup('body > .page-map-filter .date', {
-            flat: true,
-            date: [
-                new Date,
-                plus_5_days
-            ],
-            mode: 'range',
-            calendars: 2
-        });
-    }
+    $('body > .page-map-filter .calendar').on('pickmeup-change', function (e) {
+        $('body > .page-map-filter .date').val(e.detail.formatted_date[0] + ' - ' + e.detail.formatted_date[1]);
+    });
 
     <!-- page map filter end -->
+
+    <!-- page dashboard start -->
+    if ($('body > .page-dashboard .right .calendar').length > 0) {
+        pickmeup('body > .page-dashboard .right .calendar', {
+            flat: true,
+            mode: 'range'
+        });
+    }
+    <!-- page dashboard end -->
 
     <!-- page form start -->
 
@@ -338,5 +494,24 @@ $(document).ready(function () {
 
     $(window).scroll();
 
+    $('.next-header').click(function () {
+        $('html, body').stop().animate({scrollTop: $($(this).data('element')).offset().top}, 500);
+        return false;
+    });
+
     <!-- page form end -->
+
+    <!-- page my profile start -->
+
+    $('body > .page-my-profile .list-inline li').click(function () {
+        $('body > .page-my-profile .list-inline li').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $('body > .page-my-profile .input i[data-toggle="popover"]').popover({
+        trigger: 'hover',
+        placement: 'top'
+    });
+
+    <!-- page my profile end -->
 });

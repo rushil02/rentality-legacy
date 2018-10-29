@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 from twisted.web.proxy import Proxy
 
-from custom_package.privacy import ModelWithPrivacy
+from utils.privacy import ModelWithPrivacy
 
 
 class TenantProfile(models.Model):

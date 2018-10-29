@@ -13,9 +13,8 @@ from django.conf import settings
 
 
 def create_site():
-    # FIXME: site obj relation
-
-    site_obj, s_created = Site.objects.get_or_create(domain='rentality.com', name='Rentality')
+    Site.objects.exclude(id=1, domain='rentality.com').delete()
+    site_obj, s_created = Site.objects.get_or_create(id=1, domain='rentality.com', name='Rentality')
     return site_obj
 
 
@@ -64,23 +63,29 @@ def create_room__types():
     RoomType.objects.get_or_create(name="Other")
 
 
-def add_flat_pages(site_obj):
-    FLAT_DOCS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flat-docs')
-    flatpages = (
-        ('/tos/', 'Terms of Service', 'terms_of_service.txt'),
-        ('/priv-policy/', 'PRIVACY POLICY', 'privacy_policy.txt')
-    )
+def register_flat_pages(site_obj):
 
     def get_text(file_name):
-        with open(os.path.join(FLAT_DOCS_DIR, file_name), 'r') as content_file:
-            content = content_file.read()
-        return content
+        if file_name:
+            with open(os.path.join(settings.FLAT_PAGE_DOCS_DIR, file_name), 'r') as content_file:
+                content = content_file.read()
+            return content
+        else:
+            return ''
 
-    for flatpage in flatpages:
+    def get_template(file_name):
+        if file_name:
+            return os.path.join(settings.FLAT_PAGE_TEMPLATES_FOLDER, file_name)
+        else:
+            return ''
+
+    for flatpage in settings.FLAT_PAGE_TEMPLATES:
         obj, cr = FlatPage.objects.get_or_create(
             url=flatpage[0],
             title=flatpage[1],
-            content=get_text(flatpage[2])
+            template_name=get_template(flatpage[2]),
+            content=get_text(flatpage[3]),
+            registration_required=flatpage[4]
         )
         obj.sites.add(site_obj)
 
@@ -98,7 +103,7 @@ class Command(BaseCommand):
     web_init_func = {
         'Integrate OAuth info': (social_apps_info, True),
         'Create tags': (create_tags, False),
-        'Add flat pages': (add_flat_pages, True),
+        'Add flat pages': (register_flat_pages, True),
         'Create Property Type (room_type) choices': (create_room__types, False),
         # 'Initialize ElasticSearch Mappings': initialze_es,
     }

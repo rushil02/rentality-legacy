@@ -183,7 +183,7 @@ MEDIA_URL = '/media/'
 # }
 
 # FIXME: site id for all auth
-SITE_ID = 2
+SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login'
@@ -303,3 +303,13 @@ if not DEBUG:  # only active in production
 
 # SummerNote (WYSIWYG editor)
 SUMMERNOTE_THEME = 'bs4'
+
+# Flat page Settings
+FLAT_PAGE_DOCS_DIR = os.path.join(BASE_DIR, 'admin_custom', 'utils', 'flat_pages', 'docs')
+FLAT_PAGE_TEMPLATES_FOLDER = 'flatpages'
+# FLAT_PAGE_TEMPLATES - FORMAT = (url, title, template.html, content.txt, registration_required[BOOL])
+FLAT_PAGE_TEMPLATES = (
+    ('/about-us/', 'About Us', 'about_us.html', '', False),
+    ('/tos/', 'Terms of Service', '', 'terms_of_service.txt', False),
+    ('/priv-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False)
+)

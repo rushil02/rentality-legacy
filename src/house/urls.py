@@ -1,6 +1,6 @@
 from django.urls import path
 
-from custom_package.api_utils import location_list, LocationAutocomplete
+from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, add_edit_house, search_house_page, search_house_api, add_house_main, remove_house_ask, \
     delete_listing, remove_listing, mark_as_leased
 
