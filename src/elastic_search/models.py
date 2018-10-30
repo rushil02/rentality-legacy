@@ -40,7 +40,7 @@ class House(BaseModel):
         index_this_model = True
 
     class Index:
-        name = get_index_name('Location')
+        name = get_index_name('House')
 
         settings = {
             'number_of_shards': 1,
