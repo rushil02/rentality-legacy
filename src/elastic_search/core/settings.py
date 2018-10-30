@@ -4,16 +4,17 @@
 
 DIR = 'elastic_search'
 
+# FIXME: sync configurations from docker
 DATABASE_CONNECTION_INFO = {
+    'alias': 'default',
     'hosts': ['localhost'],
     # 'PORT': None,
     # 'timeout': 100
+    'sniff_on_start': True,
+    'sniff_on_connection_fail': True,
+    'sniffer_timeout': 60
 }
 
-INDEX_SETTINGS = {
-
-}
-
-INDEX_NAME_PREFIX = 'rentality'
+INDEX_NAME_PREFIX = 'web'
 
 BULK_CHUNK_SIZE = 10

@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sites.models import Site
 from django.db.utils import IntegrityError
 
-from elastic_search.core.utils import get_index, create_mappings
+from elastic_search.core.utils import create_mappings
 from house.models import Tag, RoomType
 from django.conf import settings
 
@@ -90,9 +90,8 @@ def register_flat_pages(site_obj):
         obj.sites.add(site_obj)
 
 
-# def initialze_es():
-#     get_index()
-#     create_mappings()
+def initialze_es():
+    create_mappings()
 
 
 class Command(BaseCommand):
@@ -105,7 +104,7 @@ class Command(BaseCommand):
         'Create tags': (create_tags, False),
         'Add flat pages': (register_flat_pages, True),
         'Create Property Type (room_type) choices': (create_room__types, False),
-        # 'Initialize ElasticSearch Mappings': initialze_es,
+        'Initialize ElasticSearch Mappings': (initialze_es, False),
     }
 
     def ask_user_input(self, verbose):
@@ -131,7 +130,5 @@ class Command(BaseCommand):
             print(e)
             traceback.print_stack()
             raise CommandError("Some problem occurred. Rolling back changes.")
-        # except IntegrityError:
-        #     raise CommandError("Problem with sites module")
         else:
             self.stdout.write("Website initialized with data")
