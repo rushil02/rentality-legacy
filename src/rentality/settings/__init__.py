@@ -311,5 +311,6 @@ FLAT_PAGE_TEMPLATES_FOLDER = 'flatpages'
 FLAT_PAGE_TEMPLATES = (
     ('/about-us/', 'About Us', 'about_us.html', '', False),
     ('/tos/', 'Terms of Service', '', 'terms_of_service.txt', False),
-    ('/priv-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False)
+    ('/priv-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False),
+    ('/faq/', 'Frequently Asked Questions', 'faq.html', '', False)
 )
