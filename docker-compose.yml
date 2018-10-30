@@ -29,7 +29,7 @@ services:
     # Set vm.max_map_count=262144 in /etc/sysctl.conf
     image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     environment:
-    - "cluster.name=rentality-cluster"
+      - "cluster.name=rentality-cluster"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
       - esdata:/usr/share/elasticsearch/data
@@ -42,19 +42,19 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
       POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
     ports:
-    - 5430:5432
+      - 5430:5432
     volumes:
-    # FIXME: add settings
-    - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
-    - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
-    - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
-    - pgdata:/var/lib/postgresql/data
+      # FIXME: add settings
+      - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
+      - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
+      - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
+      - pgdata:/var/lib/postgresql/data
   web:
     build:
       context: ./src
       dockerfile: Dockerfile-development
     environment:
-    - "PYTHONUNBUFFERED=1"
+      - "PYTHONUNBUFFERED=1"
     image: registry.gitlab.com/rushil0195/rentality/web:latest
     volumes:
       - ./static_dev/static_root:/rentality/static_dev/static_root
@@ -71,15 +71,15 @@ services:
   sys_monitor:
     image: grafana/grafana:5.3.1
     ports:
-    - 3000:3000
+      - 3000:3000
     depends_on:
-    - postgres
-    - timeseriesdb
+      - postgres
+      - timeseriesdb
   # FIXME: add rabbitmq settings
   rabbitmq:
     image: rabbitmq:3.7.8-management
     ports:
-    - "15672:15672"
+      - "15672:15672"
 volumes:
   pgdata:
   esdata:
