@@ -7,6 +7,7 @@ from utils.email_validator import clean_gmail
 from user_custom.models import UserProfile
 from allauth.account.forms import LoginForm as AllAuthLoginForm
 from allauth.account.forms import SignupForm as AllAuthSignupForm
+from allauth.account.forms import ChangePasswordForm as AllAuthChangePasswordForm
 
 
 class ProfileForm1(forms.ModelForm):
@@ -121,3 +122,11 @@ class CustomSignupForm(AllAuthSignupForm):
             user=user, contact_num=self.cleaned_data['contact_num'],
             sex=self.cleaned_data['gender']
         )
+
+
+class CustomChangePasswordForm(AllAuthChangePasswordForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomChangePasswordForm, self).__init__(*args, **kwargs)
+        self.fields['oldpassword'].widget.attrs['class'] = "form-control"
+        self.fields['password1'].widget.attrs['class'] = "form-control"
+        self.fields['password2'].widget.attrs['class'] = "form-control"
