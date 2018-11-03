@@ -58,6 +58,7 @@ class CustomLoginForm(AllAuthLoginForm):
         self.fields['login'].widget.attrs['placeholder'] = 'Email'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['placeholder'] = 'Password'
+        self.fields['remember'].widget.attrs['class'] = 'custom-control-input'
 
 
 class CustomSignupForm(AllAuthSignupForm):
