@@ -48,7 +48,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # Application definition
-
 INSTALLED_APPS = [
     'dal',
     'dal_select2',
@@ -198,7 +197,7 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL  # Redirect to '/'
 ACCOUNT_EMAIL_REQUIRED = True  # Email required for signing up
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "Rentality.com - "
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "Rentality.com.au - "
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 3600  # User is blocked for this time after failure to repeatedly log in
 ACCOUNT_LOGOUT_ON_GET = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
@@ -291,16 +290,6 @@ ASSEMBLY_PAYMENTS_KEY = get_env_var('ASSEMBLY_PAYMENTS_KEY')
 ASSEMBLY_PAYMENTS_SECRET = get_env_var('ASSEMBLY_PAYMENTS_SECRET')
 ASSEMBLY_PAYMENTS_IS_PROD = get_env_var('ASSEMBLY_PAYMENTS_IS_PROD')
 
-# Logging information [External logger - Sentry]
-if not DEBUG:  # only active in production
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-
-    sentry_sdk.init(
-        dsn="https://5b4980d5a06c4ce4b0cd455fe04b8c2c@sentry.io/1291192",
-        integrations=[DjangoIntegration()],
-        debug=DEBUG
-    )
 
 # SummerNote (WYSIWYG editor)
 SUMMERNOTE_THEME = 'bs4'
@@ -312,7 +301,7 @@ FLAT_PAGE_TEMPLATES_FOLDER = 'flatpages'
 FLAT_PAGE_TEMPLATES = (
     ('/about-us/', 'About Us', 'about_us.html', '', False),
     ('/tos/', 'Terms of Service', '', 'terms_of_service.txt', False),
-    ('/priv-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False),
+    ('/privacy-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False),
     ('/faq/', 'Frequently Asked Questions', 'faq.html', '', False)
 )
 

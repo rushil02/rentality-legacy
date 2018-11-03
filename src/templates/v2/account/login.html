@@ -16,20 +16,28 @@
                         <form action="{% url 'account_login' %}" method="post">
                             {% csrf_token %}
                             <div class="row">
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        <div class="col-md-12 invalid-feedback"
+                                             style="display: block; text-align: center;">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
                                 <div class="col-md-12">
                                     {{ form.login }}
                                     {% if form.login.errors %}
-                                    {% for error in form.login.errors %}
-                                    <div class="invalid-feedback" style="display: block;">{{ error }}</div>
-                                    {% endfor %}
+                                        {% for error in form.login.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="col-md-12">
                                     {{ form.password }}
                                     {% if form.password.errors %}
-                                    {% for error in form.password.errors %}
-                                    <div class="invalid-feedback" style="display: block;">{{ error }}</div>
-                                    {% endfor %}
+                                        {% for error in form.password.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="col-md-6">
@@ -44,19 +52,14 @@
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <div class=" top-margin">
-                                        <a href="{% url 'account_reset_password' %}" class="btn btn-link">Password reset</a>
+                                        <a href="{% url 'account_reset_password' %}" class="btn btn-link">Forgot
+                                            Password</a>
                                     </div>
                                 </div>
-                                {% if form.non_field_errors %}
-                                {% for error in form.non_field_errors %}
-                                <div class="col-md-12 invalid-feedback" style="display: block; text-align: center;">
-                                        {{ error }}
-                                </div>
-                                {% endfor %}
-                                {% endif %}
 
                                 {% if redirect_field_value %}
-                                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                    <input type="hidden" name="{{ redirect_field_name }}"
+                                           value="{{ redirect_field_value }}"/>
                                 {% endif %}
 
                                 <div class="col-md-3"></div>
