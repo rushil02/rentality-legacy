@@ -8,6 +8,8 @@ from user_custom.models import UserProfile
 from allauth.account.forms import LoginForm as AllAuthLoginForm
 from allauth.account.forms import SignupForm as AllAuthSignupForm
 from allauth.account.forms import ChangePasswordForm as AllAuthChangePasswordForm
+from allauth.account.forms import ResetPasswordForm as AllAuthResetPasswordForm
+from allauth.account.forms import ResetPasswordKeyForm as AllAuthResetPasswordKeyForm
 
 
 class ProfileForm1(forms.ModelForm):
@@ -128,5 +130,18 @@ class CustomChangePasswordForm(AllAuthChangePasswordForm):
     def __init__(self, *args, **kwargs):
         super(CustomChangePasswordForm, self).__init__(*args, **kwargs)
         self.fields['oldpassword'].widget.attrs['class'] = "form-control"
+        self.fields['password1'].widget.attrs['class'] = "form-control"
+        self.fields['password2'].widget.attrs['class'] = "form-control"
+
+
+class CustomResetPasswordForm(AllAuthResetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['class'] = "form-control"
+
+
+class CustomResetPasswordKeyForm(AllAuthResetPasswordKeyForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields['password1'].widget.attrs['class'] = "form-control"
         self.fields['password2'].widget.attrs['class'] = "form-control"

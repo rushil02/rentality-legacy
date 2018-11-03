@@ -234,10 +234,10 @@ ACCOUNT_FORMS = {
     'login': 'user_custom.forms.CustomLoginForm',
     'signup': 'user_custom.forms.CustomSignupForm',
     'change_password': 'user_custom.forms.CustomChangePasswordForm',
-#     'set_password': 'user_custom.forms.CustomSetPasswordForm',
+    # 'set_password': 'user_custom.forms.CustomSetPasswordForm',
 #     'add_email': 'user_custom.forms.CustomAddEmailForm',
-#     'reset_password': 'user_custom.forms.CustomResetPasswordForm',
-#     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
+    'reset_password': 'user_custom.forms.CustomResetPasswordForm',
+    'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
 }
 OAUTH_DETAILS = {
     "facebook": {
