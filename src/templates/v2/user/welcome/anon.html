@@ -1,0 +1,37 @@
+{% extends 'user/welcome/base.html' %}
+
+{% block right_menu %}
+    {% include 'components/navbar/user_menu/anon.html' %}
+{% endblock %}
+
+{% block subscription_section %}
+    <!-- subscribe start -->
+    <div class="subscribe">
+        <div class="container">
+            <h2 class="title">Subscribe for our Newsletter</h2>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form action="" method="">
+                        <div class="detail">
+                            <div class="row">
+                                <div class="col-md-7 col-lg-8">
+                                    <input type="text" name="" class="form-control" placeholder="Enter Email Address">
+                                </div>
+                                <div class="col-md-5 col-lg-4">
+                                    <button type="button" class="btn btn-link btn-block">Subscribe</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+    </div>
+    <!-- subscribe end -->
+{% endblock %}
+
+{% block footer %}
+    {% include 'components/footer/anon.html' %}
+{% endblock %}

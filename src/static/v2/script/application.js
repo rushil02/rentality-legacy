@@ -45,6 +45,16 @@ $(document).ready(function () {
     }
     <!-- menu end -->
 
+    <!-- footer start -->
+    $(window).resize(function () {
+        if (($('body > .footer').offset().top + $('body > .footer').outerHeight()) < $(window).height()) {
+            $('body > .footer').css({'position': 'absolute', 'bottom': 0, 'left': 0, 'right': 0});
+        }
+    });
+
+    $(window).resize();
+    <!-- footer end -->
+
     <!-- header start -->
     if ($('body > .header').length > 0) {
         $('body > .header [data-toggle="datepicker"]').datepicker({offset: 'top'});
@@ -60,6 +70,40 @@ $(document).ready(function () {
             $('body > .header #city > .btn-group > .btn:last-child').addClass('active');
         });
     }
+
+    var plus_5_days = new Date;
+    plus_5_days.setDate(plus_5_days.getDate() + 5);
+    pickmeup('body > .header .start-calendar', {
+        flat: true,
+        date: [
+            new Date,
+            plus_5_days
+        ],
+        mode: 'range',
+        calendars: 2
+    });
+
+    $('body > .header .start-calendar').on('pickmeup-change', function (e) {
+        $('body > .header .start-date').val(e.detail.formatted_date[0]);
+        $('body > .header .end-date').val(e.detail.formatted_date[1]);
+    });
+
+    var plus_5_days = new Date;
+    plus_5_days.setDate(plus_5_days.getDate() + 5);
+    pickmeup('body > .header .end-calendar', {
+        flat: true,
+        date: [
+            new Date,
+            plus_5_days
+        ],
+        mode: 'range',
+        calendars: 2
+    });
+
+    $('body > .header .end-calendar').on('pickmeup-change', function (e) {
+        $('body > .header .start-date').val(e.detail.formatted_date[0]);
+        $('body > .header .end-date').val(e.detail.formatted_date[1]);
+    });
     <!-- header end -->
 
     <!-- logo start -->
@@ -434,15 +478,34 @@ $(document).ready(function () {
     <!-- page map filter end -->
 
     <!-- page dashboard start -->
+    var now = new Date;
     if ($('body > .page-dashboard .right .calendar').length > 0) {
         pickmeup('body > .page-dashboard .right .calendar', {
             flat: true,
-            mode: 'range'
+            mode: 'range',
+            render: function (date) {
+                // Disable example
+                if (date < now) {
+                    return {disabled: true, class_name: 'disable-day'};
+                }
+                return {};
+            }
         });
     }
     <!-- page dashboard end -->
 
     <!-- page form start -->
+
+    $('button.anything-else-add').click(function () {
+        $('.checkbox .list-inline').append('<li class="list-inline-item">\n' +
+            '                                                <div class="custom-control custom-checkbox">\n' +
+            '                                                    <input type="checkbox" id="checkbox-1" class="custom-control-input">\n' +
+            '                                                    <label class="custom-control-label" for="checkbox-1">' + $('.anything-else').val() + '</label>\n' +
+            '                                                </div>\n' +
+            '                                            </li>');
+        $('.anything-else').val('');
+        $('.anything-else').focus();
+    });
 
     if ($('body > .page-form .right .calendar').length > 0) {
         var plus_5_days = new Date;
@@ -494,9 +557,190 @@ $(document).ready(function () {
 
     $(window).scroll();
 
-    $('.next-header').click(function () {
-        $('html, body').stop().animate({scrollTop: $($(this).data('element')).offset().top}, 500);
-        return false;
+    $('#form-2,#form-3,#form-4,#form-5,#form-6,#form-7,#form-8,#form-9,#form-10,#form-11,#form-12').addClass('d-none');
+
+    $('#form-1 .next-step').click(function () {
+        $('#form-2').removeClass('d-none');
+        $('#form-1,#form-3,#form-4').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 2) + '%');
+    });
+
+    $('#form-2 .next-step').click(function () {
+        $('#form-3').removeClass('d-none');
+        $('#form-1,#form-2,#form-4').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 3) + '%');
+    });
+
+    $('#form-2 .prev-step').click(function () {
+        $('#form-1').removeClass('d-none');
+        $('#form-2').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 1) + '%');
+    });
+
+    $('#form-3 .next-step').click(function () {
+        $('#form-4').removeClass('d-none');
+        $('#form-1,#form-2,#form-3').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 4) + '%');
+    });
+
+    $('#form-3 .prev-step').click(function () {
+        $('#form-2').removeClass('d-none');
+        $('#form-3').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 2) + '%');
+    });
+
+    $('#form-4 .next-step').click(function () {
+        $('#full-header-2').addClass('active');
+
+        $('#form-4').addClass('d-none');
+        $('#form-5').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 5) + '%');
+    });
+
+    $('#form-4 .prev-step').click(function () {
+        $('#form-3').removeClass('d-none');
+        $('#form-4').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 3) + '%');
+    });
+
+    $('#form-5 .next-step').click(function () {
+        $('#form-5').addClass('d-none');
+        $('#form-6').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 6) + '%');
+    });
+
+    $('#form-5 .prev-step').click(function () {
+        $('#full-header-2').removeClass('active');
+
+        $('#form-4').removeClass('d-none');
+        $('#form-5').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 4) + '%');
+    });
+
+    $('#form-6 .next-step').click(function () {
+        $('#form-6').addClass('d-none');
+        $('#form-7').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 7) + '%');
+    });
+
+    $('#form-6 .prev-step').click(function () {
+        $('#form-5').removeClass('d-none');
+        $('#form-6').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 5) + '%');
+    });
+
+    $('#form-7 .next-step').click(function () {
+        $('#form-7').addClass('d-none');
+        $('#form-8').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 8) + '%');
+    });
+
+    $('#form-7 .prev-step').click(function () {
+        $('#form-6').removeClass('d-none');
+        $('#form-7').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 6) + '%');
+    });
+
+    $('#form-8 .next-step').click(function () {
+        $('#full-header-3').addClass('active');
+
+        $('#form-8').addClass('d-none');
+        $('#form-9').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 9) + '%');
+    });
+
+    $('#form-8 .prev-step').click(function () {
+        $('#form-7').removeClass('d-none');
+        $('#form-8').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 7) + '%');
+    });
+
+    $('#form-9 .next-step').click(function () {
+        $('#form-9').addClass('d-none');
+        $('#form-10').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 10) + '%');
+    });
+
+    $('#form-9 .prev-step').click(function () {
+        $('#full-header-3').removeClass('active');
+
+        $('#form-8').removeClass('d-none');
+        $('#form-9').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 8) + '%');
+    });
+
+    $('#form-10 .next-step').click(function () {
+        $('#form-10').addClass('d-none');
+        $('#form-11').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 11) + '%');
+    });
+
+    $('#form-10 .prev-step').click(function () {
+        $('#form-9').removeClass('d-none');
+        $('#form-10').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 9) + '%');
+    });
+
+    $('#form-11 .next-step').click(function () {
+        $('#form-11').addClass('d-none');
+        $('#form-12').removeClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (100) + '%');
+    });
+
+    $('#form-11 .prev-step').click(function () {
+        $('#form-10').removeClass('d-none');
+        $('#form-11').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 10) + '%');
+    });
+
+    $('#form-12 .prev-step').click(function () {
+        $('#form-11').removeClass('d-none');
+        $('#form-12').addClass('d-none');
+
+        $('html, body').stop().animate({scrollTop: $('.page-form').offset().top}, 500);
+        $('body > .page-form .full-header .progress .progress-bar').css('width', (8.33 * 11) + '%');
     });
 
     <!-- page form end -->

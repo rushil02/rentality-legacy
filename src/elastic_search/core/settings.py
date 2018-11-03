@@ -14,7 +14,8 @@ DATABASE_CONNECTION_INFO = {
     'timeout': 10,  # default
     'sniff_on_start': True,
     'sniff_on_connection_fail': True,
-    'sniffer_timeout': 60
+    'sniffer_timeout': 60,
+    'sniff_timeout': 10
 }
 
 INDEX_NAME_PREFIX = 'web'

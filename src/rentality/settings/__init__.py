@@ -19,6 +19,7 @@ from .common import *
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_var('SECRET_KEY')
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 def _get_debug_val():
     debug = get_env_var('DEBUG')
@@ -193,13 +194,13 @@ LOGIN_URL = '/accounts/login'
 ACCOUNT_ADAPTER = 'user_custom.adapter.CustomAccountAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # Login field
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  # User has to click a button on the redirected page
-ACCOUNT_USER_MODEL_USERNAME_FIELD=None
-ACCOUNT_USERNAME_REQUIRED=False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL  # Redirect to '/'
 ACCOUNT_EMAIL_REQUIRED = True  # Email required for signing up
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "Rentality.com - "
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 3600  # User is blocked for this time after failure to repeatedly log in
-ACCOUNT_LOGOUT_ON_GET=True
+ACCOUNT_LOGOUT_ON_GET = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # TODO: add config for other providers
@@ -233,37 +234,37 @@ SOCIALACCOUNT_PROVIDERS = \
 ACCOUNT_FORMS = {
     'login': 'user_custom.forms.CustomLoginForm',
     'signup': 'user_custom.forms.CustomSignupForm',
-#     'change_password': 'user_custom.forms.CustomChangePasswordForm',
-#     'set_password': 'user_custom.forms.CustomSetPasswordForm',
-#     'add_email': 'user_custom.forms.CustomAddEmailForm',
-#     'reset_password': 'user_custom.forms.CustomResetPasswordForm',
-#     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
+    #     'change_password': 'user_custom.forms.CustomChangePasswordForm',
+    #     'set_password': 'user_custom.forms.CustomSetPasswordForm',
+    #     'add_email': 'user_custom.forms.CustomAddEmailForm',
+    #     'reset_password': 'user_custom.forms.CustomResetPasswordForm',
+    #     'reset_password_from_key': 'user_custom.forms.CustomResetPasswordKeyForm'
 }
 OAUTH_DETAILS = {
     "facebook": {
-      "verbose": "Facebook",
-      "secret": get_env_var('OAUTH_FACEBOOK_SECRET'),
-      "client_id": get_env_var('OAUTH_FACEBOOK_CLIENT_ID')
+        "verbose": "Facebook",
+        "secret": get_env_var('OAUTH_FACEBOOK_SECRET'),
+        "client_id": get_env_var('OAUTH_FACEBOOK_CLIENT_ID')
     },
     "google": {
-      "verbose": "Google",
-      "secret": get_env_var('OAUTH_GOOGLE_SECRET'),
-      "client_id": get_env_var('OAUTH_GOOGLE_CLIENT_ID')
+        "verbose": "Google",
+        "secret": get_env_var('OAUTH_GOOGLE_SECRET'),
+        "client_id": get_env_var('OAUTH_GOOGLE_CLIENT_ID')
     },
     "twitter": {
-      "verbose": "Twitter",
-      "secret": get_env_var('OAUTH_TWITTER_SECRET'),
-      "client_id": get_env_var('OAUTH_TWITTER_CLIENT_ID')
+        "verbose": "Twitter",
+        "secret": get_env_var('OAUTH_TWITTER_SECRET'),
+        "client_id": get_env_var('OAUTH_TWITTER_CLIENT_ID')
     },
     "instagram": {
-      "verbose": "Instagram",
-      "secret": get_env_var('OAUTH_INSTAGRAM_SECRET'),
-      "client_id": get_env_var('OAUTH_INSTAGRAM_CLIENT_ID')
+        "verbose": "Instagram",
+        "secret": get_env_var('OAUTH_INSTAGRAM_SECRET'),
+        "client_id": get_env_var('OAUTH_INSTAGRAM_CLIENT_ID')
     },
     "pinterest": {
-      "verbose": "Pinterest",
-      "secret": get_env_var('OAUTH_PINTEREST_SECRET'),
-      "client_id": get_env_var('OAUTH_PINTEREST_CLIENT_ID')
+        "verbose": "Pinterest",
+        "secret": get_env_var('OAUTH_PINTEREST_SECRET'),
+        "client_id": get_env_var('OAUTH_PINTEREST_CLIENT_ID')
     }
 }
 
@@ -314,3 +315,14 @@ FLAT_PAGE_TEMPLATES = (
     ('/priv-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False),
     ('/faq/', 'Frequently Asked Questions', 'faq.html', '', False)
 )
+
+# Easy Thumbnail
+THUMBNAIL_ALIASES = {
+    '': {
+        'profile_small': {'size': (41, 41), 'crop': True},
+        'house_home_page_small': {'size': (263, 196), 'crop': True},
+        'house_home_page_large': {'size': (360, 196), 'crop': True},
+    }
+
+}
+

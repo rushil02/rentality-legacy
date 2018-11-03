@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load thumbnail %}
+
+{% block head_title_add %}
+
+{% endblock %}
+
+{% block page_description %}
+
+{% endblock %}
+
+{% block keyword_meta_add %}
+
+{% endblock %}
+
+{% block content %}
+
+    <!-- page map filter start -->
+    <div class="page-map-filter position-sticky sticky-top">
+        <div class="container">
+            <form action="" method="">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control search" placeholder="City, State, Post Code">
+                    </div>
+                    <div class="col-md-3">
+                        <div style="position: relative">
+                            <div class="dropdown">
+                                <input type="text" class="form-control date" placeholder="17- Dec 21 Now 2018" readonly
+                                       data-toggle="dropdown">
+                                <div class="dropdown-menu">
+                                    <div class="calendar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control type" placeholder="Home Type">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control amount" placeholder="$150-$275 /week">
+                    </div>
+                    <div class="col-md-2">
+                        <!-- <a href="#other-filter" class="btn btn-link btn-block" data-toggle="collapse">More Filters</a> -->
+                        <button class="btn btn-link btn-block">Search</button>
+                    </div>
+                </div>
+                <div id="other-filter" class="collapse text-center" style="height: 80px; line-height: 80px;">
+                    ...
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- page map filter end -->
+    <!-- page map setting start -->
+    <div class="page-map-setting">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    4365 Home Available
+                </div>
+                <div class="col-md-8">
+                    <div class="setting">
+                        <span>Map View</span>
+                        <div class="view">
+                            <div class="round"></div>
+                        </div>
+                        <span>Sort By</span>
+                        <select class="form-control">
+                            <option>Price</option>
+                        </select>
+                        <button type="button" class="btn btn-link four active"></button>
+                        <button type="button" class="btn btn-link two"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- page map setting end -->
+    <!-- page map start -->
+    <div class="page-map">
+        <div class="container">
+            <div class="lists">
+                <div class="row">
+                    <div class="col-md-4 col-lg-3">
+                        <a href="#" class="list" data-lat="-33.746697" data-lng="151.105950" data-rating="#93c94c">
+                            <div class="rating">
+                                <span>4.7</span>
+                                <img src="static/image/page-map/map/profile-1.png" class="rounded-circle" alt=""
+                                     title="">
+                            </div>
+                            <div class="image">
+                                <img src="static/image/page-map/map/1.png" class="w-100" alt="" title="">
+                            </div>
+                            <h1>BALIAN TREEHOUSE w beautiful</h1>
+                            <h2>Capital Territory, Australia</h2>
+                            <div>Min<span>200 days</span></div>
+                            <div>Rent<span>200 Aud./week</span></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- page map end -->
+    <!-- page map api start -->
+    <div class="page-map-api">
+        <div id="map"></div>
+    </div>
+    <!-- page map api end -->
+{% endblock %}
+
+{% block page_scripts %}
+    <!-- page map example data start -->
+    <div class="example-data d-none">
+        <a href="#" class="list" data-lat="-33.436050" data-lng="151.095432" data-rating="#93c94c">
+            <div class="rating">
+                <span>4.7</span>
+                <img src="static/image/page-map/map/profile-1.png" class="rounded-circle" alt=""
+                     title="">
+            </div>
+            <div class="image">
+                <img src="static/image/page-map/map/1.png" class="w-100" alt="" title="">
+            </div>
+            <h1>BALIAN TREEHOUSE w beautiful</h1>
+            <h2>Capital Territory, Australia</h2>
+            <div>Min<span>200 days</span></div>
+            <div>Rent<span>200 Aud./week</span></div>
+        </a>
+    </div>
+    <!-- page map example data end -->
+    <!-- page map api start -->
+    <script>
+        var map, locations = [], markers = [], infowindow;
+
+        if ($('.page-map-filter').length > 0 && $('.page-map-setting').length > 0 && $('.page-map').length > 0 && $('.page-map-api').length > 0) {
+            var maps = function () {
+                if ($('.page-map-api').css('display') == 'block') {
+                    $('.page-map-api').css('left', $('.page-map').width() + 15);
+
+                    var pageMapPosition = $('.page-map').offset().top - $(window).scrollTop() + 36;
+                    var footerPosition = ($('.footer').offset().top - $(window).height()) - $(window).scrollTop();
+
+                    if (pageMapPosition > 0) {
+                        $('.page-map-api').css('top', (pageMapPosition) + 'px');
+                    } else {
+                        $('.page-map-api').css('top', $('.page-map-filter').outerHeight());
+                    }
+
+                    if (footerPosition > 0) {
+                        $('.page-map-api').css('bottom', 0);
+                    } else {
+                        $('.page-map-api').css('bottom', Math.abs(footerPosition) + 'px');
+                    }
+                }
+            };
+
+            $(window).resize(function () {
+                maps();
+            });
+
+            $(window).scroll(function () {
+                maps();
+            });
+
+            $('.page-map-filter .btn').click(function () {
+                setTimeout(function () {
+                    maps();
+                }, 300);
+            });
+
+            $('.page-map-setting .view').click(function () {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setIcon('static/image/marker.png');
+                    markers[i].infowindow.close();
+                }
+
+                if (!$('.page-map-setting .view').hasClass('active')) {
+                    $('.page-map-setting .view').addClass('active');
+
+                    $('.page-map').addClass('active');
+                    $('.page-map > .container').removeClass('.container').addClass('.container-fluid');
+
+                    if ($('.page-map-setting .setting .btn.active').hasClass('four')) {
+                        $('.page-map').find('.col-md-4.col-lg-3').removeClass('col-md-4').removeClass('col-lg-3').addClass('col-md-6').addClass('col-lg-6');
+                    } else {
+                        $('.page-map').find('.col-md-12.col-lg-6.full').removeClass('col-md-12').removeClass('col-lg-6').removeClass('full').addClass('col-md-12').addClass('col-lg-12');
+                    }
+
+                    $('.page-map-api').css('display', 'block');
+                    maps();
+                } else {
+                    $('.page-map-setting .view').removeClass('active');
+
+                    $('.page-map').removeClass('active');
+                    $('.page-map > .container').removeClass('.container-fluid').addClass('.container');
+
+                    if ($('.page-map-setting .setting .btn.active').hasClass('four')) {
+                        $('.page-map').find('.col-md-6.col-lg-6').removeClass('col-md-6').removeClass('col-lg-6').addClass('col-md-4').addClass('col-lg-3');
+                    } else {
+                        $('.page-map').find('.col-md-12.col-lg-12').removeClass('col-md-12').removeClass('col-lg-12').addClass('col-md-12').addClass('col-lg-6').addClass('full');
+                    }
+
+                    $('.page-map-api').css('display', 'none');
+                }
+            });
+
+            $('.page-map-setting .setting .btn').click(function () {
+                if ($('.page-map-setting .view').hasClass('active')) {
+                    if ($(this).hasClass('four')) {
+                        $('.page-map').find('.col-md-12.col-lg-12').removeClass('col-md-12').removeClass('col-lg-12').addClass('col-md-6').addClass('col-lg-6');
+                        $('.page-map-setting .setting .btn.four').addClass('active');
+                        $('.page-map-setting .setting .btn.two').removeClass('active');
+                    } else {
+                        $('.page-map').find('.col-md-6.col-lg-6').removeClass('col-md-6').removeClass('col-lg-6').addClass('col-md-12').addClass('col-lg-12');
+                        $('.page-map-setting .setting .btn.four').removeClass('active');
+                        $('.page-map-setting .setting .btn.two').addClass('active');
+                    }
+                } else {
+                    if ($(this).hasClass('four')) {
+                        $('.page-map').find('.col-md-12.col-lg-6.full').removeClass('col-md-12').removeClass('col-lg-6').removeClass('full').addClass('col-md-4').addClass('col-lg-3');
+                        $('.page-map-setting .setting .btn.four').addClass('active');
+                        $('.page-map-setting .setting .btn.two').removeClass('active');
+                    } else {
+                        $('.page-map').find('.col-md-4.col-lg-3').removeClass('col-md-4').removeClass('col-lg-3').addClass('col-md-12').addClass('col-lg-6').addClass('full');
+                        $('.page-map-setting .setting .btn.four').removeClass('active');
+                        $('.page-map-setting .setting .btn.two').addClass('active');
+                    }
+                }
+            });
+        }
+
+        $('.page-map .list').click(function () {
+            if ($('.page-map-setting .view').hasClass('active')) {
+                var lat = $(this).data('lat');
+                var lng = $(this).data('lng');
+
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setIcon('static/image/marker.png');
+                }
+
+                for (var i = 0; i < locations.length; i++) {
+                    if (lat == locations[i][0] && lng == locations[i][1]) {
+                        markers[i].setIcon('static/image/marker-active.png');
+
+                        google.maps.event.trigger(markers[i], 'click');
+                    }
+                }
+
+                return false;
+            }
+        });
+
+        var process = true;
+
+        $(window).scroll(function () {
+            if (process) {
+                if (($(window).scrollTop() + $(window).height()) == $(document).height()) {
+                    process = false;
+                    $('.page-map .lists').append('<div id="loading" style="margin-top: 60px; text-align: center;"><img src="static/image/loading.gif">');
+
+                    maps();
+
+                    setTimeout(function () {
+                        var column = $('.page-map > .container > .lists > .row > div:first-child').attr('class');
+
+                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
+                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
+                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
+                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
+
+                        for (var i = 0; i < markers.length; i++) {
+                            markers[i].setMap(null);
+                        }
+
+                        locations = [], markers = [], infowindow;
+
+                        $('.page-map .list').each(function () {
+                            if ($(this).data('lat') && $(this).data('lng') && $(this).data('rating')) {
+                                locations.push([$(this).data('lat'), $(this).data('lng'), $(this).attr('href'), $(this).find('.image img').attr('src'), $(this).find('h1').html(), $(this).find('h2').html(), $(this).find('> div:nth-child(5) span').html(), $(this).find('> div:nth-child(6) span').html(), $(this).data('rating'), $(this).find('.rating span').html()]);
+                            }
+                        })
+
+                        for (var i = 0; i < locations.length; i++) {
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(locations[i][0], locations[i][1]),
+                                map: map,
+                                icon: 'static/image/marker.png'
+                            });
+
+                            marker['infowindow'] = new google.maps.InfoWindow({
+                                content: '<a href="' + locations[i][2] + '" target="_blank"><h1>' + locations[i][4] + '</h1><h2>' + locations[i][5] + '</h2><img src="' + locations[i][3] + '"><div>Min<span>' + locations[i][6] + '</span></div><div>Rent<span>' + locations[i][7] + '</span></div><div class="rating"><div class="round" style="background-color: ' + locations[i][8] + ';"></div>' + locations[i][9] + '</div></a>'
+                            });
+
+                            markers.push(marker);
+
+                            google.maps.event.addListener(marker, 'click', function () {
+                                if (infowindow) {
+                                    infowindow.close();
+                                }
+
+                                for (var i = 0; i < markers.length; i++) {
+                                    markers[i].setIcon('static/image/marker.png');
+                                }
+
+                                this.setIcon('static/image/marker-active.png');
+
+                                google.maps.event.addListener(this['infowindow'], 'closeclick', function () {
+                                    for (var i = 0; i < markers.length; i++) {
+                                        markers[i].setIcon('static/image/marker.png');
+                                    }
+                                });
+
+                                this['infowindow'].open(map, this);
+                                infowindow = this['infowindow'];
+                            });
+                        }
+
+                        $('.page-map .lists').find('#loading').remove();
+                        process = true;
+
+                        maps();
+                    }, 3000);
+                }
+            }
+        });
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 9,
+                center: new google.maps.LatLng($('.page-map .list:first-child').data('lat'), $('.page-map .list:first-child').data('lng')),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true
+            });
+
+            $('.page-map .list').each(function () {
+                if ($(this).data('lat') && $(this).data('lng') && $(this).data('rating')) {
+                    locations.push([$(this).data('lat'), $(this).data('lng'), $(this).attr('href'), $(this).find('.image img').attr('src'), $(this).find('h1').html(), $(this).find('h2').html(), $(this).find('> div:nth-child(5) span').html(), $(this).find('> div:nth-child(6) span').html(), $(this).data('rating'), $(this).find('.rating span').html()]);
+                }
+            });
+
+            for (var i = 0; i < locations.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][0], locations[i][1]),
+                    map: map,
+                    icon: 'static/image/marker.png'
+                });
+
+                marker['infowindow'] = new google.maps.InfoWindow({
+                    content: '<a href="' + locations[i][2] + '" target="_blank"><h1>' + locations[i][4] + '</h1><h2>' + locations[i][5] + '</h2><img src="' + locations[i][3] + '"><div>Min<span>' + locations[i][6] + '</span></div><div>Rent<span>' + locations[i][7] + '</span></div><div class="rating"><div class="round" style="background-color: ' + locations[i][8] + ';"></div>' + locations[i][9] + '</div></a>'
+                });
+
+                markers.push(marker);
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    if (infowindow) {
+                        infowindow.close();
+                    }
+
+                    for (var i = 0; i < markers.length; i++) {
+                        markers[i].setIcon('static/image/marker.png');
+                    }
+
+                    this.setIcon('static/image/marker-active.png');
+
+                    google.maps.event.addListener(this['infowindow'], 'closeclick', function () {
+                        for (var i = 0; i < markers.length; i++) {
+                            markers[i].setIcon('static/image/marker.png');
+                        }
+                    });
+
+                    this['infowindow'].open(map, this);
+                    infowindow = this['infowindow'];
+                });
+            }
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKUjY7-juS0VSLNUBm0-oG2PnO5BquNp4&callback=initMap">
+    </script>
+    <!-- page map api end -->
+
+{% endblock %}

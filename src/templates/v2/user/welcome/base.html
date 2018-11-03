@@ -1,0 +1,467 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load thumbnail %}
+
+
+{% block body %}
+    <!-- mobile menu start -->
+    <div class="mobile-menu"></div>
+    <div class="mobile-menu-content"></div>
+    <!-- mobile menu end -->
+    <!-- menu start -->
+    <div class="menu session">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-9 col-md-4 col-lg-3 col-xl-4 left">
+                    <a href="{% url 'user:home_page' %}" class="logo"></a>
+                </div>
+                <div class="col-3 col-md-8 col-lg-6 col-xl-5 center align-self-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
+                        <li class="list-inline-item"><a href="{% url 'blog:home' %}">Blog</a></li>
+                        <li class="list-inline-item"><a
+                                href="{% url 'django.contrib.flatpages.views.flatpage' url="/about-us/" %}">How Its
+                            Work</a></li>
+                        <li class="list-inline-item"><a href="{% url 'house:add' %}">List Your Home</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-12 col-lg-3 col-xl-3 right align-self-center">
+                    <ul class="list-inline">
+                        {% block right_menu %}
+                        {% endblock %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- menu end -->
+    <!-- header start -->
+    <div class="header d-flex">
+        <div class="w-100 align-self-center">
+            <div class="container">
+                <h1 class="title">Welcome to your <span>Home<span>/</span>s</span></h1>
+                <h2 class="sub-title">Creating a Global Network for Medium Term Home Rentals</h2>
+            </div>
+        </div>
+        <div class="search">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-2"></div>
+                    <div class="col-12 col-xl-8">
+                        <form action="{% url 'user:search' %}" method="GET" id="search_form">
+                            <div class="detail">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        {{ search_form.location }}
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ search_form.start_date }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ search_form.end_date }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-link btn-block">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="cities">
+                            <div id="city">
+                                <label class="btn btn-link">
+                                    Canberra
+                                </label>
+                                <label class="btn btn-link">
+                                    Brisbane
+                                </label>
+                                <label class="btn btn-link">
+                                    Sydney
+                                </label>
+                                <label class="btn btn-link">
+                                    Adelaide
+                                </label>
+                                <label class="btn btn-link">
+                                    Melbourne
+                                </label>
+                                <label class="btn btn-link">
+                                    Perth
+                                </label>
+                                <label class="btn btn-link">
+                                    Gold Coast
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+    <!-- bests start -->
+    <div class="bests">
+        <div class="container">
+            <h1 class="title">Best for you</h1>
+            <div class="row">
+                <div class="col-md-8">
+                    <h2 class="sub-title">We think you might be interested. You must check these. There is really great
+                        opportunity.</h2>
+                </div>
+                <div class="col-md-4 text-right align-self-end">
+                    <a href="{% url 'user:search' %}" class="load-more">Load More</a>
+                </div>
+            </div>
+            <div class="lists">
+                <div class="row">
+                    {% static "image/placeholders/property/home-page-small.png" as default_property_small %}
+                    {% for house in house_list|slice:":8" %}
+                        <div class="col-md-4 col-lg-3">
+                            <a href="{% url 'house:info' house_uuid=house.uuid %}" class="list">
+                                <div class="image">
+                                    <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_small'|default:default_property_small }}"
+                                         class="w-100" alt="" title="">
+                                </div>
+                                <h1>{{ house.room_type }}</h1>
+                                <h2>{{ house.get_location|title }}</h2>
+                                <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
+                                </div>
+                                <div>Rent<span>{{ house.rent }} AUD/week</span></div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- bests end -->
+    <!-- cities start -->
+    <div class="cities">
+        <div class="container">
+            <h1 class="title">Discover City Furnish apartments</h1>
+            <h2 class="sub-title">Discover the Furnished apartments in the city you want</h2>
+            <div class="big-lists">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="{% url 'user:search' %}?location=Perth" class="big-list">
+                            <div class="image">
+                                <img src="{% static 'image/cities/perth-home-page.jpg' %}" class="w-100" alt=""
+                                     title="">
+                                <div class="bottom">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h1>Perth<br>Australia</h1>
+                                        </div>
+                                        <div class="col-6 align-self-center text-right">
+                                            34533
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="big-lists-right">
+                            <a href="{% url 'user:search' %}?location=Canberra" class="big-list">
+                                <div class="image">
+                                    <img src="{% static 'image/cities/canberra-home-page.jpg' %}" class="w-100" alt=""
+                                         title="">
+                                    <div class="bottom">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h1>Canberra<br>Australia</h1>
+                                            </div>
+                                            <div class="col-6 align-self-center text-right">
+                                                1644
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="{% url 'user:search' %}?location=Sydney" class="big-list">
+                                <div class="image">
+                                    <img src="{% static 'image/cities/sydney-home-page.jpg' %}" class="w-100" alt=""
+                                         title="">
+                                    <div class="bottom">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h1>Sydney<br>Australia</h1>
+                                            </div>
+                                            <div class="col-6 align-self-center text-right">
+                                                2865
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-4 text-right">
+                    <a href="{% url 'user:search' %}" class="load-more">Load More</a>
+                </div>
+            </div>
+            <div class="lists">
+                <div class="row">
+                    {% static "image/placeholders/property/home-page-large.png" as default_property_large %}
+                    {% for house in house_list|slice:"8:11" %}
+                        <div class="col-md-4">
+                            <a href="#" class="list">
+                                <div class="image">
+                                    <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_large'|default:default_property_large }}"
+                                         class="w-100" alt="" title="">
+                                </div>
+                                <h1>{{ house.room_type }}</h1>
+                                <h2>{{ house.get_location|title }}</h2>
+                                <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
+                                </div>
+                                <div>Rent<span>{{ house.rent }} AUD/week</span></div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- cities end -->
+    <!-- logo start -->
+    <div class="logo">
+        <div class="loop owl-carousel owl-theme">
+            <div class="item">
+                <div class="list">
+                    <img src="{% static 'image/logo/1.png' %}" alt="" title="">
+                </div>
+            </div>
+            <div class="item">
+                <div class="list">
+                    <img src="{% static 'image/logo/2.png' %}" alt="" title="">
+                </div>
+            </div>
+            <div class="item">
+                <div class="list">
+                    <img src="{% static 'image/logo/3.png' %}" alt="" title="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- logo end -->
+    <!-- start now start -->
+    <div class="start-now">
+        <div class="container">
+            <div class="lists">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                        <a href="#" class="list left">
+                            <div class="image">
+                                <img src="{% static 'image/start-now/1.png' %}" class="w-100" alt="" title="">
+                            </div>
+                            <h1>Rent your house.</h1>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt
+                                ut labore et dolore magna aliqua.
+                            </p>
+                            <div class="text-center">
+                                <div class="btn btn-link">Start Now</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4">
+                        <a href="#" class="list right">
+                            <div class="image">
+                                <img src="{% static 'image/start-now/2.png' %}" class="w-100" alt="" title="">
+                            </div>
+                            <h1>We looking for a house.</h1>
+                            <p>
+                                We have a fully functional online query handling system to assist you in using our
+                                online
+                                trading platform.
+                            </p>
+                            <div class="text-center">
+                                <div class="btn btn-link">Start Now</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- start not end -->
+    <!-- color boxes start -->
+    <div class="color-boxes">
+        <div class="container">
+            <div class="lists">
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="{% static 'image/color-boxes/1.svg' %}" alt="" title="">
+                            </div>
+                            <h1>Total Home</h1>
+                            <p>
+                                <span class="counter">6554</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="{% static 'image/color-boxes/2.svg' %}" alt="" title="">
+                            </div>
+                            <h1>Active User</h1>
+                            <p>
+                                <span class="counter">16767</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="{% static 'image/color-boxes/3.svg' %}" alt="" title="">
+                            </div>
+                            <h1>Total Rent</h1>
+                            <p>
+                                <span class="counter">24577</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="list">
+                            <div class="image">
+                                <img src="{% static 'image/color-boxes/4.svg' %}" alt="" title="">
+                            </div>
+                            <h1>Satisfied Customer</h1>
+                            <p>
+                                <span class="counter">97</span>%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- color boxes end -->
+
+    <!-- comment start
+    <div class="comment">
+        <div class="capsule">
+            <div class="loop owl-carousel owl-theme">
+                <div class="item">
+                    <div class="list d-flex">
+                        <div class="align-self-center">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="image">
+                                        <img src="static/image/comment/1.png" class="w-100 rounded-circle" alt=""
+                                             title="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <h1>Miranda Kerr / Sydney -Australia</h1>
+                                    <h2>I Recommend everyone.</h2>
+                                    <p>"Hello. Very good work! I like this writer. They answered the question fully and
+                                        had
+                                        great word choice along with great examples. The level of writing is high.</p>
+                                    <div class="star x5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="list d-flex">
+                        <div class="align-self-center">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="image">
+                                        <img src="static/image/comment/2.png" class="w-100 rounded-circle" alt=""
+                                             title="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <h1>Miranda Kerr / Sydney -Australia</h1>
+                                    <h2>I Recommend everyone.</h2>
+                                    <p>"Hello. Very good work! I like this writer. They answered the question fully and
+                                        had
+                                        great word choice along with great examples. The level of writing is high.</p>
+                                    <div class="star x5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     comment end -->
+
+    {% block subscription_section %}
+
+    {% endblock %}
+    <!-- footer start -->
+    {% block footer %}
+
+    {% endblock %}
+    <!-- footer end -->
+{% endblock body %}
+
+{% block page_scripts %}
+    <!-- counter start -->
+    <script src="{% static 'script/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'script/jquery.counterup.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.counter').counterUp({
+                delay: 10,
+                time: 1500
+            });
+        });
+    </script>
+    <!-- counter end -->
+
+    {# FIXME: complete checks before submission #}
+    <!-- Datepicker start -->
+    <script>
+        var start_date_sel = $('#id_start_date');
+        start_date_sel.datepicker({
+            autoHide: 'true',
+            format: 'dd/mm/yyyy',
+            startDate: new Date()
+        });
+
+        var end_date = new Date();
+        end_date.setMonth(end_date.getMonth() + 1);
+        $('#id_end_date').datepicker({
+            autoHide: 'true',
+            format: 'dd/mm/yyyy',
+            startDate: end_date
+        });
+
+        start_date_sel.on('pick.datepicker', function (e) {
+            var end_date = new Date(e.date.getTime());
+            end_date.setMonth(end_date.getMonth() + 1);
+            $('#id_end_date').datepicker('setStartDate', end_date);
+        });
+    </script>
+    <!-- Datepicker end -->
+
+    <!-- Fast Search labels start -->
+    <script>
+        $('label.btn-link').click(function () {
+            window.location.href = '{% url 'user:search' %}?location=' + this.innerText.trim();
+        })
+    </script>
+    <!-- Fast Search labels end -->
+
+
+{% endblock page_scripts %}

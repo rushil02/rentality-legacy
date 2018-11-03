@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
+from django.db.models import F
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -11,7 +12,7 @@ from formtools.wizard.views import SessionWizardView
 
 from house.models import House
 from tenant.models import HousePreference
-from user_custom.forms import ProfileForm1, ProfileForm2
+from user_custom.forms import ProfileForm1, ProfileForm2, HomePageSearchForm
 from user_custom.models import UserProfile
 from allauth.account.views import SignupView as AllAuthSignupView
 
@@ -26,18 +27,20 @@ def check_user(request):
 @login_required
 def welcome_auth_user(request):
     context = {
-        'house_pref': HousePreference.active_objects.all().order_by('-id')[:5],
-        'houses': House.active_objects.all().order_by('-id')[:5]
+        'house_list': House.active_objects.all().annotate(min_stay_weeks=F('min_stay') / 7).order_by(
+            'houseprofile__priority', '-updated_on')[:11],
+        'search_form': HomePageSearchForm()
     }
-    return render(request, 'user/welcome_auth.html', context)
+    return render(request, 'user/welcome/auth.html', context)
 
 
 def welcome(request):
     context = {
-        'house_pref': HousePreference.active_objects.all().order_by('-id')[:5],
-        'houses': House.active_objects.all().order_by('-id')[:5]
+        'house_list': House.active_objects.all().annotate(min_stay_weeks=F('min_stay') / 7).order_by(
+            'houseprofile__priority', '-updated_on')[:11],
+        'search_form': HomePageSearchForm()
     }
-    return render(request, 'user/welcome.html', context)
+    return render(request, 'user/welcome/anon.html', context)
 
 
 def send_registration_email(user):

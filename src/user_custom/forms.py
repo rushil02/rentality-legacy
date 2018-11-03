@@ -105,3 +105,42 @@ class CustomSignupForm(AllAuthSignupForm):
         UserProfile.objects.create(
             user=user, receive_newsletter=self.cleaned_data['receive_newsletter']
         )
+
+
+class HomePageSearchForm(forms.Form):
+    location = forms.CharField(
+        label='Location',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control marker', 'placeholder': 'City, State, Post code'
+        }, )
+    )
+    start_date = forms.DateField(
+        label='Start date',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date', 'placeholder': 'Start Date', 'readonly': True, 'data-toggle': 'datepicker'
+        }, )
+    )
+    end_date = forms.DateField(
+        label='End date',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date', 'placeholder': 'End Date', 'readonly': True, 'data-toggle': 'datepicker'
+        }, )
+    )
+
+
+class SearchPageSearchForm(forms.Form):
+    location = forms.CharField(
+        label='Location',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 'placeholder': 'City, State, Postcode, etc.'
+        }, )
+    )
+    bedrooms = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bedrooms', }), required=False
+    )
+    bathrooms = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bathrooms'}), required=False
+    )
+    max_price = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Rent'}), required=False
+    )

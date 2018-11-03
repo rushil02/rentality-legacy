@@ -1,23 +1,39 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="24.03" viewBox="0 0 17 24.03">
-    <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-        <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
-            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-                <rdf:Description rdf:about=""/>
-            </rdf:RDF>
-        </x:xmpmeta>
-
-
-        <?xpacket end="w"?>
-    </metadata>
-    <defs>
-        <style>
-            .cls-1 {
-            fill: #fff;
-            fill-rule: evenodd;
-            }
-        </style>
-    </defs>
-    <path class="cls-1"
-          d="M8224.5,3929a8.605,8.605,0,0,0-8.5,8.69c0,5.95,7.61,14.68,7.93,15.05a0.75,0.75,0,0,0,1.14,0c0.32-.37,7.93-9.1,7.93-15.05A8.605,8.605,0,0,0,8224.5,3929Zm0,13.06a4.371,4.371,0,1,1,4.28-4.37A4.33,4.33,0,0,1,8224.5,3942.06Z"
-          transform="translate(-8216 -3929)"/>
+  <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""/>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?></metadata>
+<defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M8224.5,3929a8.605,8.605,0,0,0-8.5,8.69c0,5.95,7.61,14.68,7.93,15.05a0.75,0.75,0,0,0,1.14,0c0.32-.37,7.93-9.1,7.93-15.05A8.605,8.605,0,0,0,8224.5,3929Zm0,13.06a4.371,4.371,0,1,1,4.28-4.37A4.33,4.33,0,0,1,8224.5,3942.06Z" transform="translate(-8216 -3929)"/>
 </svg>

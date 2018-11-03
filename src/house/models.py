@@ -93,7 +93,7 @@ class House(models.Model):
         try:
             image = Image.objects.get(house=self, is_thumbnail=True)
         except Image.DoesNotExist:
-            return "/static/img/placeholders/apartment/default.png"
+            return None
         else:
             return image.image
 
@@ -146,6 +146,11 @@ class House(models.Model):
     def has_tags(self):
         return bool(self.tags.all())
 
+    def save(self, *args, **kwargs):
+        super(House, self).save(*args, **kwargs)
+        house_profile = HouseProfile(house=self)
+        house_profile.save()
+
 
 class Image(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)
@@ -168,6 +173,14 @@ class Image(models.Model):
                 self.is_thumbnail = True
         return super(Image, self).save(force_insert=False, force_update=False, using=None,
                                        update_fields=None)
+
+
+class HouseProfile(models.Model):
+    """
+    priority : Lower number represents higher priority (is particularly used in building frontend)
+    """
+    house = models.OneToOneField(House, on_delete=models.CASCADE)
+    priority = models.PositiveSmallIntegerField(default=100)
 
 
 class Tag(models.Model):
