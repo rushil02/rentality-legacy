@@ -7,6 +7,9 @@ from utils.email_validator import clean_gmail
 from user_custom.models import UserProfile
 from allauth.account.forms import LoginForm as AllAuthLoginForm
 from allauth.account.forms import SignupForm as AllAuthSignupForm
+from allauth.account.forms import ChangePasswordForm as AllAuthChangePasswordForm
+from allauth.account.forms import ResetPasswordForm as AllAuthResetPasswordForm
+from allauth.account.forms import ResetPasswordKeyForm as AllAuthResetPasswordKeyForm
 
 
 class ProfileForm1(forms.ModelForm):
@@ -58,6 +61,7 @@ class CustomLoginForm(AllAuthLoginForm):
         self.fields['login'].widget.attrs['placeholder'] = 'Email'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['placeholder'] = 'Password'
+        self.fields['remember'].widget.attrs['class'] = 'custom-control-input'
 
 
 class CustomSignupForm(AllAuthSignupForm):
@@ -81,27 +85,63 @@ class CustomSignupForm(AllAuthSignupForm):
         )
     )
 
-    receive_newsletter = forms.BooleanField(initial=True, required=False)  # FIXME: store in db
-    policy_agreement = forms.BooleanField()
+    # receive_newsletter = forms.BooleanField(initial=True, required=False)  # FIXME: store in db
+    # policy_agreement = forms.BooleanField()
+    contact_num = forms.CharField(max_length=15, required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'contact_num',
+                'placeholder': 'Phone Number (optional)'
+            }
+        )
+    )
+    SEX_TYPE = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other')
+    )
+    gender = forms.ChoiceField(choices=SEX_TYPE, widget=forms.RadioSelect())
 
     def __init__(self, *args, **kwargs):
         super(CustomSignupForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget.attrs['class'] = 'form-control'
-        self.fields['email'].widget.attrs['placeholder'] = 'Email'
+        self.fields['email'].widget.attrs['placeholder'] = 'Email Address'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['placeholder'] = 'Password'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Password (again)'
     
-    def clean_policy_agreement(self):
-        agreement = self.cleaned_data['policy_agreement']
-        if not agreement:
-            raise forms.ValidationError(
-                _("Please accept the terms and conditions to signup and use our services."),
-                code='Policy agreement not accepted'
-            )
+    # def clean_policy_agreement(self):
+    #     agreement = self.cleaned_data['policy_agreement']
+    #     if not agreement:
+    #         raise forms.ValidationError(
+    #             _("Please accept the terms and conditions to signup and use our services."),
+    #             code='Policy agreement not accepted'
+    #         )
     
     def custom_signup(self, request, user):
         UserProfile.objects.create(
-            user=user, receive_newsletter=self.cleaned_data['receive_newsletter']
+            user=user, contact_num=self.cleaned_data['contact_num'],
+            sex=self.cleaned_data['gender']
         )
+
+
+class CustomChangePasswordForm(AllAuthChangePasswordForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomChangePasswordForm, self).__init__(*args, **kwargs)
+        self.fields['oldpassword'].widget.attrs['class'] = "form-control"
+        self.fields['password1'].widget.attrs['class'] = "form-control"
+        self.fields['password2'].widget.attrs['class'] = "form-control"
+
+
+class CustomResetPasswordForm(AllAuthResetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['class'] = "form-control"
+
+
+class CustomResetPasswordKeyForm(AllAuthResetPasswordKeyForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].widget.attrs['class'] = "form-control"
+        self.fields['password2'].widget.attrs['class'] = "form-control"
