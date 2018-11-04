@@ -53,7 +53,7 @@ def info(request, house_uuid):
         else:
             message_form = MessageForm()
             context = {'house': house, 'msg_form': message_form}
-            return render(request, 'house/info.html', context)
+            return render(request, 'property/detail.html', context)
 
 
 @login_required

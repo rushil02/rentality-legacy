@@ -73,4 +73,4 @@ class SignUpInfoWizard(SessionWizardView):
 
 class CustomSignupView(AllAuthSignupView):
     # FIXME: Reverse URL not working for reverse('user:account_creation')
-    success_url = '/add-details/'
+    success_url = '/'

@@ -290,7 +290,6 @@ ASSEMBLY_PAYMENTS_KEY = get_env_var('ASSEMBLY_PAYMENTS_KEY')
 ASSEMBLY_PAYMENTS_SECRET = get_env_var('ASSEMBLY_PAYMENTS_SECRET')
 ASSEMBLY_PAYMENTS_IS_PROD = get_env_var('ASSEMBLY_PAYMENTS_IS_PROD')
 
-
 # SummerNote (WYSIWYG editor)
 SUMMERNOTE_THEME = 'bs4'
 
@@ -311,7 +310,7 @@ THUMBNAIL_ALIASES = {
         'profile_small': {'size': (41, 41), 'crop': True},
         'house_home_page_small': {'size': (263, 196), 'crop': True},
         'house_home_page_large': {'size': (360, 196), 'crop': True},
+        'house_detail_small': {'size': (596, 416), 'crop': "smart"},
     }
 
 }
-

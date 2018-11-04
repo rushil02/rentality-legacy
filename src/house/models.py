@@ -38,7 +38,6 @@ class House(models.Model):
     STATUS = (
         ('I', 'Inactive'),      Not Visible to Public, 1st state of any listing
         ('P', 'Published'),     Visible to Public
-        ('L', 'Leased'),        Visible to Public with 'Leased' tag
         ('R', 'Removed'),       Not Visible to Public
         ('D', 'Deleted')        Deleted from user's account visibility, still in Database
     )
@@ -59,7 +58,7 @@ class House(models.Model):
         null=True, blank=True
     )
 
-    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True, verbose_name="Property Type")
+    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
     other_room_type = models.TextField(blank=True)
     bedrooms = models.PositiveSmallIntegerField(blank=True, null=True)
     bathrooms = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -150,6 +149,12 @@ class House(models.Model):
         super(House, self).save(*args, **kwargs)
         house_profile = HouseProfile(house=self)
         house_profile.save()
+
+    def get_facilities(self):
+        return self.tags.filter(tag_type='F')
+
+    def get_rules(self):
+        return self.tags.filter(tag_type='R')
 
 
 class Image(models.Model):
