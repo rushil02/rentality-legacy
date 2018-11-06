@@ -312,5 +312,4 @@ THUMBNAIL_ALIASES = {
         'house_home_page_large': {'size': (360, 196), 'crop': True},
         'house_detail_small': {'size': (596, 416), 'crop': "smart"},
     }
-
 }

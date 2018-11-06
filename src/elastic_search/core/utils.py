@@ -1,14 +1,32 @@
 import importlib
 import inspect
+import time
 
+from elasticsearch import TransportError
 from elasticsearch_dsl.connections import connections
 
 from elastic_search.core.settings import *
 
-ES_CONNECTION = connections.create_connection(**DATABASE_CONNECTION_INFO)
+
+# FIXME: remove this, and make check on docker end
+def establish_es_connection(try_num=1):
+    try:
+        connection_obj = connections.create_connection(**DATABASE_CONNECTION_INFO)
+    except TransportError as e:
+        if try_num <= CONNECTION_MAX_TRIES:
+            print("Trying to connect to ElastiSearch; Waiting %s seconds for it to start." % CONNECTION_WAIT_TIME)
+            time.sleep(CONNECTION_WAIT_TIME)
+            connection_obj = establish_es_connection(try_num+1)
+        else:
+            raise e
+    return connection_obj
+
+
+ES_CONNECTION = establish_es_connection()
 
 
 def create_connection():
+    # TODO: needs testing where the connection might close itself unexpectedly
     try:
         return ES_CONNECTION
     except Exception as e:

@@ -20,4 +20,8 @@ DATABASE_CONNECTION_INFO = {
 
 INDEX_NAME_PREFIX = 'web'
 
+# time in seconds. Makes django setup wait unless ElasticSearch is online
+CONNECTION_WAIT_TIME = 10
+CONNECTION_MAX_TRIES = 10
+
 BULK_CHUNK_SIZE = 10
