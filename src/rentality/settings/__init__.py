@@ -280,12 +280,8 @@ DEBUG_TOOLBAR_CONFIG = {
 # FormTools for Wizard - file storage
 FORMTOOLS_STORAGE_LOCATION = os.path.join(MEDIA_ROOT, 'temp-wizard-storage')
 
+# Email Settings
 DEFAULT_FROM_EMAIL = 'support@rentality.com.au'
-
-# Payment Gateway - Assembly
-ASSEMBLY_PAYMENTS_KEY = get_env_var('ASSEMBLY_PAYMENTS_KEY')
-ASSEMBLY_PAYMENTS_SECRET = get_env_var('ASSEMBLY_PAYMENTS_SECRET')
-ASSEMBLY_PAYMENTS_IS_PROD = get_env_var('ASSEMBLY_PAYMENTS_IS_PROD')
 
 # SummerNote (WYSIWYG editor)
 SUMMERNOTE_THEME = 'bs4'
