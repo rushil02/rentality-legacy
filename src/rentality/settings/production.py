@@ -33,3 +33,11 @@ sentry_sdk.init(
     integrations=[DjangoIntegration()],
     debug=False
 )
+
+# Email settings (using Sendgrid via SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'rushil02'
+EMAIL_HOST_PASSWORD = get_env_var('SENDGRID_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
