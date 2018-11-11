@@ -20,6 +20,7 @@ django-filter==1.1.0
 django-formtools==2.1
 django-model-utils==3.1.1
 django-private-chat==0.1.8
+django-sendgrid-v5==0.7.0
 django-summernote==0.8.10.0
 djangorestframework==3.7.7
 easy-thumbnails==2.5
