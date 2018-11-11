@@ -4,12 +4,12 @@ from django.db import models
 # Create your models here.
 
 
-class LandlordProfile(models.Model):
+class HomeOwnerProfile(models.Model):
     """
-    Information particular to Landlord
+    Information particular to Home Owner
     """
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='landlord')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='home_owner')
     shortlist = models.ManyToManyField('tenant.HousePreference', blank=True)
 
     def __str__(self):

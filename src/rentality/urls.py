@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('es/', include('elastic_search.urls')),
     path('te/', include('tenant.urls')),
-    path('la/', include('landlord.urls')),
+    path('la/', include('home_owner.urls')),
     path('st/', include('staff.urls')),
     path('admin/', include('admin_custom.urls')),
     path('', include('user_custom.urls')),

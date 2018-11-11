@@ -1,8 +1,8 @@
 from django.urls import path
 
-from landlord.views import shortlisted_tenants, ShortlistView
+from home_owner.views import shortlisted_tenants, ShortlistView
 
-app_name = 'landlord'
+app_name = 'home_owner'
 
 urlpatterns = [
     path('sl', shortlisted_tenants, name='shortlist'),

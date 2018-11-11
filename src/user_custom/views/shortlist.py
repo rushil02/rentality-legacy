@@ -33,7 +33,7 @@ def shortlist(request, entity=None, uuid=None):
 
         elif entity == "tenant":
             if request.user.is_authenticated:
-                entity_model = request.user.landlord
+                entity_model = request.user.home_owner
 
             try:
                 obj = HousePreference.objects.get(uuid=uuid)
@@ -60,7 +60,7 @@ def shortlist(request, entity=None, uuid=None):
 def shortlist_view(request):
     if request.user.is_authenticated:
 
-        shortlisted_tenants = request.user.landlord.shortlist.all()
+        shortlisted_tenants = request.user.home_owner.shortlist.all()
         shortlisted_houses = request.user.tenant.shortlist.all()
         applied = []  # FIXME
         offers = []

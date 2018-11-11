@@ -2,11 +2,13 @@ import os
 import time
 import uuid
 
-from django.contrib.postgres.fields import DateRangeField
+from django.contrib.postgres.fields import DateRangeField, ArrayField
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import FileField
 from django.db.models.fields.files import ImageFieldFile
+from django.contrib.postgres.fields import JSONField
 from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 
@@ -18,7 +20,7 @@ def get_file_path(instance, filename):
     return os.path.join(path, filename)
 
 
-class RoomType(models.Model):
+class HomeType(models.Model):
     name = models.TextField()
 
     def __str__(self):
@@ -27,7 +29,7 @@ class RoomType(models.Model):
 
 class ActiveHouseManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(status__in=['P', 'L'])
+        return super().get_queryset().filter(status='P')
 
 
 class House(models.Model):
@@ -42,15 +44,25 @@ class House(models.Model):
         ('D', 'Deleted')        Deleted from user's account visibility, still in Database
     )
     """
-    # TODO: add lazy verbose
-    landlord = models.ForeignKey(
-        'landlord.LandlordProfile',
+
+    REQUIRED_FIELDS = (
+        'home_owner', 'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms',
+        'bathrooms', 'parking', 'rent', 'facilities', 'cancellation_policy'
+    )
+
+    home_owner = models.ForeignKey(
+        'home_owner.HomeOwnerProfile',
         on_delete=models.CASCADE,
         related_name='houses',
         verbose_name=_('property owner')
     )
-    address_hidden = models.TextField(blank=True)
-    address = models.TextField(blank=True)
+
+    title = models.CharField(max_length=250, blank=True, verbose_name='caption')
+    furnished = models.BooleanField(default=False)
+
+    address_hidden = models.TextField(blank=True, verbose_name="Unit Number or House Number",
+                                      help_text="This is not visible to others unless a booking is made.")
+    address = models.TextField(blank=True, verbose_name='Building name, Street Name')
     location = models.ForeignKey(
         'cities.PostalCode',
         on_delete=models.PROTECT,
@@ -58,23 +70,32 @@ class House(models.Model):
         null=True, blank=True
     )
 
-    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
-    other_room_type = models.TextField(blank=True)
-    bedrooms = models.PositiveSmallIntegerField(blank=True, null=True)
-    bathrooms = models.PositiveSmallIntegerField(blank=True, null=True)
-    parking = models.PositiveSmallIntegerField(blank=True, null=True)
+    home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
+    bedrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bedrooms")
+    bathrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bathrooms")
+    parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces")
 
-    other_people = models.PositiveSmallIntegerField(default=0)
-    rent = models.PositiveSmallIntegerField(default=0)
-    tags = models.ManyToManyField('house.Tag', blank=True)
-    availability = DateRangeField(null=True, blank=True)
-    min_stay = models.PositiveSmallIntegerField(help_text=_('in days'), null=True, blank=True)
-    description = models.TextField(blank=True)
+    rent = models.PositiveSmallIntegerField(default=0, blank=True, help_text="Per Week")
+    min_stay = models.PositiveSmallIntegerField(
+        help_text=_('In days. Minimum and Default is 4 weeks (28 days).'), null=True, blank=True, default=28,
+        validators=[MinValueValidator(28)]
+    )
+    max_stay = models.PositiveSmallIntegerField(help_text=_('in days'), null=True, blank=True)
+
+    facilities = models.ManyToManyField('house.Facility', blank=True)
+    rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)
+    other_rules = models.TextField(blank=True)
+
+    cancellation_policy = models.ForeignKey('house.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
+
+    other_people_description = models.TextField(blank=True)
+
+    neighbourhood_description = models.TextField(blank=True)
+    neighbourhood_facility = models.ManyToManyField('house.NeighbourhoodDescriptor', blank=True)
 
     STATUS = (
         ('I', 'Inactive'),
         ('P', 'Published'),
-        ('L', 'Leased'),
         ('D', 'Deleted')
     )
     status = models.CharField(max_length=1, choices=STATUS, default='I')
@@ -96,8 +117,8 @@ class House(models.Model):
         else:
             return image.image
 
-    def get_room_type_display(self):
-        return "%s" % self.room_type.name
+    def get_home_type_display(self):
+        return "%s" % self.home_type.name
 
     def get_thumbnail_2(self):
         if self.is_thumbnail_available():
@@ -120,13 +141,13 @@ class House(models.Model):
         return False
 
     def __str__(self):
-        return "%s - %s [%s]" % (self.landlord, self.location, self.address)
+        return "%s - %s [%s]" % (self.home_owner, self.location, self.address)
 
     def get_images(self):
         return self.image_set.all()
 
     def get_owner(self):
-        return self.landlord.user
+        return self.home_owner.user
 
     def get_owner_username(self):  # FIXME: FIX method name
         return self.get_owner().first_name
@@ -142,19 +163,34 @@ class House(models.Model):
         else:
             return None
 
-    def has_tags(self):
-        return bool(self.tags.all())
-
     def save(self, *args, **kwargs):
+        created = False
+        if not self.pk:
+            created = True
         super(House, self).save(*args, **kwargs)
-        house_profile = HouseProfile(house=self)
-        house_profile.save()
+        if created:
+            house_profile = HouseProfile(house=self)
+            house_profile.save()
 
     def get_facilities(self):
-        return self.tags.filter(tag_type='F')
+        return self.facilities.all()
 
     def get_rules(self):
-        return self.tags.filter(tag_type='R')
+        return self.rules.all()
+
+
+class Availability(models.Model):
+    """
+    All round availability can be marked by full year with periodic.
+    """
+    house = models.ForeignKey('house.House', on_delete=models.CASCADE)
+    dates = DateRangeField()
+    periodic = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s" % self.house
 
 
 class Image(models.Model):
@@ -166,7 +202,7 @@ class Image(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "%s" % self.image.name
+        return "%s" % self.house
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -188,15 +224,51 @@ class HouseProfile(models.Model):
     priority = models.PositiveSmallIntegerField(default=100)
 
 
-class Tag(models.Model):
+class Facility(models.Model):
+    """
+    Facilities should have coherence across multiple properties, the current data relation of M2M facilitates user
+    created as well as default system created facilities.
+    """
     verbose = models.CharField(max_length=50)
+    system_default = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
-    TAG_TYPE = (
-        ('R', 'Preferences'),
-        ('F', 'Facility'),
-    )
+    def __str__(self):
+        return "%s" % self.verbose
 
-    tag_type = models.CharField(max_length=1, choices=TAG_TYPE)
+
+class NeighbourhoodDescriptor(models.Model):
+    """
+    Tags to describe the nearby area.
+    """
+    verbose = models.CharField(max_length=50)
+    system_default = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+
+class HouseRule(models.Model):
+    house = models.ForeignKey('house.House', on_delete=models.PROTECT)
+    rule = models.ForeignKey('house.Rule', on_delete=models.PROTECT)
+    value = models.CharField(max_length=1)
+    comment = models.TextField(blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('house', 'rule')
+
+    def __str__(self):
+        return "%s for %s" % (self.rule, self.house)
+
+
+class Rule(models.Model):
+    """
+    options = {'A': "verbose of A", ..}
+    """
+    verbose = models.CharField(max_length=50)
+    options = ArrayField(models.CharField(max_length=50))
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -217,3 +289,15 @@ class Application(models.Model):
 
     class Meta:
         unique_together = ('house', 'tenant')
+
+
+class CancellationPolicy(models.Model):
+    verbose = models.TextField(verbose_name='Policy Name')
+    description = models.TextField()
+    characteristics = JSONField()
+    official_policy = models.ForeignKey('essentials.Policy', on_delete=models.PROTECT, null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s" % self.verbose

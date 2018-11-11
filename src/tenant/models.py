@@ -36,9 +36,9 @@ class HousePreference(ModelWithPrivacy):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField('house.Tag')
+    # tags = models.ManyToManyField('house.Tag')
 
-    room_type = models.ForeignKey('house.RoomType', on_delete=models.PROTECT, null=True, verbose_name="Property Type")
+    home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
     description = models.TextField(blank=True)
 
     STATUS = (

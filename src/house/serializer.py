@@ -9,7 +9,7 @@ class HouseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = House
-        exclude = ['landlord', 'location']
+        exclude = ['home_owner', 'location']
 
     def get_thumbnail(self, obj):
         return obj.get_thumbnail_2()

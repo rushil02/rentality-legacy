@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from landlord.models import LandlordProfile
+from home_owner.models import HomeOwnerProfile
 from tenant.serializers import HousePreferenceSerializer
 
 
@@ -8,5 +8,5 @@ class ShortListSerializer(serializers.ModelSerializer):
     shortlist = HousePreferenceSerializer(many=True)
 
     class Meta:
-        model = LandlordProfile
+        model = HomeOwnerProfile
         exclude = ['user', ]

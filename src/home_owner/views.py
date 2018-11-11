@@ -3,21 +3,21 @@ from django.shortcuts import render
 from rest_framework import generics
 from django.contrib.auth.decorators import login_required
 
-from landlord.models import LandlordProfile
-from landlord.serializers import ShortListSerializer
+from home_owner.models import HomeOwnerProfile
+from home_owner.serializers import ShortListSerializer
 
 
 @login_required
 def home(request):
-    return HttpResponse("Landlord Home Page")
+    return HttpResponse("Home Owner Home Page")
 
 
 @login_required()
 def shortlisted_tenants(request):
-    house_pref = request.user.landlord.shortlist.all()
-    return render(request, 'landlord/shortlisted.html', {'shortlisted': house_pref})
+    house_pref = request.user.home_owner.shortlist.all()
+    return render(request, 'home_owner/shortlisted.html', {'shortlisted': house_pref})
 
 
 class ShortlistView(generics.ListCreateAPIView):
-    queryset = LandlordProfile.objects.all()
+    queryset = HomeOwnerProfile.objects.all()
     serializer_class = ShortListSerializer

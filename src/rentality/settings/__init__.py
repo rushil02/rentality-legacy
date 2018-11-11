@@ -85,7 +85,7 @@ INSTALLED_APPS = [
     'user_custom.apps.UserCustomConfig',
     'admin_custom.apps.AdminCustomConfig',
     'staff.apps.StaffConfig',
-    'landlord.apps.LandlordConfig',
+    'home_owner.apps.HomeOwnerConfig',
     'house.apps.HouseConfig',
     'tenant.apps.TenantConfig',
     'essentials.apps.EssentialsConfig',
@@ -267,7 +267,7 @@ OAUTH_DETAILS = {
     }
 }
 
-LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'libs')
+LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'working_libs')
 
 ASGI_APPLICATION = "rentality.routing.application"
 

@@ -1,0 +1,1445 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_title_add %}
+    List Your Home |
+{% endblock %}
+
+{% block additional_scripts %}
+    <link href="{% static 'plugin/dropzone/dropzone.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'style/add-property.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'plugin/dropzone/dropzone.min.js' %}"></script>
+    <script src="{% static 'script/add-property.js' %}"></script>
+
+    <!-- AutoComplete Scripts -->
+    {{ main_form.media }}
+{% endblock %}
+
+
+{% block navbar %}
+    {% include 'components/navbar/auth.html' %}
+{% endblock %}
+
+{% block additional_notification %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+
+        </div>
+    {% endif %}
+    {% if link_formset.non_form_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in link_formset.non_form_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <!-- page form start -->
+    <div class="page-form">
+        <div class="container-fluid">
+            <div class="full-header">
+                <div class="row">
+                    <div id="full-header-1" class="col-md-4 text-center">
+                        <a href="#form-1" class="nostyle form-change"><span class="number">1</span><span
+                                class="text">Basic Home info</span></a>
+                    </div>
+                    <div id="full-header-2" class="col-md-4 text-center">
+                        <a href="#form-5" class="nostyle form-change"><span class="number">2</span><span
+                                class="text">Detail Description</span></a>
+                    </div>
+                    <div id="full-header-3" class="col-md-4 text-center">
+                        <a href="#form-9" class="nostyle form-change"><span class="number">3</span><span
+                                class="text">About you</span></a>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar bg-success"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-1"></div>
+                <div class="col-xl-10">
+                    <div class="right">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="header">
+                                    <div id="sub-header-1" class="row sub-header-row">
+                                        <div class="col-md-3">
+                                            <a href="#form-1" class="nostyle form-change">
+                                                <div id="sub-title-1" class="title">About the property</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-2" class="nostyle form-change">
+                                                <div id="sub-title-2" class="title">Rent & Availability</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-3" class="nostyle form-change">
+                                                <div id="sub-title-3" class="title">Facilitas</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-4" class="nostyle form-change">
+                                                <div id="sub-title-4" class="title">Images</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="sub-header-2" class="row sub-header-row">
+                                        <div class="col-md-3">
+                                            <a href="#form-5" class="nostyle form-change">
+                                                <div id="sub-title-5" class="title">Have rules</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-6" class="nostyle form-change">
+                                                <div id="sub-title-6" class="title">Cancellation policy</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-7" class="nostyle form-change">
+                                                <div id="sub-title-7" class="title">Tenant’s space access</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-8" class="nostyle form-change">
+                                                <div id="sub-title-8" class="title">The area</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="sub-header-3" class="row sub-header-row">
+                                        <div class="col-md-3">
+                                            <a href="#form-9" class="nostyle form-change">
+                                                <div id="sub-title-9" class="title">Profile Photo</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-10" class="nostyle form-change">
+                                                <div id="sub-title-10" class="title">Fun tags</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-11" class="nostyle form-change">
+                                                <div id="sub-title-11" class="title">Welcome</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-12" class="nostyle form-change">
+                                                <div id="sub-title-12" class="title">Payout info</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form method="POST" id="main_form">
+                            {% csrf_token %}
+                            <div id="form-1">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">What home are you listing ?</h1>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="input">
+                                                    {{ main_form.title }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.title.help_text }}
+                                                </small>
+                                                {% if main_form.title.errors %}
+                                                    {% for error in main_form.title.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="input">
+                                                    {{ main_form.address_hidden }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.address_hidden.help_text }}
+                                                </small>
+                                                {% if main_form.address_hidden.errors %}
+                                                    {% for error in main_form.address_hidden.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="input">
+                                                    {{ main_form.address }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.address.help_text }}
+                                                </small>
+                                                {% if main_form.address.errors %}
+                                                    {% for error in main_form.address.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="input select">
+                                                    {{ main_form.location }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.location.help_text }}
+                                                </small>
+                                                {% if main_form.location.errors %}
+                                                    {% for error in main_form.location.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-12 col-lg-6">
+                                                <div class="input bedroom">
+                                                    {{ main_form.bedrooms }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.bedrooms.help_text }}
+                                                </small>
+                                                {% if main_form.bedrooms.errors %}
+                                                    {% for error in main_form.bedrooms.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-12 col-lg-6">
+                                                <div class="input bathroom">
+                                                    {{ main_form.bathrooms }}
+                                                    <small class="form-text text-muted">
+                                                        {{ main_form.bathrooms.help_text }}
+                                                    </small>
+                                                    {% if main_form.bathrooms.errors %}
+                                                        {% for error in main_form.bedrooms.errors %}
+                                                            <div class="invalid-feedback">{{ error }}</div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-6">
+                                                <div class="input">
+                                                    {{ main_form.parking }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.parking.help_text }}
+                                                </small>
+                                                {% if main_form.parking.errors %}
+                                                    {% for error in main_form.bedrooms.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-12 col-lg-6">
+                                                <div class="select type">
+                                                    Home Type
+                                                    {{ main_form.home_type }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.home_type.help_text }}
+                                                </small>
+                                                {% if main_form.home_type.errors %}
+                                                    {% for error in main_form.home_type.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-2">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">Set your rent and Stay limits.</h1>
+                                        <div class="row">
+                                            <div class="col-md-12 col-lg-6">
+                                                <div class="input no-background">
+                                                    {{ main_form.rent }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.rent.help_text }}
+                                                </small>
+                                                {% if main_form.rent.errors %}
+                                                    {% for error in main_form.rent.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-12 col-lg-6"></div>
+                                            <div class="col-md-12 col-lg-6">
+                                                <div class="input no-background">
+                                                    {{ main_form.min_stay }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.min_stay.help_text }}
+                                                </small>
+                                                {% if main_form.min_stay.errors %}
+                                                    {% for error in main_form.min_stay.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-12 col-lg-6">
+                                                <div class="input no-background">
+                                                    {{ main_form.max_stay }}
+                                                </div>
+                                                <small class="form-text text-muted">
+                                                    {{ main_form.max_stay.help_text }}
+                                                </small>
+                                                {% if main_form.max_stay.errors %}
+                                                    {% for error in main_form.max_stay.errors %}
+                                                        <div class="invalid-feedback">{{ error }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <h1 class="title">Set your availability</h1>
+                                        {{ availability_formset.management_form }}
+
+
+                                        <div class="row">
+                                            <ul class="list-group list-group-flush" style="width: 100%"
+                                                id="availability-dates-list">
+
+                                                {% for form in availability_formset %}
+                                                    {{ form.dates }}
+                                                    {% if form.dates.value.0 %}
+                                                        <li class="list-group-item">
+                                                            <div class="row">
+                                                                <div class="col-md-4">{{ form.dates.value.0 }}
+                                                                    to {{ form.dates.value.1 }} </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        Every
+                                                                        Year: {{ form.periodic }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="text-right">
+                                                                        {{ form.DELETE }} Delete
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+
+                                                    {% endif %}
+
+                                                    {#                                                {% if formset.can_delete %}#}
+                                                    {#                                                    <li>{{ form.DELETE }} Remove</li>#}
+                                                    {#                                                {% endif %}#}
+                                                {% endfor %}
+                                            </ul>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="text-center">
+                                                    <div class="calendar" id="availability-calendar"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6"></div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <button type="button" class="btn btn-link anything-else-add"
+                                                                id="add-dates">
+                                                            Add
+                                                            Selected Dates
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <button type="button" class="btn btn-link anything-else-add"
+                                                                id="clear-dates">
+                                                            Clear
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-3">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">Tick all the fatalities you home offers to the home</h1>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="checkbox">
+                                                    <ul class="list-inline">
+                                                        <li class="list-inline-item">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="checkbox-18"
+                                                                       class="custom-control-input">
+                                                                <label class="custom-control-label" for="checkbox-18">Bike
+                                                                    Firune</label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="input big no-background">
+                                                            <input type="text" class="form-control anything-else"
+                                                                   placeholder="Anything Else ?">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button type="button" class="btn btn-link anything-else-add">Add
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-4">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">What home are you listing ?</h1>
+                                        <div class="file">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group mb-3">
+                                                        <div class="custom-file">
+                                                            <input type="file" id="input-1" class="custom-file-input">
+                                                            <label class="custom-file-label" for="input-1">Description
+                                                                Photo</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="warning">
+                                                <p class="big">Please Not: Listing wtih photos are more likely to be
+                                                    rent
+                                                    out.</p>
+                                                <p class="small">Upload up to <span>9</span> photos</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-5">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">What are you house rules ?</h1>
+                                        <div class="big-list">
+                                            <div class="list">
+                                                <h2>Smooking</h2>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-12 col-xl-5">
+                                                        <div class="checkbox auto-width">
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-1"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-1">Acceptable</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-2"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-2">Not
+                                                                            Acceptable</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-3"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-3">Other</label>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-12 col-xl-7">
+                                                        <div class="input no-background style-gray">
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="e.g : out door only">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="list">
+                                                <h2>Pets</h2>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-12 col-xl-5">
+                                                        <div class="checkbox auto-width">
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-4"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-4">Acceptable</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-5"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-5">Not
+                                                                            Acceptable</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-6"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-6">Other</label>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-12 col-xl-7">
+                                                        <div class="input no-background style-gray">
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="e.g : small pets only">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="list">
+                                                <h2>Parties& Events</h2>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-12 col-xl-5">
+                                                        <div class="checkbox auto-width">
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-7"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-7">Acceptable</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-8"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-8">Not
+                                                                            Acceptable</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-9"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-9">Other</label>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-12 col-xl-7">
+                                                        <div class="input no-background style-gray">
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="e.g : out door only">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="list">
+                                                <h2>Suitable for children</h2>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-12 col-xl-5">
+                                                        <div class="checkbox auto-width">
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-10"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-10">Yes</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-11"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-11">No</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-12"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-12">Others</label>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-12 col-xl-7">
+                                                        <div class="input no-background style-gray">
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="e.g : Not suitable for family">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="list">
+                                                <h2>Arrival Time</h2>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-4 col-xl-3">
+                                                        <div class="label">Between</div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-4 col-xl-2">
+                                                        <div class="select">
+                                                            &nbsp;
+                                                            <select class="form-control">
+                                                                <option>00:00</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-4 col-xl-2">
+                                                        <div class="select">
+                                                            &nbsp;
+                                                            <select class="form-control">
+                                                                <option>00:00</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-5"></div>
+                                                </div>
+                                            </div>
+                                            <div class="list">
+                                                <h2>Arrival Time</h2>
+                                                <div class="row">
+                                                    <div class="col-md-8 col-lg-8 col-xl-5">
+                                                        <div class="checkbox auto-width">
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-13"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-13">Yes</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-14"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-14">Flexible</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item float-right">
+                                                                    yes ,Another is it
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 col-lg-4 col-xl-2">
+                                                        <div class="select">
+                                                            &nbsp;
+                                                            <select class="form-control">
+                                                                <option>00:00</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-5"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="green-textarea">
+                                            <h2>Is there anything else your guest need to beware of in you house ? </h2>
+                                            <div class="row">
+                                                <div class="col-md-9 col-lg-9 col-xl-6">
+                                                    <div class="textarea">
+                                                        <textarea class="form-control" rows="10"
+                                                                  placeholder="."></textarea>
+                                                        <div class="example">
+                                                            <p><strong>Examples</strong></p>
+                                                            Noise level<br>
+                                                            Stairs<br>
+                                                            What are the share space ?<br>
+                                                            Animals living on the premise ?<br>
+                                                            Off limit area ?<br>
+                                                            Eating area /limits ?<br>
+                                                            No Shoes in the house ?<br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p>Please Note: these house rules will be accepted by the guest before they
+                                                book
+                                                your
+                                                accommodation.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-6">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">Which cancellation Policy you like?</h1>
+                                        <div class="paragraph">
+                                            <div class="checkbox auto-width">
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" id="checkbox-15"
+                                                                   class="custom-control-input">
+                                                            <label class="custom-control-label black" for="checkbox-15">Flexiable
+                                                                Policy</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <p>The terant will be entitled to full refund if they cancel 24 hour
+                                                before<br>
+                                                5:00 pm of check in date (local host time zone)</p>
+                                            <p class="gray">e.g : check-in date = 15 th september , latest cancelletion
+                                                date
+                                                =
+                                                5:49
+                                                pm 14 th september</p>
+                                            <div class="checkbox auto-width">
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" id="checkbox-16"
+                                                                   class="custom-control-input">
+                                                            <label class="custom-control-label black" for="checkbox-16">Moderate
+                                                                Policy</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <p>The terant will be entitled to full refund if they cancel 7 days
+                                                before<br>
+                                                5:00 pm of check in date (local host time zone)</p>
+                                            <p class="gray">e.g : check-in date = 15 th september , latest cancelletion
+                                                date
+                                                =
+                                                5:49
+                                                pm 8 th september</p>
+                                            <div class="checkbox auto-width">
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" id="checkbox-17"
+                                                                   class="custom-control-input">
+                                                            <label class="custom-control-label black" for="checkbox-17">Strict
+                                                                Policy</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <p>The terant partial refund if they cancel 7 days before 5:00 pm of check
+                                                in
+                                                date.<br>
+                                                if booking exact refund</p>
+                                            <p>Will only be subject to the amount will depanson the duration of stay<br>
+                                                -If the stay duration is less than 2 weeks, the tenant will be. entitled
+                                                to
+                                                50%
+                                                of
+                                                the rent.<br>
+                                                -If the stay duration is between 2 weeks to rent’s refund</p>
+                                            <p>-If the stay duration exceeds 1 month, the tenant will be entitled to 2
+                                                weeks
+                                                of
+                                                the
+                                                rent’s refund.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-7">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">Are there other proble living in the house ?</h1>
+                                        <div class="black-textarea">
+                                            <div class="checkbox auto-width">
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" id="checkbox-18"
+                                                                   class="custom-control-input">
+                                                            <label class="custom-control-label"
+                                                                   for="checkbox-18">YES</label>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" id="checkbox-19"
+                                                                   class="custom-control-input">
+                                                            <label class="custom-control-label"
+                                                                   for="checkbox-19">NO</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <p>if yes, what are they like ?</p>
+                                                <div class="row">
+                                                    <div class="col-md-9 col-lg-9 col-xl-6">
+                                                        <div class="textarea">
+                                                        <textarea class="form-control" rows="6"
+                                                                  placeholder="."></textarea>
+                                                            <div class="example">
+                                                                <p><strong>Examples</strong></p>
+                                                                Who are they , what are they like ?<br>
+                                                                How old are they , are they a student , marking ?<br>
+                                                                are they quiet ? Extrovert
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h1 class="title">Are there any argen restriction for the tenant ?</h1>
+                                        <div class="black-textarea">
+                                            <div class="row">
+                                                <div class="col-md-9 col-lg-9 col-xl-6">
+                                                    <div class="textarea">
+                                                        <textarea class="form-control" rows="9"
+                                                                  placeholder="."></textarea>
+                                                        <div class="example">
+                                                            <p><strong>Examples</strong></p>
+                                                            No access uphairs.<br>
+                                                            No access to the garden outside.<br>
+                                                            Cannot enter the grany fint<br>
+                                                            Only your desinated toilet will be accessible.<br>
+                                                            No access to form animal without permission
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-8">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">What is the neighhourhood like ?</h1>
+                                        <div class="black-textarea">
+                                            <div class="checkbox auto-width">
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" id="checkbox-20"
+                                                                   class="custom-control-input">
+                                                            <label class="custom-control-label"
+                                                                   for="checkbox-20">YES</label>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" id="checkbox-21"
+                                                                   class="custom-control-input">
+                                                            <label class="custom-control-label"
+                                                                   for="checkbox-21">NO</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <p>if yes, what are they like ?</p>
+                                                <div class="row">
+                                                    <div class="col-md-9 col-lg-9 col-xl-6">
+                                                        <div class="textarea">
+                                                        <textarea class="form-control" rows="8"
+                                                                  placeholder="."></textarea>
+                                                            <div class="example">
+                                                                <p><strong>Examples</strong></p>
+                                                                10 min walk to university<br>
+                                                                5 min walk to bus stop or train station<br>
+                                                                15 min walk to shipping centre<br>
+                                                                Gym accesible in the apartment<br>
+                                                                Only 50 min bus to central.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h1 class="title">Are there any argen restriction for the tenant ?</h1>
+                                        <div class="selection">
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off"
+                                                           checked>
+                                                    Tennis court
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    Football field
+                                                </label>
+                                                <label class="btn btn-link active">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    Movie theater
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    walking area
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    Tennis court
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    Tennis court
+                                                </label>
+                                                <label class="btn btn-link active">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    Basketball court
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    Bowling alley
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-9">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">Show your tenant what you look like ?</h1>
+                                        <form action="dropzone.php" class="dropzone">
+                                            <div class="fallback">
+                                                <input type="text" name="droapzone" multiple>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-10">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">Select the hashtag that best describe you or your hobbies<i
+                                                data-toggle="popover"
+                                                data-content="The terant willl have to acklodedge these happy rules and special notes before  appying to your place">What
+                                            is this</i></h1>
+                                        <div class="selection">
+                                            <h2>Please note: but highly recommend it if you are ahve sharing</h2>
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off"
+                                                           checked>
+                                                    #Hilcav
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #Caffe addet
+                                                </label>
+                                                <label class="btn btn-link active">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #beanhumans
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #travel adcliect
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #foodie
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #doglover
+                                                </label>
+                                                <label class="btn btn-link active">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #Pound mum
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #Bigger
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #Bigger
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #Harrypotterfash
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #ANN
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #Internet
+                                                </label>
+                                                <label class="btn btn-link">
+                                                    <input type="checkbox" name="selection[]" autocomplete="off">
+                                                    #nurse
+                                                </label>
+                                            </div>
+                                            <div class="add">
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" value="#">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button type="button" class="btn btn-link btn-block">Add
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p>You may add up to 10 hashtags</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-11">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <h1 class="title">Select the group you welcome to your home</h1>
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                <div class="checkbox">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-1"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-1">Pets
+                                                                            owner</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-3"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-3">Students</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-5"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-5">Smoker</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-8"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-8">40+</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-10"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-10">Retiree</label>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-2"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-2">Parant
+                                                                            with
+                                                                            children</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-4"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-4">Backpacker</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-6"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-6">Welfore welcome</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-9"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-9">Famele
+                                                                            Only</label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" id="checkbox-11"
+                                                                               class="custom-control-input">
+                                                                        <label class="custom-control-label"
+                                                                               for="checkbox-11">LGBT+
+                                                                            friendy</label>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div id="form-12">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <div class="payment">
+                                            <h1 class="title">Complete your profile information</h1>
+                                            <div class="row">
+                                                <div class="col-md-12 col-lg-12 col-xl-6">
+                                                    <div class="page-form-payment-left">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background top-margin">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="First name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Last name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Email Address">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Contact Number">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-lg-6">
+                                                                <div class="select">
+                                                                    DOB
+                                                                    <select class="form-control">
+                                                                        <option>01.01.1986</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-lg-6">
+                                                                <div class="select">
+                                                                    Gender
+                                                                    <select class="form-control select-gender">
+                                                                        <option>Male</option>
+                                                                        <option>Female</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <p><span>Please Note:</span> We wil not disclose your
+                                                                    contact
+                                                                    detail actail until the booking is confirmed.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-12 col-xl-6">
+                                                    <div class="page-form-payment-right">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <button type="button" class="btn btn-link payment">Add
+                                                                    (or
+                                                                    change)
+                                                                    payment method
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-md-4 align-self-end">
+                                                                <div class="label">Filter</div>
+                                                            </div>
+                                                            <div class="col-md-8 text-right">
+                                                                <ul class="list-inline">
+                                                                    <li class="list-inline-item active">
+                                                                        <img src="{% static 'image/form-1/amex.png' %}"
+                                                                             alt=""
+                                                                             title="">
+                                                                    </li>
+                                                                    <li class="list-inline-item">
+                                                                        <img src="{% static 'image/form-1/visa.png' %}"
+                                                                             alt=""
+                                                                             title="">
+                                                                    </li>
+                                                                    <li class="list-inline-item">
+                                                                        <img src="{% static 'image/form-1/master-card.png' %}"
+                                                                             alt=""
+                                                                             title="">
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Name Surname">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Card Number">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Expiry Date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="i">
+                                                                    <div class="input no-background">
+                                                                        <input type="text" class="form-control"
+                                                                               placeholder="CCV">
+                                                                        <i data-toggle="popover"
+                                                                           data-content="The terant willl have to acklodedge these happy rules and special notes before  appying to your place"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="First name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Last name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Postal code">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Country">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 text-right">
+                                                                <button type="button" class="btn btn-link add-card">Add
+                                                                    Card
+                                                                </button>
+                                                                <button type="button" class="btn btn-link cancel">Cancel
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <strong>Or</strong>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Bsb">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Acc No">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Acc Name">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input no-background">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="Bank">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 text-right">
+                                                                <button type="button" class="btn btn-link save">Save
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="button top-margin">
+                                        <button type="submit" class="btn btn-link" id="submit-and-exit">Save and Exit
+                                        </button>
+                                        <a type="button" class="btn btn-link" id="next-step">Next</a>
+                                        <button type="submit" class="btn btn-link" id="list-now">List Now</button>
+                                        <a type="button" class="btn btn-link" id="prev-step">Back</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xl-1"></div>
+            </div>
+        </div>
+    </div>
+    <!-- page form end -->
+{% endblock %}
+
+{% block footer %}
+    {% include 'components/footer/auth.html' %}
+{% endblock %}
+
+{% block page_scripts %}
+    <script>
+        // Page user flow
+        $('#submit-and-exit').click(function () {
+            window.removeEventListener("beforeunload", confirm_leave);
+            $('#main_form').submit();
+        });
+
+        $('#next-step').click(function () {
+            var curr_form_num = parseInt($('div[id^="form-"][class^="form-series"]:not(.d-none)').attr('id').split('-')[1]);
+            clear_load_form(curr_form_num, curr_form_num + 1);
+            {#prev_btn.attr("href", "#form-" + curr_form_num);#}
+            {#next_btn.attr("href", "#form-" + (curr_form_num + 2));#}
+        });
+
+        $('#prev-step').click(function () {
+            var curr_form_num = parseInt($('div[id^="form-"][class^="form-series"]:not(.d-none)').attr('id').split('-')[1]);
+            clear_load_form(curr_form_num, curr_form_num - 1);
+            {#prev_btn.attr("href", "#form-" + (curr_form_num - 2));#}
+            {#next_btn.attr("href", "#form-" + curr_form_num);#}
+        });
+
+        $('.form-change').click(function () {
+            var curr_form_num = parseInt($('div[id^="form-"][class^="form-series"]:not(.d-none)').attr('id').split('-')[1]);
+            var next_form_num = parseInt($(this).attr('href').split('-')[1]);
+            clear_load_form(curr_form_num, next_form_num);
+            check_buttons(next_form_num);
+        });
+
+        function confirm_leave(event) {
+            event.preventDefault();
+            event.returnValue = 'Changes that you made may not be saved. Reload Site?';
+        }
+
+        window.addEventListener("beforeunload", confirm_leave);
+    </script>
+
+    <script>
+
+        var curr_availability_form = {{ availability_formset.initial_form_count }};
+        var total_availability_form = {{ availability_formset.total_form_count }};
+        $('#add-dates').click(function () {
+            var date_arr = pickmeup('#availability-calendar').get_date(true);
+            var date_arr_cal = pickmeup('#availability-calendar').get_date(false);
+            if (date_arr.length > 0) {
+                var time_diff = 2332800000; // 27 days in seconds
+                if ((date_arr_cal[1].getTime() - date_arr_cal[0].getTime()) > time_diff) {
+                    console.log("here");
+                    var html = '<li class="list-group-item">\
+                            <div class="row">\
+                                <div class="col-md-4">' + date_arr[0] + '\
+                                    to ' + date_arr[1] + ' </div>\
+                                <div class="col-md-4">\
+                                    <div class="custom-control custom-checkbox">\
+                                        Every\
+                                        Year:\
+                                    </div>\
+                                </div>\
+                                 <div class="col-md-4">\
+                                    <div class="text-right">\
+                                        Delete\
+                                    </div>\
+                                 </div>\
+                        </div>\
+                     </li>';
+                    $('ul#availability-dates-list').append(html);
+                    $('#id_availability-form-' + curr_availability_form + '-dates_0').val(date_arr[0]);
+                    $('#id_availability-form-' + curr_availability_form + '-dates_1').val(date_arr[1]);
+                    curr_availability_form += 1;
+
+                    if (curr_availability_form >= total_availability_form) {
+                        window.removeEventListener("beforeunload", confirm_leave);
+                        $('#main_form').submit();
+                    }
+
+                }
+                else {
+                    console.log("Error!");
+                }
+            }
+        });
+
+        $('#clear-dates').click(function () {
+            pickmeup('#availability-calendar').clear();
+        });
+
+    </script>
+{% endblock %}

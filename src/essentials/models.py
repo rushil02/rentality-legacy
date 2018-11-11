@@ -32,6 +32,7 @@ class Notification(models.Model):
     notification_type = models.CharField(max_length=3, choices=CHOICE)
 
     data = JSONField()
+    landing_url = models.URLField(null=True, blank=True)
     deleted = models.DateTimeField(null=True, blank=True)
     notified = models.BooleanField(default=False)
     update_time = models.DateTimeField(auto_now=True)

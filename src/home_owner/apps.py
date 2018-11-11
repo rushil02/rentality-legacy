@@ -1,8 +1,8 @@
 from django.apps import AppConfig
 
 
-class LandlordConfig(AppConfig):
-    name = 'landlord'
+class HomeOwnerConfig(AppConfig):
+    name = 'home_owner'
 
     def ready(self):
         from . import signals

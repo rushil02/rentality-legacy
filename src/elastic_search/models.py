@@ -28,7 +28,7 @@ class Location(BaseModel):
 class House(BaseModel):
     address = Text()
     location = Text()
-    room_type = Keyword()
+    home_type = Keyword()
     rent = Integer()
     availability = DateRange()
     min_stay = Integer()

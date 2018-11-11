@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from house.models import House, Tag, Image, Application, RoomType, HouseProfile
+from house.models import House, Image, Application, HomeType, HouseProfile, Availability
 
 
 class HouseAdmin(admin.ModelAdmin):
@@ -13,7 +13,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 admin.site.register(Image, ImageAdmin)
 admin.site.register(House, HouseAdmin)
-admin.site.register(RoomType)
-admin.site.register(Tag)
+admin.site.register(HomeType)
+admin.site.register(Availability)
 admin.site.register(Application)
 admin.site.register(HouseProfile)

@@ -83,10 +83,40 @@
 </head>
 <body>
 {% block body %}
+
     <!-- navbar start -->
-    {% block navbar %}
-        {% include 'components/navbar/base.html' %}
-    {% endblock navbar %}
+    {% block body_header_main %}
+        <!-- mobile menu start -->
+        <div class="mobile-menu white"></div>
+        <div class="mobile-menu-content white"></div>
+        <!-- mobile menu end -->
+        <!-- menu start -->
+        <div class="menu white">
+            <!-- alert start -->
+            {% block notification %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %}">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endblock notification %}
+
+            {% block additional_notification %}
+
+            {% endblock %}
+            <!-- alert end -->
+
+        {% block navbar %}
+            {% include 'components/navbar/base.html' %}
+        {% endblock navbar %}
+        </div>
+        <!-- menu end -->
+    {% endblock body_header_main %}
     <!-- navbar end -->
 
     <!-- content start -->

@@ -3,47 +3,125 @@ from django.contrib.postgres.forms import DateRangeField, RangeWidget
 from django.forms import inlineformset_factory, modelformset_factory
 from dal import autocomplete
 
-from house.models import House, Image, Tag
+from house.models import House, Image, Availability
 
 
-class HouseDetailsForm1(forms.ModelForm):
+class HouseDetailsForm1():
+    pass
+
+
+class HouseDetailsForm2(object):
+    pass
+
+
+class HouseDetailsForm3(object):
+    pass
+
+
+class HouseForm(forms.ModelForm):
     class Meta:
         model = House
-        fields = ['location', 'address', 'room_type', 'other_room_type', 'bedrooms', 'bathrooms', 'parking']
+        exclude = ['home_owner', 'status', 'rules']
         widgets = {
-            'location': autocomplete.ModelSelect2(url='house:postal_code_api',
-                                                  attrs={'class': 'form-control', 'style': "visibility:hidden;",
-                                                         'data-placeholder': 'Enter postcode'}),
-            'address': forms.TextInput(attrs={'class': 'form-control',
-                                              'placeholder': 'Unit no., House no., Street name, etc.',
-                                              }),
-            'room_type': forms.Select(attrs={'class': 'form-control', 'style': "visibility:hidden;", }),
-            'other_room_type': forms.TextInput(attrs={'class': 'form-control',
-                                                      'placeholder': 'Other Accommodation Description',
-                                                      'type': "hidden"}),
-            'bedrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bedrooms'}),
-            'bathrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bathrooms'}),
-            'parking': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of parking spaces'}),
+            'title': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+            'address_hidden': forms.TextInput(
+                attrs={'class': 'form-control address'}
+            ),
+            'address': forms.TextInput(
+                attrs={'class': 'form-control no-background'}
+            ),
+            'location': autocomplete.ModelSelect2(
+                url='house:postal_code_api',
+                attrs={'class': 'form-control address', 'data-placeholder': 'Enter postcode'}
+            ),
+            'home_type': forms.Select(
+                attrs={'class': 'form-control', }
+            ),
+            'bedrooms': forms.NumberInput(
+                attrs={'class': 'form-control'}
+            ),
+            'bathrooms': forms.NumberInput(
+                attrs={'class': 'form-control'}
+            ),
+            'parking': forms.NumberInput(
+                attrs={'class': 'form-control'}
+            ),
+            'rent': forms.NumberInput(
+                attrs={'class': 'form-control'}
+            ),
+            'min_stay': forms.NumberInput(
+                attrs={'class': 'form-control'}
+            ),
+            'max_stay': forms.NumberInput(
+                attrs={'class': 'form-control'}
+            ),
+            'other_rules': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 10}
+            ),
+            'cancellation_policy': forms.RadioSelect(
+                attrs={'class': 'form-control'}
+            )
         }
 
+    def __init__(self, *args, **kwargs):
+        super(HouseForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['placeholder'] = field.label
 
-class HouseDetailsForm2(forms.ModelForm):
-    facilities = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='F'))
-    rules = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='R'))
 
+# class HouseDetailsForm1(forms.ModelForm):
+#     class Meta:
+#         model = House
+#         fields = ['location', 'address', 'home_type', 'bedrooms', 'bathrooms', 'parking']
+#         widgets = {
+#             'location': autocomplete.ModelSelect2(url='house:postal_code_api',
+#                                                   attrs={'class': 'form-control', 'style': "visibility:hidden;",
+#                                                          'data-placeholder': 'Enter postcode'}),
+#             'address': forms.TextInput(attrs={'class': 'form-control',
+#                                               'placeholder': 'Unit no., House no., Street name, etc.',
+#                                               }),
+#             'home_type': forms.Select(attrs={'class': 'form-control', 'style': "visibility:hidden;", }),
+#             'bedrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bedrooms'}),
+#             'bathrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bathrooms'}),
+#             'parking': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of parking spaces'}),
+#         }
+
+
+# class HouseDetailsForm2(forms.ModelForm):
+#     # facilities = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='F'))
+#     # rules = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='R'))
+#
+#     class Meta:
+#         model = House
+#         fields = ['rent', 'availability', 'min_stay', 'description']
+#         widgets = {
+#             'rent': forms.NumberInput(attrs={'class': 'form-control', }),
+#             # 'rules': forms.SelectMultiple(attrs={'class': 'form-control', }),
+#             # 'facilities': forms.SelectMultiple(attrs={'class': 'form-control', }),
+#             'tenant_prof': forms.SelectMultiple(attrs={'class': 'form-control', }),
+#             'availability': RangeWidget(base_widget=forms.DateInput,
+#                                         attrs={'class': 'form-control', }),
+#             'min_stay': forms.NumberInput(attrs={'class': 'form-control', }),
+#             'description': forms.Textarea(attrs={'class': 'form-control', })
+#         }
+
+class AvailabilityForm(forms.ModelForm):
     class Meta:
-        model = House
-        fields = ['rent', 'availability', 'min_stay', 'description']
+        model = Availability
+        fields = ['dates', 'periodic']
         widgets = {
-            'rent': forms.NumberInput(attrs={'class': 'form-control', }),
-            'rules': forms.SelectMultiple(attrs={'class': 'form-control', }),
-            'facilities': forms.SelectMultiple(attrs={'class': 'form-control', }),
-            'tenant_prof': forms.SelectMultiple(attrs={'class': 'form-control', }),
-            'availability': RangeWidget(base_widget=forms.DateInput,
-                                        attrs={'class': 'form-control', }),
-            'min_stay': forms.NumberInput(attrs={'class': 'form-control', }),
-            'description': forms.Textarea(attrs={'class': 'form-control', })
+            'dates': RangeWidget(base_widget=forms.DateInput(format='%d %B, %Y'),
+                                 attrs={'class': 'form-control col-md-6', 'style': 'display: None;'}),
+            'periodic': forms.CheckboxInput(attrs={'class': 'custom-control-input'})
         }
+
+    def clean_dates(self):
+        pass
+
+
+AvailabilityFormSet = modelformset_factory(Availability, form=AvailabilityForm, extra=3, can_delete=True)
 
 
 class HousePhotoForm(forms.ModelForm):
@@ -58,19 +136,19 @@ class HousePhotoForm(forms.ModelForm):
 HousePhotoFormSet = modelformset_factory(Image, form=HousePhotoForm, extra=3)
 
 
-class HouseDetailsForm3(forms.ModelForm):
-    class Meta:
-        model = House
-        fields = ['tags']
-        labels = {
-            "tags": "Rules"
-        }
-        widgets = {
-            'tags': forms.SelectMultiple(attrs={'class': 'form-control', }),
-        }
+# class HouseDetailsForm3(forms.ModelForm):
+#     class Meta:
+#         model = House
+#         fields = ['tags']
+#         labels = {
+#             "tags": "Rules"
+#         }
+#         widgets = {
+#             'tags': forms.SelectMultiple(attrs={'class': 'form-control', }),
+#         }
 
 
-class LandlordInfoForm(forms.Form):
+class HomeOwnerInfoForm(forms.Form):
     phone_num = forms.NumberInput()
     profile_pic = forms.ImageField()
 

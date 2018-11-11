@@ -1,39 +1,31 @@
-<!-- mobile menu start -->
-<div class="mobile-menu white"></div>
-<div class="mobile-menu-content white"></div>
-<!-- mobile menu end -->
-<!-- menu start -->
-<div class="menu white">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-9 col-md-4 col-lg-4 col-xl-4 left">
-                <a href="{% url 'user:home_page' %}" class="logo"></a>
-            </div>
-            <div class="col-3 col-md-8 col-lg-8 col-xl-4 center align-self-center">
-                <ul class="list-inline">
-                    <li class="list-inline-item"><a href="#">Home</a></li>
-                    <li class="list-inline-item"><a href="#">Blog</a></li>
-                    <li class="list-inline-item"><a href="#">How Its Work</a></li>
-                    <li class="list-inline-item"><a href="#">List Your Home</a></li>
-                </ul>
-            </div>
-            <div class="col-md-12 col-lg-12 col-xl-4 right align-self-center">
-                <ul class="list-inline">
-                    {% block user_menu %}
-                        {% if request.user.is_authenticated %}
-                            {% include 'components/navbar/user_menu/auth.html' %}
-                        {% else %}
-                            {% include 'components/navbar/user_menu/anon.html' %}
-                        {% endif %}
-                    {% endblock user_menu %}
-                </ul>
-            </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-9 col-md-4 col-lg-4 col-xl-4 left">
+            <a href="{% url 'user:home_page' %}" class="logo"></a>
+        </div>
+        <div class="col-3 col-md-8 col-lg-8 col-xl-4 center align-self-center">
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Home</a></li>
+                <li class="list-inline-item"><a href="#">Blog</a></li>
+                <li class="list-inline-item"><a href="#">How Its Work</a></li>
+                <li class="list-inline-item"><a href="#">List Your Home</a></li>
+            </ul>
+        </div>
+        <div class="col-md-12 col-lg-12 col-xl-4 right align-self-center">
+            <ul class="list-inline">
+                {% block user_menu %}
+                    {% if request.user.is_authenticated %}
+                        {% include 'components/navbar/user_menu/auth.html' %}
+                    {% else %}
+                        {% include 'components/navbar/user_menu/anon.html' %}
+                    {% endif %}
+                {% endblock user_menu %}
+            </ul>
         </div>
     </div>
-    {% block gray_element %}
-        {% if request.user.is_authenticated %}
-            <div class="gray"></div>
-        {% endif %}
-    {% endblock %}
 </div>
-<!-- menu end -->
+{% block gray_element %}
+    {% if request.user.is_authenticated %}
+        <div class="gray"></div>
+    {% endif %}
+{% endblock %}

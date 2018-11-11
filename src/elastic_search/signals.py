@@ -8,7 +8,7 @@ from house.models import House
 @receiver(post_save, sender=House)
 def create_house_entry(sender, **kwargs):
     obj = kwargs.get('instance')
-    print("*" * 200)
+    print("*" * 200, "ElasticSearch")
     if obj.is_public():
         try:
             es_obj = House(

@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db.utils import IntegrityError
 
 from elastic_search.core.utils import create_mappings
-from house.models import Tag, RoomType
+from house.models import HomeType, Facility, Rule
 from django.conf import settings
 
 
@@ -34,33 +34,49 @@ def social_apps_info(site_obj):
         obj.sites.add(site_obj)
 
 
-def create_tags():  # TODO: Set all tags here
-    """ Creates all house tags here """
+def create_facilities():
+    FACILITIES = [
+        'Wifi included',
+        'Gym',
+        'Laundry',
+        'Garden',
+        'Swimming pool',
+        'TV',
+        'Smoke alarm',
+        'Lift',
+        'Heater',
+        'Air Conditioner',
+        'Fire place',
+        'BBQ'
+    ]
 
-    Tag.objects.get_or_create(verbose="No Smoking", tag_type='R')
-    Tag.objects.get_or_create(verbose="Wifi included", tag_type='F')
-    Tag.objects.get_or_create(verbose="Gym", tag_type='F')
-    Tag.objects.get_or_create(verbose="Pool", tag_type='F')
-    Tag.objects.get_or_create(verbose="Amenities Available", tag_type='F')
-    Tag.objects.get_or_create(verbose="Furnished", tag_type='F')
-    Tag.objects.get_or_create(verbose="Pet Friendly", tag_type='R')
-    Tag.objects.get_or_create(verbose="BackPacker Friendly", tag_type='R')
-    Tag.objects.get_or_create(verbose="Children Friendly", tag_type='R')
-    Tag.objects.get_or_create(verbose="LGBT+ Friendly", tag_type='R')
-    Tag.objects.get_or_create(verbose="Family OK", tag_type='R')
-    Tag.objects.get_or_create(verbose="Females Only", tag_type='R')
+    for facility_verbose in FACILITIES:
+        Facility.objects.get_or_create(verbose=facility_verbose, system_default=True)
 
 
-def create_room__types():
+def create_house_rule():
+    RULES = {
+        'Smoking': ('Acceptable', 'Not Acceptable', 'Other'),
+        'Pets': ('Acceptable', 'Not Acceptable', 'Other'),
+        'Parties & Events': ('Acceptable', 'Not Acceptable', 'Other'),
+        'Suitable for Children': ('Yes', 'No', 'Other'),
+        'Arrival Time': ('Flexible', 'Other')
+    }
+
+    for rule in RULES:
+        Rule.objects.get_or_create(verbose=rule, options=RULES[rule])
+
+
+def create_home_types():
     """ Creates all property types here """
-    RoomType.objects.get_or_create(name="Whole Apartment")
-    RoomType.objects.get_or_create(name="Whole House")
-    RoomType.objects.get_or_create(name="Room in Share-house with Private bathroom")
-    RoomType.objects.get_or_create(name="Room in Share-house with Shared bathroom")
-    RoomType.objects.get_or_create(name="Student Accommodation")
-    RoomType.objects.get_or_create(name="Home Stay")
-    RoomType.objects.get_or_create(name="Granny Flat")
-    RoomType.objects.get_or_create(name="Other")
+    HomeType.objects.get_or_create(name="Whole Apartment")
+    HomeType.objects.get_or_create(name="Whole House")
+    HomeType.objects.get_or_create(name="Room in Share-house with Private bathroom")
+    HomeType.objects.get_or_create(name="Room in Share-house with Shared bathroom")
+    HomeType.objects.get_or_create(name="Student Accommodation")
+    HomeType.objects.get_or_create(name="Home Stay")
+    HomeType.objects.get_or_create(name="Granny Flat")
+    HomeType.objects.get_or_create(name="Other")
 
 
 def register_flat_pages(site_obj):
@@ -90,7 +106,7 @@ def register_flat_pages(site_obj):
         obj.sites.add(site_obj)
 
 
-def initialze_es():
+def initialize_es():
     create_mappings()
 
 
@@ -101,10 +117,11 @@ class Command(BaseCommand):
 
     web_init_func = {
         'Integrate OAuth info': (social_apps_info, True),
-        'Create tags': (create_tags, False),
+        'Create rules': (create_house_rule, False),
+        'Create facilities': (create_facilities, False),
         'Add flat pages': (register_flat_pages, True),
-        'Create Property Type (room_type) choices': (create_room__types, False),
-        'Initialize ElasticSearch Mappings': (initialze_es, False),
+        'Create Property Type (home_type) choices': (create_home_types, False),
+        'Initialize ElasticSearch Mappings': (initialize_es, False),
     }
 
     def ask_user_input(self, verbose):

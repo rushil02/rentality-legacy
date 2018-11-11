@@ -28,7 +28,6 @@ class LocationAutocomplete(autocomplete.Select2QuerySetView):
     """ searches location by post code"""
 
     def get_queryset(self):
-        # Don't forget to filter out results depending on the visitor !
         if not self.request.user.is_authenticated:
             return PostalCode.objects.none()
 

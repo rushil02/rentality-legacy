@@ -11,7 +11,8 @@ from django.views.decorators.http import require_POST, require_GET
 from formtools.wizard.views import SessionWizardView
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
-    HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm
+    HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
+    AvailabilityFormSet
 from house.models import House
 from house.serializer import HouseSerializer
 from messaging.forms import MessageForm
@@ -20,8 +21,83 @@ from user_custom.forms import EditProfileForm
 from django.contrib import messages
 
 
+def update_house(form):
+    pass
+
+
+def list_house(house):
+    house = House()
+    for field in house.REQUIRED_FIELDS:
+        if getattr(house, field) in (None, '', 0):
+            raise KeyError
+        else:
+            continue
+
+
+@login_required()
+def create(request, house_uuid=None):
+    if house_uuid:
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            raise Http404("House Information does not exist. It may be deleted by the user.")
+        else:
+            main_form = HouseForm(request.POST or None, instance=house, prefix='main-form')
+            availability_formset = AvailabilityFormSet(request.POST or None, queryset=house.availability_set.all(),
+                                                       prefix='availability-form')
+            context = {
+                'main_form': main_form,
+                'availability_formset': availability_formset
+            }
+            if request.method == 'POST':
+                valid = True
+                if main_form.is_valid():
+                    main_form.save()
+                else:
+                    valid = False
+                if availability_formset.is_valid():
+                    for formset_form in availability_formset.forms:
+                        if formset_form.is_valid():
+                            if formset_form.has_changed():
+                                availability = formset_form.save(commit=False)
+                                availability.house = house
+                                availability.save()
+                        else:
+                            valid = False
+                    for obj in availability_formset.deleted_objects:
+                        obj.delete()
+                else:
+                    valid = False
+
+                if valid:
+                    print("here")
+
+                return render(request, 'property/add_form.html', context)
+            else:
+                return render(request, 'property/add_form.html', context)
+    else:
+        print("here maa ki choot")
+        main_form = HouseForm(request.POST or None, prefix='main-form')
+        availability_formset = AvailabilityFormSet(request.POST or None)
+        context = {
+            'main_form': main_form,
+            'availability_formset': availability_formset
+        }
+        if request.method == 'POST':
+            if main_form.is_valid():
+                house = main_form.save(commit=False)
+                house.home_owner = request.user.home_owner
+                house.save()
+                return redirect(reverse('house:create_edit', args=[house.uuid, ]))
+            else:
+                return render(request, 'property/add_form.html', context)
+
+        else:
+            return render(request, 'property/add_form.html', context)
+
+
 def add_house_main(request):
-    house = House.objects.create(landlord=request.user.landlord)
+    house = House.objects.create(home_owner=request.user.home_owner)
     return redirect(reverse('house:edit', args=[1, house.uuid]))
 
 
@@ -140,8 +216,8 @@ def add_house_form2(request, uuid):
 
 
 @login_required
-def landlord_info(request, uuid):
-    template = 'house/add_house/landlord_details.html'
+def home_owner_info(request, uuid):
+    template = 'house/add_house/home_owner_details.html'
 
     try:
         house = House.objects.get(uuid=uuid)
@@ -174,7 +250,7 @@ def add_edit_house(request, form_num, uuid=None):
     func_di = {
         1: add_house_form1,
         2: add_house_form2,
-        3: landlord_info,
+        3: home_owner_info,
     }
 
     try:
@@ -210,7 +286,7 @@ def search_house_api(request):
 def delete_listing(request, house_uuid, house=None):
     try:
         if not house:
-            house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+            house = House.objects.get(home_owner__user=request.user, uuid=house_uuid)
     except House.DoesNotExist:
         raise Http404("Bad Request")
     form = HouseDeleteForm(request.POST or None)
@@ -233,7 +309,7 @@ def delete_listing(request, house_uuid, house=None):
 def remove_listing(request, house_uuid, house=None):
     try:
         if not house:
-            house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+            house = House.objects.get(home_owner__user=request.user, uuid=house_uuid)
     except House.DoesNotExist:
         raise Http404("Bad Request")
     form = HouseRemoveForm(request.POST or None)
@@ -254,7 +330,7 @@ def remove_listing(request, house_uuid, house=None):
 
 def remove_house_ask(request, house_uuid):
     try:
-        house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+        house = House.objects.get(home_owner__user=request.user, uuid=house_uuid)
     except House.DoesNotExist:
         raise Http404("Bad Request")
     form = HouseRemoveTypeForm(request.POST or None)
@@ -279,7 +355,7 @@ def remove_house_ask(request, house_uuid):
 @login_required
 def mark_as_leased(request, house_uuid):
     try:
-        house = House.objects.get(landlord__user=request.user, uuid=house_uuid)
+        house = House.objects.get(home_owner__user=request.user, uuid=house_uuid)
     except House.DoesNotExist:
         raise Http404("Bad Request")
     form = HouseMarkLeasedForm(request.POST or None)
