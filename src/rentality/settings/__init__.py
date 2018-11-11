@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     'django.contrib.gis',
 
     'debug_toolbar',
-    'channels',
     'cities',
     'rest_framework',
     'allauth',
@@ -268,8 +267,6 @@ OAUTH_DETAILS = {
 }
 
 LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'working_libs')
-
-ASGI_APPLICATION = "rentality.routing.application"
 
 # Django Cities settings
 CITIES_DATA_DIR = os.path.join(LIB_PATH, 'geo_data')
