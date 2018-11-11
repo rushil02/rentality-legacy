@@ -11,7 +11,7 @@ services:
       - ./static_dev/media_root:/media
     depends_on:
       - web
-      - sys_monitor
+#      - sys_monitor
   postgres:
     image: mdillon/postgis:10-alpine
     environment:
@@ -35,20 +35,20 @@ services:
       - esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-  timeseriesdb:
-    image: timescale/timescaledb:0.12.1-pg10
-    environment:
-      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
-      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
-    ports:
-      - 5430:5432
-    volumes:
-      # FIXME: add settings
-      - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
-      - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
-      - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
-      - pgdata:/var/lib/postgresql/data
+#  timeseriesdb:
+#    image: timescale/timescaledb:0.12.1-pg10
+#    environment:
+#      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
+#      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+#      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
+#    ports:
+#      - 5430:5432
+#    volumes:
+#      # FIXME: add settings
+#      - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
+#      - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
+#      - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
+#      - pgdata:/var/lib/postgresql/data
   web:
     build:
       context: ./src
@@ -64,17 +64,17 @@ services:
     depends_on:
       - postgres
       - elasticsearch
-      - timeseriesdb
+#      - timeseriesdb
       - rabbitmq
     ports:
       - "8001:8000"
-  sys_monitor:
-    image: grafana/grafana:5.3.1
-    ports:
-      - 3000:3000
-    depends_on:
-      - postgres
-      - timeseriesdb
+#  sys_monitor:
+#    image: grafana/grafana:5.3.1
+#    ports:
+#      - 3000:3000
+#    depends_on:
+#      - postgres
+#      - timeseriesdb
   # FIXME: add rabbitmq settings
   rabbitmq:
     image: rabbitmq:3.7.8-management
