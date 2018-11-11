@@ -306,3 +306,10 @@ THUMBNAIL_ALIASES = {
         'house_detail_small': {'size': (596, 416), 'crop': "smart"},
     }
 }
+
+# Django's Message Framework
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'dark',
+    messages.ERROR: 'danger',
+}

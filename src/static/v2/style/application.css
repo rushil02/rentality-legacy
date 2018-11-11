@@ -10,11 +10,18 @@ body {
 /***** warning start *****/
 /*************************/
 
+body > .menu.session > .alert {
+    top: 120px;
+}
+
+body > .menu.white > .alert {
+    top: 0;
+}
+
 body > .menu > .alert {
     margin-bottom: 0;
     position: fixed;
     left: 15px;
-    top: 0;
     right: 15px;
     border: none;
     padding-top: 28px;

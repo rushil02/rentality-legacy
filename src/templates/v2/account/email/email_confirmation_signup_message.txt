@@ -1,0 +1,7 @@
+Hi {{ request.user.get_short_name }},
+
+Welcome to Rentality! In order to get you started, please verify your email address by using the following link - {{ activate_url }}.
+
+Thank You,
+The Rentality Team
+{{ current_site }}

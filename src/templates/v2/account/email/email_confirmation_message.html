@@ -1,0 +1,104 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Rentality</title>
+    <style>
+        @import "https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext";
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .mail {
+            height: inherit;
+            width: 652px;
+            border: 1px solid #a6a6a6;
+            padding: 30px 50px;
+            display: inline-block;
+            max-width: 550px;
+            text-align: left;
+            display: block;
+            margin: 0 auto;
+            overflow: auto;
+        }
+
+        .mail .right {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2a2b32;
+            text-align: right;
+            float: right;
+            display: inline-block;
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
+        .mail p {
+            font-size: 18px;
+            font-weight: 400;
+            color: #2a2b32;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+
+        .mail h2 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #000000;
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+
+        .mail h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000000;
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+
+        .mail .button {
+            text-align: center;
+        }
+
+        .mail .button a {
+            margin-top: 60px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #36ffb1;
+            background-color: #2a2b32;
+            padding: 15px 75px;
+            border-radius: 99px;
+            display: inline-block;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="mail">
+        <img src={% static "image/mail/1_1.png" %} class="logo">
+        <h3>Hi {{ request.user.get_short_name }}</h3>
+        <p>
+            Please verify your email address by clicking on this button.
+        </p>
+        <div class="button">
+            <a href="{{ activate_url }}">Verify Email</a>
+        </div>
+        <div class="right">
+            <a>
+                Thank You
+                <br>
+                The Rentality Team
+                <br>
+                {{ current_site }}
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
