@@ -228,13 +228,13 @@
                                                 </div>
                                                 <div class="button property-actions">
                                                     {% if not house.is_public %}
-                                                        <button type="button" class="btn btn-link">List</button>
-                                                        <button type="button" class="btn btn-link">Edit</button>
-                                                        <button type="button" class="btn btn-link">Delete</button>
+                                                        <button type="button" onclick="location.href='{% url 'house:create_edit' house.uuid %}';" class="btn btn-link">List</button>
+                                                        <button type="button" onclick="location.href='{% url 'house:create_edit' house.uuid %}';" class="btn btn-link">Edit</button>
+                                                        <button type="button" onclick="location.href='{% url 'house:create_edit' house.uuid %}';" class="btn btn-link">Delete</button>
                                                     {% else %}
-                                                        <button type="button" class="btn btn-link">Edit</button>
-                                                        <button type="button" class="btn btn-link">Delete</button>
-                                                        <button type="button" class="btn btn-link">Remove</button>
+                                                        <button type="button" onclick="location.href='{% url 'house:create_edit' house.uuid %}';" class="btn btn-link">Edit</button>
+                                                        <button type="button" onclick="location.href='{% url 'house:create_edit' house.uuid %}';" class="btn btn-link">Delete</button>
+                                                        <button type="button" onclick="location.href='{% url 'house:create_edit' house.uuid %}';" class="btn btn-link">Remove</button>
                                                     {% endif %}
                                                 </div>
                                             </div>
