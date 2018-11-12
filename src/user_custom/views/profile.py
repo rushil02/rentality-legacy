@@ -8,13 +8,11 @@ from user_custom.forms import ProfileForm1, ProfileForm2, EditProfileForm, UserC
 
 @login_required
 def dashboard(request):
-    house_pref = HousePreference.objects.filter(tenant__user=request.user).all()
     houses = House.objects.filter(home_owner__user=request.user).exclude(status='D').all()
     context = {
-        'house_pref': house_pref,
         'houses': houses
     }
-    return render(request, 'user_common/dashboard.html', context)
+    return render(request, 'home_owner/dashboard.html', context)
 
 
 def check_mail(request):

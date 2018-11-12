@@ -304,11 +304,13 @@ THUMBNAIL_ALIASES = {
         'house_home_page_small': {'size': (263, 196), 'crop': True},
         'house_home_page_large': {'size': (360, 196), 'crop': True},
         'house_detail_small': {'size': (596, 416), 'crop': "smart"},
+        'house_dashboard_large': {'size': (360, 196), 'crop': True},
     }
 }
 
 # Django's Message Framework
 from django.contrib.messages import constants as messages
+
 MESSAGE_TAGS = {
     messages.DEBUG: 'dark',
     messages.ERROR: 'danger',

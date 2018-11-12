@@ -709,7 +709,6 @@ body > .header .search #other-city {
     padding-top: 4px;
 }
 
-
 body > .header .dropdown .dropdown-menu {
     border: none;
     border-radius: 0;
@@ -762,8 +761,8 @@ body > .header .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance .pmu-p
     background-image: url(../image/chevron-left.png) !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
-    width: 9px !important;
-    height: 14px !important;
+    width: 20px !important;
+    height: 20px !important;
     z-index: 9999 !important;
 }
 
@@ -775,12 +774,11 @@ body > .header .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance .pmu-n
     background-image: url(../image/chevron-right.png) !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
-    width: 9px !important;
-    height: 14px !important;
+    width: 20px !important;
+    height: 20px !important;
     z-index: 9999 !important;
     transform: none !important;
 }
-
 
 /**********************/
 /***** header end *****/
@@ -2971,12 +2969,6 @@ body > .page-map-filter .dropdown .dropdown-menu::after {
     border-color: transparent transparent #2a2b32 transparent;
 }
 
-
-
-
-
-
-
 body > .page-map-filter .dropdown .dropdown-menu {
     border: none;
     border-radius: 0;
@@ -3047,18 +3039,6 @@ body > .page-map-filter .dropdown .dropdown-menu .calendar .pickmeup .pmu-instan
     z-index: 9999 !important;
     transform: none !important;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*******************************/
 /***** page map filter end *****/
@@ -5334,15 +5314,55 @@ body > .page-form .right .text-single {
 /***** page inbox end *****/
 /**************************/
 
-/***********************************/
-/***** dashboard popup 2 start *****/
-/***********************************/
-
 .modal-backdrop {
     background-color: #ffffff;
 }
 
-#dashboard-popup-2 .modal-content {
+/*****************************************/
+/***** dashboard popup general start *****/
+/*****************************************/
+
+.dashboard-modal .button.property-actions > button:nth-child(1) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #36ffb1;
+    border: None;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+}
+
+.dashboard-modal .button.property-actions > button:nth-child(1):hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+.dashboard-modal .button.property-actions > button:nth-child(2) {
+    font-weight: 400;
+    color: #2a2b32;
+    background-color: #ffffff;
+    border: 1px solid #2a2b32;
+    padding: 12px 50px;
+}
+
+.dashboard-modal .button.property-actions > button:nth-child(2):hover {
+    background-color: #2a2b32;
+    color: #ffffff;
+}
+
+.dashboard-modal .button.property-actions > button:nth-child(3) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+}
+
+.dashboard-modal .button.property-actions > button:nth-child(3):hover {
+    color: #2a2b32;
+    background-color: #ff1a00;
+}
+
+.dashboard-modal .modal-content {
     padding: 50px 25px;
     border: none;
     border-radius: 10px;
@@ -5353,61 +5373,61 @@ body > .page-form .right .text-single {
     box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.25);
 }
 
-#dashboard-popup-2 .modal-content img {
-    margin-bottom: 50px;
+.dashboard-modal .modal-content img {
+    margin-bottom: 20px;
 }
 
-#dashboard-popup-2 .modal-content h1 {
+.dashboard-modal .modal-content h1 {
     font-size: 20px;
     font-weight: 700;
     color: #2a2b32;
     margin-bottom: 40px;
 }
 
-#dashboard-popup-2 .modal-content h1 span {
+.dashboard-modal .modal-content h1 span :not(.badge) {
     color: #3fc692;
 }
 
-#dashboard-popup-2 .modal-content p.bold {
+.dashboard-modal.modal-content p.bold {
     font-weight: 700;
 }
 
-#dashboard-popup-2 .modal-content .text-left {
+.dashboard-modal.modal-content .text-left {
     padding-left: 100px;
 }
 
-#dashboard-popup-2 .button {
+.dashboard-modal .button {
     text-align: center;
     margin-top: 25px;
 }
 
-#dashboard-popup-2 .button > button {
+.dashboard-modal .button > button {
     font-size: 16px;
     border-radius: 99px;
     transition: all .25s ease-in-out;
 }
 
-#dashboard-popup-2 .button > button:not(:last-child) {
+.dashboard-modal .button > button:not(:last-child) {
     margin-right: 10px;
 }
 
-#dashboard-popup-2 .button > button:hover, #dashboard-popup-2 .button > button:focus {
+.dashboard-modal .button > button:hover, .dashboard-modal.button > button:focus {
     text-decoration: none;
 }
 
-#dashboard-popup-2 .button > button:nth-child(1) {
+.dashboard-modal .button > button:nth-child(1) {
     font-weight: 400;
     color: #2a2b32;
     border: 1px solid #2a2b32;
     padding: 12px 50px;
 }
 
-#dashboard-popup-2 .button > button:nth-child(1):hover {
+.dashboard-modal .button > button:nth-child(1):hover {
     background-color: #2a2b32;
     color: #ffffff;
 }
 
-#dashboard-popup-2 .button > button:nth-child(2) {
+.dashboard-modal .button > button:nth-child(2) {
     font-size: 16px;
     font-weight: 700;
     color: #36ffb1;
@@ -5415,14 +5435,14 @@ body > .page-form .right .text-single {
     padding: 11px 59px;
 }
 
-#dashboard-popup-2 .button > button:nth-child(2):hover {
+.dashboard-modal .button > button:nth-child(2):hover {
     color: #2a2b32;
     background-color: #36ffb1;
 }
 
-/*********************************/
-/***** dashboard popup 2 end *****/
-/*********************************/
+/***************************************/
+/***** dashboard popup general end *****/
+/***************************************/
 
 /*****************************/
 /***** send mail 1 start *****/
@@ -6089,7 +6109,7 @@ body > .page-form .right .text-single {
 .page-dashboard .property .tool {
     position: absolute;
     top: 50px;
-    right: 20px;
+    right: 30px;
     display: inline-block;
     z-index: 99;
 }
@@ -6127,7 +6147,7 @@ body > .page-form .right .text-single {
     opacity: 1;
 }
 
-.page-dashboard .calendar{
+.page-dashboard .calendar {
     border-radius: 10px;
     position: relative;
     overflow: hidden;
@@ -6146,8 +6166,8 @@ body > .page-form .right .text-single {
     background-image: url(../image/chevron-left.png) !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
-    width: 9px !important;
-    height: 14px !important;
+    width: 20px !important;
+    height: 20px !important;
     z-index: 9999 !important;
 }
 
@@ -6159,8 +6179,8 @@ body > .page-form .right .text-single {
     background-image: url(../image/chevron-right.png) !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
-    width: 9px !important;
-    height: 14px !important;
+    width: 20px !important;
+    height: 20px !important;
     z-index: 9999 !important;
     transform: none !important;
 }

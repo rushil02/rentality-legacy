@@ -25,7 +25,7 @@
     </div>
 </li>
 <li class="list-inline-item person">
-    <a href="#">
+    <a href="{% url 'user:dashboard' %}">
         <div class="image"><img src="{% static 'image/placeholders/profile.png' %}" class="w-100"></div>
         {{ request.user.get_short_name|title }}
     </a>

@@ -29,7 +29,7 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
-    dsn="https://5b4980d5a06c4ce4b0cd455fe04b8c2c@sentry.io/1291192",
+    dsn=get_env_var("SENTRY_DSN"),
     integrations=[DjangoIntegration()],
     debug=False
 )
