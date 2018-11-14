@@ -12,13 +12,15 @@ from formtools.wizard.views import SessionWizardView
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
-    AvailabilityFormSet
+    AvailabilityFormSet, HomeOwnerInfoForm
 from house.models import House
 from house.serializer import HouseSerializer
 from messaging.forms import MessageForm
 from messaging.views import save_message, save_new_thread
 from user_custom.forms import EditProfileForm
 from django.contrib import messages
+from payments.stripe_wrapper import create_account, get_account
+from cities.models import Country
 
 
 def update_house(form):
@@ -372,3 +374,26 @@ def mark_as_leased(request, house_uuid):
             return redirect(reverse('user:dashboard'))
 
     return render(request, 'house/state_change_leased.html', context)
+
+
+@login_required
+def home_owner_account_details(request):
+    home_owner = request.user.home_owner
+    if request.POST:
+        home_owner_info_form = HomeOwnerInfoForm(request.POST)
+        if home_owner_info_form.is_valid():
+            if not home_owner.account_id:
+                account = create_account(country=home_owner_info_form.cleaned_data.get('country').code)
+                home_owner.account_id = account.id
+                home_owner.save()
+            return redirect(reverse('house:home_owner'))
+    if home_owner.account_id:
+        account = get_account(home_owner.account_id)
+        country = Country.objects.get(code=account.country)
+        home_owner_info_form = HomeOwnerInfoForm(initial={'country': country})
+    else:
+        home_owner_info_form = HomeOwnerInfoForm()
+    context = {
+        'home_owner_info_form': home_owner_info_form
+    }
+    return render(request, 'property/home_owner_profile.html', context)

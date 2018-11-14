@@ -315,3 +315,7 @@ MESSAGE_TAGS = {
     messages.DEBUG: 'dark',
     messages.ERROR: 'danger',
 }
+
+
+STRIPE_PUBLISHABLE_KEY = get_env_var('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = get_env_var('STRIPE_SECRET_KEY')

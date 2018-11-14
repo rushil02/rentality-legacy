@@ -2,8 +2,9 @@ from django import forms
 from django.contrib.postgres.forms import DateRangeField, RangeWidget
 from django.forms import inlineformset_factory, modelformset_factory
 from dal import autocomplete
-
+from cities.models import Country
 from house.models import House, Image, Availability
+from home_owner.models import HomeOwnerProfile
 
 
 class HouseDetailsForm1():
@@ -149,8 +150,13 @@ HousePhotoFormSet = modelformset_factory(Image, form=HousePhotoForm, extra=3)
 
 
 class HomeOwnerInfoForm(forms.Form):
-    phone_num = forms.NumberInput()
-    profile_pic = forms.ImageField()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['country'].widget.attrs['class'] = 'form-control'
+        if kwargs.get('initial'):
+            self.fields['country'].widget.attrs['disabled'] = 'true'
+
+    country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False)
 
 
 class SearchForm(forms.Form):
