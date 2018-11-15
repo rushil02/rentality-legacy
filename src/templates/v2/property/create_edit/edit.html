@@ -56,55 +56,15 @@
 
         });
 
-        $(document).ready(function () {
-
-        })
-
     </script>
     <script>
         // Form 2 - Availability Form
-        function delete_availability(id) {
-            console.log("here" + id);
-            $('#availability-list-' + id).remove();
-        }
-
         $('.delete-availability-btn-prev').on('click', function () {
-            delete_availability(this.id.split('-').pop());
+            var id = this.id.split('-').pop();
+            $('#availability-list-' + id).css("display", "none");
+            $('div[id^="id_availability-form-"][id$="-DELETE"]').prop("checked", true);
         });
 
-
-        $('div[input^="periodic-checkbox-"]').on('click', function () {
-            console.log(this.id);
-
-        });
-
-
-        function get_dates_html(date_arr, curr_availability_form) {
-            var html = '' +
-                '<li class="list-group-item" id="availability-list-1">\n' +
-                '                    <div class="row">\n' +
-                '                    <input type="checkbox" name="availability-form-0-DELETE" id="id_availability-form-0-DELETE">\n' +
-                '                        <div class="col-md-4">\n' +
-                '                           ' + date_arr[0] + 'to' + date_arr[1] +
-                '                        </div>\n' +
-                '                        <div class="col-md-4">\n' +
-                '                            <div class="custom-control custom-checkbox">\n' +
-                '                            <input type="checkbox" name="availability-form-0-periodic" id="id_availability-form-0-periodic" class="custom-control-input">\n' +
-                '                                <label class="custom-control-label" for="checkbox-1">Periodic Yearly</label>\n' +
-                '                            </div>\n' +
-                '                        </div>\n' +
-                '                        <div class="col-md-4">\n' +
-                '                            <div class="text-right">\n' +
-                '                                <button type="button" class="btn btn-danger btn-sm delete-availability-btn-prev" id="delete-availability-' + curr_availability_form + '">\n' +
-                '                                    Delete\n' +
-                '                                </button>\n' +
-                '                            </div>\n' +
-                '                        </div>\n' +
-                '                    </div>\n' +
-                '                </li>';
-
-            return html
-        }
 
         var curr_availability_form = {{ availability_formset.initial_form_count }};
         var total_availability_form = {{ availability_formset.total_form_count }};
@@ -113,17 +73,19 @@
             calendar_feedback.text();
             var date_arr = pickmeup('#availability-calendar').get_date(true);
             var date_arr_cal = pickmeup('#availability-calendar').get_date(false);
+            var date_arr_input = pickmeup('#availability-calendar').get_date('Y-m-d');
             if (date_arr.length > 0) {
                 var time_diff = 2332800000; // 27 days in seconds
                 if ((date_arr_cal[1].getTime() - date_arr_cal[0].getTime()) > time_diff) {
-                    var html = get_dates_html(date_arr, curr_availability_form);
-                    $('ul#availability-dates-list').append(html);
-                    $("#delete-availability-" + curr_availability_form).on("click", function () {
-                        delete_availability(curr_availability_form);
-                    });
-                    $('#id_availability-form-' + curr_availability_form + '-dates_0').val(date_arr[0]);
-                    $('#id_availability-form-' + curr_availability_form + '-dates_1').val(date_arr[1]);
+
+                    $("#availability-list-" + curr_availability_form).css("display", "block");
+                    $('#availability-form-start-date-' + curr_availability_form).text(date_arr[0]);
+                    $('#availability-form-end-date-' + curr_availability_form).text(date_arr[1]);
+                    $('#id_availability-form-' + curr_availability_form + '-dates_0').val(date_arr_input[0]);
+                    $('#id_availability-form-' + curr_availability_form + '-dates_1').val(date_arr_input[1]);
+
                     curr_availability_form += 1;
+
                     if (curr_availability_form >= total_availability_form) {
                         $('#id_main-form-submit').prop('checked', true);
                         $('#id_main-form-exit').prop('checked', false);

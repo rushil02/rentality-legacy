@@ -86,12 +86,12 @@ class HouseForm(forms.ModelForm):
         return [choice.verbose for choice in self.fields['facilities'].queryset]
 
     def clean(self):
+        super(HouseForm, self).clean()
         if self.cleaned_data['list_now']:
-            super(HouseForm, self).clean()
-            self.clean_for_listing()
+            self.clean_for_listing() # TODO
             return self.cleaned_data
         elif self.cleaned_data['submit']:
-            return super(HouseForm, self).clean()
+            return self.cleaned_data
         else:
             raise ValidationError("Invalid form submission request.")
 
@@ -122,16 +122,22 @@ class AvailabilityForm(forms.ModelForm):
         model = Availability
         fields = ['dates', 'periodic']
         widgets = {
-            'dates': RangeWidget(base_widget=forms.DateInput(format='%d %B, %Y'),
-                                 attrs={'class': 'form-control col-md-6', 'style': 'display: None;'}),
+            'dates': RangeWidget(base_widget=forms.DateInput(),
+                                 attrs={'style': 'display: None;'}),
             'periodic': forms.CheckboxInput(attrs={'class': 'custom-control-input'})
         }
 
     def clean_dates(self):
-        pass
+        """
+        Check if dates are 1month apart
+        """
+
+        data = self.cleaned_data['dates']
+        # FIXME: Test if dates are apart; would also need to merge conflicting dates
+        return data
 
 
-AvailabilityFormSet = inlineformset_factory(House, Availability, form=AvailabilityForm, extra=3)
+AvailabilityFormSet = inlineformset_factory(House, Availability, form=AvailabilityForm, extra=10)
 
 
 class HousePhotoForm(forms.ModelForm):

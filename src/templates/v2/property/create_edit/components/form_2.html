@@ -51,49 +51,6 @@
             <h1 class="title">Set your availability</h1>
 
             <div class="row">
-                <ul class="list-group list-group-flush" style="width: 100%"
-                    id="availability-dates-list">
-
-                    {% for form in availability_formset %}
-                        {% if form.dates.value.0 %}
-                            <li class="list-group-item"
-                                id="availability-list-{{ forloop.counter }}">
-                                <div class="row">
-                                    {{ form.DELETE }}
-                                    <div class="col-md-4">
-                                        {{ form.dates.value.0 }}
-                                        to {{ form.dates.value.1 }} </div>
-                                    <div class="col-md-4">
-                                        <div class="custom-control custom-checkbox">
-                                            {{ form.periodic }}
-                                            {#                                                                        <input type="checkbox"#}
-                                            {#                                                                               id="periodic-checkbox-{{ forloop.counter }}"#}
-                                            {#                                                                               class="custom-control-input"#}
-                                            {#                                                                                {% if form.periodic.value %}#}
-                                            {#                                                                               checked {% endif %}>#}
-                                            <label class="custom-control-label"
-                                                   for="checkbox-{{ forloop.counter }}">Periodic
-                                                Yearly</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="text-right">
-                                            <button type="button"
-                                                    class="btn btn-danger btn-sm delete-availability-btn-prev"
-                                                    id="delete-availability-{{ forloop.counter }}">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-
-            </div>
-            <div class="row">
                 <div class="col-md-12">
                     <div class="text-center">
                         <div class="calendar" id="availability-calendar"></div>
@@ -121,6 +78,85 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row" style="margin-top: 30px">
+                <ul class="list-group list-group-flush" style="width: 100%"
+                    id="availability-dates-list">
+
+                    {% for form in availability_formset %}
+                        {% if forloop.counter0 < availability_formset.initial_form_count %}
+                            <li class="list-group-item"
+                                id="availability-list-{{ forloop.counter0 }}">
+                                <div class="row">
+                                    {{ form.id }}
+                                    {{ form.dates }}
+                                    {{ form.DELETE }}
+                                    <div class="col-md-4">
+                                        {% if form.periodic.value %}
+                                            {{ form.initial.dates.lower|date:'d M' }}
+                                            to {{ form.initial.dates.upper| date:'d M' }}, Every Year
+
+                                        {% else %}
+                                            {{ form.initial.dates.lower|date:'d M, Y' }}
+                                            to {{ form.initial.dates.upper|date:'d M, Y' }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-checkbox">
+                                            {{ form.periodic }}
+                                            <label class="custom-control-label" for="{{ form.periodic.id_for_label }}">Periodic
+                                                Yearly</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-right">
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm delete-availability-btn-prev"
+                                                    id="delete-availability-{{ forloop.counter0 }}">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item"
+                                id="availability-list-{{ forloop.counter0 }}" style="display: none">
+                                <div class="row">
+                                    {{ form.id }}
+                                    {{ form.dates }}
+                                    {{ form.DELETE }}
+                                    <div class="col-md-4">
+                                        <a id="availability-form-start-date-{{ forloop.counter0 }}">
+                                        </a>
+                                        to
+                                        <a id="availability-form-end-date-{{ forloop.counter0 }}">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-checkbox">
+                                            {{ form.periodic }}
+                                            <label class="custom-control-label" for="{{ form.periodic.id_for_label }}">Periodic
+                                                Yearly</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-right">
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm delete-availability-btn-prev"
+                                                    id="delete-availability-{{ forloop.counter0 }}">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+            </div>
+
 
         </div>
         <div class="col-md-1"></div>

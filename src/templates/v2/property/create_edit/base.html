@@ -48,7 +48,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            {% for form in formset %}
+            {% for form in image_formset %}
                 {% for field in form %}
                     {% if field.errors %}
                         <p><strong>{{ field.label }} - </strong>
@@ -65,26 +65,18 @@
             {% for error in image_formset.non_form_errors %}
                 <p>{{ error }}</p>
             {% endfor %}
-        {% for error in image_formset.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-
-
-        </div>
-    {% endif %}
-    {% if availability_formset.non_form_errors %}
-        123123123
-        <div class="alert alert-danger" role="alert">
-            {% for error in link_formset.non_form_errors %}
+            {% for error in image_formset.errors %}
                 <p>{{ error }}</p>
             {% endfor %}
         </div>
     {% endif %}
-    {% if image_formset.non_form_errors %}
-        123123123
+    {% if availability_formset.total_error_count > 0 %}
         <div class="alert alert-danger" role="alert">
-            {% for error in link_formset.non_form_errors %}
-                <p>{{ error }}</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {% for error in availability_formset.errors %}
+                <p>{{ error|title }}</p>
             {% endfor %}
         </div>
     {% endif %}
