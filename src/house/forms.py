@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.postgres.forms import DateRangeField, RangeWidget
+from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, modelformset_factory
 from dal import autocomplete
 
-from house.models import House, Image, Availability
+from house.models import House, Image, Availability, Facility
 
 
 class HouseDetailsForm1():
@@ -19,12 +20,16 @@ class HouseDetailsForm3(object):
 
 
 class HouseForm(forms.ModelForm):
+    submit_exit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
+    list_now = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
+    facilities = forms.ModelMultipleChoiceField(queryset=Facility.objects.filter(system_default=True))
+
     class Meta:
         model = House
         exclude = ['home_owner', 'status', 'rules']
         widgets = {
             'title': forms.TextInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control title'}
             ),
             'address_hidden': forms.TextInput(
                 attrs={'class': 'form-control address'}
@@ -37,25 +42,25 @@ class HouseForm(forms.ModelForm):
                 attrs={'class': 'form-control address', 'data-placeholder': 'Enter postcode'}
             ),
             'home_type': forms.Select(
-                attrs={'class': 'form-control', }
+                attrs={'class': 'form-control'}
             ),
             'bedrooms': forms.NumberInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control', 'placeholder': 1}
             ),
             'bathrooms': forms.NumberInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control', 'placeholder': 1}
             ),
             'parking': forms.NumberInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control', 'placeholder': 0}
             ),
             'rent': forms.NumberInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control', 'placeholder': '$AUD'}
             ),
             'min_stay': forms.NumberInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control', 'placeholder': 28}
             ),
             'max_stay': forms.NumberInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control', 'placeholder': 0}
             ),
             'other_rules': forms.Textarea(
                 attrs={'class': 'form-control', 'rows': 10}
@@ -68,44 +73,43 @@ class HouseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(HouseForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
-            field.widget.attrs['placeholder'] = field.label
+            try:
+                field.widget.attrs['placeholder']
+            except KeyError:
+                field.widget.attrs['placeholder'] = field.label
 
+    def get_facility_choices(self):
+        return [choice.verbose for choice in self.fields['facilities'].queryset]
 
-# class HouseDetailsForm1(forms.ModelForm):
-#     class Meta:
-#         model = House
-#         fields = ['location', 'address', 'home_type', 'bedrooms', 'bathrooms', 'parking']
-#         widgets = {
-#             'location': autocomplete.ModelSelect2(url='house:postal_code_api',
-#                                                   attrs={'class': 'form-control', 'style': "visibility:hidden;",
-#                                                          'data-placeholder': 'Enter postcode'}),
-#             'address': forms.TextInput(attrs={'class': 'form-control',
-#                                               'placeholder': 'Unit no., House no., Street name, etc.',
-#                                               }),
-#             'home_type': forms.Select(attrs={'class': 'form-control', 'style': "visibility:hidden;", }),
-#             'bedrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bedrooms'}),
-#             'bathrooms': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of bathrooms'}),
-#             'parking': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of parking spaces'}),
-#         }
+    def clean(self):
+        if self.cleaned_data['submit_exit']:
+            pass
+        elif self.cleaned_data['list_now']:
+            self.clean_for_listing()
+        else:
+            raise ValidationError("Invalid form submission request.")
 
+    def clean_for_listing(self):
+        cleaned_data = super().clean()
+        for field in self.Meta.model.REQUIRED_FIELDS:
+            if cleaned_data[field]:
+                print("here")
+                # FIXME
 
-# class HouseDetailsForm2(forms.ModelForm):
-#     # facilities = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='F'))
-#     # rules = forms.ModelMultipleChoiceField(required=False, queryset=Tag.objects.filter(tag_type='R'))
-#
-#     class Meta:
-#         model = House
-#         fields = ['rent', 'availability', 'min_stay', 'description']
-#         widgets = {
-#             'rent': forms.NumberInput(attrs={'class': 'form-control', }),
-#             # 'rules': forms.SelectMultiple(attrs={'class': 'form-control', }),
-#             # 'facilities': forms.SelectMultiple(attrs={'class': 'form-control', }),
-#             'tenant_prof': forms.SelectMultiple(attrs={'class': 'form-control', }),
-#             'availability': RangeWidget(base_widget=forms.DateInput,
-#                                         attrs={'class': 'form-control', }),
-#             'min_stay': forms.NumberInput(attrs={'class': 'form-control', }),
-#             'description': forms.Textarea(attrs={'class': 'form-control', })
-#         }
+    def clean_bedrooms(self):
+        data = self.cleaned_data['bedrooms']
+        if data:
+            if data < 1:
+                raise ValidationError("There should be at least 1 bedroom.")
+        return data
+
+    def clean_bathrooms(self):
+        data = self.cleaned_data['bathrooms']
+        if data:
+            if data < 1:
+                raise ValidationError("There should be at least 1 bathroom.")
+        return data
+
 
 class AvailabilityForm(forms.ModelForm):
     class Meta:
@@ -127,9 +131,9 @@ AvailabilityFormSet = modelformset_factory(Availability, form=AvailabilityForm, 
 class HousePhotoForm(forms.ModelForm):
     class Meta:
         model = Image
-        fields = ['image', ]
+        fields = ['image', 'is_thumbnail']
         widgets = {
-            'image': forms.ClearableFileInput(attrs={'class': 'form-control image-formset-image'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'custom-file-input'}),
         }
 
 

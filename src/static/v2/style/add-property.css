@@ -1,6 +1,14 @@
-a.nostyle:link, a.nostyle:visited  {
+div#house-img-dropzone.dropzone {
+    background-image: url('../image/form-1/home.svg') !important;
+}
+
+a.nostyle:link, a.nostyle:visited {
     text-decoration: inherit;
     color: inherit;
+}
+
+.full-header div[id^="full-header-"] a.disabled, .header div[id^="sub-header-"] a.disabled {
+    cursor: not-allowed;
 }
 
 button.anything-else-add {
@@ -23,6 +31,27 @@ button.anything-else-add {
 button.anything-else-add:nth-child(1):hover {
     background-color: #2a2b32;
     color: #ffffff;
+}
+
+body > .page-form #form-2 ul#availability-dates-list input[type='checkbox'][id$="DELETE"] {
+    display: none;
+}
+
+button.calendar-btns {
+    font-size: 16px;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+    background-color: #ffffff;
+    color: #2a2b32;
+    font-weight: 400;
+    border: 1px solid #2a2b32;
+    padding: 12px 50px;
+}
+
+button.calendar-btns:hover, button.calendar-btns:focus {
+    background-color: #2a2b32;
+    color: #ffffff;
+    text-decoration: None;
 }
 
 body > .page-form-status {
@@ -213,8 +242,17 @@ body > .page-form .right .input.no-background .form-control {
     background: none;
 }
 
+body > .page-form .right .input.no-background.number-disp {
+    padding-left: 0;
+    background: none;
+}
+
 body > .page-form .right .input .address.form-control {
     background-image: url('../image/form-1/address.svg');
+}
+
+body > .page-form .right .input .address-hidden.form-control {
+    background-image: url('../image/form-1/key.svg');
 }
 
 body > .page-form .right .select {
@@ -294,15 +332,15 @@ body > .page-form .right .select.light select.form-control {
     color: #2a2b32;
 }
 
-body > .page-form .right .select.bedroom {
+body > .page-form .right .bedroom {
     background-image: url('../image/form-1/bedroom.svg');
 }
 
-body > .page-form .right .select.bathroom {
+body > .page-form .right .bathroom {
     background-image: url('../image/form-1/bathroom.svg');
 }
 
-body > .page-form .right .select.available {
+body > .page-form .right .input.available {
     background-image: url('../image/form-1/available.svg');
 }
 
@@ -456,10 +494,6 @@ body > .page-form .right .calendar .pickmeup .pmu-instance .pmu-next {
     z-index: 9999 !important;
     transform: none !important;
 }
-
-
-
-
 
 body > .page-form .right .checkbox .list-inline li {
     width: 215px;
@@ -979,4 +1013,43 @@ body > .page-form .right .text-single {
     color: #2a2b32;
     margin-top: -2px;
     text-align: right;
+}
+
+body > .page-form .right .input.number-disp {
+    position: relative;
+    font-size: 15px;
+    color: #676767;
+    font-weight: 400;
+    border-bottom: 1px solid #c7cdd9;
+    padding-top: 20px;
+    padding-bottom: 15px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 50px;
+    margin-top: 10px;
+}
+
+body > .page-form .right .input.number-disp .form-control {
+    font-size: 17px;
+    font-weight: 800;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    color: #2a2b32;
+    height: auto;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: auto;
+    display: inline-block;
+    float: right;
+    text-align: right;
+}
+
+body > .page-form .right .input.number-disp .form-control::-webkit-outer-spin-button,
+body > .page-form .right .input.number-disp .form-control::-webkit-inner-spin-button {
+    margin-left: 30px;
+}
+
+body > .page-form .right .input.number-disp .form-control[type=number] {
+    -moz-appearance: textfield;
 }

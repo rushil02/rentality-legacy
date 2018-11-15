@@ -156,7 +156,7 @@ body > .menu.session .right .list-inline li.message > .dropdown > a {
     background-image: url('../image/message-white.svg');
 }
 
-body > .menu.white .right .list-inline li.message > .dropdown > a > span, body > .menu.session .right .list-inline li.message > .dropdown > a > span {
+body > .menu.white .right .list-inline li > .dropdown > a > span, body > .menu.session .right .list-inline li > .dropdown > a > span {
     background-color: #3fc692;
     position: absolute;
     right: 5px;
@@ -5358,7 +5358,6 @@ body > .page-form .right .text-single {
 }
 
 .dashboard-modal .button.property-actions > button:nth-child(3):hover {
-    color: #2a2b32;
     background-color: #ff1a00;
 }
 
@@ -6311,7 +6310,6 @@ body > .page-form .right .text-single {
 /**************************/
 
 .dropzone {
-    background: none !important;
     background-image: url('../image/form-1/dropzone.svg') !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;

@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    <!-- alert start -->
+    $('.alert-auto-hide').delay(4000).slideUp("slow");
+    <!-- alert end -->
+
     <!-- menu start -->
     if ($('body > .mobile-menu').length > 0 && $('body > .mobile-menu-content').length > 0) {
         $('body > .mobile-menu').click(function () {

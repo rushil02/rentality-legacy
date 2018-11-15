@@ -25,111 +25,9 @@ def update_house(form):
     pass
 
 
-def list_house(house):
-    house = House()
-    for field in house.REQUIRED_FIELDS:
-        if getattr(house, field) in (None, '', 0):
-            raise KeyError
-        else:
-            continue
-
-
-@login_required()
-def create(request, house_uuid=None):
-    if house_uuid:
-        try:
-            house = House.objects.get(uuid=house_uuid)
-        except House.DoesNotExist:
-            raise Http404("House Information does not exist. It may be deleted by the user.")
-        else:
-            main_form = HouseForm(request.POST or None, instance=house, prefix='main-form')
-            availability_formset = AvailabilityFormSet(request.POST or None, queryset=house.availability_set.all(),
-                                                       prefix='availability-form')
-            context = {
-                'main_form': main_form,
-                'availability_formset': availability_formset
-            }
-            if request.method == 'POST':
-                valid = True
-                if main_form.is_valid():
-                    main_form.save()
-                else:
-                    valid = False
-                if availability_formset.is_valid():
-                    for formset_form in availability_formset.forms:
-                        if formset_form.is_valid():
-                            if formset_form.has_changed():
-                                availability = formset_form.save(commit=False)
-                                availability.house = house
-                                availability.save()
-                        else:
-                            valid = False
-                    for obj in availability_formset.deleted_objects:
-                        obj.delete()
-                else:
-                    valid = False
-
-                if valid:
-                    print("here")
-
-                return render(request, 'property/add_form.html', context)
-            else:
-                return render(request, 'property/add_form.html', context)
-    else:
-        print("here maa ki choot")
-        main_form = HouseForm(request.POST or None, prefix='main-form')
-        availability_formset = AvailabilityFormSet(request.POST or None)
-        context = {
-            'main_form': main_form,
-            'availability_formset': availability_formset
-        }
-        if request.method == 'POST':
-            if main_form.is_valid():
-                house = main_form.save(commit=False)
-                house.home_owner = request.user.home_owner
-                house.save()
-                return redirect(reverse('house:create_edit', args=[house.uuid, ]))
-            else:
-                return render(request, 'property/add_form.html', context)
-
-        else:
-            return render(request, 'property/add_form.html', context)
-
-
 def add_house_main(request):
     house = House.objects.create(home_owner=request.user.home_owner)
     return redirect(reverse('house:edit', args=[1, house.uuid]))
-
-
-def info(request, house_uuid):
-    try:
-        house = House.objects.prefetch_related('tags').get(uuid=house_uuid)
-    except House.DoesNotExist:
-        raise Http404("House does not exist.")
-    else:
-        if request.method == 'POST':
-            message_form = MessageForm(request.POST)
-            if request.user.is_authenticated:
-                if message_form.is_valid():
-                    try:
-                        save_new_thread(request, house, message=message_form.data['content'])
-                    except AssertionError:
-                        messages.add_message(request, messages.INFO, 'You cannot send yourself a message')
-                    else:
-                        messages.add_message(request, messages.SUCCESS,
-                                             'Your message has been sent to the property owner.')
-                        message_form = MessageForm()
-                    context = {'house': house, 'msg_form': message_form}
-                    return render(request, 'house/info.html', context)
-                else:
-                    context = {'house': house, 'msg_form': message_form}
-                    return render(request, 'house/info.html', context)
-            else:
-                return redirect(settings.LOGIN_URL + '?next=' + request.get_full_path())
-        else:
-            message_form = MessageForm()
-            context = {'house': house, 'msg_form': message_form}
-            return render(request, 'property/detail.html', context)
 
 
 @login_required
@@ -350,25 +248,3 @@ def remove_house_ask(request, house_uuid):
                 return delete_listing(request, house_uuid, house=house)
 
     return render(request, 'house/remove/remove_or_delete.html', context)
-
-
-@login_required
-def mark_as_leased(request, house_uuid):
-    try:
-        house = House.objects.get(home_owner__user=request.user, uuid=house_uuid)
-    except House.DoesNotExist:
-        raise Http404("Bad Request")
-    form = HouseMarkLeasedForm(request.POST or None)
-    context = {
-        'house': house,
-        'form': form,
-    }
-
-    if request.method == 'POST':
-        if form.is_valid():
-            if form.cleaned_data['confirm']:
-                house.status = 'L'
-                house.save()
-            return redirect(reverse('user:dashboard'))
-
-    return render(request, 'house/state_change_leased.html', context)

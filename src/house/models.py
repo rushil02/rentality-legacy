@@ -57,7 +57,7 @@ class House(models.Model):
         verbose_name=_('property owner')
     )
 
-    title = models.CharField(max_length=250, blank=True, verbose_name='caption')
+    title = models.CharField(max_length=250, verbose_name='Property Name')
     furnished = models.BooleanField(default=False)
 
     address_hidden = models.TextField(blank=True, verbose_name="Unit Number or House Number",
@@ -67,7 +67,7 @@ class House(models.Model):
         'cities.PostalCode',
         on_delete=models.PROTECT,
         verbose_name=_('location'),
-        null=True, blank=True
+        null=True
     )
 
     home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
@@ -75,12 +75,16 @@ class House(models.Model):
     bathrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bathrooms")
     parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces")
 
-    rent = models.PositiveSmallIntegerField(default=0, blank=True, help_text="Per Week")
+    rent = models.PositiveSmallIntegerField(default=0, blank=True, help_text="Per Week in AUD")
     min_stay = models.PositiveSmallIntegerField(
+        verbose_name=_('Minimum length of stay'),
         help_text=_('In days. Minimum and Default is 4 weeks (28 days).'), null=True, blank=True, default=28,
         validators=[MinValueValidator(28)]
     )
-    max_stay = models.PositiveSmallIntegerField(help_text=_('in days'), null=True, blank=True)
+    max_stay = models.PositiveSmallIntegerField(
+        verbose_name=_('Maximum length of stay'),
+        help_text=_('in days. 0 signifies no limit.'), null=True, blank=True
+    )
 
     facilities = models.ManyToManyField('house.Facility', blank=True)
     rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)
@@ -154,7 +158,6 @@ class House(models.Model):
 
     def get_owner_pic(self):
         foo = self.get_owner().userprofile.get_profile_pic()
-        print(foo)
         return foo
 
     def get_location(self):

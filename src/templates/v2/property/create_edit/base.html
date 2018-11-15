@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_title_add %}
+    List Your Home |
+{% endblock %}
+
+{% block additional_scripts %}
+    <link href="{% static 'plugin/dropzone/dropzone.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'style/add-property.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'plugin/dropzone/dropzone.min.js' %}"></script>
+    <script src="{% static 'script/add-property.js' %}"></script>
+
+    <!-- AutoComplete Scripts -->
+    {{ main_form.media }}
+{% endblock %}
+
+
+{% block navbar %}
+    {% include 'components/navbar/auth.html' %}
+{% endblock %}
+
+{% block additional_notification %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if link_formset.non_form_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in link_formset.non_form_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <!-- page form start -->
+    <div class="page-form">
+        <div class="container-fluid">
+            <div class="full-header">
+                <div class="row">
+                    <div id="full-header-1" class="col-md-4 text-center">
+                        <a href="#form-1" class="nostyle form-change"><span class="number">1</span><span
+                                class="text">Basic Home info</span></a>
+                    </div>
+                    <div id="full-header-2" class="col-md-4 text-center">
+                        <a href="#form-5" class="nostyle form-change"><span class="number">2</span><span
+                                class="text">Detail Description</span></a>
+                    </div>
+                    <div id="full-header-3" class="col-md-4 text-center">
+                        <a href="#form-9" class="nostyle form-change"><span class="number">3</span><span
+                                class="text">About you</span></a>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar bg-success"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-1"></div>
+                <div class="col-xl-10">
+                    <div class="right">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="header">
+                                    <div id="sub-header-1" class="row sub-header-row">
+                                        <div class="col-md-3">
+                                            <a href="#form-1" class="nostyle form-change">
+                                                <div id="sub-title-1" class="title">About the property</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-2" class="nostyle form-change">
+                                                <div id="sub-title-2" class="title">Rent & Availability</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-3" class="nostyle form-change">
+                                                <div id="sub-title-3" class="title">Facilitas</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-4" class="nostyle form-change">
+                                                <div id="sub-title-4" class="title">Rules</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="sub-header-2" class="row sub-header-row">
+                                        <div class="col-md-3">
+                                            <a href="#form-5" class="nostyle form-change">
+                                                <div id="sub-title-5" class="title">Images</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-6" class="nostyle form-change">
+                                                <div id="sub-title-6" class="title">Cancellation policy</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-7" class="nostyle form-change">
+                                                <div id="sub-title-7" class="title">Tenant’s space access</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-8" class="nostyle form-change">
+                                                <div id="sub-title-8" class="title">The area</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="sub-header-3" class="row sub-header-row">
+                                        <div class="col-md-3">
+                                            <a href="#form-9" class="nostyle form-change">
+                                                <div id="sub-title-9" class="title">Profile Photo</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-10" class="nostyle form-change">
+                                                <div id="sub-title-10" class="title">Fun tags</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-11" class="nostyle form-change">
+                                                <div id="sub-title-11" class="title">Welcome</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="#form-12" class="nostyle form-change">
+                                                <div id="sub-title-12" class="title">Payout info</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form method="POST" id="main_form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% block forms %}
+
+                            {% endblock %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="button top-margin">
+                                        <button type="submit" class="btn btn-link" id="submit-and-exit">Save and Exit
+                                        </button>
+                                        <a type="button" class="btn btn-link" id="next-step">Next</a>
+                                        <button type="submit" class="btn btn-link" id="list-now">List Now</button>
+                                        <a type="button" class="btn btn-link" id="prev-step">Back</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ main_form.submit_exit }}
+                            {{ main_form.list_now }}
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xl-1"></div>
+            </div>
+        </div>
+    </div>
+    <!-- page form end -->
+{% endblock %}
+
+{% block footer %}
+    {% include 'components/footer/auth.html' %}
+{% endblock %}
+
+{% block page_scripts %}
+    {% block form_script_pre %}
+
+    {% endblock %}
+    <script>
+        // Page user flow
+        $('#submit-and-exit').click(function () {
+            var main_form = $('#main_form');
+            console.log("mainformi ahsiud");
+            window.removeEventListener("beforeunload", confirm_leave);
+            main_form.submit();
+        });
+
+        $('#list-now').click(function () {
+            var main_form = $('#main_form');
+            window.removeEventListener("beforeunload", confirm_leave);
+            main_form.submit();
+        });
+
+        {% block override_next %}
+            $('#next-step').click(function () {
+                var curr_form_num = parseInt($('div[id^="form-"][class^="form-series"]:not(.d-none)').attr('id').split('-')[1]);
+                clear_load_form(curr_form_num, curr_form_num + 1);
+                {#$('#prev-step').attr("href", "#form-" + curr_form_num);#}
+                {#$('#next-step').attr("href", "#form-" + (curr_form_num + 2));#}
+            });
+        {% endblock %}
+
+
+        $('#prev-step').click(function (event) {
+            var curr_form_num = parseInt($('div[id^="form-"][class^="form-series"]:not(.d-none)').attr('id').split('-')[1]);
+            clear_load_form(curr_form_num, curr_form_num - 1);
+            {#$('#prev-step').attr("href", "#form-" + (curr_form_num - 2));#}
+            {#$('#next-step').attr("href", "#form-" + curr_form_num);#}
+        });
+
+        $('.form-change').click(function (event) {
+            if ($(this).hasClass("disabled")) {
+                event.preventDefault();
+            } else {
+                var curr_form_num = parseInt($('div[id^="form-"][class^="form-series"]:not(.d-none)').attr('id').split('-')[1]);
+                var next_form_num = parseInt($(this).attr('href').split('-')[1]);
+                clear_load_form(curr_form_num, next_form_num);
+                check_buttons(next_form_num);
+            }
+        });
+
+        function confirm_leave(event) {
+            event.preventDefault();
+            event.returnValue = 'Changes that you made may not be saved. Reload Site?';
+        }
+
+        window.addEventListener("beforeunload", confirm_leave);
+    </script>
+
+    {% block form_script_post %}
+
+    {% endblock %}
+{% endblock %}
