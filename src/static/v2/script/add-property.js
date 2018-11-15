@@ -85,6 +85,14 @@ $(document).ready(function () {
         load_new_form(form_num);
     }
 
+    $('a[id^="set-thumbnail-"]').each(function () {
+        var form_num = $(this).attr('id').split('-')[2];
+        if ($('#id_images-form-' + form_num + '-is_thumbnail').prop('checked')) {
+            $('#thumbnail-container-' + form_num).addClass('highlight');
+        }
+    });
+
+
     <!-- page form end -->
 
 });
@@ -157,4 +165,13 @@ function load_new_form(form_num) {
 
 }
 
+function check_thumbnail_highlight(curr_form) {
+    $('a[id^="set-thumbnail-"]').each(function () {
+        var form_num = $(this).attr('id').split('-')[2];
+        if (form_num !== curr_form) {
+            $('#thumbnail-container-' + form_num).removeClass('highlight');
+            $('#id_images-form-' + form_num + '-is_thumbnail').prop('checked', false);
+        }
+    });
+}
 

@@ -1,3 +1,58 @@
+#form-5 .image img {
+    transition: all .25s ease-in-out;
+    transform: scale(1, 1) rotate(0deg);
+}
+
+#form-5 .image {
+    position: relative;
+    overflow: hidden;
+}
+
+#form-5 .list {
+    display: block;
+    margin-top: 30px;
+}
+
+#form-5 .tool {
+    position: absolute;
+    top: 50px;
+    right: 30px;
+    display: inline-block;
+    z-index: 99;
+}
+
+#form-5 .tool .list-inline {
+    margin-bottom: 0;
+}
+
+#form-5 #stored-images div[id^='thumbnail-container-'].highlight {
+    border: solid 3px #3fc692;
+}
+
+#form-5 #stored-images .image input[type='checkbox'] {
+    display: none;
+}
+
+#form-5 .tool .list-inline li.remove a {
+    background-image: url(../image/form-1/cancel-button.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-indent: -9999px;
+}
+
+#form-5 .tool .list-inline li.thumbnail a {
+    background-image: url(../image/form-1/picture.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-indent: -9999px;
+}
+
 div#house-img-dropzone.dropzone {
     background-image: url('../image/form-1/home.svg') !important;
 }
@@ -394,6 +449,18 @@ body > .page-form .right .button > button:nth-child(1) {
 }
 
 body > .page-form .right .button > button:nth-child(1):hover {
+    background-color: #2a2b32;
+    color: #ffffff;
+}
+
+body > .page-form .right .button > button#save {
+    font-weight: 400;
+    color: #2a2b32;
+    border: 1px solid #2a2b32;
+    padding: 12px 50px;
+}
+
+body > .page-form .right .button > button#save:hover {
     background-color: #2a2b32;
     color: #ffffff;
 }

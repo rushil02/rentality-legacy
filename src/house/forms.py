@@ -3,8 +3,11 @@ from django.contrib.postgres.forms import DateRangeField, RangeWidget
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, modelformset_factory
 from dal import autocomplete
+from easy_thumbnails.widgets import ImageClearableFileInput
 
 from house.models import House, Image, Availability, Facility
+from rentality import settings
+from utils.form_thumbnailer import ImageFileInput
 
 
 class HouseDetailsForm1():
@@ -136,11 +139,12 @@ class HousePhotoForm(forms.ModelForm):
         model = Image
         fields = ['image', 'is_thumbnail']
         widgets = {
-            'image': forms.ClearableFileInput(attrs={'class': 'custom-file-input'}),
+            'image': ImageFileInput(thumbnail_options=settings.THUMBNAIL_ALIASES['']['house_home_page_small'],
+                                    template="%(thumb)s", attrs={'required': False}),
         }
 
 
-HousePhotoFormSet = inlineformset_factory(House, Image, form=HousePhotoForm, extra=3)
+HousePhotoFormSet = inlineformset_factory(House, Image, form=HousePhotoForm, extra=0)
 
 
 # class HouseDetailsForm3(forms.ModelForm):

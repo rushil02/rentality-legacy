@@ -4,26 +4,17 @@ from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
+from rest_framework import status, viewsets
+from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
     AvailabilityFormSet
-from house.models import House
-
-
-def get_context(request, house=None):
-    if house:
-        context = {
-
-        }
-    else:
-        context = {
-            'main_form': HouseForm(request.POST or None, instance=house, prefix='main-form'),
-            'availability_formset': AvailabilityFormSet(request.POST or None, prefix='availability-form'),
-            'image_formset': HousePhotoFormSet(request.POST or None, prefix='images-form')
-        }
-
-    return context
+from house.models import House, Image
+from house.serializer import ImageSerializer
 
 
 def list_house(house):
@@ -53,23 +44,26 @@ def edit(request, house_uuid):
                                           prefix='images-form')
 
         context = {
+            "house": house,
             'main_form': main_form,
             'availability_formset': availability_formset,
             'image_formset': image_formset
         }
         if request.method == 'POST':
             valid = True
+
             if main_form.is_valid():
                 main_form.save()
             else:
                 valid = False
+
             if availability_formset.is_valid():
-                for formset_form in availability_formset.forms:
-                    if formset_form.is_valid():
-                        if formset_form.has_changed():
-                            formset_form.save()
-                    else:
-                        valid = False
+                availability_formset.save()
+            else:
+                valid = False
+
+            if image_formset.is_valid():
+                image_formset.save()
             else:
                 valid = False
 
@@ -84,6 +78,14 @@ def edit(request, house_uuid):
                         messages.add_message(request, messages.SUCCESS, "Your House information has been saved.")
                         return redirect(reverse('user:dashboard'))
                     else:
+                        context = {
+                            "house": house,
+                            'main_form': HouseForm(None, instance=house, prefix='main-form'),
+                            'availability_formset': AvailabilityFormSet(None, queryset=house.availability_set.all(),
+                                                                        instance=house, prefix='availability-form'),
+                            'image_formset': HousePhotoFormSet(None, instance=house, queryset=house.image_set.all(),
+                                                               prefix='images-form')
+                        }
                         return render(request, 'property/create_edit/edit.html', context)
             return render(request, 'property/create_edit/edit.html', context)
         else:
@@ -103,3 +105,21 @@ def create(request):
             return render(request, 'property/create_edit/create.html', {'main_form': main_form})
     else:
         return render(request, 'property/create_edit/create.html', {'main_form': main_form})
+
+
+class ImageUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, house_uuid, *args, **kwargs):
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            file_serializer = ImageSerializer(data=request.data)
+            if file_serializer.is_valid():
+                file_serializer.save(house=house)
+                return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

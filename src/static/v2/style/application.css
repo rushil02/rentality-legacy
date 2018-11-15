@@ -6138,7 +6138,7 @@ body > .page-form .right .text-single {
 }
 
 .page-dashboard .property .tool .list-inline li a {
-    opacity: 0.5;
+    opacity: 0.7;
     transition: all .25s ease-in-out;
 }
 

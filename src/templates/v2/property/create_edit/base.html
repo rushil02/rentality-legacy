@@ -11,6 +11,7 @@
     <link href="{% static 'style/add-property.css' %}" rel="stylesheet" type="text/css">
     <script src="{% static 'plugin/dropzone/dropzone.min.js' %}"></script>
     <script src="{% static 'script/add-property.js' %}"></script>
+    <script src="{% static 'script/csrf.js' %}"></script>
 
     <!-- AutoComplete Scripts -->
     {{ main_form.media }}
@@ -42,7 +43,44 @@
             {% endfor %}
         </div>
     {% endif %}
+    {% if image_formset.total_error_count > 0 %}
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {% for form in formset %}
+                {% for field in form %}
+                    {% if field.errors %}
+                        <p><strong>{{ field.label }} - </strong>
+                            {% for error in field.errors %}
+                                {{ error }}; &emsp;
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in image_formset.non_form_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        {% for error in image_formset.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+
+
+        </div>
+    {% endif %}
     {% if availability_formset.non_form_errors %}
+        123123123
+        <div class="alert alert-danger" role="alert">
+            {% for error in link_formset.non_form_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if image_formset.non_form_errors %}
         123123123
         <div class="alert alert-danger" role="alert">
             {% for error in link_formset.non_form_errors %}
@@ -97,7 +135,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <a href="#form-3" class="nostyle form-change">
-                                                <div id="sub-title-3" class="title">Facilitas</div>
+                                                <div id="sub-title-3" class="title">Facilities</div>
                                             </a>
                                         </div>
                                         <div class="col-md-3">
@@ -156,6 +194,8 @@
                         <form method="POST" id="main_form" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ availability_formset.management_form }}
+                            {{ image_formset.management_form }}
+
                             {% block forms %}
 
                             {% endblock %}
@@ -193,6 +233,16 @@
     {% endblock %}
     <script>
         // Page user flow
+
+        $('#save').click(function () {
+            var main_form = $('#main_form');
+            $('#id_main-form-submit').prop('checked', true);
+            $('#id_main-form-exit').prop('checked', false);
+            $('#id_main-form-list_now').prop('checked', false);
+            window.removeEventListener("beforeunload", confirm_leave);
+            main_form.submit();
+        });
+
         $('#submit-and-exit').click(function () {
             var main_form = $('#main_form');
             $('#id_main-form-submit').prop('checked', true);
@@ -236,7 +286,8 @@
                 var next_form_num = parseInt($(this).attr('href').split('-')[1]);
                 clear_load_form(curr_form_num, next_form_num);
                 check_buttons(next_form_num);
-            }false
+            }
+            false
         });
 
         function confirm_leave(event) {

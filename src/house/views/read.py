@@ -15,7 +15,7 @@ from django.contrib import messages
 
 def info(request, house_uuid):
     try:
-        house = House.objects.prefetch_related('tags').get(uuid=house_uuid)
+        house = House.objects.get(uuid=house_uuid)
     except House.DoesNotExist:
         raise Http404("House does not exist.")
     else:

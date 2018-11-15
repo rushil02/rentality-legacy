@@ -1,0 +1,128 @@
+<div id="form-2">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h1 class="title">Set your rent and Stay limits.</h1>
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="input number-disp no-background">
+                        {{ main_form.rent.label }}
+                        {{ main_form.rent }}
+                    </div>
+                    <small class="form-text text-muted">
+                        {{ main_form.rent.help_text }}
+                    </small>
+                    {% if main_form.rent.errors %}
+                        {% for error in main_form.rent.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12 col-lg-6"></div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="input number-disp no-background">
+                        {{ main_form.min_stay.label }}
+                        {{ main_form.min_stay }}
+                    </div>
+                    <small class="form-text text-muted">
+                        {{ main_form.min_stay.help_text }}
+                    </small>
+                    {% if main_form.min_stay.errors %}
+                        {% for error in main_form.min_stay.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="input number-disp no-background">
+                        {{ main_form.max_stay.label }}
+                        {{ main_form.max_stay }}
+                    </div>
+                    <small class="form-text text-muted">
+                        {{ main_form.max_stay.help_text }}
+                    </small>
+                    {% if main_form.max_stay.errors %}
+                        {% for error in main_form.max_stay.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <h1 class="title">Set your availability</h1>
+
+            <div class="row">
+                <ul class="list-group list-group-flush" style="width: 100%"
+                    id="availability-dates-list">
+
+                    {% for form in availability_formset %}
+                        {% if form.dates.value.0 %}
+                            <li class="list-group-item"
+                                id="availability-list-{{ forloop.counter }}">
+                                <div class="row">
+                                    {{ form.DELETE }}
+                                    <div class="col-md-4">
+                                        {{ form.dates.value.0 }}
+                                        to {{ form.dates.value.1 }} </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-checkbox">
+                                            {{ form.periodic }}
+                                            {#                                                                        <input type="checkbox"#}
+                                            {#                                                                               id="periodic-checkbox-{{ forloop.counter }}"#}
+                                            {#                                                                               class="custom-control-input"#}
+                                            {#                                                                                {% if form.periodic.value %}#}
+                                            {#                                                                               checked {% endif %}>#}
+                                            <label class="custom-control-label"
+                                                   for="checkbox-{{ forloop.counter }}">Periodic
+                                                Yearly</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-right">
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm delete-availability-btn-prev"
+                                                    id="delete-availability-{{ forloop.counter }}">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-center">
+                        <div class="calendar" id="availability-calendar"></div>
+                        <div class="invalid-feedback"
+                             id="calendar-invalid-feedback-manual"
+                             style="padding: 10px"></div>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <button type="button" class="btn btn-link calendar-btns"
+                                    id="add-dates">
+                                Add
+                                Selected Dates
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-link calendar-btns"
+                                    id="clear-dates">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>

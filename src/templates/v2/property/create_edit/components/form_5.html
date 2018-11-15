@@ -1,0 +1,60 @@
+{% load thumbnail %}
+
+<div id="form-5">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h1 class="title">Upload Images of your House</h1>
+            <div class="file" style="border-bottom: 1px solid #bbb8b7">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="house-img-dropzone" class="dropzone">
+                        </div>
+                    </div>
+                </div>
+                <div class="warning">
+                    <p class="big">Please Note: Listing wtih photos are more likely to be
+                        rent out.</p>
+                    <p>Save page to select thumbnails or delete images.</p>
+                </div>
+            </div>
+
+            <div class="row" id="stored-images">
+                {% for form in image_formset %}
+                    <div class="col-md-4 col-lg-3" id="thumbnail-container-{{ forloop.counter0 }}">
+                        <div class="tool">
+                            <ul class="list-inline">
+                                <li class="list-inline-item thumbnail"><a href="#"
+                                                                          id="set-thumbnail-{{ forloop.counter0 }}"
+                                                                          title="Set this as thumbnail">Thubnail</a>
+                                </li>
+                                <li class="list-inline-item remove"><a href="#"
+                                                                       id="delete-image-{{ forloop.counter0 }}"
+                                                                       title="Remove">Remove</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="list">
+                            <div class="image">
+                                {{ form.image }}
+                                {{ form.DELETE }}
+                                {{ form.is_thumbnail }}
+                                {{ form.id }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="button top-margin">
+                <button type="submit" class="btn btn-link" id="save">Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

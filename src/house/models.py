@@ -115,8 +115,8 @@ class House(models.Model):
 
     def get_thumbnail(self):
         try:
-            image = Image.objects.get(house=self, is_thumbnail=True)
-        except Image.DoesNotExist:
+            image = Image.objects.filter(house=self, is_thumbnail=True)[0]
+        except (Image.DoesNotExist, IndexError):
             return None
         else:
             return image.image
@@ -124,6 +124,7 @@ class House(models.Model):
     def get_home_type_display(self):
         return "%s" % self.home_type.name
 
+    # FIXME: needs to be removed
     def get_thumbnail_2(self):
         if self.is_thumbnail_available():
             thumbnailer = get_thumbnailer(self.get_thumbnail())
@@ -220,6 +221,21 @@ class Image(models.Model):
                 self.is_thumbnail = True
         return super(Image, self).save(force_insert=False, force_update=False, using=None,
                                        update_fields=None)
+
+    def delete(self, *args, **kwargs):
+        need_new_thumbnail = self.is_thumbnail
+        data = super(Image, self).delete(*args, **kwargs)
+        if need_new_thumbnail:
+            try:
+                obj = Image.objects.filter(house=self.house, is_thumbnail=False)[0]
+            except IndexError:
+                pass
+            else:
+                obj.is_thumbnail=True
+                obj.save()
+        return data
+
+
 
 
 class HouseProfile(models.Model):

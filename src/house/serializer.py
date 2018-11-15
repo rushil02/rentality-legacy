@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from house.models import House
+from house.models import House, Image
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -13,3 +13,9 @@ class HouseSerializer(serializers.ModelSerializer):
 
     def get_thumbnail(self, obj):
         return obj.get_thumbnail_2()
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['image', 'is_thumbnail']
