@@ -20,28 +20,28 @@ def execute_request(request, *args, **kwargs):
         print("Message is: {}".format(err.get('message')))
     except stripe.error.RateLimitError as e:
         # Too many requests made to the API too quickly
-        pass
+        print(e)
     except stripe.error.InvalidRequestError as e:
         # Invalid parameters were supplied to Stripe's API
-        pass
+        print(e)
     except stripe.error.AuthenticationError as e:
         # Authentication with Stripe's API failed
         # (maybe you changed API keys recently)
-        pass
+        print(e)
     except stripe.error.APIConnectionError as e:
         # Network communication with Stripe failed
-        pass
+        print(e)
     except stripe.error.StripeError as e:
         # Display a very generic error to the user, and maybe send
         # yourself an email
-        pass
+        print(e)
     except Exception as e:
         # Something else happened, completely unrelated to Stripe
-        pass
+        print(e)
 
 
-def create_account(country, account_type='custom'):
-    return execute_request(stripe.Account.create, country=country, type=account_type)
+def create_account(country, account_type='custom', *args, **kwargs):
+    return execute_request(stripe.Account.create, country=country, type=account_type, *args, **kwargs)
 
 
 def get_account(id):

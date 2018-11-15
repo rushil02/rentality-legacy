@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 from home_owner.models import HomeOwnerProfile
 from home_owner.forms import HomeOwnerInfoForm
@@ -33,9 +34,19 @@ def home_owner_account_details(request):
         home_owner_info_form = HomeOwnerInfoForm(request.POST)
         if home_owner_info_form.is_valid():
             if not home_owner.account_id:
-                account = create_account(country=home_owner_info_form.cleaned_data.get('country').code)
+                account = create_account(
+                    country=home_owner_info_form.cleaned_data.get('country').code, 
+                    email=request.user.email,
+                    legal_entity={'type': 'individual'}
+                )
+                account.account_token =  request.POST.get('token')
+                account.save()
                 home_owner.account_id = account.id
                 home_owner.save()
+            else:
+                account = get_account(home_owner.account_id)
+                account.account_token = request.POST.get('token')
+                account.save()
             return redirect(reverse('home_owner:home_owner'))
     if home_owner.account_id:
         account = get_account(home_owner.account_id)

@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 from user_custom.views import set_timezone, check_user, \
     dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
-    CustomSignupView, search
+    CustomSignupView, search, get_stripe_publishable_key
 
 app_name = 'user'
 
@@ -17,6 +17,7 @@ urlpatterns = [
          name='sel_listing'),
     path('profile', edit_profile, name='user_details'),
     path('time', set_timezone, name='set_timezone'),
+    path('publishable_key', get_stripe_publishable_key, name='set_timezone'),
     path('shortlist/<str:entity>/<uuid:uuid>', shortlist, name='add_to_shortlist'),
     path('my-shortlist/', shortlist_view, name='view_shortlist'),
 

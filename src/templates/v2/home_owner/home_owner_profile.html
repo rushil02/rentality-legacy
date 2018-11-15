@@ -1,13 +1,55 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block additional_scripts %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'script/home_owner/profile_save.js' %}"></script>
+{% endblock %}
+
 {% block navbar %}
     {% include 'components/navbar/auth.html' %}
 {% endblock %}
 
 {% block content %}
-<form method="POST">
+<form class="my-form" method="POST">
     {% csrf_token %}
     {{ home_owner_info_form.country }}
+
+    <input type="hidden" name="token" id="token">
+    <label>
+        <span>First Name</span>
+        <input class="inp-first-name" name="first_name">
+    </label>
+    <label>
+        <span>Last Name</span>
+        <input class="inp-last-name" name="last_name">
+    </label>
+    <fieldset>
+        <legend>Address</legend>
+        <label>
+            <span>Street Address Line 1</span>
+            <input class="inp-street-address1" name="street_address1">
+        </label>
+        <label>
+            <span>City</span>
+            <input class="inp-city" name="city">
+        </label>
+        <label>
+            <span>State</span>
+            <input class="inp-state" name="state">
+        </label>
+        <label>
+            <span>Postal Code</span>
+            <input class="inp-zip" name="zip">
+        </label>
+        <label>
+            <span>Document</span>
+            <input type="file" id="id-file" name="id-file" accept=".jpeg,.jpg,.png">
+        </label>
+    </fieldset>
+    <p>By clicking, you agree to <a href="#">our terms</a> and the <a href="/connect-account/legal">Stripe Connected
+            Account Agreement</a>.</p>
     <input type="submit" value="Submit">
 </form>
 {% endblock %}

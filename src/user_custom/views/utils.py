@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from user_custom.serializers import UserTimezoneSerializer
+from django.conf import settings
 
 
 @api_view(['POST'])
@@ -45,3 +46,9 @@ def set_timezone(request):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+def get_stripe_publishable_key(request):
+    return Response({'publishable_key': settings.STRIPE_PUBLISHABLE_KEY}, status=status.HTTP_200_OK)
