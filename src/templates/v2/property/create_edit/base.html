@@ -22,14 +22,28 @@
 {% endblock %}
 
 {% block additional_notification %}
-    {% if form.non_field_errors %}
+    {% if main_form.errors %}
         <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {% for field in main_form %}
+                {% if field.errors %}
+                    <p><strong>{{ field.label }} - </strong>
+                        {% for error in field.errors %}
+                            {{ error }}; &emsp;
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            {% endfor %}
+
+            {% for error in main_form.non_field_errors %}
                 <p>{{ error }}</p>
             {% endfor %}
         </div>
     {% endif %}
-    {% if link_formset.non_form_errors %}
+    {% if availability_formset.non_form_errors %}
+        123123123
         <div class="alert alert-danger" role="alert">
             {% for error in link_formset.non_form_errors %}
                 <p>{{ error }}</p>
@@ -141,6 +155,7 @@
                         </div>
                         <form method="POST" id="main_form" enctype="multipart/form-data">
                             {% csrf_token %}
+                            {{ availability_formset.management_form }}
                             {% block forms %}
 
                             {% endblock %}
@@ -155,7 +170,8 @@
                                     </div>
                                 </div>
                             </div>
-                            {{ main_form.submit_exit }}
+                            {{ main_form.submit }}
+                            {{ main_form.exit }}
                             {{ main_form.list_now }}
                         </form>
                     </div>
@@ -179,13 +195,18 @@
         // Page user flow
         $('#submit-and-exit').click(function () {
             var main_form = $('#main_form');
-            console.log("mainformi ahsiud");
+            $('#id_main-form-submit').prop('checked', true);
+            $('#id_main-form-exit').prop('checked', true);
+            $('#id_main-form-list_now').prop('checked', false);
             window.removeEventListener("beforeunload", confirm_leave);
             main_form.submit();
         });
 
         $('#list-now').click(function () {
             var main_form = $('#main_form');
+            $('#id_main-form-submit').prop('checked', false);
+            $('#id_main-form-exit').prop('checked', false);
+            $('#id_main-form-list_now').prop('checked', true);
             window.removeEventListener("beforeunload", confirm_leave);
             main_form.submit();
         });
@@ -215,7 +236,7 @@
                 var next_form_num = parseInt($(this).attr('href').split('-')[1]);
                 clear_load_form(curr_form_num, next_form_num);
                 check_buttons(next_form_num);
-            }
+            }false
         });
 
         function confirm_leave(event) {

@@ -20,7 +20,9 @@
 {% block override_next %}
     $('#next-step').click(function () {
     var main_form = $('#main_form');
-    console.log("mainformi ahsiud");
+    $('#id_main-form-submit').prop('checked', true);
+    $('#id_main-form-exit').prop('checked', false);
+    $('#id_main-form-list_now').prop('checked', false);
     window.removeEventListener("beforeunload", confirm_leave);
     main_form.submit();
     });

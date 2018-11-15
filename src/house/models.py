@@ -67,7 +67,7 @@ class House(models.Model):
         'cities.PostalCode',
         on_delete=models.PROTECT,
         verbose_name=_('location'),
-        null=True
+        null=True, blank=True  # FIXME: remove blank after migrating geo data
     )
 
     home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
@@ -180,6 +180,9 @@ class House(models.Model):
 
     def get_rules(self):
         return self.rules.all()
+
+    def set_status(self, status):
+        self.status = status
 
 
 class Availability(models.Model):

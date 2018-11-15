@@ -3,6 +3,7 @@ from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib import messages
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
@@ -13,11 +14,7 @@ from house.models import House
 def get_context(request, house=None):
     if house:
         context = {
-            'main_form': HouseForm(request.POST or None, instance=house, prefix='main-form'),
-            'availability_formset': AvailabilityFormSet(request.POST or None, queryset=house.availability_set.all(),
-                                                        prefix='availability-form'),
-            'image_formset': HousePhotoFormSet(request.POST or None, queryset=house.image_set.all(),
-                                               prefix='images-form')
+
         }
     else:
         context = {
@@ -49,30 +46,45 @@ def edit(request, house_uuid):
     except House.DoesNotExist:
         raise Http404("House Information does not exist. It may be deleted by the user.")
     else:
-        context = get_context(request, house)
+        main_form = HouseForm(request.POST or None, instance=house, prefix='main-form')
+        availability_formset = AvailabilityFormSet(request.POST or None, queryset=house.availability_set.all(),
+                                                   instance=house, prefix='availability-form')
+        image_formset = HousePhotoFormSet(request.POST or None, instance=house, queryset=house.image_set.all(),
+                                          prefix='images-form')
+
+        context = {
+            'main_form': main_form,
+            'availability_formset': availability_formset,
+            'image_formset': image_formset
+        }
         if request.method == 'POST':
             valid = True
-            if context['main_form'].is_valid():
-                context['main_form'].save()
+            if main_form.is_valid():
+                main_form.save()
             else:
                 valid = False
-            if context['availability_formset'].is_valid():
-                for formset_form in context['availability_formset'].forms:
+            if availability_formset.is_valid():
+                for formset_form in availability_formset.forms:
                     if formset_form.is_valid():
                         if formset_form.has_changed():
-                            availability = formset_form.save(commit=False)
-                            availability.house = house
-                            availability.save()
+                            formset_form.save()
                     else:
                         valid = False
-                for obj in context['availability_formset'].deleted_forms:
-                    obj.delete()
             else:
                 valid = False
 
             if valid:
-                pass
-
+                if main_form.cleaned_data['list_now']:
+                    house.set_status('P')
+                    house.save()
+                    messages.add_message(request, messages.SUCCESS, "Your house has been added to Public Listing")
+                    return redirect(reverse('user:dashboard'))
+                else:
+                    if main_form.cleaned_data['exit']:
+                        messages.add_message(request, messages.SUCCESS, "Your House information has been saved.")
+                        return redirect(reverse('user:dashboard'))
+                    else:
+                        return render(request, 'property/create_edit/edit.html', context)
             return render(request, 'property/create_edit/edit.html', context)
         else:
             return render(request, 'property/create_edit/edit.html', context)
@@ -80,14 +92,14 @@ def edit(request, house_uuid):
 
 @login_required()
 def create(request):
-    context = get_context(request)
+    main_form = HouseForm(request.POST or None, prefix='main-form')
     if request.method == 'POST':
-        if context['main_form'].is_valid():
-            house = context['main_form'].save(commit=False)
+        if main_form.is_valid():
+            house = main_form.save(commit=False)
             house.home_owner = request.user.home_owner
             house.save()
-            return redirect(reverse('house:create_edit', args=[house.uuid, ]))
+            return redirect(reverse('house:create_edit', args=[house.uuid, ]) + "#form-2")
         else:
-            return render(request, 'property/create_edit/create.html', context)
+            return render(request, 'property/create_edit/create.html', {'main_form': main_form})
     else:
-        return render(request, 'property/create_edit/create.html', context)
+        return render(request, 'property/create_edit/create.html', {'main_form': main_form})

@@ -20,9 +20,10 @@ class HouseDetailsForm3(object):
 
 
 class HouseForm(forms.ModelForm):
-    submit_exit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
+    submit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
+    exit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
     list_now = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
-    facilities = forms.ModelMultipleChoiceField(queryset=Facility.objects.filter(system_default=True))
+    facilities = forms.ModelMultipleChoiceField(queryset=Facility.objects.filter(system_default=True), required=False)
 
     class Meta:
         model = House
@@ -82,10 +83,12 @@ class HouseForm(forms.ModelForm):
         return [choice.verbose for choice in self.fields['facilities'].queryset]
 
     def clean(self):
-        if self.cleaned_data['submit_exit']:
-            pass
-        elif self.cleaned_data['list_now']:
+        if self.cleaned_data['list_now']:
+            super(HouseForm, self).clean()
             self.clean_for_listing()
+            return self.cleaned_data
+        elif self.cleaned_data['submit']:
+            return super(HouseForm, self).clean()
         else:
             raise ValidationError("Invalid form submission request.")
 
@@ -125,7 +128,7 @@ class AvailabilityForm(forms.ModelForm):
         pass
 
 
-AvailabilityFormSet = modelformset_factory(Availability, form=AvailabilityForm, extra=3, can_delete=True)
+AvailabilityFormSet = inlineformset_factory(House, Availability, form=AvailabilityForm, extra=3)
 
 
 class HousePhotoForm(forms.ModelForm):
@@ -137,7 +140,7 @@ class HousePhotoForm(forms.ModelForm):
         }
 
 
-HousePhotoFormSet = modelformset_factory(Image, form=HousePhotoForm, extra=3)
+HousePhotoFormSet = inlineformset_factory(House, Image, form=HousePhotoForm, extra=3)
 
 
 # class HouseDetailsForm3(forms.ModelForm):
