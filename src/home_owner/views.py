@@ -1,10 +1,13 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import generics
 from django.contrib.auth.decorators import login_required
 
 from home_owner.models import HomeOwnerProfile
+from home_owner.forms import HomeOwnerInfoForm
 from home_owner.serializers import ShortListSerializer
+from cities.models import Country
+from payments.stripe_wrapper import create_account, get_account
 
 
 @login_required
@@ -21,3 +24,26 @@ def shortlisted_tenants(request):
 class ShortlistView(generics.ListCreateAPIView):
     queryset = HomeOwnerProfile.objects.all()
     serializer_class = ShortListSerializer
+
+
+@login_required
+def home_owner_account_details(request):
+    home_owner = request.user.home_owner
+    if request.POST:
+        home_owner_info_form = HomeOwnerInfoForm(request.POST)
+        if home_owner_info_form.is_valid():
+            if not home_owner.account_id:
+                account = create_account(country=home_owner_info_form.cleaned_data.get('country').code)
+                home_owner.account_id = account.id
+                home_owner.save()
+            return redirect(reverse('home_owner:home_owner'))
+    if home_owner.account_id:
+        account = get_account(home_owner.account_id)
+        country = Country.objects.get(code=account.country)
+        home_owner_info_form = HomeOwnerInfoForm(initial={'country': country})
+    else:
+        home_owner_info_form = HomeOwnerInfoForm()
+    context = {
+        'home_owner_info_form': home_owner_info_form
+    }
+    return render(request, 'home_owner/home_owner_profile.html', context)
