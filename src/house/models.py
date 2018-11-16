@@ -236,8 +236,6 @@ class Image(models.Model):
         return data
 
 
-
-
 class HouseProfile(models.Model):
     """
     priority : Lower number represents higher priority (is particularly used in building frontend)

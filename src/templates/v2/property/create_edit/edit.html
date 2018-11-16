@@ -106,5 +106,51 @@
         });
 
     </script>
+    <script>
+        // Form 3
+        function get_facilities_html(verbose, selected, num) {
+            num = num || '';
+            var checked = '';
+            if (selected) {
+                checked = 'checked';
+            }
+            var html = '<li class="list-inline-item">\n' +
+                '            <div class="custom-control custom-checkbox" id="facility-checkbox-container-"' + num + '>\n' +
+                '                 <input type="checkbox" class="custom-control-input" id="facility-checkbox-' + num + '" ' + checked + '>\n' +
+                '                  <label class="custom-control-label" for="facility-checkbox-' + num + '">' + verbose + '</label>\n' +
+                '            </div>\n' +
+                '       </li>';
 
+            return html
+        }
+
+        $(document).ready(function () {
+            $.getJSON("{% url 'house:facility' house_uuid=house.uuid %}", function (data) {
+                $(data).each(function () {
+                    $('#form-3 ul#facilities-list').append(get_facilities_html(this.verbose, this.checked, this.id));
+                });
+            });
+        });
+
+        $('#form-3 button#add-facilities').click(function () {
+            var other_f = $('#other-facility-text');
+            if (other_f.val()) {
+                $('#form-3 ul#facilities-list').append(get_facilities_html(other_f.val(), true));
+                var data = [{"verbose": other_f.val()}];
+                other_f.val('');
+                other_f.focus();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'house:facility' house_uuid=house.uuid %}",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
+        });
+
+        // FIXME: URGENT - cannot catch checkbox click event
+
+    </script>
 {% endblock %}

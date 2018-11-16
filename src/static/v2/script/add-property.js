@@ -1,19 +1,6 @@
 $(document).ready(function () {
     <!-- page form start -->
-    $('button#add-facilities').click(function () {
-        var curr_id = parseInt($("ul#facilities-list > li.list-inline-item").last().attr('id').split('-')[1]) + 1;
-        console.log(curr_id);
-        var other_f = $('#other-facility-text');
 
-        $('.checkbox .list-inline').append('<li class="list-inline-item" id="facility-' + curr_id + '">\n' +
-            '                                                <div class="custom-control custom-checkbox">\n' +
-            '                                                    <input type="checkbox" id="checkbox-' + curr_id + '" class="custom-control-input" checked>\n' +
-            '                                                    <label class="custom-control-label" for="checkbox-' + curr_id + '">' + other_f.val() + '</label>\n' +
-            '                                                </div>\n' +
-            '                                            </li>');
-        other_f.val('');
-        other_f.focus();
-    });
 
     if ($('body > .page-form .right .calendar').length > 0) {
         var plus_5_days = new Date;

@@ -4,6 +4,7 @@ from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
+from django.db.models import Q, Exists, OuterRef
 from rest_framework import status, viewsets
 from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
@@ -13,8 +14,8 @@ from rest_framework.views import APIView
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
     AvailabilityFormSet
-from house.models import House, Image
-from house.serializer import ImageSerializer
+from house.models import House, Image, Facility
+from house.serializer import ImageSerializer, FacilitySerializer
 
 
 def list_house(house):
@@ -123,3 +124,40 @@ class ImageUploadView(APIView):
                 return Response(file_serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FacilityView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer = FacilitySerializer
+
+    def get(self, request, house_uuid, *args, **kwargs):
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            qs = list(Facility.objects.filter(
+                Q(system_default=True) | Q(house=house)
+            ).values('verbose', 'id').annotate(checked=Exists(Facility.objects.filter(house=house, pk=OuterRef('pk')))))
+
+            serializer = self.serializer(data=qs, many=True)
+            if serializer.is_valid():
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request, house_uuid, *args, **kwargs):
+        print(request.data)
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = self.serializer(data=request.data, many=True)
+            if serializer.is_valid():
+                objs = serializer.save()
+                house.facilities.add(*objs)
+                print("here", objs)
+                return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

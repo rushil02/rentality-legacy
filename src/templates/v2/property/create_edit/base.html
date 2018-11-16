@@ -198,6 +198,7 @@
                                         </button>
                                         <a type="button" class="btn btn-link" id="next-step">Next</a>
                                         <button type="submit" class="btn btn-link" id="list-now">List Now</button>
+                                        <button type="submit" class="btn btn-link save-state-stay">Save</button>
                                         <a type="button" class="btn btn-link" id="prev-step">Back</a>
                                     </div>
                                 </div>
@@ -226,7 +227,7 @@
     <script>
         // Page user flow
 
-        $('#save').click(function () {
+        $('.save-state-stay').click(function () {
             var main_form = $('#main_form');
             $('#id_main-form-submit').prop('checked', true);
             $('#id_main-form-exit').prop('checked', false);

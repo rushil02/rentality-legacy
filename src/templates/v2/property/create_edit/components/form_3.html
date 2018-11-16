@@ -1,43 +1,32 @@
-    <div id="form-3">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <h1 class="title">Tick all the fatalities you home offers to the home</h1>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="checkbox">
-                            <ul class="list-inline" id="facilities-list">
-                                {% for choice in main_form.get_facility_choices %}
-                                    <li class="list-inline-item"
-                                        id="facility-{{ forloop.counter }}">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox"
-                                                   id="checkbox-{{ forloop.counter }}"
-                                                   class="custom-control-input">
-                                            <label class="custom-control-label"
-                                                   for="checkbox-{{ forloop.counter }}">{{ choice }}</label>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+<div id="form-3">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h1 class="title">Tick all the fatalities you home offers to the home</h1>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="checkbox">
+                        <ul class="list-inline" id="facilities-list">
+
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input big no-background">
+                                <input type="text" class="form-control anything-else"
+                                       id="other-facility-text"
+                                       placeholder="Add other facilities">
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="input big no-background">
-                                    <input type="text" class="form-control anything-else"
-                                           id="other-facility-text"
-                                           placeholder="Add other facilities">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-link anything-else-add"
-                                        id="add-facilities">Add
-                                </button>
-                            </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-link anything-else-add"
+                                    id="add-facilities">Add
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-1"></div>
         </div>
+        <div class="col-md-1"></div>
     </div>
+</div>

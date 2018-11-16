@@ -26,7 +26,6 @@ class HouseForm(forms.ModelForm):
     submit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
     exit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
     list_now = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
-    facilities = forms.ModelMultipleChoiceField(queryset=Facility.objects.filter(system_default=True), required=False)
 
     class Meta:
         model = House
