@@ -41,7 +41,10 @@ def home_owner_account_details(request):
                 account = create_account(
                     country=home_owner_info_form.cleaned_data.get('country').code, 
                     email=request.user.email,
-                    legal_entity={'type': 'individual'}
+                    legal_entity={'type': 'individual'},
+                    payout_schedule={
+                        'interval': 'manual' 
+                    }
                 )
                 account.account_token =  request.POST.get('token')
                 account.save()
