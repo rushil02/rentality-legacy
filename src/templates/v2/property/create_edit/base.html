@@ -48,25 +48,8 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            {% for form in image_formset %}
-                {% for field in form %}
-                    {% if field.errors %}
-                        <p><strong>{{ field.label }} - </strong>
-                            {% for error in field.errors %}
-                                {{ error }}; &emsp;
-                            {% endfor %}
-                        </p>
-                    {% endif %}
-                {% endfor %}
-                {% for error in form.non_field_errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endfor %}
-            {% for error in image_formset.non_form_errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
             {% for error in image_formset.errors %}
-                <p>{{ error }}</p>
+                <p>{{ error|title }}</p>
             {% endfor %}
         </div>
     {% endif %}
@@ -76,6 +59,16 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             {% for error in availability_formset.errors %}
+                <p>{{ error|title }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if rule_formset.total_error_count > 0 %}
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {% for error in rule_formset.errors %}
                 <p>{{ error|title }}</p>
             {% endfor %}
         </div>
@@ -187,6 +180,7 @@
                             {% csrf_token %}
                             {{ availability_formset.management_form }}
                             {{ image_formset.management_form }}
+                            {{ rule_formset.management_form }}
 
                             {% block forms %}
 

@@ -5,7 +5,7 @@ from django.forms import inlineformset_factory, modelformset_factory
 from dal import autocomplete
 from easy_thumbnails.widgets import ImageClearableFileInput
 
-from house.models import House, Image, Availability, Facility
+from house.models import House, Image, Availability, Facility, HouseRule
 from rentality import settings
 from utils.form_thumbnailer import ImageFileInput
 
@@ -66,10 +66,10 @@ class HouseForm(forms.ModelForm):
                 attrs={'class': 'form-control', 'placeholder': 0}
             ),
             'other_rules': forms.Textarea(
-                attrs={'class': 'form-control', 'rows': 10}
+                attrs={'class': 'form-control', 'rows': 10, 'placeholder':'.'}
             ),
-            'cancellation_policy': forms.RadioSelect(
-                attrs={'class': 'form-control'}
+            'cancellation_policy': forms.Select(
+                attrs={'class': 'd-none'}
             )
         }
 
@@ -81,13 +81,10 @@ class HouseForm(forms.ModelForm):
             except KeyError:
                 field.widget.attrs['placeholder'] = field.label
 
-    def get_facility_choices(self):
-        return [choice.verbose for choice in self.fields['facilities'].queryset]
-
     def clean(self):
         super(HouseForm, self).clean()
         if self.cleaned_data['list_now']:
-            self.clean_for_listing() # TODO
+            self.clean_for_listing()  # TODO
             return self.cleaned_data
         elif self.cleaned_data['submit']:
             return self.cleaned_data
@@ -152,16 +149,22 @@ class HousePhotoForm(forms.ModelForm):
 HousePhotoFormSet = inlineformset_factory(House, Image, form=HousePhotoForm, extra=0)
 
 
-# class HouseDetailsForm3(forms.ModelForm):
-#     class Meta:
-#         model = House
-#         fields = ['tags']
-#         labels = {
-#             "tags": "Rules"
-#         }
-#         widgets = {
-#             'tags': forms.SelectMultiple(attrs={'class': 'form-control', }),
-#         }
+class HouseRuleForm(forms.ModelForm):
+
+    class Meta:
+        model = HouseRule
+        fields = ['value', 'comment']
+        widgets = {
+            'comment': forms.TextInput(attrs={
+                'class': 'form-control', 'placeholder': 'Comment or Special Instructions'
+            }),
+            'value': forms.TextInput(attrs={
+                'class': 'd-none'
+            })
+        }
+
+
+HouseRuleFormSet = inlineformset_factory(House, HouseRule, form=HouseRuleForm, extra=0)
 
 
 class HomeOwnerInfoForm(forms.Form):

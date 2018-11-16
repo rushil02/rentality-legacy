@@ -1,79 +1,81 @@
-    <div id="form-6">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <h1 class="title">Which cancellation Policy you like?</h1>
-                <div class="paragraph">
-                    <div class="checkbox auto-width">
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" id="checkbox-15"
-                                           class="custom-control-input">
-                                    <label class="custom-control-label black" for="checkbox-15">Flexiable
-                                        Policy</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <p>The terant will be entitled to full refund if they cancel 24 hour
-                        before<br>
-                        5:00 pm of check in date (local host time zone)</p>
-                    <p class="gray">e.g : check-in date = 15 th september , latest cancelletion
-                        date
-                        =
-                        5:49
-                        pm 14 th september</p>
-                    <div class="checkbox auto-width">
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" id="checkbox-16"
-                                           class="custom-control-input">
-                                    <label class="custom-control-label black" for="checkbox-16">Moderate
-                                        Policy</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <p>The terant will be entitled to full refund if they cancel 7 days
-                        before<br>
-                        5:00 pm of check in date (local host time zone)</p>
-                    <p class="gray">e.g : check-in date = 15 th september , latest cancelletion
-                        date
-                        =
-                        5:49
-                        pm 8 th september</p>
-                    <div class="checkbox auto-width">
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" id="checkbox-17"
-                                           class="custom-control-input">
-                                    <label class="custom-control-label black" for="checkbox-17">Strict
-                                        Policy</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <p>The terant partial refund if they cancel 7 days before 5:00 pm of check
-                        in
-                        date.<br>
-                        if booking exact refund</p>
-                    <p>Will only be subject to the amount will depanson the duration of stay<br>
-                        -If the stay duration is less than 2 weeks, the tenant will be. entitled
-                        to
-                        50%
-                        of
-                        the rent.<br>
-                        -If the stay duration is between 2 weeks to rent’s refund</p>
-                    <p>-If the stay duration exceeds 1 month, the tenant will be entitled to 2
-                        weeks
-                        of
-                        the
-                        rent’s refund.</p>
+<div id="form-6">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h1 class="title">Which cancellation Policy you like?</h1>
+            {{ main_form.cancellation_policy }}
+
+            <div class="paragraph">
+                <div class="checkbox auto-width">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="checkbox-CP-FP" class="custom-control-input">
+                                <label class="custom-control-label black" for="checkbox-CP-FP">Flexible
+                                    Policy</label>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
+
+                <p>The terant will be entitled to full refund if they cancel 24 hour
+                    before<br>
+                    5:00 pm of check in date (local host time zone)</p>
+                <p class="gray">e.g : check-in date = 15 th september , latest cancelletion
+                    date
+                    =
+                    5:49
+                    pm 14 th september</p>
+                <div class="checkbox auto-width">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="checkbox-CP-MP"
+                                       class="custom-control-input">
+                                <label class="custom-control-label black" for="checkbox-CP-MP">Moderate
+                                    Policy</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <p>The terant will be entitled to full refund if they cancel 7 days
+                    before<br>
+                    5:00 pm of check in date (local host time zone)</p>
+                <p class="gray">e.g : check-in date = 15 th september , latest cancelletion
+                    date
+                    =
+                    5:49
+                    pm 8 th september</p>
+                <div class="checkbox auto-width">
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="checkbox-CP-SP"
+                                       class="custom-control-input">
+                                <label class="custom-control-label black" for="checkbox-CP-SP">Strict
+                                    Policy</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <p>The terant partial refund if they cancel 7 days before 5:00 pm of check
+                    in
+                    date.<br>
+                    if booking exact refund</p>
+                <p>Will only be subject to the amount will depanson the duration of stay<br>
+                    -If the stay duration is less than 2 weeks, the tenant will be. entitled
+                    to
+                    50%
+                    of
+                    the rent.<br>
+                    -If the stay duration is between 2 weeks to rent’s refund</p>
+                <p>-If the stay duration exceeds 1 month, the tenant will be entitled to 2
+                    weeks
+                    of
+                    the
+                    rent’s refund.</p>
             </div>
-            <div class="col-md-1"></div>
         </div>
+        <div class="col-md-1"></div>
     </div>
+</div>

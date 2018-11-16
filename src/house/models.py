@@ -175,6 +175,10 @@ class House(models.Model):
         if created:
             house_profile = HouseProfile(house=self)
             house_profile.save()
+            rules = []
+            for rule in Rule.objects.all():
+                rules.append(HouseRule(house=self, rule=rule, value=rule.options[0]))
+            HouseRule.objects.bulk_create(rules)
 
     def get_facilities(self):
         return self.facilities.all()
@@ -271,7 +275,7 @@ class NeighbourhoodDescriptor(models.Model):
 class HouseRule(models.Model):
     house = models.ForeignKey('house.House', on_delete=models.PROTECT)
     rule = models.ForeignKey('house.Rule', on_delete=models.PROTECT)
-    value = models.CharField(max_length=1)
+    value = models.CharField(max_length=50)
     comment = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -285,7 +289,8 @@ class HouseRule(models.Model):
 
 class Rule(models.Model):
     """
-    options = {'A': "verbose of A", ..}
+    options = ["verbose option", ...]
+    first element in option list is taken as default
     """
     verbose = models.CharField(max_length=50)
     options = ArrayField(models.CharField(max_length=50))
@@ -314,7 +319,7 @@ class Application(models.Model):
 class CancellationPolicy(models.Model):
     verbose = models.TextField(verbose_name='Policy Name')
     description = models.TextField()
-    characteristics = JSONField()
+    properties = JSONField()
     official_policy = models.ForeignKey('essentials.Policy', on_delete=models.PROTECT, null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db.utils import IntegrityError
 
 from elastic_search.core.utils import create_mappings
-from house.models import HomeType, Facility, Rule
+from house.models import HomeType, Facility, Rule, CancellationPolicy
 from django.conf import settings
 
 
@@ -79,8 +79,16 @@ def create_home_types():
     HomeType.objects.get_or_create(name="Other")
 
 
-def register_flat_pages(site_obj):
+# FIXME: Confirm Policiies
+def create_cancellation_policy():
+    """ Creates Cancellation Policy Selected by HomeOwner for each house and applicable on tenants """
+    CancellationPolicy.objects.get_or_create(verbose="Flexible Policy", description=" ", properties="{}")
+    CancellationPolicy.objects.get_or_create(verbose="Moderate Policy", description=" ", properties="{}")
+    CancellationPolicy.objects.get_or_create(verbose="Strict Policy", description=" ", properties="{}")
 
+
+def register_flat_pages(site_obj):
+    """ Register Flat Pages """
     def get_text(file_name):
         if file_name:
             with open(os.path.join(settings.FLAT_PAGE_DOCS_DIR, file_name), 'r') as content_file:
@@ -122,6 +130,7 @@ class Command(BaseCommand):
         'Add flat pages': (register_flat_pages, True),
         'Create Property Type (home_type) choices': (create_home_types, False),
         'Initialize ElasticSearch Mappings': (initialize_es, False),
+        'Register Cancellation Policy': (create_cancellation_policy, False),
     }
 
     def ask_user_input(self, verbose):

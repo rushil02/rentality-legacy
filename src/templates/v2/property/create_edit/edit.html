@@ -136,6 +136,7 @@
             var other_f = $('#other-facility-text');
             if (other_f.val()) {
                 $('#form-3 ul#facilities-list').append(get_facilities_html(other_f.val(), true));
+
                 var data = [{"verbose": other_f.val()}];
                 other_f.val('');
                 other_f.focus();
@@ -152,5 +153,59 @@
 
         // FIXME: URGENT - cannot catch checkbox click event
 
+    </script>
+
+    <script>
+        // Form 4
+        $('#form-4 .custom-radio-button').click(function () {
+            var form_num = $(this).attr('id').split('-')[1];
+            $('#id_houserule_set-' + form_num + '-value').val($(this).val());
+        });
+
+        $(document).ready(function () {
+            $('#form-4 .list.rule').each(function () {
+                var id = $(this).attr('id').split('-')[2];
+                var choice_val = $('#id_houserule_set-' + id + '-value').val();
+                $('#form-4 input[type=radio][id^="gridRadios-' + id + '"]').each(function () {
+                    if (this.value === choice_val) {
+                        $(this).prop('checked', true);
+                    }
+                });
+            })
+        })
+    </script>
+
+    <script>
+        // Form 6
+        $('#form-6 .custom-control-input').click(function () {
+            var label = $('label[for="' + $(this).attr('id') + '"]');
+            var value = label.text().replace(/ /g, '').replace('\n', '');
+            $('#id_main-form-cancellation_policy > option').each(function () {
+                var options_text = $(this).text().replace(/ /g, '').replace('\n', '');
+                if (value === options_text) {
+                    $(this).attr("selected", true);
+                } else {
+                    $(this).attr("selected", false);
+                }
+            });
+            $('#form-6 .custom-control-input').not('#' + this.id).each(function () {
+                    $(this).prop("checked", false)
+                }
+            )
+        });
+
+        $(document).ready(function () {
+            var options_text = $('#id_main-form-cancellation_policy > option:selected').text().replace(/ /g, '').replace('\n', '');
+
+            $('#form-6 .custom-control-input').each(function () {
+                var value = $('label[for="' + $(this).attr('id') + '"]').text().replace(/ /g, '').replace('\n', '');
+                if (value === options_text) {
+                    $(this).prop("checked", true);
+                } else {
+                    $(this).prop("checked", false);
+                }
+            });
+
+        })
     </script>
 {% endblock %}

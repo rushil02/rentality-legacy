@@ -13,8 +13,8 @@ from rest_framework.views import APIView
 
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
-    AvailabilityFormSet
-from house.models import House, Image, Facility
+    AvailabilityFormSet, HouseRuleFormSet
+from house.models import House, Image, Facility, HouseRule
 from house.serializer import ImageSerializer, FacilitySerializer
 
 
@@ -43,12 +43,15 @@ def edit(request, house_uuid):
                                                    instance=house, prefix='availability-form')
         image_formset = HousePhotoFormSet(request.POST or None, instance=house, queryset=house.image_set.all(),
                                           prefix='images-form')
+        rule_formset = HouseRuleFormSet(request.POST or None, instance=house,
+                                        queryset=HouseRule.objects.filter(house=house))
 
         context = {
             "house": house,
             'main_form': main_form,
             'availability_formset': availability_formset,
-            'image_formset': image_formset
+            'image_formset': image_formset,
+            'rule_formset': rule_formset
         }
         if request.method == 'POST':
             valid = True
@@ -65,6 +68,11 @@ def edit(request, house_uuid):
 
             if image_formset.is_valid():
                 image_formset.save()
+            else:
+                valid = False
+
+            if rule_formset.is_valid():
+                rule_formset.save()
             else:
                 valid = False
 
@@ -85,7 +93,10 @@ def edit(request, house_uuid):
                             'availability_formset': AvailabilityFormSet(None, queryset=house.availability_set.all(),
                                                                         instance=house, prefix='availability-form'),
                             'image_formset': HousePhotoFormSet(None, instance=house, queryset=house.image_set.all(),
-                                                               prefix='images-form')
+                                                               prefix='images-form'),
+                            'rule_formset': HouseRuleFormSet(None, instance=house,
+                                                             queryset=HouseRule.objects.filter(house=house))
+
                         }
                         return render(request, 'property/create_edit/edit.html', context)
             return render(request, 'property/create_edit/edit.html', context)
@@ -147,7 +158,6 @@ class FacilityView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, house_uuid, *args, **kwargs):
-        print(request.data)
         try:
             house = House.objects.get(uuid=house_uuid)
         except House.DoesNotExist:
@@ -157,7 +167,6 @@ class FacilityView(APIView):
             if serializer.is_valid():
                 objs = serializer.save()
                 house.facilities.add(*objs)
-                print("here", objs)
                 return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

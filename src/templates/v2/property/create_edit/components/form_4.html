@@ -1,267 +1,73 @@
-    <div id="form-4">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <h1 class="title">What are you house rules ?</h1>
-                <div class="big-list">
-                    <div class="list">
-                        <h2>Smooking</h2>
+<div id="form-4">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h1 class="title">What are you house rules ?</h1>
+            <div class="big-list">
+                {% for form in rule_formset %}
+                    <div class="list rule" id="rule-container-{{ forloop.counter0 }}">
+                        <h2>{{ form.instance.rule.verbose }}</h2>
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-5">
                                 <div class="checkbox auto-width">
                                     <ul class="list-inline">
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-1"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-1">Acceptable</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-2"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-2">Not
-                                                    Acceptable</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-3"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-3">Other</label>
-                                            </div>
-                                        </li>
+                                        {{ form.value }}
+                                        {{ form.id }}
+                                        <fieldset class="form-group" id="radio-group-{{ forloop.counter0 }}">
+                                            {% for choice in form.instance.rule.options %}
+                                                <li class="list-inline-item checkbox-container-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                                                    <div class="custom-control">
+                                                        <div class="form-check" style="padding-left: 0">
+                                                            <input class="form-check-input custom-radio-button"
+                                                                   type="radio"
+                                                                   name="radio-group-{{ forloop.parentloop.counter0 }}"
+                                                                   id="gridRadios-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
+                                                                   value="{{ choice }}">
+                                                            <label class="form-check-label"
+                                                                   for="gridRadios-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                                                                {{ choice }}          </label>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </fieldset>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-md-12 col-lg-12 col-xl-7">
                                 <div class="input no-background style-gray">
-                                    <input type="text" class="form-control"
-                                           placeholder="e.g : out door only">
+                                    {{ form.comment }}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="list">
-                        <h2>Pets</h2>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-5">
-                                <div class="checkbox auto-width">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-4"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-4">Acceptable</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-5"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-5">Not
-                                                    Acceptable</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-6"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-6">Other</label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-12 col-xl-7">
-                                <div class="input no-background style-gray">
-                                    <input type="text" class="form-control"
-                                           placeholder="e.g : small pets only">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list">
-                        <h2>Parties& Events</h2>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-5">
-                                <div class="checkbox auto-width">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-7"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-7">Acceptable</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-8"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-8">Not
-                                                    Acceptable</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-9"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-9">Other</label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-12 col-xl-7">
-                                <div class="input no-background style-gray">
-                                    <input type="text" class="form-control"
-                                           placeholder="e.g : out door only">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list">
-                        <h2>Suitable for children</h2>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-5">
-                                <div class="checkbox auto-width">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-10"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-10">Yes</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-11"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-11">No</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-12"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-12">Others</label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-12 col-xl-7">
-                                <div class="input no-background style-gray">
-                                    <input type="text" class="form-control"
-                                           placeholder="e.g : Not suitable for family">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list">
-                        <h2>Arrival Time</h2>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-4 col-xl-3">
-                                <div class="label">Between</div>
-                            </div>
-                            <div class="col-md-12 col-lg-4 col-xl-2">
-                                <div class="select">
-                                    &nbsp;
-                                    <select class="form-control">
-                                        <option>00:00</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-4 col-xl-2">
-                                <div class="select">
-                                    &nbsp;
-                                    <select class="form-control">
-                                        <option>00:00</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xl-5"></div>
-                        </div>
-                    </div>
-                    <div class="list">
-                        <h2>Arrival Time</h2>
-                        <div class="row">
-                            <div class="col-md-8 col-lg-8 col-xl-5">
-                                <div class="checkbox auto-width">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-13"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-13">Yes</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" id="checkbox-14"
-                                                       class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                       for="checkbox-14">Flexible</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item float-right">
-                                            yes ,Another is it
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-lg-4 col-xl-2">
-                                <div class="select">
-                                    &nbsp;
-                                    <select class="form-control">
-                                        <option>00:00</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xl-5"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="green-textarea">
-                    <h2>Is there anything else your guest need to beware of in you house ? </h2>
-                    <div class="row">
-                        <div class="col-md-9 col-lg-9 col-xl-6">
-                            <div class="textarea">
-                                                        <textarea class="form-control" rows="10"
-                                                                  placeholder="."></textarea>
-                                <div class="example">
-                                    <p><strong>Examples</strong></p>
-                                    Noise level<br>
-                                    Stairs<br>
-                                    What are the share space ?<br>
-                                    Animals living on the premise ?<br>
-                                    Off limit area ?<br>
-                                    Eating area /limits ?<br>
-                                    No Shoes in the house ?<br>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <p>Please Note: these house rules will be accepted by the guest before they
-                        book
-                        your
-                        accommodation.</p>
-                </div>
+                {% endfor %}
             </div>
-            <div class="col-md-1"></div>
+            <div class="green-textarea">
+                <h2>Is there anything else your guest need to beware of in you house ? </h2>
+                <div class="row">
+                    <div class="col-md-9 col-lg-9 col-xl-6">
+                        <div class="textarea">
+                            {{ main_form.other_rules }}
+                            <div class="example">
+                                <p><strong>Examples</strong></p>
+                                Noise level<br>
+                                Stairs<br>
+                                What are the share space ?<br>
+                                Animals living on the premise ?<br>
+                                Off limit area ?<br>
+                                Eating area /limits ?<br>
+                                No Shoes in the house ?<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>Please Note: these house rules will be accepted by the guest before they
+                    book
+                    your
+                    accommodation.</p>
+            </div>
         </div>
+        <div class="col-md-1"></div>
     </div>
+</div>
