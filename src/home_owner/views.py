@@ -63,6 +63,7 @@ def home_owner_account_details(request):
         account = get_account(home_owner.account_id)
         country = Country.objects.get(code=account.country)
         home_owner_info_form = HomeOwnerInfoForm(
+            business_tax_id_provided=account.legal_entity.get('business_tax_id_provided', False),
             initial={
                 'country': country,
                 'street_address1': account.legal_entity.address.line1,
@@ -70,6 +71,7 @@ def home_owner_account_details(request):
                 'state': account.legal_entity.address.state,
                 'zip': account.legal_entity.address.postal_code,
                 'type': account.legal_entity.type,
+                'business_name': account.legal_entity.get('business_name')
             }
         )
         if len(account.external_accounts.data) > 0:

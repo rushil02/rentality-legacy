@@ -6,7 +6,18 @@ from user_custom.models import UserProfile
 
 class HomeOwnerInfoForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        business_tax_id_provided = kwargs.pop('business_tax_id_provided', False)
         super().__init__(*args, **kwargs)
+        if not business_tax_id_provided:
+            self.fields['business_tax_id'] = forms.CharField(
+                max_length=50, required=False, 
+                widget=forms.TextInput(
+                    attrs={
+                        'class': 'inp-business-tax-id form-control',
+                        'placeholder': 'Business Tax ID'
+                    }
+                )
+            )
         self.fields['country'].widget.attrs['class'] = 'form-control'
         if kwargs.get('initial'):
             self.fields['country'].widget.attrs['disabled'] = 'true'
@@ -53,6 +64,15 @@ class HomeOwnerInfoForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 'class': 'inp-zip form-control',
+            }
+        )
+    )
+    business_name = forms.CharField(
+        max_length=50, required=False, 
+        widget=forms.TextInput(
+            attrs={
+                'class': 'inp-business-name form-control',
+                'placeholder': 'Business Name'
             }
         )
     )

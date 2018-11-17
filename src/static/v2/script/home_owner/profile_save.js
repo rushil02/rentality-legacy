@@ -3,6 +3,26 @@ $(document).ready(function () {
 
     $('#id_dob').datepicker();
 
+    $('#id_type').on('change', function(){
+        if (this.value === 'individual'){
+            $('#id_business_name').hide();
+            $('#id_business_tax_id').hide();
+        }
+        else{
+            $('#id_business_name').show();
+            $('#id_business_tax_id').show();
+        }
+    });
+
+    if($('#id_type').val() === 'individual'){
+        $('#id_business_name').hide();
+        $('#id_business_tax_id').hide();
+    }
+    else{
+        $('#id_business_name').show();
+        $('#id_business_tax_id').show();
+    }
+
     $.get('/publishable_key').done(
         function (data){
             stripe = Stripe(data.publishable_key);
@@ -38,6 +58,8 @@ $(document).ready(function () {
         
         var account_data = {
             legal_entity: {
+                business_name: document.querySelector('.inp-business-name').value,
+                business_tax_id: $('.inp-business-tax-id').val(),
                 first_name: document.querySelector('.inp-first-name').value,
                 last_name: document.querySelector('.inp-last-name').value,
                 address: {
