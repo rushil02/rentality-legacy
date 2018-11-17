@@ -150,7 +150,6 @@ class FacilityView(APIView):
             qs = list(Facility.objects.filter(
                 Q(system_default=True) | Q(house=house)
             ).values('verbose', 'id').annotate(checked=Exists(Facility.objects.filter(house=house, pk=OuterRef('pk')))))
-
             serializer = self.serializer(data=qs, many=True)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_200_OK)

@@ -17,7 +17,7 @@
     background-position: left center;
 }
 
-#form-1 div.location{
+#form-1 div.location {
     margin-top: 10px;
 }
 
@@ -597,8 +597,10 @@ body > .page-form .right .calendar .pickmeup .pmu-instance:nth-child(2) .pmu-mon
 }
 
 body > .page-form .right .calendar .pickmeup .pmu-instance .pmu-prev {
+    padding: 15px 15px 15px 15px;
     position: absolute !important;
-    top: 24px !important;
+    border-radius: 50%;
+    top: 16px !important;
     left: 30px !important;
     color: transparent !important;
     background-image: url(../image/chevron-left.png) !important;
@@ -610,9 +612,19 @@ body > .page-form .right .calendar .pickmeup .pmu-instance .pmu-prev {
     border: 12px;
 }
 
+.pickmeup .pmu-instance .pmu-button {
+    color: #2a2b32;
+}
+
+body > .page-form .right .calendar .pickmeup .pmu-instance .pmu-prev:hover {
+    background-color: #e6e6e6;
+}
+
 body > .page-form .right .calendar .pickmeup .pmu-instance .pmu-next {
+    padding: 15px 15px 15px 15px;
     position: absolute !important;
-    top: 24px !important;
+    border-radius: 50%;
+    top: 16px !important;
     left: 585px !important;
     color: transparent !important;
     background-image: url(../image/chevron-right.png) !important;
@@ -622,6 +634,10 @@ body > .page-form .right .calendar .pickmeup .pmu-instance .pmu-next {
     height: 14px !important;
     z-index: 9999 !important;
     transform: none !important;
+}
+
+body > .page-form .right .calendar .pickmeup .pmu-instance .pmu-next:hover {
+    background-color: #e6e6e6;
 }
 
 body > .page-form .right .checkbox .list-inline li {

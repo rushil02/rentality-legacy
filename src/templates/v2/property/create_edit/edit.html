@@ -25,6 +25,7 @@
         $("div#profile-img-dropzone").dropzone({
             url: "/file/post",
             paramName: "image",
+            acceptedFiles: "image/*",
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')
             }
@@ -35,6 +36,7 @@
         $("div#house-img-dropzone").dropzone({
             url: "{% url 'house:add_house_images' house_uuid=house.uuid %}",
             paramName: "image",
+            acceptedFiles: "image/*",
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')
             }
@@ -62,7 +64,7 @@
         $('.delete-availability-btn-prev').on('click', function () {
             var id = this.id.split('-').pop();
             $('#availability-list-' + id).css("display", "none");
-            $('div[id^="id_availability-form-"][id$="-DELETE"]').prop("checked", true);
+            $('#id_availability-form-' + id + '-DELETE').prop("checked", true);
         });
 
 
@@ -129,6 +131,7 @@
                 $(data).each(function () {
                     $('#form-3 ul#facilities-list').append(get_facilities_html(this.verbose, this.checked, this.id));
                 });
+                console.log(data);
             });
         });
 

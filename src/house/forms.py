@@ -5,7 +5,7 @@ from django.forms import inlineformset_factory, modelformset_factory
 from dal import autocomplete
 from easy_thumbnails.widgets import ImageClearableFileInput
 
-from house.models import House, Image, Availability, Facility, HouseRule
+from house.models import House, Image, Availability, HouseRule
 from rentality import settings
 from utils.form_thumbnailer import ImageFileInput
 
