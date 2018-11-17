@@ -164,8 +164,9 @@ class FacilityView(APIView):
         else:
             serializer = self.serializer(data=request.data, many=True)
             if serializer.is_valid():
-                objs = serializer.save()
-                house.facilities.add(*objs)
+                objs_set = serializer.save()
+                house.facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
+                house.facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False])
                 return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

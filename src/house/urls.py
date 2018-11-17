@@ -20,5 +20,4 @@ urlpatterns = [
     path('remove-ask/<uuid:house_uuid>', remove_house_ask, name='remove_house_ask'),
     path('del/<uuid:house_uuid>', delete_listing, name='delete_house'),
     path('rem/<uuid:house_uuid>', remove_listing, name='remove_house'),
-
 ]

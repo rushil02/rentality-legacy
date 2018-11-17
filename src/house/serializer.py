@@ -24,13 +24,15 @@ class ImageSerializer(serializers.ModelSerializer):
 class FacilitySerializer(serializers.Serializer):
     verbose = serializers.CharField()
     id = serializers.IntegerField(required=False)
-    checked = serializers.BooleanField(required=False)
+    checked = serializers.BooleanField()
 
     def create(self, validated_data):
         """
         Create and return a new `Facility` instance, given the validated data.
         """
         if not validated_data.get('id', None):
+            if validated_data["checked"] is False:
+                return None, False
             obj, created = Facility.objects.get_or_create(verbose=validated_data['verbose'])
 
         else:
@@ -39,4 +41,4 @@ class FacilitySerializer(serializers.Serializer):
             except Facility.DoesNotExist as e:
                 raise e  # TODO: test this exception
 
-        return obj
+        return obj, validated_data["checked"]

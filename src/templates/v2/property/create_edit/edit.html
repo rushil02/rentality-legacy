@@ -117,7 +117,7 @@
                 checked = 'checked';
             }
             var html = '<li class="list-inline-item">\n' +
-                '            <div class="custom-control custom-checkbox" id="facility-checkbox-container-"' + num + '>\n' +
+                '            <div class="custom-control custom-checkbox" id="facility-checkbox-container-' + num + '">\n' +
                 '                 <input type="checkbox" class="custom-control-input" id="facility-checkbox-' + num + '" ' + checked + '>\n' +
                 '                  <label class="custom-control-label" for="facility-checkbox-' + num + '">' + verbose + '</label>\n' +
                 '            </div>\n' +
@@ -131,7 +131,20 @@
                 $(data).each(function () {
                     $('#form-3 ul#facilities-list').append(get_facilities_html(this.verbose, this.checked, this.id));
                 });
-                console.log(data);
+                $('#form-3 input.custom-control-input').bind('click', function () {
+                    var data = [{
+                        "id": parseInt(this.id.split('-')[2]),
+                        "verbose": $('#form-3 label[for="' + this.id + '"]').text(),
+                        "checked": $(this).prop("checked")
+                    }];
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'house:facility' house_uuid=house.uuid %}",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
+                })
             });
         });
 
@@ -139,8 +152,10 @@
             var other_f = $('#other-facility-text');
             if (other_f.val()) {
                 $('#form-3 ul#facilities-list').append(get_facilities_html(other_f.val(), true));
-
-                var data = [{"verbose": other_f.val()}];
+                var data = [{
+                    "verbose": other_f.val(),
+                    "checked": true
+                }];
                 other_f.val('');
                 other_f.focus();
 
@@ -150,11 +165,10 @@
                     data: JSON.stringify(data),
                     contentType: "application/json",
                     dataType: 'json'
+                }).done(function (data) {
                 });
             }
         });
-
-        // FIXME: URGENT - cannot catch checkbox click event
 
     </script>
 

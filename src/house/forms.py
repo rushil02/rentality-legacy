@@ -29,7 +29,7 @@ class HouseForm(forms.ModelForm):
 
     class Meta:
         model = House
-        exclude = ['home_owner', 'status', 'rules']
+        exclude = ['home_owner', 'status', 'rules', 'facilities']
         widgets = {
             'title': forms.TextInput(
                 attrs={'class': 'form-control title'}
