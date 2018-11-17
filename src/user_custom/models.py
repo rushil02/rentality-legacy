@@ -83,6 +83,12 @@ class User(AbstractUser):
     def __str__(self):
         return self.get_full_name()
 
+    def save(self, *args, **kwargs):
+        object_is_new = not self.pk
+        super(User, self).save(*args, **kwargs)
+        if object_is_new:
+            UserProfile.objects.create(user=self)
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

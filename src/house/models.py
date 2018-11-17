@@ -22,6 +22,11 @@ def get_file_path(instance, filename):
 
 class HomeType(models.Model):
     name = models.TextField()
+    SPACE_STYLES = (
+        ('S', 'Shared'),
+        ('F', 'Unshared')
+    )
+    space_style = models.CharField(max_length=1)
 
     def __str__(self):
         return "%s" % self.name
@@ -93,6 +98,8 @@ class House(models.Model):
     cancellation_policy = models.ForeignKey('house.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
 
     other_people_description = models.TextField(blank=True)
+
+    access_restrictions = models.TextField(blank=True)
 
     neighbourhood_description = models.TextField(blank=True)
     neighbourhood_facility = models.ManyToManyField('house.NeighbourhoodDescriptor', blank=True)
@@ -168,13 +175,10 @@ class House(models.Model):
             return None
 
     def save(self, *args, **kwargs):
-        created = False
-        if not self.pk:
-            created = True
+        object_is_new = not self.pk
         super(House, self).save(*args, **kwargs)
-        if created:
-            house_profile = HouseProfile(house=self)
-            house_profile.save()
+        if object_is_new:
+            HouseProfile.objects.create(house=self)
             rules = []
             for rule in Rule.objects.all():
                 rules.append(HouseRule(house=self, rule=rule, value=rule.options[0]))
@@ -235,7 +239,7 @@ class Image(models.Model):
             except IndexError:
                 pass
             else:
-                obj.is_thumbnail=True
+                obj.is_thumbnail = True
                 obj.save()
         return data
 

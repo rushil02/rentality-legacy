@@ -24,11 +24,11 @@ def social_apps_info(site_obj):
     providers = settings.OAUTH_DETAILS
 
     for provider in providers:
-        obj, created = SocialApp.objects.get_or_create(
+        obj, created = SocialApp.objects.update_or_create(
             provider=provider,
-            name=providers[provider]['verbose'],
-            secret=providers[provider]['secret'],
-            client_id=providers[provider]['client_id']
+            defaults=dict(name=providers[provider]['verbose'],
+                          secret=providers[provider]['secret'],
+                          client_id=providers[provider]['client_id'])
         )
 
         obj.sites.add(site_obj)
@@ -51,7 +51,7 @@ def create_facilities():
     ]
 
     for facility_verbose in FACILITIES:
-        Facility.objects.get_or_create(verbose=facility_verbose, system_default=True)
+        Facility.objects.update_or_create(verbose=facility_verbose, defaults={'system_default': True})
 
 
 def create_house_rule():
@@ -64,19 +64,18 @@ def create_house_rule():
     }
 
     for rule in RULES:
-        Rule.objects.get_or_create(verbose=rule, options=RULES[rule])
+        Rule.objects.update_or_create(verbose=rule, defaults={'options': RULES[rule]})
 
 
 def create_home_types():
     """ Creates all property types here """
-    HomeType.objects.get_or_create(name="Whole Apartment")
-    HomeType.objects.get_or_create(name="Whole House")
-    HomeType.objects.get_or_create(name="Room in Share-house with Private bathroom")
-    HomeType.objects.get_or_create(name="Room in Share-house with Shared bathroom")
-    HomeType.objects.get_or_create(name="Student Accommodation")
-    HomeType.objects.get_or_create(name="Home Stay")
-    HomeType.objects.get_or_create(name="Granny Flat")
-    HomeType.objects.get_or_create(name="Other")
+    HomeType.objects.update_or_create(name="Whole Apartment", defaults={'space_style': 'F'})
+    HomeType.objects.update_or_create(name="Whole House", defaults={'space_style': 'F'})
+    HomeType.objects.update_or_create(name="Room in Share-house with Private bathroom", defaults={'space_style': 'S'})
+    HomeType.objects.update_or_create(name="Room in Share-house with Shared bathroom", defaults={'space_style': 'S'})
+    HomeType.objects.update_or_create(name="Student Accommodation", defaults={'space_style': 'S'})
+    HomeType.objects.update_or_create(name="Home Stay", defaults={'space_style': 'S'})
+    HomeType.objects.update_or_create(name="Granny Flat", defaults={'space_style': 'S'})
 
 
 # FIXME: Confirm Policiies
@@ -89,6 +88,7 @@ def create_cancellation_policy():
 
 def register_flat_pages(site_obj):
     """ Register Flat Pages """
+
     def get_text(file_name):
         if file_name:
             with open(os.path.join(settings.FLAT_PAGE_DOCS_DIR, file_name), 'r') as content_file:

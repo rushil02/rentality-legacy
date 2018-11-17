@@ -118,12 +118,6 @@ class CustomSignupForm(AllAuthSignupForm):
     #             _("Please accept the terms and conditions to signup and use our services."),
     #             code='Policy agreement not accepted'
     #         )
-    
-    def custom_signup(self, request, user):
-        UserProfile.objects.create(
-            user=user, contact_num=self.cleaned_data['contact_num'],
-            sex=self.cleaned_data['gender']
-        )
 
 
 class CustomChangePasswordForm(AllAuthChangePasswordForm):

@@ -70,7 +70,16 @@ class HouseForm(forms.ModelForm):
             ),
             'cancellation_policy': forms.Select(
                 attrs={'class': 'd-none'}
-            )
+            ),
+            'other_people_description': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 6, 'placeholder': '.'}
+            ),
+            'access_restrictions': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 9, 'placeholder': '.'}
+            ),
+            'neighbourhood_description': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 8, 'placeholder': '.'}
+            ),
         }
 
     def __init__(self, *args, **kwargs):
