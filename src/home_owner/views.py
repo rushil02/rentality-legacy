@@ -72,9 +72,10 @@ def home_owner_account_details(request):
                 'type': account.legal_entity.type,
             }
         )
-        bank_warning_message = "A external account with account number ending with {} already exists. Entering data again will overwrite the previous information.".format(
-            account.external_accounts.data[0].last4
-        )
+        if len(account.external_accounts.data) > 0:
+            bank_warning_message = "A external account with account number ending with {} already exists. Entering data again will overwrite the previous information.".format(
+                account.external_accounts.data[0].last4
+            )
     else:
         home_owner_info_form = HomeOwnerInfoForm()
     user_home_owner_form = UserHomeOwnerForm(instance=request.user)
