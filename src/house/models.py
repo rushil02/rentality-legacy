@@ -102,7 +102,7 @@ class House(models.Model):
     access_restrictions = models.TextField(blank=True)
 
     neighbourhood_description = models.TextField(blank=True)
-    neighbourhood_facility = models.ManyToManyField('house.NeighbourhoodDescriptor', blank=True)
+    neighbourhood_facilities = models.ManyToManyField('house.NeighbourhoodDescriptor', blank=True)
 
     STATUS = (
         ('I', 'Inactive'),
