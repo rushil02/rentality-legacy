@@ -65,9 +65,31 @@ $(document).ready(function () {
 
         const result = await stripe.createToken('account', account_data);
 
+        var resultBankAccount;
+        
+        if (document.querySelector('.inp-routing-number').value || document.querySelector('.inp-account-number').value){
+            resultBankAccount = await stripe.createToken('bank_account', {
+                country: 'AU',
+                currency: 'aud',
+                routing_number: document.querySelector('.inp-routing-number').value,
+                account_number: document.querySelector('.inp-account-number').value,
+                account_holder_name: document.querySelector('.inp-first-name').value + ' ' + document.querySelector('.inp-last-name').value,
+                account_holder_type: 'individual',
+            });
+        }
 
-        if (result.token) {
+        // TODO: Remove country Hard Code
+
+        if (resultBankAccount && resultBankAccount.error){
+            document.querySelector('#bank-error-message').innerHTML = resultBankAccount.error.message;
+        }
+        else if (!resultBankAccount && result.token){
             document.querySelector('#token').value = result.token.id;
+            myForm.submit();
+        }
+        else if (result.token && resultBankAccount.token) {
+            document.querySelector('#token').value = result.token.id;
+            document.querySelector('#bank-account-token').value = resultBankAccount.token.id;
             myForm.submit();
         }
     }
