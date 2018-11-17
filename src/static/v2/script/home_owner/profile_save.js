@@ -51,6 +51,7 @@ $(document).ready(function () {
                     month: dob.getMonth() + 1,
                     year: dob.getFullYear(),
                 },
+                type: document.querySelector('.inp-type').value,
                 gender: gender,
                 phone_number: phone_number,
             },
@@ -74,7 +75,7 @@ $(document).ready(function () {
                 routing_number: document.querySelector('.inp-routing-number').value,
                 account_number: document.querySelector('.inp-account-number').value,
                 account_holder_name: document.querySelector('.inp-first-name').value + ' ' + document.querySelector('.inp-last-name').value,
-                account_holder_type: 'individual',
+                account_holder_type: document.querySelector('.inp-type').value,
             });
         }
 

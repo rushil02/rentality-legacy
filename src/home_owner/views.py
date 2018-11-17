@@ -38,18 +38,17 @@ def home_owner_account_details(request):
             user_home_owner_form.save()
             user_profile_home_owner_form.save()
             if not home_owner.account_id:
-                account = create_account(
-                    country=home_owner_info_form.cleaned_data.get('country').code, 
-                    email=request.user.email,
-                    legal_entity={'type': 'individual'},
-                    payout_schedule={
-                        'interval': 'manual' 
-                    }
-                )
-                account.account_token =  request.POST.get('token')
+                kwargs = {
+                    'country': home_owner_info_form.cleaned_data.get('country').code, 
+                    'email': request.user.email,
+                    'payout_schedule': {
+                        'interval': 'manual'
+                    },
+                    'account_token': request.POST.get('token')
+                }
                 if request.POST.get('bank_account_token'):
-                    account.external_account = request.POST.get('bank_account_token')
-                account.save()
+                    kwargs['external_account'] = request.POST.get('bank_account_token')
+                account = create_account(**kwargs)
                 home_owner.account_id = account.id
                 home_owner.save()
             else:
@@ -69,7 +68,8 @@ def home_owner_account_details(request):
                 'street_address1': account.legal_entity.address.line1,
                 'city': account.legal_entity.address.city,
                 'state': account.legal_entity.address.state,
-                'zip': account.legal_entity.address.postal_code
+                'zip': account.legal_entity.address.postal_code,
+                'type': account.legal_entity.type,
             }
         )
         bank_warning_message = "A external account with account number ending with {} already exists. Entering data again will overwrite the previous information.".format(

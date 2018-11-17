@@ -10,7 +10,19 @@ class HomeOwnerInfoForm(forms.Form):
         self.fields['country'].widget.attrs['class'] = 'form-control'
         if kwargs.get('initial'):
             self.fields['country'].widget.attrs['disabled'] = 'true'
-
+    
+    type = forms.ChoiceField(
+        choices=(
+            ('individual', 'Individual'),
+            ('company', 'Company')
+        ),
+        required=False,
+        widget=forms.Select(
+            attrs={
+                'class': 'inp-type form-control',
+            }
+        )
+    )
     country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False)
     street_address1 = forms.CharField(
         max_length=50, required=False, 

@@ -22,7 +22,10 @@
                     <div class="row">
                         <input type="hidden" name="token" id="token">
                         <input type="hidden" name="bank_account_token" id="bank-account-token">
-
+                        <div class="col-md-12">
+                            <span>Account Type</span>
+                                {{ home_owner_info_form.type }}
+                        </div>
                         <div class="col-md-12">
                             {{ user_home_owner_form.first_name }}
                         </div>
