@@ -19,15 +19,18 @@
 
 #form-5 .list {
     display: block;
-    margin-top: 30px;
 }
 
 #form-5 .tool {
     position: absolute;
-    top: 50px;
+    top: 20px;
     right: 30px;
     display: inline-block;
     z-index: 99;
+}
+
+#form-5 #stored-images{
+    margin-top: 50px;
 }
 
 #form-5 .tool .list-inline {
