@@ -67,7 +67,7 @@ class House(models.Model):
 
     address_hidden = models.TextField(blank=True, verbose_name="Unit Number or House Number",
                                       help_text="This is not visible to others unless a booking is made.")
-    address = models.TextField(blank=True, verbose_name='Building name, Street Name')
+    address = models.TextField(blank=True, verbose_name='Street Name')
     location = models.ForeignKey(
         'cities.PostalCode',
         on_delete=models.PROTECT,

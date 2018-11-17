@@ -5,7 +5,7 @@
             <h1 class="title">What home are you listing ?</h1>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="input">
+                    <div class="input title">
                         {{ main_form.title }}
                     </div>
                     <small class="form-text text-muted">
@@ -18,7 +18,7 @@
                     {% endif %}
                 </div>
                 <div class="col-md-6">
-                    <div class="input address-hidden">
+                    <div class="input address">
                         {{ main_form.address_hidden }}
                     </div>
                     <small class="form-text text-muted">
@@ -44,7 +44,7 @@
                     {% endif %}
                 </div>
                 <div class="col-md-12">
-                    <div class="input select address">
+                    <div class="input location">
                         {{ main_form.location }}
                     </div>
                     <small class="form-text text-muted">

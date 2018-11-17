@@ -7,6 +7,48 @@
     background-color: #eee;
 }
 
+#form-1 span.select2-container {
+    font-size: 15px;
+    font-weight: 400;
+    padding: .375rem 0 .75rem 50px;
+    width: 100% !important;
+    border-bottom: 1px solid #c7cdd9;
+    background: url(../image/form-1/address.svg) no-repeat;
+    background-position: left center;
+}
+
+#form-1 div.location{
+    margin-top: 10px;
+}
+
+#form-1 span.select2-selection {
+    border: none;
+}
+
+#form-1 span.select2-selection__placeholder {
+    color: #495057;
+}
+
+#form-1 span.select2-selection__rendered {
+    padding-left: 0;
+}
+
+#form-1 span.select2-selection__arrow {
+    content: '';
+    display: block;
+    background: url(../image/form-1/select.svg) no-repeat center center;
+    position: absolute;
+    width: 14px;
+    height: 9px;
+    top: 15px;
+    right: 15px;
+    z-index: 0;
+}
+
+#form-1 span.select2-selection__arrow > b {
+    display: none;
+}
+
 #form-5 .image img {
     transition: all .25s ease-in-out;
     transform: scale(1, 1) rotate(0deg);
@@ -29,7 +71,7 @@
     z-index: 99;
 }
 
-#form-5 #stored-images{
+#form-5 #stored-images {
     margin-top: 50px;
 }
 
@@ -318,6 +360,10 @@ body > .page-form .right .input .address.form-control {
     background-image: url('../image/form-1/address.svg');
 }
 
+body > .page-form .right .input .title.form-control {
+    background-image: url('../image/form-1/title.svg');
+}
+
 body > .page-form .right .input .address-hidden.form-control {
     background-image: url('../image/form-1/key.svg');
 }
@@ -405,6 +451,10 @@ body > .page-form .right .bedroom {
 
 body > .page-form .right .bathroom {
     background-image: url('../image/form-1/bathroom.svg');
+}
+
+body > .page-form .right .parking {
+    background-image: url('../image/form-1/parking.svg');
 }
 
 body > .page-form .right .input.available {

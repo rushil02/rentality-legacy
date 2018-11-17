@@ -35,14 +35,14 @@ class HouseForm(forms.ModelForm):
                 attrs={'class': 'form-control title'}
             ),
             'address_hidden': forms.TextInput(
-                attrs={'class': 'form-control address'}
+                attrs={'class': 'form-control address-hidden'}
             ),
             'address': forms.TextInput(
                 attrs={'class': 'form-control no-background'}
             ),
             'location': autocomplete.ModelSelect2(
                 url='house:postal_code_api',
-                attrs={'class': 'form-control address', 'data-placeholder': 'Enter postcode'}
+                attrs={'class': 'form-control address', 'data-placeholder': 'Enter postcode, City or Suburb'}
             ),
             'home_type': forms.Select(
                 attrs={'class': 'form-control'}
