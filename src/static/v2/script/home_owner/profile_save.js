@@ -93,7 +93,7 @@ $(document).ready(function () {
         if (document.querySelector('.inp-routing-number').value || document.querySelector('.inp-account-number').value){
             resultBankAccount = await stripe.createToken('bank_account', {
                 country: 'AU',
-                currency: 'aud',
+                currency: 'aud', // FIXME: make it dynamic
                 routing_number: document.querySelector('.inp-routing-number').value,
                 account_number: document.querySelector('.inp-account-number').value,
                 account_holder_name: document.querySelector('.inp-first-name').value + ' ' + document.querySelector('.inp-last-name').value,
