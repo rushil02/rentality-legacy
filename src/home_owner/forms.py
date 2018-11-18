@@ -39,7 +39,7 @@ class HomeOwnerInfoForm(forms.Form):
         max_length=50, required=False, 
         widget=forms.TextInput(
             attrs={
-                'class': 'inp-street-address1 form-control',
+                'class': 'inp-street-address1 form-control', 'placeholder': 'Street Address'
             }
         )
     )
@@ -47,7 +47,7 @@ class HomeOwnerInfoForm(forms.Form):
         max_length=50, required=False, 
         widget=forms.TextInput(
             attrs={
-                'class': 'inp-city form-control',
+                'class': 'inp-city form-control', 'placeholder': 'City'
             }
         )
     )
@@ -55,7 +55,7 @@ class HomeOwnerInfoForm(forms.Form):
         max_length=50, required=False, 
         widget=forms.TextInput(
             attrs={
-                'class': 'inp-state form-control',
+                'class': 'inp-state form-control', 'placeholder': 'State'
             }
         )
     )
@@ -63,7 +63,7 @@ class HomeOwnerInfoForm(forms.Form):
         max_length=50, required=False, 
         widget=forms.TextInput(
             attrs={
-                'class': 'inp-zip form-control',
+                'class': 'inp-zip form-control', 'placeholder': 'Zipcode/Postcode'
             }
         )
     )
@@ -101,9 +101,10 @@ class UserProfileHomeOwnerForm(forms.ModelForm):
         self.fields['dob'].widget = forms.DateInput(
             attrs={
                 'class': 'inp-dob form-control date',
-                'data-toggle': 'datepicker'
+                'data-toggle': 'datepicker',
+                'placeholder': 'Date of Birth',
+                'autocomplete': 'off'
             },
-            format='%m/%d/%Y'
         )
         self.fields['sex'].widget.attrs['class'] = 'inp-gender form-control'
         self.fields['contact_num'].widget.attrs['class'] = 'inp-contact-num form-control'

@@ -1,0 +1,169 @@
+{% extends 'user/profile/base.html' %}
+
+{% load static %}
+
+{% block additional_scripts %}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="{% static 'script/home_owner/profile_save.js' %}"></script>
+{% endblock %}
+
+{% block navbar %}
+    {% include 'components/navbar/auth.html' %}
+{% endblock %}
+
+{% block profile-navbar-content %}
+    <div class="col-md-12">
+        <div class="header">
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="{% url 'user:user_details' %}"
+                                                class="btn btn-link">My Detail</a></li>
+                <li class="list-inline-item"><a href="{% url 'home_owner:account_details' %}"
+                                                class="btn btn-link active">Bank Information</a></li>
+                <li class="list-inline-item"><a href="{% url 'account_change_password' %}"
+                                                class="btn btn-link">Change
+                    Password</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block profile-content %}
+    <form class="my-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="token" id="token">
+        <input type="hidden" name="bank_account_token" id="bank-account-token">
+
+
+        <div class="col-md-11">
+            <div class="row">
+
+                <div class="col-md-12 text-center">
+                    <div class="label" style="padding-bottom: 50px"><b>Information on this page is required only if you
+                        are
+                        listing your house.</b></div>
+                </div>
+                <div class="col-md-auto col-lg-1 col-xl-1"></div>
+                <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="input select no-background">
+                                Account Type {{ home_owner_info_form.type }}
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <div class="input no-background">
+                                {{ user_home_owner_form.first_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <div class="input no-background">
+                                {{ user_home_owner_form.last_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ home_owner_info_form.business_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ home_owner_info_form.business_tax_id }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ home_owner_info_form.country }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input no-background">
+                                {{ user_profile_home_owner_form.dob }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="i">
+                                <div class="input no-background">
+                                    {{ user_profile_home_owner_form.sex }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input  no-background">
+                                {{ user_profile_home_owner_form.contact_num }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ home_owner_info_form.street_address1 }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ home_owner_info_form.city }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input no-background">
+                                {{ home_owner_info_form.state }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input no-background">
+                                {{ home_owner_info_form.zip }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                <span>Identity Verification Document</span>
+                                <input type="file" id="id-file" name="id-file" accept=".jpeg,.jpg,.png">
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p>By clicking, you agree to <a
+                                    href="{% url 'django.contrib.flatpages.views.flatpage' url="tos/" %}">our terms</a>
+                                and the <a href="https://stripe.com/au/connect-account/legal">Stripe Connected
+                                    Account Agreement</a>.</p>
+                        </div>
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-link add-card">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-auto col-lg-1 col-xl-1"></div>
+                <div class="col-md-12 col-lg-4 col-xl-5">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                <input type="text" class="inp-routing-number form-control" name="routing_number"
+                                       placeholder="Routing Number">
+                            </div>
+                            <div id="bank-error-message" class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                <input type="text" class="inp-account-number form-control" name="account_number"
+                                       placeholder="Account Number">
+                            </div>
+                            <div id="bank-warning-message" class="invalid-feedback">{{ bank_warning_message }}</div>
+                        </div>
+                        <div class="col-md-12 text-right">
+                            <div class="button">
+                                <button type="submit" class="btn btn-link" value="Submit">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-1"></div>
+
+{% endblock %}
+
+{% block footer %}
+    {% include 'components/footer/auth.html' %}
+{% endblock %}
