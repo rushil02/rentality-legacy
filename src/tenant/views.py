@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.views.decorators.http import require_POST, require_GET
 from django.urls import reverse
+from payments.stripe_wrapper import create_charge
 
 from messaging.forms import MessageForm
 from messaging.views import save_new_thread
@@ -267,3 +268,22 @@ def mark_as_selected(request, hp_uuid):
             return redirect(reverse('user:dashboard'))
 
     return render(request, 'tenant/state_change_selected.html', context)
+
+
+def checkout(request):
+    #TODO: Add relavant details
+    if request.POST:
+        kwargs = {
+            'source': request.POST.get('stripeToken'),
+            'target_account_id': 'acct_1DXajWJwl0dd6to9',
+            'amount': '1000',
+            'destination_amount': '877'
+        }
+        charge = create_charge(**kwargs)
+        return redirect(reverse('tenant:payment_successful'))
+
+    return render(request, 'tenant/checkout.html')
+
+
+def payment_successful(request):
+    return render(request, 'tenant/payment_successful.html')
