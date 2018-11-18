@@ -126,6 +126,7 @@
             facilities_temp_id += 1;
             return [html, num]
         }
+
         var facilities_temp_id = 65;
         $(document).ready(function () {
             $.getJSON("{% url 'house:facility' house_uuid=house.uuid %}", function (data) {
@@ -262,6 +263,7 @@
             nearby_facilities_temp_id += 1;
             return [html, num]
         }
+
         var nearby_facilities_temp_id = 65;
         $(document).ready(function () {
             $.getJSON("{% url 'house:nearby_facility' house_uuid=house.uuid %}", function (data) {
@@ -270,7 +272,6 @@
                     $('#form-8 div#nearby-facilities-list').append(element[0]);
                 });
                 $('#form-8 label.nearby-facility').bind('click', function () {
-                    console.log("here", $(this).hasClass("active"));
                     var data = [{
                         "id": parseInt(this.id.split('-')[3]),
                         "verbose": $(this).text(),
@@ -314,6 +315,109 @@
                         $.ajax({
                             type: 'POST',
                             url: "{% url 'house:nearby_facility' house_uuid=house.uuid %}",
+                            data: JSON.stringify(data),
+                            contentType: "application/json",
+                            dataType: 'json'
+                        });
+                    })
+
+                });
+            }
+        });
+    </script>
+
+    <script>
+        //Form 9
+        $('#add-profile-pic').click(function () {
+            $('#id_profile-pic-form-profile_pic').click();
+        });
+        $("#id_profile-pic-form-profile_pic").change(function () {
+            $('#picture-feedback').show();
+        });
+        $('#upload-new-profile-pic').click(function (e) {
+            e.preventDefault();
+            $('#id_profile-pic-form-profile_pic').click();
+        });
+        $('#delete-profile-pic').click(function (e) {
+            e.preventDefault();
+            $('#profile-pic-form-profile_pic-clear_id').prop("checked", true);
+            $('#thumbnail-anchor').hide();
+            $('#picture-feedback').show();
+            $('#image-options').hide();
+        });
+    </script>
+
+    <script>
+        //Form 10
+        function get_fun_tags_html(verbose, selected, num) {
+            num = num || String.fromCharCode(nearby_facilities_temp_id);
+            var checked = '';
+            var active = '';
+            if (selected) {
+                checked = 'checked';
+                active = 'active';
+            }
+            var html = '<label class="fun-tag btn btn-link ' + active + '" id="fun-tag-label-' + num + '">\n' +
+                '                        <input type="checkbox" class="fun-tag" id="fun-tag-checkbox-' + num + '" autocomplete="off"\n' +
+                '                            ' + checked + '>\n' +
+                '                       #' + verbose + '\n' +
+                '                    </label>';
+
+            fun_tag_temp_id += 1;
+            return [html, num]
+        }
+
+        var fun_tag_temp_id = 65;
+        $(document).ready(function () {
+            $.getJSON("{% url 'user:personality_tags' %}", function (data) {
+                $(data).each(function () {
+                    var element = get_fun_tags_html(this.verbose, this.checked, this.id);
+                    $('#form-10 div#fun-tags-list').append(element[0]);
+                });
+                $('#form-10 label.fun-tag').bind('click', function () {
+                    var data = [{
+                        "id": parseInt(this.id.split('-')[3]),
+                        "verbose": $(this).text(),
+                        "checked": !($(this).hasClass("active"))
+                    }];
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'user:personality_tags' %}",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
+                })
+            });
+        });
+
+        $('#form-10 button#add-more-tags').click(function () {
+            var other_f = $('#add-more-fun-tags-text');
+            if (other_f.val()) {
+                var element = get_fun_tags_html(other_f.val(), true);
+                $('#form-10 div#fun-tags-list').append(element[0]);
+                var data = [{
+                    "verbose": other_f.val(),
+                    "checked": true
+                }];
+                other_f.val('');
+                other_f.focus();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'user:personality_tags' %}",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('#form-10 label#fun-tag-label-' + element[1]).bind('click', function () {
+                        var data = [{
+                            "verbose": $(this).text(),
+                            "checked": !($(this).hasClass("active"))
+                        }];
+                        $.ajax({
+                            type: 'POST',
+                            url: "{% url 'user:personality_tags' %}",
                             data: JSON.stringify(data),
                             contentType: "application/json",
                             dataType: 'json'

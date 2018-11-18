@@ -1,13 +1,47 @@
-    <div id="form-9">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <h1 class="title">Show your tenant what you look like ?</h1>
-                <div id="profile-img-dropzone" class="dropzone">
-                    {#                                            <div class="dz-default dz-message"><span>Drop files here to upload</span>#}
-                    {#                                            </div>#}
-                </div>
+<div id="form-9">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h1 class="title">Show your tenant what you look like ?</h1>
+            <div class="profile-image">
+                {% if not user_form.profile_pic.value %}
+                    <div id="add-image">
+                        <div class="text-center">
+                            <a class="btn btn-info" id="add-profile-pic">Add Profile Picture</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="tool" id="image-options" style="top: 160px;">
+                        <ul class="list-inline">
+                            <li class="list-inline-item replace"><a href="#" id="upload-new-profile-pic"
+                                                                    title="Upload new Profile Pictue">Thumbnail</a>
+                            </li>
+                            <li class="list-inline-item remove"><a href="#" id="delete-profile-pic"
+                                                                   title="Remove">Remove</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                {% endif %}
+                {{ user_form.profile_pic }}
             </div>
-            <div class="col-md-1"></div>
+            <div class="valid-feedback text-center" id="picture-feedback">
+                <b>Looks good! Save the page to complete Profile picture changes!</b>
+            </div>
+            {% if user_form.profile_pic.errors %}
+                {% for error in user_form.profile_pic.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+        {% endif %}
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="button top-margin">
+                <button type="submit" class="btn btn-link save-state-stay">Save
+                </button>
+            </div>
         </div>
     </div>
+</div>

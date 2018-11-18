@@ -11,6 +11,8 @@ from elastic_search.core.utils import create_mappings
 from house.models import HomeType, Facility, Rule, CancellationPolicy, NeighbourhoodDescriptor
 from django.conf import settings
 
+from user_custom.models import PersonalityTag
+
 
 def create_site():
     Site.objects.exclude(id=1, domain='rentality.com').delete()
@@ -61,6 +63,15 @@ def create_nearby_facilities():
 
     for verbose in FACILITIES:
         NeighbourhoodDescriptor.objects.update_or_create(verbose=verbose, defaults={'system_default': True})
+
+
+def create_personality_tags():
+    TAGS = [
+        'Coffee Addict', 'Dog Lover', 'Foodie', 'Traveller'
+    ]
+
+    for verbose in TAGS:
+        PersonalityTag.objects.update_or_create(verbose=verbose, defaults={'system_default': True})
 
 
 def create_house_rule():
@@ -140,7 +151,9 @@ class Command(BaseCommand):
         'Create Property Type (home_type) choices': (create_home_types, False),
         'Initialize ElasticSearch Mappings': (initialize_es, False),
         'Register Cancellation Policy': (create_cancellation_policy, False),
-        'Register Nearby Facilities (neighbourhood Descriptors)': (create_nearby_facilities, False)
+        'Register Nearby Facilities (neighbourhood Descriptors)': (create_nearby_facilities, False),
+        'Create Personality tags (used as Fun tags)': (create_personality_tags, False)
+
     }
 
     def ask_user_input(self, verbose):

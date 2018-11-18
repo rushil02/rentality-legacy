@@ -107,6 +107,8 @@ class UserProfile(models.Model):
     dob = models.DateField(_('Date of Birth'), blank=True, null=True)
     receive_newsletter = models.BooleanField(default=True)
     profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True, upload_to=get_file_path)
+    personality_tags = models.ManyToManyField('user_custom.PersonalityTag', blank=True)
+
     updated_on = models.DateTimeField(auto_now=True)
 
     DEFAULT_PROFILE_PIC = '/static/img/placeholders/profile/default.png'
@@ -119,3 +121,16 @@ class UserProfile(models.Model):
             return self.profile_pic
         else:
             return self.DEFAULT_PROFILE_PIC
+
+
+class PersonalityTag(models.Model):
+    """
+    Tags to describe the personality/hobbies of a user.
+    """
+    verbose = models.CharField(max_length=50)
+    system_default = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s" % self.verbose

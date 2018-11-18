@@ -62,6 +62,19 @@ class EditProfileForm(forms.ModelForm):
         }
 
 
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_pic', ]
+        widgets = {
+            'profile_pic': ImageClearableFileInput(
+                thumbnail_options=settings.THUMBNAIL_ALIASES['']['house_detail_small'],
+                attrs={'required': False, 'style': "visibility: hidden"},
+                template='%(template)s <a id="thumbnail-anchor" href="%(source_url)s" target="_blank">%(thumb)s</a>'
+            ),
+        }
+
+
 class CustomLoginForm(AllAuthLoginForm):
     def __init__(self, *args, **kwargs):
         super(CustomLoginForm, self).__init__(*args, **kwargs)
