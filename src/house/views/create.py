@@ -14,8 +14,8 @@ from rest_framework.views import APIView
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
     AvailabilityFormSet, HouseRuleFormSet
-from house.models import House, Image, Facility, HouseRule
-from house.serializer import ImageSerializer, FacilitySerializer
+from house.models import House, Image, Facility, HouseRule, NeighbourhoodDescriptor
+from house.serializer import ImageSerializer, FacilitySerializer, NearbyFacilitySerializer
 
 
 def list_house(house):
@@ -167,6 +167,41 @@ class FacilityView(APIView):
                 objs_set = serializer.save()
                 house.facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
                 house.facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False])
+                return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NearbyFacilitiesView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer = NearbyFacilitySerializer
+
+    def get(self, request, house_uuid, *args, **kwargs):
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            qs = list(NeighbourhoodDescriptor.objects.filter(
+                Q(system_default=True) | Q(house=house)
+            ).values('verbose', 'id').annotate(checked=Exists(NeighbourhoodDescriptor.objects.filter(house=house, pk=OuterRef('pk')))))
+            serializer = self.serializer(data=qs, many=True)
+            if serializer.is_valid():
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request, house_uuid, *args, **kwargs):
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = self.serializer(data=request.data, many=True)
+            if serializer.is_valid():
+                objs_set = serializer.save()
+                house.neighbourhood_facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
+                house.neighbourhood_facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False])
                 return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

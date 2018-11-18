@@ -2,7 +2,7 @@ from django.urls import path
 
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, add_edit_house, search_house_page, search_house_api, add_house_main, remove_house_ask, \
-    delete_listing, remove_listing, create, edit, ImageUploadView, FacilityView
+    delete_listing, remove_listing, create, edit, ImageUploadView, FacilityView, NearbyFacilitiesView
 
 app_name = 'house'
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('add/<uuid:house_uuid>/', edit, name='create_edit'),
     path('add_images/<uuid:house_uuid>/', ImageUploadView.as_view(), name='add_house_images'),
     path('facilities/<uuid:house_uuid>/', FacilityView.as_view(), name='facility'),
+    path('nearby_facilities/<uuid:house_uuid>/', NearbyFacilitiesView.as_view(), name='nearby_facility'),
 
     path('edit/<int:form_num>/<uuid:uuid>', add_edit_house, name='edit'),
     path('search', search_house_page, name='search_house'),

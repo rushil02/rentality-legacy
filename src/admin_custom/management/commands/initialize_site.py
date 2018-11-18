@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db.utils import IntegrityError
 
 from elastic_search.core.utils import create_mappings
-from house.models import HomeType, Facility, Rule, CancellationPolicy
+from house.models import HomeType, Facility, Rule, CancellationPolicy, NeighbourhoodDescriptor
 from django.conf import settings
 
 
@@ -52,6 +52,15 @@ def create_facilities():
 
     for facility_verbose in FACILITIES:
         Facility.objects.update_or_create(verbose=facility_verbose, defaults={'system_default': True})
+
+
+def create_nearby_facilities():
+    FACILITIES = [
+        'Tennis Court', 'Football Field', 'Movie Theater', 'Walking Area', 'BasketBall Court'
+    ]
+
+    for verbose in FACILITIES:
+        NeighbourhoodDescriptor.objects.update_or_create(verbose=verbose, defaults={'system_default': True})
 
 
 def create_house_rule():
@@ -131,6 +140,7 @@ class Command(BaseCommand):
         'Create Property Type (home_type) choices': (create_home_types, False),
         'Initialize ElasticSearch Mappings': (initialize_es, False),
         'Register Cancellation Policy': (create_cancellation_policy, False),
+        'Register Nearby Facilities (neighbourhood Descriptors)': (create_nearby_facilities, False)
     }
 
     def ask_user_input(self, verbose):

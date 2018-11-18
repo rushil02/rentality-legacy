@@ -102,6 +102,7 @@ $(document).ready(function () {
         }
 
         // TODO: Remove country Hard Code
+        // FIXME: Bank Form Errors
 
         if (resultBankAccount && resultBankAccount.error){
             document.querySelector('#bank-error-message').innerHTML = resultBankAccount.error.message;

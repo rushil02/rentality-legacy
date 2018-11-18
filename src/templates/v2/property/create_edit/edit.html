@@ -111,7 +111,7 @@
     <script>
         // Form 3
         function get_facilities_html(verbose, selected, num) {
-            num = num || '';
+            num = num || String.fromCharCode(facilities_temp_id);
             var checked = '';
             if (selected) {
                 checked = 'checked';
@@ -123,13 +123,15 @@
                 '            </div>\n' +
                 '       </li>';
 
-            return html
+            facilities_temp_id += 1;
+            return [html, num]
         }
-
+        var facilities_temp_id = 65;
         $(document).ready(function () {
             $.getJSON("{% url 'house:facility' house_uuid=house.uuid %}", function (data) {
                 $(data).each(function () {
-                    $('#form-3 ul#facilities-list').append(get_facilities_html(this.verbose, this.checked, this.id));
+                    var element = get_facilities_html(this.verbose, this.checked, this.id);
+                    $('#form-3 ul#facilities-list').append(element[0]);
                 });
                 $('#form-3 input.custom-control-input').bind('click', function () {
                     var data = [{
@@ -151,7 +153,8 @@
         $('#form-3 button#add-facilities').click(function () {
             var other_f = $('#other-facility-text');
             if (other_f.val()) {
-                $('#form-3 ul#facilities-list').append(get_facilities_html(other_f.val(), true));
+                var element = get_facilities_html(other_f.val(), true);
+                $('#form-3 ul#facilities-list').append(element[0]);
                 var data = [{
                     "verbose": other_f.val(),
                     "checked": true
@@ -165,7 +168,21 @@
                     data: JSON.stringify(data),
                     contentType: "application/json",
                     dataType: 'json'
-                }).done(function (data) {
+                }).done(function () {
+                    $('#form-3 input#facility-checkbox-' + element[1]).bind('click', function () {
+                        var data = [{
+                            "verbose": $('#form-3 label[for="' + this.id + '"]').text(),
+                            "checked": $(this).prop("checked")
+                        }];
+                        console.log(data);
+                        $.ajax({
+                            type: 'POST',
+                            url: "{% url 'house:facility' house_uuid=house.uuid %}",
+                            data: JSON.stringify(data),
+                            contentType: "application/json",
+                            dataType: 'json'
+                        });
+                    })
                 });
             }
         });
@@ -224,5 +241,87 @@
             });
 
         })
+    </script>
+
+    <script>
+        // Form 8
+        function get_nearby_facilities_html(verbose, selected, num) {
+            num = num || String.fromCharCode(nearby_facilities_temp_id);
+            var checked = '';
+            var active = '';
+            if (selected) {
+                checked = 'checked';
+                active = 'active';
+            }
+            var html = '<label class="nearby-facility btn btn-link ' + active + '" id="nearby-facility-label-' + num + '">\n' +
+                '                        <input type="checkbox" class="nearby-facility" id="nearby-facility-checkbox-' + num + '" autocomplete="off"\n' +
+                '                            ' + checked + '>\n' +
+                '                       ' + verbose + '\n' +
+                '                    </label>';
+
+            nearby_facilities_temp_id += 1;
+            return [html, num]
+        }
+        var nearby_facilities_temp_id = 65;
+        $(document).ready(function () {
+            $.getJSON("{% url 'house:nearby_facility' house_uuid=house.uuid %}", function (data) {
+                $(data).each(function () {
+                    var element = get_nearby_facilities_html(this.verbose, this.checked, this.id);
+                    $('#form-8 div#nearby-facilities-list').append(element[0]);
+                });
+                $('#form-8 label.nearby-facility').bind('click', function () {
+                    console.log("here", $(this).hasClass("active"));
+                    var data = [{
+                        "id": parseInt(this.id.split('-')[3]),
+                        "verbose": $(this).text(),
+                        "checked": !($(this).hasClass("active"))
+                    }];
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'house:nearby_facility' house_uuid=house.uuid %}",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
+                })
+            });
+        });
+
+        $('#form-8 button#add-nearby-facilities').click(function () {
+            var other_f = $('#other-nearby-facility-text');
+            if (other_f.val()) {
+                var element = get_nearby_facilities_html(other_f.val(), true);
+                $('#form-8 div#nearby-facilities-list').append(element[0]);
+                var data = [{
+                    "verbose": other_f.val(),
+                    "checked": true
+                }];
+                other_f.val('');
+                other_f.focus();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'house:nearby_facility' house_uuid=house.uuid %}",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('#form-8 label#nearby-facility-label-' + element[1]).bind('click', function () {
+                        var data = [{
+                            "verbose": $(this).text(),
+                            "checked": !($(this).hasClass("active"))
+                        }];
+                        $.ajax({
+                            type: 'POST',
+                            url: "{% url 'house:nearby_facility' house_uuid=house.uuid %}",
+                            data: JSON.stringify(data),
+                            contentType: "application/json",
+                            dataType: 'json'
+                        });
+                    })
+
+                });
+            }
+        });
     </script>
 {% endblock %}

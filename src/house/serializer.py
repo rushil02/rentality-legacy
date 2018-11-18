@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from house.models import House, Image, Facility
+from house.models import House, Image, Facility, NeighbourhoodDescriptor
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -32,13 +32,44 @@ class FacilitySerializer(serializers.Serializer):
         """
         if not validated_data.get('id', None):
             if validated_data["checked"] is False:
-                return None, False
-            obj, created = Facility.objects.get_or_create(verbose=validated_data['verbose'])
+                try:
+                    obj = Facility.objects.get(verbose=validated_data['verbose'])
+                except Facility.DoesNotExist:
+                    return None, False
+            else:
+                obj, created = Facility.objects.get_or_create(verbose=validated_data['verbose'])
 
         else:
             try:
                 obj = Facility.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
             except Facility.DoesNotExist as e:
+                raise e  # TODO: test this exception
+
+        return obj, validated_data["checked"]
+
+
+class NearbyFacilitySerializer(serializers.Serializer):
+    verbose = serializers.CharField()
+    id = serializers.IntegerField(required=False)
+    checked = serializers.BooleanField()
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Facility` instance, given the validated data.
+        """
+        if not validated_data.get('id', None):
+            if validated_data["checked"] is False:
+                try:
+                    obj = NeighbourhoodDescriptor.objects.get(verbose=validated_data['verbose'])
+                except NeighbourhoodDescriptor.DoesNotExist:
+                    return None, False
+            else:
+                obj, created = NeighbourhoodDescriptor.objects.get_or_create(verbose=validated_data['verbose'])
+
+        else:
+            try:
+                obj = NeighbourhoodDescriptor.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
+            except NeighbourhoodDescriptor.DoesNotExist as e:
                 raise e  # TODO: test this exception
 
         return obj, validated_data["checked"]
