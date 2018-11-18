@@ -428,4 +428,87 @@
             }
         });
     </script>
+
+    <script>
+        //Form 11
+        function get_welcome_tag_html(verbose, selected, num) {
+            num = num || String.fromCharCode(facilities_temp_id);
+            var checked = '';
+            if (selected) {
+                checked = 'checked';
+            }
+            var html = '<li class="list-inline-item">\n' +
+                '            <div class="custom-control custom-checkbox" id="welcometag-checkbox-container-' + num + '">\n' +
+                '                 <input type="checkbox" class="custom-control-input" id="welcometag-checkbox-' + num + '" ' + checked + '>\n' +
+                '                  <label class="custom-control-label" for="welcometag-checkbox-' + num + '">' + verbose + '</label>\n' +
+                '            </div>\n' +
+                '       </li>';
+
+            welcome_tag_temp_id += 1;
+            return [html, num]
+        }
+
+        var welcome_tag_temp_id = 65;
+        $(document).ready(function () {
+            $.getJSON("{% url 'house:welcome_tags' house_uuid=house.uuid %}", function (data) {
+                $(data).each(function () {
+                    var element = get_welcome_tag_html(this.verbose, this.checked, this.id);
+                    $('#form-11 ul#welcome-list').append(element[0]);
+                });
+                $('#form-11 input.custom-control-input').bind('click', function () {
+                    var data = [{
+                        "id": parseInt(this.id.split('-')[2]),
+                        "verbose": $('#form-11 label[for="' + this.id + '"]').text(),
+                        "checked": $(this).prop("checked")
+                    }];
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'house:welcome_tags' house_uuid=house.uuid %}",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: 'json'
+                    });
+                })
+            });
+        });
+
+        $('#form-11 button#add-welcome-tags').click(function () {
+            var other_f = $('#other-welcome-tag-text');
+            if (other_f.val()) {
+                var element = get_welcome_tag_html(other_f.val(), true);
+                $('#form-11 ul#welcome-list').append(element[0]);
+                var data = [{
+                    "verbose": other_f.val(),
+                    "checked": true
+                }];
+                other_f.val('');
+                other_f.focus();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'house:welcome_tags' house_uuid=house.uuid %}",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: 'json'
+                }).done(function () {
+                    $('#form-11 input#welcometag-checkbox-' + element[1]).bind('click', function () {
+                        var data = [{
+                            "verbose": $('#form-11 label[for="' + this.id + '"]').text(),
+                            "checked": $(this).prop("checked")
+                        }];
+                        $.ajax({
+                            type: 'POST',
+                            url: "{% url 'house:welcome_tags' house_uuid=house.uuid %}",
+                            data: JSON.stringify(data),
+                            contentType: "application/json",
+                            dataType: 'json'
+                        });
+                    })
+                });
+            }
+        });
+
+
+
+    </script>
 {% endblock %}

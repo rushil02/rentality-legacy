@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from house.models import House, Image, Facility, NeighbourhoodDescriptor
+from house.models import House, Image, Facility, NeighbourhoodDescriptor, WelcomeTag
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -70,6 +70,33 @@ class NearbyFacilitySerializer(serializers.Serializer):
             try:
                 obj = NeighbourhoodDescriptor.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
             except NeighbourhoodDescriptor.DoesNotExist as e:
+                raise e  # TODO: test this exception
+
+        return obj, validated_data["checked"]
+
+
+class WelcomeTagSerializer(serializers.Serializer):
+    verbose = serializers.CharField()
+    id = serializers.IntegerField(required=False)
+    checked = serializers.BooleanField()
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Facility` instance, given the validated data.
+        """
+        if not validated_data.get('id', None):
+            if validated_data["checked"] is False:
+                try:
+                    obj = WelcomeTag.objects.get(verbose=validated_data['verbose'])
+                except WelcomeTag.DoesNotExist:
+                    return None, False
+            else:
+                obj, created = WelcomeTag.objects.get_or_create(verbose=validated_data['verbose'])
+
+        else:
+            try:
+                obj = WelcomeTag.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
+            except WelcomeTag.DoesNotExist as e:
                 raise e  # TODO: test this exception
 
         return obj, validated_data["checked"]

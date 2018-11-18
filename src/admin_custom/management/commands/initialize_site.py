@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.db.utils import IntegrityError
 
 from elastic_search.core.utils import create_mappings
-from house.models import HomeType, Facility, Rule, CancellationPolicy, NeighbourhoodDescriptor
+from house.models import HomeType, Facility, Rule, CancellationPolicy, NeighbourhoodDescriptor, WelcomeTag
 from django.conf import settings
 
 from user_custom.models import PersonalityTag
@@ -72,6 +72,16 @@ def create_personality_tags():
 
     for verbose in TAGS:
         PersonalityTag.objects.update_or_create(verbose=verbose, defaults={'system_default': True})
+
+
+def create_welcome_tags():
+    TAGS = [
+        'Pet Owners ', 'Students', 'Smokers', '40+', 'Retiree', 'Parents', 'Backpackers', 'LGBTQ+ Friendly',
+        'Female Only'
+    ]
+
+    for verbose in TAGS:
+        WelcomeTag.objects.update_or_create(verbose=verbose, defaults={'system_default': True})
 
 
 def create_house_rule():
@@ -152,8 +162,8 @@ class Command(BaseCommand):
         'Initialize ElasticSearch Mappings': (initialize_es, False),
         'Register Cancellation Policy': (create_cancellation_policy, False),
         'Register Nearby Facilities (neighbourhood Descriptors)': (create_nearby_facilities, False),
-        'Create Personality tags (used as Fun tags)': (create_personality_tags, False)
-
+        'Create Personality tags (used as Fun tags)': (create_personality_tags, False),
+        'Register Welcome Tags': (create_welcome_tags, False)
     }
 
     def ask_user_input(self, verbose):

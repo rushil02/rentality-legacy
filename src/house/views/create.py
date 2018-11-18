@@ -15,8 +15,8 @@ from home_owner.forms import HomeOwnerInfoForm, UserHomeOwnerForm, UserProfileHo
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
     AvailabilityFormSet, HouseRuleFormSet
-from house.models import House, Image, Facility, HouseRule, NeighbourhoodDescriptor
-from house.serializer import ImageSerializer, FacilitySerializer, NearbyFacilitySerializer
+from house.models import House, Image, Facility, HouseRule, NeighbourhoodDescriptor, WelcomeTag
+from house.serializer import ImageSerializer, FacilitySerializer, NearbyFacilitySerializer, WelcomeTagSerializer
 from cities.models import Country
 from payments.stripe_wrapper import create_account, get_account
 from user_custom.forms import ProfilePictureForm
@@ -217,6 +217,43 @@ class NearbyFacilitiesView(APIView):
                 objs_set = serializer.save()
                 house.neighbourhood_facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
                 house.neighbourhood_facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False])
+                return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# FIXME: check for house with user together : Needs to be implemented in all views
+class WelcomeTagView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer = WelcomeTagSerializer
+
+    def get(self, request, house_uuid, *args, **kwargs):
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            qs = list(WelcomeTag.objects.filter(
+                Q(system_default=True) | Q(house=house)
+            ).values('verbose', 'id').annotate(
+                checked=Exists(WelcomeTag.objects.filter(house=house, pk=OuterRef('pk')))))
+            serializer = self.serializer(data=qs, many=True)
+            if serializer.is_valid():
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request, house_uuid, *args, **kwargs):
+        try:
+            house = House.objects.get(uuid=house_uuid)
+        except House.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = self.serializer(data=request.data, many=True)
+            if serializer.is_valid():
+                objs_set = serializer.save()
+                house.welcome_tags.add(*[obj[0] for obj in objs_set if obj[1] is True])
+                house.welcome_tags.remove(*[obj[0] for obj in objs_set if obj[1] is False])
                 return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

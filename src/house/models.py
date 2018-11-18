@@ -104,6 +104,8 @@ class House(models.Model):
     neighbourhood_description = models.TextField(blank=True)
     neighbourhood_facilities = models.ManyToManyField('house.NeighbourhoodDescriptor', blank=True)
 
+    welcome_tags = models.ManyToManyField('house.WelcomeTag', blank=True)
+
     STATUS = (
         ('I', 'Inactive'),
         ('P', 'Published'),
@@ -292,6 +294,19 @@ class HouseRule(models.Model):
 
     def __str__(self):
         return "%s for %s" % (self.rule, self.house)
+
+
+class WelcomeTag(models.Model):
+    """
+    Tags to describe who is welcomed by the homeowner in particular to a house.
+    """
+    verbose = models.CharField(max_length=50)
+    system_default = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s" % self.verbose
 
 
 class Rule(models.Model):
