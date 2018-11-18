@@ -3,12 +3,15 @@ from django.shortcuts import render, redirect
 from rest_framework import generics
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from billing.models import Order, Fee
 
 from home_owner.models import HomeOwnerProfile
 from home_owner.forms import HomeOwnerInfoForm, UserHomeOwnerForm, UserProfileHomeOwnerForm
 from home_owner.serializers import ShortListSerializer
 from cities.models import Country
 from payments.stripe_wrapper import create_account, get_account
+from house.models import Application, ApplicationState
+from payments.stripe_wrapper import create_charge
 
 
 @login_required
@@ -90,3 +93,53 @@ def home_owner_account_details(request):
         'bank_warning_message': bank_warning_message
     }
     return render(request, 'home_owner/account_info.html', context)
+
+
+@login_required
+def application_detail(request, application_uuid):
+    try:
+        application = Application.objects.get(uuid=application_uuid)
+    except Application.DoesNotExist:
+        raise Http404("Application does not exist")
+    else:
+        if request.POST:
+            old_state = application.status
+            if old_state == 'P':
+                application.status = 'A'
+                application.save()
+
+                application_state = ApplicationState(old_state=old_state, new_state='A', actor=request.user)
+                application_state.save()
+
+                amounts = calculate_amount(application.rent)
+
+                amount = amounts['source_amount']
+                customer = application.tenant.customer_id
+                destination_amount = amounts['destination_amount']
+                destination_account = application.house.home_owner.account_id
+
+                charge = create_charge(
+                    customer=customer,
+                    target_account_id=destination_account,
+                    amount=amount,
+                    destination_amount=destination_amount
+                )
+
+                print(charge.id)
+
+                order = Order(application=application, charge_id=charge.id)
+                order.save()
+                return redirect(reverse('home_owner:application_detail', args=[application_uuid, ]))
+        context = {
+            'application': application
+        }
+        return render(request, 'home_owner/application_detail.html', context)
+
+
+def calculate_amount(rent):
+    fee = Fee.objects.get(active=True)
+    d = {
+        'source_amount': int(rent * (1 + (fee.tenant_charge/100))) * 100,
+        'destination_amount': int(rent * (1 - (fee.home_owner_charge/100))) * 100
+    }
+    return d

@@ -2,8 +2,7 @@ from django.urls import path
 
 from utils.api_utils import CityLocationAutocomplete, LocationAutocomplete
 from tenant.views import home, shortlisted_houses, info, search_tenant_page, \
-    search_tenant_api, add_preference_main, add_edit_pref, mark_as_selected, checkout, \
-    payment_successful, tenant_profile
+    search_tenant_api, add_preference_main, add_edit_pref, mark_as_selected, tenant_profile
 
 app_name = 'tenant'
 
@@ -17,7 +16,5 @@ urlpatterns = [
     path('search-api', search_tenant_api, name='search_api'),
     path('city-location', CityLocationAutocomplete.as_view(), name='city_name_api'),
     path('selected-confirm/<uuid:hp_uuid>', mark_as_selected, name='mark_selected_ask'),
-    path('checkout/', checkout, name='checkout'),
-    path('payment/successful', payment_successful, name='payment_successful'),
     path('profile/', tenant_profile, name='profile'),
 ]

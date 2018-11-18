@@ -49,11 +49,11 @@ def get_account(id):
     return execute_request(stripe.Account.retrieve, id)
 
 
-def create_charge(source, target_account_id, amount, destination_amount, *args, **kwargs):
+def create_charge(customer, target_account_id, amount, destination_amount, *args, **kwargs):
     '''
    Create a Stripe Charge
 
-   ``source``: The token recieved by stripe elements.\n
+   ``customer``: The token recieved by stripe elements.\n
    ``target_account_id``: Account ID of recipient.\n
    ``amount``: Amount to be charged by Customer.\n
    ``destination_amount``: Ammount to be recieved by recipient. Rest is your profit.
@@ -61,7 +61,7 @@ def create_charge(source, target_account_id, amount, destination_amount, *args, 
     return execute_request(
         stripe.Charge.create, 
         currency='aud', amount=amount, 
-        source=source,
+        customer=customer,
         destination={
             'amount': destination_amount,
             'account': target_account_id

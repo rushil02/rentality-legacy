@@ -12,12 +12,16 @@ class ImageAdmin(admin.ModelAdmin):
     pass
 
 
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ('uuid', )
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(House, HouseAdmin)
 admin.site.register(HomeType)
 admin.site.register(Facility)
 admin.site.register(Availability)
-admin.site.register(Application)
+admin.site.register(Application, ApplicationAdmin)
 admin.site.register(HouseProfile)
 admin.site.register(HouseRule)
 admin.site.register(Rule)

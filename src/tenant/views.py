@@ -271,25 +271,6 @@ def mark_as_selected(request, hp_uuid):
     return render(request, 'tenant/state_change_selected.html', context)
 
 
-def checkout(request):
-    #TODO: Add relavant details
-    if request.POST:
-        kwargs = {
-            'source': request.POST.get('stripeToken'),
-            'target_account_id': 'acct_1DXajWJwl0dd6to9',
-            'amount': '1000',
-            'destination_amount': '877'
-        }
-        charge = create_charge(**kwargs)
-        return redirect(reverse('tenant:payment_successful'))
-
-    return render(request, 'tenant/checkout.html')
-
-
-def payment_successful(request):
-    return render(request, 'tenant/payment_successful.html')
-
-
 @login_required
 def tenant_profile(request):
     tenant = request.user.tenant
