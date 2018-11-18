@@ -7,6 +7,12 @@ if [ "$opt" = "y" ]; then
     docker-compose exec web python manage.py cities --import=postal_code
 fi
 
+read -p "Import Countries? [y/n]" opt
+
+if [ "$opt" = "y" ]; then
+    docker-compose exec web python manage.py cities --import=country
+fi
+
 read -p "Create Superuser? [y/n]" opt
 
 if [ "$opt" = "y" ]; then

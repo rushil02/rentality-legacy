@@ -176,11 +176,6 @@ class HouseRuleForm(forms.ModelForm):
 HouseRuleFormSet = inlineformset_factory(House, HouseRule, form=HouseRuleForm, extra=0)
 
 
-class HomeOwnerInfoForm(forms.Form):
-    phone_num = forms.NumberInput()
-    profile_pic = forms.ImageField()
-
-
 class SearchForm(forms.Form):
     location = forms.CharField(
         label='Location',
