@@ -68,3 +68,11 @@ def create_charge(source, target_account_id, amount, destination_amount, *args, 
         },
         *args, **kwargs
     )
+
+
+def create_customer(*args, **kwargs):
+    return execute_request(stripe.Customer.create, *args, **kwargs)
+
+
+def retrieve_customer(id):
+    return execute_request(stripe.Customer.retrieve, id)

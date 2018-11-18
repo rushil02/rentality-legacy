@@ -6,11 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.views.decorators.http import require_POST, require_GET
 from django.urls import reverse
-from payments.stripe_wrapper import create_charge
+from payments.stripe_wrapper import create_charge, create_customer, retrieve_customer
+from cities.models import Country
 
 from messaging.forms import MessageForm
 from messaging.views import save_new_thread
-from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2, MarkSelectedForm
+from tenant.forms import HousePreferenceForm, SearchForm, AddTenantFormSet, HousePreferenceForm2, MarkSelectedForm, TenantInfoForm, UserTenantForm, UserProfileTenantForm
 from tenant.models import HousePreference
 from tenant.serializers import HousePreferenceSerializer
 from user_custom.forms import EditProfileForm
@@ -287,3 +288,75 @@ def checkout(request):
 
 def payment_successful(request):
     return render(request, 'tenant/payment_successful.html')
+
+
+@login_required
+def tenant_profile(request):
+    tenant = request.user.tenant
+    if request.POST:
+        tenant_info_form = TenantInfoForm(request.POST)
+        user_tenant_form = UserTenantForm(request.POST, instance=request.user)
+        user_profile_tenant_form = UserProfileTenantForm(request.POST, instance=request.user.userprofile)
+        if tenant_info_form.is_valid() and user_tenant_form.is_valid() and user_profile_tenant_form.is_valid():
+            user = user_tenant_form.save()
+            user_profile = user_profile_tenant_form.save()
+            if not tenant.customer_id:
+                kwargs = {
+                    'email': request.user.email,
+                    'shipping': {
+                        'address': {
+                            'line1': tenant_info_form.cleaned_data['street_address1'],
+                            'city': tenant_info_form.cleaned_data['city'],
+                            'country': tenant_info_form.cleaned_data['country'].code,
+                            'postal_code': tenant_info_form.cleaned_data['zip'],
+                            'state': tenant_info_form.cleaned_data['state']
+                        },
+                        'name': "{} {}".format(user.first_name, user.last_name),
+                        'phone': user_profile.contact_num
+                    }
+                }
+                if request.POST.get('stripeToken'):
+                    kwargs['source'] = request.POST.get('stripeToken')
+                customer = create_customer(**kwargs)
+                tenant.customer_id = customer.id
+                tenant.save()
+            else:
+                customer = retrieve_customer(tenant.customer_id)
+                customer.shipping = {
+                    'address': {
+                        'line1': tenant_info_form.cleaned_data['street_address1'],
+                        'city': tenant_info_form.cleaned_data['city'],
+                        'country': tenant_info_form.cleaned_data['country'].code,
+                        'postal_code': tenant_info_form.cleaned_data['zip'],
+                        'state': tenant_info_form.cleaned_data['state']
+                    },
+                    'name': "{} {}".format(user.first_name, user.last_name),
+                    'phone': user_profile.contact_num
+                }
+                if request.POST.get('stripeToken'):
+                    customer.source = request.POST.get('stripeToken')
+                customer.save()
+            return redirect(reverse('tenant:profile'))
+    else:
+        if tenant.customer_id:
+            customer = retrieve_customer(tenant.customer_id)
+            initial = {}
+            print(customer.shipping.get('address').get('postal_code'))
+            print(customer.sources.data[0].last4)
+            if customer.shipping.get('address').get('country'):
+                initial['country'] = Country.objects.get(code=customer.shipping.get('address').get('country'))
+            initial['city'] = customer.shipping.get('address').get('city'),
+            initial['zip'] = customer.shipping.get('address').get('postal_code'),
+            initial['state'] = customer.shipping.get('address').get('state')
+            initial['street_address1'] = customer.shipping.get('address').get('line1')
+            tenant_info_form = TenantInfoForm(initial=initial)
+        else:
+            tenant_info_form = TenantInfoForm()
+        user_tenant_form = UserTenantForm(instance=request.user)
+        user_profile_tenant_form = UserProfileTenantForm(instance=request.user.userprofile)
+        context = {
+            'tenant_info_form': tenant_info_form,
+            'user_tenant_form': user_tenant_form,
+            'user_profile_tenant_form': user_profile_tenant_form
+        }
+    return render(request, 'tenant/profile.html', context)

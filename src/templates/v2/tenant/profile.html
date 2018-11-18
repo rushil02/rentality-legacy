@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+    {% include 'components/navbar/auth.html' %}
+{% endblock %}
+
+{% block additional_scripts %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'script/tenant/checkout.js' %}"></script>
+<link href="{% static 'style/tenant/checkout.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="page-home-owner">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <form action="" method="POST" id="payment-form">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="col-md-12">
+                {{ user_tenant_form.first_name }}
+            </div>
+            <div class="col-md-12">
+                {{ user_tenant_form.last_name }}
+            </div>
+            <div class="col-md-12">
+                <span>Contact Number</span>
+                {{ user_profile_tenant_form.contact_num }}
+            </div>
+            <div class="col-md-12">
+                <span>Address</span>
+                {{ tenant_info_form.street_address1 }}
+            </div>
+            <div class="col-md-12">
+                <span>City</span>
+                {{ tenant_info_form.city }}
+            </div>
+            <div class="col-md-12">
+                <span>State</span>
+                {{ tenant_info_form.state }}
+            </div>
+            <div class="col-md-12">
+                <span>Country</span>
+                {{ tenant_info_form.country }}
+            </div>
+            <div class="col-md-12">
+                <span>Postal Code</span>
+                {{ tenant_info_form.zip }}
+            </div>
+            <label for="card-element">
+              Credit or debit card
+            </label>
+            <div id="card-element" style='width: 100%;'>
+              <!-- A Stripe Element will be inserted here. -->
+            </div>
+
+            <!-- Used to display Element errors. -->
+            <div id="card-errors" role="alert"></div>
+          </div>
+
+          <button class="btn">Save Card</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
