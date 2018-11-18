@@ -34,8 +34,8 @@
     <div class="dropdown">
         <a href="#" data-toggle="dropdown">Setting</a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a href="#" class="dropdown-item">Settings</a>
-            <a href="#" class="dropdown-item">My Profile</a>
+{#            <a href="#" class="dropdown-item">Settings</a>#}
+            <a href="{% url 'user:user_details' %}" class="dropdown-item">My Profile</a>
             <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
         </div>
     </div>

@@ -3,6 +3,7 @@ from django.conf import settings
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
 def execute_request(request, *args, **kwargs):
     try:
         # Use Stripe's library to make requests...
@@ -10,7 +11,7 @@ def execute_request(request, *args, **kwargs):
     except stripe.error.CardError as e:
         # Since it's a decline, stripe.error.CardError will be caught
         body = e.json_body
-        err  = body.get('error', {})
+        err = body.get('error', {})
 
         print("Status is: {}".format(e.http_status))
         print("Type is: {}".format(err.get('type')))

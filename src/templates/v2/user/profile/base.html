@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+    {% include 'components/navbar/auth.html' %}
+{% endblock navbar %}
+
+{% block content %}
+
+    <div class="page-my-profile">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-1"></div>
+                <div class="col-xl-10">
+                    <div class="row">
+
+                        {% block profile-navbar-content %}
+                            <div class="col-md-12">
+                                <div class="header">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><a href="{% url 'user:user_details' %}"
+                                                                        class="btn btn-link">My Detail</a></li>
+                                        <li class="list-inline-item"><a href="{% url 'home_owner:account_details' %}"
+                                                                        class="btn btn-link">Bank Information</a></li>
+                                        <li class="list-inline-item"><a href="{% url 'account_change_password' %}"
+                                                                        class="btn btn-link">Change Password</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endblock profile-navbar-content %}
+
+                        {% block profile-content %}
+
+                        {% endblock profile-content %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block footer %}
+    {% include 'components/footer/auth.html' %}
+{% endblock %}

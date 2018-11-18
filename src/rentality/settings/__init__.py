@@ -302,11 +302,11 @@ FLAT_PAGE_TEMPLATES = (
 # Easy Thumbnail
 THUMBNAIL_ALIASES = {
     '': {
-        'profile_small': {'size': (41, 41), 'crop': True},
-        'house_home_page_small': {'size': (263, 196), 'crop': True},
-        'house_home_page_large': {'size': (360, 196), 'crop': True},
+        'profile_small': {'size': (41, 41), 'crop': "smart"},
+        'house_home_page_small': {'size': (263, 196), 'crop': "smart"},
+        'house_home_page_large': {'size': (360, 196), 'crop': "smart"},
         'house_detail_small': {'size': (596, 416), 'crop': "smart"},
-        'house_dashboard_large': {'size': (360, 196), 'crop': True},
+        'house_dashboard_large': {'size': (360, 196), 'crop': "smart"},
     }
 }
 

@@ -1,0 +1,167 @@
+{% extends 'user/profile/base.html' %}
+
+{% load static %}
+
+{% block profile-navbar-content %}
+    <div class="col-md-12">
+        <div class="header">
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="{% url 'user:user_details' %}" class="btn btn-link active">My
+                    Detail</a></li>
+                <li class="list-inline-item"><a href="{% url 'home_owner:account_details' %}" class="btn btn-link">Bank
+                    Information</a></li>
+                <li class="list-inline-item"><a href="{% url 'account_change_password' %}" class="btn btn-link">Change
+                    Password</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock profile-navbar-content %}
+
+{% block profile-content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-md-11">
+            <div class="row">
+                <div class="col-md-5 col-lg-5 col-xl-5">
+                    <div class="profile-image">
+                        {% if not form2.profile_pic.value %}
+                            <div id="add-image">
+                                <div class="text-center">
+                                    <a class="btn btn-info" id="add-profile-pic">Add Profile Picture</a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="tool" id="image-options">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item replace"><a href="#" id="upload-new-profile-pic"
+                                                                            title="Upload new Profile Pictue">Thubnail</a>
+                                    </li>
+                                    <li class="list-inline-item remove"><a href="#" id="delete-profile-pic"
+                                                                           title="Remove">Remove</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        {% endif %}
+                        {{ form2.profile_pic }}
+                    </div>
+                    <div class="valid-feedback text-center" id="picture-feedback">
+                        <b>Looks good! Save the page to complete Profile picture changes!</b>
+                    </div>
+                </div>
+                <div class="col-md-auto col-lg-2 col-xl-2"></div>
+                <div class="col-md-6 col-lg-5 col-xl-5">
+                    <h1 class="title">Complete your profile information</h1>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input no-background top-margin">
+                                {{ form1.first_name }}
+                            </div>
+                            <small class="form-text text-muted">
+                                {{ form1.first_name.help_text }}
+                            </small>
+                            {% if form1.first_name.errors %}
+                                {% for error in form1.first_name.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ form1.last_name }}
+                            </div>
+                            <small class="form-text text-muted">
+                                {{ form1.last_name.help_text }}
+                            </small>
+                            {% if form1.last_name.errors %}
+                                {% for error in form1.last_name.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ form2.contact_num }}
+                            </div>
+                            <small class="form-text text-muted">
+                                {{ form2.contact_num.help_text }}
+                            </small>
+                            {% if form2.contact_num.errors %}
+                                {% for error in form2.contact_num.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background number-disp">
+                                {{ form2.dob }}
+                            </div>
+                            <small class="form-text text-muted">
+                                {{ form2.dob.help_text }}
+                            </small>
+                            {% if form2.dob.errors %}
+                                {% for error in form2.dob.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <div class="select">
+                                Gender
+                                {{ form2.sex }}
+                            </div>
+                            <small class="form-text text-muted">
+                                {{ form2.sex.help_text }}
+                            </small>
+                            {% if form2.sex.errors %}
+                                {% for error in form1.last_name.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <p><span>Please Note:</span> We wil not disclose your contact
+                                details until the booking is confirmed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-12">
+            <div class="button">
+                <button class="btn btn-link">Save</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block page_scripts %}
+    <script>
+        $('#add-profile-pic').click(function () {
+            $('#id_profile_pic').click();
+        });
+        $("#id_profile_pic").change(function () {
+            $('#picture-feedback').show();
+        });
+        $('#upload-new-profile-pic').click(function () {
+            $('#id_profile_pic').click();
+        });
+        $('#delete-profile-pic').click(function () {
+            $('#profile_pic-clear_id').prop("checked", true);
+            $('#thumbnail-anchor').hide();
+            $('#picture-feedback').show();
+            $('#image-options').hide();
+        });
+
+        $(document).ready(function () {
+            $('#id_dob').datepicker({
+                format: "yyyy-mm-dd"
+            });
+        })
+
+    </script>
+{% endblock %}

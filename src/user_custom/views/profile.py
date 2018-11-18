@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from house.models import House
 from tenant.models import HousePreference
@@ -12,12 +13,8 @@ def dashboard(request):
     context = {
         'houses': houses
     }
+    # FIXME: separation of dashboards
     return render(request, 'home_owner/dashboard.html', context)
-
-
-def check_mail(request):
-    # TODO: send email
-    return render(request, 'user_common/account_creation/email_conf.html')
 
 
 def edit_profile(request):
@@ -27,12 +24,10 @@ def edit_profile(request):
         'form1': form1,
         'form2': form2
     }
-    print(request.POST)
     if request.method == 'POST':
         if form1.is_valid() and form2.is_valid():
             form1.save()
-            obj = form2.save(commit=False)
-            obj.profile_pic = form2.cleaned_data['profile_pic']
-            obj.save()
+            form2.save()
+            return redirect(reverse('user:user_details'))
 
-    return render(request, 'user_common/profile.html', context)
+    return render(request, 'user/profile/edit_details.html', context)

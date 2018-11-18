@@ -7608,3 +7608,75 @@ body > .header .search .cities #mobile-city {
 /**********************/
 /***** mobile end *****/
 /**********************/
+
+.profile-image {
+    border: dashed;
+    border-radius: 20px;
+    font-size: 0;
+    padding: 15px 15px 15px 15px;
+}
+
+.profile-image > *:not(#add-image):not(#id_profile_pic):not(#thumbnail-anchor):not(#image-options) {
+    display: none;
+}
+
+.profile-image > a#thumbnail-anchor {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.profile-image > a#thumbnail-anchor > img:hover {
+    -webkit-filter: brightness(70%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+.profile-image > #add-image a.btn{
+    font-size: 16px;
+    font-weight: 400;
+    color: #2a2b32;
+    border: 1px solid #2a2b32;
+    padding: 12px 50px;
+    background-color: transparent;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+}
+
+.profile-image > #add-image a.btn:hover{
+    color: #fff;
+    background-color: #2a2b32;
+}
+
+.profile-image .tool {
+    position: absolute;
+    top: 40px;
+    right: 50px;
+    display: inline-block;
+    z-index: 99;
+}
+
+.profile-image .tool .list-inline {
+    margin-bottom: 0;
+}
+
+
+.profile-image .list-inline li.replace a {
+    background: url(../image/form-1/picture.svg) no-repeat center center;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-indent: -9999px;
+}
+
+.profile-image .list-inline li.remove a {
+    background: url(../image/form-1/cancel-button.svg) no-repeat center center;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    text-indent: -9999px;
+}
