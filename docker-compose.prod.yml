@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   nginx:
-    image: registry.gitlab.com/rushil0195/rentality/nginx:latest
+    image: registry.gitlab.com/rushil0195/rentality/nginx:v0.2
     ports:
       - 80:80
     volumes:
@@ -37,7 +37,7 @@ services:
         constraints:
           - node.role == manager
   web:
-    image: registry.gitlab.com/rushil0195/rentality/web:latest
+    image: registry.gitlab.com/rushil0195/rentality/web:v0.2
     volumes:
       - static:/rentality/static_dev/static_root
       - media:/rentality/static_dev/media_root
