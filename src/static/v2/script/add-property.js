@@ -61,6 +61,9 @@ $(document).ready(function () {
     $('#form-1,#form-2,#form-3,#form-4,#form-5,#form-6,#form-7,#form-8,#form-9,#form-10,#form-11,#form-12').addClass('form-series d-none');
 
     var form_id = window.location.hash;
+    if ($('.page-form').hasClass('payment')){
+        form_id = 'form-12';
+    }
     if (!form_id) {
         $('#full-header-1').addClass('active');
         load_new_form(1);
@@ -99,7 +102,7 @@ function check_buttons(form_val) {
         prev_btn.addClass('d-none');
         next_btn.removeClass('d-none');
         list_now_btn.addClass('d-none');
-    } else if (form_val === 12) {
+    } else if (form_val === 11) {
         prev_btn.removeClass('d-none');
         next_btn.addClass('d-none');
         list_now_btn.removeClass('d-none');

@@ -314,8 +314,11 @@ THUMBNAIL_ALIASES = {
 from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
-    messages.DEBUG: 'dark',
-    messages.ERROR: 'danger',
+    messages.WARNING: 'alert-warning',
+    messages.DEBUG: 'alert-dark',
+    messages.ERROR: 'alert-danger',
+    messages.SUCCESS: 'alert-success',
+    messages.INFO: 'alert-info'
 }
 
 

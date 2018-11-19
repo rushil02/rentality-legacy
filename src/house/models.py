@@ -76,9 +76,9 @@ class House(models.Model):
     )
 
     home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
-    bedrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bedrooms")
-    bathrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bathrooms")
-    parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces")
+    bedrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bedrooms", default=1)
+    bathrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bathrooms", default=1)
+    parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces", default=0)
 
     rent = models.PositiveSmallIntegerField(default=0, blank=True, help_text="Per Week in AUD")
     min_stay = models.PositiveSmallIntegerField(

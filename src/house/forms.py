@@ -97,19 +97,12 @@ class HouseForm(forms.ModelForm):
     def clean(self):
         super(HouseForm, self).clean()
         if self.cleaned_data['list_now']:
-            self.clean_for_listing()  # TODO
             return self.cleaned_data
         elif self.cleaned_data['submit']:
             return self.cleaned_data
         else:
             raise ValidationError("Invalid form submission request.")
 
-    def clean_for_listing(self):
-        cleaned_data = super().clean()
-        for field in self.Meta.model.REQUIRED_FIELDS:
-            if cleaned_data[field]:
-                print("here")
-                # FIXME
 
     def clean_bedrooms(self):
         data = self.cleaned_data['bedrooms']

@@ -31,8 +31,15 @@ def list_house(house):
             continue
 
 
-def save_and_exit():
-    pass
+# Need custom validation
+def check_data_for_listing(house):
+    error_field_list = []
+    for field in house.REQUIRED_FIELDS:
+        if getattr(house, field) in (None, '', ' '):
+            error_field_list.append(field)
+
+    error_msg = "Following fields are required for listing - " + ' ;'.join(error_field_list)
+    return not bool(error_field_list), error_msg
 
 
 @login_required()
@@ -88,10 +95,19 @@ def edit(request, house_uuid):
 
             if valid:
                 if main_form.cleaned_data['list_now']:
-                    house.set_status('P')
-                    house.save()
-                    messages.add_message(request, messages.SUCCESS, "Your house has been added to Public Listing")
-                    return redirect(reverse('user:dashboard'))
+                    eligible, errors = check_data_for_listing(house)
+                    if eligible:
+                        messages.add_message(request, messages.SUCCESS,
+                                             "All your data is saved! This is the last step to listing.")
+                        return redirect(reverse('house:payment', args=[house.uuid, ]))
+                    else:
+                        messages.add_message(
+                            request, messages.WARNING,
+                            "All your data is saved! But here are some details required before listing. " + errors,
+                            extra_tags='no-auto-hide'
+                        )
+                        return redirect(reverse('house:create_edit', args=[house.uuid, ]))
+
                 else:
                     if main_form.cleaned_data['exit']:
                         messages.add_message(request, messages.SUCCESS, "Your House information has been saved.")
@@ -261,8 +277,12 @@ class WelcomeTagView(APIView):
 
 # FIXME: Merge this method with home_owner.views.home_owner_account_details
 @login_required
-def home_owner_account_details(request):
+def home_owner_account_details(request, house_uuid):
     home_owner = request.user.home_owner
+    try:
+        house = House.objects.get(home_owner=home_owner, uuid=house_uuid)
+    except House.DoesNotExist:
+        return HttpResponseBadRequest
     if request.POST:
         home_owner_info_form = HomeOwnerInfoForm(request.POST)
         user_home_owner_form = UserHomeOwnerForm(request.POST, instance=request.user)
@@ -290,7 +310,7 @@ def home_owner_account_details(request):
                 if request.POST.get('bank_account_token'):
                     account.external_account = request.POST.get('bank_account_token')
                 account.save()
-            return redirect(reverse('home_owner:account_details'))
+            return redirect(reverse('house:payment', args=[house.uuid, ]))
     bank_warning_message = ""
     if home_owner.account_id:
         account = get_account(home_owner.account_id)
@@ -317,9 +337,10 @@ def home_owner_account_details(request):
     user_home_owner_form = UserHomeOwnerForm(instance=request.user)
     user_profile_home_owner_form = UserProfileHomeOwnerForm(instance=request.user.userprofile)
     context = {
+        'house': house,
         'home_owner_info_form': home_owner_info_form,
         'user_home_owner_form': user_home_owner_form,
         'user_profile_home_owner_form': user_profile_home_owner_form,
         'bank_warning_message': bank_warning_message
     }
-    return render(request, 'home_owner/account_info.html', context)
+    return render(request, 'property/create_edit/payment.html', context)

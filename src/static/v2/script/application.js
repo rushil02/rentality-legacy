@@ -1,6 +1,6 @@
 $(document).ready(function () {
     <!-- alert start -->
-    $('.alert-auto-hide').delay(4000).slideUp("slow");
+    $('.alert-auto-hide:not(".no-auto-hide")').delay(4000).slideUp("slow");
     <!-- alert end -->
 
     <!-- menu start -->
@@ -524,4 +524,11 @@ $(document).ready(function () {
     });
 
     <!-- page my profile end -->
+});
+
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }
 });
