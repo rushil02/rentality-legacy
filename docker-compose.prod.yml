@@ -1,13 +1,10 @@
 version: '3.6'
 services:
   nginx:
-    image: nginx:alpine
+    image: registry.gitlab.com/rushil0195/rentality/nginx:latest
     ports:
       - 80:80
     volumes:
-      - ./nginx/config/common.conf:/etc/nginx/conf.d
-      - ./nginx/config/production.conf:/etc/nginx/conf.d
-      - ./nginx/certs:/etc/nginx/certs
       - static:/static
       - media:/media
     depends_on:
@@ -17,7 +14,7 @@ services:
         constraints:
           - node.role == manager
   postgres:
-    image: mdillon/postgis:9.5-alpine
+    image: mdillon/postgis:10-alpine
     environment:
       POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
