@@ -51,9 +51,9 @@ services:
         # cpus: Percentage of CPU usage
         # memory: Memory size
         # limits: Maximum allowable resources.
-        limits:
-          cpus: '0.3'
-          memory: 200M
+        # limits:
+        #   cpus: '0.3'
+        #   memory: 200M
         # Minimum resources that are always allocated to a container. Uncomment if needed
         # reservations:
         #   cpus: '0.25'
