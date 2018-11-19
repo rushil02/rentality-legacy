@@ -38,6 +38,7 @@ services:
       - media:/rentality/static_dev/media_root
     depends_on:
       - postgres
+      - elasticsearch
     secrets:
       - POSTGRES_USER
       - POSTGRES_PASSWORD

@@ -56,8 +56,6 @@ services:
 #      - tsdbdata:/var/lib/postgresql/data
   web:
     build: ./src
-    environment:
-      - "PYTHONUNBUFFERED=1"
     image: registry.gitlab.com/rushil0195/rentality/web:latest
     volumes:
       - ./static_dev/static_root:/rentality/static_dev/static_root
@@ -71,7 +69,7 @@ services:
       - rabbitmq
     ports:
       - "8001:8000"
-    command: ['./entrypoint.dev.sh']
+    entrypoint: ['./entrypoint.dev.sh']
 #  sys_monitor:
 #    image: grafana/grafana:5.3.1
 #    ports:
