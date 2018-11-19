@@ -1,5 +1,7 @@
 FROM registry.gitlab.com/rushil0195/rentality/base:latest
 
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /rentality/src
 
 COPY requirements.txt .
