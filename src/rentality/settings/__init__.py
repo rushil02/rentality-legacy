@@ -91,7 +91,8 @@ INSTALLED_APPS = [
     'elastic_search.apps.ElasticSearchConfig',
     'messaging.apps.MessagingConfig',
     'cities_custom.apps.CitiesCustomConfig',
-    'blog.apps.BlogConfig'
+    'blog.apps.BlogConfig',
+    'billing.apps.BillingConfig'
 ]
 
 MIDDLEWARE = [

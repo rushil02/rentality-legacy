@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+    {% include 'components/navbar/auth.html' %}
+{% endblock navbar %}
+
+{% block content %}
+<h1>Hello</h1> {{ application.status }}
+
+<form action="" method=POST>
+    {% csrf_token %}
+    <input type="submit" value="Accept">
+</form>
+
+{% endblock content %}

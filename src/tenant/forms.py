@@ -1,6 +1,9 @@
 from dal import autocomplete
 from django import forms
 from django.forms import inlineformset_factory, modelformset_factory
+from cities.models import Country
+from django.contrib.auth import get_user_model
+from user_custom.models import UserProfile
 
 from tenant.models import HousePreference, AdditionalTenant
 
@@ -65,3 +68,62 @@ class SearchForm(forms.Form):
 class MarkSelectedForm(forms.Form):
     confirm = forms.TypedChoiceField(coerce=lambda x: x == 'True',
                                      choices=((False, 'No'), (True, 'Yes')))
+
+
+class TenantInfoForm(forms.Form):
+    country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False)
+    street_address1 = forms.CharField(
+        max_length=50, required=False, 
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
+    )
+    city = forms.CharField(
+        max_length=50, required=False, 
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
+    )
+    state = forms.CharField(
+        max_length=50, required=False, 
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
+    )
+    zip = forms.CharField(
+        max_length=50, required=False, 
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
+    )
+
+
+class UserTenantForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs['class'] = 'form-control'
+        self.fields['first_name'].widget.attrs['placeholder'] = 'First Name'
+        self.fields['last_name'].widget.attrs['class'] = 'form-control'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Last Name'
+
+
+class UserProfileTenantForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['contact_num',]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['contact_num'].widget.attrs['class'] = 'form-control'
