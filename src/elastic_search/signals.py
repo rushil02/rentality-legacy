@@ -10,9 +10,11 @@ def create_house_entry(sender, **kwargs):
     obj = kwargs.get('instance')
     print("*" * 200, "ElasticSearch")
     if obj.is_public():
+        print("#" * 200, "ElasticSearch - adding")
         try:
             es_obj = House(
-                obj_pk=obj.id, address=obj.address,
+                obj_pk=obj.id, address=obj.address, location=obj.location, home_type=obj.home_type, uuid=obj.uuid,
+                user_image=obj.user_image
             )
             es_obj.find_delete_duplicates()
             es_obj.save()

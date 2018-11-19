@@ -272,7 +272,7 @@ LIB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'working_libs')
 # Django Cities settings
 CITIES_DATA_DIR = os.path.join(LIB_PATH, 'geo_data')
 CITIES_VALIDATE_POSTAL_CODES = True
-CITIES_POSTAL_CODES = ['AU', ]
+CITIES_POSTAL_CODES = ['AU']
 
 
 # Debug toolbar settings
