@@ -2,7 +2,7 @@ version: '3.6'
 services:
   nginx:
     build: ./nginx
-    image: registry.gitlab.com/rushil0195/rentality/nginx:latest
+    image: registry.gitlab.com/rushil0195/rentality/nginx:v0.2
     ports:
       - "8000:80"
     volumes:
@@ -56,7 +56,7 @@ services:
 #      - tsdbdata:/var/lib/postgresql/data
   web:
     build: ./src
-    image: registry.gitlab.com/rushil0195/rentality/web:latest
+    image: registry.gitlab.com/rushil0195/rentality/web:v0.2
     volumes:
       - ./static_dev/static_root:/rentality/static_dev/static_root
       - ./static_dev/media_root:/rentality/static_dev/media_root
