@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 from home_owner.forms import HomeOwnerInfoForm, UserHomeOwnerForm, UserProfileHomeOwnerForm
 from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3, SearchForm, \
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
-    AvailabilityFormSet, HouseRuleFormSet
+    AvailabilityFormSet, HouseRuleFormSet, SubmitOptionsForm
 from house.models import House, Image, Facility, HouseRule, NeighbourhoodDescriptor, WelcomeTag
 from house.serializer import ImageSerializer, FacilitySerializer, NearbyFacilitySerializer, WelcomeTagSerializer
 from cities.models import Country
@@ -146,6 +146,7 @@ def create(request):
         else:
             return render(request, 'property/create_edit/create.html', {'main_form': main_form})
     else:
+
         return render(request, 'property/create_edit/create.html', {'main_form': main_form})
 
 
@@ -179,7 +180,7 @@ class FacilityView(APIView):
         else:
             qs = list(Facility.objects.filter(
                 Q(system_default=True) | Q(house=house)
-            ).values('verbose', 'id').annotate(checked=Exists(Facility.objects.filter(house=house, pk=OuterRef('pk')))))
+            ).distinct().values('verbose', 'id').annotate(checked=Exists(Facility.objects.filter(house=house, pk=OuterRef('pk')))))
             serializer = self.serializer(data=qs, many=True)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -214,7 +215,7 @@ class NearbyFacilitiesView(APIView):
         else:
             qs = list(NeighbourhoodDescriptor.objects.filter(
                 Q(system_default=True) | Q(house=house)
-            ).values('verbose', 'id').annotate(
+            ).distinct().values('verbose', 'id').annotate(
                 checked=Exists(NeighbourhoodDescriptor.objects.filter(house=house, pk=OuterRef('pk')))))
             serializer = self.serializer(data=qs, many=True)
             if serializer.is_valid():
@@ -251,7 +252,7 @@ class WelcomeTagView(APIView):
         else:
             qs = list(WelcomeTag.objects.filter(
                 Q(system_default=True) | Q(house=house)
-            ).values('verbose', 'id').annotate(
+            ).distinct().values('verbose', 'id').annotate(
                 checked=Exists(WelcomeTag.objects.filter(house=house, pk=OuterRef('pk')))))
             serializer = self.serializer(data=qs, many=True)
             if serializer.is_valid():
@@ -284,6 +285,7 @@ def home_owner_account_details(request, house_uuid):
     except House.DoesNotExist:
         return HttpResponseBadRequest
     if request.POST:
+        submit_options_form = SubmitOptionsForm(request.POST)
         home_owner_info_form = HomeOwnerInfoForm(request.POST)
         user_home_owner_form = UserHomeOwnerForm(request.POST, instance=request.user)
         user_profile_home_owner_form = UserProfileHomeOwnerForm(request.POST, instance=request.user.userprofile)
@@ -334,10 +336,12 @@ def home_owner_account_details(request, house_uuid):
             )
     else:
         home_owner_info_form = HomeOwnerInfoForm()
+    submit_options_form = SubmitOptionsForm()
     user_home_owner_form = UserHomeOwnerForm(instance=request.user)
     user_profile_home_owner_form = UserProfileHomeOwnerForm(instance=request.user.userprofile)
     context = {
         'house': house,
+        'submit_options': submit_options_form,
         'home_owner_info_form': home_owner_info_form,
         'user_home_owner_form': user_home_owner_form,
         'user_profile_home_owner_form': user_profile_home_owner_form,

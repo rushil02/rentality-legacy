@@ -210,20 +210,10 @@
                                                            accept=".jpeg,.jpg,.png">
 
                                                 </div>
+
                                             </div>
-                                            <div class="col-md-12">
-                                                <p>By clicking, you agree to <a
-                                                        href="{% url 'django.contrib.flatpages.views.flatpage' url="tos/" %}">our
-                                                    terms</a>
-                                                    and the <a href="https://stripe.com/au/connect-account/legal">Stripe
-                                                        Connected
-                                                        Account Agreement</a>.</p>
-                                            </div>
-                                            <div class="col-md-12 text-right">
-                                                <div class="button">
-                                                    <button type="submit" class="btn btn-link add-card">Submit</button>
-                                                </div>
-                                            </div>
+
+
                                         </div>
                                     </div>
                                     <div class="col-md-auto col-lg-1 col-xl-1"></div>
@@ -246,15 +236,36 @@
                                                 <div id="bank-warning-message"
                                                      class="invalid-feedback">{{ bank_warning_message }}</div>
                                             </div>
-                                            <div class="col-md-12 text-right">
-                                                <div class="button">
-                                                    <button type="submit" class="btn btn-link" value="Submit">Save
-                                                    </button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row" style="margin-top: 50px">
+                                    <div class="col-md-12 text-right">
+                                        <p>By clicking submit or save, you agree to <a
+                                                href="{% url 'django.contrib.flatpages.views.flatpage' url="tos/" %}">our
+                                            terms</a>
+                                            and the <a href="https://stripe.com/au/connect-account/legal">Stripe
+                                                Connected
+                                                Account Agreement</a>.</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="button top-margin">
+
+                                            <button type="submit" class="btn btn-link" id="submit-and-exit">Save and
+                                                Exit
+                                            </button>
+                                            <a type="submit" class="btn btn-link" id="next-step">List house</a>
+                                            <button type="submit" class="btn btn-link" id="list-now">Enter Bank Details
+                                                and
+                                                List
+                                            </button>
+                                            <a type="button" href="{% url 'house:create_edit'  house_uuid=house.uuid%}#form-11" class="btn btn-link" id="prev-step">Back</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ main_form.submit }}
+                                {{ main_form.exit }}
+                                {{ main_form.list_now }}
                             </div>
                         </form>
                         <div class="col-md-1"></div>

@@ -15,8 +15,8 @@ from user_custom.models import PersonalityTag
 
 
 def create_site():
-    Site.objects.exclude(id=1, domain='rentality.com').delete()
-    site_obj, s_created = Site.objects.get_or_create(id=1, domain='rentality.com', name='Rentality')
+    Site.objects.exclude(id=1, domain='rentality.com.au').delete()
+    site_obj, s_created = Site.objects.get_or_create(id=1, domain='rentality.com.au', name='Rentality')
     return site_obj
 
 
