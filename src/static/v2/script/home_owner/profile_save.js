@@ -86,8 +86,12 @@ $(document).ready(function () {
             }
         }
 
-        const result = await stripe.createToken('account', account_data);
-
+        try{
+            const result = await stripe.createToken('account', account_data);
+        }
+        catch (err){
+            document.querySelector('#account-error-message').innerHTML = err.message;
+        }
         var resultBankAccount;
         
         if (document.querySelector('.inp-routing-number').value || document.querySelector('.inp-account-number').value){
@@ -106,6 +110,9 @@ $(document).ready(function () {
 
         if (resultBankAccount && resultBankAccount.error){
             document.querySelector('#bank-error-message').innerHTML = resultBankAccount.error.message;
+        }
+        else if (result && result.error){
+            document.querySelector('#account-error-message').innerHTML = result.error.message;
         }
         else if (!resultBankAccount && result.token){
             document.querySelector('#token').value = result.token.id;
