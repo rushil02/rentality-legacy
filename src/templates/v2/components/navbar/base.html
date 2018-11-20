@@ -5,10 +5,10 @@
         </div>
         <div class="col-3 col-md-8 col-lg-8 col-xl-4 center align-self-center">
             <ul class="list-inline">
-                <li class="list-inline-item"><a href="#">Home</a></li>
-                <li class="list-inline-item"><a href="#">Blog</a></li>
-                <li class="list-inline-item"><a href="#">How Its Work</a></li>
-                <li class="list-inline-item"><a href="#">List Your Home</a></li>
+                <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
+                <li class="list-inline-item"><a href="{% url 'blog:home' %}">Blog</a></li>
+                <li class="list-inline-item"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="/about-us/" %}">How Its Work</a></li>
+                <li class="list-inline-item"><a href="{% url 'house:create' %}">List Your Home</a></li>
             </ul>
         </div>
         <div class="col-md-12 col-lg-12 col-xl-4 right align-self-center">

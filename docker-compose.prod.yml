@@ -4,6 +4,7 @@ services:
     image: registry.gitlab.com/rushil0195/rentality/nginx:v0.2
     ports:
       - 80:80
+      - 443:443
     volumes:
       - static:/static
       - media:/media

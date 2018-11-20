@@ -285,7 +285,7 @@ def home_owner_account_details(request, house_uuid):
     except House.DoesNotExist:
         return HttpResponseBadRequest
     if request.POST:
-        submit_options_form = SubmitOptionsForm(request.POST)
+        submit_options_form = SubmitOptionsForm(request.POST, prefix='submit-options')
         home_owner_info_form = HomeOwnerInfoForm(request.POST)
         user_home_owner_form = UserHomeOwnerForm(request.POST, instance=request.user)
         user_profile_home_owner_form = UserProfileHomeOwnerForm(request.POST, instance=request.user.userprofile)
@@ -336,7 +336,7 @@ def home_owner_account_details(request, house_uuid):
             )
     else:
         home_owner_info_form = HomeOwnerInfoForm()
-    submit_options_form = SubmitOptionsForm()
+    submit_options_form = SubmitOptionsForm(prefix='submit-options')
     user_home_owner_form = UserHomeOwnerForm(instance=request.user)
     user_profile_home_owner_form = UserProfileHomeOwnerForm(instance=request.user.userprofile)
     context = {
