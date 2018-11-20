@@ -285,6 +285,7 @@ def home_owner_account_details(request, house_uuid):
     except House.DoesNotExist:
         return HttpResponseBadRequest
     if request.POST:
+        print("post request")
         submit_options_form = SubmitOptionsForm(request.POST, prefix='submit-options')
         home_owner_info_form = HomeOwnerInfoForm(request.POST)
         user_home_owner_form = UserHomeOwnerForm(request.POST, instance=request.user)
@@ -312,7 +313,38 @@ def home_owner_account_details(request, house_uuid):
                 if request.POST.get('bank_account_token'):
                     account.external_account = request.POST.get('bank_account_token')
                 account.save()
-            return redirect(reverse('house:payment', args=[house.uuid, ]))
+            if submit_options_form.cleaned_data['list_now']:
+                eligible, errors = check_data_for_listing(house)
+                if eligible:
+                    messages.add_message(request, messages.SUCCESS,
+                                         "Your house has been successfully added to public listing")
+                    house.set_status('P')
+                    house.save()
+                    return redirect(reverse('user:dashboard'))
+                else:
+                    messages.add_message(
+                        request, messages.WARNING,
+                        "All your data is saved! But here are some details required before listing. " + errors,
+                        extra_tags='no-auto-hide'
+                    )
+                    return redirect(reverse('house:create_edit', args=[house.uuid, ]))
+            else:
+                messages.add_message(request, messages.SUCCESS, "Your Bank information has been saved.")
+                if submit_options_form.cleaned_data['exit']:
+                    return redirect(reverse('user:dashboard'))
+                else:
+                    return redirect(reverse('house:payment', args=[house.uuid, ]))
+        else:
+            context = {
+                'house': house,
+                'submit_options': submit_options_form,
+                'home_owner_info_form': home_owner_info_form,
+                'user_home_owner_form': user_home_owner_form,
+                'user_profile_home_owner_form': user_profile_home_owner_form,
+                'bank_warning_message': ""
+            }
+            return render(request, 'property/create_edit/payment.html', context)
+
     bank_warning_message = ""
     if home_owner.account_id:
         account = get_account(home_owner.account_id)

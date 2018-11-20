@@ -27,16 +27,16 @@ class HomeOwnerInfoForm(forms.Form):
             ('individual', 'Individual'),
             ('company', 'Company')
         ),
-        required=False,
+        required=True,
         widget=forms.Select(
             attrs={
                 'class': 'inp-type form-control',
             }
         )
     )
-    country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False)
+    country = forms.ModelChoiceField(queryset=Country.objects.all(), required=True)
     street_address1 = forms.CharField(
-        max_length=50, required=False, 
+        max_length=50, required=True,
         widget=forms.TextInput(
             attrs={
                 'class': 'inp-street-address1 form-control', 'placeholder': 'Street Address'
@@ -44,7 +44,7 @@ class HomeOwnerInfoForm(forms.Form):
         )
     )
     city = forms.CharField(
-        max_length=50, required=False, 
+        max_length=50, required=True,
         widget=forms.TextInput(
             attrs={
                 'class': 'inp-city form-control', 'placeholder': 'City'
@@ -60,7 +60,7 @@ class HomeOwnerInfoForm(forms.Form):
         )
     )
     zip = forms.CharField(
-        max_length=50, required=False, 
+        max_length=50, required=True,
         widget=forms.TextInput(
             attrs={
                 'class': 'inp-zip form-control', 'placeholder': 'Zipcode/Postcode'
