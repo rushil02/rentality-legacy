@@ -136,15 +136,15 @@
                                         <div class="row">
 
                                             <div class="col-md-12">
-{#                                                {% for error in user_profile_home_owner_form.errors %}#}
-{#                                                    <div class="invalid-feedback">{{ error }}</div>#}
-{#                                                {% endfor %}#}
-{#                                                {% for error in home_owner_info_form.errors %}#}
-{#                                                    <div class="invalid-feedback">{{ error }}</div>#}
-{#                                                {% endfor %}#}
-{#                                                {% for error in user_home_owner_form.errors %}#}
-{#                                                    <div class="invalid-feedback">{{ error }}</div>#}
-{#                                                {% endfor %}#}
+                                                {#                                                {% for error in user_profile_home_owner_form.errors %}#}
+                                                {#                                                    <div class="invalid-feedback">{{ error }}</div>#}
+                                                {#                                                {% endfor %}#}
+                                                {#                                                {% for error in home_owner_info_form.errors %}#}
+                                                {#                                                    <div class="invalid-feedback">{{ error }}</div>#}
+                                                {#                                                {% endfor %}#}
+                                                {#                                                {% for error in user_home_owner_form.errors %}#}
+                                                {#                                                    <div class="invalid-feedback">{{ error }}</div>#}
+                                                {#                                                {% endfor %}#}
 
 
                                             </div>
@@ -340,35 +340,11 @@
 
 {% block page_scripts %}
 
-    <script>
-        // Page user flow
-
-
-        $('#submit-and-exit').click(function () {
-            var main_form = $('#payment-form');
-            $('#id_submit-options-submit').prop('checked', true);
-            $('#id_submit-options-exit').prop('checked', true);
-            $('#id_submit-options-list_now').prop('checked', false);
-            main_form.submit();
-        });
-
-        $('#next-step').click(function () {
-            var main_form = $('#payment-form');
-            $('#id_submit-options-submit').prop('checked', false);
-            $('#id_submit-options-exit').prop('checked', false);
-            $('#id_submit-options-list_now').prop('checked', true);
-            main_form.submit();
-        });
-
-        {% block override_next %}
-
-        {% endblock %}
-
-    </script>
-
-
     <div class="modal" id="wait-for-ajax"><!-- Place at bottom of page --></div>
 
 {% endblock %}
 
 
+{% block override_next %}
+
+{% endblock %}

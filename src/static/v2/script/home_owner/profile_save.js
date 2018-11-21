@@ -3,34 +3,48 @@ $(document).ready(function () {
 
     $('#id_dob').datepicker();
 
-    $('#id_type').on('change', function(){
-        if (this.value === 'individual'){
+    $('#id_type').on('change', function () {
+        if (this.value === 'individual') {
             $('#id_business_name').hide();
             $('#id_business_tax_id').hide();
         }
-        else{
+        else {
             $('#id_business_name').show();
             $('#id_business_tax_id').show();
         }
     });
 
-    if($('#id_type').val() === 'individual'){
+    if ($('#id_type').val() === 'individual') {
         $('#id_business_name').hide();
         $('#id_business_tax_id').hide();
     }
-    else{
+    else {
         $('#id_business_name').show();
         $('#id_business_tax_id').show();
     }
 
     $.get('/publishable_key').done(
-        function (data){
+        function (data) {
             stripe = Stripe(data.publishable_key);
         }
     );
 
-    const myForm = document.querySelector('.my-form');
-    myForm.addEventListener('submit', handleForm);
+    const myForm = document.querySelector('#payment-form');
+    // myForm.addEventListener('submit', handleForm);
+
+    $('#submit-and-exit').click(function (event) {
+        $('#id_submit-options-submit').prop('checked', true);
+        $('#id_submit-options-exit').prop('checked', true);
+        $('#id_submit-options-list_now').prop('checked', false);
+        handleForm(event);
+    });
+
+    $('#next-step').click(function (event) {
+        $('#id_submit-options-submit').prop('checked', false);
+        $('#id_submit-options-exit').prop('checked', false);
+        $('#id_submit-options-list_now').prop('checked', true);
+        handleForm(event);
+    });
 
     async function handleForm(event) {
         event.preventDefault();
@@ -40,7 +54,7 @@ $(document).ready(function () {
         data.append('purpose', 'identity_document');
         const fileResult = await fetch('https://uploads.stripe.com/v1/files', {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${stripe._apiKey}` },
+            headers: {'Authorization': `Bearer ${stripe._apiKey}`},
             body: data,
         });
         const fileData = await fileResult.json();
@@ -55,7 +69,7 @@ $(document).ready(function () {
             gender = 'female'
         else
             gender = undefined;
-        
+
         var account_data = {
             legal_entity: {
                 business_name: document.querySelector('.inp-business-name').value,
@@ -80,21 +94,23 @@ $(document).ready(function () {
             tos_shown_and_accepted: true,
         };
 
-        if (fileData.id){
+        if (fileData.id) {
             account_data.legal_entity['verification'] = {
                 document: fileData.id
             }
         }
 
-        try{
-            const result = await stripe.createToken('account', account_data);
+        try {
+            var result = await stripe.createToken('account', account_data);
+            // console.log(result);
         }
-        catch (err){
+        catch (err) {
             document.querySelector('#account-error-message').innerHTML = err.message;
         }
+
         var resultBankAccount;
-        
-        if (document.querySelector('.inp-routing-number').value || document.querySelector('.inp-account-number').value){
+
+        if (document.querySelector('.inp-routing-number').value || document.querySelector('.inp-account-number').value) {
             resultBankAccount = await stripe.createToken('bank_account', {
                 country: 'AU',
                 currency: 'aud', // FIXME: make it dynamic
@@ -108,13 +124,13 @@ $(document).ready(function () {
         // TODO: Remove country Hard Code
         // FIXME: Bank Form Errors
 
-        if (resultBankAccount && resultBankAccount.error){
+        if (resultBankAccount && resultBankAccount.error) {
             document.querySelector('#bank-error-message').innerHTML = resultBankAccount.error.message;
         }
-        else if (result && result.error){
+        else if (result && result.error) {
             document.querySelector('#account-error-message').innerHTML = result.error.message;
         }
-        else if (!resultBankAccount && result.token){
+        else if (!resultBankAccount && result.token) {
             document.querySelector('#token').value = result.token.id;
             myForm.submit();
         }
