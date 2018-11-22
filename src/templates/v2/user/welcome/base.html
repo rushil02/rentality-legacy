@@ -33,7 +33,7 @@
                         <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
                         <li class="list-inline-item"><a href="{% url 'blog:home' %}">Blog</a></li>
                         <li class="list-inline-item"><a
-                                href="{% url 'django.contrib.flatpages.views.flatpage' url="/about-us/" %}">How It
+                                href="{% url 'django.contrib.flatpages.views.flatpage' url="how-it-works/" %}">How It
                             Works</a></li>
                         <li class="list-inline-item"><a href="{% url 'house:create' %}">List Your Home</a></li>
                     </ul>
@@ -52,7 +52,7 @@
     <div class="header d-flex">
         <div class="w-100 align-self-center">
             <div class="container">
-                <h1 class="title">Find and book your <span>Home</span> for the next few months</h1>
+                <h1 class="title">Book a <span>Home</span> for the next few months</h1>
                 <h2 class="sub-title">Creating a Global Network for Medium Term Home Rentals</h2>
             </div>
         </div>
@@ -268,30 +268,30 @@
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-4">
-                        <a href="#" class="list left">
+                        <a href="{% url 'house:create' %}" class="list left">
                             <div class="image">
                                 <img src="{% static 'image/start-now/1.png' %}" class="w-100" alt="" title="">
                             </div>
-                            <h1>Rent your house.</h1>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt
-                                ut labore et dolore magna aliqua.
-                            </p>
+                            <h1>Rent your House</h1>
+{#                            <p>#}
+{#                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor#}
+{#                                incididunt#}
+{#                                ut labore et dolore magna aliqua.#}
+{#                            </p>#}
                         </a>
                     </div>
                     <div class="col-md-2"></div>
                     <div class="col-md-4">
-                        <a href="#" class="list right">
+                        <a href="{% url 'user:search' %}" class="list right">
                             <div class="image">
                                 <img src="{% static 'image/start-now/2.png' %}" class="w-100" alt="" title="">
                             </div>
-                            <h1>We looking for a house.</h1>
-                            <p>
-                                We have a fully functional online query handling system to assist you in using our
-                                online
-                                trading platform.
-                            </p>
+                            <h1>Looking for a House</h1>
+{#                            <p>#}
+{#                                We have a fully functional online query handling system to assist you in using our#}
+{#                                online#}
+{#                                trading platform.#}
+{#                            </p>#}
                         </a>
                     </div>
                     <div class="col-md-1"></div>
@@ -465,6 +465,5 @@
         })
     </script>
     <!-- Fast Search labels end -->
-
 
 {% endblock page_scripts %}

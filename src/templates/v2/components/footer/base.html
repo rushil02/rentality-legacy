@@ -5,7 +5,7 @@
             <div class="col-6 col-md-3">
                 <div class="list">
                     <ul class="list-unstyled">
-                        <li><a href="">Contact Us</a></li>
+                        <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="contact-us/" %}">Contact Us</a></li>
                         <li><a href="">Rent Home</a></li>
                         <li><a href="">Request Home</a></li>
                     </ul>
@@ -18,7 +18,7 @@
                         <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="privacy-policy/" %}">Privacy Policy</a></li>
                         <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="faq/" %}">FAQs</a></li>
                         <li><a href="">Cookies</a></li>
-                        <li><a href="">Blog</a></li>
+                        <li><a href="{% url 'blog:home' %}">Blog</a></li>
                         <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="about-us/" %}">About</a></li>
                         <li><a href="">Help</a></li>
                     </ul>

@@ -274,7 +274,6 @@ CITIES_DATA_DIR = os.path.join(LIB_PATH, 'geo_data')
 CITIES_VALIDATE_POSTAL_CODES = True
 CITIES_POSTAL_CODES = ['AU']
 
-
 # Debug toolbar settings
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda show_toolbar: True if DEBUG else False,
@@ -297,7 +296,9 @@ FLAT_PAGE_TEMPLATES = (
     ('/about-us/', 'About Us', 'about_us.html', '', False),
     ('/tos/', 'Terms of Service', '', 'terms_of_service.txt', False),
     ('/privacy-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False),
-    ('/faq/', 'Frequently Asked Questions', 'faq.html', '', False)
+    ('/faq/', 'Frequently Asked Questions', 'faq.html', '', False),
+    ('/how-it-works/', 'How it Works', 'how_it_works.html', '', False),
+    ('/contact-us/', 'Contact Us', 'contact_us.html', '', False),
 )
 
 # Easy Thumbnail
@@ -321,7 +322,6 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
     messages.INFO: 'alert-info'
 }
-
 
 STRIPE_PUBLISHABLE_KEY = get_env_var('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = get_env_var('STRIPE_SECRET_KEY')
