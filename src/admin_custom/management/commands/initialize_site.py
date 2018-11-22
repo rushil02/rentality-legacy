@@ -49,7 +49,8 @@ def create_facilities():
 
 def create_nearby_facilities():
     FACILITIES = [
-        'Tennis Court', 'Football Field', 'Movie Theater', 'Walking Area', 'BasketBall Court'
+        '24 Hours Convenience Store', 'Convenience Store', 'Pharmacy', 'University', 'Train Station', 'Bus Stop',
+        'Grocery Store', 'Mall', 'CBD', 'City Centre', 'Sports Centre', 'Beach', 'Bar', 'Restaurants', 'Pub'
     ]
 
     for verbose in FACILITIES:
