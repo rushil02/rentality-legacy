@@ -80,8 +80,7 @@
                 if ((date_arr_cal[1].getTime() - date_arr_cal[0].getTime()) > time_diff) {
 
                     $("#availability-list-" + curr_availability_form).css("display", "block");
-                    $('#availability-form-start-date-' + curr_availability_form).text(date_arr[0]);
-                    $('#availability-form-end-date-' + curr_availability_form).text(date_arr[1]);
+                    $('#availability-form-date-' + curr_availability_form).text(date_arr[0] + " to " + date_arr[1]);
                     $('#id_availability-form-' + curr_availability_form + '-dates_0').val(date_arr_input[0]);
                     $('#id_availability-form-' + curr_availability_form + '-dates_1').val(date_arr_input[1]);
 
@@ -104,6 +103,35 @@
 
         $('#clear-dates').click(function () {
             pickmeup('#availability-calendar').clear();
+        });
+
+        $('#add-all-dates').click(function () {
+            let start = new Date();
+            let end = new Date(new Date().getFullYear() + 1, start.getMonth(), start.getDate());
+            pickmeup('#availability-calendar').set_date([start, end]);
+            var date_arr = pickmeup('#availability-calendar').get_date(true);
+            var date_arr_input = pickmeup('#availability-calendar').get_date('Y-m-d');
+
+            calendar_feedback.text();
+
+            $("#availability-list-" + curr_availability_form).css("display", "block");
+            $('#availability-form-date-' + curr_availability_form).text("All Year Round");
+            $('#id_availability-form-' + curr_availability_form + '-dates_0').val(date_arr_input[0]);
+            $('#id_availability-form-' + curr_availability_form + '-dates_1').val(date_arr_input[1]);
+            $('#id_availability-form-' + curr_availability_form + '-periodic').prop("checked", true);
+
+            curr_availability_form += 1;
+
+            if (curr_availability_form >= total_availability_form) {
+                $('#id_main-form-submit').prop('checked', true);
+                $('#id_main-form-exit').prop('checked', false);
+                $('#id_main-form-list_now').prop('checked', false);
+                window.removeEventListener("beforeunload", confirm_leave);
+                $('#main_form').submit();
+            }
+
+            $('#add-dates').disable();
+
         });
 
     </script>
@@ -506,7 +534,6 @@
                 });
             }
         });
-
 
 
     </script>

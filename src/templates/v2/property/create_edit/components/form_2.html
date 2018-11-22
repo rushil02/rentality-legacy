@@ -73,17 +73,22 @@
                              style="padding: 10px"></div>
                     </div>
                 </div>
-{#                <div class="col-md-6 col-lg-auto"></div>#}
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-12 col-lg-4">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="margin-top: 30px">
+                            <button type="button" class="btn btn-link calendar-btns-black"
+                                    id="add-all-dates">
+                                Set to All year round
+                            </button>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 30px">
                             <button type="button" class="btn btn-link calendar-btns"
                                     id="add-dates">
                                 Add
                                 Selected Dates
                             </button>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="margin-top: 30px">
                             <button type="button" class="btn btn-link calendar-btns"
                                     id="clear-dates">
                                 Clear
@@ -144,10 +149,7 @@
                                     {{ form.dates }}
                                     {{ form.DELETE }}
                                     <div class="col-md-4">
-                                        <a id="availability-form-start-date-{{ forloop.counter0 }}">
-                                        </a>
-                                        to
-                                        <a id="availability-form-end-date-{{ forloop.counter0 }}">
+                                        <a id="availability-form-date-{{ forloop.counter0 }}">
                                         </a>
                                     </div>
                                     <div class="col-md-4">

@@ -146,6 +146,22 @@ body > .page-form #form-2 ul#availability-dates-list input[type='checkbox'][id$=
     display: none;
 }
 
+button.calendar-btns-black {
+    font-size: 16px;
+    font-weight: 700;
+    color: #36ffb1;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+    text-transform: uppercase;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+}
+
+button.calendar-btns-black:hover{
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
 button.calendar-btns {
     font-size: 16px;
     border-radius: 99px;
