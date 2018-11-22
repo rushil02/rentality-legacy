@@ -10,15 +10,15 @@ body {
 /***** warning start *****/
 /*************************/
 
-body > .menu.session > .alert {
+body > .menu.session > .alerts-holder {
     top: 120px;
 }
 
-body > .menu.white > .alert {
+body > .menu.white > .alerts-holder {
     top: 0;
 }
 
-body > .menu > .alert {
+body > .menu > .alerts-holder {
     margin-bottom: 0;
     position: fixed;
     left: 15px;

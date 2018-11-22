@@ -93,6 +93,7 @@
         <!-- menu start -->
         <div class="menu white">
             <!-- alert start -->
+            <div class="alerts-holder">
             {% block notification %}
                 {% if messages %}
                     {% for message in messages %}
@@ -100,7 +101,7 @@
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <p>{{ message }}</p>
+                            <p>{{ message|safe }}</p>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -109,6 +110,7 @@
             {% block additional_notification %}
 
             {% endblock %}
+            </div>
             <!-- alert end -->
 
             {% block navbar %}

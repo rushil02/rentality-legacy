@@ -52,7 +52,7 @@ class HouseForm(forms.ModelForm):
             ),
             'location': autocomplete.ModelSelect2(
                 url='house:postal_code_api',
-                attrs={'class': 'form-control address', 'data-placeholder': 'Enter postcode, City or Suburb'}
+                attrs={'class': 'form-control address', 'data-placeholder': 'Enter Postcode to select Suburb and City'}
             ),
             'home_type': forms.Select(
                 attrs={'class': 'form-control'}
@@ -109,13 +109,10 @@ class HouseForm(forms.ModelForm):
 
     def clean(self):
         super(HouseForm, self).clean()
-        if self.cleaned_data['list_now']:
-            return self.cleaned_data
-        elif self.cleaned_data['submit']:
+        if self.cleaned_data['list_now'] or self.cleaned_data['submit']:
             return self.cleaned_data
         else:
             raise ValidationError("Invalid form submission request.")
-
 
     def clean_bedrooms(self):
         data = self.cleaned_data['bedrooms']

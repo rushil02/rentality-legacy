@@ -48,17 +48,18 @@ $(document).ready(function () {
         $(window).resize();
     }
 
-    if ($('body > .menu > .alert').length > 0) {
+    if ($('body > .menu > .alerts-holder').length > 0) {
         $(window).scroll(function () {
             if ($(window).scrollTop() > $('body > .menu.white').outerHeight()) {
-                $('body > .menu > .alert').css('top', 15);
+                $('body > .menu > .alerts-holder').css('top', 15);
             } else {
-                $('body > .menu > .alert').css('top', ($('body > .menu.white').outerHeight() - $(window).scrollTop()) + 15);
+                $('body > .menu > .alerts-holder').css('top', ($('body > .menu.white').outerHeight() - $(window).scrollTop()) + 15);
             }
         });
 
         $(window).scroll();
     }
+
     <!-- menu end -->
 
     <!-- footer start -->

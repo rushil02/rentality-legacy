@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
@@ -20,26 +21,6 @@ from house.serializer import ImageSerializer, FacilitySerializer, NearbyFacility
 from cities.models import Country
 from payments.stripe_wrapper import create_account, get_account
 from user_custom.forms import ProfilePictureForm
-
-
-def list_house(house):
-    house = House()
-    for field in house.REQUIRED_FIELDS:
-        if getattr(house, field) in (None, '', 0):
-            raise KeyError
-        else:
-            continue
-
-
-# Need custom validation
-def check_data_for_listing(house):
-    error_field_list = []
-    for field in house.REQUIRED_FIELDS:
-        if getattr(house, field) in (None, '', ' '):
-            error_field_list.append(field)
-
-    error_msg = "Following fields are required for listing - " + ' ;'.join(error_field_list)
-    return not bool(error_field_list), error_msg
 
 
 @login_required()
@@ -94,20 +75,31 @@ def edit(request, house_uuid):
                 valid = False
 
             if valid:
+                main_form.save()
                 if main_form.cleaned_data['list_now']:
-                    eligible, errors = check_data_for_listing(house)
-                    if eligible:
+                    try:
+                        house.set_status('P')
+                    except ValidationError as e:
+                        for error in e:
+                            if error[0] in main_form.fields:
+                                main_form.add_error(error[0], error[1])
+                            elif error[0] != NON_FIELD_ERRORS:  # FIXME: Optimize
+                                field_verbose = house._meta.get_field(error[0]).verbose_name.title()
+                                main_form.add_error(None, "%s - %s" % (field_verbose, ', '.join(error[1])))
+                            else:
+                                main_form.add_error(None, error[1])
+
+                        messages.add_message(
+                            request, messages.WARNING,
+                            'All your data is saved! But here are some details required before listing.',
+                            extra_tags='no-auto-hide'
+                        )
+                        return render(request, 'property/create_edit/edit.html', context)
+                    else:
+                        house.save()
                         messages.add_message(request, messages.SUCCESS,
                                              "All your data is saved! This is the last step to listing.")
                         return redirect(reverse('house:payment', args=[house.uuid, ]))
-                    else:
-                        messages.add_message(
-                            request, messages.WARNING,
-                            "All your data is saved! But here are some details required before listing. " + errors,
-                            extra_tags='no-auto-hide'
-                        )
-                        return redirect(reverse('house:create_edit', args=[house.uuid, ]))
-
                 else:
                     if main_form.cleaned_data['exit']:
                         messages.add_message(request, messages.SUCCESS, "Your House information has been saved.")
@@ -180,7 +172,8 @@ class FacilityView(APIView):
         else:
             qs = list(Facility.objects.filter(
                 Q(system_default=True) | Q(house=house)
-            ).distinct().values('verbose', 'id').annotate(checked=Exists(Facility.objects.filter(house=house, pk=OuterRef('pk')))))
+            ).distinct().values('verbose', 'id').annotate(
+                checked=Exists(Facility.objects.filter(house=house, pk=OuterRef('pk')))))
             serializer = self.serializer(data=qs, many=True)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -277,6 +270,7 @@ class WelcomeTagView(APIView):
 
 
 # FIXME: Merge this method with home_owner.views.home_owner_account_details
+# FIXME: Require form handling when stripe returns error
 @login_required
 def home_owner_account_details(request, house_uuid):
     home_owner = request.user.home_owner
@@ -313,20 +307,36 @@ def home_owner_account_details(request, house_uuid):
                     account.external_account = request.POST.get('bank_account_token')
                 account.save()
             if submit_options_form.cleaned_data['list_now']:
-                eligible, errors = check_data_for_listing(house)
-                if eligible:
-                    messages.add_message(request, messages.SUCCESS,
-                                         "Your house has been successfully added to public listing")
+                try:
                     house.set_status('P')
-                    house.save()
-                    return redirect(reverse('user:dashboard'))
-                else:
+                except ValidationError as e:
+                    error_list = []
+                    for error in e:
+                        field_verbose = house._meta.get_field(error[0]).verbose_name.title()
+                        field_errors = ', '.join(error[1])
+                        error_list.append("%s - %s" % (field_verbose, field_errors))
+
                     messages.add_message(
                         request, messages.WARNING,
-                        "All your data is saved! But here are some details required before listing. " + errors,
+                        'All your data is saved! But here are some details required before listing. <br>' +
+                        '<br>'.join(error_list),
                         extra_tags='no-auto-hide'
                     )
-                    return redirect(reverse('house:create_edit', args=[house.uuid, ]))
+                    context = {
+                        'house': house,
+                        'submit_options': submit_options_form,
+                        'home_owner_info_form': home_owner_info_form,
+                        'user_home_owner_form': user_home_owner_form,
+                        'user_profile_home_owner_form': user_profile_home_owner_form,
+                        'bank_warning_message': ""
+                    }
+                    return render(request, 'property/create_edit/payment.html', context)
+                else:
+                    house.save()
+                    messages.add_message(request, messages.SUCCESS,
+                                         "Your house has been successfully added to public listing")
+
+                    return redirect(reverse('user:dashboard'))
             else:
                 messages.add_message(request, messages.SUCCESS, "Your Bank information has been saved.")
                 if submit_options_form.cleaned_data['exit']:

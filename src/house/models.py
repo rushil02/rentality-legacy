@@ -23,11 +23,11 @@ def get_file_path(instance, filename):
 
 
 STATUS_CHOICES = (
-        ('P', 'Pending'),
-        ('A', 'Accepted'),
-        ('D', 'Declined'),
-        ('T', 'Timeout'),
-        ('E', 'Transaction Error')
+    ('P', 'Pending'),
+    ('A', 'Accepted'),
+    ('D', 'Declined'),
+    ('T', 'Timeout'),
+    ('E', 'Transaction Error')
 )
 
 
@@ -61,9 +61,11 @@ class House(models.Model):
     )
     """
 
+    # These fields are required to make the listing public [Published]
     REQUIRED_FIELDS = (
         'home_owner', 'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms',
-        'bathrooms', 'parking', 'rent', 'facilities', 'cancellation_policy', 'max_people_allowed'
+        'bathrooms', 'parking', 'rent', 'min_stay', 'facilities', 'rules', 'cancellation_policy', 'max_people_allowed',
+        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', #'availability', 'image'
     )
 
     home_owner = models.ForeignKey(
@@ -88,15 +90,15 @@ class House(models.Model):
         'cities.PostalCode',
         on_delete=models.PROTECT,
         verbose_name=_('location'),
-        null=True, blank=True  # FIXME: remove blank after migrating geo data
+        null=True, blank=True
     )
 
     home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
-    bedrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bedrooms", default=1)
-    bathrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bathrooms", default=1)
-    parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces", default=0)
+    bedrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bedrooms")
+    bathrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bathrooms")
+    parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces")
 
-    rent = models.PositiveSmallIntegerField(blank=True, help_text="Per Week in AUD")
+    rent = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Per Week in AUD")
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),
         help_text=_('In days. Minimum and Default is 4 weeks (28 days).'), null=True, blank=True, default=28,
@@ -173,7 +175,7 @@ class House(models.Model):
         return False
 
     def __str__(self):
-        return "%s - %s [%s]" % (self.home_owner, self.location, self.address)
+        return "%s - %s [%s]" % (self.home_owner, self.title, self.address_hidden)
 
     def get_images(self):
         return self.image_set.all()
@@ -211,7 +213,27 @@ class House(models.Model):
         return self.rules.all()
 
     def set_status(self, status):
+        if status == 'P':
+            self.verify_data_for_publishing()
         self.status = status
+
+    def verify_data_for_publishing(self):
+        """
+        Tests if all required fields are present in the object
+        :return: None [or will raise error]
+        """
+        errors = dict()
+
+        for field_name in self.REQUIRED_FIELDS:
+            if isinstance(self._meta.get_field(field_name), models.ManyToManyField):
+                if self._meta.get_field(field_name).related_model.objects.filter(house=self).count() == 0:
+                    errors[field_name] = ValidationError('This field is required', code='required')
+            else:
+                if getattr(self, field_name) in (None, '', ' '):
+                    errors[field_name] = ValidationError('This field is required', code='required')
+
+        if bool(errors):
+            raise ValidationError(errors)
 
 
 class Availability(models.Model):

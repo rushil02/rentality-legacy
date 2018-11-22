@@ -38,18 +38,9 @@ def social_apps_info(site_obj):
 
 def create_facilities():
     FACILITIES = [
-        'Wifi included',
-        'Gym',
-        'Laundry',
-        'Garden',
-        'Swimming pool',
-        'TV',
-        'Smoke alarm',
-        'Lift',
-        'Heater',
-        'Air Conditioner',
-        'Fire place',
-        'BBQ'
+        'Wifi included', 'Gym', 'Balcony', 'Heater', 'Laundry', 'Garden', 'Swimming pool', 'Indoor Secured Carpark',
+        'TV', 'Wheel Chair Accessible', 'Amenities Available', 'Smoke alarm', 'Lift', 'Air Condition', 'Fire place',
+        'Barbecue Facilities'
     ]
 
     for facility_verbose in FACILITIES:
@@ -67,7 +58,8 @@ def create_nearby_facilities():
 
 def create_personality_tags():
     TAGS = [
-        'Coffee Addict', 'Dog Lover', 'Foodie', 'Traveller'
+        'Hiker',  'Professional', 'Accountant', 'Vegan', 'Doglover', 'Blogger', 'TravelAddict', 'Introvert',
+        'CoffeeAddict', 'GymCrazy', 'Nurse', 'HarryPotterFan'
     ]
 
     for verbose in TAGS:
@@ -76,8 +68,8 @@ def create_personality_tags():
 
 def create_welcome_tags():
     TAGS = [
-        'Pet Owners ', 'Students', 'Smokers', '40+', 'Retiree', 'Parents', 'Backpackers', 'LGBTQ+ Friendly',
-        'Female Only'
+        'Pet Owners ', 'Students', 'Smokers', '40+', 'Retiree', 'Parents with children', 'Backpackers', 'LGBTQ+ Friendly',
+        'Female Only', 'Everyone'
     ]
 
     for verbose in TAGS:
