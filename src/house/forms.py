@@ -38,7 +38,7 @@ class HouseForm(forms.ModelForm):
         fields = [
             'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms', 'bathrooms',
             'parking', 'rent', 'min_stay', 'max_stay', 'other_rules', 'cancellation_policy', 'other_people_description',
-            'access_restrictions', 'neighbourhood_description'
+            'access_restrictions', 'neighbourhood_description', 'max_people_allowed'
         ]
         widgets = {
             'title': forms.TextInput(
@@ -57,6 +57,10 @@ class HouseForm(forms.ModelForm):
             'home_type': forms.Select(
                 attrs={'class': 'form-control'}
             ),
+            'furnished': forms.Select(
+                choices=model.FURNISHED_OPTIONS,
+                attrs={'class': 'form-control'}
+            ),
             'bedrooms': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 1}
             ),
@@ -71,6 +75,9 @@ class HouseForm(forms.ModelForm):
             ),
             'min_stay': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 28}
+            ),
+            'max_people_allowed': forms.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': 0}
             ),
             'max_stay': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 0}

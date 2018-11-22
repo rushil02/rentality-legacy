@@ -465,6 +465,10 @@ body > .page-form .right .select.type {
     background-image: url('../image/form-1/type.svg');
 }
 
+body > .page-form .right .select.furnished {
+    background-image: url('../image/form-1/kitchen.svg');
+}
+
 body > .page-form .right .button {
     text-align: right;
     margin-top: 50px;

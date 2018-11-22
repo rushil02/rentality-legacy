@@ -47,6 +47,20 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="input number-disp no-background">
+                        {{ main_form.max_people_allowed.label }}
+                        {{ main_form.max_people_allowed }}
+                    </div>
+                    <small class="form-text text-muted">
+                        {{ main_form.max_people_allowed.help_text }}
+                    </small>
+                    {% if main_form.max_people_allowed.errors %}
+                        {% for error in main_form.max_people_allowed.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
             <h1 class="title">Set your availability</h1>
 

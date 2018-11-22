@@ -63,7 +63,7 @@ class House(models.Model):
 
     REQUIRED_FIELDS = (
         'home_owner', 'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms',
-        'bathrooms', 'parking', 'rent', 'facilities', 'cancellation_policy'
+        'bathrooms', 'parking', 'rent', 'facilities', 'cancellation_policy', 'max_people_allowed'
     )
 
     home_owner = models.ForeignKey(
@@ -74,7 +74,12 @@ class House(models.Model):
     )
 
     title = models.CharField(max_length=250, verbose_name='Property Name')
-    furnished = models.BooleanField(default=False)
+
+    FURNISHED_OPTIONS = (
+        ('Y', 'Yes'),
+        ('N', 'No')
+    )
+    furnished = models.CharField(max_length=1, blank=True, verbose_name='Furnished')
 
     address_hidden = models.TextField(blank=True, verbose_name="Unit Number or House Number",
                                       help_text="This is not visible to others unless a booking is made.")
@@ -91,7 +96,7 @@ class House(models.Model):
     bathrooms = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of Bathrooms", default=1)
     parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces", default=0)
 
-    rent = models.PositiveSmallIntegerField(default=0, blank=True, help_text="Per Week in AUD")
+    rent = models.PositiveSmallIntegerField(blank=True, help_text="Per Week in AUD")
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),
         help_text=_('In days. Minimum and Default is 4 weeks (28 days).'), null=True, blank=True, default=28,
@@ -101,6 +106,8 @@ class House(models.Model):
         verbose_name=_('Maximum length of stay'),
         help_text=_('in days. 0 signifies no limit.'), null=True, blank=True
     )
+
+    max_people_allowed = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Maximum people allowed")
 
     facilities = models.ManyToManyField('house.Facility', blank=True)
     rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)
