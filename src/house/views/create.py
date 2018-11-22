@@ -75,10 +75,9 @@ def edit(request, house_uuid):
                 valid = False
 
             if valid:
-                main_form.save()
                 if main_form.cleaned_data['list_now']:
                     try:
-                        house.set_status('P')
+                        house.verify_data_for_publishing()
                     except ValidationError as e:
                         for error in e:
                             if error[0] in main_form.fields:
@@ -99,7 +98,6 @@ def edit(request, house_uuid):
                         )
                         return render(request, 'property/create_edit/edit.html', context)
                     else:
-                        house.save()
                         messages.add_message(request, messages.SUCCESS,
                                              "All your data is saved! This is the last step to listing.")
                         return redirect(reverse('house:payment', args=[house.uuid, ]))
