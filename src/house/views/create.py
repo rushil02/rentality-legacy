@@ -84,7 +84,10 @@ def edit(request, house_uuid):
                             if error[0] in main_form.fields:
                                 main_form.add_error(error[0], error[1])
                             elif error[0] != NON_FIELD_ERRORS:  # FIXME: Optimize
-                                field_verbose = house._meta.get_field(error[0]).verbose_name.title()
+                                try:
+                                    field_verbose = house._meta.get_field(error[0]).verbose_name.title()
+                                except AttributeError:
+                                    field_verbose = house._meta.get_field(error[0]).name.title()
                                 main_form.add_error(None, "%s - %s" % (field_verbose, ', '.join(error[1])))
                             else:
                                 main_form.add_error(None, error[1])
@@ -312,7 +315,10 @@ def home_owner_account_details(request, house_uuid):
                 except ValidationError as e:
                     error_list = []
                     for error in e:
-                        field_verbose = house._meta.get_field(error[0]).verbose_name.title()
+                        try:
+                            field_verbose = house._meta.get_field(error[0]).verbose_name.title()
+                        except AttributeError:
+                            field_verbose = house._meta.get_field(error[0]).name.title()
                         field_errors = ', '.join(error[1])
                         error_list.append("%s - %s" % (field_verbose, field_errors))
 

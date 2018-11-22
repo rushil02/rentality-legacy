@@ -65,7 +65,7 @@ class House(models.Model):
     REQUIRED_FIELDS = (
         'home_owner', 'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms',
         'bathrooms', 'parking', 'rent', 'min_stay', 'facilities', 'rules', 'cancellation_policy', 'max_people_allowed',
-        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', #'availability', 'image'
+        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image'
     )
 
     home_owner = models.ForeignKey(
@@ -225,8 +225,12 @@ class House(models.Model):
         errors = dict()
 
         for field_name in self.REQUIRED_FIELDS:
-            if isinstance(self._meta.get_field(field_name), models.ManyToManyField):
-                if self._meta.get_field(field_name).related_model.objects.filter(house=self).count() == 0:
+            field = self._meta.get_field(field_name)
+            if isinstance(field, models.ManyToManyField):
+                if field.related_model.objects.filter(house=self).count() == 0:
+                    errors[field_name] = ValidationError('This field is required', code='required')
+            elif (field.one_to_many or field.one_to_one) and field.auto_created and not field.concrete:
+                if field.related_model.objects.filter(house=self).count() == 0:
                     errors[field_name] = ValidationError('This field is required', code='required')
             else:
                 if getattr(self, field_name) in (None, '', ' '):
@@ -236,6 +240,7 @@ class House(models.Model):
             raise ValidationError(errors)
 
 
+# FIXME: validate overlapping dates
 class Availability(models.Model):
     """
     All round availability can be marked by full year with periodic.
