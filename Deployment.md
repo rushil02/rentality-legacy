@@ -29,6 +29,6 @@
 ## Updating with latest images
 
 - Push latest images to Gitlab.
-- `docker service update --with-registry-auth --image registry.gitlab.com/rushil0195/rentality/web:latest rentality_web`
+- `docker service update --with-registry-auth --image registry.gitlab.com/rushil0195/rentality/web:v0.2 rentality_web`
 
 - Sync Services Again

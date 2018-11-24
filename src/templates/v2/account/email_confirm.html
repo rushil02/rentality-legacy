@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load account %}
+
+{% block head_title_add %}
+    Confirm E-mail Address
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-signup-login">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h1>Confirm E-mail Address</h1>
+                    {% if confirmation %}
+
+                        <p>Please confirm that {{ confirmation.email_address.email }} is an e-mail address for user
+                            {{ confirmation.email_address.user|title }}.
+                        </p>
+                        <div class="form">
+                            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+
+                                    <div class="col-md-6">
+
+                                        <button type="submit" class="btn btn-link btn-block">Confirm</button>
+                                    </div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                            </form>
+                        </div>
+
+                    {% else %}
+
+
+                        <p>This e-mail confirmation link expired or is invalid. Please
+                            <a href="{% url 'account_email' %}">issue a new e-mail confirmation request</a>.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

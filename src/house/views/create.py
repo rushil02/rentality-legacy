@@ -1,3 +1,5 @@
+from allauth.account.decorators import verified_email_required
+from allauth.account.models import EmailAddress
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.core.files.storage import FileSystemStorage
@@ -273,6 +275,7 @@ class WelcomeTagView(APIView):
 # FIXME: Merge this method with home_owner.views.home_owner_account_details
 # FIXME: Require form handling when stripe returns error
 @login_required
+@verified_email_required
 def home_owner_account_details(request, house_uuid):
     home_owner = request.user.home_owner
     try:

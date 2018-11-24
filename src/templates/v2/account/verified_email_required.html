@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block head_title_add %}
+    Verify E-mail
+{% endblock %}
+
+
+{% block navbar %}
+    {% include 'components/navbar/auth.html' %}
+{% endblock navbar %}
+
+{% block content %}
+    <div class="page-signup-login">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h1>Verify Your E-mail Address</h1>
+                    <div class="text-justify">
+                        <p>This part of the site requires us to verify that
+                            you are who you claim to be. For this purpose, we require that you
+                            verify ownership of your e-mail address.</p>
+
+                        <p>We have sent an e-mail to you for
+                            verification. Please click on the link inside this e-mail. Please
+                            contact us if you do not receive it within a few minutes.</p>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
