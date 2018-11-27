@@ -59,7 +59,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4">
-                    4365 Home Available
+{#                    4365 Home Available#}
                 </div>
                 <div class="col-md-8">
                     <div class="setting">
@@ -114,22 +114,22 @@
 
 {% block page_scripts %}
     <!-- page map example data start -->
-    <div class="example-data d-none">
-        <a href="#" class="list" data-lat="-33.436050" data-lng="151.095432" data-rating="#93c94c">
-            <div class="rating">
-                <span>4.7</span>
-                <img src="static/image/page-map/map/profile-1.png" class="rounded-circle" alt=""
-                     title="">
-            </div>
-            <div class="image">
-                <img src="static/image/page-map/map/1.png" class="w-100" alt="" title="">
-            </div>
-            <h1>BALIAN TREEHOUSE w beautiful</h1>
-            <h2>Capital Territory, Australia</h2>
-            <div>Min<span>200 days</span></div>
-            <div>Rent<span>200 Aud./week</span></div>
-        </a>
-    </div>
+{#    <div class="example-data d-none">#}
+{#        <a href="#" class="list" data-lat="-33.436050" data-lng="151.095432" data-rating="#93c94c">#}
+{#            <div class="rating">#}
+{#                <span>4.7</span>#}
+{#                <img src="static/image/page-map/map/profile-1.png" class="rounded-circle" alt=""#}
+{#                     title="">#}
+{#            </div>#}
+{#            <div class="image">#}
+{#                <img src="static/image/page-map/map/1.png" class="w-100" alt="" title="">#}
+{#            </div>#}
+{#            <h1>BALIAN TREEHOUSE w beautiful</h1>#}
+{#            <h2>Capital Territory, Australia</h2>#}
+{#            <div>Min<span>200 days</span></div>#}
+{#            <div>Rent<span>200 Aud./week</span></div>#}
+{#        </a>#}
+{#    </div>#}
     <!-- page map example data end -->
     <!-- page map api start -->
     <script>
@@ -255,77 +255,77 @@
 
         var process = true;
 
-        $(window).scroll(function () {
-            if (process) {
-                if (($(window).scrollTop() + $(window).height()) == $(document).height()) {
-                    process = false;
-                    $('.page-map .lists').append('<div id="loading" style="margin-top: 60px; text-align: center;"><img src="static/image/loading.gif">');
-
-                    maps();
-
-                    setTimeout(function () {
-                        var column = $('.page-map > .container > .lists > .row > div:first-child').attr('class');
-
-                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
-                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
-                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
-                        $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');
-
-                        for (var i = 0; i < markers.length; i++) {
-                            markers[i].setMap(null);
-                        }
-
-                        locations = [], markers = [], infowindow;
-
-                        $('.page-map .list').each(function () {
-                            if ($(this).data('lat') && $(this).data('lng') && $(this).data('rating')) {
-                                locations.push([$(this).data('lat'), $(this).data('lng'), $(this).attr('href'), $(this).find('.image img').attr('src'), $(this).find('h1').html(), $(this).find('h2').html(), $(this).find('> div:nth-child(5) span').html(), $(this).find('> div:nth-child(6) span').html(), $(this).data('rating'), $(this).find('.rating span').html()]);
-                            }
-                        })
-
-                        for (var i = 0; i < locations.length; i++) {
-                            var marker = new google.maps.Marker({
-                                position: new google.maps.LatLng(locations[i][0], locations[i][1]),
-                                map: map,
-                                icon: 'static/image/marker.png'
-                            });
-
-                            marker['infowindow'] = new google.maps.InfoWindow({
-                                content: '<a href="' + locations[i][2] + '" target="_blank"><h1>' + locations[i][4] + '</h1><h2>' + locations[i][5] + '</h2><img src="' + locations[i][3] + '"><div>Min<span>' + locations[i][6] + '</span></div><div>Rent<span>' + locations[i][7] + '</span></div><div class="rating"><div class="round" style="background-color: ' + locations[i][8] + ';"></div>' + locations[i][9] + '</div></a>'
-                            });
-
-                            markers.push(marker);
-
-                            google.maps.event.addListener(marker, 'click', function () {
-                                if (infowindow) {
-                                    infowindow.close();
-                                }
-
-                                for (var i = 0; i < markers.length; i++) {
-                                    markers[i].setIcon('static/image/marker.png');
-                                }
-
-                                this.setIcon('static/image/marker-active.png');
-
-                                google.maps.event.addListener(this['infowindow'], 'closeclick', function () {
-                                    for (var i = 0; i < markers.length; i++) {
-                                        markers[i].setIcon('static/image/marker.png');
-                                    }
-                                });
-
-                                this['infowindow'].open(map, this);
-                                infowindow = this['infowindow'];
-                            });
-                        }
-
-                        $('.page-map .lists').find('#loading').remove();
-                        process = true;
-
-                        maps();
-                    }, 3000);
-                }
-            }
-        });
+        {#$(window).scroll(function () {#}
+        {#    if (process) {#}
+        {#        if (($(window).scrollTop() + $(window).height()) == $(document).height()) {#}
+        {#            process = false;#}
+        {#            $('.page-map .lists').append('<div id="loading" style="margin-top: 60px; text-align: center;"><img src="static/image/loading.gif">');#}
+        {##}
+        {#            maps();#}
+        {##}
+        {#            setTimeout(function () {#}
+        {#                var column = $('.page-map > .container > .lists > .row > div:first-child').attr('class');#}
+        {##}
+        {#                $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');#}
+        {#                $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');#}
+        {#                $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');#}
+        {#                $('.page-map > .container > .lists > .row').append('<div class="' + column + '">' + $('.example-data').html() + '</div>');#}
+        {##}
+        {#                for (var i = 0; i < markers.length; i++) {#}
+        {#                    markers[i].setMap(null);#}
+        {#                }#}
+        {##}
+        {#                locations = [], markers = [], infowindow;#}
+        {##}
+        {#                $('.page-map .list').each(function () {#}
+        {#                    if ($(this).data('lat') && $(this).data('lng') && $(this).data('rating')) {#}
+        {#                        locations.push([$(this).data('lat'), $(this).data('lng'), $(this).attr('href'), $(this).find('.image img').attr('src'), $(this).find('h1').html(), $(this).find('h2').html(), $(this).find('> div:nth-child(5) span').html(), $(this).find('> div:nth-child(6) span').html(), $(this).data('rating'), $(this).find('.rating span').html()]);#}
+        {#                    }#}
+        {#                })#}
+        {##}
+        {#                for (var i = 0; i < locations.length; i++) {#}
+        {#                    var marker = new google.maps.Marker({#}
+        {#                        position: new google.maps.LatLng(locations[i][0], locations[i][1]),#}
+        {#                        map: map,#}
+        {#                        icon: 'static/image/marker.png'#}
+        {#                    });#}
+        {##}
+        {#                    marker['infowindow'] = new google.maps.InfoWindow({#}
+        {#                        content: '<a href="' + locations[i][2] + '" target="_blank"><h1>' + locations[i][4] + '</h1><h2>' + locations[i][5] + '</h2><img src="' + locations[i][3] + '"><div>Min<span>' + locations[i][6] + '</span></div><div>Rent<span>' + locations[i][7] + '</span></div><div class="rating"><div class="round" style="background-color: ' + locations[i][8] + ';"></div>' + locations[i][9] + '</div></a>'#}
+        {#                    });#}
+        {##}
+        {#                    markers.push(marker);#}
+        {##}
+        {#                    google.maps.event.addListener(marker, 'click', function () {#}
+        {#                        if (infowindow) {#}
+        {#                            infowindow.close();#}
+        {#                        }#}
+        {##}
+        {#                        for (var i = 0; i < markers.length; i++) {#}
+        {#                            markers[i].setIcon('static/image/marker.png');#}
+        {#                        }#}
+        {##}
+        {#                        this.setIcon('static/image/marker-active.png');#}
+        {##}
+        {#                        google.maps.event.addListener(this['infowindow'], 'closeclick', function () {#}
+        {#                            for (var i = 0; i < markers.length; i++) {#}
+        {#                                markers[i].setIcon('static/image/marker.png');#}
+        {#                            }#}
+        {#                        });#}
+        {##}
+        {#                        this['infowindow'].open(map, this);#}
+        {#                        infowindow = this['infowindow'];#}
+        {#                    });#}
+        {#                }#}
+        {##}
+        {#                $('.page-map .lists').find('#loading').remove();#}
+        {#                process = true;#}
+        {##}
+        {#                maps();#}
+        {#            }, 3000);#}
+        {#        }#}
+        {#    }#}
+        {#});#}
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {

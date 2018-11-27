@@ -59,7 +59,7 @@ def create_nearby_facilities():
 
 def create_personality_tags():
     TAGS = [
-        'Hiker',  'Professional', 'Accountant', 'Vegan', 'Doglover', 'Blogger', 'TravelAddict', 'Introvert',
+        'Hiker', 'Professional', 'Accountant', 'Vegan', 'Doglover', 'Blogger', 'TravelAddict', 'Introvert',
         'CoffeeAddict', 'GymCrazy', 'Nurse', 'HarryPotterFan'
     ]
 
@@ -69,7 +69,8 @@ def create_personality_tags():
 
 def create_welcome_tags():
     TAGS = [
-        'Pet Owners ', 'Students', 'Smokers', '40+', 'Retiree', 'Parents with children', 'Backpackers', 'LGBTQ+ Friendly',
+        'Pet Owners ', 'Students', 'Smokers', '40+', 'Retiree', 'Parents with children', 'Backpackers',
+        'LGBTQ+ Friendly',
         'Female Only', 'Everyone'
     ]
 
@@ -104,9 +105,27 @@ def create_home_types():
 # FIXME: Confirm Policiies
 def create_cancellation_policy():
     """ Creates Cancellation Policy Selected by HomeOwner for each house and applicable on tenants """
-    CancellationPolicy.objects.get_or_create(verbose="Flexible Policy", description=" ", properties="{}")
-    CancellationPolicy.objects.get_or_create(verbose="Moderate Policy", description=" ", properties="{}")
-    CancellationPolicy.objects.get_or_create(verbose="Strict Policy", description=" ", properties="{}")
+    CancellationPolicy.objects.update_or_create(
+        verbose="Flexible Policy",
+        defaults={
+            'description': "Full refund of the deposit (excluding our Service Fee) for cancellation received at least two days prior to the check-in date. After this time, the Tenant will only be entitled to a 50% refund (excluding our Service Fee).",
+            'properties': "{}"
+        }
+    )
+    CancellationPolicy.objects.update_or_create(
+        verbose="Moderate Policy",
+        defaults={
+            'description': "Full refund of the deposit (excluding our Service Fee) for cancellation received at least one week prior to the check-in date. After this time, the Tenant will only be entitled to a 50% refund (excluding our Service Fee).",
+            'properties': "{}"
+        }
+    )
+    CancellationPolicy.objects.update_or_create(
+        verbose="Strict Policy",
+        defaults={
+            'description': "The tenant is not allowed to cancel the booking 24 hours after the booking is approved by the homeowner. After this time, the Tenant will only be entitled to a 50% refund (excluding our Service Fee).",
+            'properties': "{}"
+        }
+    )
 
 
 def register_flat_pages(site_obj):
@@ -127,12 +146,14 @@ def register_flat_pages(site_obj):
             return ''
 
     for flatpage in settings.FLAT_PAGE_TEMPLATES:
-        obj, cr = FlatPage.objects.get_or_create(
+        obj, cr = FlatPage.objects.update_or_create(
             url=flatpage[0],
-            title=flatpage[1],
-            template_name=get_template(flatpage[2]),
-            content=get_text(flatpage[3]),
-            registration_required=flatpage[4]
+            defaults={
+                'title': flatpage[1],
+                'template_name': get_template(flatpage[2]),
+                'content': get_text(flatpage[3]),
+                'registration_required': flatpage[4]
+            }
         )
         obj.sites.add(site_obj)
 

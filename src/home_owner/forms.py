@@ -78,6 +78,7 @@ class HomeOwnerInfoForm(forms.Form):
     )
 
 
+# FIXME: Convert attributes to meta attribute to reduce processing time
 class UserHomeOwnerForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
@@ -108,3 +109,4 @@ class UserProfileHomeOwnerForm(forms.ModelForm):
         )
         self.fields['sex'].widget.attrs['class'] = 'inp-gender form-control'
         self.fields['contact_num'].widget.attrs['class'] = 'inp-contact-num form-control'
+        self.fields['contact_num'].widget.attrs['placeholder'] = 'Contact Number'

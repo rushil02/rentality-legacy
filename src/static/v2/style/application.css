@@ -1982,14 +1982,14 @@ body > .page-detail .left > .about {
     margin-bottom: 30px;
 }
 
-body > .page-detail .left > .about h2 {
+body > .page-detail .left h2 {
     font-size: 20px;
     font-weight: 700;
     color: #3fc692;
     margin-bottom: 30px;
 }
 
-body > .page-detail .left > .about h3 {
+body > .page-detail .left h3 {
     font-size: 17px;
     font-weight: 500;
     color: #000000;

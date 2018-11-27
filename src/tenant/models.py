@@ -88,21 +88,21 @@ class HousePreference(ModelWithPrivacy):
     def get_locations_display(self):
         return ", ".join([str(location.full_name) for location in self.locations.all()])
 
-    def get_thumbnail(self):
-        return self.tenant.user.userprofile.get_profile_pic()
-
-    def get_thumbnail_2(self):
-        if self.is_thumbnail_available():
-            thumbnailer = get_thumbnailer(self.get_thumbnail())
-            url = thumbnailer.get_thumbnail({'crop': 'smart', 'size': (360, 360)})
-            return '/media/' + str(url)
-        return self.get_thumbnail()
-
-    def is_thumbnail_available(self):
-        if self.tenant.user.userprofile.profile_pic:
-            return True
-        else:
-            return False
+    # def get_thumbnail(self):
+    #     return self.tenant.user.userprofile.get_profile_pic()
+    #
+    # def get_thumbnail_2(self):
+    #     if self.is_thumbnail_available():
+    #         thumbnailer = get_thumbnailer(self.get_thumbnail())
+    #         url = thumbnailer.get_thumbnail({'crop': 'smart', 'size': (360, 360)})
+    #         return '/media/' + str(url)
+    #     return self.get_thumbnail()
+    #
+    # def is_thumbnail_available(self):
+    #     if self.tenant.user.userprofile.profile_pic:
+    #         return True
+    #     else:
+    #         return False
 
     def get_owner(self):
         return self.tenant.user

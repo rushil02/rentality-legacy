@@ -1,14 +1,16 @@
 {% load static %}
+{% load thumbnail %}
+
 <li class="list-inline-item message">
     <div class="dropdown">
         <a href="#" data-toggle="dropdown">Message<span>0</span></a>
         <div class="dropdown-menu dropdown-menu-right">
-{#            <a href="#" class="dropdown-item active"><img src="{% static 'image/placeholders/profile.png' %}" alt=""#}
-{#            >Jason Bourne<span>3 days ago</span></a>#}
-{#            <a href="#" class="dropdown-item"><img src="{% static 'image/placeholders/profile.png' %}" alt="">Jessica#}
-{#                Alba<span>1 hours ago</span></a>#}
-{#            <a href="#" class="dropdown-item"><img src="{% static 'image/placeholders/profile.png' %}" alt="">Shakira<span>1#}
-{#                                            monts ago</span></a>#}
+            {#            <a href="#" class="dropdown-item active"><img src="{% static 'image/placeholders/profile.png' %}" alt=""#}
+            {#            >Jason Bourne<span>3 days ago</span></a>#}
+            {#            <a href="#" class="dropdown-item"><img src="{% static 'image/placeholders/profile.png' %}" alt="">Jessica#}
+            {#                Alba<span>1 hours ago</span></a>#}
+            {#            <a href="#" class="dropdown-item"><img src="{% static 'image/placeholders/profile.png' %}" alt="">Shakira<span>1#}
+            {#                                            monts ago</span></a>#}
         </div>
     </div>
 </li>
@@ -16,17 +18,19 @@
     <div class="dropdown">
         <a href="#" data-toggle="dropdown">Notifications<span>0</span></a>
         <div class="dropdown-menu dropdown-menu-right">
-{#            <a href="#" class="dropdown-item">Your account has been deleted.<span>3 days ago</span></a>#}
-{#            <a href="#" class="dropdown-item">Your account has been#}
-{#                approved.<span>1 hours ago</span></a>#}
-{#            <a href="#" class="dropdown-item">Your account has been#}
-{#                approved.<span>1 monts ago</span></a>#}
+            {#            <a href="#" class="dropdown-item">Your account has been deleted.<span>3 days ago</span></a>#}
+            {#            <a href="#" class="dropdown-item">Your account has been#}
+            {#                approved.<span>1 hours ago</span></a>#}
+            {#            <a href="#" class="dropdown-item">Your account has been#}
+            {#                approved.<span>1 monts ago</span></a>#}
         </div>
     </div>
 </li>
 <li class="list-inline-item person">
     <a href="{% url 'user:dashboard' %}">
-        <div class="image"><img src="{% static 'image/placeholders/profile.png' %}" class="w-100"></div>
+        {% static 'image/placeholders/profile.png' as default_navbar_profile_pic %}
+
+        <div class="image"><img src="{{ request.user.userprofile.profile_pic|thumbnail_url:'profile_navbar'|default:default_navbar_profile_pic }}" class="w-100"></div>
         {{ request.user.get_short_name|title }}
     </a>
 </li>
@@ -34,7 +38,7 @@
     <div class="dropdown">
         <a href="#" data-toggle="dropdown">Setting</a>
         <div class="dropdown-menu dropdown-menu-right">
-{#            <a href="#" class="dropdown-item">Settings</a>#}
+            {#            <a href="#" class="dropdown-item">Settings</a>#}
             <a href="{% url 'user:user_details' %}" class="dropdown-item">My Profile</a>
             <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
         </div>

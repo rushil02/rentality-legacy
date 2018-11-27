@@ -9,7 +9,9 @@
         <div class="loop owl-carousel owl-theme">
             {% for img in house.get_images %}
                 <div class="item">
-                    <img src="{{ img.image|thumbnail_url:'house_detail_small' }}" alt="" title="">
+                    <a href="{{ img.image.url }}">
+                        <img src="{{ img.image|thumbnail_url:'house_detail_small' }}" alt="" title="">
+                    </a>
                 </div>
             {% endfor %}
 
@@ -25,13 +27,23 @@
                     <div class="left">
                         <!-- page detail left title start -->
                         <div class="title">
-                            <h1>{{ house.get_home_type_display|title }}</h1>
-                            <p class="address">{{ house.get_location|title }}</p>
+                            <h1>{{ house.title|title }}</h1>
+                            <p class="address">{{ house.get_address|title }}</p>
                         </div>
                         <!-- page detail left title end -->
                         <!-- page detail left box start -->
                         <div class="box">
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="title">
+                                        {% if house.furnished == 'Y' %}
+                                            Furnished {{ house.get_home_type_display }}
+                                        {% else %}
+                                            Unfurnished {{ house.get_home_type_display }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
                                 <div class="col-md-3">
                                     <div class="icon">
                                         <div class="image">
@@ -62,33 +74,52 @@
                         <!-- page detail left about start -->
                         <div class="about">
                             <h2>About The Property</h2>
-                            {{ house.description|linebreaks }}
+                            <h3>Tenant Access</h3>
+                            <p>
+                                {{ house.access_restrictions|linebreaks }}
+                            </p>
+                            {% if house.other_people_description %}
+                                <h3>Other People in the house</h3>
+                                <p>
+                                    {{ house.other_people_description|linebreaks }}
+                                </p>
+
+                            {% endif %}
+                            <h3>Welcome to</h3>
+                            <ul class="list-inline">
+                                {% for welcome_tag in house.get_welcome_tags %}
+                                    <li class="list-inline-item">{{ welcome_tag.verbose }}</li>
+                                {% endfor %}
+                            </ul>
 
                         </div>
                         <!-- page detail left about end -->
                         <!-- page detail left facility start -->
                         <div class="facility">
                             <h2>Housing Facilities</h2>
-                            <div class="hide">
-                                <ul class="list-inline">
-                                    {% for facility in house.get_facilities %}
-                                        <li class="list-inline-item">{{ facility.verbose }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <div class="text-right">
-                                <button class="btn btn-link">See more</button>
-                            </div>
+                            {#                            <div class="hide">#}
+                            <ul class="list-inline">
+                                {% for facility in house.get_facilities %}
+                                    <li class="list-inline-item">{{ facility.verbose }}</li>
+                                {% endfor %}
+                            </ul>
+                            {#                            </div>#}
+                            {#                            <div class="text-right">#}
+                            {#                                <button class="btn btn-link">See more</button>#}
+                            {#                            </div>#}
                         </div>
                         <!-- page detail left facility end -->
                         <!-- page detail left rule start -->
                         <div class="rule">
                             <h2>Housing Rules</h2>
-                            <p>
-                                {% for rule in house.get_rules %}
-                                {{ rule.verbose }}<br>
-                                {% endfor %}
-                            </p>
+                            {% for rule in house.get_rules %}
+                                <div class="row">
+                                    <div class="col-md-3">{{ rule.rule.verbose }}</div>
+                                    <div class="col-md-3">{{ rule.value }}</div>
+                                    <div class="col-md-6">{{ rule.comment }}</div>
+                                </div>
+                            {% endfor %}
+                            <p>{{ house.other_rules|linebreaks }}</p>
                         </div>
                         <!-- page detail left rule end -->
 
@@ -96,205 +127,36 @@
                         <!-- page detail left available start -->
                         <div class="available">
                             <h2>Availability</h2>
-                            <p>Minimum Stay - <span>{{ house.min_stay }} days</span></p>
-{#                            <p>Special Conditions <i data-toggle="popover"#}
-{#                                                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">What#}
-{#                                is this</i></p>#}
-{#                            <p class="red">#}
-{#                                must stay the for the entire period between 2. july-2 . August .#}
-{#                            </p>#}
+                            <p>Minimum Length of Stay - <span>{{ house.min_stay }} days</span></p>
+                            <p>Maximum Length of Stay - <span>{% if house.max_stay %}{{ house.max_stay }} days{% else %}
+                                No Limit {% endif %}</span></p>
+                            <p>Maximum number of people allowed - <span>{{ house.max_people_allowed }}</span></p>
+                            <h2>Cancellation Policy</h2>
+                            <h3>{{ house.cancellation_policy.verbose }}</h3>
+                            <p>{{ house.cancellation_policy.description }}</p>
                         </div>
                         <!-- page detail left available end -->
                         <!-- page detail left map start -->
-{#                        <div class="map">#}
-{#                            <h2>About Area</h2>#}
-{#                            <p>Moderate policy-free cancelation within 1 week of more in date</p>#}
-{#                            <div id="map"></div>#}
-{#                            <h3>Local area facility</h3>#}
-{#                            <ul class="list-inline">#}
-{#                                <li class="list-inline-item">Public Pool</li>#}
-{#                                <li class="list-inline-item">Hiking track</li>#}
-{#                                <li class="list-inline-item">Bus Stop</li>#}
-{#                                <li class="list-inline-item">Cafe</li>#}
-{#                                <li class="list-inline-item">Golf Courte</li>#}
-{#                                <li class="list-inline-item">Restourant</li>#}
-{#                                <li class="list-inline-item">Train Station</li>#}
-{#                                <li class="list-inline-item">Airport</li>#}
-{#                            </ul>#}
-{#                        </div>#}
-                        <!-- page detail left map end -->
-                        <!-- page detail left review start -->
-{#                        <div class="review">#}
-{#                            <h2>Reviews (3)#}
-{#                                <div class="star x5"></div>#}
-{#                            </h2>#}
-{#                            <div class="row">#}
-{#                                <div class="col-3 col-md-2">#}
-{#                                    <img src="static/image/page-detail/left-review/profile.png"#}
-{#                                         class="w-100 rounded-circle" alt="" title="">#}
-{#                                </div>#}
-{#                                <div class="col-9 col-md-10">#}
-{#                                    <h3>Tom Lertrs<span>12 August 2018</span></h3>#}
-{#                                    <p>Wunderbares Haus, tolle Lage, sehr gut ausgestattet, sehr sauber, viele schöne#}
-{#                                        Buchten#}
-{#                                        zum Schwimmen in der Nähe. Frederico hat uns viele Insider Tips für Ausflüge</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="row">#}
-{#                                <div class="col-3 col-md-2">#}
-{#                                    <img src="static/image/page-detail/left-review/profile.png"#}
-{#                                         class="w-100 rounded-circle" alt="" title="">#}
-{#                                </div>#}
-{#                                <div class="col-9 col-md-10">#}
-{#                                    <h3>Tom Lertrs<span>12 August 2018</span></h3>#}
-{#                                    <p>Vista stupenda sul mare. Luogo tranquillo e vicinissimo ai centri abitati.#}
-{#                                        Pulizia#}
-{#                                        impeccabile, casa arredata elegantemente. Dory è sempre s…</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="row">#}
-{#                                <div class="col-3 col-md-2">#}
-{#                                    <img src="static/image/page-detail/left-review/profile.png"#}
-{#                                         class="w-100 rounded-circle" alt="" title="">#}
-{#                                </div>#}
-{#                                <div class="col-9 col-md-10">#}
-{#                                    <h3>Tom Lertrs<span>12 August 2018</span></h3>#}
-{#                                    <p>Soggiorno perfetto: casa splendida, curata nei minimi dettagli e con una#}
-{#                                        bellissima#}
-{#                                        vista. Dory è venuta incontro alle nostre esigenze e ci</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="hide">#}
-{#                                <div class="row">#}
-{#                                    <div class="col-3 col-md-2">#}
-{#                                        <img src="static/image/page-detail/left-review/profile.png"#}
-{#                                             class="w-100 rounded-circle" alt="" title="">#}
-{#                                    </div>#}
-{#                                    <div class="col-9 col-md-10">#}
-{#                                        <h3>Tom Lertrs<span>12 August 2018</span></h3>#}
-{#                                        <p>Soggiorno perfetto: casa splendida, curata nei minimi dettagli e con una#}
-{#                                            bellissima#}
-{#                                            vista. Dory è venuta incontro alle nostre esigenze e ci</p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="row">#}
-{#                                    <div class="col-3 col-md-2">#}
-{#                                        <img src="static/image/page-detail/left-review/profile.png"#}
-{#                                             class="w-100 rounded-circle" alt="" title="">#}
-{#                                    </div>#}
-{#                                    <div class="col-9 col-md-10">#}
-{#                                        <h3>Tom Lertrs<span>12 August 2018</span></h3>#}
-{#                                        <p>Soggiorno perfetto: casa splendida, curata nei minimi dettagli e con una#}
-{#                                            bellissima#}
-{#                                            vista. Dory è venuta incontro alle nostre esigenze e ci</p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="text-right">#}
-{#                                <button class="btn btn-link">See more</button>#}
-{#                            </div>#}
-{#                        </div>#}
-                        <!-- page detail left review end -->
-                        <!-- page detail left how start -->
-                        <div class="how">
-                            <h2>How does it work?</h2>
-                            <div class="accordion">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">
-                                            <button type="button" class="btn btn-link" data-toggle="collapse"
-                                                    data-target="#collapse01">
-                                                How do I book ?
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapse01" class="collapse">
-                                        <div class="card-body">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                            richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard
-                                            dolor
-                                            brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
-                                            tempor,
-                                            sunt
-                                            aliqua put a bird on it squid single-origin coffee nulla assumenda
-                                            shoreditch
-                                            et.
-                                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
-                                            sapiente
-                                            ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                                            beer
-                                            farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
-                                            of
-                                            them
-                                            accusamus labore sustainable VHS.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">
-                                            <button type="button" class="btn btn-link" data-toggle="collapse"
-                                                    data-target="#collapse02">
-                                                How do I pay ?
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapse02" class="collapse">
-                                        <div class="card-body">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                            richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard
-                                            dolor
-                                            brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
-                                            tempor,
-                                            sunt
-                                            aliqua put a bird on it squid single-origin coffee nulla assumenda
-                                            shoreditch
-                                            et.
-                                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
-                                            sapiente
-                                            ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                                            beer
-                                            farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
-                                            of
-                                            them
-                                            accusamus labore sustainable VHS.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">
-                                            <button type="button" class="btn btn-link" data-toggle="collapse"
-                                                    data-target="#collapse03">
-                                                When can I message my host ?
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="collapse03" class="collapse">
-                                        <div class="card-body">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                            richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard
-                                            dolor
-                                            brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
-                                            tempor,
-                                            sunt
-                                            aliqua put a bird on it squid single-origin coffee nulla assumenda
-                                            shoreditch
-                                            et.
-                                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
-                                            sapiente
-                                            ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                                            beer
-                                            farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
-                                            of
-                                            them
-                                            accusamus labore sustainable VHS.
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="map">
+                            <h2>About Area</h2>
+                            <div id="map">
+                                <iframe width="100%" height="100%" frameborder="0" style="border:0"
+                                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyClsJFzjgJBxhY3D4HDn4V_EG9Y5FYqdqQ&q={{ house.get_location|urlencode }}"
+                                        allowfullscreen>
+                                </iframe>
                             </div>
+                            <h3>Local area facility</h3>
+                            <ul class="list-inline">
+                                {% for nearby_facility in house.get_neighbourhood_facilities %}
+                                    <li class="list-inline-item">{{ nearby_facility.verbose }}</li>
+                                {% endfor %}
+                            </ul>
+                            <p>
+                                {{ house.neighbourhood_description|linebreaks }}
+                            </p>
                         </div>
-                        <!-- page detail left how end -->
+                        <!-- page detail left map end -->
+
                     </div>
                     <!-- page detail left end -->
                 </div>
@@ -303,16 +165,18 @@
                     <div class="right">
                         <!-- page detail right user start -->
                         <div class="user">
-                            <img src="static/image/page-detail/right-user/profile.png" class="rounded-circle" alt=""
+                            {% static 'image/placeholders/profile-large.png' as default_profile_pic %}
+                            <img src="{{ house.get_owner.userprofile.profile_pic|thumbnail_url:'profile_house_info'|default:default_profile_pic }}"
+                                 class="rounded-circle" alt=""
                                  title="">
-                            <h2>Miranda Kerr</h2>
-                            <div class="star x5"></div>
+                            <h2>{{ house.get_owner.get_full_name|title }}</h2>
+                            {#                            <div class="star x5"></div>#}
                             <div class="list">
                                 <ul class="list-inline">
                                     <li class="list-inline-item title">Hobbies</li>
-                                    <li class="list-inline-item"><a href="">#Caffe addet</a></li>
-                                    <li class="list-inline-item"><a href="">#doglover</a></li>
-                                    <li class="list-inline-item"><a href="">#Internet</a></li>
+                                    {% for personality_tag in house.get_owner.userprofile.get_personality_tags %}
+                                        <li class="list-inline-item"><a href="">#{{ personality_tag }}</a></li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                         </div>
@@ -324,13 +188,13 @@
                                 <div class="row">
                                     <div class="col-5">
                                         <div class="sub-title">Move in</div>
-                                        <input type="text" class="form-control" value="Oct 22 2018" readonly
+                                        <input type="text" class="form-control" value="Dec 08 2018" readonly
                                                data-toggle="datepicker">
                                     </div>
                                     <div class="col-2 center-arrow"></div>
                                     <div class="col-5">
                                         <div class="sub-title text-right">Move out</div>
-                                        <input type="text" class="form-control text-right" value="Oct 22 2018" readonly
+                                        <input type="text" class="form-control text-right" value="Jan 06 2019" readonly
                                                data-toggle="datepicker">
                                     </div>
                                 </div>
@@ -341,12 +205,16 @@
                         <div class="quest">
                             <div class="row">
                                 <div class="col-8">
-                                    <div class="title">Quest</div>
+                                    <div class="title">Number of Guests</div>
                                 </div>
                                 <div class="col-4">
                                     <div class="select-arrow">
                                         <select class="form-control">
-                                            <option>2</option>
+                                            {% with ''|center:house.max_people_allowed as range %}
+                                                {% for option_num in range%}
+                                                    <option>{{ forloop.counter }}</option>
+                                                {% endfor %}
+                                            {% endwith %}
                                         </select>
                                     </div>
                                 </div>
@@ -358,14 +226,13 @@
                             <div class="calculate">
                                 <div class="left-padding">
                                     <div class="row">
-                                        <div class="col-8 gray">Rent ($200) x 4 weeks:</div>
-                                        <div class="col-4 text-right bold">$800 AUD</div>
+                                        <div class="col-8 gray">Rent (${{ house.rent }}) x 4 weeks:</div>
+                                        <div class="col-4 text-right bold">${% widthratio house.rent 1 4 %} AUD</div>
                                     </div>
                                     <div class="row bottom-margin">
-                                        <div class="col-8 gray">Service fee:<i data-toggle="popover"
-                                                                               data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."></i>
+                                        <div class="col-8 gray">Service fee:
                                         </div>
-                                        <div class="col-4 text-right bold">$48 AUD</div>
+                                        <div class="col-4 text-right bold">${% widthratio house.rent 100 32 %} AUD</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-8 gray">Amount payable:</div>
@@ -373,14 +240,15 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-8 gray"><span>(First month + Service fee)</span></div>
-                                        <div class="col-4 text-right normal">$206 AUD</div>
+                                        {% widthratio house.rent 100 32 as service_fee %}
+                                        <div class="col-4 text-right normal">${{ house.rent|add:service_fee }} AUD</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="left-padding">
                                 <div class="row">
                                     <div class="col-8 small-normal">Amount payable</div>
-                                    <div class="col-4 text-right red">$848 AUD</div>
+                                    <div class="col-4 text-right red">${{ house.rent|add:service_fee }} AUD</div>
                                 </div>
                             </div>
                             <div class="left-right-margin">
@@ -394,86 +262,4 @@
             </div>
         </div>
     </div>
-    <!-- page detail bests start -->
-    <div class="page-detail-bests">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h2>Other Homes nearby</h2>
-                </div>
-                <div class="col-md-4 text-right align-self-end">
-                    <a href="#" class="load-more">See More</a>
-                </div>
-            </div>
-            <div class="lists">
-                <div class="row">
-                    <div class="col-md-4 col-lg-3">
-                        <a href="#" class="list">
-                            <div class="rating">
-                                <span>4.7</span>
-                                <img src="static/image/page-detail/bests/profile-1.png" class="rounded-circle" alt=""
-                                     title="">
-                            </div>
-                            <div class="image">
-                                <img src="static/image/page-detail/bests/1.png" class="w-100" alt="" title="">
-                            </div>
-                            <h1>BALIAN TREEHOUSE w beautiful</h1>
-                            <h2>Capital Territory, Australia</h2>
-                            <div>Min<span>180 days</span></div>
-                            <div>Rent<span>150 Aud./week</span></div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 col-lg-3">
-                        <a href="#" class="list">
-                            <div class="rating">
-                                <span>4.7</span>
-                                <img src="static/image/page-detail/bests/profile-2.png" class="rounded-circle" alt=""
-                                     title="">
-                            </div>
-                            <div class="image">
-                                <img src="static/image/page-detail/bests/2.png" class="w-100" alt="" title="">
-                            </div>
-                            <h1>BALIAN TREEHOUSE w beautiful</h1>
-                            <h2>Capital Territory, Australia</h2>
-                            <div>Min<span>180 days</span></div>
-                            <div>Rent<span>150 Aud./week</span></div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 col-lg-3">
-                        <a href="#" class="list">
-                            <div class="rating">
-                                <span>4.7</span>
-                                <img src="static/image/page-detail/bests/profile-3.png" class="rounded-circle" alt=""
-                                     title="">
-                            </div>
-                            <div class="image">
-                                <img src="static/image/page-detail/bests/3.png" class="w-100" alt="" title="">
-                            </div>
-                            <h1>BALIAN TREEHOUSE w beautiful</h1>
-                            <h2>Capital Territory, Australia</h2>
-                            <div>Min<span>180 days</span></div>
-                            <div>Rent<span>150 Aud./week</span></div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 col-lg-3">
-                        <a href="#" class="list">
-                            <div class="rating">
-                                <span>4.7</span>
-                                <img src="static/image/page-detail/bests/profile-4.png" class="rounded-circle" alt=""
-                                     title="">
-                            </div>
-                            <div class="image">
-                                <img src="static/image/page-detail/bests/4.png" class="w-100" alt="" title="">
-                            </div>
-                            <h1>BALIAN TREEHOUSE w beautiful</h1>
-                            <h2>Capital Territory, Australia</h2>
-                            <div>Min<span>180 days</span></div>
-                            <div>Rent<span>150 Aud./week</span></div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- page detail bests end -->
 {% endblock %}

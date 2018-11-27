@@ -120,7 +120,10 @@ class UserProfile(models.Model):
         if self.profile_pic:
             return self.profile_pic
         else:
-            return self.DEFAULT_PROFILE_PIC
+            return None
+
+    def get_personality_tags(self):
+        return self.personality_tags.all()
 
 
 class PersonalityTag(models.Model):

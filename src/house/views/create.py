@@ -77,7 +77,7 @@ def edit(request, house_uuid):
                 valid = False
 
             if valid:
-                if main_form.cleaned_data['list_now']:
+                if main_form.cleaned_data['list_now'] or house.is_public():
                     try:
                         house.verify_data_for_publishing()
                     except ValidationError as e:

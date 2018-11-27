@@ -183,16 +183,15 @@ class House(models.Model):
     def get_owner(self):
         return self.home_owner.user
 
-    def get_owner_username(self):  # FIXME: FIX method name
-        return self.get_owner().first_name
-
-    def get_owner_pic(self):
-        foo = self.get_owner().userprofile.get_profile_pic()
-        return foo
-
     def get_location(self):
         if self.location:
             return self.location.name_full
+        else:
+            return None
+
+    def get_address(self):
+        if self.address:
+            return "%s, %s" % (self.address, self.get_location() or "")
         else:
             return None
 
@@ -209,8 +208,17 @@ class House(models.Model):
     def get_facilities(self):
         return self.facilities.all()
 
+    def get_welcome_tags(self):
+        return self.welcome_tags.all()
+
+    def get_neighbourhood_facilities(self):
+        return self.neighbourhood_facilities.all()
+
     def get_rules(self):
-        return self.rules.all()
+        return self.houserule_set.all().select_related('rule')
+
+    def get_availability(self):
+        return self.availability_set.all()
 
     def set_status(self, status):
         if status == 'P':
@@ -238,6 +246,11 @@ class House(models.Model):
 
         if bool(errors):
             raise ValidationError(errors)
+
+    def clean(self):
+        super(House, self).clean()
+        if self.max_stay < self.min_stay:
+            raise ValidationError("Maximum length of stay cannot be less than Minimum length of stay", code='invalid')
 
 
 # FIXME: validate overlapping dates

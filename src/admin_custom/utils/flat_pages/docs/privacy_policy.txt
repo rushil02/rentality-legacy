@@ -1,31 +1,136 @@
+Rentality Privacy Policy
 
-This policy covers Rentality and its use of personal information collected when you use the rentality.com.au website. This privacy policy is regularly reviewed and Rentality may amend it from time to time. While Rentality will endeavour to notify you of any major changes to this Privacy Policy from time to time, you agree that you will periodically review the most up-to-date version of this Privacy Policy available.
+Last updated: 19th October 2018
 
-The policy also gives you information about cookies, Rentality’s and third parties’ use of cookies and how you reject cookies.You will be asked to submit personal information about yourself (e.g. name and email address) in order to register to receive or use services on rentality.com.au. Such services include newsletters, live chats, message boards and other future developments By entering your details, you enable Rentality and its service providers to provide you with the services you select. Whenever you provide personal information, we will treat it in accordance with this policy. When using your personal information Rentality will act in accordance with current legislation and aim to meet current Internet best practice.
 
-1. Visitor Data.
-During the course of any visit to rentality.com.au the pages you see pass data via a short text file called a ‘cookie’, to your computer. Most websites do this, because cookies enable website publishers to ascertain whether the computer has visited the website before. This is done on a subsequent visit by detecting the cookie left there previously. From time to time we may use the services of research companies to gather non-personal data regarding the users of our website using cookies, log file data and code embedded on our site. Information supplied by cookies helps us to improve your online user experience and allows us to profile how users navigate the site. If you wish to reject cookies please contact Rentality at admin@rentality.com.au.
+1. Introduction
 
-2. Third Party Advertising.
-Advertisements appearing on this Web site may be served by Rentality or one of our Web advertising partners. Our Web advertising partners may set cookies. These cookies allow the ad server to recognize your computer each time you click an online advertisement. In this way, ad servers may compile information about when you, or others using your computer, saw advertisements and which ads are clicked. This allows an advertisement network to deliver targeted advertisements that they believe will be of most interest to you.
+Rentality values your privacy and is committed to protecting your personal data. The following Privacy Policy describes how we collect, use, process, and disclose your information, including personal information, in conjunction with your access to and use of the Rentality Platform and the Payment Services.
 
-3. What is a cookie?
-A cookie is a small amount of data sent to your browser from a website’s computer and stored on your computer’s hard drive. Each website can send its own cookie to your browser if your browser’s preferences allow it, but your browser only permits a web site to access the cookies it has sent to you, not cookies sent by other sites. Most sites do this whenever a user visits their website in order to track online traffic flows. Users can set their computers to accept cookies, to notify when a cookie is issued, or not to receive cookies. Browsers vary so it is advisable to check the “Help” menu of your browser to learn how to change your cookie preferences.
+This Privacy Policy should be read together with our Terms and Condition, Cookies Policy,  and any location specific legal notice.
 
-4. Use and storage of your personal information.
-When you supply any personal information to Rentality we have legal obligations towards you in the way we use the data. We must explain how we will use it and tell you if we want to pass the information on to anyone else. In general and subject to the terms of this Privacy policy, any information you provide to Rentality will only be used within Rentality and by its agents and service providers. Your information will be disclosed only where we are obliged to do so or permitted to do so by law. Also, if you post or send offensive, inappropriate or objectionable content anywhere on rentality.com.au or otherwise engage in any disruptive behaviour on rentality.com.au, Rentality may use whatever information available to it about you to stop such behaviour. This may involve informing relevant third parties such as law enforcement agencies about the content you have posted. We will hold your personal information for as long as you use the rentality.com.au services, and remove it when you no longer wish to continue your registration. Rentality may store messaging transcript data (including message content, member names, times and dates) arising from the use of rentality.com.au community services for a period of six months. We will ensure that all personal information supplied is held securely, in accordance with the relevant privacy laws. If you are notified on the rentality.com.au site that your information may be used to allow Rentality to contact you for “service administration purposes”, this means we may contact you for a number of purposes related to our service. For example, we may wish to provide you with password reminders or notify you that the particular service has been suspended for maintenance.
+When this policy mentions “Rentality,” “we,” “us,” or “our,” it refers to the Rentality Proprietary Limited that is responsible for your information under this Privacy Policy (the “Data Controller”).
 
-5. Sharing and Disclosure of Information.
-Rentality reserves the right to transfer personal information to a successor in interest that acquires rights to that information as a result of the sale of Rentality or substantially all of its assets to that successor in interest. For more information see the “Changes to Our Privacy Policy” section below.
 
-6. Changes in Our Privacy Policy.
-From time to time we may make changes to our privacy policy and will post them on the rentality.com.au website. A User is bound by any changes to the policy when he or she uses the site after those changes have been posted.
+2. Information we collect
 
-7. Access to your personal information.
-You have the right to request a copy of the personal information Rentality holds about you and to have any inaccuracies corrected. (please note that due to administration costs, Rentality will charge $20 for information requests.) Please address requests to Rentality at admin@rentality.com.au.
+There are three general categories of information we collect.
+2.1 Information You Give to Us.
+2.1.1 Information that is necessary for the use of the Rentality Platform.
+We ask for and collect the following personal information about you when you use the Rentality Platform. This information is necessary for the adequate performance of the contract between you and us and to allow us to comply with our legal obligations. Without it, we may not be able to provide you with all the requested services.
+Account Information. When you sign up for a Rentality Account, we require certain information such as your first name, last name, email address, and date of birth.
+Profile and Listing Information. To use certain features of the Rentality Platform (such as booking or creating a Listing), we may ask you to provide additional information, which may include your address, and a profile picture.
+Payment Information. To use certain features of the Rentality Platform (such as booking or creating a Listing), we may require you to provide certain financial information (like your bank account or credit card information) in order to facilitate the processing of payments (via Stripe Payments Australia Pty Ltd).
+Communications with Rentality and other Members. When you communicate with Rentality or use the Rentality Platform to communicate with other users, we collect information about your communication and any information you choose to provide.
+2.1.2 Information you choose to give us.
+You may choose to provide us with additional personal information in order to obtain a better user experience when using Rentality Platform. This additional information will be processed based on your consent.
+Additional Profile Information. You may choose to provide additional information as part of your Rentality profile (such as gender, city, phone number and a personal description). Some of this information as indicated in your Account settings is part of your public profile page, and will be publicly visible to others.
+Other Information. You may otherwise choose to provide us information when you fill in a form, conduct a search, update or add information to your Rentality Account, respond to surveys, post to community forums, endorsements, review, participate in promotions, or use other features of the Rentality Platform.
+2.1.3 Information that is necessary for the use of the Payment Services.
+The Payments Data Controller needs to collect the following information, as it is necessary for the adequate performance of the contract with you and to comply with applicable law (such as anti-money laundering regulations). Without it, you will not be able to use Payment Services:
+Payment Information. When you use the Payment Services, the Payments Data Controller requires certain financial information (like your bank account or credit card information) in order to process payments and comply with applicable law.
+2.2 Information We Automatically Collect from Your Use of the Rentality  Platform.
+When you use the Rentality Platform, we automatically collect information, including personal information, about the services you use and how you use them. This information is necessary for the adequate performance of the contract between you and us, to enable us to comply with legal obligations and given our legitimate interest in being able to provide and improve the functionalities of the Rentality Platform.
+Geo-location Information. When you use certain features of the Rentality Platform, we may collect information about your precise or approximate location as determined through data such as your IP address or mobile device’s GPS to offer you an improved user experience.
+Usage Information. We collect information about your interactions with the Rentality Platform such as the pages or content you view, your searches for Listings, bookings you have made, and other actions on the Rentality Platform.
+Log Data and Device Information. We automatically collect log data and device information when you access and use the Rentality Platform, even if you have not created a Rentality Account or logged in. That information includes, among other things: details about how you’ve used the Rentality Platform, IP address, access dates and times, hardware and software information, device information, device event information, unique identifiers, crash data, cookie data, and the pages you’ve viewed or engaged with before or after using the Rentality Platform.
+Cookies and Similar Technologies. We use cookies and google analytics technologies on the Rentality Platform to track your behavior on our behalf. While you may disable the usage of cookies through your browser settings, the Rentality Platform currently does not respond to a “Do Not Track” signal in the HTTP header from your browser or mobile application due to lack of standardization regarding how that signal should be interpreted. For more information on our use of these technologies, see our Cookies Policy. (Hyperlink this)
+2.3 Information We Collect from Third Parties.
+Rentality may collect information, including personal information, that others provide about you when they use the Rentality Platform,or obtain information from other sources and combine that with information we collect through the Rentality Platform. We do not control, supervise or respond for how the third parties providing your information process your personal data, and any information request regarding the disclosure of your personal information to us should be directed to such third parties.
+Third Party Services. If you link, connect, or login to your Rentality Account with a third party service (e.g. Google, Facebook, Instagram, Twitter, Pinterest), the third party service may send us information such as your registration and profile information from that service. This information varies and is controlled by that service or as authorised by you via your privacy settings at that service.
+Your Reviews. If someone has written a review for you, it will be published on your Rentality public profile page.
 
-8. Minors
-Users who are minors. If you are under 13 or a minor under applicable law please obtain your parent/guardian’s permission beforehand whenever you provide personal information to the rentality.com.au website. Users without this consent are not permitted to provide us with personal information.
 
-9. Contact Details
-admin@rentality.com.au
+
+3. How we use information we collect
+
+We use, store, and process information, including personal information, about you to provide, understand, improve, and develop the Rentality Platform, create and maintain a trusted and safer environment and comply with our legal obligations.
+3.1 Provide, Improve, and Develop the Rentality Platform.
+Enable you to access and use the Rentality Platform.
+Enable you to communicate with other Users.
+Operate, protect, improve, and optimise the Rentality Platform and experience, such as by performing analytics and conducting research.
+Provide customer service.
+Send you service or support messages, updates, security alerts, and account notifications.
+If you provide us with your contacts’ information, we may process this information: (i) to facilitate your reviews, (ii) send your requests for references, and (iii) for any purpose you authorise at the time of collection.
+To operate, protect, improve, and optimise the Rentality Platform and experience, and personalize and customize your experience (such as making Listing suggestions or ranking search results), we conduct profiling based on your interactions with the Rentality Platform, your search and booking history, your profile information and preferences, and other content you submit to the Rentality Platform.
+We process this information given our legitimate interest in improving the Rentality Platform and our users’ experience with it, and where it is necessary for the adequate performance of the contract with you.
+3.2 Create and Maintain a Trusted and Safer Environment.
+Detect and prevent fraud, spam, abuse, security incidents, and other harmful activity.
+Conduct security investigations and risk assessments.
+Verify or authenticate information or identifications provided by you (such as to verify your Accommodation address or compare your identification photo to another photo you provide).
+Conduct checks against databases and other information sources, to the extent permitted by applicable laws and with your consent where required.
+Comply with our legal obligations.
+Resolve any disputes with any of our users and enforce our agreements with third parties.
+Enforce our Terms and Conditions and other policies.
+In connection with the activities above, we may conduct profiling based on your interactions with the Rentality Platform, your profile information and other content you submit to the Rentality Platform, and information obtained from third parties. In limited cases, automated processes may restrict or suspend access to the Rentality Platform if such processes detect a Member or activity that we think poses a safety or other risk to the Rentality Platform, other users, or third parties.
+We process this information given our legitimate interest in protecting the Rentality Platform, to measure the adequate performance of our contract with you, and to comply with applicable laws.
+3.3 Provide, Personalise, Measure, and Improve our Advertising and Marketing.
+Send you promotional messages, marketing, advertising, and other information that may be of interest to you based on your preferences (including information about Rentality or partner campaigns and services) and social media advertising through social media platforms such as Facebook or Google).
+Personalise, measure, and improve our advertising.
+Administer referral programs, rewards, surveys, sweepstakes, contests, or other promotional activities or events sponsored or managed by Rentality or its third party partners.
+We will process your personal information for the purposes listed in this section given our legitimate interest in undertaking marketing activities to offer you products or services that may be of your interest. You can opt-out of receiving marketing communications from us by following the unsubscribe instructions included in our marketing communications or changing your notification settings within your Rentality Account.
+4. SHARING & DISCLOSURE
+4.1 With Your Consent.
+Where you have provided consent, we share your information, including personal information, as described at the time of consent, such as when you authorise a third party application or website to access your Rentality Account or when you participate in promotional activities conducted by Rentality partners or third parties.
+4.2 Sharing between Members.
+To help facilitate bookings or other interactions between users, we may need to share certain information, including personal information, with other users, as it is necessary for the adequate performance of the contract between you and us, as follows:
+When you as a Tenant submit a booking request, certain information about you is shared with the Homeowner (and Co-Homeowner, if applicable), including your full name, the full name of any additional Tenants, your cancellation history, and other information you agree to share. When your booking is confirmed, we will disclose additional information to assist with coordinating the trip, like your phone number.
+When you as a Homeowner (or Co-Homeowner, if applicable) have a confirmed booking, certain information is shared with the Tenant to coordinate the booking, such as your full name, phone number, and Accommodation or Experience address.
+We don’t share your billing and payout information with other users.
+4.3 Profiles, Listings, and other Public Information.
+The Rentality Platform lets you publish information, including personal information, that is visible to the general public. For example:
+Parts of your public profile page, such as your first name, your description, and profile picture, are publicly visible to others.
+Listing pages are publicly visible and include information such as the Accommodation  approximate location (neighborhood and city) or precise location (where you have provided your consent), Listing description, calendar availability, your public profile photo,), and any additional information you choose to share.
+After completing a booking, Tenant and Homeowners may write Reviews and rate each other. Reviews and Ratings are a part of your public profile page and may also be surfaced elsewhere on the Rentality Platform (such as the Listing page).
+If you submit content in a community or discussion forum, blog or social media post, or use a similar feature on the Rentality Platform, that content is publicly visible.
+Based on our legitimate interest to promote the Rentality Platform we may display parts of the Rentality Platform (e.g., your Listing page) on sites operated by Rentality business partners. If your Listings are displayed on a partner’s site, information from your public profile page may also be displayed.
+Information you share publicly on the Rentality Platform may be indexed through third party search engines. In some cases, you may opt-out of this feature in your Account settings. If you change your settings or your public-facing content, these search engines may not update their databases. We do not control the practices of third party search engines, and they may use caches containing your outdated information.
+4.4 Compliance with Law, Responding to Legal Requests, Preventing Harm and Protection of our Rights.
+Rentality may disclose your information, including personal information, to courts, law enforcement or governmental authorities, or authorised third parties, if and to the extent we are required or permitted to do so by law or if such disclosure is reasonably necessary: (i) to comply with our legal obligations, (ii) to comply with legal process and to respond to claims asserted against Rentality, (iii) to respond to verified requests relating to a criminal investigation or alleged or suspected illegal activity or any other activity that may expose us, you, or any other of our users to legal liability, (iv) to enforce and administer our Terms of Service, the Payment Terms or other agreements with users, or (v) to protect the rights, property or personal safety of Rentality, its employees, its users, or members of the public.
+These disclosures may be necessary to comply with our legal obligations, for the protection of your or another person's vital interests or for the purposes of our or a third party’s legitimate interest in keeping the Rentality Platform secure, preventing harm or crime, enforcing or defending legal rights, or preventing damage.
+Where appropriate, we may notify users about legal requests unless: (i) providing notice is prohibited by the legal process itself, by court order we receive, or by applicable law, or (ii) we believe that providing notice would be futile, ineffective, create a risk of injury or bodily harm to an individual or group, or create or increase a risk of fraud upon Rentality’s property, its users and the Rentality Platform. In instances where we comply with legal requests without notice for these reasons, we will attempt to notify that user about the request after the fact where appropriate and where we determine in good faith that we are no longer prevented from doing so.
+
+4.5 Government Registration.
+In jurisdictions where Rentality facilitates or requires a registration, notification, permit, or license application of a Host with a local governmental authority through the Rentality Platform in accordance with local law, we may share information of participating Hosts with the relevant authority, both during the application process and, if applicable, periodically thereafter, such as the Host’s full name and contact details, Accommodation address, tax identification number, Listing details, and number of nights booked.
+4.6 Business Transfers.
+If Rentality undertakes or is involved in any merger, acquisition, reorganization, sale of assets, bankruptcy, or insolvency event, then we may sell, transfer or share some or all of our assets, including your information in connection with such transaction or in contemplation of such transaction (e.g., due diligence). In this event, we will notify you before your personal information is transferred and becomes subject to a different privacy policy.
+4.7 Aggregated Data.
+We may also share aggregated information (information about our users that we combine together so that it no longer identifies or references an individual user) and other anonymized information for regulatory compliance, industry and market analysis, demographic profiling, marketing and advertising, and other business purposes.
+5. OTHER IMPORTANT INFORMATION
+5.1 Analyzing your Communications.
+We may review, scan, or analyze your communications on the Rentality Platform for fraud prevention, risk assessment, regulatory compliance, investigation, product development, research, and customer support purposes. For example, as part of our fraud prevention efforts, we scan and analyze messages to mask contact information and references to other websites. In some cases, we may also scan, review, or analyze messages to debug, improve, and expand product offerings. We use automated methods where reasonably possible. However, occasionally we may need to manually review some communications, such as for fraud investigations and customer support, or to assess and improve the functionality of these automated tools. We will not review, scan, or analyze your communications to send third party marketing messages to you, and we will not sell reviews or analyses of these communications.
+These activities are carried out based on Rentality's legitimate interest in ensuring compliance with applicable laws and our Terms, preventing fraud, promoting safety, and improving and ensuring the adequate performance of our services.
+5.2 Linking Third Party Accounts.
+You may link your Rentality Account with your account at a third party social networking service.  When you create this link:
+some of the information you provide to us from the linking of your accounts may be published on your Rentality Account profile;
+a link to your public profile on that third party social networking service may be included in your Rentality public profile;
+the information you provide to us from the linking of your accounts may be stored, processed and transmitted for fraud prevention and risk assessment purposes.
+
+
+We only collect your information from linked third party accounts to the extent necessary to ensure the adequate performance of our contract with you, or to ensure that we comply with applicable laws, or with your consent.
+5.3 Google Maps/Earth.
+Parts of the Rentality Platform use Google Maps/Earth services, including the Google Maps API(s). Use of Google Maps/Earth is subject to Google Maps/Earth Additional Terms of Use and the Google Privacy Policy.
+6. YOUR RIGHTS (Keeping your personal data)
+You may exercise any of the rights described in this section before your applicable Rentality Data Controller by sending an email to admin@rentality.com.au . Please note that we may ask you to verify your identity before taking further action on your request.
+6.1 Managing Your Information.
+You may access and update some of your information through your Account settings. If you have chosen to connect your Rentality Account to a third-party application, like Facebook or Google, you can change your settings and remove permission for the app by changing your Account settings. You are responsible for keeping your personal information up-to-date.
+6.2 Rectification of Inaccurate or Incomplete Information.
+You have the right to ask us to correct inaccurate or incomplete personal information concerning you (and which you cannot update yourself within your Rentality Account).
+6.3 Data Retention and Erasure.
+We generally retain your personal information for as long as is necessary for the performance of the contract between you and us and to comply with our legal obligations. If you no longer want us to use your information to provide the Rentality Platform to you, you can request that we erase your personal information and close your Rentality Account. Please note that if you request the erasure of your personal information:
+We may retain some of your personal information as necessary for our legitimate business interests, such as fraud detection and prevention and enhancing safety.
+We may retain and use your personal information to the extent necessary to comply with our legal obligations. For example, Rentality may keep some of your information for tax, legal reporting and auditing obligations.
+Information you have shared with others (e.g., Reviews, forum postings) may continue to be publicly visible on the Rentality Platform, even after your Rentality Account is cancelled. However, attribution of such information to you will be removed. Additionally, some copies of your information (e.g., log records) may remain in our database.
+Because we maintain the Rentality Platform to protect from accidental or malicious loss and destruction, residual copies of your personal information may not be removed from our backup systems.
+6.4 Withdrawing Consent and Restriction of Processing.
+Where you have provided your consent to the processing of your personal information by Rentality you may withdraw your consent at any time by changing your Account settings or by sending a communication to Rentality specifying which consent you are withdrawing. Please note that the withdrawal of your consent does not affect the lawfulness of any processing activities based on such consent before its withdrawal.
+6.5 Objection to Processing.
+In some jurisdictions, applicable law may entitle you to require Rentality not to process your personal information for certain specific purposes where such processing is based on legitimate interest. If you object to such processing Rentality will no longer process your personal information for these purposes unless we can demonstrate compelling legitimate grounds for such processing or such processing is required for the establishment, exercise or defence of legal claims.
+6.6 Lodging Complaints.
+You have the right to lodge complaints about the data processing activities carried out by Rentality before the competent data protection authorities.
+7. SECURITY
+We are continuously implementing and updating administrative, technical, and physical security measures to help protect your information against unauthorised access, loss, destruction, or alteration. Some of the safeguards we use to protect your information are firewalls and data encryption, and information access controls. If you know or have reason to believe that your Rentality Account credentials have been lost, stolen, misappropriated, or otherwise compromised or in case of any actual or suspected unauthorized use of your Rentality Account, please contact us.
+8. CHANGES TO THIS PRIVACY POLICY
+This Privacy Policy was last updated on 19th October 2018. Rentality reserves the right to modify this Privacy Policy at any time in accordance with this provision. Previous versions can be obtained by contacting us. Should any substantive or material change be made to this Privacy Policy, we will notify you by email.
+9. CONTACT US
+If you have any questions or complaints about this Privacy Policy or Rentalty’s information handling practices, you may email us or contact us at (02) 85202065
