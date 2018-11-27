@@ -249,8 +249,9 @@ class House(models.Model):
 
     def clean(self):
         super(House, self).clean()
-        if self.max_stay < self.min_stay:
-            raise ValidationError("Maximum length of stay cannot be less than Minimum length of stay", code='invalid')
+        if self.max_stay and self.min_stay:
+            if self.max_stay < self.min_stay:
+                raise ValidationError("Maximum length of stay cannot be less than Minimum length of stay", code='invalid')
 
 
 # FIXME: validate overlapping dates
