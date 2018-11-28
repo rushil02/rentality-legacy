@@ -3,13 +3,16 @@ from django.views.generic import TemplateView
 
 from user_custom.views import set_timezone, check_user, \
     dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
-    CustomSignupView, search, get_stripe_publishable_key, PersonalityTagView
+    CustomSignupView, search, get_stripe_publishable_key, PersonalityTagView, search_api
 
 app_name = 'user'
 
 urlpatterns = [
     path('', check_user, name='home_page'),
+
     path('search', search, name='search'),
+    path('search_api', search_api, name='search_api'),
+
     path('accounts/signup/', CustomSignupView.as_view(), name="account_signup"),
     path('notifications', Notifications.as_view(), name='notifications'),
     path('dashboard', dashboard, name='dashboard'),

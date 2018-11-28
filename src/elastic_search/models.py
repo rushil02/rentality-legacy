@@ -26,6 +26,7 @@ class Location(BaseModel):
 
 
 class House(BaseModel):
+    title = Text(index=False)
     address = Text()
     location = Text()
     home_type = Keyword()

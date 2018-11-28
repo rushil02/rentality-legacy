@@ -111,8 +111,6 @@ class UserProfile(models.Model):
 
     updated_on = models.DateTimeField(auto_now=True)
 
-    DEFAULT_PROFILE_PIC = '/static/img/placeholders/profile/default.png'
-
     def __str__(self):
         return "%s" % self.user
 

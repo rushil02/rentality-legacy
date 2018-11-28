@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model, authenticate, password_validation
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
+from house.models import HomeType
 from utils.email_validator import clean_gmail
 from user_custom.models import UserProfile
 from allauth.account.forms import LoginForm as AllAuthLoginForm
@@ -172,19 +174,31 @@ class HomePageSearchForm(forms.Form):
     location = forms.CharField(
         label='Location',
         widget=forms.TextInput(attrs={
-            'class': 'form-control marker', 'placeholder': 'City, State, Post code'
+            'class': 'form-control marker search', 'placeholder': 'City, State, Post code'
         }, )
     )
     start_date = forms.DateField(
         label='Start date',
         widget=forms.TextInput(attrs={
-            'class': 'form-control date', 'placeholder': 'Start Date', 'readonly': True, 'data-toggle': 'datepicker'
+            'class': 'form-control', 'placeholder': 'Start Date', 'hidden': True, 'data-toggle': 'datepicker'
         }, )
     )
     end_date = forms.DateField(
         label='End date',
         widget=forms.TextInput(attrs={
-            'class': 'form-control date', 'placeholder': 'End Date', 'readonly': True, 'data-toggle': 'datepicker'
+            'class': 'form-control', 'placeholder': 'End Date', 'hidden': True, 'data-toggle': 'datepicker'
+        }, )
+    )
+    home_type = forms.ModelChoiceField(
+        label='Home Type', queryset=HomeType.objects.all(),
+        widget=forms.Select(attrs={
+            'class': 'form-control type', 'placeholder': 'Home Type',
+        }, )
+    )
+    rent = forms.IntegerField(
+        label='Rent',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control amount', 'placeholder': 'Rent $AUD/week',
         }, )
     )
 

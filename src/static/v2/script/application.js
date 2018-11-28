@@ -73,54 +73,67 @@ $(document).ready(function () {
     <!-- footer end -->
 
     <!-- header start -->
-    if ($('body > .header').length > 0) {
-        $('body > .header [data-toggle="datepicker"]').datepicker({offset: 'top'});
 
-        $('body > .header #city > .btn-group > .btn').click(function () {
-            $('body > .header #other-city > .btn-group > .btn').removeClass('active');
-            $('body > .header #city > .btn-group > .btn:last-child').removeClass('active');
-            $('body > .header #other-city.collapse').collapse('hide');
-        });
-
-        $('body > .header #other-city > .btn-group > .btn').click(function () {
-            $('body > .header #city > .btn-group > .btn').removeClass('active');
-            $('body > .header #city > .btn-group > .btn:last-child').addClass('active');
-        });
-    }
-
-    var plus_5_days = new Date;
-    plus_5_days.setDate(plus_5_days.getDate() + 5);
-    pickmeup('body > .header .start-calendar', {
+    pickmeup('body > .header .calendar', {
         flat: true,
-        date: [
-            new Date,
-            plus_5_days
-        ],
         mode: 'range',
         calendars: 2
     });
 
-    $('body > .header .start-calendar').on('pickmeup-change', function (e) {
-        $('body > .header .start-date').val(e.detail.formatted_date[0]);
-        $('body > .header .end-date').val(e.detail.formatted_date[1]);
+    $('body > .header .calendar').on('pickmeup-change', function (e) {
+        $('body > .header #placeholder-date').val(e.detail.formatted_date[0] + ' to ' + e.detail.formatted_date[1]);
+        $('body > .header #id_start_date').val(e.detail.formatted_date[0]);
+        $('body > .header #id_end_date').val(e.detail.formatted_date[1]);
     });
 
-    var plus_5_days = new Date;
-    plus_5_days.setDate(plus_5_days.getDate() + 5);
-    pickmeup('body > .header .end-calendar', {
-        flat: true,
-        date: [
-            new Date,
-            plus_5_days
-        ],
-        mode: 'range',
-        calendars: 2
-    });
+    // if ($('body > .header').length > 0) {
+    //     $('body > .header [data-toggle="datepicker"]').datepicker({offset: 'top'});
+    //
+    //     $('body > .header #city > .btn-group > .btn').click(function () {
+    //         $('body > .header #other-city > .btn-group > .btn').removeClass('active');
+    //         $('body > .header #city > .btn-group > .btn:last-child').removeClass('active');
+    //         $('body > .header #other-city.collapse').collapse('hide');
+    //     });
+    //
+    //     $('body > .header #other-city > .btn-group > .btn').click(function () {
+    //         $('body > .header #city > .btn-group > .btn').removeClass('active');
+    //         $('body > .header #city > .btn-group > .btn:last-child').addClass('active');
+    //     });
+    // }
 
-    $('body > .header .end-calendar').on('pickmeup-change', function (e) {
-        $('body > .header .start-date').val(e.detail.formatted_date[0]);
-        $('body > .header .end-date').val(e.detail.formatted_date[1]);
-    });
+    // var plus_5_days = new Date;
+    // plus_5_days.setDate(plus_5_days.getDate() + 5);
+    // pickmeup('body > .header .start-calendar', {
+    //     flat: true,
+    //     date: [
+    //         new Date,
+    //         plus_5_days
+    //     ],
+    //     mode: 'range',
+    //     calendars: 2
+    // });
+
+    // $('body > .header .start-calendar').on('pickmeup-change', function (e) {
+    //     $('body > .header .start-date').val(e.detail.formatted_date[0]);
+    //     $('body > .header .end-date').val(e.detail.formatted_date[1]);
+    // });
+
+    // var plus_5_days = new Date;
+    // plus_5_days.setDate(plus_5_days.getDate() + 5);
+    // pickmeup('body > .header .end-calendar', {
+    //     flat: true,
+    //     date: [
+    //         new Date,
+    //         plus_5_days
+    //     ],
+    //     mode: 'range',
+    //     calendars: 2
+    // });
+
+    // $('body > .header .end-calendar').on('pickmeup-change', function (e) {
+    //     $('body > .header .start-date').val(e.detail.formatted_date[0]);
+    //     $('body > .header .end-date').val(e.detail.formatted_date[1]);
+    // });
     <!-- header end -->
 
     <!-- logo start -->
@@ -530,6 +543,10 @@ $(document).ready(function () {
 $body = $("body");
 
 $(document).on({
-    ajaxStart: function() { $body.addClass("loading");    },
-     ajaxStop: function() { $body.removeClass("loading"); }
+    ajaxStart: function () {
+        $body.addClass("loading");
+    },
+    ajaxStop: function () {
+        $body.removeClass("loading");
+    }
 });

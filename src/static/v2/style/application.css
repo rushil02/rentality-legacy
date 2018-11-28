@@ -24,10 +24,13 @@ body > .menu > .alerts-holder {
     left: 15px;
     right: 15px;
     border: none;
-    padding-top: 28px;
 }
 
-body > .menu > .alert.alert-success {
+body > .menu > .alerts {
+    padding-top: 15px;
+}
+
+body > .menu > .alerts-holder > .alert.alert-success {
     background-color: #39ffaf;
     color: #2a2b32;
 }

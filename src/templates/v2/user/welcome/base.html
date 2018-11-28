@@ -65,15 +65,26 @@
                     <div class="col-12 col-xl-8">
                         <form action="{% url 'user:search' %}" method="GET" id="search_form">
                             <div class="detail">
-                                <div class="row">
+                                <div class="row" style="padding-left: 10px">
                                     <div class="col-md-5">
                                         {{ search_form.location }}
                                     </div>
-                                    <div class="col-md-2">
+{#                                    <div class="col-md-2">#}
                                         {{ search_form.start_date }}
-                                    </div>
-                                    <div class="col-md-2">
+{#                                    </div>#}
+{#                                    <div class="col-md-2">#}
                                         {{ search_form.end_date }}
+{#                                    </div>#}
+                                    <div class="col-md-4">
+                                        <div style="position: relative">
+                                            <div class="dropdown">
+                                                <input type="text" id="placeholder-date" class="form-control date" readonly placeholder="Select Dates"
+                                                       data-toggle="dropdown">
+                                                <div class="dropdown-menu">
+                                                    <div class="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <button type="submit" class="btn btn-link btn-block">Search</button>
@@ -167,7 +178,7 @@
                                             <h1>Perth<br>Australia</h1>
                                         </div>
                                         <div class="col-6 align-self-center text-right">
-{#                                            34533#}
+                                            {#                                            34533#}
                                         </div>
                                     </div>
                                 </div>
@@ -186,7 +197,7 @@
                                                 <h1>Canberra<br>Australia</h1>
                                             </div>
                                             <div class="col-6 align-self-center text-right">
-{#                                                1644#}
+                                                {#                                                1644#}
                                             </div>
                                         </div>
                                     </div>
@@ -202,7 +213,7 @@
                                                 <h1>Sydney<br>Australia</h1>
                                             </div>
                                             <div class="col-6 align-self-center text-right">
-{#                                                2865#}
+                                                {#                                                2865#}
                                             </div>
                                         </div>
                                     </div>
@@ -446,28 +457,7 @@
 
     {# FIXME: complete checks before submission #}
     <!-- Datepicker start -->
-    <script>
-        var start_date_sel = $('#id_start_date');
-        start_date_sel.datepicker({
-            autoHide: 'true',
-            format: 'dd/mm/yyyy',
-            startDate: new Date()
-        });
 
-        var end_date = new Date();
-        end_date.setMonth(end_date.getMonth() + 1);
-        $('#id_end_date').datepicker({
-            autoHide: 'true',
-            format: 'dd/mm/yyyy',
-            startDate: end_date
-        });
-
-        start_date_sel.on('pick.datepicker', function (e) {
-            var end_date = new Date(e.date.getTime());
-            end_date.setMonth(end_date.getMonth() + 1);
-            $('#id_end_date').datepicker('setStartDate', end_date);
-        });
-    </script>
     <!-- Datepicker end -->
 
     <!-- Fast Search labels start -->
