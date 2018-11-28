@@ -16,9 +16,7 @@ def search(request):
 
 
 def search_api(request):
-    print(request.GET)
     location = request.GET['location']
-    s = House.search().query('match', location=location)
+    s = House.search().query('fuzzy', location=location)
     results = s.execute().to_dict()
-    print(results)
     return JsonResponse(results['hits']['hits'], safe=False)

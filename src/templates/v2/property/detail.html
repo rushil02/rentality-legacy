@@ -74,6 +74,7 @@
                         <!-- page detail left about start -->
                         <div class="about">
                             <h2>About The Property</h2>
+                            <p>{{ house.description|linebreaks }}</p>
                             <h3>Tenant Access</h3>
                             <p>
                                 {{ house.access_restrictions|linebreaks }}
@@ -189,12 +190,12 @@
                                     <div class="row">
                                         <div class="col-5">
                                             <div class="sub-title">Move in</div>
-                                            {{ form.move_in_data }}
+                                            {{ form.move_in_date }}
                                         </div>
                                         <div class="col-2 center-arrow"></div>
                                         <div class="col-5">
                                             <div class="sub-title text-right">Move out</div>
-                                            {{ form.move_out_data }}
+                                            {{ form.move_out_date }}
                                         </div>
                                     </div>
                                 </div>
@@ -219,14 +220,17 @@
                                 <div class="calculate">
                                     <div class="left-padding">
                                         <div class="row">
-                                            <div class="col-8 gray">Rent (${{ house.rent }}) x 4 weeks:</div>
-                                            <div class="col-4 text-right bold">${% widthratio house.rent 1 4 %} AUD
+                                            <div class="col-8 gray">Rent (${{ house.rent }}) x
+                                                <span id="num_weeks">0</span>
+                                                weeks:
+                                            </div>
+                                            <div class="col-4 text-right bold"> $<span id="amount">0</span> AUD
                                             </div>
                                         </div>
                                         <div class="row bottom-margin">
                                             <div class="col-8 gray">Service fee:
                                             </div>
-                                            <div class="col-4 text-right bold">${% widthratio house.rent 100 32 %} AUD
+                                            <div class="col-4 text-right bold">$<span id="service-fee">0</span> AUD
                                             </div>
                                         </div>
                                         <div class="row">
@@ -235,8 +239,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-8 gray"><span>(First month + Service fee)</span></div>
-                                            {% widthratio house.rent 100 32 as service_fee %}
-                                            <div class="col-4 text-right normal">${{ house.rent|add:service_fee }} AUD
+                                            <div class="col-4 text-right normal">$<span id="amount-payable">0</span> AUD
                                             </div>
                                         </div>
                                     </div>
@@ -244,7 +247,7 @@
                                 <div class="left-padding">
                                     <div class="row">
                                         <div class="col-8 small-normal">Amount payable</div>
-                                        <div class="col-4 text-right red">${{ house.rent|add:service_fee }} AUD</div>
+                                        <div class="col-4 text-right red">$<span id="amount-payable-fin">0</span> AUD</div>
                                     </div>
                                 </div>
                                 <div class="left-right-margin">
@@ -260,4 +263,45 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block page_scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#id_move_in_date').datepicker({
+                format: "yyyy-mm-dd"
+            });
+            $('#id_move_out_date').datepicker({
+                format: "yyyy-mm-dd"
+            });
+        });
+
+        const rent = 0{{ house.rent }};
+
+        function calculate_val(start, end) {
+            start = new Date(start);
+            end = new Date(end);
+            var weeks = parseFloat((end - start) / (1000 * 7 * 24 * 60 * 60)).toFixed(1);
+            $('#num_weeks').text(weeks);
+            $('#amount').text(parseFloat(weeks*rent).toFixed(2));
+            $('#service-fee').text(parseFloat(rent*4*0.08).toFixed(2));
+            $('#amount-payable').text(parseFloat((rent*4*0.08)+(rent*4)).toFixed(2));
+            $('#amount-payable-fin').text(parseFloat((rent*4*0.08)+(rent*4)).toFixed(2));
+        }
+
+        $('#id_move_in_date').change(function () {
+            let end = $('#id_move_out_date').val();
+            if (end) {
+                calculate_val($(this).val(), end);
+            }
+        });
+
+        $('#id_move_out_date').change(function () {
+            let start = $('#id_move_in_date').val();
+            if (start) {
+                calculate_val(start, $(this).val())
+            }
+        });
+
+    </script>
 {% endblock %}

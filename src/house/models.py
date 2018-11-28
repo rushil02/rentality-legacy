@@ -65,7 +65,7 @@ class House(models.Model):
     REQUIRED_FIELDS = (
         'home_owner', 'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms',
         'bathrooms', 'parking', 'rent', 'min_stay', 'facilities', 'rules', 'cancellation_policy', 'max_people_allowed',
-        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image'
+        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image', 'description'
     )
 
     home_owner = models.ForeignKey(
@@ -110,6 +110,8 @@ class House(models.Model):
     )
 
     max_people_allowed = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Maximum people allowed")
+
+    description = models.TextField(blank=True, null=True, verbose_name="House Description")
 
     facilities = models.ManyToManyField('house.Facility', blank=True)
     rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)

@@ -2,6 +2,19 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
+            <h1 class="title">What is your home like?</h1>
+            <div class="black-textarea">
+                <p> Describe it to your guests</p>
+                <div class="row">
+                    <div class="col-md-9 col-lg-9 col-xl-6">
+                        <div class="textarea">
+                            {{ main_form.description }}
+                            <div class="example">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h1 class="title">Are there other people living in the house ?</h1>
             <div class="black-textarea">
                 <p>If Yes, What are they like ?</p>
@@ -11,7 +24,7 @@
                             {{ main_form.other_people_description }}
                             <div class="example">
                                 <p><strong>Examples</strong></p>
-                               Who are they?<br>
+                                Who are they?<br>
                                 What are they like? <br> How old are they? <br>
                                 What are their occupation?
                             </div>

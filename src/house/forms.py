@@ -38,7 +38,7 @@ class HouseForm(forms.ModelForm):
         fields = [
             'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms', 'bathrooms',
             'parking', 'rent', 'min_stay', 'max_stay', 'other_rules', 'cancellation_policy', 'other_people_description',
-            'access_restrictions', 'neighbourhood_description', 'max_people_allowed'
+            'access_restrictions', 'neighbourhood_description', 'max_people_allowed', 'description'
         ]
         widgets = {
             'title': forms.TextInput(
@@ -81,6 +81,9 @@ class HouseForm(forms.ModelForm):
             ),
             'max_stay': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 0}
+            ),
+            'description': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 10, 'placeholder': '.'}
             ),
             'other_rules': forms.Textarea(
                 attrs={'class': 'form-control', 'rows': 10, 'placeholder': '.'}
@@ -231,17 +234,17 @@ class ApplyForm(forms.Form):
             'class': 'form-control', 'placeholder': 'Number of Guests',
         }, )
     )
-    move_in_data = forms.DateField(
-        label='Move in Data',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control', 'placeholder': 'Move in Date', 'data-toggle': 'datepicker',
+    move_in_date = forms.DateField(
+        label='Move in Date',
+        widget=forms.DateInput(attrs={
+            'class': 'form-control', 'placeholder': 'Move in Date',
             'readonly': True
         }, )
     )
-    move_out_data = forms.DateField(
-        label='Move out Data',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control', 'placeholder': 'Move out Date', 'data-toggle': 'datepicker',
+    move_out_date = forms.DateField(
+        label='Move out Date',
+        widget=forms.DateInput(attrs={
+            'class': 'form-control', 'placeholder': 'Move out Date',
             'readonly': True
         }, )
     )

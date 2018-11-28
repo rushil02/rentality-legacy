@@ -174,48 +174,32 @@ class HomePageSearchForm(forms.Form):
     location = forms.CharField(
         label='Location',
         widget=forms.TextInput(attrs={
-            'class': 'form-control marker search', 'placeholder': 'City, State, Post code'
+            'class': 'form-control marker search', 'placeholder': 'City, State, Post code',
         }, )
     )
     start_date = forms.DateField(
-        label='Start date',
+        label='Start date', required=False,
         widget=forms.TextInput(attrs={
-            'class': 'form-control', 'placeholder': 'Start Date', 'hidden': True, 'data-toggle': 'datepicker'
+            'placeholder': 'Start Date', 'hidden': True, 'data-toggle': 'datepicker',
         }, )
     )
     end_date = forms.DateField(
-        label='End date',
+        label='End date', required=False,
         widget=forms.TextInput(attrs={
-            'class': 'form-control', 'placeholder': 'End Date', 'hidden': True, 'data-toggle': 'datepicker'
+            'placeholder': 'End Date', 'hidden': True, 'data-toggle': 'datepicker',
+            'required': False
+
         }, )
     )
     home_type = forms.ModelChoiceField(
-        label='Home Type', queryset=HomeType.objects.all(),
+        label='Home Type', queryset=HomeType.objects.all(), required=False,
         widget=forms.Select(attrs={
-            'class': 'form-control type', 'placeholder': 'Home Type',
+            'class': 'form-control type', 'placeholder': 'Home Type', 'required': False
         }, )
     )
     rent = forms.IntegerField(
-        label='Rent',
+        label='Rent', required=False,
         widget=forms.TextInput(attrs={
-            'class': 'form-control amount', 'placeholder': 'Rent $AUD/week',
+            'class': 'form-control amount', 'placeholder': 'Rent $AUD/week', 'required': False
         }, )
-    )
-
-
-class SearchPageSearchForm(forms.Form):
-    location = forms.CharField(
-        label='Location',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control', 'placeholder': 'City, State, Postcode, etc.'
-        }, )
-    )
-    bedrooms = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bedrooms', }), required=False
-    )
-    bathrooms = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'No. of bathrooms'}), required=False
-    )
-    max_price = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max Rent'}), required=False
     )

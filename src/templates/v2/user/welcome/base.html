@@ -54,7 +54,7 @@
     <div class="header d-flex">
         <div class="w-100 align-self-center">
             <div class="container">
-                <h1 class="title">Creating a Global Community for Temporary <span>Home</span> Rental.</h1>
+                <h1 class="title">Creating a Global Community for Temporary <span>Home</span> Rentals</h1>
                 <h2 class="sub-title">Book your Home for the next few months </h2>
             </div>
         </div>
@@ -64,22 +64,19 @@
                     <div class="col-xl-2"></div>
                     <div class="col-12 col-xl-8">
                         <form action="{% url 'user:search' %}" method="GET" id="search_form">
+                            {{ search_form.start_date }}
+                            {{ search_form.end_date }}
                             <div class="detail">
                                 <div class="row" style="padding-left: 10px">
                                     <div class="col-md-5">
                                         {{ search_form.location }}
                                     </div>
-{#                                    <div class="col-md-2">#}
-                                        {{ search_form.start_date }}
-{#                                    </div>#}
-{#                                    <div class="col-md-2">#}
-                                        {{ search_form.end_date }}
-{#                                    </div>#}
                                     <div class="col-md-4">
                                         <div style="position: relative">
                                             <div class="dropdown">
-                                                <input type="text" id="placeholder-date" class="form-control date" readonly placeholder="Select Dates"
-                                                       data-toggle="dropdown">
+                                                <input type="text" id="placeholder-date" class="form-control date"
+                                                       readonly placeholder="Select Dates"
+                                                       data-toggle="dropdown" required>
                                                 <div class="dropdown-menu">
                                                     <div class="calendar"></div>
                                                 </div>
@@ -130,8 +127,7 @@
             <h1 class="title">Recommended for you</h1>
             <div class="row">
                 <div class="col-md-8">
-                    <h2 class="sub-title">We think you might be interested. You must check these. There is really great
-                        opportunity.</h2>
+                    <h2 class="sub-title"></h2>
                 </div>
                 <div class="col-md-4 text-right align-self-end">
                     <a href="{% url 'user:search' %}" class="load-more">Load More</a>
@@ -147,7 +143,7 @@
                                     <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_small'|default:default_property_small }}"
                                          class="w-100" alt="" title="">
                                 </div>
-                                <h1>{{ house.home_type }}</h1>
+                                <h1>{{ house.title|title }} | {{ house.home_type }}</h1>
                                 <h2>{{ house.get_location|title }}</h2>
                                 <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
                                 </div>
@@ -163,8 +159,8 @@
     <!-- cities start -->
     <div class="cities">
         <div class="container">
-            <h1 class="title">Discover City Furnish apartments</h1>
-            <h2 class="sub-title">Discover the Furnished apartments in the city you want</h2>
+            <h1 class="title">Discover Furnished Apartments</h1>
+            <h2 class="sub-title"></h2>
             <div class="big-lists">
                 <div class="row">
                     <div class="col-md-6">
@@ -240,7 +236,7 @@
                                     <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_large'|default:default_property_large }}"
                                          class="w-100" alt="" title="">
                                 </div>
-                                <h1>{{ house.home_type }}</h1>
+                                <h1>{{ house.title|title }} | {{ house.home_type }}</h1>
                                 <h2>{{ house.get_location|title }}</h2>
                                 <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
                                 </div>

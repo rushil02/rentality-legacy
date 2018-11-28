@@ -30,10 +30,10 @@ def apply_temp(request, house_uuid):
                   "applicant email - %s \n" \
                   "house - %s \n" \
                   "dates - %s to %s \n" \
-                  "guests - %s" % (email, house, form.cleaned_data['move_in_data'], form.cleaned_data['move_out_data'], form.cleaned_data['guests'])
+                  "guests - %s" % (email, house, form.cleaned_data['move_in_date'], form.cleaned_data['move_out_date'], form.cleaned_data['guests'])
         send_mail("New Application", message, "support@rentality.com.au", ["admin@rentality.com.au"], fail_silently=True)
         messages.add_message(request, messages.SUCCESS,
-                             "Your application has been registered with us, We will contact you shortly for the next steps")
+                             "Your application has been registered with us, We will contact you shortly via your registered email for the next steps.")
     else:
         messages.add_message(request, messages.ERROR,
                              "Invalid Data Submission")

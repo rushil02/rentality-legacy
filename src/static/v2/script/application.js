@@ -65,7 +65,7 @@ $(document).ready(function () {
     <!-- footer start -->
     $(window).resize(function () {
         if (($('body > .footer').offset().top + $('body > .footer').outerHeight()) < $(window).height()) {
-            $('body > .footer').css({'position': 'absolute', 'bottom': 0, 'left': 0, 'right': 0});
+            $('body:not(:has(.page-map)) > .footer').css({'position': 'absolute', 'bottom': 0, 'left': 0, 'right': 0});
         }
     });
 
