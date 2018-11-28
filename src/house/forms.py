@@ -83,7 +83,7 @@ class HouseForm(forms.ModelForm):
                 attrs={'class': 'form-control', 'placeholder': 0}
             ),
             'other_rules': forms.Textarea(
-                attrs={'class': 'form-control', 'rows': 10, 'placeholder':'.'}
+                attrs={'class': 'form-control', 'rows': 10, 'placeholder': '.'}
             ),
             'cancellation_policy': forms.Select(
                 attrs={'class': 'd-none'}
@@ -166,7 +166,6 @@ HousePhotoFormSet = inlineformset_factory(House, Image, form=HousePhotoForm, ext
 
 
 class HouseRuleForm(forms.ModelForm):
-
     class Meta:
         model = HouseRule
         fields = ['value', 'comment']
@@ -223,3 +222,31 @@ class HouseRemoveTypeForm(forms.Form):
 class HouseMarkLeasedForm(forms.Form):
     confirm = forms.TypedChoiceField(coerce=lambda x: x == 'True',
                                      choices=((False, 'No'), (True, 'Yes')))
+
+
+class ApplyForm(forms.Form):
+    guests = forms.ChoiceField(
+        label='Guests',
+        widget=forms.Select(attrs={
+            'class': 'form-control', 'placeholder': 'Number of Guests',
+        }, )
+    )
+    move_in_data = forms.DateField(
+        label='Move in Data',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 'placeholder': 'Move in Date', 'data-toggle': 'datepicker',
+            'readonly': True
+        }, )
+    )
+    move_out_data = forms.DateField(
+        label='Move out Data',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 'placeholder': 'Move out Date', 'data-toggle': 'datepicker',
+            'readonly': True
+        }, )
+    )
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('obj')
+        super(ApplyForm, self).__init__(*args, **kwargs)
+        self.fields['guests'].choices = [(i + 1, i + 1) for i in range(obj.max_people_allowed)]

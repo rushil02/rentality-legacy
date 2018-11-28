@@ -163,99 +163,97 @@
                 <div class="col-lg-5 col-xl-4">
                     <!-- page detail right start -->
                     <div class="right">
-                        <!-- page detail right user start -->
-                        <div class="user">
-                            {% static 'image/placeholders/profile-large.png' as default_profile_pic %}
-                            <img src="{{ house.get_owner.userprofile.profile_pic|thumbnail_url:'profile_house_info'|default:default_profile_pic }}"
-                                 class="rounded-circle" alt=""
-                                 title="">
-                            <h2>{{ house.get_owner.get_full_name|title }}</h2>
-                            {#                            <div class="star x5"></div>#}
-                            <div class="list">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item title">Hobbies</li>
-                                    {% for personality_tag in house.get_owner.userprofile.get_personality_tags %}
-                                        <li class="list-inline-item"><a href="">#{{ personality_tag }}</a></li>
-                                    {% endfor %}
-                                </ul>
+                        <form action="{% url 'house:apply' house.uuid %}" method="GET">
+                            <!-- page detail right user start -->
+                            <div class="user">
+                                {% static 'image/placeholders/profile-large.png' as default_profile_pic %}
+                                <img src="{{ house.get_owner.userprofile.profile_pic|thumbnail_url:'profile_house_info'|default:default_profile_pic }}"
+                                     class="rounded-circle" alt=""
+                                     title="">
+                                <h2>{{ house.get_owner.get_full_name|title }}</h2>
+                                {#                            <div class="star x5"></div>#}
+                                <div class="list">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item title">Hobbies</li>
+                                        {% for personality_tag in house.get_owner.userprofile.get_personality_tags %}
+                                            <li class="list-inline-item"><a href="">#{{ personality_tag }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <!-- page detail right user end -->
-                        <!-- page detail right date start -->
-                        <div class="date">
-                            <div class="title">Date</div>
-                            <div class="in-out">
+                            <!-- page detail right user end -->
+                            <!-- page detail right date start -->
+                            <div class="date">
+                                <div class="title">Date</div>
+                                <div class="in-out">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <div class="sub-title">Move in</div>
+                                            {{ form.move_in_data }}
+                                        </div>
+                                        <div class="col-2 center-arrow"></div>
+                                        <div class="col-5">
+                                            <div class="sub-title text-right">Move out</div>
+                                            {{ form.move_out_data }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- page detail right date end -->
+                            <!-- page detail right quest start -->
+                            <div class="quest">
                                 <div class="row">
-                                    <div class="col-5">
-                                        <div class="sub-title">Move in</div>
-                                        <input type="text" class="form-control" value="Dec 08 2018" readonly
-                                               data-toggle="datepicker">
+                                    <div class="col-8">
+                                        <div class="title">Number of Guests</div>
                                     </div>
-                                    <div class="col-2 center-arrow"></div>
-                                    <div class="col-5">
-                                        <div class="sub-title text-right">Move out</div>
-                                        <input type="text" class="form-control text-right" value="Jan 06 2019" readonly
-                                               data-toggle="datepicker">
+                                    <div class="col-4">
+                                        <div class="select-arrow">
+                                            {{ form.guests }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- page detail right date end -->
-                        <!-- page detail right quest start -->
-                        <div class="quest">
-                            <div class="row">
-                                <div class="col-8">
-                                    <div class="title">Number of Guests</div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="select-arrow">
-                                        <select class="form-control">
-                                            {% with ''|center:house.max_people_allowed as range %}
-                                                {% for option_num in range%}
-                                                    <option>{{ forloop.counter }}</option>
-                                                {% endfor %}
-                                            {% endwith %}
-                                        </select>
+                            <!-- page detail right quest end -->
+                            <!-- page detail right amount start -->
+                            <div class="amount">
+                                <div class="calculate">
+                                    <div class="left-padding">
+                                        <div class="row">
+                                            <div class="col-8 gray">Rent (${{ house.rent }}) x 4 weeks:</div>
+                                            <div class="col-4 text-right bold">${% widthratio house.rent 1 4 %} AUD
+                                            </div>
+                                        </div>
+                                        <div class="row bottom-margin">
+                                            <div class="col-8 gray">Service fee:
+                                            </div>
+                                            <div class="col-4 text-right bold">${% widthratio house.rent 100 32 %} AUD
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-8 gray">Amount payable:</div>
+                                            <div class="col-4"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-8 gray"><span>(First month + Service fee)</span></div>
+                                            {% widthratio house.rent 100 32 as service_fee %}
+                                            <div class="col-4 text-right normal">${{ house.rent|add:service_fee }} AUD
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- page detail right quest end -->
-                        <!-- page detail right amount start -->
-                        <div class="amount">
-                            <div class="calculate">
                                 <div class="left-padding">
                                     <div class="row">
-                                        <div class="col-8 gray">Rent (${{ house.rent }}) x 4 weeks:</div>
-                                        <div class="col-4 text-right bold">${% widthratio house.rent 1 4 %} AUD</div>
-                                    </div>
-                                    <div class="row bottom-margin">
-                                        <div class="col-8 gray">Service fee:
-                                        </div>
-                                        <div class="col-4 text-right bold">${% widthratio house.rent 100 32 %} AUD</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-8 gray">Amount payable:</div>
-                                        <div class="col-4"></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-8 gray"><span>(First month + Service fee)</span></div>
-                                        {% widthratio house.rent 100 32 as service_fee %}
-                                        <div class="col-4 text-right normal">${{ house.rent|add:service_fee }} AUD</div>
+                                        <div class="col-8 small-normal">Amount payable</div>
+                                        <div class="col-4 text-right red">${{ house.rent|add:service_fee }} AUD</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="left-padding">
-                                <div class="row">
-                                    <div class="col-8 small-normal">Amount payable</div>
-                                    <div class="col-4 text-right red">${{ house.rent|add:service_fee }} AUD</div>
+                                <div class="left-right-margin">
+                                    <button type="submit" class="btn btn-link btn-block">Apply Now</button>
                                 </div>
                             </div>
-                            <div class="left-right-margin">
-                                <button type="button" class="btn btn-link btn-block">Apply Now</button>
-                            </div>
-                        </div>
-                        <!-- page detail right amount end -->
+
+                            <!-- page detail right amount end -->
+                        </form>
                     </div>
                     <!-- page detail right end -->
                 </div>
