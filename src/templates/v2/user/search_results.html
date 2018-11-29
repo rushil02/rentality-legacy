@@ -20,7 +20,9 @@
     <!-- page map filter start -->
     <div class="page-map-filter position-sticky sticky-top">
         <div class="container">
-            <form action="" method="">
+            <form action="{% url 'user:search' %}" method="GET" id="search_form">
+                {{ search_form.start_date }}
+                {{ search_form.end_date }}
                 <div class="row">
                     <div class="col-md-3">
                         {{ search_form.location }}
@@ -28,8 +30,9 @@
                     <div class="col-md-3">
                         <div style="position: relative">
                             <div class="dropdown">
-                                <input type="text" class="form-control date" placeholder="17- Dec 21 Now 2018" readonly
-                                       data-toggle="dropdown">
+                                <input type="text" class="form-control date" placeholder="Select Dates" readonly
+                                       id="placeholder-date"
+                                       data-toggle="dropdown" required>
                                 <div class="dropdown-menu">
                                     <div class="calendar"></div>
                                 </div>
@@ -113,6 +116,16 @@
 {% endblock %}
 
 {% block page_scripts %}
+    <script>
+        $(document).ready(function () {
+            let start_date = $('#id_start_date').val();
+            let end_date = $('#id_end_date').val();
+            if(start_date && end_date) {
+                $('#placeholder-date').val($('#id_start_date').val() + ' to ' + $('#id_end_date').val());
+            }
+        })
+    </script>
+
     <!-- page map api start -->
     <script>
         var map, locations = [], markers = [], infowindow;
@@ -237,17 +250,25 @@
 
         var process = true;
 
+        var first_iter_check = true;
+
+        var data_available = true;
+
+        var pagination_start = 0;
+
+        var pagination_end = 10;
+
         function get_html(data) {
-            return ''+
+            return '' +
                 '        <a href="/property/info/' + data["uuid"] + '"  class="list" data-lat="-33.436050" data-lng="151.095432" data-rating="#93c94c">\n' +
                 '            <div class="rating">\n' +
-                '                <img src="static/image/page-map/map/profile-1.png" class="rounded-circle" alt=""\n' +
+                '                <img src="' + data["user_image"] + '" class="rounded-circle" alt=""\n' +
                 '                     title="">\n' +
                 '            </div>\n' +
                 '            <div class="image">\n' +
-                '                <img src="static/image/page-map/map/1.png" class="w-100" alt="" title="">\n' +
+                '                <img src="' + data["thumbnail"] + '" class="w-100" alt="" title="">\n' +
                 '            </div>\n' +
-                '            <h1>' + data['title'] + '</h1>\n' +
+                '            <h1>' + data['title'] + ' | ' + data['home_type'] + '</h1>\n' +
                 '            <h2>' + data['location'] + '</h2>\n' +
                 '            <div>Min<span>' + data['min'] + '</span></div>\n' +
                 '            <div>Rent<span> $' + data['rent'] + ' ./week</span></div>\n' +
@@ -255,7 +276,7 @@
         }
 
         $(window).scroll(function () {
-            if (process) {
+            if (process && data_available) {
                 if (($(window).scrollTop() + $(window).height()) == $(document).height()) {
                     process = false;
                     $('.page-map .lists').append('<div id="loading" style="margin-top: 60px; text-align: center;"><img src="static/image/loading.gif">');
@@ -264,12 +285,27 @@
 
                     var searchParams = new URLSearchParams(window.location.search);
 
-                    $.getJSON("{% url 'user:search_api' %}?location=" + searchParams.get('location') + "&start-date=" + searchParams.get('start-date') + "&end-date=" + searchParams.get('end-date'), function (data) {
+                    $.getJSON("{% url 'user:search_api' %}?location=" + searchParams.get('location') + "&start-date=" + searchParams.get('start-date') + "&end-date=" + searchParams.get('end-date') + "&pagination-start=" + pagination_start + "&pagination-end=" + pagination_end, function (data) {
+                        if (data.length > 0) {
+                            pagination_start = pagination_end;
+                            pagination_end += 10;
+                            if (first_iter_check) {
+                                first_iter_check = false;
+                                $('body > .footer').css({
+                                    'position': 'relative',
+                                });
+                            }
+                        } else {
+                            data_available = false;
+                            if (first_iter_check) {
+                                first_iter_check = false;
+                                $('.page-map .lists').append('<div id="loading" style="margin-top: 60px; text-align: center;">Sorry, We couldn\'t find anything relevant to your preference.</div>');
+                            }
+                        }
                         $.each(data, function (key, val) {
                             val = val['_source'];
                             console.log(val);
                             $('.page-map > .container > .lists > .row').append('<div class="col-md-4 col-lg-3">' + get_html(val) + '</div>');
-
                         });
 
                         for (var i = 0; i < markers.length; i++) {
@@ -284,40 +320,40 @@
                             }
                         });
 
-                        for (var i = 0; i < locations.length; i++) {
-                            var marker = new google.maps.Marker({
-                                position: new google.maps.LatLng(locations[i][0], locations[i][1]),
-                                map: map,
-                                icon: 'static/image/marker.png'
-                            });
-
-                            marker['infowindow'] = new google.maps.InfoWindow({
-                                content: '<a href="' + locations[i][2] + '" target="_blank"><h1>' + locations[i][4] + '</h1><h2>' + locations[i][5] + '</h2><img src="' + locations[i][3] + '"><div>Min<span>' + locations[i][6] + '</span></div><div>Rent<span>' + locations[i][7] + '</span></div><div class="rating"><div class="round" style="background-color: ' + locations[i][8] + ';"></div>' + locations[i][9] + '</div></a>'
-                            });
-
-                            markers.push(marker);
-
-                            google.maps.event.addListener(marker, 'click', function () {
-                                if (infowindow) {
-                                    infowindow.close();
-                                }
-
-                                for (var i = 0; i < markers.length; i++) {
-                                    markers[i].setIcon('static/image/marker.png');
-                                }
-
-                                this.setIcon('static/image/marker-active.png');
-
-                                google.maps.event.addListener(this['infowindow'], 'closeclick', function () {
-                                    for (var i = 0; i < markers.length; i++) {
-                                        markers[i].setIcon('static/image/marker.png');
-                                    }
-                                });
-
-                                this['infowindow'].open(map, this);
-                                infowindow = this['infowindow'];
-                            });
-                        }
+                        {#for (var i = 0; i < locations.length; i++) {#}
+                        {#    var marker = new google.maps.Marker({#}
+                        {#        position: new google.maps.LatLng(locations[i][0], locations[i][1]),#}
+                        {#        map: map,#}
+                        {#        icon: 'static/image/marker.png'#}
+                        {#    });#}
+                        {##}
+                        {#    marker['infowindow'] = new google.maps.InfoWindow({#}
+                        {#        content: '<a href="' + locations[i][2] + '" target="_blank"><h1>' + locations[i][4] + '</h1><h2>' + locations[i][5] + '</h2><img src="' + locations[i][3] + '"><div>Min<span>' + locations[i][6] + '</span></div><div>Rent<span>' + locations[i][7] + '</span></div><div class="rating"><div class="round" style="background-color: ' + locations[i][8] + ';"></div>' + locations[i][9] + '</div></a>'#}
+                        {#    });#}
+                        {##}
+                        {#    markers.push(marker);#}
+                        {##}
+                        {#    google.maps.event.addListener(marker, 'click', function () {#}
+                        {#        if (infowindow) {#}
+                        {#            infowindow.close();#}
+                        {#        }#}
+                        {##}
+                        {#        for (var i = 0; i < markers.length; i++) {#}
+                        {#            markers[i].setIcon('static/image/marker.png');#}
+                        {#        }#}
+                        {##}
+                        {#        this.setIcon('static/image/marker-active.png');#}
+                        {##}
+                        {#        google.maps.event.addListener(this['infowindow'], 'closeclick', function () {#}
+                        {#            for (var i = 0; i < markers.length; i++) {#}
+                        {#                markers[i].setIcon('static/image/marker.png');#}
+                        {#            }#}
+                        {#        });#}
+                        {##}
+                        {#        this['infowindow'].open(map, this);#}
+                        {#        infowindow = this['infowindow'];#}
+                        {#    });#}
+                        {#//}#}
 
                         $('.page-map .lists').find('#loading').remove();
                         process = true;

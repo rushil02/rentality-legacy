@@ -35,6 +35,7 @@ class House(BaseModel):
     min_stay = Integer()
     uuid = Keyword()
     rating = HalfFloat()
+    thumbnail = Text(index=False)
     user_image = Text(index=False)
 
     class IndexInfo(BaseModel.IndexInfo):

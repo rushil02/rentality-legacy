@@ -302,6 +302,8 @@ FLAT_PAGE_TEMPLATES = (
 )
 
 # Easy Thumbnail
+# FIXME: Set target and refactor usage (if applicable)
+# https://easy-thumbnails.readthedocs.io/en/stable/usage/
 THUMBNAIL_ALIASES = {
     '': {
         'profile_navbar': {'size': (41, 41), 'crop': "smart", 'autocrop': True, 'upscale': True},

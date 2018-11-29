@@ -65,7 +65,7 @@ $(document).ready(function () {
     <!-- footer start -->
     $(window).resize(function () {
         if (($('body > .footer').offset().top + $('body > .footer').outerHeight()) < $(window).height()) {
-            $('body:not(:has(.page-map)) > .footer').css({'position': 'absolute', 'bottom': 0, 'left': 0, 'right': 0});
+            $('body > .footer').css({'position': 'absolute', 'bottom': 0, 'left': 0, 'right': 0});
         }
     });
 
@@ -502,7 +502,7 @@ $(document).ready(function () {
     });
 
     $('body > .page-map-filter .calendar').on('pickmeup-change', function (e) {
-        $('body > .page-map-filter .date').val(e.detail.formatted_date[0] + ' - ' + e.detail.formatted_date[1]);
+        $('body > .page-map-filter .date').val(e.detail.formatted_date[0] + ' to ' + e.detail.formatted_date[1]);
     });
 
     <!-- page map filter end -->

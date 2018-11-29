@@ -170,6 +170,8 @@ class CustomResetPasswordKeyForm(AllAuthResetPasswordKeyForm):
         self.fields['password2'].widget.attrs['class'] = "form-control"
 
 
+
+# FIXME: This is in the wrong package
 class HomePageSearchForm(forms.Form):
     location = forms.CharField(
         label='Location',
@@ -203,3 +205,9 @@ class HomePageSearchForm(forms.Form):
             'class': 'form-control amount', 'placeholder': 'Rent $AUD/week', 'required': False
         }, )
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['home_type'].choices = [(None, "Select Home Type"),] + \
+                list(self.fields["home_type"].choices)[1:]
+
