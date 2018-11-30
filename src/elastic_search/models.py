@@ -1,10 +1,9 @@
-from elasticsearch_dsl import Text, Completion, Keyword, Integer, DateRange, HalfFloat
+from elasticsearch_dsl import Text, Completion, Keyword, Integer, DateRange, HalfFloat, GeoPoint
 
 from elastic_search.core.models import BaseModel
 from elastic_search.core.utils import get_index_name
 
 
-# FIXME: optimize
 class Location(BaseModel):
     suburb = Text(
         multi=True,
@@ -34,6 +33,7 @@ class House(BaseModel):
     availability = DateRange()
     min_stay = Integer()
     uuid = Keyword()
+    geo_point = GeoPoint()
     rating = HalfFloat()
     thumbnail = Text(index=False)
     user_image = Text(index=False)

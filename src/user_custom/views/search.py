@@ -14,10 +14,13 @@ def search(request):
     return render(request, 'user/search_results.html', context)
 
 
+# def get_region(location_phrase):
+#     q =
+
 def search_api(request):
     location = request.GET.get('location', '')
     slice_start = int(request.GET.get('pagination-start', 0))
     slice_end = int(request.GET.get('pagination-end', 10))
-    s = House.search().query('fuzzy', location=location)[slice_start:slice_end]
+    s = House.search().query('match_all')[slice_start:slice_end]
     results = s.execute().to_dict()
     return JsonResponse(results['hits']['hits'], safe=False)
