@@ -277,7 +277,7 @@
 
         $(window).scroll(function () {
             if (process && data_available) {
-                if (($(window).scrollTop() + $(window).height()) == $(document).height()) {
+                if (first_iter_check || ($(window).scrollTop() + $(window).height()) == $(document).height()) {
                     process = false;
                     $('.page-map .lists').append('<div id="loading" style="margin-top: 60px; text-align: center;"><img src="static/image/loading.gif">');
 
