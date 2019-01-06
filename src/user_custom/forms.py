@@ -12,8 +12,9 @@ from allauth.account.forms import SignupForm as AllAuthSignupForm
 from allauth.account.forms import ChangePasswordForm as AllAuthChangePasswordForm
 from allauth.account.forms import ResetPasswordForm as AllAuthResetPasswordForm
 from allauth.account.forms import ResetPasswordKeyForm as AllAuthResetPasswordKeyForm
-
+from cities.models import PostalCode
 from utils.form_thumbnailer import ImageClearableFileInput
+from dal import autocomplete
 
 
 class ProfileForm1(forms.ModelForm):
@@ -173,11 +174,10 @@ class CustomResetPasswordKeyForm(AllAuthResetPasswordKeyForm):
 
 # FIXME: This is in the wrong package
 class HomePageSearchForm(forms.Form):
-    location = forms.CharField(
+    location = forms.ModelChoiceField(
+        queryset=PostalCode.objects.all(),
         label='Location',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control marker search', 'placeholder': 'City, State, Post code',
-        }, )
+        required=False
     )
     start_date = forms.DateField(
         label='Start date', required=False,

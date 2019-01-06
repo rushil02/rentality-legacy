@@ -285,7 +285,7 @@
 
                     var searchParams = new URLSearchParams(window.location.search);
 
-                    $.getJSON("{% url 'user:search_api' %}?location=" + searchParams.get('location') + "&start-date=" + searchParams.get('start-date') + "&end-date=" + searchParams.get('end-date') + "&pagination-start=" + pagination_start + "&pagination-end=" + pagination_end, function (data) {
+                    $.getJSON("{% url 'user:search_api' %}?location=" + searchParams.get('location') + "&start-date=" + searchParams.get('start-date') + "&end-date=" + searchParams.get('end-date') + "&pagination-start=" + pagination_start + "&pagination-end=" + pagination_end + "&home_type=" + searchParams.get('home_type') + "&rent=" + searchParams.get('rent'), function (data) {
                         if (data.length > 0) {
                             pagination_start = pagination_end;
                             pagination_end += 10;
