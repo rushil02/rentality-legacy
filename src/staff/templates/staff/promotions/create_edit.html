@@ -1,0 +1,87 @@
+{% extends 'staff/base.html' %}
+
+{% load static %}
+{% load staff_custom_tags %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Create New Promotion Code</h3>
+            </div>
+            <div class="title_right">
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="x_title">
+                            <h2>Basic Information
+                                <small>different form elements</small>
+                            </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br>
+                            <div class="form-horizontal form-label-left">
+                                {% for field in promo_form %}
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                            <label class="col-md-12">
+                                                {{ field }}
+                                            </label>
+                                            <p class="font-gray-dark col-md-12">{{ field.help_text }}</p>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                        <div class="x_title">
+                            <h2>Restrictions and Validations</h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br>
+                            <div class="form-horizontal form-label-left">
+                                {% regroup_fields validations_form as field_groups %}
+                                {% for field_group in field_groups %}
+                                    <div class="form-group">
+                                        {% for field in field_group %}
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                <label class="col-md-12">
+                                                    {{ field }}
+                                                </label>
+                                                <p class="font-gray-dark col-md-12">{{ field.help_text }}</p>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                {% endfor %}
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

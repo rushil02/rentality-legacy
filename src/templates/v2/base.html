@@ -94,22 +94,22 @@
         <div class="menu white">
             <!-- alert start -->
             <div class="alerts-holder">
-            {% block notification %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-auto-hide {% if message.tags %} {{ message.tags }} {% endif %}">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <p>{{ message|safe }}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endblock notification %}
+                {% block notification %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-auto-hide {% if message.tags %} {{ message.tags }} {% endif %}">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <p>{{ message|safe }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endblock notification %}
 
-            {% block additional_notification %}
+                {% block additional_notification %}
 
-            {% endblock %}
+                {% endblock %}
             </div>
             <!-- alert end -->
 

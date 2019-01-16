@@ -8,7 +8,6 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import FileField
 from django.db.models.fields.files import ImageFieldFile
-from django.contrib.postgres.fields import JSONField
 from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 from django.contrib.postgres.fields import JSONField
@@ -20,15 +19,6 @@ def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (instance.uuid, ext)
     return os.path.join(path, filename)
-
-
-STATUS_CHOICES = (
-    ('P', 'Pending'),
-    ('A', 'Accepted'),
-    ('D', 'Declined'),
-    ('T', 'Timeout'),
-    ('E', 'Transaction Error')
-)
 
 
 class HomeType(models.Model):
@@ -43,7 +33,17 @@ class HomeType(models.Model):
         return "%s" % self.name
 
 
-class ActiveHouseManager(models.Manager):
+class HouseManager(models.Manager):
+    def objects_from_owner(self, user):
+        return super().get_queryset().filter(home_owner__user=user)
+
+
+class DeleteManager(HouseManager):
+    def get_queryset(self):
+        return super().get_queryset().exclude(status='D')
+
+
+class ActiveHouseManager(HouseManager):
     def get_queryset(self):
         return super().get_queryset().filter(status='P')
 
@@ -56,7 +56,6 @@ class House(models.Model):
     STATUS = (
         ('I', 'Inactive'),      Not Visible to Public, 1st state of any listing
         ('P', 'Published'),     Visible to Public
-        ('R', 'Removed'),       Not Visible to Public
         ('D', 'Deleted')        Deleted from user's account visibility, still in Database
     )
     """
@@ -99,6 +98,8 @@ class House(models.Model):
     parking = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name="Number of parking spaces")
 
     rent = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Per Week in AUD")
+    promo_codes = models.ManyToManyField('promotions.PromotionalCode', blank=True)
+
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),
         help_text=_('In days. Minimum and Default is 4 weeks (28 days).'), null=True, blank=True, default=28,
@@ -139,8 +140,9 @@ class House(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-    objects = models.Manager()
+    objects = DeleteManager()
     active_objects = ActiveHouseManager()
+    all_objects = HouseManager()
 
     # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
@@ -191,11 +193,21 @@ class House(models.Model):
         else:
             return None
 
+    def get_city(self):
+        if self.location:
+            return self.location.subregion_name
+        else:
+            return None
+
     def get_address(self):
         if self.address:
             return "%s, %s" % (self.address, self.get_location() or "")
         else:
             return None
+
+    def get_rent(self, **kwargs):
+        # TODO: Expand rent information on the basis of time, number of guests, etc.
+        return self.rent
 
     def save(self, *args, **kwargs):
         object_is_new = not self.pk
@@ -382,38 +394,6 @@ class Rule(models.Model):
 
     def __str__(self):
         return "%s" % self.verbose
-
-
-class Application(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    house = models.ForeignKey('house.House', on_delete=models.PROTECT)
-    house_meta = JSONField(null=True, blank=True)
-    tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.PROTECT)
-    tenant_meta = JSONField(null=True, blank=True)
-    rent = models.PositiveIntegerField()
-    fee = models.ForeignKey('billing.Fee', on_delete=models.PROTECT)
-    meta = JSONField(null=True, blank=True)
-    date = DateRangeField(verbose_name=_('stay dates'))
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "'%s' applied for %s" % (self.tenant, self.house)
-
-    class Meta:
-        unique_together = ('house', 'tenant')
-
-
-class ApplicationState(models.Model):
-    old_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    new_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    actor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True, blank=True
-    )
-    created_on = models.DateTimeField(auto_now_add=True)
 
 
 class CancellationPolicy(models.Model):

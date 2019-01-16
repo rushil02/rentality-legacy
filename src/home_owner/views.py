@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from django.contrib.auth.decorators import login_required
@@ -10,7 +10,7 @@ from home_owner.forms import HomeOwnerInfoForm, UserHomeOwnerForm, UserProfileHo
 from home_owner.serializers import ShortListSerializer
 from cities.models import Country
 from payments.stripe_wrapper import create_account, get_account
-from house.models import Application, ApplicationState
+from application.models import Application, ApplicationState
 from payments.stripe_wrapper import create_charge
 
 
@@ -124,8 +124,6 @@ def application_detail(request, application_uuid):
                     amount=amount,
                     destination_amount=destination_amount
                 )
-
-                print(charge.id)
 
                 order = Order(application=application, charge_id=charge.id)
                 order.save()

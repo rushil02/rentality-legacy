@@ -14,7 +14,7 @@ from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3,
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
     AvailabilityFormSet
 from house.models import House
-from house.serializer import HouseSerializer
+from house.serializers import HouseSerializer
 from messaging.forms import MessageForm
 from messaging.views import save_message, save_new_thread
 from user_custom.forms import EditProfileForm

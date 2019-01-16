@@ -1,8 +1,6 @@
 from allauth.account.decorators import verified_email_required
-from allauth.account.models import EmailAddress
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
-from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -19,7 +17,7 @@ from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3,
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
     AvailabilityFormSet, HouseRuleFormSet, SubmitOptionsForm
 from house.models import House, Image, Facility, HouseRule, NeighbourhoodDescriptor, WelcomeTag
-from house.serializer import ImageSerializer, FacilitySerializer, NearbyFacilitySerializer, WelcomeTagSerializer
+from house.serializers import ImageSerializer, FacilitySerializer, NearbyFacilitySerializer, WelcomeTagSerializer
 from cities.models import Country
 from payments.stripe_wrapper import create_account, get_account
 from user_custom.forms import ProfilePictureForm
@@ -100,9 +98,13 @@ def edit(request, house_uuid):
                         )
                         return render(request, 'property/create_edit/edit.html', context)
                     else:
-                        messages.add_message(request, messages.SUCCESS,
-                                             "All your data is saved! This is the last step to listing.")
-                        return redirect(reverse('house:payment', args=[house.uuid, ]))
+                        if not house.home_owner.account_id:
+                            messages.add_message(request, messages.SUCCESS,
+                                                 "All your data is saved! This is the last step to listing.")
+                            return redirect(reverse('house:payment', args=[house.uuid, ]))
+                        else:
+                            messages.add_message(request, messages.SUCCESS, "Your House information has been saved.")
+                            return redirect(reverse('user:dashboard'))
                 else:
                     if main_form.cleaned_data['exit']:
                         messages.add_message(request, messages.SUCCESS, "Your House information has been saved.")
@@ -151,7 +153,7 @@ class ImageUploadView(APIView):
 
     def post(self, request, house_uuid, *args, **kwargs):
         try:
-            house = House.objects.get(uuid=house_uuid)
+            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
         except House.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -169,7 +171,7 @@ class FacilityView(APIView):
 
     def get(self, request, house_uuid, *args, **kwargs):
         try:
-            house = House.objects.get(uuid=house_uuid)
+            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
         except House.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -185,7 +187,7 @@ class FacilityView(APIView):
 
     def post(self, request, house_uuid, *args, **kwargs):
         try:
-            house = House.objects.get(uuid=house_uuid)
+            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
         except House.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -205,7 +207,7 @@ class NearbyFacilitiesView(APIView):
 
     def get(self, request, house_uuid, *args, **kwargs):
         try:
-            house = House.objects.get(uuid=house_uuid)
+            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
         except House.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -221,7 +223,7 @@ class NearbyFacilitiesView(APIView):
 
     def post(self, request, house_uuid, *args, **kwargs):
         try:
-            house = House.objects.get(uuid=house_uuid)
+            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
         except House.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -242,7 +244,7 @@ class WelcomeTagView(APIView):
 
     def get(self, request, house_uuid, *args, **kwargs):
         try:
-            house = House.objects.get(uuid=house_uuid)
+            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
         except House.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -258,7 +260,7 @@ class WelcomeTagView(APIView):
 
     def post(self, request, house_uuid, *args, **kwargs):
         try:
-            house = House.objects.get(uuid=house_uuid)
+            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
         except House.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:

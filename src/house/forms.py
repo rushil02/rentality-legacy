@@ -29,6 +29,8 @@ class SubmitOptionsForm(forms.Form):
 
 
 class HouseForm(forms.ModelForm):
+    promo_codes = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Code'}),
+                                  required=False)
     submit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
     exit = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
     list_now = forms.BooleanField(widget=forms.CheckboxInput(attrs={'style': 'visibility: hidden'}), required=False)
@@ -252,4 +254,4 @@ class ApplyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('obj')
         super(ApplyForm, self).__init__(*args, **kwargs)
-        self.fields['guests'].choices = [(i + 1, i + 1) for i in range(obj.max_people_allowed)]
+        self.fields['guests'].choices = [(i + 1, i + 1) for i in range(obj.max_people_allowed or 1)]

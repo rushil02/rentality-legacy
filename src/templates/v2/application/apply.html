@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load thumbnail %}
+
+{% block content %}
+    <!-- page apply now start -->
+    <div class="page-apply-now">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-xl-8">
+                    <div class="left">
+                        <h1>Appliction for {{ house.get_owner.get_short_name|title }}’s Home </h1>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="input no-background top-margin">
+                                    <input type="text" class="form-control" disabled aria-disabled="true"
+                                           value="{{ request.user.first_name|title }}">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input no-background">
+                                    <input type="text" class="form-control" disabled aria-disabled="true"
+                                           value="{{ request.user.last_name|title }}">
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
+                                <div class="input no-background">
+                                    <input type="text" class="form-control" disabled aria-disabled="true"
+                                           value="{{ request.user.email }}">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input no-background">
+                                    <input type="text" class="form-control" disabled aria-disabled="true"
+                                           value="{{ request.user.userprofile.contact_num }}">
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5 col-lg-5">
+                                <div class="input no-background">
+
+                                    <div class="form-control">
+                                        <div style="padding-top: 12px; display: flex;">
+                                            <div style="width: 50%">Gender</div>
+                                            <div class="text-right" style="width: 50%">
+                                                <b>{{ request.user.userprofile.get_sex_display }} </b></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <h3>Tips on what to write to {{ house.get_owner.get_short_name|title }}</h3>
+                        <p>
+                            Who are you? Are you a Student? What is your occupation?<br>
+                            What're you like as a tenant? Are you quiet? Clean? Extrovert?<br>
+                            What brings you to {{ house.get_city|title }}?<br>
+                            What are your hobbies?
+                        </p>
+                        <textarea class="form-control" rows="6" style="resize: vertical;"></textarea>
+                        <h2>House Rules</h2>
+                        <p><span>Please Note : </span>By applying to this home, you agree to
+                            follow {{ house.get_owner.get_short_name|title }}’s house rules.</p>
+                        <div class="rule">
+                            <div class="row">
+                                {% for rule in house.get_rules %}
+                                    <div class="col-md-4">
+                                        <div class="list">
+                                            <h2>{{ rule.rule.verbose }}</h2>
+                                            <h3>{{ rule.value }}</h3>
+                                            <p>{{ rule.comment }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                {% endfor %}
+                                <div class="col-md-12 text-justify">
+                                    <h3>Additional rules</h3>
+                                    {{ house.other_rules|linebreaks }}
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Payment</h2>
+                        <p><span>Please Note : </span>You will not be charged until the host approves your application.</p>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="input no-background top-margin">
+                                    <input type="text" class="form-control"
+                                           placeholder="Card Number">
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-8">
+                                <div class="input no-background">
+                                    <input type="text" class="form-control"
+                                           placeholder="Name Surname">
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <div class="input no-background">
+                                    <input type="text" class="form-control"
+                                           placeholder="Expiry Date">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input no-background">
+                                    <input type="text" class="form-control"
+                                           placeholder="CCV">
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                        <p class="red">Card number is not correct.</p>
+                        <div class="checkbox auto-width">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" id="checkbox-1"
+                                               class="custom-control-input">
+                                        <label class="custom-control-label" for="checkbox-1">I agree to pay the total
+                                            amount
+                                            shawn and abide by the home rules</label>
+                                    </div>
+                                </li>
+                                <li class="list-inline-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" id="checkbox-2"
+                                               class="custom-control-input">
+                                        <label class="custom-control-label" for="checkbox-2">I agree to pay the total
+                                            amount
+                                            shawn and abide by the home rules when
+                                            the host accept my application</label>
+                                    </div>
+                                </li>
+                                <li class="list-inline-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" id="checkbox-3"
+                                               class="custom-control-input">
+                                        <label class="custom-control-label" for="checkbox-3">
+                                            I accept rentality.com.au's <a href="{% url 'django.contrib.flatpages.views.flatpage' url="tos/" %}">Terms of Service</a>
+                                            and <a href="{% url 'django.contrib.flatpages.views.flatpage' url="privacy-policy/" %}">Private Policy</a>,
+                                            and to abide by the host’s home rules.
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-xl-4">
+                    <div class="right">
+                        <div class="gallery">
+                            <div class="loop owl-carousel owl-theme">
+                                {% for img in house.get_images %}
+                                    <div class="item">
+                                        <img src="{{ img.image|thumbnail_url:'house_detail_small' }}" alt="" title="">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="padding">
+                            <div class="title">
+                                <h1>{{ house.title }}</h1>
+                                <p>{{ house.get_location }}</p>
+                            </div>
+                            <div class="date">
+                                <div class="in-out">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <div class="sub-title">Move in</div>
+                                            <div>{{ move_in_date }}</div>
+                                        </div>
+                                        <div class="col-2 center-arrow"></div>
+                                        <div class="col-5">
+                                            <div class="sub-title text-right">Move out</div>
+                                            <div class="text-right">{{ move_out_date }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="quest">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="title">Guests</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-right">
+                                            {{ guests }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list">
+                                <h2>Room Type</h2>
+                                <p>{{ house.get_home_type_display }}</p>
+                                <h2>Cancellation Policy</h2>
+                                <p>{{ house.cancellation_policy.verbose }}<i data-toggle="popover"
+                                              data-content="{{ house.cancellation_policy.description }}">Hover for Details</i></p>
+                            </div>
+                            <div class="amount">
+                                <div class="calculate">
+                                    <div class="left-padding">
+                                        <div class="row">
+                                            <div class="col-8 gray">${{ house.rent }} x {{ weeks }} weeks:</div>
+                                            <div class="col-4 text-right bold">$800 AUD</div>
+                                        </div>
+                                        <div class="row bottom-margin">
+                                            <div class="col-8 gray">Service fee:<i data-toggle="popover"
+                                                                                   data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">what
+                                                is this</i>
+                                            </div>
+                                            <div class="col-4 text-right bold">$48 AUD</div>
+                                        </div>
+                                    </div>
+                                    <div class="form">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <input type="text" class="form-control" placeholder="Discount Code">
+                                            </div>
+                                            <div class="col-4">
+                                                <button type="button" class="btn btn-link btn-block">Apply code</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="left-padding">
+                                    <div class="row">
+                                        <div class="col-8 small-normal">Total</div>
+                                        <div class="col-4 text-right red">$848 AUD</div>
+                                    </div>
+                                </div>
+                                <p class="last-p">
+                                    Please Note: you are not required to pay until the
+                                    host approve your application
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="button">
+                        <button type="button" class="btn btn-link">Apply Now</button>
+                        <button type="button" class="btn btn-link">Save application</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- page apply now end -->
+{% endblock %}

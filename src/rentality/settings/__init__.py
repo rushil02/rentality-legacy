@@ -92,7 +92,9 @@ INSTALLED_APPS = [
     'messaging.apps.MessagingConfig',
     'cities_custom.apps.CitiesCustomConfig',
     'blog.apps.BlogConfig',
-    'billing.apps.BillingConfig'
+    'billing.apps.BillingConfig',
+    'application.apps.ApplicationConfig',
+    'promotions.apps.PromotionsConfig'
 ]
 
 MIDDLEWARE = [

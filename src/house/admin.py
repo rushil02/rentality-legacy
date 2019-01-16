@@ -1,11 +1,23 @@
 from django.contrib import admin
 
-from house.models import House, Image, Application, HomeType, HouseProfile, Availability, Facility, HouseRule, Rule, \
+from house.models import House, Image, HomeType, HouseProfile, Availability, Facility, HouseRule, Rule, \
     CancellationPolicy
 
 
 class HouseAdmin(admin.ModelAdmin):
     autocomplete_fields = ['location']
+    list_display = ('home_owner', 'title', 'address', 'location', 'home_type', 'status')
+    list_filter = ('status', 'home_type')
+
+    def get_queryset(self, request):
+        if request.user.is_superuser:
+            qs = self.model.all_objects.get_queryset()
+            ordering = self.get_ordering(request)
+            if ordering:
+                qs = qs.order_by(*ordering)
+            return qs
+        else:
+            return super(HouseAdmin, self).get_queryset(request)
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -13,7 +25,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('uuid', )
+    list_display = ('uuid',)
 
 
 admin.site.register(Image, ImageAdmin)
@@ -21,7 +33,6 @@ admin.site.register(House, HouseAdmin)
 admin.site.register(HomeType)
 admin.site.register(Facility)
 admin.site.register(Availability)
-admin.site.register(Application, ApplicationAdmin)
 admin.site.register(HouseProfile)
 admin.site.register(HouseRule)
 admin.site.register(Rule)

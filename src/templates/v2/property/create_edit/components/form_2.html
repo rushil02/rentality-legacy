@@ -177,6 +177,31 @@
             </div>
 
 
+            <h1 class="title">Promo Code</h1>
+            <p>Enter your Voucher or Discount code, if applicable.</p>
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="input no-background">
+                        {{ main_form.promo_codes }}
+                    </div>
+                    <small class="form-text text-muted">
+                        {{ main_form.promo_codes.help_text }}
+                    </small>
+                    <div id="promo-result"></div>
+                    {% if main_form.promo_codes.errors %}
+                        {% for error in main_form.rent.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="verify-promo-code">
+                        Verify
+                    </button>
+                </div>
+            </div>
+
+
         </div>
         <div class="col-md-1"></div>
     </div>

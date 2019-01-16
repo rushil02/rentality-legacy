@@ -219,7 +219,13 @@
                                 <div class="calculate">
                                     <div class="left-padding">
                                         <div class="row">
-                                            <div class="col-8 gray">Rent (${{ house.rent }}) x
+                                            <div class="col-8 gray">Weekly Rent
+                                            </div>
+                                            <div class="col-4 text-right bold"> ${{ house.get_rent }} AUD
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-8 gray">Total Rent (${{ house.rent }}) x
                                                 <span id="num_weeks">0</span>
                                                 weeks:
                                             </div>
@@ -275,13 +281,14 @@
             });
         });
 
-        const rent = 0{{ house.rent }};
+        const rent = 0 + {{ house.get_rent }};
 
         function calculate_val(start, end) {
             start = new Date(start);
             end = new Date(end);
-            var weeks = parseFloat((end - start) / (1000 * 7 * 24 * 60 * 60)).toFixed(1);
+            var weeks = parseFloat((end - start + 1) / (1000 * 7 * 24 * 60 * 60)).toFixed(1);
             $('#num_weeks').text(weeks);
+            console.log(weeks, rent);
             $('#amount').text(parseFloat(weeks*rent).toFixed(2));
             $('#service-fee').text(parseFloat(rent*4*0.08).toFixed(2));
             $('#amount-payable').text(parseFloat((rent*4*0.08)+(rent*4)).toFixed(2));

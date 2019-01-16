@@ -40,6 +40,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('property/', include('house.urls')),
     path('blogs/', include('blog.urls')),
+    path('apply/', include('application.urls')),
+    path('promo/', include('promotions.urls')),
 
     # TODO: enable notifications
     # path('ess/', include('essentials.urls')),

@@ -93,8 +93,7 @@
                         window.removeEventListener("beforeunload", confirm_leave);
                         $('#main_form').submit();
                     }
-                }
-                else {
+                } else {
                     console.log("Error in dates");
                     calendar_feedback.text('Minimum length of stay allowed is more than or equal to 28 days.')
                 }
@@ -132,6 +131,17 @@
 
             $('#add-dates').disable();
 
+        });
+
+        $('#verify-promo-code').click(function () {
+            var code = $('#id_main-form-promo_codes').val();
+            $.getJSON("{% url 'promotions:verify_use' house_uuid=house.uuid %}", {'code': code}, function (data) {
+                if (data.valid) {
+                    $('#promo-result').append('<div class="valid-feedback" style="display:block;" >Promo-code Applied - ' + data.promo + '</div>')
+                } else {
+                    $('#promo-result').append('<div class="invalid-feedback" style="display:block;" >' + data.msg + ' - ' + code + '</div>')
+                }
+            });
         });
 
     </script>

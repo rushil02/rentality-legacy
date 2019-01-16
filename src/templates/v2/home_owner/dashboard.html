@@ -185,7 +185,7 @@
                                                                 class="btn btn-link">Edit
                                                         </button>
                                                         <button type="button"
-                                                                onclick="location.href='{% url 'house:create_edit' house.uuid %}';"
+                                                                onclick="location.href='{% url 'house:delete_object' house.uuid %}';"
                                                                 class="btn btn-link">Delete
                                                         </button>
                                                     {% else %}
@@ -194,12 +194,12 @@
                                                                 class="btn btn-link">Edit
                                                         </button>
                                                         <button type="button"
-                                                                onclick="location.href='{% url 'house:create_edit' house.uuid %}';"
+                                                                onclick="location.href='{% url 'house:delete_object' house.uuid %}';"
                                                                 class="btn btn-link">Delete
                                                         </button>
                                                         <button type="button"
-                                                                onclick="location.href='{% url 'house:create_edit' house.uuid %}';"
-                                                                class="btn btn-link">Remove
+                                                                onclick="location.href='{% url 'house:remove_public' house.uuid %}';"
+                                                                class="btn btn-link">Unlist
                                                         </button>
                                                     {% endif %}
                                                 </div>
