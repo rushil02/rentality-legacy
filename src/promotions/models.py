@@ -14,11 +14,11 @@ class MetaValueDoesNotExit(Exception):
 
 
 class PromotionalCodeManager(models.Manager):
-    def validate(self, code, user, entity, **kwargs):
+    def validate(self, code, user, applied_on_content_type, **kwargs):
         """
         :param code: code
         :param user: current user
-        :param entity: Entity on which the code is being used
+        :param applied_on_content_type: Content type of entity on which the code is being used
         :return: [Boolean, error_msg] or raises error
         """
         if self.get_queryset().filter(code=code).count() == 0:
@@ -31,7 +31,7 @@ class PromotionalCodeManager(models.Manager):
             except PromotionalCode.DoesNotExist:
                 return False, "This code has expired.", None
             else:
-                return [*code_obj.validate_for_use(user=user, entity=entity, **kwargs), code_obj]
+                return [*code_obj.validate_for_use(user=user, applied_on_content_type=applied_on_content_type, **kwargs), code_obj]
 
 
 class PromotionalCode(models.Model):
@@ -112,7 +112,7 @@ class PromotionalCode(models.Model):
         for validator in self.get_validators_list():
             method = self.get_validation_method(validator)
             try:
-                method(obj=self, user=None, entity=None, applied_on=None)
+                method(obj=self, user=None, applied_on_content_type=None, applied_on=None)
             except MetaValueDoesNotExit as e:
                 raise ValidationError({
                     'code': _(
@@ -192,9 +192,9 @@ class PromotionalCode(models.Model):
 
     # endregion
 
-    def default_validations(self, entity, applier_type):
+    def default_validations(self, applied_on_content_type, applier_type):
         # check applied_on
-        if self.applicable_on != ContentType.objects.get_for_model(entity):
+        if self.applicable_on != applied_on_content_type:
             return False
         # check applied by
         if self.applied_by != applier_type:
@@ -216,22 +216,24 @@ class PromotionalCode(models.Model):
         else:
             return self.get_meta_data('validation_list', default=[])
 
-    def validate_for_use(self, user, entity, applier_type, **kwargs):
+    def validate_for_use(self, user, applied_on_content_type, applier_type, **kwargs):
         """
         :param applier_type: can be home owner [H] or tenant [T]. Refer to 'applied_by' choices for all options.
         :param user: current user
-        :param entity: Entity on which the code is being used
+        :param applied_on_content_type: Content Type of entity on which the code is being used
         :returns Boolean, Error message if applicable
         """
         override_default_validation = self.get_meta_data(
             'override_default_validation', default=False
         )
         if not override_default_validation:
-            self.default_validations(entity, applier_type)
+            validation_result = self.default_validations(applied_on_content_type, applier_type)
+            if not validation_result:
+                return False, "This code is not valid."
         validations = self.get_validators_list()
         for validator in validations:
             method = self.get_validation_method(validator)
-            if method(obj=self, user=user, entity=entity, applier_type=applier_type, **kwargs):
+            if method(obj=self, user=user, applied_on_content_type=applied_on_content_type, applier_type=applier_type, **kwargs):
                 continue
             else:
                 return False, self.get_validation_error(validator)
