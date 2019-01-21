@@ -107,3 +107,15 @@ class AmountSerializer(serializers.Serializer):
     move_out_date = serializers.DateField(required=False)
     guests_num = serializers.IntegerField()
 
+
+class HomeOwnerRelatedField(serializers.RelatedField):
+    def to_representation(self, value):
+        return "{} {}".format(value.user.first_name, value.user.last_name).strip()
+
+
+class HouseSerializerForApplication(serializers.ModelSerializer):
+    class Meta:
+        model = House
+        fields = '__all__'
+    
+    home_owner = HomeOwnerRelatedField(read_only=True)
