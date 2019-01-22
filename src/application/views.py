@@ -1,12 +1,19 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework.decorators import api_view
 from django.views.decorators.http import require_GET
 from rest_framework.views import APIView
-from house.models import House
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from house.serializers import HouseSerializerForApplication
 from datetime import datetime
 from django.http import Http404
+
+from house.models import House
+from house.serializers import HouseSerializer, HouseSerializerForApplication
+
+
+def create_react(request, house_uuid):
+    get_object_or_404(House, uuid=house_uuid)
+    return render(request, 'react_base.html', {})
 
 
 @require_GET
@@ -41,12 +48,12 @@ class HouseDetailViewForApplication(APIView):
             house = House.active_objects.get(uuid=house_uuid)
         except:
             raise Http404
-        
+
         return house
-    
+
     def get_serializer(self, instance):
         return self.serializer_class(instance)
-    
+
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)

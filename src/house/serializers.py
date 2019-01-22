@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from cities_custom.serializers import LocationCitySerializer, PostalCodeSerializer
 from house.models import House, Image, Facility, NeighbourhoodDescriptor, WelcomeTag
 
 
@@ -119,3 +120,4 @@ class HouseSerializerForApplication(serializers.ModelSerializer):
         fields = '__all__'
     
     home_owner = HomeOwnerRelatedField(read_only=True)
+    location = PostalCodeSerializer(read_only=True)

@@ -1,0 +1,599 @@
+
+/********************************/
+/***** page apply now start *****/
+/********************************/
+
+.page-apply-now {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.page-apply-now .left h1 {
+    font-size: 25px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.page-apply-now .left h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2b32;
+    margin-top: 50px;
+}
+
+.page-apply-now .left h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2a2b32;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.page-apply-now p {
+    font-size: 15px;
+    font-weight: 400;
+    /*
+    color: #bcbcbc;
+    */
+    margin-bottom: 25px;
+}
+
+.page-apply-now p span {
+    /*
+    color: #6e6e6e;
+    */
+}
+
+.page-apply-now p.red {
+    font-size: 15px;
+    font-weight: 400;
+    color: #ff0000;
+    margin-top: 15px;
+    margin-bottom: 35px;
+}
+
+.page-apply-now .form-control {
+    font-size: 15px;
+    font-weight: 400;
+    padding-left: 50px;
+    padding-right: 0;
+    border: none;
+    border-bottom: 1px solid #c7cdd9;
+    border-radius: 0;
+    height: calc(2.25rem + 15px);
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+.page-apply-now .input .form-control:hover,
+.page-apply-now .input .form-control:focus {
+    box-shadow: none;
+}
+
+.page-apply-now .form-control::placeholder {
+    opacity: 1;
+    color: #676767;
+}
+
+.page-apply-now .input.no-background .form-control {
+    padding-left: 0;
+    background: none;
+}
+
+.page-apply-now .select {
+    position: relative;
+    font-size: 15px;
+    color: #676767;
+    font-weight: 400;
+    border-bottom: 1px solid #c7cdd9;
+    padding-top: 20px;
+    padding-bottom: 15px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 50px;
+    margin-top: 10px;
+}
+
+.page-apply-now .select select.form-control {
+    font-size: 17px;
+    font-weight: 800;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    color: #2a2b32;
+    height: auto;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: auto;
+    display: inline-block;
+    float: right;
+    padding-right: 44px;
+}
+
+.page-apply-now .select .form-control:hover,
+.page-apply-now .select .form-control:focus {
+    box-shadow: none;
+}
+
+.page-apply-now .select::after {
+    content: '';
+    display: block;
+    background-image: url('/static/image/form-1/select.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: absolute;
+    width: 14px;
+    height: 9px;
+    top: 28px;
+    right: 15px;
+    z-index: 0;
+}
+
+.page-apply-now .select select::-ms-expand {
+    display: none;
+}
+
+.page-apply-now .select {
+    padding-left: 0;
+    margin-top: 0;
+}
+
+.page-apply-now textarea.form-control {
+    border: 2px solid #3fc692;
+    resize: none;
+    background-color: transparent;
+    position: relative;
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+    padding: 20px;
+    height: auto;
+}
+
+.page-apply-now textarea.form-control:hover,
+.page-apply-now textarea.form-control:focus {
+    box-shadow: none;
+}
+
+.page-apply-now textarea.form-control::placeholder {
+    opacity: 0;
+    color: transparent;
+}
+
+.page-apply-now .checkbox .list-inline li {
+    width: 215px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+    margin-bottom: 35px;
+}
+
+.page-apply-now .checkbox.auto-width {
+    margin-top: 23px;
+}
+
+.page-apply-now .checkbox.auto-width .list-inline {
+    margin-bottom: 0;
+}
+
+.page-apply-now .checkbox.auto-width .list-inline li {
+    width: auto;
+    margin-right: 20px;
+}
+
+.page-apply-now .checkbox .list-inline li:not(:last-child) {
+    margin-right: 0;
+}
+
+.page-apply-now .checkbox.auto-width .list-inline li {
+    height: 70px;
+}
+
+.page-apply-now .checkbox.auto-width .list-inline li:not(:last-child) {
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.page-apply-now .checkbox .list-inline li .custom-control-label {
+    line-height: 25px;
+    padding-left: 15px;
+}
+
+.page-apply-now .checkbox .list-inline li .custom-control-label.black {
+    font-weight: 700;
+    color: #000000;
+}
+
+.page-apply-now .checkbox .list-inline li .custom-control-label::before {
+    width: 25px;
+    height: 25px;
+    margin-top: -4px;
+    border: 1px solid #cacaca;
+    background-color: #ffffff;
+    box-shadow: none;
+}
+
+.page-apply-now .checkbox .list-inline li .custom-control-label::after {
+    width: 25px;
+    height: 25px;
+    margin-top: -4px;
+}
+
+.page-apply-now .checkbox .list-inline li .custom-checkbox .custom-control-input ~ .custom-control-label::after {
+    transition: all .25s ease-in-out;
+    opacity: 0;
+}
+
+.page-apply-now .checkbox .list-inline li .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: url('/static/image/form-1/check.svg');
+    background-size: unset;
+    opacity: 1;
+}
+
+.page-apply-now .rule {
+    margin-bottom: 25px;
+}
+
+.page-apply-now .rule .list {
+
+    margin-bottom: 20px;
+}
+
+.page-apply-now .rule .list h2 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #2a2b32;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.page-apply-now .rule .list h3 {
+    font-size: 15px;
+    font-weight: 400;
+    color: #676767;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.page-apply-now .rule .list p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #bcbcbc;
+    margin-top: 0;
+    margin-bottom: 0
+}
+
+.page-apply-now .button {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.page-apply-now .button > button {
+    font-size: 16px;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+}
+
+.page-apply-now .button > button:not(:last-child) {
+    margin-right: 10px;
+}
+
+.page-apply-now .button > button:hover, .page-apply-now .button > button:focus {
+    text-decoration: none;
+}
+
+.page-apply-now .button > button:nth-child(2) {
+    font-weight: 400;
+    color: #2a2b32;
+    border: 1px solid #2a2b32;
+    padding: 12px 50px;
+}
+
+.page-apply-now .button > button:nth-child(2):hover {
+    background-color: #2a2b32;
+    color: #ffffff;
+}
+
+.page-apply-now .button > button:nth-child(1) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #36ffb1;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+}
+
+.page-apply-now .button > button:nth-child(1):hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+.page-apply-now .right {
+    border: 1px solid #dce0e8;
+}
+
+.page-apply-now .right .gallery {
+    padding: 3px;
+    position: relative;
+    z-index: 0;
+}
+
+.page-apply-now .right > .padding {
+    padding: 15px 20px;
+}
+
+.page-apply-now .right > .padding > .title {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e9ebf0;
+}
+
+.page-apply-now .right > .padding > .title h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+.page-apply-now .right > .padding > .title p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #bcbcbc;
+    margin-bottom: 0;
+}
+
+.page-apply-now .right .date {
+    padding-bottom: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e9ebf0;
+}
+
+.page-apply-now .right .date .in-out .sub-title {
+    font-size: 10px;
+    font-weight: 500;
+    color: #aeaeae;
+}
+
+.page-apply-now .right .date .in-out .form-control {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2a2b32;
+}
+
+.page-apply-now .right .date .in-out .form-control:hover, .page-apply-now .right .date .in-out .form-control:focus {
+    box-shadow: none;
+}
+
+.page-apply-now .right .date .in-out .center-arrow {
+    background-image: url('/static/image/page-detail/right-date/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.page-apply-now .right .quest {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e9ebf0;
+}
+
+.page-apply-now .right .quest .title {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+    line-height: 25px;
+}
+
+.page-apply-now .right .quest select.form-control {
+    font-size: 17px;
+    font-weight: 500;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    color: #646997;
+    height: auto;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.page-apply-now .right .quest select::-ms-expand {
+    display: none;
+}
+
+.page-apply-now .right .quest .select-arrow {
+    position: relative;
+}
+
+.page-apply-now .right .quest .select-arrow::after {
+    content: '';
+    display: block;
+    background-image: url('/static/image/page-detail/right-quest/select.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: absolute;
+    width: 10px;
+    height: 5px;
+    top: 9px;
+    right: 5px;
+    z-index: 0;
+}
+
+.page-apply-now .right .quest .form-control:hover,
+.page-apply-now .right .quest .form-control:focus {
+    box-shadow: none;
+}
+
+.page-apply-now .right .quest input.form-control {
+    border: none;
+    padding: 0;
+    height: calc(2.25rem - 8px);
+    font-size: 17px;
+    font-weight: 400;
+    color: #393939;
+    text-align: right;
+}
+
+.page-apply-now .right .quest input.form-control::placeholder {
+    opacity: 1;
+    color: #bcbcbc;
+}
+
+.page-apply-now .right .quest input.form-control:hover, .page-apply-now .right .quest input.form-control:focus {
+    box-shadow: none;
+}
+
+.page-apply-now .right .amount {
+}
+
+.page-apply-now .right .calculate {
+    padding-bottom: 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e8e8e9;
+}
+
+.page-apply-now .right .amount .left-padding .col-8 {
+    padding-right: 0;
+}
+
+.page-apply-now .right .amount .left-padding .col-4 {
+    padding-left: 0;
+}
+
+.page-apply-now .right .amount .left-right-margin {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.page-apply-now .right .amount .btn:hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+.page-apply-now .right .amount .gray {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+}
+
+.page-apply-now .right .amount .gray span {
+    font-size: 12px;
+}
+
+.page-apply-now .right .amount .bold {
+    font-size: 15px;
+    font-weight: 500;
+    color: #2a2b32;
+}
+
+.page-apply-now .right .amount .normal {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+}
+
+.page-apply-now .right .amount .small-normal {
+    font-size: 13px;
+    font-weight: 400;
+    color: #2a2b32;
+}
+
+.page-apply-now .right .amount .red {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ff4a4a;
+}
+
+.page-apply-now .right .amount .bottom-margin {
+    margin-bottom: 20px;
+}
+
+.page-apply-now .right i {
+    font-size: 15px;
+    font-weight: 400;
+    color: #bcbcbc;
+    background-image: url('/static/image/popover.svg');
+    background-repeat: no-repeat;
+    background-position: right center;
+    cursor: alias;
+    font-style: unset;
+    display: inline-block;
+    padding-right: 25px;
+    margin-left: 30px;
+}
+
+.page-apply-now .right .amount i {
+    margin-left: 10px;
+    padding-right: 25px;
+}
+
+.page-apply-now .right .list {
+    padding-top: 5px;
+}
+
+.page-apply-now .right .list h2 {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+}
+
+.page-apply-now .right .list p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #bcbcbc;
+    border-bottom: 1px solid #e9ebf0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.page-apply-now .right p.last-p {
+    font-size: 13px;
+    font-weight: 400;
+    color: #bcbcbc;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+.page-apply-now .right .form input.form-control {
+    border: none;
+    padding: 0;
+    height: calc(2.25rem - 8px);
+    font-size: 13px;
+    font-weight: 400;
+    color: #2a2b32;
+}
+
+.page-apply-now .right .form input.form-control::placeholder {
+    opacity: 1;
+    color: #bcbcbc;
+}
+
+.page-apply-now .right .form input.form-control:hover, .page-apply-now .right .form input.form-control:focus {
+    box-shadow: none;
+}
+
+.page-apply-now .right .form .btn {
+    font-size: 11px;
+    font-weight: 500;
+    color: #bcbcbc;
+    border: 1px solid #bcbcbc;
+    border-radius: 99px;
+    margin-bottom: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.page-apply-now .right .form .btn:hover {
+    background-color: inherit;
+    color: #bcbcbc !important;
+    border: 1px solid #56ffbd;
+}
+
+.page-apply-now .right .form .btn:hover, .page-apply-now .right .form .btn:focus {
+    text-decoration: none;
+}
+
+/********************************/
+/***** page apply now end *****/
+/********************************/
