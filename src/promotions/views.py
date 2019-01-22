@@ -35,8 +35,8 @@ def create_promotional_code(request):
 def verify_promo_use(request, house_uuid):
     house = House.objects.get(uuid=house_uuid, home_owner__user=request.user)
     result = PromotionalCode.objects.validate(
-        code=request.GET['code'], 
-        user=request.user, 
+        code=request.GET['code'],
+        user=request.user,
         applied_on_content_type=ContentType.objects.get_for_model(house),
         applier_type='H'
     )
@@ -55,23 +55,27 @@ class VerifyPromoUseView(APIView):
     :param: applier_types tenant | home_owner
     """
     permission_classes = (IsAuthenticated,)
-    applied_on_content_types = {
-        "application": ContentType.objects.get(app_label='application', model='application'),
-        "house": ContentType.objects.get(app_label='house', model='house')
-    }
+    
     applier_types = {
         "tenant": 'T',
         "home_owner": 'H'
     }
 
+    def __init__(self, *args, **kwargs):
+        self.applied_on_content_types = {
+            "application": ContentType.objects.get(app_label='application', model='application'),
+            "house": ContentType.objects.get(app_label='house', model='house')
+        }
+        super(VerifyPromoUseView, self).__init__(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         code = request.GET['code']
         applied_on = self.applied_on_content_types[request.GET['applied_on_content_type']]
         applier_type = self.applier_types[request.GET['applier_type']]
-        
+
         result = PromotionalCode.objects.validate(
             code=code,
-            user=request.user, 
+            user=request.user,
             applied_on_content_type=applied_on,
             applier_type=applier_type
         )

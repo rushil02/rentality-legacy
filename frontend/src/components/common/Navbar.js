@@ -155,7 +155,6 @@ class NavbarComponent extends Component {
                     </div>
                     <div className="gray"/>
                 </div>
-
             </React.Fragment>
         );
     }
