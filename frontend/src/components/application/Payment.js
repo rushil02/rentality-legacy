@@ -45,7 +45,7 @@ export default class Payment extends Component {
           </div>
           <div className="col-md-4"/>
         </div>
-        <p className="red">Card number is not correct.</p>
+        {/*<p className="red">Card number is not correct.</p>*/}
       </div>
     );
   }

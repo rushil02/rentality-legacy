@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import Navbar from "containers/common/Navbar";
-import Details from "./Details";
 import Form from "../../components/application/Form";
 import 'components/application/Application.css'
+import BookingDetails from "../../components/application/BookingDetails";
 
 class ApplicationPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      cost: null,
       house: null,
+      bookingDetails: null,
       tenant: {
         "firstName": "",
         "lastName": "",
@@ -54,7 +55,7 @@ class ApplicationPage extends Component {
     //   }));
 
     this.setState({
-      "data": {
+      "bookingDetails": {
         "total_rent": 1200,
         "calculated_rent": 500,
         "service_fee": 700,
@@ -62,19 +63,19 @@ class ApplicationPage extends Component {
       "house": {
         "id": 1,
         "homeOwner": "Elliott",
-        "location": null,
+        "location": "Location 1",
         "title": "House 1",
         "furnished": "Y",
         "addressHidden": "1",
         "address": "hello st",
-        "bedrooms": null,
-        "bathrooms": null,
+        "bedrooms": 3,
+        "bathrooms": 2,
         "parking": 1,
         "rent": 1000,
         "minStay": 28,
         "maxStay": 30,
         "maxPeopleAllowed": 3,
-        "description": "",
+        "description": "A nice 3 bedroom apartment",
         "other_rules": "",
         "otherPeopleDescription": "",
         "accessRestrictions": "",
@@ -84,7 +85,7 @@ class ApplicationPage extends Component {
         "createdOn": "2019-01-22T11:03:15.615791Z",
         "updatedOn": "2019-01-22T11:15:23.611375Z",
         "homeType": 1,
-        "cancellationPolicy": null,
+        "cancellationPolicy": "Moderate",
         "promoCodes": [],
         "facilities": [
           6,
@@ -169,7 +170,10 @@ class ApplicationPage extends Component {
                       />
                     </div>
                     <div className="col-lg-5 col-xl-4">
-                      <Details/>
+                      <BookingDetails
+                        houseDetails={this.state.house}
+                        bookingDetails={this.state.bookingDetails}
+                        />
                     </div>
                     <div className="col-12">
                       <div className="button">
