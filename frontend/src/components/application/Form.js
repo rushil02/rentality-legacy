@@ -29,7 +29,7 @@ class Form extends Component {
           ccv={this.props.ccv}
           onFieldChange={this.props.onPaymentFieldChange}/>
         <Agreements
-          agreeToHomeRules={this.props.agreeToHomeRules}
+          agreeToHouseRules={this.props.agreeToHouseRules}
           agreeToPay={this.props.agreeToPay}
           agreeToTermsAndConditions={this.props.agreeToTermsAndConditions}
           onFieldChange={this.props.onAgreementsFieldChange}/>

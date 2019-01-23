@@ -32,12 +32,11 @@ export default class HouseRules extends Component {
   };
 
   render() {
-    console.log("STATE", this.props);
     return (
       <div>
         <h2>House Rules</h2>
         <p>
-          Please Note: By applying to this home, you agree to follow {this.props.homeOwner}'s home rules.
+          Please Note: By applying to this home, you agree to follow {this.props.homeOwner}'s house rules.
         </p>
         <div className="rule">
           <div className="row">

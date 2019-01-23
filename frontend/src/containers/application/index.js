@@ -8,9 +8,10 @@ class ApplicationPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cost: null,
       house: null,
+      data: null,
       bookingDetails: null,
+      discountCode: "",
       tenant: {
         "firstName": "",
         "lastName": "",
@@ -26,7 +27,7 @@ class ApplicationPage extends Component {
         "ccv": ""
       },
       agreements: {
-        "agreeToHomeRules": false,
+        "agreeToHouseRules": false,
         "agreeToPay": false,
         "agreeToTermsAndConditions": false
       },
@@ -56,6 +57,18 @@ class ApplicationPage extends Component {
 
     this.setState({
       "bookingDetails": {
+        "totalRent": 1200,
+        "calculatedRent": 500,
+        "serviceFee": 700,
+        "moveIn": "02 Oct 2018", //
+        "moveOut": "28 Oct 2018", //
+        "bookingDuration": 5, // days
+        "guests": 3, //
+        "discount": true, //
+        "percentageDiscount": 20, //
+        "discountSavings": 200 //
+      },
+      "data": {
         "total_rent": 1200,
         "calculated_rent": 500,
         "service_fee": 700,
@@ -71,7 +84,7 @@ class ApplicationPage extends Component {
         "bedrooms": 3,
         "bathrooms": 2,
         "parking": 1,
-        "rent": 1000,
+        "rent": 100, // Assumed to be cost per day
         "minStay": 28,
         "maxStay": 30,
         "maxPeopleAllowed": 3,
@@ -85,7 +98,7 @@ class ApplicationPage extends Component {
         "createdOn": "2019-01-22T11:03:15.615791Z",
         "updatedOn": "2019-01-22T11:15:23.611375Z",
         "homeType": 1,
-        "cancellationPolicy": "Moderate",
+        "cancellationPolicy": "Moderate", // Should this have more information to show what 'Moderate' means for example?
         "promoCodes": [],
         "facilities": [
           6,
@@ -128,7 +141,6 @@ class ApplicationPage extends Component {
   };
 
   handleAgreementsFieldChange = (fieldName, value) => {
-    console.log("AGREEMENTS", fieldName, value);
     this.setState(prevState => ({
       ...prevState,
       agreements: {
@@ -138,54 +150,93 @@ class ApplicationPage extends Component {
     }))
   };
 
+  handleFieldChange = (fieldName, value) => {
+    this.setState(prevState => ({
+      ...prevState,
+        [fieldName]: value
+    }))
+  };
+
+  handleSendDiscountCode = (discountCode) => {
+    console.log("sending discount code to backend:", discountCode)
+    // get request to check whether discount code is valid
+    //   fetch().then((resp) => this.setState(prevState => ({
+    //     ...prevState,
+    //     bookingDetails: {
+    //       ...prevState.bookingDetails,
+    //       discountCode: 20,
+    //       discount: true
+    //     }
+    //   })))
+  };
+
+  handleSubmitButton = () => {
+    console.log("send data to backend", this.state);
+    // an exmaple of what should be sent to backend
+    // fetch(url, ..., this.props.state)
+    //   .then((resp) => {
+    //     this.setState({
+    //       bookingDetails: resp.bookingDetails,
+    //       house: resp.house,
+    //     })
+    //   })
+  };
+
+  handleSaveButton = () => {
+    console.log("save form to backend?", this.state)
+  };
+
     render() {
       if (!this.state.data) {
         return null
       }
-        return (
-          <React.Fragment>
-            <Navbar/>
-              <div className="page-apply-now">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-lg-7 col-xl-8">
-                      <Form
-                        homeOwner={this.state.house.homeOwner}
-                        firstName={this.state.tenant.firstName}
-                        lastName={this.state.tenant.lastName}
-                        phoneNumber={this.state.tenant.phoneNumber}
-                        gender={this.state.tenant.gender}
-                        comments={this.state.tenant.comment}
-                        onTenantFieldChange={this.handleTenantFieldChange}
-                        rules={this.state.house.rules}
-                        cardNumber={this.state.payment.cardNumber}
-                        cardSurname={this.state.payment.cardSurname}
-                        expiryDate={this.state.payment.expiryDate}
-                        ccv={this.state.payment.ccv}
-                        onPaymentFieldChange={this.handlePaymentFieldChange}
-                        agreeToHomeRules={this.state.agreements.agreeToHomeRules}
-                        agreeToPay={this.state.agreements.agreeToPay}
-                        agreeToTermsAndConditions={this.state.agreements.agreeToTermsAndConditions}
-                        onAgreementsFieldChange={this.handleAgreementsFieldChange}
+      return (
+        <React.Fragment>
+          <Navbar/>
+            <div className="page-apply-now">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-7 col-xl-8">
+                    <Form
+                      homeOwner={this.state.house.homeOwner}
+                      firstName={this.state.tenant.firstName}
+                      lastName={this.state.tenant.lastName}
+                      phoneNumber={this.state.tenant.phoneNumber}
+                      gender={this.state.tenant.gender}
+                      comments={this.state.tenant.comment}
+                      onTenantFieldChange={this.handleTenantFieldChange}
+                      rules={this.state.house.rules}
+                      cardNumber={this.state.payment.cardNumber}
+                      cardSurname={this.state.payment.cardSurname}
+                      expiryDate={this.state.payment.expiryDate}
+                      ccv={this.state.payment.ccv}
+                      onPaymentFieldChange={this.handlePaymentFieldChange}
+                      agreeToHomeRules={this.state.agreements.agreeToHomeRules}
+                      agreeToPay={this.state.agreements.agreeToPay}
+                      agreeToTermsAndConditions={this.state.agreements.agreeToTermsAndConditions}
+                      onAgreementsFieldChange={this.handleAgreementsFieldChange}
+                    />
+                  </div>
+                  <div className="col-lg-5 col-xl-4">
+                    <BookingDetails
+                      houseDetails={this.state.house}
+                      bookingDetails={this.state.bookingDetails}
+                      onFieldChange={this.handleFieldChange}
+                      discountCode={this.state.discountCode}
+                      onApplyDiscount={this.handleSendDiscountCode}
                       />
-                    </div>
-                    <div className="col-lg-5 col-xl-4">
-                      <BookingDetails
-                        houseDetails={this.state.house}
-                        bookingDetails={this.state.bookingDetails}
-                        />
-                    </div>
-                    <div className="col-12">
-                      <div className="button">
-                        <button type="button" className="btn btn-link">Apply Now</button>
-                        <button type="button" className="btn btn-link">Save application</button>
-                      </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="button">
+                      <button type="button" className="btn btn-link" onClick={this.handleSubmitButton}>Apply Now</button>
+                      <button type="button" className="btn btn-link" onClick={this.handleSaveButton}>Save application</button>
                     </div>
                   </div>
                 </div>
               </div>
-          </React.Fragment>
-        );
+            </div>
+        </React.Fragment>
+      );
     }
 }
 

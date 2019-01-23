@@ -60,8 +60,8 @@ export default class TenantDetails extends Component {
           What are your hobbies?
         </p>
         <textarea className="form-control" rows="4"
-                  value={this.props.comment}
-                  onChange={(e) => this.props.onFieldChange("comment", e.target.value)}/>
+                  value={this.props.comments}
+                  onChange={(e) => this.props.onFieldChange("comments", e.target.value)}/>
       </div>
     )
   }

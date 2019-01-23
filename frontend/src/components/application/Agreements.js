@@ -9,10 +9,10 @@ export default class Agreements extends Component {
           <li className="list-inline-item">
             <div className="custom-control custom-checkbox">
               <input type="checkbox" id="checkbox-1" className="custom-control-input"
-                     checked={this.props.agreeToHomeRules}
-                     onChange={(e) => this.props.onFieldChange("agreeToHomeRules", e.target.checked)}/>
+                     checked={this.props.agreeToHouseRules}
+                     onChange={(e) => this.props.onFieldChange("agreeToHouseRules", e.target.checked)}/>
               <label className="custom-control-label" htmlFor="checkbox-1">
-                I agree to abide by the home rules
+                I agree to abide by the owner's house rules
               </label>
             </div>
           </li>
