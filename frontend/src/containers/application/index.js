@@ -3,6 +3,7 @@ import Navbar from "containers/common/Navbar";
 import Form from "../../components/application/Form";
 import 'components/application/Application.css'
 import BookingDetails from "../../components/application/BookingDetails";
+import axios from 'axios';
 
 class ApplicationPage extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class ApplicationPage extends Component {
       },
       isLoading: false,
       error: null,
+      cardToken: {}
     };
   }
 
@@ -172,18 +174,28 @@ class ApplicationPage extends Component {
 
   handleSubmitButton = () => {
     console.log("send data to backend", this.state);
-    // an exmaple of what should be sent to backend
-    // fetch(url, ..., this.props.state)
-    //   .then((resp) => {
-    //     this.setState({
-    //       bookingDetails: resp.bookingDetails,
-    //       house: resp.house,
-    //     })
-    //   })
+    //FIXME: Get Application UUID
+    const stripeToken = this.state.cardToken.token.id;
+    console.log(stripeToken);
+    const applicationUUID = '';
+    const data = {
+      stripeToken: stripeToken
+    }
+    axios.post('/apply/payment/' + applicationUUID, data).then(
+      (result) => console.log(result)
+    ).error(
+      (result) => console.log(result)
+    )
   };
 
   handleSaveButton = () => {
     console.log("save form to backend?", this.state)
+  };
+
+  handleStripePaymentTokenGenerated = (cardToken) => {
+    this.setState({
+      cardToken
+    });
   };
 
     render() {
@@ -214,6 +226,7 @@ class ApplicationPage extends Component {
                       agreeToHomeRules={this.state.agreements.agreeToHomeRules}
                       agreeToPay={this.state.agreements.agreeToPay}
                       agreeToTermsAndConditions={this.state.agreements.agreeToTermsAndConditions}
+                      onStripePaymentTokenGenerated={this.handleStripePaymentTokenGenerated}
                       onAgreementsFieldChange={this.handleAgreementsFieldChange}
                     />
                   </div>

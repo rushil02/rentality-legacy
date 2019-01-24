@@ -3,6 +3,7 @@ import TenantDetails from "./TenantDetails";
 import HouseRules from "./HouseRules";
 import Payment from "./Payment";
 import Agreements from "./Agreements";
+import StripePayment from './StripePayment';
 
 
 class Form extends Component {
@@ -22,12 +23,9 @@ class Form extends Component {
         <HouseRules
           rules={this.props.rules}
           homeOwner={this.props.homeOwner}/>
-        <Payment
-          cardNumber={this.props.cardNumber}
-          cardSurname={this.props.cardSurname}
-          expiryDate={this.props.expiryDate}
-          ccv={this.props.ccv}
-          onFieldChange={this.props.onPaymentFieldChange}/>
+        <StripePayment 
+          onStripePaymentTokenGenerated={this.props.onStripePaymentTokenGenerated}
+        />
         <Agreements
           agreeToHouseRules={this.props.agreeToHouseRules}
           agreeToPay={this.props.agreeToPay}

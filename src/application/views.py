@@ -9,6 +9,9 @@ from django.http import Http404
 
 from house.models import House
 from house.serializers import HouseSerializer, HouseSerializerForApplication
+from payments.stripe_wrapper import retrieve_customer
+from application.models import Application, ApplicationState
+from billing.models import Fee, Order
 
 
 def create_react(request, house_uuid):
@@ -66,3 +69,54 @@ class HouseDetailViewForApplication(APIView):
 
         self.amounts['house'] = serializer.data
         return Response(self.amounts)
+
+
+class PaymentForApplication(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def calculate_amount(rent):
+        fee = Fee.objects.get(active=True)
+        d = {
+            'source_amount': int(rent * (1 + (fee.tenant_charge/100))) * 100,
+            'destination_amount': int(rent * (1 - (fee.home_owner_charge/100))) * 100
+        }
+        return d
+
+    def post(self, request, *args, **kwargs):
+        application_uuid = self.kwargs['application_uuid']
+        user = request.user
+        if user.tenant.customer_id:
+            customer = retrieve_customer(user.tenant.customer_id)
+            if request.POST.get('stripeToken'):
+                customer.source = request.POST.get('stripeToken')
+            customer.save()
+        else:
+            kwargs = {
+                    'email': request.user.email
+                }
+            if request.POST.get('stripeToken'):
+                kwargs['source'] = request.POST.get('stripeToken')
+                customer = create_customer(**kwargs)
+                user.tenant.customer_id = customer.id
+                user.tenant.save()
+        try:
+            application = Application.objects.get(uuid=application_uuid)
+        except Application.DoesNotExist:
+            raise Http404("Application does not exist")
+        else:
+            amounts = calculate_amount(application.rent)
+            amount = amounts['source_amount']
+            customer = application.tenant.customer_id
+            destination_amount = amounts['destination_amount']
+            destination_account = application.house.home_owner.account_id
+
+            charge = create_charge(
+                customer=customer,
+                target_account_id=destination_account,
+                amount=amount,
+                destination_amount=destination_amount
+            )
+
+            order = Order(application=application, charge_id=charge.id)
+            order.save()
+        return Response({"status": True})
