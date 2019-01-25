@@ -6374,7 +6374,7 @@ body > .page-form .right .text-single {
 }
 
 .pickmeup .pmu-instance .pmu-days * {
-    width: 45px !important;
+    width: 38px !important;
     height: 30px !important;
     line-height: 30px !important;
 }
@@ -6386,7 +6386,7 @@ body > .page-form .right .text-single {
 }
 
 .pickmeup .pmu-instance .pmu-day-of-week * {
-    width: 45px !important;
+    width: 39px !important;
     height: 30px !important;
     line-height: 30px !important;
 }
@@ -6415,7 +6415,7 @@ body > .page-form .right .text-single {
 }
 
 .pickmeup .pmu-instance .pmu-not-in-month {
-    color: #c2bdb9;
+    color: #c2bdb9 !important;
 }
 
 .pickmeup .pmu-instance .pmu-days .pmu-button {
