@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.http import require_GET
+from rest_framework import status
 
 from house.models import House
 from promotions.forms import PromotionalCodeForm, PromotionalCodeRestrictionsForm
@@ -27,9 +29,6 @@ def create_promotional_code(request):
     return context
 
 
-# def edit_promotional_code(request, code):
-#     return context
-
 # TODO: FIXME - temp method process, promo-code should not be added here
 @require_GET
 def verify_promo_use(request, house_uuid):
@@ -40,22 +39,23 @@ def verify_promo_use(request, house_uuid):
         applied_on_content_type=ContentType.objects.get_for_model(house),
         applier_type='H'
     )
-    if result[0]:
-        verbose = result[2].verbose
-        house.promo_codes.add(result[2])
+
+    if result["valid"]:
+        verbose = result["obj"].verbose
+        house.promo_codes.add(result["obj"])
     else:
         verbose = None
-    return JsonResponse({'valid': result[0], "msg": result[1], "promo": verbose})
+    return JsonResponse({'valid': result["valid"], "msg": result["msg"], "promo": verbose})
 
 
-class VerifyPromoUseView(APIView):
+class VerifyPromoUseAPIView(APIView):
     """
     :param code
-    :param applied_on_content_type appplication | house
+    :param applied_on_content_type application | house
     :param: applier_types tenant | home_owner
     """
     permission_classes = (IsAuthenticated,)
-    
+
     applier_types = {
         "tenant": 'T',
         "home_owner": 'H'
@@ -66,12 +66,15 @@ class VerifyPromoUseView(APIView):
             "application": ContentType.objects.get(app_label='application', model='application'),
             "house": ContentType.objects.get(app_label='house', model='house')
         }
-        super(VerifyPromoUseView, self).__init__(*args, **kwargs)
+        super(VerifyPromoUseAPIView, self).__init__(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        code = request.GET['code']
-        applied_on = self.applied_on_content_types[request.GET['applied_on_content_type']]
-        applier_type = self.applier_types[request.GET['applier_type']]
+        try:
+            code = request.GET['code']
+            applied_on = self.applied_on_content_types[request.GET['applied_on_content_type']]
+            applier_type = self.applier_types[request.GET['applier_type']]
+        except MultiValueDictKeyError:
+            return Response({"detail": "Incomplete parameters."}, status=status.HTTP_400_BAD_REQUEST)
 
         result = PromotionalCode.objects.validate(
             code=code,
@@ -79,12 +82,7 @@ class VerifyPromoUseView(APIView):
             applied_on_content_type=applied_on,
             applier_type=applier_type
         )
-
-        response = {
-            "valid": result[0],
-            "msg": result[1],
-        }
-
-        if result[2]:
-            response["promo_code"] = PromoCodeSerializer(result[2]).data
-        return Response(response)
+        if result["valid"]:
+            return Response(PromoCodeSerializer(result["obj"]).data)
+        else:
+            return Response({"detail": result["msg"]}, status=status.HTTP_400_BAD_REQUEST)

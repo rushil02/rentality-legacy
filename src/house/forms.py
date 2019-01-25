@@ -255,3 +255,10 @@ class ApplyForm(forms.Form):
         obj = kwargs.pop('obj')
         super(ApplyForm, self).__init__(*args, **kwargs)
         self.fields['guests'].choices = [(i + 1, i + 1) for i in range(obj.max_people_allowed or 1)]
+
+    def clean(self):
+        super(ApplyForm, self).clean()
+        if self.cleaned_data['move_in_date'] >= self.cleaned_data["move_out_date"]:
+            raise ValidationError("Invalid Dates")
+        if (self.cleaned_data['move_out_date'] - self.cleaned_data["move_in_date"]).days/7 < 4:
+            raise ValidationError("Booking should be at least of 4 weeks")

@@ -40,6 +40,7 @@ const createOptions = (fontSize, padding) => {
 
 
 class _CardForm extends React.Component {
+    //FIXME: on submit rather than on change; File Review required @Elliott
     handleChange = (change) => {
         if (change.complete) {
             console.log("Completed");

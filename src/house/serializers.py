@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
 from cities_custom.serializers import LocationCitySerializer, PostalCodeSerializer
-from house.models import House, Image, Facility, NeighbourhoodDescriptor, WelcomeTag
+from essentials.serializers import PolicyPublicSerializer
+from house.models import House, Image, Facility, NeighbourhoodDescriptor, WelcomeTag, HouseRule, Rule, \
+    CancellationPolicy
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -114,10 +116,35 @@ class HomeOwnerRelatedField(serializers.RelatedField):
         return "{} {}".format(value.user.first_name, value.user.last_name).strip()
 
 
-class HouseSerializerForApplication(serializers.ModelSerializer):
+class HouseRulesPublicSerializer(serializers.ModelSerializer):
+    rule = serializers.SlugRelatedField(read_only=True, slug_field='verbose')
+
+    class Meta:
+        model = HouseRule
+        fields = ('rule', 'value', 'comment')
+
+
+class CancellationPolicyPublicSerializer(serializers.ModelSerializer):
+    official_policy = PolicyPublicSerializer()
+
+    class Meta:
+        model = CancellationPolicy
+        fields = ('verbose', 'description', 'official_policy')
+
+
+class HouseDetailsPublicSerializer(serializers.ModelSerializer):
+    """
+    No Secured information of the house or home owner is passed
+    """
+    location = PostalCodeSerializer()
+    home_type = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    facilities = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
+    rules = HouseRulesPublicSerializer(many=True, read_only=True, source='houserule_set')
+    cancellation_policy = CancellationPolicyPublicSerializer()
+    neighbourhood_facilities = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
+    welcome_tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
+    home_owner = serializers.StringRelatedField()
+
     class Meta:
         model = House
-        fields = '__all__'
-    
-    home_owner = HomeOwnerRelatedField(read_only=True)
-    location = PostalCodeSerializer(read_only=True)
+        exclude = ('address_hidden', 'promo_codes', 'status', 'created_on', 'updated_on')

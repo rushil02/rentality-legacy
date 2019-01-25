@@ -9,7 +9,6 @@ app_name = 'house'
 
 urlpatterns = [
     path('info/<uuid:house_uuid>', info, name='info'),
-    path('apply/<uuid:house_uuid>', apply_temp, name='apply'),
     path('add/', create, name='create'),
     path('add/<uuid:house_uuid>/', edit, name='create_edit'),
     path('images/<uuid:house_uuid>/', ImageUploadView.as_view(), name='add_house_images'),

@@ -163,7 +163,7 @@
                 <div class="col-lg-5 col-xl-4">
                     <!-- page detail right start -->
                     <div class="right">
-                        <form action="{% url 'house:apply' house.uuid %}" method="GET">
+                        <form action="{% url 'application:create' house.uuid %}" method="GET">
                             <!-- page detail right user start -->
                             <div class="user">
                                 {% static 'image/placeholders/profile-large.png' as default_profile_pic %}

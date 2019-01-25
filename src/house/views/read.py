@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST, require_GET
 
+from application.views import create_react
 from house.forms import ApplyForm
 from house.models import House
 from django.contrib import messages
@@ -23,23 +24,31 @@ def info(request, house_uuid):
 # FIXME: temporary method
 @login_required
 def apply_temp(request, house_uuid):
-    email = request.user.email
     house = House.objects.get(uuid=house_uuid)
     form = ApplyForm(request.GET, obj=house)
     if form.is_valid():
-        message = "Following are the application details \n " \
-                  "applicant email - %s \n" \
-                  "house - %s \n" \
-                  "dates - %s to %s \n" \
-                  "guests - %s" % (email, house, form.cleaned_data['move_in_date'], form.cleaned_data['move_out_date'],
-                                   form.cleaned_data['guests'])
-        send_mail("New Application", message, "support@rentality.com.au", ["admin@rentality.com.au"])
-        messages.add_message(request, messages.SUCCESS,
-                             "Your application has been registered with us, We will contact you shortly via your registered email for the next steps.")
+        return create_react(request, house_uuid)
     else:
         messages.add_message(request, messages.ERROR,
                              "Invalid Data Submission")
-    return redirect(reverse("house:info", args=[house_uuid]))
+        return redirect(reverse("house:info", args=[house_uuid]))
+    # email = request.user.email
+    # house = House.objects.get(uuid=house_uuid)
+    # form = ApplyForm(request.GET, obj=house)
+    # if form.is_valid():
+    #     message = "Following are the application details \n " \
+    #               "applicant email - %s \n" \
+    #               "house - %s \n" \
+    #               "dates - %s to %s \n" \
+    #               "guests - %s" % (email, house, form.cleaned_data['move_in_date'], form.cleaned_data['move_out_date'],
+    #                                form.cleaned_data['guests'])
+    #     send_mail("New Application", message, "support@rentality.com.au", ["admin@rentality.com.au"])
+    #     messages.add_message(request, messages.SUCCESS,
+    #                          "Your application has been registered with us, We will contact you shortly via your registered email for the next steps.")
+    # else:
+    #     messages.add_message(request, messages.ERROR,
+    #                          "Invalid Data Submission")
+    # return redirect(reverse("house:info", args=[house_uuid]))
 
 
 @require_GET

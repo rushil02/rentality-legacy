@@ -22,16 +22,19 @@ class PromotionalCodeManager(models.Manager):
         :return: [Boolean, error_msg] or raises error
         """
         if self.get_queryset().filter(code=code).count() == 0:
-            return False, "Invalid Code", None
+            return {"valid": False, "msg": "Invalid Code", "obj": None}
         else:
             try:
                 code_obj = self.get(code=code, active=True)
             except PromotionalCode.MultipleObjectsReturned:
                 raise ValueError("Multiple schemes active with same promo code")
             except PromotionalCode.DoesNotExist:
-                return False, "This code has expired.", None
+                return {"valid": False, "msg": "This code has expired.", "obj": None}
             else:
-                return [*code_obj.validate_for_use(user=user, applied_on_content_type=applied_on_content_type, **kwargs), code_obj]
+                return dict(
+                    obj=code_obj,
+                    **code_obj.validate_for_use(user=user, applied_on_content_type=applied_on_content_type, **kwargs)
+                )
 
 
 class PromotionalCode(models.Model):
@@ -229,15 +232,16 @@ class PromotionalCode(models.Model):
         if not override_default_validation:
             validation_result = self.default_validations(applied_on_content_type, applier_type)
             if not validation_result:
-                return False, "This code is not valid."
+                return {'valid': False, 'msg': "This code is not valid."}
         validations = self.get_validators_list()
         for validator in validations:
             method = self.get_validation_method(validator)
-            if method(obj=self, user=user, applied_on_content_type=applied_on_content_type, applier_type=applier_type, **kwargs):
+            if method(obj=self, user=user, applied_on_content_type=applied_on_content_type, applier_type=applier_type,
+                      **kwargs):
                 continue
             else:
-                return False, self.get_validation_error(validator)
-        return True, ""
+                return {'valid': False, 'msg': self.get_validation_error(validator)}
+        return {'valid': True, 'msg': ""}
 
 
 class Referee(models.Model):

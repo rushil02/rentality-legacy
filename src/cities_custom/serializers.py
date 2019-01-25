@@ -1,4 +1,4 @@
-from cities.models import City
+from cities.models import City, PostalCode
 from rest_framework import serializers
 
 
@@ -8,8 +8,7 @@ class LocationCitySerializer(serializers.ModelSerializer):
         fields = ['name', ]
 
 
-# FIXME: Attach to model
-class PostalCodeSerializer(serializers.RelatedField):
-
-    def to_representation(self, value):
-        return "{}".format(value.name_full)
+class PostalCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostalCode
+        fields = '__all__'
