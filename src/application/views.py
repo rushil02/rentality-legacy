@@ -6,6 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from datetime import datetime
 from django.http import Http404
+from rest_framework import generics
+from application.serializers import ApplicationSerializer
+from billing.models import Fee
+import pytz
+from psycopg2.extras import DateRange
+
 
 from house.models import House
 from house.serializers import HouseSerializer, HouseSerializerForApplication
@@ -120,3 +126,35 @@ class PaymentForApplication(APIView):
             order = Order(application=application, charge_id=charge.id)
             order.save()
         return Response({"status": True})
+
+
+class CreateApplicationView(generics.CreateAPIView):
+    # FIXME Remove id usages
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ApplicationSerializer
+
+    def calculate_rent(self, house):
+        self.start_date = datetime.strptime(self.request.data['start_date'], '%Y-%m-%dT%H:%M:%S.%fZ').date()
+        self.end_date = datetime.strptime(self.request.data['end_date'], '%Y-%m-%dT%H:%M:%S.%fZ').date()
+        promo_code = self.request.data.get('promo_code', [])
+        # FIXME: Add rent calculation Logic
+        self.amounts = {
+            'calculated_rent': 500,
+            'service_fee': 700,
+            'total_rent': 1200
+        }
+
+    def get_fee_instance(self):
+        return Fee.objects.get(active=True)
+
+    def perform_create(self, serializer):
+        house = serializer.validated_data['house']
+        # FIXME Add tenant meta
+        # house_meta = HouseSerializerForApplication(house).data
+        tenant = self.request.user.tenant
+        self.calculate_rent(house)
+        # FIXME Which Rent
+        rent = self.amounts['calculated_rent']
+        fee = self.get_fee_instance()
+        date = DateRange(lower=self.start_date, upper=self.end_date)
+        serializer.save(tenant=tenant, rent=rent, fee=fee, date=date)
