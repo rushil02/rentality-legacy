@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import Navbar from "containers/common/Navbar";
-import Form from "../../components/application/Form";
 import 'components/application/Application.css'
 import BookingDetails from "../../components/application/BookingDetails";
+import TenantDetails from "../../components/application/TenantDetails";
+import HouseRules from "../../components/application/HouseRules";
+import Payment from "../../components/application/Payment";
+import Agreements from "../../components/application/Agreements";
 
-class ApplicationPage extends Component {
+class BookingConfirmationPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -153,7 +156,7 @@ class ApplicationPage extends Component {
   handleFieldChange = (fieldName, value) => {
     this.setState(prevState => ({
       ...prevState,
-        [fieldName]: value
+      [fieldName]: value
     }))
   };
 
@@ -186,58 +189,65 @@ class ApplicationPage extends Component {
     console.log("save form to backend?", this.state)
   };
 
-    render() {
-      if (!this.state.data) {
-        return null
-      }
-      return (
-        <React.Fragment>
-          <Navbar/>
-            <div className="page-apply-now">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-7 col-xl-8">
-                    <Form
-                      homeOwner={this.state.house.homeOwner}
-                      firstName={this.state.tenant.firstName}
-                      lastName={this.state.tenant.lastName}
-                      phoneNumber={this.state.tenant.phoneNumber}
-                      gender={this.state.tenant.gender}
-                      comments={this.state.tenant.comment}
-                      onTenantFieldChange={this.handleTenantFieldChange}
-                      rules={this.state.house.rules}
-                      cardNumber={this.state.payment.cardNumber}
-                      cardSurname={this.state.payment.cardSurname}
-                      expiryDate={this.state.payment.expiryDate}
-                      ccv={this.state.payment.ccv}
-                      onPaymentFieldChange={this.handlePaymentFieldChange}
-                      agreeToHomeRules={this.state.agreements.agreeToHomeRules}
-                      agreeToPay={this.state.agreements.agreeToPay}
-                      agreeToTermsAndConditions={this.state.agreements.agreeToTermsAndConditions}
-                      onAgreementsFieldChange={this.handleAgreementsFieldChange}
-                    />
-                  </div>
-                  <div className="col-lg-5 col-xl-4">
-                    <BookingDetails
-                      houseDetails={this.state.house}
-                      bookingDetails={this.state.bookingDetails}
-                      onFieldChange={this.handleFieldChange}
-                      discountCode={this.state.discountCode}
-                      onApplyDiscount={this.handleSendDiscountCode}
-                      />
-                  </div>
-                  <div className="col-12">
-                    <div className="button">
-                      <button type="button" className="btn btn-link" onClick={this.handleSubmitButton}>Apply Now</button>
-                      <button type="button" className="btn btn-link" onClick={this.handleSaveButton}>Save application</button>
-                    </div>
-                  </div>
+  render() {
+    if (!this.state.data) {
+      return null
+    }
+    return (
+      <React.Fragment>
+        <Navbar/>
+        <div className="page-apply-now">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-7 col-xl-8">
+                <div className="left">
+                  <h1>Application for {this.props.homeOwner}'s Home </h1>
+                  <TenantDetails
+                    homeOwner={this.state.house.homeOwner}
+                    firstName={this.state.tenant.firstName}
+                    lastName={this.state.tenant.lastName}
+                    phoneNumber={this.state.tenant.phoneNumber}
+                    gender={this.state.tenant.gender}
+                    comments={this.state.tenant.comments}
+                    onFieldChange={this.handleTenantFieldChange}
+                  />
+                  <HouseRules
+                    rules={this.state.house.rules}
+                    homeOwner={this.state.house.homeOwner}/>
+                  <Payment
+                    cardNumber={this.state.payment.cardNumber}
+                    cardSurname={this.state.payment.cardSurname}
+                    expiryDate={this.state.payment.expiryDate}
+                    ccv={this.state.payment.ccv}
+                    onFieldChange={this.handlePaymentFieldChange}/>
+                  <Agreements
+                    agreeToHouseRules={this.state.agreements.agreeToHouseRules}
+                    agreeToPay={this.state.agreements.agreeToPay}
+                    agreeToTermsAndConditions={this.state.agreements.agreeToTermsAndConditions}
+                    onFieldChange={this.handleAgreementsFieldChange}/>
+                </div>
+              </div>
+              <div className="col-lg-5 col-xl-4">
+                <BookingDetails
+                  houseDetails={this.state.house}
+                  bookingDetails={this.state.bookingDetails}
+                  onFieldChange={this.handleFieldChange}
+                  discountCode={this.state.discountCode}
+                  onApplyDiscount={this.handleSendDiscountCode}
+                />
+              </div>
+              <div className="col-12">
+                <div className="button">
+                  <button type="button" className="btn btn-link" onClick={this.handleSubmitButton}>Book Now</button>
+                  <button type="button" className="btn btn-link" onClick={this.handleSaveButton}>Save Application</button>
                 </div>
               </div>
             </div>
-        </React.Fragment>
-      );
-    }
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
 }
 
-export default ApplicationPage;
+export default BookingConfirmationPage;
