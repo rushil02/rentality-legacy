@@ -5,11 +5,6 @@ export default class BookingDetails extends Component {
     const bookingDuration = this.props.bookingDetails.bookingDuration;
     return (
       <div className="right">
-        <div className="gallery">
-          <div className="loop owl-carousel owl-theme">
-            <h1>Hello world</h1>
-          </div>
-        </div>
         <div className="padding">
           <div className="title">
             <h1>{this.props.houseDetails.title}</h1>
@@ -60,7 +55,7 @@ export default class BookingDetails extends Component {
               <div className="left-padding">
                 <div className="row">
                   <div className="col-8 gray">
-                    ${this.props.houseDetails.rent} x {bookingDuration < 8 ? bookingDuration : bookingDuration / 7} weeks:
+                    ${this.props.houseDetails.rent} x {bookingDuration < 8 ? bookingDuration : (bookingDuration/ 7).toFixed(1)} weeks:
                   </div>
                   <div className="col-4 text-right bold">${this.props.bookingDetails.calculatedRent} AUD</div>
                 </div>

@@ -14,6 +14,7 @@ export default class Agreements extends Component {
               <label className="custom-control-label" htmlFor="checkbox-1">
                 I agree to abide by the owner's house rules
               </label>
+              {this.props.errors.agreeToHouseRules && <div style={{color: "red"}}>Please agree to the house rules before progressing</div>}
             </div>
           </li>
           <li className="list-inline-item">
@@ -24,6 +25,7 @@ export default class Agreements extends Component {
               <label className="custom-control-label" htmlFor="checkbox-2">
                 I agree to pay the total amount shown if the host accepts my application
               </label>
+              {this.props.errors.agreeToHouseRules && <div style={{color: "red"}}>Please agree to the payment terms before progressing</div>}
             </div>
           </li>
           <li className="list-inline-item">
@@ -34,6 +36,7 @@ export default class Agreements extends Component {
               <label className="custom-control-label" htmlFor="checkbox-3">
                 I accept Rentality's Terms and Conditions
               </label>
+              {this.props.errors.agreeToHouseRules && <div style={{color: "red"}}>Please agree to the T&Cs before progressing</div>}
             </div>
           </li>
         </ul>

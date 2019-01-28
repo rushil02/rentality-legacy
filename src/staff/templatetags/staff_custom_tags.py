@@ -1,5 +1,8 @@
 from django import template
 from django.forms import CheckboxInput
+from django.utils.safestring import mark_safe
+
+import json
 
 register = template.Library()
 
@@ -33,3 +36,8 @@ def regroup_form_fields(form):
                     else:
                         groups[group_num].append(field)
     return groups.values()
+
+
+@register.filter(is_safe=True)
+def js(obj):
+    return mark_safe(json.dumps(obj))

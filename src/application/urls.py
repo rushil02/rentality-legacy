@@ -8,4 +8,5 @@ urlpatterns = [
     path('<uuid:house_uuid>', create, name='create'),
     path('get-house-detail/<uuid:house_uuid>', HouseDetailViewForApplication.as_view(), name='house-detial-view-application'),
     path('create/<uuid:house_uuid>', create_react, name='create'),
+    path('summary/<uuid:house_uuid>', create_react, name='summary'),
 ]
