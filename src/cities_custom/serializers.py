@@ -11,4 +11,4 @@ class LocationCitySerializer(serializers.ModelSerializer):
 class PostalCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostalCode
-        fields = '__all__'
+        exclude = ['id', 'slug']

@@ -3,11 +3,15 @@ from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST, require_GET
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import RetrieveModelMixin
 
 from application.views import create_react
 from house.forms import ApplyForm
 from house.models import House
 from django.contrib import messages
+
+from house.serializers import HouseDetailsPublicSerializer
 
 
 def info(request, house_uuid):
@@ -54,3 +58,13 @@ def apply_temp(request, house_uuid):
 @require_GET
 def get_rent_info(request, house_uuid):
     pass
+
+
+class HouseDetailPublicView(RetrieveModelMixin, GenericAPIView):
+    serializer_class = HouseDetailsPublicSerializer
+    queryset = House.objects.all()
+    lookup_field = 'uuid'
+    lookup_url_kwarg = 'house_uuid'
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)

@@ -48,6 +48,7 @@ def verify_promo_use(request, house_uuid):
     return JsonResponse({'valid': result["valid"], "msg": result["msg"], "promo": verbose})
 
 
+# FIXME: change method parameters
 class VerifyPromoUseAPIView(APIView):
     """
     :param code

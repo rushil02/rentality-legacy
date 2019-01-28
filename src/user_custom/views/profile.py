@@ -10,7 +10,7 @@ from house.models import House
 from tenant.models import HousePreference
 from user_custom.forms import ProfileForm1, ProfileForm2, EditProfileForm, UserChangeForm
 from user_custom.models import PersonalityTag
-from user_custom.serializers import PersonalityTagSerializer
+from user_custom.serializers import PersonalityTagSerializer, UserInfoSerializer, UserProfileSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -67,3 +67,12 @@ class PersonalityTagView(APIView):
             return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserInfoView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, *args, **kwargs):
+        user_info_serializer = UserInfoSerializer(request.user)
+        user_profile_serializer = UserProfileSerializer(request.user.userprofile)
+        return Response(dict(**user_info_serializer.data, **user_profile_serializer.data))

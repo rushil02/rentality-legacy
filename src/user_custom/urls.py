@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 from user_custom.views import set_timezone, check_user, \
     dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
-    CustomSignupView, search, get_stripe_publishable_key, PersonalityTagView, search_api
+    CustomSignupView, search, get_stripe_publishable_key, PersonalityTagView, search_api, UserInfoView
 
 app_name = 'user'
 
@@ -28,5 +28,9 @@ urlpatterns = [
     path('add-details/', SignUpInfoWizard.as_view(), name='account_creation'),
 
     # TODO: remove later (or create seperate package, shouldn't be here; immediate requirement defies project structure
-    path('vfxr', TemplateView.as_view(template_name='others/validation_email_1.html'), name='validation_email_1')
+    path('vfxr', TemplateView.as_view(template_name='others/validation_email_1.html'), name='validation_email_1'),
+
+    # APIs
+    path('info/', UserInfoView.as_view(), name='info'),
+
 ]

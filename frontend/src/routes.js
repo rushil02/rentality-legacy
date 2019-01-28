@@ -9,14 +9,18 @@ export default {
 
     // APIs
     application: include('/apply', {
-        bookingDetails: 'get-house-detail/:houseUUID',
+        bookingDetails: 'amount/:houseUUID',
         create: 'create-app/:houseUUID'
     }),
-    promo:include('/promo', {
-        verify: 'verify-promo-use'
+    promo: include('/promo', {
+        verifyApplicationDiscount: 'verify-promo-use/application/:houseUUID',
+        verifyHouseDiscount: 'verify-promo-use/house/:houseUUID'
     }),
-    house:include('/property',{
-        details: 'details'
+    house: include('/property', {
+        details: 'details/:houseUUID'
+    }),
+    user: include('/user', {
+        info: 'info'
     })
 
 };

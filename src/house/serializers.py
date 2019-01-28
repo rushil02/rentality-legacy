@@ -147,4 +147,4 @@ class HouseDetailsPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = House
-        exclude = ('address_hidden', 'promo_codes', 'status', 'created_on', 'updated_on')
+        exclude = ('address_hidden', 'promo_codes', 'status', 'created_on', 'updated_on', 'id')
