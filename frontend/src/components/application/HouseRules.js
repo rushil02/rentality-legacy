@@ -17,7 +17,7 @@ export default class HouseRules extends Component {
 
       houseRulesList.push(
         <div className="list">
-          <h2>{rule.rule}</h2>
+          <h2>Rule Number {rule.rule}</h2>
           <h3>{rule.value}</h3>
           <p>{rule.comment}</p>
         </div>

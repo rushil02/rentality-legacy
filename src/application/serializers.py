@@ -2,7 +2,7 @@ from rest_framework import serializers
 from application.models import Application
 
 
-class ApplicationSerializer(serializers.ModelSerializer):
+class ApplicationPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
         fields = '__all__'

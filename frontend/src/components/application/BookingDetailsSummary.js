@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
+import '../../components/application/Application.css'
 
-export default class BookingDetails extends Component {
+
+export default class BookingDetailsSummary extends Component {
   render() {
     const bookingDuration = this.props.bookingDetails.bookingDuration;
+    const houseImage = this.props.houseDetails.thumbnail;
     return (
       <div className="right">
         <div className="padding">
@@ -10,19 +13,20 @@ export default class BookingDetails extends Component {
             <h1>{this.props.houseDetails.title}</h1>
             <p>{this.props.houseDetails.location}</p>
           </div>
+          <img src={houseImage} className="w-100" style={{paddingBottom: "10px"}}/>
           <div className="date">
             <div className="in-out">
               <div className="row">
                 <div className="col-5">
                   <div className="sub-title">Move in</div>
                   <input type="text" className="form-control" value={this.props.bookingDetails.moveIn}
-                  readOnly="" data-toggle="datepicker"/>
+                         readOnly="" data-toggle="datepicker" style={{}}/>
                 </div>
                 <div className="col-2 center-arrow"/>
                 <div className="col-5">
                   <div className="sub-title text-right">Move out</div>
                   <input type="text" className="form-control text-right"
-                  value={this.props.bookingDetails.moveOut} readOnly="" data-toggle="datepicker"/>
+                         value={this.props.bookingDetails.moveOut} readOnly="" data-toggle="datepicker"/>
                 </div>
               </div>
             </div>
@@ -69,7 +73,7 @@ export default class BookingDetails extends Component {
                   <div className="col-4 text-right bold">${this.props.bookingDetails.serviceFee} AUD</div>
                 </div>
                 {this.props.bookingDetails.discountTitle
-                ? <div className="row bottom-margin">
+                  ? <div className="row bottom-margin">
                     <div className="col-8 gray">
                       {this.props.bookingDetails.discountTitle}:
                     </div>
@@ -77,41 +81,17 @@ export default class BookingDetails extends Component {
                       - ${this.props.bookingDetails.discountAmount} AUD
                     </div>
                   </div>
-                : null}
-              </div>
-              <div className="form">
-                <div className="row">
-                  <div className="col-8">
-                    <input type="text" className="form-control"
-                           placeholder="Discount Code"
-                           value={this.props.discountCode}
-                           onChange={(value) => this.props.onFieldChange('discountCode', value.target.value)}/>
-                  </div>
-                  <div className="col-4" style={{paddingTop: "10px"}}>
-                    <button type="button"
-                            className="btn btn-link btn-block"
-                            onClick={() => this.props.onApplyDiscount(this.props.discountCode)}>
-                            Apply code
-                    </button>
-                  </div>
-                </div>
-                {this.props.errors.discountCode && <div style={{color: "red", fontSize: 12}}>{this.props.errors.discountCode}</div>}
+                  : null}
               </div>
             </div>
             <div className="left-padding">
               <div className="row">
                 <div className="col-8 small-normal">Total</div>
                 <div className="col-4 text-right red">
-                  ${this.props.discountTitle
-                  ? this.props.bookingDetails.totalRent - this.props.bookingDetails.discountSavings
-                  : this.props.bookingDetails.totalRent} AUD
+                  ${this.props.bookingDetails.totalRent} AUD
                 </div>
               </div>
             </div>
-            <p className="last-p">
-              Please Note: You are not required to pay until the
-              host approves your application
-            </p>
           </div>
         </div>
       </div>
