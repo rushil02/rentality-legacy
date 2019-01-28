@@ -60,8 +60,8 @@ def create_charge(customer, target_account_id, amount, destination_amount, *args
     ``destination_amount``: Ammount to be recieved by recipient. Rest is your profit.
     """
     return execute_request(
-        stripe.Charge.create, 
-        currency='aud', amount=amount, 
+        stripe.Charge.create,
+        currency='aud', amount=amount,
         customer=customer,
         destination={
             'amount': destination_amount,
