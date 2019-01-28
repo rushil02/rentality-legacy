@@ -1,9 +1,10 @@
 from django.urls import path
 
+from house.serializers import HouseDetailsPublicSerializer
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, ImageUploadView, FacilityView, NearbyFacilitiesView, \
-    home_owner_account_details, WelcomeTagView, apply_temp, remove_from_public, delete
+    home_owner_account_details, WelcomeTagView, apply_temp, remove_from_public, delete, HouseDetailPublicView
 
 app_name = 'house'
 
@@ -23,4 +24,7 @@ urlpatterns = [
     path('postal-location', LocationAutocomplete.as_view(), name='postal_code_api'),
     path('del/<uuid:house_uuid>', delete, name='delete_object'),
     path('rem/<uuid:house_uuid>', remove_from_public, name='remove_public'),
+
+    # APIs
+    path('detail/<uuid:house_uuid>', HouseDetailPublicView.as_view(), name='detail_api')
 ]

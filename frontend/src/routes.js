@@ -9,20 +9,20 @@ export default {
 
   // APIs
   application: include('/apply', {
-    bookingDetails: 'get-house-detail/:houseUUID',
-    create: 'create-app/:houseUUID',
-    tenant: 'tenant-details',
+      bookingDetails: 'amount/:houseUUID',
+      create: 'create-app/:houseUUID',
+      tenant: 'tenant-details',
   }),
-  promo:include('/promo', {
-    verify: 'verify-promo-use'
+  promo: include('/promo', {
+      verifyApplicationDiscount: 'verify-promo-use/application/:houseUUID',
+      verifyHouseDiscount: 'verify-promo-use/house/:houseUUID'
   }),
-  house:include('/property',{
-    details: 'details'
+  house: include('/property', {
+      details: 'details/:houseUUID'
   }),
-  tenant:include('/tenant',{
-    details: 'details'
+  user: include('/user', {
+      info: 'info'
   })
-
 };
 
 

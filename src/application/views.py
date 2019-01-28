@@ -2,17 +2,17 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from rest_framework.decorators import api_view
 from django.views.decorators.http import require_GET
+from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from datetime import datetime
 from django.http import Http404
 from rest_framework import generics
-from application.serializers import ApplicationPublicSerializer
+from application.serializers import ApplicationPublicSerializer, BookingAmountDetailsSerializer, BookingInfoSerializer
 from billing.models import Fee
 import pytz
 from psycopg2.extras import DateRange
-
 
 from house.forms import ApplyForm
 from house.models import House
@@ -22,6 +22,7 @@ from application.models import Application, ApplicationState
 from billing.models import Fee, Order
 
 
+# FIXME: Needs to be removed
 # @require_GET
 def create_react(request, house_uuid):
     house = get_object_or_404(House, uuid=house_uuid)
@@ -38,7 +39,7 @@ def create_react(request, house_uuid):
             'duration': float("{0:.1f}".format(round(duration, 1))),
             'total_payment': float("{0:.2f}".format(float(rent * 4 * float(1 + (fee.tenant_charge / 100))))),
             'cal_rent': float("{0:.2f}".format(round(rent * duration, 2))),
-            'service_fee': float(4 * rent * float(fee.tenant_charge/100)),
+            'service_fee': float(4 * rent * float(fee.tenant_charge / 100)),
             'discount_percentage': 0,
             'discount_savings': 0
 
@@ -50,6 +51,7 @@ def create_react(request, house_uuid):
         return redirect(reverse("house:info", args=[house_uuid]))
 
 
+# FIXME: needs to be removed
 class HouseDetailViewForApplication(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = HouseDetailsPublicSerializer
@@ -171,3 +173,22 @@ class CreateApplicationView(APIView):
     def get_fee_instance(self):
         return Fee.objects.get(active=True)
 
+
+class BookingAmountView(APIView):
+
+    @staticmethod
+    def calculate_rent(house):
+        return {'total_amount': 0, 'service_fee': 0, 'payable_amount': 0, 'weekly_rent': 0, 'discount': 0}
+
+    def get(self, request, *args, **kwargs):
+        try:
+            house = House.active_objects.get(uuid=self.kwargs['house_uuid'])
+        except (KeyError, House.DoesNotExist):
+            raise Http404
+        else:
+            print(request.data)
+            booking_info = BookingInfoSerializer(data=request.data)
+            if booking_info.is_valid(raise_exception=True):
+                print(booking_info.data)
+                serializer = BookingAmountDetailsSerializer(self.calculate_rent(house))
+                return Response(serializer.data)

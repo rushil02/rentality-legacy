@@ -6,4 +6,4 @@ from promotions.models import PromotionalCode
 class PromoCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromotionalCode
-        fields = ('id', 'code', 'verbose', 'description', 'tnc')
+        fields = ('code', 'verbose', 'description', 'tnc')

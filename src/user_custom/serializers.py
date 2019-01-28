@@ -1,7 +1,8 @@
 import pytz
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from user_custom.models import PersonalityTag
+from user_custom.models import PersonalityTag, UserProfile
 
 
 class UserTimezoneSerializer(serializers.Serializer):
@@ -34,3 +35,15 @@ class PersonalityTagSerializer(serializers.Serializer):
                 raise e  # TODO: test this exception
 
         return obj, validated_data["checked"]
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('first_name', 'last_name', 'email')
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('contact_num', 'sex')
