@@ -86,7 +86,7 @@ export default class BookingDetails extends Component {
                     <input type="text" className="form-control"
                            placeholder="Discount Code"
                            value={this.props.discountCode}
-                           onChange={(value) => this.props.onFieldChange('discountCode', value.target.value)}/>
+                           onChange={(value) => this.props.onDiscountFieldChange(value.target.value)}/>
                   </div>
                   <div className="col-4" style={{paddingTop: "10px"}}>
                     <button type="button"

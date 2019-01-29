@@ -23,6 +23,7 @@ class ApplicationPage extends Component {
                 "guests": window.django.extra_data.guests,
             },
             discountCodes: [],
+            currentDiscountCode: "",
             tenant: {
                 "firstName": "",
                 "lastName": "",
@@ -159,26 +160,25 @@ class ApplicationPage extends Component {
         }))
     };
 
-    handleFieldChange = (fieldName, value) => {
+    handleDiscountFieldChange = (code) => {
         this.setState(prevState => ({
             ...prevState,
-            [fieldName]: value
+          currentDiscountCode: code
         }))
     };
 
 
     handleSendDiscountCode = (discountCode) => {
-        console.log("sending discount code to backend:", discountCode); // FIXME: Not getting any code here
+        console.log("sending discount code to backend:", discountCode);
         let errors = {};
 
-        axios.get(reverse(routes.promo.verifyApplicationDiscount), {params: {code:discountCode}}
+        axios.get(reverse(routes.promo.verifyApplicationDiscount), {params: {code: discountCode}}
         ).then(resp => {
                 this.setState(prevState => ({ // FIXME: @Elliot discountCodes is a list, how do you update that?
                     ...prevState,
                     discountCodes: {
-                        ...prevState.discountCodes,
-                        discountCode: resp.code,
-                        discountTitle: resp.verbose,
+                      ...prevState.discountCodes,
+                      [resp.code]: {discountCode: resp.code, discountTitle: resp.verbose}
                     }
                 }))
             }
@@ -190,7 +190,7 @@ class ApplicationPage extends Component {
                         start_date: window.django.extra_data.move_in_date,
                         end_date: window.django.extra_data.move_out_date,
                         guests: window.django.extra_data.guests,
-                        promo_code: this.state.discountCodes // FIXME: is this correct? Please make sure that this list is updated
+                        promo_code: [this.state.discountCode] // FIXME: is this correct? Please make sure that this list is updated
                     }
                 }
             ) // FIXME: doesn't it require a then for setState, like the following?
@@ -380,8 +380,9 @@ class ApplicationPage extends Component {
                             <div className="col-lg-5 col-xl-4">
                                 <BookingDetails
                                     houseDetails={this.state.house}
+                                    discountCode={this.state.discountCode}
                                     bookingDetails={this.state.bookingDetails}
-                                    onFieldChange={this.handleFieldChange}
+                                    onDiscountFieldChange={this.handleDiscountFieldChange}
                                     onApplyDiscount={this.handleSendDiscountCode}
                                     errors={this.state.errors}
                                 />
