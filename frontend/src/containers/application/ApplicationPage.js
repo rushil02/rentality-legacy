@@ -22,6 +22,7 @@ class ApplicationPage extends Component {
                 "moveOut": window.django.extra_data.move_out_date,
                 "guests": window.django.extra_data.guests,
             },
+            bookingAmountDetails: {},
             discountCodes: [],
             currentDiscountCode: "",
             tenant: {
@@ -41,7 +42,7 @@ class ApplicationPage extends Component {
                 "agreeToTermsAndConditions": false
             },
             isLoading: false,
-            errors: {"discountCodes": "Your discountCode was invalid"},
+            errors: {},
         };
     }
 
@@ -180,7 +181,7 @@ class ApplicationPage extends Component {
                     ...prevState,
                     discountCodes: [
                       ...prevState.discountCodes,
-                      ...[resp]
+                      ...[resp.data]
                     ]
                 }))
             }
@@ -188,7 +189,7 @@ class ApplicationPage extends Component {
             axios.get(
                 reverse(routes.application.bookingDetails, {"houseUUID": this.state.house.uuid}),
                 {
-                    data: {
+                    params: {
                         start_date: window.django.extra_data.move_in_date,
                         end_date: window.django.extra_data.move_out_date,
                         guests: window.django.extra_data.guests,
@@ -389,7 +390,7 @@ class ApplicationPage extends Component {
                                     houseDetails={this.state.house}
                                     discountCode={this.state.currentDiscountCode}
                                     discountCodes={this.state.discountCodes}
-                                    bookingDetails={this.state.bookingDetails}
+                                    bookingDetails={this.state.bookingAmountDetails}
                                     onDiscountFieldChange={this.handleDiscountFieldChange}
                                     onApplyDiscount={this.handleSendDiscountCode}
                                     errors={this.state.errors}

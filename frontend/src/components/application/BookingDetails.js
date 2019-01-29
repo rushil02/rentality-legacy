@@ -3,11 +3,14 @@ import React, {Component} from 'react';
 export default class BookingDetails extends Component {
 
   displayDiscountCodes = () => {
-    let discountCodeList = [
-      {code: "dsdfsdf", verbose: "This 50% discount is for new users", description: "50% off!", tnc: "hello"},
-      {code: "asdfa", verbose: "This 20% discount is for new users", description: "20% off!", tnc: "hello"},
-    ];
-    for (let code of this.props.discountCodes) {
+    // FIXME: Change discountCOdeList to this.props.discountCodes when the API is working. Below is just hardcoded to
+    //  get it to render
+    let discountCodeList = this.props.discountCodes;
+    // [
+    //   {code: "dsdfsdf", verbose: "This 50% discount is for new users", description: "50% off!", tnc: "hello"},
+    //   {code: "asdfa", verbose: "This 20% discount is for new users", description: "20% off!", tnc: "hello"},
+    // ];
+    for (let code of discountCodeList) {
       discountCodeList.push(
         <div className="row bottom-margin">
           <div className="col-8 gray">
@@ -21,7 +24,7 @@ export default class BookingDetails extends Component {
 
   render() {
     const bookingDuration = this.props.bookingDetails.bookingDuration;
-    console.log(this.props.bookingDetails);
+    console.log("COOKING STATE", this.props);
     return (
       <div className="right">
         <div className="padding">
