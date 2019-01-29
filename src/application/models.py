@@ -20,7 +20,7 @@ STATUS_CHOICES = (
 class Application(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     house = models.ForeignKey('house.House', on_delete=models.PROTECT)
-    ref_code = models.CharField(unique=True, max_length=20)
+    ref_code = models.CharField(unique=True, max_length=20, blank=True)
     house_meta = JSONField(null=True, blank=True)
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.PROTECT)
     tenant_meta = JSONField(null=True, blank=True)
@@ -29,7 +29,7 @@ class Application(models.Model):
     meta = JSONField(null=True, blank=True)
     date = DateRangeField(verbose_name=_('stay dates'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
-    promotional_code = models.ManyToManyField('promotions.PromotionalCode', blank=True)
+    promotional_code = models.ManyToManyField('promotions.PromotionalCode', blank=True)  # FIXME: Needs to be plural
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -37,9 +37,6 @@ class Application(models.Model):
 
     def __str__(self):
         return "'%s' applied for %s" % (self.tenant, self.house)
-
-    class Meta:
-        unique_together = ('house', 'tenant')
 
     def get_ref_code(self):
         try:

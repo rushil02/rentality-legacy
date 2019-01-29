@@ -62,9 +62,9 @@ class PromotionalCode(models.Model):
         help_text="Default behaviour is Discount. Selecting it will change the behaviour to extra charge."
     )
     PRINCIPAL_CHOICES = (
-        ('R', 'Total Rent'),
+        ('R', 'Payable Rent'),
         ('S', 'Service Fee'),
-        ('N', 'Net Amount')
+        ('N', 'Total Amount')
     )
     principal = models.CharField(max_length=1, choices=PRINCIPAL_CHOICES)
     value = models.DecimalField(max_digits=12, decimal_places=5)
@@ -245,6 +245,18 @@ class PromotionalCode(models.Model):
             else:
                 return {'valid': False, 'msg': self.get_validation_error(validator)}
         return {'valid': True, 'msg': ""}
+
+    def apply_code(self, total_rent, service_fee, total_amount):
+        invert_discount = {True: -1, False: 1}
+        principal_options = {'R': total_rent, 'S': service_fee, 'T': total_amount}
+
+        if self.value_type == 'F':
+            return self.value * invert_discount[self.invert_discount]
+
+        elif self.value_type == 'P':
+            principal = principal_options[self.principal]
+            discount = principal * (self.value/100) * invert_discount[self.invert_discount]
+            return discount
 
 
 class Referee(models.Model):
