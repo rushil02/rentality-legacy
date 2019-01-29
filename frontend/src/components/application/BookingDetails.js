@@ -1,9 +1,30 @@
 import React, {Component} from 'react';
 
 export default class BookingDetails extends Component {
+
+  displayDiscountCodes = () => {
+    let discountCodeList = this.props.discountCodes;
+    let count = 0;
+    for (let code of discountCodeList) {
+      discountCodeList.push(
+        <div className="row bottom-margin">
+          <div className="col-8 gray">
+            {code.description}:
+          </div>
+          {count === discountCodeList.length - 1 &&
+            <div className="col-8 gray">
+              {this.props.bookingDetails.discountAmount}:
+            </div>}
+        </div>
+      );
+      count++
+    }
+  };
+
+
   render() {
     const bookingDuration = this.props.bookingDetails.bookingDuration;
-    console.log(this.props.bookingDetails);
+    console.log("COOKING STATE", this.props);
     return (
       <div className="right">
         <div className="padding">
@@ -60,7 +81,7 @@ export default class BookingDetails extends Component {
                   </div>
                   <div className="col-4 text-right bold">${this.props.bookingDetails.totalRent} AUD</div>
                 </div>
-                <div className={"row" + (!this.props.bookingDetails.discountTitle ? " bottom-margin" : "")}>
+                <div className={"row" + (!this.props.discountCodes ? " bottom-margin" : "")}>
                   <div className="col-8 gray">
                     Service fee:
                     <i data-toggle="popover" data-content="Charges for Rentality's services">
@@ -69,16 +90,7 @@ export default class BookingDetails extends Component {
                   </div>
                   <div className="col-4 text-right bold">${this.props.bookingDetails.serviceFee} AUD</div>
                 </div>
-                {this.props.bookingDetails.discountTitle
-                ? <div className="row bottom-margin">
-                    <div className="col-8 gray">
-                      {this.props.bookingDetails.discountTitle}:
-                    </div>
-                    <div className="col-4 text-right bold">
-                      - ${this.props.bookingDetails.discountAmount} AUD
-                    </div>
-                  </div>
-                : null}
+                {this.props.discountCodes && this.displayDiscountCodes()}
               </div>
               <div className="form">
                 <div className="row">
@@ -103,9 +115,7 @@ export default class BookingDetails extends Component {
               <div className="row">
                 <div className="col-8 small-normal">Total</div>
                 <div className="col-4 text-right red">
-                  ${this.props.discountTitle
-                  ? this.props.bookingDetails.totalRent - this.props.bookingDetails.discountSavings
-                  : this.props.bookingDetails.totalRent} AUD
+                  ${this.props.bookingDetails.totalPayable} AUD
                 </div>
               </div>
             </div>

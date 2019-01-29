@@ -22,6 +22,7 @@ class ApplicationPage extends Component {
                 "moveOut": window.django.extra_data.move_out_date,
                 "guests": window.django.extra_data.guests,
             },
+            bookingAmountDetails: {},
             discountCodes: [],
             currentDiscountCode: "",
             tenant: {
@@ -41,7 +42,7 @@ class ApplicationPage extends Component {
                 "agreeToTermsAndConditions": false
             },
             isLoading: false,
-            errors: {"discountCodes": "Your discountCode was invalid"},
+            errors: {},
         };
     }
 
@@ -174,26 +175,28 @@ class ApplicationPage extends Component {
 
         axios.get(reverse(routes.promo.verifyApplicationDiscount), {params: {code: discountCode}}
         ).then(resp => {
-                this.setState(prevState => ({ // FIXME: @Elliot discountCodes is a list, how do you update that?
+            console.log("RESP CODE", resp);
+                this.setState(prevState => ({
+                  // FIXME: @Elliott discountCodes is a list, how do you update that? >> I've changed it to a list now.
                     ...prevState,
-                    discountCodes: {
+                    discountCodes: [
                       ...prevState.discountCodes,
-                      [resp.code]: {discountCode: resp.code, discountTitle: resp.verbose}
-                    }
+                      ...[resp.data]
+                    ]
                 }))
             }
         ).then((resp) => {
             axios.get(
                 reverse(routes.application.bookingDetails, {"houseUUID": this.state.house.uuid}),
                 {
-                    data: {
+                    params: {
                         start_date: window.django.extra_data.move_in_date,
                         end_date: window.django.extra_data.move_out_date,
                         guests: window.django.extra_data.guests,
                         promo_code: [this.state.discountCode] // FIXME: is this correct? Please make sure that this list is updated
                     }
                 }
-            ) // FIXME: doesn't it require a then for setState, like the following?
+            ) // FIXME: doesn't it require a then for setState, like the following? >> YES, you're right.
             .then(result => {
                 this.setState({
                     bookingAmountDetails: {
@@ -206,9 +209,13 @@ class ApplicationPage extends Component {
                     }
                 })
             }
-        );
-        })
-        // FIXME: Please confirm if the following code is unnecessary
+        ).error((result) => {
+            console.log("ERRORS FROM RESP", result);
+                  errors = {...errors, ...result.errors};
+                  this.setState({errors: errors})
+              });
+        });
+        // FIXME: Please confirm if the following code is unnecessary >> No, you shouldn't need this give the above code
 
         //     .then(resp => {
         //         this.setState(prevState => ({
@@ -231,7 +238,7 @@ class ApplicationPage extends Component {
         let bookingDetails = {
             startDate: window.django.extra_data.move_in_date,
             endDate: window.django.extra_data.move_out_date,
-            promoCodes: this.state.promoCodes, // FIXME: is this definition correct?
+            promoCodes: this.state.discountCodes, // FIXME: is this definition correct? >> I've now changed it to the discountCodes list.
             guests: window.django.extra_data.guests
         };
 
@@ -247,7 +254,8 @@ class ApplicationPage extends Component {
             }
         );
 
-        //FIXME: Below code seems unnecessary
+        //FIXME: Below code seems unnecessary >> Yeah was just separating the API requests in case the above
+        // routes.application.create didn't accept the tenant and payment data
 
         // const stripeToken = this.state.payment.stripeToken;
         // const applicationUUID = '';
@@ -380,8 +388,9 @@ class ApplicationPage extends Component {
                             <div className="col-lg-5 col-xl-4">
                                 <BookingDetails
                                     houseDetails={this.state.house}
-                                    discountCode={this.state.discountCode}
-                                    bookingDetails={this.state.bookingDetails}
+                                    discountCode={this.state.currentDiscountCode}
+                                    discountCodes={this.state.discountCodes}
+                                    bookingDetails={this.state.bookingAmountDetails}
                                     onDiscountFieldChange={this.handleDiscountFieldChange}
                                     onApplyDiscount={this.handleSendDiscountCode}
                                     errors={this.state.errors}
