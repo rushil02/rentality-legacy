@@ -174,12 +174,14 @@ class ApplicationPage extends Component {
 
         axios.get(reverse(routes.promo.verifyApplicationDiscount), {params: {code: discountCode}}
         ).then(resp => {
-                this.setState(prevState => ({ // FIXME: @Elliot discountCodes is a list, how do you update that?
+            console.log("RESP CODE", resp);
+                this.setState(prevState => ({
+                  // FIXME: @Elliott discountCodes is a list, how do you update that? >> I've changed it to a list now.
                     ...prevState,
-                    discountCodes: {
+                    discountCodes: [
                       ...prevState.discountCodes,
-                      [resp.code]: {discountCode: resp.code, discountTitle: resp.verbose}
-                    }
+                      ...[resp]
+                    ]
                 }))
             }
         ).then((resp) => {
@@ -193,7 +195,7 @@ class ApplicationPage extends Component {
                         promo_code: [this.state.discountCode] // FIXME: is this correct? Please make sure that this list is updated
                     }
                 }
-            ) // FIXME: doesn't it require a then for setState, like the following?
+            ) // FIXME: doesn't it require a then for setState, like the following? >> YES, you're right.
             .then(result => {
                 this.setState({
                     bookingAmountDetails: {
@@ -212,7 +214,7 @@ class ApplicationPage extends Component {
                   this.setState({errors: errors})
               });
         });
-        // FIXME: Please confirm if the following code is unnecessary
+        // FIXME: Please confirm if the following code is unnecessary >> No, you shouldn't need this give the above code
 
         //     .then(resp => {
         //         this.setState(prevState => ({
@@ -235,7 +237,7 @@ class ApplicationPage extends Component {
         let bookingDetails = {
             startDate: window.django.extra_data.move_in_date,
             endDate: window.django.extra_data.move_out_date,
-            promoCodes: this.state.discountCodes, // FIXME: is this definition correct?
+            promoCodes: this.state.discountCodes, // FIXME: is this definition correct? >> I've now changed it to the discountCodes list.
             guests: window.django.extra_data.guests
         };
 

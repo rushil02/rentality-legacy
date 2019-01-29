@@ -3,15 +3,15 @@ import React, {Component} from 'react';
 export default class BookingDetails extends Component {
 
   displayDiscountCodes = () => {
-    let discountCodeList = [];
+    let discountCodeList = [
+      {code: "dsdfsdf", verbose: "This 50% discount is for new users", description: "50% off!", tnc: "hello"},
+      {code: "asdfa", verbose: "This 20% discount is for new users", description: "20% off!", tnc: "hello"},
+    ];
     for (let code of this.props.discountCodes) {
       discountCodeList.push(
         <div className="row bottom-margin">
           <div className="col-8 gray">
-            {code.discountTitle}:
-          </div>
-          <div className="col-4 text-right bold">
-            - ${code.discountAmount} AUD
+            {code.description}:
           </div>
         </div>
       )
@@ -78,7 +78,7 @@ export default class BookingDetails extends Component {
                   </div>
                   <div className="col-4 text-right bold">${this.props.bookingDetails.totalRent} AUD</div>
                 </div>
-                <div className={"row" + (!this.props.bookingDetails.discountTitle ? " bottom-margin" : "")}>
+                <div className={"row" + (!this.props.discountCodes ? " bottom-margin" : "")}>
                   <div className="col-8 gray">
                     Service fee:
                     <i data-toggle="popover" data-content="Charges for Rentality's services">
