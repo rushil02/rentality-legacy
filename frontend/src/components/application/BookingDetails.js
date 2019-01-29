@@ -3,21 +3,21 @@ import React, {Component} from 'react';
 export default class BookingDetails extends Component {
 
   displayDiscountCodes = () => {
-    // FIXME: Change discountCOdeList to this.props.discountCodes when the API is working. Below is just hardcoded to
-    //  get it to render
     let discountCodeList = this.props.discountCodes;
-    // [
-    //   {code: "dsdfsdf", verbose: "This 50% discount is for new users", description: "50% off!", tnc: "hello"},
-    //   {code: "asdfa", verbose: "This 20% discount is for new users", description: "20% off!", tnc: "hello"},
-    // ];
+    let count = 0;
     for (let code of discountCodeList) {
       discountCodeList.push(
         <div className="row bottom-margin">
           <div className="col-8 gray">
             {code.description}:
           </div>
+          {count === discountCodeList.length - 1 &&
+            <div className="col-8 gray">
+              {this.props.bookingDetails.discountAmount}:
+            </div>}
         </div>
-      )
+      );
+      count++
     }
   };
 
@@ -115,9 +115,7 @@ export default class BookingDetails extends Component {
               <div className="row">
                 <div className="col-8 small-normal">Total</div>
                 <div className="col-4 text-right red">
-                  ${this.props.discountTitle
-                  ? this.props.bookingDetails.totalRent - this.props.bookingDetails.discountSavings
-                  : this.props.bookingDetails.totalRent} AUD
+                  ${this.props.bookingDetails.totalPayable} AUD
                 </div>
               </div>
             </div>
