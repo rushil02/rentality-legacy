@@ -31,6 +31,6 @@ urlpatterns = [
     path('vfxr', TemplateView.as_view(template_name='others/validation_email_1.html'), name='validation_email_1'),
 
     # APIs
-    path('info/', UserInfoView.as_view(), name='info'),
+    path('cu-info/', UserInfoView.as_view(), name='info'),
 
 ]

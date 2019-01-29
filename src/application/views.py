@@ -178,7 +178,7 @@ class BookingAmountView(APIView):
 
     @staticmethod
     def calculate_rent(house):
-        return {'total_amount': 0, 'service_fee': 0, 'payable_amount': 0, 'weekly_rent': 0, 'discount': 0}
+        return {'total_amount': 0, 'service_fee': 0, 'payable_amount': 0, 'weekly_rent': 0, 'discount': 0, 'stay_duration': 0}
 
     def get(self, request, *args, **kwargs):
         try:
@@ -186,9 +186,7 @@ class BookingAmountView(APIView):
         except (KeyError, House.DoesNotExist):
             raise Http404
         else:
-            print(request.data)
-            booking_info = BookingInfoSerializer(data=request.data)
+            booking_info = BookingInfoSerializer(data=request.GET)
             if booking_info.is_valid(raise_exception=True):
-                print(booking_info.data)
                 serializer = BookingAmountDetailsSerializer(self.calculate_rent(house))
                 return Response(serializer.data)

@@ -144,7 +144,11 @@ class HouseDetailsPublicSerializer(serializers.ModelSerializer):
     neighbourhood_facilities = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
     welcome_tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
     home_owner = serializers.StringRelatedField()
+    thumbnail = serializers.SerializerMethodField()
 
     class Meta:
         model = House
         exclude = ('address_hidden', 'promo_codes', 'status', 'created_on', 'updated_on', 'id')
+
+    def get_thumbnail(self, obj):
+        return obj.get_thumbnail_2()

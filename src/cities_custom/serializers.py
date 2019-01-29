@@ -1,5 +1,7 @@
 from cities.models import City, PostalCode
 from rest_framework import serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
+
 
 
 class LocationCitySerializer(serializers.ModelSerializer):
@@ -8,7 +10,8 @@ class LocationCitySerializer(serializers.ModelSerializer):
         fields = ['name', ]
 
 
-class PostalCodeSerializer(serializers.ModelSerializer):
+class PostalCodeSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PostalCode
-        exclude = ['id', 'slug']
+        geo_field = "location"
+        exclude = ['slug', ]

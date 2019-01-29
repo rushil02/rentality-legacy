@@ -48,7 +48,6 @@ def verify_promo_use(request, house_uuid):
     return JsonResponse({'valid': result["valid"], "msg": result["msg"], "promo": verbose})
 
 
-# FIXME: change method parameters
 class VerifyPromoUseAPIView(APIView):
     """
     :param code
@@ -72,9 +71,9 @@ class VerifyPromoUseAPIView(APIView):
     def get(self, request, *args, **kwargs):
         try:
             code = request.GET['code']
-            applied_on = self.applied_on_content_types[request.GET['applied_on_content_type']]
-            applier_type = self.applier_types[request.GET['applier_type']]
-        except MultiValueDictKeyError:
+            applied_on = self.applied_on_content_types[kwargs.get('applied_on')]
+            applier_type = self.applier_types[kwargs.get('applied_by')]
+        except KeyError:
             return Response({"detail": "Incomplete parameters."}, status=status.HTTP_400_BAD_REQUEST)
 
         result = PromotionalCode.objects.validate(

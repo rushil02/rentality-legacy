@@ -23,9 +23,11 @@ django-private-chat==0.1.8
 django-sendgrid-v5==0.7.0
 django-summernote==0.8.10.0
 djangorestframework==3.9.0
+djangorestframework-gis==0.14
 easy-thumbnails==2.5
 elasticsearch==6.3.1
 elasticsearch-dsl==6.2.1
+future==0.17.1
 gunicorn==19.9.0
 hyperlink==18.0.0
 idna==2.6
@@ -38,11 +40,13 @@ progressbar2==3.37.1
 psycopg2==2.7.6
 python-dateutil==2.6.1
 python-dotenv==0.8.2
+python-http-client==3.1.0
 python-utils==2.3.0
 python3-openid==3.1.0
 pytz==2018.4
 requests==2.20.0
 requests-oauthlib==0.8.0
+sendgrid==5.6.0
 sentry-sdk==0.3.6
 six==1.11.0
 sqlparse==0.2.4

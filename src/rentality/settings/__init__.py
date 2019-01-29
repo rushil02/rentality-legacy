@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'cities',
     'rest_framework',
+    'rest_framework_gis',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

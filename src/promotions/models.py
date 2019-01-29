@@ -97,7 +97,7 @@ class PromotionalCode(models.Model):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if PromotionalCode.objects.filter(code=self.code, active=True).exists() and self.active:
+        if PromotionalCode.objects.filter(code=self.code, active=True).exclude(id=self.id).exists() and self.active:
             raise ValidationError({
                 'code': _(
                     'A Promotional scheme is already active with this code. Please change the code.'),
@@ -198,9 +198,12 @@ class PromotionalCode(models.Model):
     def default_validations(self, applied_on_content_type, applier_type):
         # check applied_on
         if self.applicable_on != applied_on_content_type:
+            print(self.applicable_on, applied_on_content_type)
+            print("hrer")
             return False
         # check applied by
         if self.applied_by != applier_type:
+            print("here2")
             return False
         return True
 
