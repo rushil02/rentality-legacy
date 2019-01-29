@@ -206,8 +206,12 @@ class ApplicationPage extends Component {
                     }
                 })
             }
-        );
-        })
+        ).error((result) => {
+            console.log("ERRORS FROM RESP", result);
+                  errors = {...errors, ...result.errors};
+                  this.setState({errors: errors})
+              });
+        });
         // FIXME: Please confirm if the following code is unnecessary
 
         //     .then(resp => {
@@ -231,7 +235,7 @@ class ApplicationPage extends Component {
         let bookingDetails = {
             startDate: window.django.extra_data.move_in_date,
             endDate: window.django.extra_data.move_out_date,
-            promoCodes: this.state.promoCodes, // FIXME: is this definition correct?
+            promoCodes: this.state.discountCodes, // FIXME: is this definition correct?
             guests: window.django.extra_data.guests
         };
 
@@ -247,7 +251,8 @@ class ApplicationPage extends Component {
             }
         );
 
-        //FIXME: Below code seems unnecessary
+        //FIXME: Below code seems unnecessary >> Yeah was just separating the API requests in case the above
+        // routes.application.create didn't accept the tenant and payment data
 
         // const stripeToken = this.state.payment.stripeToken;
         // const applicationUUID = '';
@@ -380,7 +385,8 @@ class ApplicationPage extends Component {
                             <div className="col-lg-5 col-xl-4">
                                 <BookingDetails
                                     houseDetails={this.state.house}
-                                    discountCode={this.state.discountCode}
+                                    discountCode={this.state.currentDiscountCode}
+                                    discountCodes={this.state.discountCodes}
                                     bookingDetails={this.state.bookingDetails}
                                     onDiscountFieldChange={this.handleDiscountFieldChange}
                                     onApplyDiscount={this.handleSendDiscountCode}
