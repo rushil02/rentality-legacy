@@ -3,15 +3,17 @@ from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST, require_GET
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from application.views import create_react
 from house.forms import ApplyForm
-from house.models import House
+from house.models import House, Image
 from django.contrib import messages
 
-from house.serializers import HouseDetailsPublicSerializer
+from house.serializers import HouseDetailsPublicSerializer, ImagePublicSerializer
 
 
 def info(request, house_uuid):
@@ -68,3 +70,21 @@ class HouseDetailPublicView(RetrieveModelMixin, GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+
+
+class ImagesPublicView(GenericAPIView):
+    serializer_class = ImagePublicSerializer
+
+    def get(self, request, house_uuid, *args, **kwargs):
+        images = Image.objects.filter(house__uuid=house_uuid)
+        serializer = self.serializer_class(images, many=True)
+        return Response(serializer.data)
+
+
+class ThumbnailPublicView(GenericAPIView):
+    serializer_class = ImagePublicSerializer
+
+    def get(self, request, house_uuid, *args, **kwargs):
+        image = Image.objects.get(house__uuid=house_uuid, is_thumbnail=True)
+        serializer = self.serializer_class(image)
+        return Response(serializer.data)

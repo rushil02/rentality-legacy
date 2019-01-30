@@ -213,6 +213,5 @@ class BookingAmountView(APIView):
                     date_range=[booking_info.validated_data['start_date'], booking_info.validated_data['end_date']],
                     guests_num=booking_info.validated_data['guests'], promotional_codes=promo_objs
                 ).tenant_account.to_dict()
-                print(amount_details, "here")
                 serializer = BookingAmountDetailsSerializer(amount_details)
                 return Response(serializer.data)

@@ -61,7 +61,7 @@ class TenantAccountBase(object):
 
     @property
     def total_rent(self):
-        return self.stay_duration * self.weekly_rent
+        return Decimal(self.stay_duration * self.weekly_rent)
 
     @property
     def payable_rent(self):
@@ -106,6 +106,7 @@ class TenantAccountBase(object):
             stay_duration=self.stay_duration
         )
 
+
 # FIXME: Verify following model, compare with TenantAccount
 class HomeOwnerAccountBase(object):
     def __init__(self, stay_duration, weekly_rent, fee, promo_codes):
@@ -143,17 +144,30 @@ class HomeOwnerAccountBase(object):
         val = Decimal(0.0)
         for promo_code in self.promo_codes:
             val += Decimal(promo_code.apply_code(total_rent=self.payable_rent, service_fee=self.service_fee,
-                                         total_amount=self.total_amount))
+                                                 total_amount=self.total_amount))
         return Charge.reverse_init(value=val, principal=self.total_amount)
 
     @property
     def tax(self):
-        return Charge.init(self.fee.GST, self.service_fee)
+        return Charge.init(self.fee.GST, self.service_fee.value)
 
     @property
     def payable_amount(self):
         """ Final amount received by the home owner """
         return max(0, self.total_amount + self.discount.value - self.tax.value)
+
+    def to_dict(self):
+        return dict(
+            weekly_rent=self.weekly_rent,
+            total_rent=self.total_rent,
+            payable_rent=self.payable_rent,
+            service_fee=self.service_fee.value,
+            total_amount=self.total_amount,
+            discount=self.discount.value,
+            tax=self.tax.value,
+            payable_amount=self.payable_amount,
+            stay_duration=self.stay_duration
+        )
 
 
 class FeeModelBase(object):
@@ -162,10 +176,8 @@ class FeeModelBase(object):
 
     def __init__(self, application, fee):
         """
-        :param house: House object
-        :param date_range: [Date(start_date), Date(end_date)]
-        :param guests_num: int
-        :param promotional_codes: [promo_code_obj_1, ...]
+        :param application: 'billing.utils.application' object or a child class object
+        :param fee: model object instance passed from the DB
         """
         self.application = application
         self.fee = fee

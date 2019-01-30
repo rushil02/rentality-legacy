@@ -8,7 +8,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -107,3 +106,14 @@ docker-compose.override.yml
 .vscode
 
 static_dev/
+
+frontend/node_modules
+frontend/package-lock.json
+
+src/static/v2/frontend/index.js
+
+00*.py
+
+.idea
+
+bin/sync_with_prod

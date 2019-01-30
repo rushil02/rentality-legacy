@@ -3,7 +3,7 @@ from rest_framework import serializers
 from cities_custom.serializers import LocationCitySerializer, PostalCodeSerializer
 from essentials.serializers import PolicyPublicSerializer
 from house.models import House, Image, Facility, NeighbourhoodDescriptor, WelcomeTag, HouseRule, Rule, \
-    CancellationPolicy
+    CancellationPolicy, Availability
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -132,6 +132,12 @@ class CancellationPolicyPublicSerializer(serializers.ModelSerializer):
         fields = ('verbose', 'description', 'official_policy')
 
 
+class AvailabilityPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = ('dates', 'periodic')
+
+
 class HouseDetailsPublicSerializer(serializers.ModelSerializer):
     """
     No Secured information of the house or home owner is passed
@@ -163,3 +169,9 @@ class HouseAllDetailsSerializer(serializers.ModelSerializer):
         model = House
         fields = '__all__'
         depth = 1
+
+
+class ImagePublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['image', 'is_thumbnail', 'uuid']
