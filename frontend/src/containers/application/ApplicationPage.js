@@ -390,6 +390,7 @@ class ApplicationPage extends Component {
                                     houseDetails={this.state.house}
                                     discountCode={this.state.currentDiscountCode}
                                     discountCodes={this.state.discountCodes}
+                                    bookingAmountDetails={this.state.bookingAmountDetails}
                                     bookingDetails={this.state.bookingAmountDetails}
                                     onDiscountFieldChange={this.handleDiscountFieldChange}
                                     onApplyDiscount={this.handleSendDiscountCode}

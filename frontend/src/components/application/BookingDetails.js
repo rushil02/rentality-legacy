@@ -13,7 +13,7 @@ export default class BookingDetails extends Component {
           </div>
           {count === discountCodeList.length - 1 &&
             <div className="col-8 gray">
-              {this.props.bookingDetails.discountAmount}:
+              {this.props.bookingAmountDetails.discountAmount}:
             </div>}
         </div>
       );
@@ -23,7 +23,7 @@ export default class BookingDetails extends Component {
 
 
   render() {
-    const bookingDuration = this.props.bookingDetails.bookingDuration;
+    const bookingDuration = this.props.bookingAmountDetails.bookingDuration;
     console.log("COOKING STATE", this.props);
     return (
       <div className="right">
@@ -77,9 +77,9 @@ export default class BookingDetails extends Component {
               <div className="left-padding">
                 <div className="row">
                   <div className="col-8 gray">
-                    ${this.props.bookingDetails.weeklyRent} x {bookingDuration < 8 ? bookingDuration : (bookingDuration/ 7).toFixed(1)} weeks:
+                    ${this.props.bookingAmountDetails.weeklyRent} x {bookingDuration < 8 ? bookingDuration : (bookingDuration/ 7).toFixed(1)} weeks:
                   </div>
-                  <div className="col-4 text-right bold">${this.props.bookingDetails.totalRent} AUD</div>
+                  <div className="col-4 text-right bold">${this.props.bookingAmountDetails.totalRent} AUD</div>
                 </div>
                 <div className={"row" + (!this.props.discountCodes ? " bottom-margin" : "")}>
                   <div className="col-8 gray">
@@ -88,7 +88,7 @@ export default class BookingDetails extends Component {
                       what is this
                     </i>
                   </div>
-                  <div className="col-4 text-right bold">${this.props.bookingDetails.serviceFee} AUD</div>
+                  <div className="col-4 text-right bold">${this.props.bookingAmountDetails.serviceFee} AUD</div>
                 </div>
                 {this.props.discountCodes && this.displayDiscountCodes()}
               </div>
@@ -115,7 +115,7 @@ export default class BookingDetails extends Component {
               <div className="row">
                 <div className="col-8 small-normal">Total</div>
                 <div className="col-4 text-right red">
-                  ${this.props.bookingDetails.totalPayable} AUD
+                  ${this.props.bookingAmountDetails.totalPayable} AUD
                 </div>
               </div>
             </div>
