@@ -152,3 +152,14 @@ class HouseDetailsPublicSerializer(serializers.ModelSerializer):
 
     def get_thumbnail(self, obj):
         return obj.get_thumbnail_2()
+
+
+class HouseAllDetailsSerializer(serializers.ModelSerializer):
+    """
+    Serializes all fields with depth - '1' (all related data)
+    """
+
+    class Meta:
+        model = House
+        fields = '__all__'
+        depth = 1

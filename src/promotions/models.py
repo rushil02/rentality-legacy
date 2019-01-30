@@ -36,6 +36,29 @@ class PromotionalCodeManager(models.Manager):
                     **code_obj.validate_for_use(user=user, applied_on_content_type=applied_on_content_type, **kwargs)
                 )
 
+    def validate_list(self, codes, user, applied_on_content_type, applier_type, **kwargs):
+        """ Validates a list of promo-codes, returns error if any is invalid or if they are incompatible. """
+        promo_codes = []
+        incompatible_with_others = False
+        for code in codes:
+            result = self.validate(
+                code=code,
+                user=user,
+                applied_on_content_type=applied_on_content_type,
+                applier_type=applier_type
+            )
+            if result["valid"]:
+                promo_codes.append(result["obj"])
+                if not incompatible_with_others:
+                    incompatible_with_others = result["obj"].get_meta_data("incompatible_with_others", default=False)
+            else:
+                raise ValueError(result["msg"])
+
+        if incompatible_with_others and len(promo_codes) > 1:
+            raise ValueError("Incompatible Promo Codes")
+        else:
+            return promo_codes
+
 
 class PromotionalCode(models.Model):
     """
@@ -255,8 +278,15 @@ class PromotionalCode(models.Model):
 
         elif self.value_type == 'P':
             principal = principal_options[self.principal]
-            discount = principal * (self.value/100) * invert_discount[self.invert_discount]
+            discount = principal * (self.value / 100) * invert_discount[self.invert_discount]
             return discount
+
+    @property
+    def is_change_fee(self):  # FIXME: record fee structure changes
+        return False
+
+    def get_fee_model(self):
+        return None  # FIXME
 
 
 class Referee(models.Model):

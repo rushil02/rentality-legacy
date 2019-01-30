@@ -1,6 +1,8 @@
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
 from application.models import Application
+from promotions.models import PromotionalCode
 
 
 class ApplicationPublicSerializer(serializers.ModelSerializer):

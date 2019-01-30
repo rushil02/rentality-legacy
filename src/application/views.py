@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from rest_framework.decorators import api_view
 from django.views.decorators.http import require_GET
@@ -8,12 +9,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from datetime import datetime
 from django.http import Http404
-from rest_framework import generics
+from rest_framework import generics, status
 from application.serializers import ApplicationPublicSerializer, BookingAmountDetailsSerializer, BookingInfoSerializer
 from billing.models import Fee
 import pytz
 from psycopg2.extras import DateRange
 
+from billing.utils import Fee as BillingFee
 from house.forms import ApplyForm
 from house.models import House
 from house.serializers import HouseSerializer, HouseDetailsPublicSerializer
@@ -21,9 +23,11 @@ from payments.stripe_wrapper import retrieve_customer, create_customer, create_c
 from application.models import Application, ApplicationState
 from billing.models import Fee, Order
 
-
 # FIXME: Needs to be removed
 # @require_GET
+from promotions.models import PromotionalCode
+
+
 def create_react(request, house_uuid):
     house = get_object_or_404(House, uuid=house_uuid)
     form = ApplyForm(request.GET, obj=house)
@@ -176,10 +180,6 @@ class CreateApplicationView(APIView):
 
 class BookingAmountView(APIView):
 
-    @staticmethod
-    def calculate_rent(house):
-        return {'total_amount': 0, 'service_fee': 0, 'payable_amount': 0, 'weekly_rent': 0, 'discount': 0, 'stay_duration': 0}
-
     def get(self, request, *args, **kwargs):
         try:
             house = House.active_objects.get(uuid=self.kwargs['house_uuid'])
@@ -188,5 +188,21 @@ class BookingAmountView(APIView):
         else:
             booking_info = BookingInfoSerializer(data=request.GET)
             if booking_info.is_valid(raise_exception=True):
-                serializer = BookingAmountDetailsSerializer(self.calculate_rent(house))
+                promo_codes = booking_info.validated_data.get('promo_codes', [])
+                try:
+                    promo_objs = PromotionalCode.objects.validate_list(
+                        codes=promo_codes, user=request.user,
+                        applied_on_content_type=ContentType.objects.get(app_label='application', model='application'),
+                        applier_type='T'
+                    )
+                except ValueError as e:
+                    return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+                amount_details = BillingFee.init(
+                    house=house,
+                    date_range=[booking_info.validated_data['start_date'], booking_info.validated_data['end_date']],
+                    guests_num=booking_info.validated_data['guests'], promotional_codes=promo_objs
+                ).tenant_account.to_dict()
+                print(amount_details, "here")
+                serializer = BookingAmountDetailsSerializer(amount_details)
                 return Response(serializer.data)

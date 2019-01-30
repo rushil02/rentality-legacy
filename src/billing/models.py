@@ -15,7 +15,12 @@ class Order(models.Model):
         return "%s" % self.application
 
 
-# FIXME: Add checks for default and model update/delete
+class FeeManager(models.Manager):
+    def get_default(self):
+        return self.get(active=True)
+
+
+# FIXME: Add checks for default and model delete
 class Fee(models.Model):
     """
     Once a fee object is created, it should not be deletable or editable
@@ -34,6 +39,8 @@ class Fee(models.Model):
 
     billing_model = models.CharField(max_length=1, choices=BILLING_MODELS)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    objects = FeeManager()
 
     def __str__(self):
         return "T - %s; H - %s" % (self.tenant_charge, self.home_owner_charge)

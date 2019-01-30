@@ -1,7 +1,48 @@
 """
 Base file to describe Fee and Billing Financial models
 """
+
 # FIXME: Requires validation checks, All checks can be migrated here (duration limit, etc)
+from datetime import timedelta
+from decimal import Decimal
+
+
+class Charge(object):
+    """
+    Stores charge (percentage) and calculates value for it
+    """
+
+    def __init__(self, charge, principal, value):
+        """
+        :param charge: percentage value
+        :param principal: amount
+        :param value: amount
+        """
+        if charge is None and value is None:
+            raise ValueError("Need at least one argument - charge or value")
+        self._charge = charge
+        self._value = value
+        self.principal = principal
+
+    @property
+    def value(self):
+        if self._value is None:
+            self._value = (self.charge / 100) * self.principal
+        return self._value
+
+    @property
+    def charge(self):
+        if self._charge is None:
+            self._charge = (self.value / self.principal) * 100
+        return self._charge
+
+    @classmethod
+    def reverse_init(cls, value, principal):
+        return cls(charge=None, principal=principal, value=value)
+
+    @classmethod
+    def init(cls, charge, principal):
+        return cls(charge=charge, principal=principal, value=None)
 
 
 class TenantAccountBase(object):
@@ -28,31 +69,44 @@ class TenantAccountBase(object):
 
     @property
     def service_fee(self):
-        return (self.fee.tenant_charge / 100) * self.payable_rent
+        return Charge.init(self.fee.tenant_charge, self.payable_rent)
 
     @property
     def total_amount(self):
         """ Total before tax and discount """
-        return self.service_fee + self.payable_rent
+        return self.service_fee.value + self.payable_rent
 
     @property
     def discount(self):
-        val = 0.0
+        val = Decimal(0.0)
         for promo_code in self.promo_codes:
-            val += promo_code.apply_code(total_rent=self.payable_rent, service_fee=self.service_fee,
-                                         total_amount=self.total_amount)
-        return val
+            val += Decimal(promo_code.apply_code(total_rent=self.payable_rent, service_fee=self.service_fee,
+                                                 total_amount=self.total_amount))
+        return Charge.reverse_init(value=val, principal=self.total_amount)
 
     @property
     def tax(self):
-        return (self.fee.GST / 100) * self.service_fee
+        return Charge.init(self.fee.GST, self.service_fee.value)
 
     @property
     def payable_amount(self):
         """ Final amount paid by the tenant """
-        return max(0, self.total_amount - self.discount) + self.tax
+        return max(0, self.total_amount - self.discount.value) + self.tax.value
 
+    def to_dict(self):
+        return dict(
+            weekly_rent=self.weekly_rent,
+            total_rent=self.total_rent,
+            payable_rent=self.payable_rent,
+            service_fee=self.service_fee.value,
+            total_amount=self.total_amount,
+            discount=self.discount.value,
+            tax=self.tax.value,
+            payable_amount=self.payable_amount,
+            stay_duration=self.stay_duration
+        )
 
+# FIXME: Verify following model, compare with TenantAccount
 class HomeOwnerAccountBase(object):
     def __init__(self, stay_duration, weekly_rent, fee, promo_codes):
         """
@@ -68,7 +122,7 @@ class HomeOwnerAccountBase(object):
 
     @property
     def total_rent(self):
-        return self.stay_duration * self.weekly_rent
+        return Decimal(self.stay_duration * self.weekly_rent)
 
     @property
     def payable_rent(self):
@@ -77,7 +131,7 @@ class HomeOwnerAccountBase(object):
 
     @property
     def service_fee(self):
-        return (self.fee.home_owner_charge / 100) * self.payable_rent
+        return Charge.init(charge=self.fee.home_owner_charge, principal=self.payable_rent)
 
     @property
     def total_amount(self):
@@ -86,35 +140,43 @@ class HomeOwnerAccountBase(object):
 
     @property
     def discount(self):
-        val = 0.0
+        val = Decimal(0.0)
         for promo_code in self.promo_codes:
-            val += promo_code.apply_code(total_rent=self.payable_rent, service_fee=self.service_fee,
-                                         total_amount=self.total_amount)
-        return val
+            val += Decimal(promo_code.apply_code(total_rent=self.payable_rent, service_fee=self.service_fee,
+                                         total_amount=self.total_amount))
+        return Charge.reverse_init(value=val, principal=self.total_amount)
 
     @property
     def tax(self):
-        return (self.fee.GST / 100) * self.service_fee
+        return Charge.init(self.fee.GST, self.service_fee)
 
     @property
     def payable_amount(self):
         """ Final amount received by the home owner """
-        return max(0, self.total_amount + self.discount - self.tax)
+        return max(0, self.total_amount + self.discount.value - self.tax.value)
 
 
 class FeeModelBase(object):
     TenantAccountModel = TenantAccountBase
     HomeOwnerAccountModel = HomeOwnerAccountBase
 
-    def __init__(self, application):
+    def __init__(self, application, fee):
+        """
+        :param house: House object
+        :param date_range: [Date(start_date), Date(end_date)]
+        :param guests_num: int
+        :param promotional_codes: [promo_code_obj_1, ...]
+        """
         self.application = application
+        self.fee = fee
+
         self.tenant_account = self.TenantAccountModel(
-            stay_duration=self.stay_duration, weekly_rent=application.rent,
-            fee=application.fee, promo_codes=self.application.promotional_code
+            stay_duration=self.stay_duration, weekly_rent=self.application.rent,
+            fee=self.fee, promo_codes=self.application.promo_codes
         )
         self.home_owner_account = self.HomeOwnerAccountModel(
-            stay_duration=self.stay_duration, weekly_rent=application.rent,
-            fee=application.fee, promo_codes=self.application.house_meta.get('promotional_codes', [])
+            stay_duration=self.stay_duration, weekly_rent=self.application.rent,
+            fee=self.fee, promo_codes=self.application.house.promo_codes.all()
         )
 
     @property
@@ -127,4 +189,4 @@ class FeeModelBase(object):
 
     @property
     def stay_duration(self):
-        return self.application.date[1] - self.application.date[0] + 1
+        return (self.application.date_range[1] - self.application.date_range[0] + timedelta(days=1)).days / 7

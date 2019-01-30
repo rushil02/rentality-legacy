@@ -8,6 +8,8 @@ from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
+from house.serializers import HouseAllDetailsSerializer
+
 STATUS_CHOICES = (
     ('P', 'Pending'),
     ('A', 'Accepted'),
@@ -25,8 +27,8 @@ class Application(models.Model):
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.PROTECT)
     tenant_meta = JSONField(null=True, blank=True)
     rent = models.PositiveIntegerField()
-    fee = models.ForeignKey('billing.Fee', on_delete=models.PROTECT)
     meta = JSONField(null=True, blank=True)
+
     date = DateRangeField(verbose_name=_('stay dates'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
     promotional_code = models.ManyToManyField('promotions.PromotionalCode', blank=True)  # FIXME: Needs to be plural
@@ -80,12 +82,14 @@ class Application(models.Model):
         else:
             new_code = new_code + prev_code[i:]
 
-        return new_code
+        return new_code[::-1]
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if self.pk is None:
             self.ref_code = self.get_ref_code()
+        if self.house_meta is None:
+            self.house_meta = HouseAllDetailsSerializer(self.house).data
         super(Application, self).save(force_insert=False, force_update=False, using=None,
                                       update_fields=None)
 
@@ -99,6 +103,17 @@ class ApplicationState(models.Model):
         on_delete=models.PROTECT,
     )
     created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "%s" % self.application
+
+
+class AccountDetail(models.Model):
+    application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
+    fee = models.ForeignKey('billing.Fee', on_delete=models.PROTECT)
+    tenant = JSONField()
+    home_owner = JSONField()
+    meta = JSONField()
 
     def __str__(self):
         return "%s" % self.application
