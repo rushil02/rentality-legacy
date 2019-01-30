@@ -22,12 +22,13 @@ from house.serializers import HouseSerializer, HouseDetailsPublicSerializer
 from payments.stripe_wrapper import retrieve_customer, create_customer, create_charge
 from application.models import Application, ApplicationState
 from billing.models import Fee, Order
-
-# FIXME: Needs to be removed
-# @require_GET
+from rest_framework.settings import api_settings
+from rest_framework import status
 from promotions.models import PromotionalCode
 
 
+# FIXME: Needs to be removed
+# @require_GET
 def create_react(request, house_uuid):
     house = get_object_or_404(House, uuid=house_uuid)
     form = ApplyForm(request.GET, obj=house)
@@ -159,12 +160,21 @@ class CreateApplicationView(APIView):
         rent = amounts['calculated_rent']
         fee = self.get_fee_instance()
         date = DateRange(lower=self.start_date, upper=self.end_date)
-        serializer = self.serializer_class(data=dict(tenant=tenant, rent=rent, fee=fee, date=date))
-        serializer.save()
+        serializer = self.serializer_class(data=dict(start_date=self.start_date, end_date=self.end_date))
+        serializer.is_valid(raise_exception=True)
+        serializer.save(tenant=tenant, rent=rent, fee=fee, date=date, house=house)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_success_headers(self, data):
+        try:
+            return {'Location': str(data[api_settings.URL_FIELD_NAME])}
+        except (TypeError, KeyError):
+            return {}
 
     def calculate_rent(self, house):
-        self.start_date = datetime.strptime(self.request.data['start_date'], '%Y-%m-%dT%H:%M:%S.%fZ').date()
-        self.end_date = datetime.strptime(self.request.data['end_date'], '%Y-%m-%dT%H:%M:%S.%fZ').date()
+        self.start_date = datetime.strptime(self.request.data['startDate'], '%Y-%m-%d').date()
+        self.end_date = datetime.strptime(self.request.data['endDate'], '%Y-%m-%d').date()
         promo_code = self.request.data.get('promo_code', [])
         # FIXME: Add rent calculation Logic
         amounts = {

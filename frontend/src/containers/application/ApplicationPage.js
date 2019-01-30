@@ -12,6 +12,9 @@ import axios from 'axios';
 import {reverse} from 'named-urls';
 import routes from "../../routes";
 
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
 class ApplicationPage extends Component {
     constructor(props) {
         super(props);
@@ -245,7 +248,7 @@ class ApplicationPage extends Component {
         let dataToSend = {...this.state.payment, ...this.state.tenant, ...this.state.agreements, ...bookingDetails};
         axios.post(
             reverse(routes.application.create, {"houseUUID": this.state.house.uuid}),
-            {data: dataToSend, headers: "csrftoken?"}).then(
+            dataToSend).then(
             result => console.log(result)
         ).error(
             (result) => {
