@@ -4,8 +4,8 @@ from application.models import Application
 
 
 class ApplicationPublicSerializer(serializers.ModelSerializer):
-    start_date = serializers.DateField()
-    end_date = serializers.DateField()
+    start_date = serializers.DateField(read_only=True)
+    end_date = serializers.DateField(read_only=True)
 
     class Meta:
         model = Application
