@@ -77,11 +77,17 @@ export default class BookingDetails extends Component {
               <div className="left-padding">
                 <div className="row">
                   <div className="col-8 gray">
-                    ${this.props.bookingAmountDetails.weeklyRent} x {bookingDuration < 8 ? bookingDuration : (bookingDuration/ 7).toFixed(1)} weeks:
+                    Weekly Rent:
+                  </div>
+                  <div className="col-4 text-right bold">${this.props.bookingAmountDetails.weeklyRent} AUD</div>
+                </div>
+                <div className="row">
+                  <div className="col-8 gray">
+                    ${this.props.bookingAmountDetails.weeklyRent} x {parseFloat(bookingDuration).toFixed(1)} weeks:
                   </div>
                   <div className="col-4 text-right bold">${this.props.bookingAmountDetails.totalRent} AUD</div>
                 </div>
-                <div className={"row" + (!this.props.discountCodes ? " bottom-margin" : "")}>
+                <div className="row">
                   <div className="col-8 gray">
                     Service fee:
                     <i data-toggle="popover" data-content="Charges for Rentality's services">
@@ -89,6 +95,17 @@ export default class BookingDetails extends Component {
                     </i>
                   </div>
                   <div className="col-4 text-right bold">${this.props.bookingAmountDetails.serviceFee} AUD</div>
+
+                </div>
+
+                <div className={"row" + (!this.props.discountCodes ? " bottom-margin" : "")}>
+                  <div className="col-8 gray">
+                    Total Amount Payable:
+                    <i data-toggle="popover" data-content="Only first month's rent is accepted by rentality as booking fees.">
+                      what is this
+                    </i>
+                  </div>
+                  <div className="col-4 text-right bold">${this.props.bookingAmountDetails.totalPayable} AUD</div>
                 </div>
                 {this.props.discountCodes && this.displayDiscountCodes()}
               </div>

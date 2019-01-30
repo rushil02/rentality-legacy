@@ -122,10 +122,12 @@ class ApplicationPage extends Component {
                 this.setState({
                     bookingAmountDetails: {
                         "weeklyRent": result.data.weekly_rent,
-                        "totalRent": result.data.total_amount,
+                        "totalRent": result.data.total_rent,
+                        "payableRent": result.data.payable_rent,
                         "serviceFee": result.data.service_fee,
+                        "totalAmount": result.data.total_amount,
                         "discountAmount": result.data.discount,
-//                        "discountTitle": "Discount 20%",
+                        "tax": result.data.tax,
                         "totalPayable": result.data.payable_amount,
                         "bookingDuration": result.data.stay_duration,
                     }
@@ -167,7 +169,7 @@ class ApplicationPage extends Component {
     handleDiscountFieldChange = (code) => {
         this.setState(prevState => ({
             ...prevState,
-          currentDiscountCode: code
+            currentDiscountCode: code
         }))
     };
 
@@ -178,13 +180,13 @@ class ApplicationPage extends Component {
 
         axios.get(reverse(routes.promo.verifyApplicationDiscount), {params: {code: discountCode}}
         ).then(resp => {
-            console.log("RESP CODE", resp);
+                console.log("RESP CODE", resp);
                 this.setState(prevState => ({
-                  // FIXME: @Elliott discountCodes is a list, how do you update that? >> I've changed it to a list now.
+                    // FIXME: @Elliott discountCodes is a list, how do you update that? >> I've changed it to a list now.
                     ...prevState,
                     discountCodes: [
-                      ...prevState.discountCodes,
-                      ...[resp.data]
+                        ...prevState.discountCodes,
+                        ...[resp.data]
                     ]
                 }))
             }
@@ -199,41 +201,27 @@ class ApplicationPage extends Component {
                         promo_code: [this.state.discountCode] // FIXME: is this correct? Please make sure that this list is updated
                     }
                 }
-            ) // FIXME: doesn't it require a then for setState, like the following? >> YES, you're right.
-            .then(result => {
-                this.setState({
-                    bookingAmountDetails: {
-                        "weeklyRent": result.data.weekly_rent,
-                        "totalRent": result.data.total_amount,
-                        "serviceFee": result.data.service_fee,
-                        "discountAmount": result.data.discount,
-                        "totalPayable": result.data.payable_amount,
-                        "bookingDuration": result.data.stay_duration,
-                    }
-                })
-            }
-        ).error((result) => {
-            console.log("ERRORS FROM RESP", result);
-                  errors = {...errors, ...result.errors};
-                  this.setState({errors: errors})
-              });
+            ).then(result => {
+                    this.setState({
+                        bookingAmountDetails: {
+                            "weeklyRent": result.data.weekly_rent,
+                            "totalRent": result.data.total_rent,
+                            "payableRent": result.data.payable_rent,
+                            "serviceFee": result.data.service_fee,
+                            "totalAmount": result.data.total_amount,
+                            "discountAmount": result.data.discount,
+                            "tax": result.data.tax,
+                            "totalPayable": result.data.payable_amount,
+                            "bookingDuration": result.data.stay_duration,
+                        }
+                    })
+                }
+            ).error((result) => {
+                console.log("ERRORS FROM RESP", result);
+                errors = {...errors, ...result.errors};
+                this.setState({errors: errors})
+            });
         });
-        // FIXME: Please confirm if the following code is unnecessary >> No, you shouldn't need this give the above code
-
-        //     .then(resp => {
-        //         this.setState(prevState => ({
-        //             ...prevState,
-        //             bookingDetails: {
-        //                 ...prevState.bookingDetails,
-        //                 "discountAmount": resp.discountAmount, // TODO: get discountAmount and totalPayable in bookingDetails resp.
-        //                 "totalPayable": resp.totalPayable,
-        //             }
-        //         }))
-        //     }
-        // ).error((result) => {
-        //     errors = {...errors, ...result.errors};
-        //     this.setState({errors: errors})
-        // });
     };
 
     sendFormData = () => {
@@ -256,32 +244,6 @@ class ApplicationPage extends Component {
                 errors = {...errors, ...result.errors};
             }
         );
-
-        //FIXME: Below code seems unnecessary >> Yeah was just separating the API requests in case the above
-        // routes.application.create didn't accept the tenant and payment data
-
-        // const stripeToken = this.state.payment.stripeToken;
-        // const applicationUUID = '';
-        // const data = {
-        //     stripeToken: stripeToken
-        // };
-        // axios.post('/apply/payment/' + applicationUUID, data).then(
-        //     (result) => console.log(result)
-        // ).error(
-        //     (result) => {
-        //         console.log(result);
-        //         errors = {...errors, ...result.errors};
-        //     }
-        // );
-        //
-        // axios.post('/apply/tenant/' + applicationUUID, this.state.tenant).then(
-        //     (result) => console.log(result)
-        // ).error(
-        //     (result) => {
-        //         console.log(result);
-        //         errors = {...errors, ...result.errors};
-        //     }
-        // );
 
         this.setState({errors: errors});
         return errors
@@ -394,7 +356,7 @@ class ApplicationPage extends Component {
                                     discountCode={this.state.currentDiscountCode}
                                     discountCodes={this.state.discountCodes}
                                     bookingAmountDetails={this.state.bookingAmountDetails}
-                                    bookingDetails={this.state.bookingAmountDetails}
+                                    bookingDetails={this.state.bookingDetails}
                                     onDiscountFieldChange={this.handleDiscountFieldChange}
                                     onApplyDiscount={this.handleSendDiscountCode}
                                     errors={this.state.errors}

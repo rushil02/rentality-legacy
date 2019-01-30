@@ -112,8 +112,6 @@ frontend/package-lock.json
 
 src/static/v2/frontend/index.js
 
-00*.py
-
 .idea
 
 bin/sync_with_prod
