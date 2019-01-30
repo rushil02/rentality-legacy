@@ -173,6 +173,28 @@ class ApplicationPage extends Component {
         }))
     };
 
+    parseParams = (params) => {
+        const keys = Object.keys(params);
+        let options = '';
+
+        keys.forEach((key) => {
+            const isParamTypeObject = typeof params[key] === 'object';
+            const isParamTypeArray = isParamTypeObject && (params[key].length >= 0);
+
+            if (!isParamTypeObject) {
+                options += `${key}=${params[key]}&`;
+            }
+
+            if (isParamTypeObject && isParamTypeArray) {
+                params[key].forEach((element) => {
+                    options += `${key}=${element}&`;
+                });
+            }
+        });
+
+        return options ? options.slice(0, -1) : options;
+    };
+
 
     handleSendDiscountCode = (discountCode) => {
         console.log("sending discount code to backend:", discountCode);
@@ -182,11 +204,9 @@ class ApplicationPage extends Component {
         ).then(resp => {
                 console.log("RESP CODE", resp);
                 this.setState(prevState => ({
-                    // FIXME: @Elliott discountCodes is a list, how do you update that? >> I've changed it to a list now.
-                    ...prevState,
                     discountCodes: [
                         ...prevState.discountCodes,
-                        ...[resp.data]
+                        resp.data
                     ]
                 }))
             }
@@ -198,8 +218,11 @@ class ApplicationPage extends Component {
                         start_date: window.django.extra_data.move_in_date,
                         end_date: window.django.extra_data.move_out_date,
                         guests: window.django.extra_data.guests,
-                        promo_code: [this.state.discountCode] // FIXME: is this correct? Please make sure that this list is updated
-                    }
+                        promo_codes: this.state.discountCodes.map(code => {
+                            return code.code
+                        })
+                    },
+                    paramsSerializer: params => this.parseParams(params)
                 }
             ).then(result => {
                     this.setState({

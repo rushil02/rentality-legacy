@@ -1,27 +1,6 @@
 import React, {Component} from 'react';
 
 export default class BookingDetails extends Component {
-
-  displayDiscountCodes = () => {
-    let discountCodeList = this.props.discountCodes;
-    let count = 0;
-    for (let code of discountCodeList) {
-      discountCodeList.push(
-        <div className="row bottom-margin">
-          <div className="col-8 gray">
-            {code.description}:
-          </div>
-          {count === discountCodeList.length - 1 &&
-            <div className="col-8 gray">
-              {this.props.bookingAmountDetails.discountAmount}:
-            </div>}
-        </div>
-      );
-      count++
-    }
-  };
-
-
   render() {
     const bookingDuration = this.props.bookingAmountDetails.bookingDuration;
     console.log("COOKING STATE", this.props);
@@ -107,7 +86,17 @@ export default class BookingDetails extends Component {
                   </div>
                   <div className="col-4 text-right bold">${this.props.bookingAmountDetails.totalPayable} AUD</div>
                 </div>
-                {this.props.discountCodes && this.displayDiscountCodes()}
+                {this.props.discountCodes && this.props.discountCodes.map((code, index) => {
+                  return <div className="row bottom-margin">
+                            <div className="col-8 gray">
+                              {code.description}:
+                    </div>
+                            {index === this.props.discountCodes.length - 1 &&
+                              <div className="col-8 gray">
+                                {this.props.bookingAmountDetails.discountAmount}:
+                      </div>}
+                          </div>;
+                })}
               </div>
               <div className="form">
                 <div className="row">
