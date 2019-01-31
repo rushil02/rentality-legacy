@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from rest_framework.decorators import api_view
@@ -32,6 +33,7 @@ from promotions.models import PromotionalCode
 from user_custom.models import Account
 
 
+@login_required
 def create_react(request, house_uuid):
     house = get_object_or_404(House, uuid=house_uuid)
     form = ApplyForm(request.GET, obj=house)
@@ -45,12 +47,6 @@ def create_react(request, house_uuid):
             'move_out_date': form.cleaned_data['move_out_date'].__str__(),
             'guests': form.cleaned_data['guests'],
             'duration': float("{0:.1f}".format(round(duration, 1))),
-            'total_payment': float("{0:.2f}".format(float(rent * 4 * float(1 + (fee.tenant_charge / 100))))),
-            'cal_rent': float("{0:.2f}".format(round(rent * duration, 2))),
-            'service_fee': float(4 * rent * float(fee.tenant_charge / 100)),
-            'discount_percentage': 0,
-            'discount_savings': 0
-
         }
         return render(request, 'react_base.html', {"extra_data": context})
     else:

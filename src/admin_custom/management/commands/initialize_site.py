@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sites.models import Site
 from django.db.utils import IntegrityError
 
+from billing.models import Fee
 from elastic_search.core.utils import create_mappings
 from house.models import HomeType, Facility, Rule, CancellationPolicy, NeighbourhoodDescriptor, WelcomeTag
 from django.conf import settings
@@ -160,6 +161,10 @@ def register_flat_pages(site_obj):
 
 def initialize_es():
     create_mappings()
+
+
+def create_fee():
+    Fee.objects.update_or_create(tenant_charge=8, home_owner_charge=4, billing_model='A', GST=0, active=True)
 
 
 class Command(BaseCommand):
