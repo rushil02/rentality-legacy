@@ -4,7 +4,7 @@ Base file to describe Fee and Billing Financial models
 
 # FIXME: Requires validation checks, All checks can be migrated here (duration limit, etc)
 from datetime import timedelta
-from decimal import Decimal
+from decimal import Decimal, ROUND_UP
 
 
 class Charge(object):
@@ -106,8 +106,17 @@ class TenantAccountBase(object):
             stay_duration=self.stay_duration
         )
 
+    def to_json_dict(self):
+        representation = self.to_dict()
+        json_di = dict()
+        for key in representation:
+            if isinstance(representation[key], Decimal):
+                json_di[key] = float(representation[key])
+            else:
+                json_di[key] = representation[key]
+        return json_di
 
-# FIXME: Verify following model, compare with TenantAccount
+
 class HomeOwnerAccountBase(object):
     def __init__(self, stay_duration, weekly_rent, fee, promo_codes):
         """
@@ -137,7 +146,7 @@ class HomeOwnerAccountBase(object):
     @property
     def total_amount(self):
         """ Total before tax and discount """
-        return self.payable_rent - self.service_fee
+        return self.payable_rent - self.service_fee.value
 
     @property
     def discount(self):
@@ -169,6 +178,16 @@ class HomeOwnerAccountBase(object):
             stay_duration=self.stay_duration
         )
 
+    def to_json_dict(self):
+        representation = self.to_dict()
+        json_di = dict()
+        for key in representation:
+            if isinstance(representation[key], Decimal):
+                json_di[key] = float(representation[key])
+            else:
+                json_di[key] = representation[key]
+        return json_di
+
 
 class FeeModelBase(object):
     TenantAccountModel = TenantAccountBase
@@ -193,12 +212,29 @@ class FeeModelBase(object):
 
     @property
     def source_amount(self):
-        return self.tenant_account.payable_amount
+        return self.tenant_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP)
 
     @property
     def destination_amount(self):
-        return self.home_owner_account.payable_amount
+        return self.home_owner_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP)
 
     @property
     def stay_duration(self):
         return (self.application.date_range[1] - self.application.date_range[0] + timedelta(days=1)).days / 7
+
+    def to_dict(self):
+        return dict(
+            source_amount=self.source_amount,
+            destination_amount=self.destination_amount,
+            stay_duration=self.stay_duration,
+        )
+
+    def to_json_dict(self):
+        representation = self.to_dict()
+        json_di = dict()
+        for key in representation:
+            if isinstance(representation[key], Decimal):
+                json_di[key] = float(representation[key])
+            else:
+                json_di[key] = representation[key]
+        return json_di

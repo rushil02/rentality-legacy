@@ -141,7 +141,7 @@ class PersonalityTag(models.Model):
 # FIXME: Migrate all payment process in reference to this model
 class Account(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    details = JSONField()
+    details = JSONField(default={})
     PAYMENT_GATEWAY_CHOICES = (
         ('S', 'Stripe'),
         ('A', 'Assembly')
@@ -150,3 +150,12 @@ class Account(models.Model):
 
     def __str__(self):
         return "%s" % self.user
+
+    def get_details(self, key, **kwargs):
+        try:
+            return self.details[key]
+        except KeyError as e:
+            try:
+                return kwargs['default']
+            except KeyError:
+                raise e

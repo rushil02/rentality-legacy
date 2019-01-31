@@ -3,14 +3,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from rest_framework.decorators import api_view
 from django.views.decorators.http import require_GET
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from datetime import datetime
 from django.http import Http404
 from rest_framework import generics, status
-from application.serializers import ApplicationPublicSerializer, BookingAmountDetailsSerializer, BookingInfoSerializer
+from application.serializers import BookingAmountDetailsSerializer, BookingInfoSerializer, \
+    ApplicationCreateSerializer
 from billing.models import Fee
 import pytz
 from psycopg2.extras import DateRange
@@ -20,15 +21,17 @@ from house.forms import ApplyForm
 from house.models import House
 from house.serializers import HouseSerializer, HouseDetailsPublicSerializer
 from payments.stripe_wrapper import retrieve_customer, create_customer, create_charge
-from application.models import Application, ApplicationState
+from application.models import Application, ApplicationState, AccountDetail
 from billing.models import Fee, Order
 from rest_framework.settings import api_settings
 from rest_framework import status
 from promotions.models import PromotionalCode
 
-
 # FIXME: Needs to be removed
 # @require_GET
+from user_custom.models import Account
+
+
 def create_react(request, house_uuid):
     house = get_object_or_404(House, uuid=house_uuid)
     form = ApplyForm(request.GET, obj=house)
@@ -95,97 +98,92 @@ class HouseDetailViewForApplication(APIView):
         return Response(self.amounts)
 
 
-class PaymentForApplication(APIView):
+class CreateApplicationView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = ApplicationCreateSerializer
 
-    @staticmethod
-    def calculate_amount(rent):
-        fee = Fee.objects.get(active=True)
-        d = {
-            'source_amount': int(rent * (1 + (fee.tenant_charge / 100))) * 100,
-            'destination_amount': int(rent * (1 - (fee.home_owner_charge / 100))) * 100
-        }
-        return d
+    PaymentGateway = 'S'  # Stripe, Refer to user_custom.models.Account
 
-    def post(self, request, *args, **kwargs):
-        application_uuid = self.kwargs['application_uuid']
+    def process_payment(self, request, stripe_token, fee_model, house):
         user = request.user
-        if user.tenant.customer_id:
-            customer = retrieve_customer(user.tenant.customer_id)
-            if request.POST.get('stripeToken'):
-                customer.source = request.POST.get('stripeToken')
-            customer.save()
-        else:
-            kwargs = {
-                'email': request.user.email
-            }
-            if request.POST.get('stripeToken'):
-                kwargs['source'] = request.POST.get('stripeToken')
-                customer = create_customer(**kwargs)
-                user.tenant.customer_id = customer.id
-                user.tenant.save()
         try:
-            application = Application.objects.get(uuid=application_uuid)
-        except Application.DoesNotExist:
-            raise Http404("Application does not exist")
+            account = user.account_set.get(payment_gateway=self.PaymentGateway)
+        except Account.DoesNotExist:
+            customer = create_customer(email=request.user.email, source=stripe_token)
+            account = Account(
+                user=user, payment_gateway=self.PaymentGateway, details={'customer_id': customer.id}
+            )
+            account.save()
         else:
-            amounts = self.calculate_amount(application.rent)
-            amount = amounts['source_amount']
-            customer = application.tenant.customer_id
-            destination_amount = amounts['destination_amount']
-            destination_account = application.house.home_owner.account_id
+            customer_id = account.get_details('customer_id', default=None)
 
-            charge = create_charge(
-                customer=customer,
-                target_account_id=destination_account,
-                amount=amount,
-                destination_amount=destination_amount
+            if customer_id:
+                customer = retrieve_customer(customer_id)
+                customer.source = stripe_token
+                customer.save()
+            else:
+                customer = create_customer(email=request.user.email, source=stripe_token)
+                account.details['customer_id'] = customer.id
+                account.save()
+
+        destination_amount = fee_model.destination_amount
+        destination_account = house.home_owner.account_id
+
+        charge = create_charge(
+            customer=customer,
+            target_account_id=destination_account,
+            amount=fee_model.source_amount,
+            destination_amount=destination_amount
+        )
+        return charge
+
+    def create(self, request, *args, **kwargs):
+        try:
+            house = House.objects.get(uuid=kwargs.get('house_uuid'))
+        except House.DoesNotExist:
+            raise Http404
+
+        tenant = self.request.user.tenant
+
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            promo_codes = serializer.validated_data['booking_info']['promo_codes']
+            try:
+                promo_objs = PromotionalCode.objects.validate_list(
+                    codes=promo_codes, user=request.user,
+                    applied_on_content_type=ContentType.objects.get(app_label='application', model='application'),
+                    applier_type='T'
+                )
+            except ValueError as e:
+                return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+            tenant_meta = None
+            app_obj = Application(
+                house=house, tenant=tenant, tenant_meta=tenant_meta, rent=house.rent,
+                date=DateRange(lower=serializer.validated_data['booking_info']['start_date'],
+                               upper=serializer.validated_data['booking_info']['end_date']),
+            )
+            app_obj.save()
+            app_obj.promotional_code.add(*promo_objs)
+
+            fee_model = BillingFee.init(
+                house=house,
+                date_range=(serializer.validated_data['booking_info']['start_date'], serializer.validated_data['booking_info']['end_date']),
+                guests_num=serializer.validated_data['booking_info']['guests'], promotional_codes=promo_objs
             )
 
-            order = Order(application=application, charge_id=charge.id)
-            order.save()
-        return Response({"status": True})
+            AccountDetail(
+                application=app_obj, fee=fee_model.fee,
+                tenant=fee_model.tenant_account.to_json_dict(),
+                home_owner=fee_model.home_owner_account.to_json_dict(),
+                meta=fee_model.to_json_dict()
+            ).save()
 
+            charge = self.process_payment(request, serializer.validated_data['stripe_token'], fee_model, house)
+            Order(application=app_obj, charge_id=charge.id)
 
-class CreateApplicationView(APIView):
-    # FIXME Remove id usages
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ApplicationPublicSerializer
-
-    def post(self, request, *args, **kwargs):
-        print(request.data)
-        house = get_object_or_404(House, uuid=kwargs.get('house_uuid'))
-        tenant = self.request.user.tenant
-        amounts = self.calculate_rent(house)
-        rent = amounts['calculated_rent']
-        fee = self.get_fee_instance()
-        date = DateRange(lower=self.start_date, upper=self.end_date)
-        serializer = self.serializer_class(data=dict(start_date=self.start_date, end_date=self.end_date))
-        serializer.is_valid(raise_exception=True)
-        serializer.save(tenant=tenant, rent=rent, fee=fee, date=date, house=house)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def get_success_headers(self, data):
-        try:
-            return {'Location': str(data[api_settings.URL_FIELD_NAME])}
-        except (TypeError, KeyError):
-            return {}
-
-    def calculate_rent(self, house):
-        self.start_date = datetime.strptime(self.request.data['startDate'], '%Y-%m-%d').date()
-        self.end_date = datetime.strptime(self.request.data['endDate'], '%Y-%m-%d').date()
-        promo_code = self.request.data.get('promo_code', [])
-        # FIXME: Add rent calculation Logic
-        amounts = {
-            'calculated_rent': 500,
-            'service_fee': 700,
-            'total_rent': 1200
-        }
-        return amounts
-
-    def get_fee_instance(self):
-        return Fee.objects.get(active=True)
+            return Response({"details": "success"}, status=status.HTTP_201_CREATED)
 
 
 class BookingAmountView(APIView):

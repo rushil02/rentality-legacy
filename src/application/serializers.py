@@ -5,9 +5,7 @@ from application.models import Application
 from promotions.models import PromotionalCode
 
 
-class ApplicationPublicSerializer(serializers.ModelSerializer):
-    start_date = serializers.DateField(read_only=True)
-    end_date = serializers.DateField(read_only=True)
+class ApplicationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Application
@@ -36,6 +34,19 @@ class BookingAmountDetailsSerializer(serializers.Serializer):
     stay_duration = serializers.DecimalField(max_digits=5, decimal_places=1)
 
 
-class ApplicationSerializer(serializers.Serializer):
-    class Meta:
-        model = Application
+class GuestDetailsSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
+    contact_num = serializers.CharField()
+    sex = serializers.CharField()
+
+
+class ApplicationCreateSerializer(serializers.Serializer):
+    booking_info = BookingInfoSerializer()
+    tenant_message = serializers.CharField()
+    agree_to_pay = serializers.BooleanField()
+    tenant_details = GuestDetailsSerializer()
+    stripe_token = serializers.CharField()
+    agree_to_tnc = serializers.BooleanField()
+    agree_to_house_rules = serializers.BooleanField()

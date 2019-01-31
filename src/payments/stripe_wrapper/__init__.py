@@ -54,10 +54,10 @@ def create_charge(customer, target_account_id, amount, destination_amount, *args
     """
     Create a Stripe Charge
 
-    ``customer``: The token recieved by stripe elements.\n
-    ``target_account_id``: Account ID of recipient.\n
-    ``amount``: Amount to be charged by Customer.\n
-    ``destination_amount``: Ammount to be recieved by recipient. Rest is your profit.
+    ``customer``: The token recieved by stripe elements
+    ``target_account_id``: Account ID of recipient
+    ``amount``: Amount to be charged to Customer
+    ``destination_amount``: Ammount to be recieved by recipient. Rest is your profit
     """
     return execute_request(
         stripe.Charge.create,

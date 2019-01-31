@@ -249,18 +249,35 @@ class ApplicationPage extends Component {
 
     sendFormData = () => {
         let errors = {};
-        let bookingDetails = {
-            startDate: window.django.extra_data.move_in_date,
-            endDate: window.django.extra_data.move_out_date,
-            promoCodes: this.state.discountCodes, // FIXME: is this definition correct? >> I've now changed it to the discountCodes list.
-            guests: window.django.extra_data.guests
-        };
 
-        let dataToSend = {...this.state.payment, ...this.state.tenant, ...this.state.agreements, ...bookingDetails};
+        let dataToSend = {
+            booking_info: {
+                start_date: window.django.extra_data.move_in_date,
+                end_date: window.django.extra_data.move_out_date,
+                promo_codes: this.state.discountCodes,
+                guests: window.django.extra_data.guests
+            },
+            stripe_token: this.state.payment.stripeToken,
+            agree_to_pay: this.state.agreements.agreeToPay,
+            agree_to_house_rules: this.state.agreements.agreeToHouseRules,
+            agree_to_tnc: this.state.agreements.agreeToTermsAndConditions,
+            tenant_details: {
+                first_name: this.state.tenant.firstName,
+                last_name: this.state.tenant.lastName,
+                email: this.state.tenant.emailAddress,
+                contact_num: this.state.tenant.phoneNumber,
+                sex: this.state.tenant.gender,
+            },
+            tenant_message: this.state.tenant.comments
+        };
         axios.post(
             reverse(routes.application.create, {"houseUUID": this.state.house.uuid}),
             dataToSend).then(
             result => console.log(result)
+        ).then(resp => {
+                console.log("RESP CODE", resp);
+
+            }
         ).error(
             (result) => {
                 console.log(result);
