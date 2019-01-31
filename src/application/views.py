@@ -133,7 +133,8 @@ class CreateApplicationView(CreateAPIView):
             customer=customer,
             target_account_id=destination_account,
             amount=fee_model.source_amount,
-            destination_amount=destination_amount
+            destination_amount=destination_amount,
+            receipt_email=user.email,
         )
         return charge
 
@@ -169,7 +170,8 @@ class CreateApplicationView(CreateAPIView):
 
             fee_model = BillingFee.init(
                 house=house,
-                date_range=(serializer.validated_data['booking_info']['start_date'], serializer.validated_data['booking_info']['end_date']),
+                date_range=(serializer.validated_data['booking_info']['start_date'],
+                            serializer.validated_data['booking_info']['end_date']),
                 guests_num=serializer.validated_data['booking_info']['guests'], promotional_codes=promo_objs
             )
 

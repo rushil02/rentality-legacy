@@ -212,11 +212,11 @@ class FeeModelBase(object):
 
     @property
     def source_amount(self):
-        return self.tenant_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP)
+        return int(self.tenant_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP) * 100)
 
     @property
     def destination_amount(self):
-        return self.home_owner_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP)
+        return int(self.home_owner_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP) * 100)
 
     @property
     def stay_duration(self):
