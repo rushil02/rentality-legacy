@@ -34,7 +34,7 @@ module.exports = {
         ],
 
     },
-    watch: true,
+    watch: false,
     output: {
         path: path.resolve(parentDir, 'src/static/v2/frontend'),
         filename: 'index.js'

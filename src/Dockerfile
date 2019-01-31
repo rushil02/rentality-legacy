@@ -1,3 +1,5 @@
+FROM registry.gitlab.com/rushil0195/rentality/frontend:latest as frontend-builder
+
 FROM registry.gitlab.com/rushil0195/rentality/base:latest
 
 ENV PYTHONUNBUFFERED=1
@@ -15,5 +17,7 @@ RUN apk update && \
 EXPOSE 8000
 
 COPY . .
+
+COPY --from=frontend-builder /src/static/v2/frontend/index.js ./static/v2/frontend/index.js
 
 ENTRYPOINT [ "./entrypoint.sh" ]

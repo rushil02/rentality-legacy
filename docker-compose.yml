@@ -54,6 +54,13 @@ services:
 #      - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
 #      - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
 #      - tsdbdata:/var/lib/postgresql/data
+  frontend:
+    build: ./frontend
+    image: registry.gitlab.com/rushil0195/rentality/frontend:latest
+    entrypoint: ['npm', 'run', 'dev']
+    volumes: 
+      - ./frontend:/app
+      - ./src/static/v2/frontend:/src/static/v2/frontend
   web:
     build: ./src
     image: registry.gitlab.com/rushil0195/rentality/web:v0.2
