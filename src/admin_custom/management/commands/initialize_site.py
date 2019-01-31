@@ -164,6 +164,7 @@ def initialize_es():
 
 
 def create_fee():
+    """ Register initial fee model"""
     Fee.objects.update_or_create(tenant_charge=8, home_owner_charge=4, billing_model='A', GST=0, active=True)
 
 
@@ -182,7 +183,8 @@ class Command(BaseCommand):
         'Register Cancellation Policy': (create_cancellation_policy, False),
         'Register Nearby Facilities (neighbourhood Descriptors)': (create_nearby_facilities, False),
         'Create Personality tags (used as Fun tags)': (create_personality_tags, False),
-        'Register Welcome Tags': (create_welcome_tags, False)
+        'Register Welcome Tags': (create_welcome_tags, False),
+        'Register Fee Model': (create_fee, False)
     }
 
     def ask_user_input(self, verbose):
