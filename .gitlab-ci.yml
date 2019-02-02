@@ -24,5 +24,7 @@
 
  build:
    stage: build
+   tags:
+    - docker
    script:
      - ls
