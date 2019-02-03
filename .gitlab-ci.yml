@@ -28,4 +28,4 @@
     - docker
    script:
      - ls /ssh
-     - ssh -i /ssh/id_rsa.pem root@rentality.com.au ls
+     - ssh -i /ssh/id_rsa.pem -o StrictHostKeyChecking=no root@rentality.com.au ls
