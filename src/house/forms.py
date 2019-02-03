@@ -234,21 +234,21 @@ class ApplyForm(forms.Form):
         label='Guests',
         widget=forms.Select(attrs={
             'class': 'form-control', 'placeholder': 'Number of Guests',
-        }, )
+        }, ), required=True
     )
     move_in_date = forms.DateField(
         label='Move in Date',
         widget=forms.DateInput(attrs={
             'class': 'form-control', 'placeholder': 'Move in Date',
             'readonly': True
-        }, )
+        }, ), required=True
     )
     move_out_date = forms.DateField(
         label='Move out Date',
         widget=forms.DateInput(attrs={
             'class': 'form-control', 'placeholder': 'Move out Date',
             'readonly': True
-        }, )
+        }, ), required=True
     )
 
     def __init__(self, *args, **kwargs):
@@ -258,7 +258,10 @@ class ApplyForm(forms.Form):
 
     def clean(self):
         super(ApplyForm, self).clean()
-        if self.cleaned_data['move_in_date'] >= self.cleaned_data["move_out_date"]:
+        try:
+            if self.cleaned_data['move_in_date'] >= self.cleaned_data["move_out_date"]:
+                raise ValidationError("Invalid Dates")
+            if (self.cleaned_data['move_out_date'] - self.cleaned_data["move_in_date"]).days/7 < 4:
+                raise ValidationError("Booking should be at least of 4 weeks")
+        except KeyError:
             raise ValidationError("Invalid Dates")
-        if (self.cleaned_data['move_out_date'] - self.cleaned_data["move_in_date"]).days/7 < 4:
-            raise ValidationError("Booking should be at least of 4 weeks")

@@ -15,3 +15,17 @@ class PostalCodeSerializer(GeoFeatureModelSerializer):
         model = PostalCode
         geo_field = "location"
         exclude = ['slug', ]
+
+
+class PostalCodeAllDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostalCode
+        exclude = ['alt_names', ]
+
+    def __init__(self, *args, **kwargs):
+        super(PostalCodeAllDetailSerializer, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if isinstance(self.fields[field], serializers.CharField):
+                self.fields[field].allow_blank = True
+            elif isinstance(self.fields[field], serializers.ManyRelatedField):
+                self.fields[field].allow_empty = True

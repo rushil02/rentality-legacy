@@ -18,6 +18,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "static_root
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "media_root")
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'test_emails')
 
 ALLOWED_HOSTS = ['*']

@@ -31,6 +31,7 @@ from promotions.models import PromotionalCode
 # FIXME: Needs to be removed
 # @require_GET
 from user_custom.models import Account
+from utils.mailer import send_template_mail
 
 
 @login_required
@@ -181,7 +182,16 @@ class CreateApplicationView(CreateAPIView):
             charge = self.process_payment(request, serializer.validated_data['stripe_token'], fee_model, house)
             Order(application=app_obj, charge_id=charge.id)
 
-            return Response({"details": "success"}, status=status.HTTP_201_CREATED)
+            send_template_mail(
+                subject="Rentality - Booking Confirmed",
+                template_name='emails/booking/confirmed.html',
+                context={'application': app_obj},
+                from_email='support@rentality.com.au',
+                recipient_list=[self.request.user.email],
+                text_message="Your booking has been confirmed. Please enable text/html to view this email correctly."
+            )
+
+            return Response({"details": "success", "msg": ""}, status=status.HTTP_201_CREATED)
 
 
 class BookingAmountView(APIView):
@@ -211,3 +221,14 @@ class BookingAmountView(APIView):
                 ).tenant_account.to_dict()
                 serializer = BookingAmountDetailsSerializer(amount_details)
                 return Response(serializer.data)
+
+
+def application_completion(request):
+    valid = request.GET['valid']
+    if valid:
+        messages.add_message(request, messages.SUCCESS, "%s" % 'Payment Successful, Your booking has been confirmed.'
+                                                               ' Check your email for confirmed booking details.')
+    else:
+        msg = request.GET.get('msg', default='Transaction Failed to process.')
+        messages.add_message(request, messages.ERROR, "Payment Failure - %s" % msg)
+    return redirect(reverse("user:dashboard"))

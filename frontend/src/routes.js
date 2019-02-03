@@ -12,6 +12,7 @@ export default {
       bookingDetails: 'amount/:houseUUID',
       create: 'create-app/:houseUUID',
       tenant: 'tenant-details',
+      complete: 'comp'
   }),
   promo: include('/promo', {
       verifyApplicationDiscount: 'verify-promo-use/application/tenant',

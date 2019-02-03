@@ -19,13 +19,12 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "css-loader": "^2.1.0",
     "file-loader": "^3.0.1",
-    "prop-types": "^15.6.2",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
     "style-loader": "^0.23.1",
     "svg-inline-loader": "^0.8.0",
+    "svg-url-loader": "^2.3.2",
+    "terser": "3.14.1",
     "url-loader": "^1.1.2",
-    "webpack": "^4.28.4",
+    "webpack": "4.28.4",
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
@@ -34,10 +33,12 @@
     "informed": "^1.10.12",
     "jquery": "^3.3.1",
     "named-urls": "^1.4.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^4.3.1",
     "react-stripe-elements": "^2.0.2",
-    "svg-url-loader": "^2.3.2",
     "title-case": "^2.1.1"
   }
 }

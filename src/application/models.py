@@ -2,13 +2,16 @@ import random
 import uuid
 import string
 
+from cities.models import PostalCode
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
-from house.serializers import HouseAllDetailsSerializer
+from cities_custom.serializers import PostalCodeSerializer, PostalCodeAllDetailSerializer
+from house.models import House, HomeType
+from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
 
 STATUS_CHOICES = (
     ('P', 'Pending'),
@@ -39,6 +42,30 @@ class Application(models.Model):
 
     def __str__(self):
         return "'%s' applied for %s" % (self.tenant, self.house)
+
+    def __init__(self, *args, **kwargs):
+        super(Application, self).__init__(*args, **kwargs)
+        self._house_native_obj = None
+
+    @property
+    def house_native_obj(self):
+        # FIXME: Make Complete Wrapper
+        if self._house_native_obj is None:
+            house_serializer = HouseAllDetailsSerializer(data=self.house_meta)
+            house_serializer.is_valid()
+            _house_native_obj = House(**house_serializer.validated_data)
+
+            del self.house_meta['location']['alt_names']
+            location_serializer = PostalCodeAllDetailSerializer(data=self.house_meta['location'])
+            location_serializer.is_valid(raise_exception=True)
+            _house_native_obj.location = PostalCode(**location_serializer.validated_data)
+
+            home_type_serializer = HomeTypeSerializer(data=self.house_meta['home_type'])
+            home_type_serializer.is_valid()
+            _house_native_obj.home_type = HomeType(**home_type_serializer.validated_data)
+
+            self._house_native_obj = _house_native_obj
+        return self._house_native_obj
 
     def get_ref_code(self):
         try:
@@ -117,3 +144,11 @@ class AccountDetail(models.Model):
 
     def __str__(self):
         return "%s" % self.application
+
+    @property
+    def tenant_amount(self):
+        return float(self.meta['source_amount'])/100
+
+    @property
+    def home_owner_amount(self):
+        return float(self.meta['destination_amount'])/100

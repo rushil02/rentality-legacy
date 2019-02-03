@@ -326,9 +326,8 @@ class ApplicationPage extends Component {
 
         if (Object.entries(errors).length === 0 && errors.constructor === Object) {
             let backendErrors = await this.sendFormData();
-            // FIXME: Change this routes.user.info to the routes.apply.comp (i.e. apply/comp)
               window.location.replace(
-                `${reverse(routes.user.info)}?valid=${backendErrors.valid}&msg=${backendErrors.msg}`
+                `${reverse(routes.application.complete)}?valid=${backendErrors.valid}&msg=${backendErrors.msg}`
               );
         }
     };

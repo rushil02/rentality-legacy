@@ -179,7 +179,7 @@ class House(models.Model):
         return False
 
     def __str__(self):
-        return "%s - %s [%s]" % (self.home_owner, self.title, self.address_hidden)
+        return "%s [%s]" % (self.title, self.address)
 
     def get_images(self):
         return self.image_set.all()
@@ -238,6 +238,12 @@ class House(models.Model):
         if status == 'P':
             self.verify_data_for_publishing()
         self.status = status
+
+    def get_complete_address(self):
+        if self.address_hidden:
+            return "%s, %s, %s" % (self.address_hidden, self.address, self.get_location() or "")
+        else:
+            return ""
 
     def verify_data_for_publishing(self):
         """

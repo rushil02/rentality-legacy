@@ -3,7 +3,7 @@ from rest_framework import serializers
 from cities_custom.serializers import LocationCitySerializer, PostalCodeSerializer
 from essentials.serializers import PolicyPublicSerializer
 from house.models import House, Image, Facility, NeighbourhoodDescriptor, WelcomeTag, HouseRule, Rule, \
-    CancellationPolicy, Availability
+    CancellationPolicy, Availability, HomeType
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -175,3 +175,9 @@ class ImagePublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['image', 'is_thumbnail', 'uuid']
+
+
+class HomeTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeType
+        fields = ['name', 'space_style']
