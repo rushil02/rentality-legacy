@@ -27,4 +27,5 @@
    tags:
     - docker
    script:
-     - ls /foo
+     - ls /ssh
+     - ssh /ssh/id_rsa.pem root@rentality.com.au ls
