@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 export default class BookingDetails extends Component {
   render() {
     const bookingDuration = this.props.bookingAmountDetails.bookingDuration;
-    console.log("COOKING STATE", this.props);
     return (
       <div className="right">
         <div className="padding">

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { render } from 'react-dom';
 import { StripeProvider, injectStripe, Elements, CardElement } from 'react-stripe-elements';
 import axios from 'axios';
 import './StripePayment.css';
@@ -44,18 +43,15 @@ class _CardForm extends React.Component {
   //FIXME: on submit rather than on change; File Review required @Elliott
   sendStripeRequest = () => {
     if (this.props.stripe) {
-      console.log("Stripe object not null");
       this.props.stripe.createToken()
         .then((resp) => {
           if (resp.token) {
             this.props.onStripePaymentTokenGenerated(resp.token.id);
             this.props.onPaymentFieldChange("stripeToken", resp.token.id);
-            console.log("STRIPE PAYMENT", resp.token.id)
           }
         });
 
     } else {
-      console.log("Stripe.js hasn't loaded yet.");
     }
   };
 
@@ -101,7 +97,6 @@ export default class StripePayment extends Component {
   componentDidMount = () => {
     axios.get('/publishable_key').then(
       (result) => {
-        console.log(result);
         this.setState({
           apiKey: result.data.publishable_key
         });

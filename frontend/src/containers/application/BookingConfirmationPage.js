@@ -146,7 +146,6 @@ class BookingConfirmationPage extends Component {
   };
 
   handleSendDiscountCode = (discountCode) => {
-    console.log("sending discount code to backend:", discountCode)
     // get request to check whether discount code is valid
     //   fetch().then((resp) => this.setState(prevState => ({
     //     ...prevState,

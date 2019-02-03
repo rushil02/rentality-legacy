@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
     "informed": "^1.10.12",
     "jquery": "^3.3.1",
     "named-urls": "^1.4.0",

@@ -8,6 +8,7 @@ import HouseRules from "../../components/application/HouseRules";
 import Agreements from "../../components/application/Agreements";
 import StripePayment from "../../components/application/StripePayment";
 
+import 'babel-polyfill'
 import axios from 'axios';
 import {reverse} from 'named-urls';
 import routes from "../../routes";
@@ -197,12 +198,10 @@ class ApplicationPage extends Component {
 
 
     handleSendDiscountCode = (discountCode) => {
-        console.log("sending discount code to backend:", discountCode);
         let errors = {};
 
         axios.get(reverse(routes.promo.verifyApplicationDiscount), {params: {code: discountCode}}
         ).then(resp => {
-                console.log("RESP CODE", resp);
                 this.setState(prevState => ({
                     discountCodes: [
                         ...prevState.discountCodes,
@@ -240,15 +239,14 @@ class ApplicationPage extends Component {
                     })
                 }
             ).error((result) => {
-                console.log("ERRORS FROM RESP", result);
                 errors = {...errors, ...result.errors};
                 this.setState({errors: errors})
             });
         });
     };
 
-    sendFormData = () => {
-        let errors = {};
+    sendFormData = async () => {
+        let response = {};
 
         let dataToSend = {
             booking_info: {
@@ -270,23 +268,19 @@ class ApplicationPage extends Component {
             },
             tenant_message: this.state.tenant.comments
         };
-        axios.post(
+
+        try {
+          await axios.post(
             reverse(routes.application.create, {"houseUUID": this.state.house.uuid}),
-            dataToSend).then(
-            result => console.log(result)
-        ).then(resp => {
-                console.log("RESP CODE", resp);
+            dataToSend)
+            .then(resp => {
+              response = {msg: resp.msg, valid: [200, 201].includes(resp.status)};
+            })
+        } catch(resp) {
+            response = await {msg: resp, valid: false};
+        }
 
-            }
-        ).error(
-            (result) => {
-                console.log(result);
-                errors = {...errors, ...result.errors};
-            }
-        );
-
-        this.setState({errors: errors});
-        return errors
+        return await response
     };
 
     validateFields = () => {
@@ -298,6 +292,7 @@ class ApplicationPage extends Component {
             "emailAddress",
             "phoneNumber",
             "gender",
+            "comments",
         ];
 
         let agreementFields = [
@@ -322,19 +317,19 @@ class ApplicationPage extends Component {
             }
         }
 
-        this.setState({errors: errors})
+        this.setState({errors: errors});
         return errors;
     };
 
-    handleSubmitButton = () => {
+    handleSubmitButton = async () => {
         let errors = this.validateFields();
 
         if (Object.entries(errors).length === 0 && errors.constructor === Object) {
-            console.log("NO ERRORS?", errors);
-            let backendErrors = this.sendFormData();
-            if (!backendErrors) {
-                this.props.history.push("/apply/summary/" + window.location.pathname.split("/").pop())
-            }
+            let backendErrors = await this.sendFormData();
+            // FIXME: Change this routes.user.info to the routes.apply.comp (i.e. apply/comp)
+              window.location.replace(
+                `${reverse(routes.user.info)}?valid=${backendErrors.valid}&msg=${backendErrors.msg}`
+              );
         }
     };
 
@@ -353,7 +348,6 @@ class ApplicationPage extends Component {
     };
 
     render() {
-        console.log("HOUSE", this.state.errors);
         if (!(this.state.bookingDetails && this.state.tenant && this.state.house)) {
             return null
         }
