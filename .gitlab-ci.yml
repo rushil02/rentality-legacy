@@ -27,4 +27,4 @@
    tags:
     - docker
    script:
-     - ls
+     - ls /foo
