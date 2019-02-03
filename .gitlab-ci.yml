@@ -20,7 +20,7 @@
    - docker:dind
 
  before_script:
-   - docker info
+   - apk add openssh
 
  build:
    stage: build
