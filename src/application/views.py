@@ -131,7 +131,6 @@ class CreateApplicationView(CreateAPIView):
             target_account_id=destination_account,
             amount=fee_model.source_amount,
             destination_amount=destination_amount,
-            receipt_email=user.email,
         )
         return charge
 
@@ -143,7 +142,6 @@ class CreateApplicationView(CreateAPIView):
 
         tenant = self.request.user.tenant
 
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             promo_codes = serializer.validated_data['booking_info']['promo_codes']
@@ -180,7 +178,7 @@ class CreateApplicationView(CreateAPIView):
             ).save()
 
             charge = self.process_payment(request, serializer.validated_data['stripe_token'], fee_model, house)
-            Order(application=app_obj, charge_id=charge.id)
+            Order.objects.create(application=app_obj, charge_id=charge.id, payment_gateway=self.PaymentGateway)
 
             send_template_mail(
                 subject="Rentality - Booking Confirmed",
@@ -225,7 +223,8 @@ class BookingAmountView(APIView):
 
 def application_completion(request):
     valid = request.GET['valid']
-    if valid:
+
+    if valid in ['T', 't', 'true', 'True']:
         messages.add_message(request, messages.SUCCESS, "%s" % 'Payment Successful, Your booking has been confirmed.'
                                                                ' Check your email for confirmed booking details.')
     else:

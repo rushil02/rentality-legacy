@@ -1,6 +1,6 @@
 from django.urls import path
 from application.views import create_react, HouseDetailViewForApplication, CreateApplicationView, BookingAmountView, \
-    application_completion, test
+    application_completion
 
 app_name = 'application'
 

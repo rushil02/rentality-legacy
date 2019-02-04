@@ -397,9 +397,9 @@ class ApplicationPage extends Component {
                             </div>
                             <div className="col-12">
                                 <div className="button">
-                                    <button type="button" className="btn btn-link" onClick={this.handleSaveButton}>Save
-                                        Application
-                                    </button>
+                                    {/*<button type="button" className="btn btn-link" onClick={this.handleSaveButton}>Save*/}
+                                        {/*Application*/}
+                                    {/*</button>*/}
                                     <button type="button" className="btn btn-link"
                                             onClick={this.handleSubmitButton}>Book Now
                                     </button>

@@ -3,9 +3,11 @@ from django.contrib.postgres.forms import DateRangeField, RangeWidget
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, modelformset_factory
 from dal import autocomplete
+from psycopg2.extras import DateRange
 from easy_thumbnails.widgets import ImageClearableFileInput
 
 from house.models import House, Image, Availability, HouseRule
+from house.utils import HouseAvailability
 from rentality import settings
 from utils.form_thumbnailer import ImageFileInput
 
@@ -252,9 +254,9 @@ class ApplyForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        obj = kwargs.pop('obj')
+        self._obj = kwargs.pop('obj')
         super(ApplyForm, self).__init__(*args, **kwargs)
-        self.fields['guests'].choices = [(i + 1, i + 1) for i in range(obj.max_people_allowed or 1)]
+        self.fields['guests'].choices = [(i + 1, i + 1) for i in range(self._obj.max_people_allowed or 1)]
 
     def clean(self):
         super(ApplyForm, self).clean()
@@ -265,3 +267,6 @@ class ApplyForm(forms.Form):
                 raise ValidationError("Booking should be at least of 4 weeks")
         except KeyError:
             raise ValidationError("Invalid Dates")
+
+        if not HouseAvailability(house=self._obj, date_range=DateRange(self.cleaned_data['move_in_date'], self.cleaned_data['move_out_date'])).is_valid():
+            raise ValidationError("Chosen Dates are not available for booking.")
