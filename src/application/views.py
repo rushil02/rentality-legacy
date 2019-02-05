@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from rest_framework.decorators import api_view
 from django.views.decorators.http import require_GET
@@ -56,45 +57,6 @@ def create_react(request, house_uuid):
         return redirect(reverse("house:info", args=[house_uuid]))
 
 
-# FIXME: needs to be removed
-class HouseDetailViewForApplication(APIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = HouseDetailsPublicSerializer
-
-    def calculate_rent(self, house, start_date, end_date, promo_code):
-        # FIXME: Add rent calculation Logic
-        self.amounts = {
-            'calculated_rent': 500,
-            'service_fee': 700,
-            'total_rent': 1200
-        }
-
-    def get_object(self, *args, **kwargs):
-        house_uuid = self.kwargs['house_uuid']
-        try:
-            house = House.active_objects.get(uuid=house_uuid)
-        except:
-            raise Http404
-
-        return house
-
-    def get_serializer(self, instance):
-        return self.serializer_class(instance)
-
-    def get(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-
-        start_date = datetime.strptime(request.GET['start_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        end_date = datetime.strptime(request.GET['end_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        promo_code = request.GET.get('promo_code', None)
-
-        self.calculate_rent(instance, start_date, end_date, promo_code)
-
-        self.amounts['house'] = serializer.data
-        return Response(self.amounts)
-
-
 class CreateApplicationView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ApplicationCreateSerializer
@@ -135,6 +97,7 @@ class CreateApplicationView(CreateAPIView):
         return charge
 
     def create(self, request, *args, **kwargs):
+        # FIXME: Atomicity or States - Need at least 1 paradigm covered
         try:
             house = House.objects.get(uuid=kwargs.get('house_uuid'))
         except House.DoesNotExist:
@@ -154,9 +117,10 @@ class CreateApplicationView(CreateAPIView):
             except ValueError as e:
                 return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-            tenant_meta = None
+            tenant_meta = serializer.validated_data['tenant_details']
+            meta = {'guests': serializer.validated_data['booking_info']['guests']}
             app_obj = Application(
-                house=house, tenant=tenant, tenant_meta=tenant_meta, rent=house.rent,
+                house=house, tenant=tenant, tenant_meta=tenant_meta, rent=house.rent, meta=meta,
                 date=DateRange(lower=serializer.validated_data['booking_info']['start_date'],
                                upper=serializer.validated_data['booking_info']['end_date']),
             )
@@ -180,13 +144,24 @@ class CreateApplicationView(CreateAPIView):
             charge = self.process_payment(request, serializer.validated_data['stripe_token'], fee_model, house)
             Order.objects.create(application=app_obj, charge_id=charge.id, payment_gateway=self.PaymentGateway)
 
+            email_context = {'application': app_obj, 'current_site': get_current_site(request)}
+
             send_template_mail(
                 subject="Rentality - Booking Confirmed",
-                template_name='emails/booking/confirmed.html',
-                context={'application': app_obj},
+                template_name='emails/tenant/booking/confirmed.html',
+                context=email_context,
                 from_email='support@rentality.com.au',
                 recipient_list=[self.request.user.email],
                 text_message="Your booking has been confirmed. Please enable text/html to view this email correctly."
+            )
+
+            send_template_mail(
+                subject="Rentality - Booking Made",
+                template_name='emails/home_owner/booking/confirmed.html',
+                context=email_context,
+                from_email='support@rentality.com.au',
+                recipient_list=[house.home_owner.user.email],
+                text_message="A booking has been made. Please enable text/html to view this email correctly."
             )
 
             return Response({"details": "success", "msg": ""}, status=status.HTTP_201_CREATED)

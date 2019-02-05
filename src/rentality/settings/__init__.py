@@ -317,6 +317,7 @@ THUMBNAIL_ALIASES = {
         'house_detail_small': {'size': (596, 416), 'crop': "smart", 'autocrop': True, 'upscale': True},
         'house_dashboard_large': {'size': (360, 196), 'crop': "smart", 'autocrop': True, 'upscale': True},
         'profile_house_info': {'size': (150, 159), 'crop': "smart", 'autocrop': True, 'upscale': True},
+        'email': {'size': (480, 283), 'crop': "smart", 'autocrop': True, 'upscale': True},
     }
 }
 

@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 from billing.utils import get_available_models
@@ -44,3 +45,73 @@ class Fee(models.Model):
 
     def __str__(self):
         return "T - %s; H - %s" % (self.tenant_charge, self.home_owner_charge)
+
+
+# FIXME: join this model and write validations
+class PaymentGateway(models.Model):
+    """
+    Stores readable information of payment gateway. Primarily created to maintain consistency across various
+    model relations.
+
+    meta -> stores information for monetary validations and checks while creating a Fee model,
+    can be used to store other information. Expected structure -
+    {
+        'expenses': {
+            'payout': {
+                'breakdown': [
+                    {
+                        'verbose': string,
+                        'fee': {
+                            'percentage': {
+                                'principal': string - 'verbose of any other breakdown or `principal`'
+                                'value': float/integer,
+                            },
+                            'fixed': float/integer
+                        },
+                        'description': string,
+                        'tax': {
+                            'inclusive': boolean,
+                            'fee': {
+                                'percentage': float/integer,
+                                'fixed': float/integer
+                            }
+                        },
+                    },
+                    ...
+                ]
+            },
+            'payin': {
+                'breakdown': [
+                    {
+                        'verbose': string,
+                        'fee': {
+                            'percentage': {
+                                'principal': string - 'verbose of any other breakdown or `principal`'
+                                'value': float/integer,
+                            },
+                            'fixed': float/integer
+                        },
+                        'description': string,
+                        'tax': {
+                            'inclusive': boolean,
+                            'fee': {
+                                'percentage': float/integer,
+                                'fixed': float/integer
+                            }
+                        },
+                    },
+                    ...
+                ]
+            },
+        }
+    }
+
+    """
+    name = models.CharField(max_length=50)
+    meta = JSONField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s" % self.name
+
