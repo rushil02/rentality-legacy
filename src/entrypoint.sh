@@ -1,5 +1,5 @@
 #!/bin/sh
 
-python manage.py collectstatic --noinput
+python manage.py collectstatic --noinput # why is this supposed to happen in every container or via every container
 #python manage.py makemigrations
 gunicorn rentality.wsgi -b 0.0.0.0:8000
