@@ -297,8 +297,6 @@ FLAT_PAGE_TEMPLATES_FOLDER = 'flatpages'
 # FLAT_PAGE_TEMPLATES - FORMAT = (url, title, template.html, content.txt, registration_required[BOOL])
 FLAT_PAGE_TEMPLATES = (
     ('/about-us/', 'About Us', 'about_us.html', '', False),
-    ('/tos/', 'Terms of Service', '', 'terms_of_service.txt', False),
-    ('/privacy-policy/', 'Privacy Policy', '', 'privacy_policy.txt', False),
     ('/faq/', 'Frequently Asked Questions', 'faq.html', '', False),
     ('/how-it-works/', 'How it Works', 'how_it_works.html', '', False),
     ('/contact-us/', 'Contact Us', 'contact_us.html', '', False),

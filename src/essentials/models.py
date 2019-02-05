@@ -42,16 +42,25 @@ class Notification(models.Model):
 def get_policy_doc_path(instance, filename):
     path = 'docs/policy/' + time.strftime('/%Y/%m/%d/')
     ext = filename.split('.')[-1]
-    filename = "%s.%s" % (uuid.uuid4(), ext)
+    filename = "%s_%s.%s" % (instance.code_name, instance.version, ext)
     return os.path.join(path, filename)
 
 
 class Policy(models.Model):
-    version = models.CharField(max_length=20, unique=True)
+    version = models.CharField(max_length=20, unique=True, help_text="Don't use any special characters.")
     verbose_name = models.CharField(max_length=100)
-    code_name = models.CharField(max_length=20)
+    code_name = models.CharField(max_length=20, help_text="For internal references (Short Verbose)")
     doc = models.FileField(upload_to=get_policy_doc_path)
     html = models.TextField(blank=True)
+
+    TYPE = (
+        ('TnC', 'Terms and Conditions'),
+        ('ToS', 'Terms of Service'),
+        ('PP', 'Privacy Policy'),
+        ('CP', 'Cookies Policy'),
+        ('CanP', 'Cancellation Policy'),
+    )
+    policy_type = models.CharField(choices=TYPE, max_length=6)
 
     STATUS = (
         ("A", "Active"),
@@ -64,6 +73,7 @@ class Policy(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
 
+    # FIXME: check before save - only 1 from each type should be active
     def __str__(self):
         return "%s" % self.version
 

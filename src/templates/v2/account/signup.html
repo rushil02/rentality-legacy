@@ -124,9 +124,9 @@
 
                                 <div class="col-md-12">
                                     <div class="warning">Creating an account means that you accept our<br>
-                                        <a href="{% url 'django.contrib.flatpages.views.flatpage' url="/tos/" %}">Terms
+                                        <a href="{% url 'essentials:get_policy' policy_type="ToS" %}">Terms
                                             of service</a> and <a
-                                                href="{% url 'django.contrib.flatpages.views.flatpage' url="/privacy-policy/" %}">Privacy
+                                                href="{% url 'essentials:get_policy' policy_type="PP" %}">Privacy
                                             Policy</a></div>
                                 </div>
                                 <div class="col-md-3"></div>

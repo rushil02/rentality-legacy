@@ -43,8 +43,7 @@ urlpatterns = [
     path('apply/', include('application.urls')),
     path('promo/', include('promotions.urls')),
 
-    # TODO: enable notifications
-    # path('ess/', include('essentials.urls')),
+    path('ess/', include('essentials.urls')),
 
     # TODO: no individual messaging urls needed ?
     path('messaging/', include('messaging.urls')),

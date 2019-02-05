@@ -139,8 +139,8 @@
                                         <input type="checkbox" id="checkbox-3"
                                                class="custom-control-input">
                                         <label class="custom-control-label" for="checkbox-3">
-                                            I accept rentality.com.au's <a href="{% url 'django.contrib.flatpages.views.flatpage' url="tos/" %}">Terms of Service</a>
-                                            and <a href="{% url 'django.contrib.flatpages.views.flatpage' url="privacy-policy/" %}">Private Policy</a>,
+                                            I accept rentality.com.au's <a href="{% url 'essentials:get_policy' policy_type="ToS" %}">Terms of Service</a>
+                                            and <a href="{% url 'essentials:get_policy' policy_type="PP" %}">Privacy Policy</a>,
                                             and to abide by the host’s home rules.
                                         </label>
                                     </div>

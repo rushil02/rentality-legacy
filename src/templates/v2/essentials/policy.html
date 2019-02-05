@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block additional_scripts %}
+    <link href="{% static 'style/policy.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block head_title_add %}
+    {{ policy.verbose_name }} |
+{% endblock %}
+
+{% block page_description %}
+    {{ policy.verbose_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="policy-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="title">{{ policy.verbose_name }}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Last updated on: {{ policy.updated_on|date }}</h5>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="float-right">Version Reference: {{ policy.version }}</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-justify">
+                    {{ policy.html|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
