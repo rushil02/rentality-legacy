@@ -2,12 +2,14 @@ import traceback
 
 from django.core.management import BaseCommand, CommandError
 
+from elastic_search.models import House as HouseElastic
 from house.models import House
 from house.utils import index_to_es
 
 
 def synchronise_es():
-    # FIXME: remove non active objects
+    HouseElastic._index.delete()
+    HouseElastic.init()
     for obj in House.active_objects.all():
         index_to_es(obj)
 

@@ -16,7 +16,7 @@ def establish_es_connection(try_num=1):
         if try_num <= CONNECTION_MAX_TRIES:
             print("Trying to connect to ElastiSearch; Waiting %s seconds for it to start." % CONNECTION_WAIT_TIME)
             time.sleep(CONNECTION_WAIT_TIME)
-            connection_obj = establish_es_connection(try_num+1)
+            connection_obj = establish_es_connection(try_num + 1)
         else:
             raise e
     return connection_obj
