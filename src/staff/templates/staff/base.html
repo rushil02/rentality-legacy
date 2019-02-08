@@ -32,6 +32,10 @@
             <link href="{% static 'staff/vendors/jqvmap/dist/jqvmap.min.css' %}" rel="stylesheet"/>
             <!-- Switchery -->
             <link href="{% static 'staff/vendors/switchery/dist/switchery.min.css' %}" rel="stylesheet"/>
+            <!-- PNotify -->
+            <link href="{% static 'staff/vendors/pnotify/dist/pnotify.css' %}" rel="stylesheet"/>
+            <link href="{% static 'staff/vendors/pnotify/dist/pnotify.buttons.css' %}" rel="stylesheet"/>
+            <link href="{% static 'staff/vendors/pnotify/dist/pnotify.nonblock.css' %}" rel="stylesheet"/>
         {% endblock stylesheets %}
         <!-- Custom Theme Style -->
         <link href="{% static 'staff/build/css/custom.css' %}" rel="stylesheet">
@@ -67,6 +71,30 @@
         </div>
     </div>
 
+    <!-- Notifications -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="ui-pnotify  ui-pnotify-fade-normal ui-pnotify-in ui-pnotify-fade-in ui-pnotify-move"
+                 aria-live="assertive" aria-role="alertdialog"
+                 style="display: none; width: 300px; right: 36px; top: 263px; cursor: auto;">
+                <div class="alert ui-pnotify-container alert-warning ui-pnotify-shadow" role="alert"
+                     style="min-height: 16px;">
+                    <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close"
+                         style="cursor: pointer; visibility: hidden;"><span class="glyphicon glyphicon-remove"></span>
+                    </div>
+                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="true" tabindex="0" title="Unstick"
+                         style="cursor: pointer; visibility: hidden;"><span class="glyphicon glyphicon-play"
+                                                                            aria-pressed="true"></span></div>
+                    <div class="ui-pnotify-icon"><span class="glyphicon glyphicon-exclamation-sign"></span></div>
+                    {#                    <h4 class="ui-pnotify-title">Sticky Warning</h4>#}
+                    <div class="ui-pnotify-text" aria-role="alert">{{ message }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
     {% block javascripts %}
         <!-- jQuery -->
         <script src="{% static 'staff/vendors/jquery/dist/jquery.min.js' %}"></script>
@@ -101,6 +129,10 @@
         <script src="{% static 'staff/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
         <!-- starrr -->
         <script src="{% static 'staff/vendors/starrr/dist/starrr.js' %}"></script>
+        <!-- PNotify -->
+        <script src="{% static 'staff/vendors/pnotify/dist/pnotify.js' %}"></script>
+        <script src="{% static 'staff/vendors/pnotify/dist/pnotify.buttons.js' %}"></script>
+        <script src="{% static 'staff/vendors/pnotify/dist/pnotify.nonblock.js' %}"></script>
     {% endblock %}
     <!-- Custom Theme Scripts -->
     <script src="{% static 'staff/build/js/custom.js' %}"></script>

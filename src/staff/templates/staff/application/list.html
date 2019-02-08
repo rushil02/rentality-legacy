@@ -1,0 +1,73 @@
+{% extends 'staff/base.html' %}
+
+{% load static %}
+{% load staff_custom_tags %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Applications List </h3>
+            </div>
+            <div class="title_right">
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Applications
+                            <small>Click to see details</small>
+                        </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Reference Code</th>
+                                <th>House</th>
+                                <th>Home Owner</th>
+                                <th>Tenant</th>
+                                <th>Rent</th>
+                                <th>Check-in Date</th>
+                                <th>Check-out Date</th>
+                                <th>Updated On</th>
+                                <th>Created On</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for app in applications %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>
+                                        <a href="{% url 'staff:application_details' uuid=app.uuid %}">{{ app.ref_code }}</a>
+                                    </td>
+                                    <td>{{ app.house }}</td>
+                                    <td>{{ app.house.home_owner }}</td>
+                                    <td>{{ app.tenant }}</td>
+                                    <td>{{ app.rent }}</td>
+                                    <td>{{ app.date.lower }}</td>
+                                    <td>{{ app.date.upper }}</td>
+                                    <td>{{ app.updated_on }}</td>
+                                    <td>{{ app.created_on }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

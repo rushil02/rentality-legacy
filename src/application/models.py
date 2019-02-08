@@ -67,7 +67,7 @@ class Application(models.Model):
             self._house_native_obj = _house_native_obj
         return self._house_native_obj
 
-    def get_ref_code(self):
+    def _create_ref_code(self):
         try:
             obj = Application.objects.latest('created_on')
         except Application.DoesNotExist:
@@ -114,7 +114,7 @@ class Application(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if self.pk is None:
-            self.ref_code = self.get_ref_code()
+            self.ref_code = self._create_ref_code()
         if self.house_meta is None:
             self.house_meta = HouseAllDetailsSerializer(self.house).data
         super(Application, self).save(force_insert=False, force_update=False, using=None,

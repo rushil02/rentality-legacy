@@ -1,0 +1,81 @@
+{% extends 'staff/base.html' %}
+
+{% load static %}
+{% load staff_custom_tags %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Applications Details </h3>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Reference Code: {{ application.ref_code }}</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel">
+                                <a class="panel-heading">
+                                    <h4 class="panel-title">House Details</h4>
+                                </a>
+                                <div class="panel-collapse">
+                                    <div class="panel-body">
+                                        Address : {{ application.house.get_complete_address }}<br>
+                                        Rent : {{ application.house.rent }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <a class="panel-heading">
+                                    <h4 class="panel-title">Tenant Details</h4>
+                                </a>
+                                <div class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        Name : {{ application.house.tenant.user.full_name }} <br>
+                                        <strong>Tenant Meta</strong>
+                                        <p>{{ application.tenant.meta }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <a class="panel-heading">
+                                    <h4 class="panel-title">Home Owner Details</h4>
+                                </a>
+                                <div class="panel-collapse">
+                                    <div class="panel-body">
+                                        Name : {{ application.house.home_owner.user.full_name }} <br>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <a class="panel-heading">
+                                    <h4 class="panel-title">Billing Information</h4>
+                                </a>
+                                <div class="panel-collapse">
+                                    <div class="panel-body">
+                                        Fee : {{ application.accountdetail.fee.get_billing_model_display }} <br>
+                                        Tenant Charges : {{ application.accountdetail.tenant_amount }} <br>
+                                        Home Owner Remittance : {{ application.accountdetail.home_owner_amount }} <br>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <a href="{% url 'staff:application_resend_email' entity='tenant' uuid=application.uuid %}" class="btn btn-info">Resend Booking Confirmation Email to Tenant
+                            </a>
+                            <a href="{% url 'staff:application_resend_email' entity='homeowner' uuid=application.uuid %}" class="btn btn-info">Resend Booking Confirmation Email to Home Owner
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

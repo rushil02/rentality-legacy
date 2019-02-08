@@ -1,15 +1,10 @@
-from django.http import HttpResponse
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 from promotions.views import create_promotional_code
 
 
-@login_required  # FIXME: custom user check
-def home(request):
-    return render(request, 'staff/dashboard.html', {})
-
-
+@staff_member_required
 def create_edit_promo_code(request, promo_id=None):
     if promo_id:
         context = {}
