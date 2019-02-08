@@ -2,7 +2,7 @@ version: '3.6'
 services:
   nginx:
     build: ./nginx
-    image: registry.gitlab.com/rushil0195/rentality/nginx:v0.2
+    image: registry.gitlab.com/rushil0195/rentality/nginx:latest
     ports:
       - "8000:80"
     volumes:
@@ -63,7 +63,7 @@ services:
       - ./src/static/v2/frontend:/src/static/v2/frontend
   web:
     build: ./src
-    image: registry.gitlab.com/rushil0195/rentality/web:v0.7
+    image: registry.gitlab.com/rushil0195/rentality/web:latest
     volumes:
       - ./static_dev/static_root:/rentality/static_dev/static_root
       - ./static_dev/media_root:/rentality/static_dev/media_root
