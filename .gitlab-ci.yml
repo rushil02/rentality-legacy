@@ -1,31 +1,20 @@
 stages:
   - build
+  - release
 
 image: docker:stable
 
 variables:
-  # When using dind service we need to instruct docker, to talk with the
-  # daemon started inside of the service. The daemon is available with
-  # a network connection instead of the default /var/run/docker.sock socket.
-  #
-  # The 'docker' hostname is the alias of the service container as described at
-  # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services
-  #
-  # Note that if you're using Kubernetes executor, the variable should be set to
-  # tcp://localhost:2375 because of how Kubernetes executor connects services
-  # to the job container
   DOCKER_HOST: tcp://docker:2375/
-  # When using dind, it's wise to use the overlayfs driver for
-  # improved performance.
   DOCKER_DRIVER: overlay2
 
-  CONTAINER_TEST_FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHA
-  CONTAINER_STAGING_RELEASE_FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:staging-latest
-  CONTAINER_RELEASE_FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:latest
+  FRONTEND_HASH_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHA
+  FRONTEND_STAGING_IMAGE: $CI_REGISTRY_IMAGE/frontend:staging-latest
+  FRONTEND_LATEST_IMAGE: $CI_REGISTRY_IMAGE/frontend:latest
 
-  CONTAINER_TEST_WEB_IMAGE: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
-  CONTAINER_STAGING_RELEASE_WEB_IMAGE: $CI_REGISTRY_IMAGE/web:staging-latest
-  CONTAINER_RELEASE_WEB_IMAGE: $CI_REGISTRY_IMAGE/web:latest
+  WEB_HASH_IMAGE: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
+  WEB_STAGING_IMAGE: $CI_REGISTRY_IMAGE/web:staging-latest
+  WEB_LATEST_IMAGE: $CI_REGISTRY_IMAGE/web:latest
 
 services:
   - docker:dind
@@ -40,13 +29,38 @@ build:
     - docker
   script:
     - docker-compose build
-    - docker tag $CONTAINER_RELEASE_WEB_IMAGE $CONTAINER_TEST_WEB_IMAGE
-    - docker push $CONTAINER_TEST_WEB_IMAGE
-    - docker tag $CONTAINER_TEST_WEB_IMAGE $CONTAINER_STAGING_RELEASE_WEB_IMAGE
-    - docker push $CONTAINER_STAGING_RELEASE_WEB_IMAGE
-    - docker tag $CONTAINER_RELEASE_FRONTEND_IMAGE $CONTAINER_TEST_FRONTEND_IMAGE
-    - docker push $CONTAINER_TEST_FRONTEND_IMAGE
-    - docker tag $CONTAINER_TEST_FRONTEND_IMAGE $CONTAINER_STAGING_RELEASE_FRONTEND_IMAGE
-    - docker push $CONTAINER_STAGING_RELEASE_FRONTEND_IMAGE
+    - docker tag $WEB_LATEST_IMAGE $WEB_HASH_IMAGE
+    - docker push $WEB_HASH_IMAGE
+    - docker tag $FRONTEND_LATEST_IMAGE $FRONTEND_HASH_IMAGE
+    - docker push $FRONTEND_HASH_IMAGE
   only:
     - staging
+    - master
+
+release-staging:
+  stage: release
+  tags:
+    - docker
+  script:
+    - docker pull $WEB_HASH_IMAGE
+    - docker pull $FRONTEND_HASH_IMAGE
+    - docker tag $WEB_HASH_IMAGE $WEB_STAGING_IMAGE
+    - docker push $WEB_STAGING_IMAGE
+    - docker tag $FRONTEND_HASH_IMAGE $FRONTEND_STAGING_IMAGE
+    - docker push $FRONTEND_STAGING_IMAGE
+  only:
+    - staging
+
+release-prod:
+  stage: release
+  tags:
+    - docker
+  script:
+    - docker pull $WEB_HASH_IMAGE
+    - docker pull $FRONTEND_HASH_IMAGE
+    - docker tag $WEB_HASH_IMAGE $WEB_LATEST_IMAGE
+    - docker push $WEB_LATEST_IMAGE
+    - docker tag $FRONTEND_HASH_IMAGE $FRONTEND_LATEST_IMAGE
+    - docker push $FRONTEND_LATEST_IMAGE
+  only:
+    - master
