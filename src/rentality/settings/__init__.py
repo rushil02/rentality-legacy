@@ -176,6 +176,8 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 
+FILE_UPLOAD_PERMISSIONS = 0o644
+
 # FIXME: choose right security permissions api class
 # REST_FRAMEWORK = {
 #     # Use Django's standard `django.contrib.auth` permissions,
