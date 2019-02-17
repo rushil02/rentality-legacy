@@ -1,7 +1,10 @@
 import os
 import time
 import uuid
+from datetime import date
 
+from django.utils import timezone
+from psycopg2.extras import DateRange
 from django.contrib.postgres.fields import DateRangeField, ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -12,6 +15,8 @@ from django.utils.translation import gettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 from django.contrib.postgres.fields import JSONField
 from django.conf import settings
+
+from house.helpers import check_house_availability
 
 
 def get_file_path(instance, filename):
@@ -271,22 +276,122 @@ class House(models.Model):
         super(House, self).clean()
         if self.max_stay and self.min_stay:
             if self.max_stay < self.min_stay:
-                raise ValidationError("Maximum length of stay cannot be less than Minimum length of stay", code='invalid')
+                raise ValidationError("Maximum length of stay cannot be less than Minimum length of stay",
+                                      code='invalid')
+
+    def check_availability(self, lower, upper):
+        """
+        :param upper: datetime.date object
+        :param lower: datetime.date object
+        :return: Boolean
+        """
+        return check_house_availability(house=self, date_range=DateRange(lower=lower, upper=upper))
 
 
-# FIXME: validate overlapping dates
+class AvailabilityManager(models.Manager):
+
+    def add_date_range(self, house, dates, periodic):
+        """
+        Validates and adds dates in reference to house. Automatically merges with other dates if required.
+        :param house: House model object
+        :param dates: psycopg2.extras.DateRange object
+        :param periodic: boolean
+        """
+        availabilities = self.get_queryset().filter(house=house)
+
+        delete_rows = []
+        new_dates = self.model(house=house, dates=dates, periodic=periodic)
+        create = True
+        for availability in availabilities:
+            # Original Dates are equal to the new date information
+            if (availability.dates.lower == new_dates.dates.lower) and (
+                    availability.dates.upper == new_dates.dates.upper):
+                if (not availability.periodic) and new_dates.periodic:
+                    delete_rows.append(availability.id)
+                else:
+                    create = False
+                    break
+
+            # Original Dates already contain this date information
+            elif (availability.dates.lower < new_dates.dates.lower) and (
+                    availability.dates.upper > new_dates.dates.upper):
+                if (not availability.periodic) and new_dates.periodic:
+                    continue
+                else:
+                    create = False
+                    break
+
+            # Dates don't need to be merged
+            elif (availability.dates.upper < new_dates.dates.lower) or (
+                    availability.dates.lower > new_dates.dates.upper):
+                continue
+
+            else:
+                if availability.periodic:
+                    if new_dates.periodic:
+                        new_dates.dates = DateRange(
+                            lower=min(availability.dates.lower, new_dates.dates.lower),
+                            upper=max(availability.dates.upper, new_dates.dates.upper)
+                        )
+                        delete_rows.append(availability.id)
+                    else:
+                        new_dates.dates = DateRange(
+                            lower=min(availability.dates.lower, new_dates.dates.lower),
+                            upper=max(availability.dates.upper, new_dates.dates.upper)
+                        )
+                else:
+                    if new_dates.periodic:
+                        availability.dates = DateRange(
+                            lower=min(availability.dates.lower, new_dates.dates.lower),
+                            upper=max(availability.dates.upper, new_dates.dates.upper)
+                        )
+                        availability.save()
+                    else:
+                        new_dates.dates = DateRange(
+                            lower=min(availability.dates.lower, new_dates.dates.lower),
+                            upper=max(availability.dates.upper, new_dates.dates.upper)
+                        )
+                        delete_rows.append(availability.id)
+
+        if create:
+            self.get_queryset().filter(id__in=delete_rows).delete()
+            new_dates.save()
+            return new_dates
+        else:
+            return None
+
+    def add_date_ranges(self, house, date_ranges):
+        """
+        Add multiple date ranges
+        :param house: house object
+        :param date_ranges: list of dict, [{'dates': psycopg2.extras.DateRange object, 'periodic': boolean }, ...]
+        :return: boolean
+        """
+
+        # TODO: Add multiple dates at once
+        raise NotImplementedError
+
+
 class Availability(models.Model):
     """
-    All round availability can be marked by full year with periodic.
+    Note: All round availability can be marked by full year with periodic.
     """
     house = models.ForeignKey('house.House', on_delete=models.CASCADE)
     dates = DateRangeField()
-    periodic = models.BooleanField(default=False)
+    periodic = models.BooleanField(default=False, verbose_name="Make the selected dates available every year")
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+    objects = AvailabilityManager()
+
     def __str__(self):
         return "%s" % self.house
+
+    def save(self, *args, **kwargs):
+        if self.periodic and ((self.dates.upper - self.dates.lower).days >= 365):
+            curr_year = timezone.now().year
+            self.dates = DateRange(lower=date(curr_year, 1, 1), upper=date(curr_year, 12, 31))
+        super(Availability, self).save(*args, **kwargs)
 
 
 class Image(models.Model):
