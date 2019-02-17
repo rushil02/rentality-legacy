@@ -28,10 +28,10 @@ def check_house_availability(house, date_range):
             return True
         else:
             # check for periodic dates
-            periodic_dates = house.availability_set.filter(dates_contains=date_range, periodic=True)
+            periodic_dates = house.availability_set.filter(periodic=True)
 
             for periodic_date in periodic_dates:
-                diff = abs(date_range.lower.year - periodic_date.dates.lower.year)
+                diff = date_range.lower.year - periodic_date.dates.lower.year
                 lower_bound = periodic_date.dates.lower.replace(year=(periodic_date.dates.lower.year + diff))
                 upper_bound = periodic_date.dates.upper.replace(year=(periodic_date.dates.upper.year + diff))
                 if date_range.lower >= lower_bound and date_range.upper <= upper_bound:

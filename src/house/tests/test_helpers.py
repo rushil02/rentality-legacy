@@ -5,7 +5,7 @@ from django.utils import timezone
 from psycopg2._range import DateRange
 
 from application.tests.factories import ApplicationFactory
-from house.helpers import get_available_dates
+from house.helpers import get_available_dates, check_house_availability
 from .factories import AvailabilityFactory, HouseFactory
 
 
@@ -239,27 +239,57 @@ class AvailabilityGetTests(TestCase):
 
         house = HouseFactory.create()
         for test_date in test_dates['availabilities']['non-periodic']:
-            print(test_date)
             AvailabilityFactory(house=house, dates=test_date, periodic=False)
 
-        print("-" * 100)
         for test_date in test_dates['availabilities']['periodic']:
-            print(test_date)
             AvailabilityFactory(house=house, dates=test_date, periodic=True)
 
-        print("-" * 100)
         for test_date in test_dates['applications']:
-            print(test_date)
             ApplicationFactory(house=house, date=test_date)
 
         curr_year = timezone.now().date().year
         result = get_available_dates(house, from_year=curr_year, till_year=curr_year + 1)
-
-        print('=' * 100)
-        for r in result:
-            print(r)
-        print('*' * 100)
-
-        for r in expected_output:
-            print(r)
         self.assertListEqual(expected_output, result)
+
+
+class TestCheckAvailability(TestCase):
+    maxDiff = None
+
+    def test_check_availability(self):
+        test_dates = {
+            'periodic': [
+                DateRange(lower=timezone.now().date() + timedelta(days=30),
+                          upper=timezone.now().date() + timedelta(days=130)),
+                DateRange(lower=timezone.now().date() + timedelta(days=120),
+                          upper=timezone.now().date() + timedelta(days=250)),
+            ],
+            'non-periodic': [
+                DateRange(lower=timezone.now().date() + timedelta(days=200),
+                          upper=timezone.now().date() + timedelta(days=280)),
+                DateRange(lower=timezone.now().date() + timedelta(days=300),
+                          upper=timezone.now().date() + timedelta(days=340)),
+            ]
+        }
+
+        house = HouseFactory.create()
+        for test_date in test_dates['periodic']:
+            AvailabilityFactory(house=house, dates=test_date, periodic=True)
+
+        for test_date in test_dates['non-periodic']:
+            AvailabilityFactory(house=house, dates=test_date, periodic=False)
+
+        test_ranges = [
+            DateRange(lower=timezone.now().date() + timedelta(days=10),
+                      upper=timezone.now().date() + timedelta(days=100)),
+            DateRange(lower=timezone.now().date() + timedelta(days=40),
+                      upper=timezone.now().date() + timedelta(days=280)),
+            DateRange(lower=timezone.now().date() + timedelta(days=300),
+                      upper=timezone.now().date() + timedelta(days=340)),
+            DateRange(lower=timezone.now().date() + timedelta(days=500),
+                      upper=timezone.now().date() + timedelta(days=560)),
+        ]
+
+        expected_output = [False, False, True, True]
+        for index, test_range in enumerate(test_ranges):
+            result = check_house_availability(house=house, date_range=test_range)
+            self.assertEqual(result, expected_output[index])
