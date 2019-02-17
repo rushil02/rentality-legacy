@@ -32,6 +32,7 @@ class Application(models.Model):
     rent = models.PositiveIntegerField()
     meta = JSONField(null=True, blank=True)
 
+    # FIXME: need to change this variable to date_range or stay_date_range
     date = DateRangeField(verbose_name=_('stay dates'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
     promotional_code = models.ManyToManyField('promotions.PromotionalCode', blank=True)  # FIXME: Needs to be plural

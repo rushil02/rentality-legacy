@@ -152,7 +152,6 @@ class AvailabilityForm(forms.ModelForm):
         """
 
         data = self.cleaned_data['dates']
-        # FIXME: Test if dates are apart; would also need to merge conflicting dates
         return data
 
 

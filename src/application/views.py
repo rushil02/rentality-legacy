@@ -28,9 +28,6 @@ from billing.models import Fee, Order
 from rest_framework.settings import api_settings
 from rest_framework import status
 from promotions.models import PromotionalCode
-
-# FIXME: Needs to be removed
-# @require_GET
 from user_custom.models import Account
 from utils.mailer import send_template_mail
 
