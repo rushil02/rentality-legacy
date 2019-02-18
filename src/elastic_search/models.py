@@ -5,7 +5,11 @@ from elastic_search.core.utils import get_index_name
 
 
 class Location(BaseModel):
-    suburb = Text(
+    obj_pk = Keyword(required=True)
+    verbose = Text()
+    geo_point = GeoPoint()
+
+    extra = Text(
         multi=True,
         fields={
             'suggester': Completion(preserve_separators=False)
