@@ -1,0 +1,66 @@
+stages:
+  - build
+  - release
+
+image: docker:stable
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+  FRONTEND_HASH_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHA
+  FRONTEND_STAGING_IMAGE: $CI_REGISTRY_IMAGE/frontend:staging-latest
+  FRONTEND_LATEST_IMAGE: $CI_REGISTRY_IMAGE/frontend:latest
+
+  WEB_HASH_IMAGE: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHA
+  WEB_STAGING_IMAGE: $CI_REGISTRY_IMAGE/web:staging-latest
+  WEB_LATEST_IMAGE: $CI_REGISTRY_IMAGE/web:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - apk add --update python py-pip python-dev && pip install docker-compose
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+build:
+  stage: build
+  tags:
+    - docker
+  script:
+    - docker-compose build
+    - docker tag $WEB_LATEST_IMAGE $WEB_HASH_IMAGE
+    - docker push $WEB_HASH_IMAGE
+    - docker tag $FRONTEND_LATEST_IMAGE $FRONTEND_HASH_IMAGE
+    - docker push $FRONTEND_HASH_IMAGE
+  only:
+    - staging
+    - master
+
+release-staging:
+  stage: release
+  tags:
+    - docker
+  script:
+    - docker pull $WEB_HASH_IMAGE
+    - docker pull $FRONTEND_HASH_IMAGE
+    - docker tag $WEB_HASH_IMAGE $WEB_STAGING_IMAGE
+    - docker push $WEB_STAGING_IMAGE
+    - docker tag $FRONTEND_HASH_IMAGE $FRONTEND_STAGING_IMAGE
+    - docker push $FRONTEND_STAGING_IMAGE
+  only:
+    - staging
+
+release-prod:
+  stage: release
+  tags:
+    - docker
+  script:
+    - docker pull $WEB_HASH_IMAGE
+    - docker pull $FRONTEND_HASH_IMAGE
+    - docker tag $WEB_HASH_IMAGE $WEB_LATEST_IMAGE
+    - docker push $WEB_LATEST_IMAGE
+    - docker tag $FRONTEND_HASH_IMAGE $FRONTEND_LATEST_IMAGE
+    - docker push $FRONTEND_LATEST_IMAGE
+  only:
+    - master
