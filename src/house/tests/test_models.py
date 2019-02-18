@@ -28,13 +28,14 @@ class AvailabilityModelTests(TestCase):
         }
 
         house = HouseFactory()
-
+        new_dates = []
         for test_date in test_dates['periodic']:
-            Availability.objects.add_date_range(house=house, dates=test_date, periodic=True)
+            new_dates.append({'dates': test_date, 'periodic': True})
 
         for test_date in test_dates['non-periodic']:
-            Availability.objects.add_date_range(house=house, dates=test_date, periodic=False)
+            new_dates.append({'dates': test_date, 'periodic': False})
 
+        Availability.objects.add_date_ranges(house=house, date_list=new_dates)
         expected_output = [
             (
                 DateRange(lower=timezone.now().date() + timedelta(days=30),
@@ -68,11 +69,14 @@ class AvailabilityModelTests(TestCase):
 
         house = HouseFactory()
 
+        new_dates = []
         for test_date in test_dates['periodic']:
-            Availability.objects.add_date_range(house=house, dates=test_date, periodic=True)
+            new_dates.append({'dates': test_date, 'periodic': True})
 
         for test_date in test_dates['non-periodic']:
-            Availability.objects.add_date_range(house=house, dates=test_date, periodic=False)
+            new_dates.append({'dates': test_date, 'periodic': False})
+
+        Availability.objects.add_date_ranges(house=house, date_list=new_dates)
 
         expected_output = [
             (
@@ -107,8 +111,13 @@ class AvailabilityModelTests(TestCase):
 
         house = HouseFactory()
 
+        new_dates = []
+
         for test_date in test_dates['periodic']:
-            Availability.objects.add_date_range(house=house, dates=test_date, periodic=True)
+            new_dates.append({'dates': test_date, 'periodic': True})
+
+        Availability.objects.add_date_ranges(house=house, date_list=new_dates)
+
         curr_year = timezone.now().year
         expected_output = [
             (

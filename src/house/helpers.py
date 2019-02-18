@@ -92,7 +92,7 @@ def filter_past_dates(date_range):
     """
     Removes dates which cannot be booked as they are past the minimum buffer required for booking start_date
     :param date_range: psycopg2.extras.DateRange object
-    :return:
+    :return: psycopg2.extras.DateRange object
     """
     # FIXME: Describes the minimum start_date of booking;should be detailed in the payment model and imported from there
     MIN_DATE = timezone.now().date()

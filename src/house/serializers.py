@@ -137,6 +137,24 @@ class AvailabilityPublicSerializer(serializers.ModelSerializer):
         model = Availability
         fields = ('dates', 'periodic')
 
+    def create(self, validated_data):  # TODO: Check working
+        return self.Meta.model.objects.add_date_range(**validated_data)
+
+    def update(self, *args, **kwargs):
+        """ Update is not supposed to be used with current structure and validations """
+        raise NotImplementedError
+
+
+class NetAvailableDatesSerailizer(serializers.Serializer):
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()
+
+    def get_start_date(self, obj):
+        return obj.lower
+
+    def get_end_date(self, obj):
+        return obj.upper
+
 
 class HouseDetailsPublicSerializer(serializers.ModelSerializer):
     """

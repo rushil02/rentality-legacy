@@ -7,6 +7,8 @@ from house.views import info, create, edit, ImageUploadView, FacilityView, Nearb
     home_owner_account_details, WelcomeTagView, apply_temp, remove_from_public, delete, HouseDetailPublicView, \
     ImagesPublicView, ThumbnailPublicView
 
+from house.views.api import NetAvailableDatesView
+
 app_name = 'house'
 
 urlpatterns = [
@@ -29,5 +31,7 @@ urlpatterns = [
     # APIs
     path('detail/<uuid:house_uuid>', HouseDetailPublicView.as_view(), name='detail_api'),
     path('all-images/<uuid:house_uuid>', ImagesPublicView.as_view(), name='all_images'),
-    path('thumbnail/<uuid:house_uuid>', ThumbnailPublicView.as_view(), name='thumbnail')
+    path('thumbnail/<uuid:house_uuid>', ThumbnailPublicView.as_view(), name='thumbnail'),
+    path('current-availability/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='curr_avail'),
+
 ]

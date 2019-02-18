@@ -1,9 +1,10 @@
 import traceback
 
+from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand, CommandError
 
 from elastic_search.models import House as HouseElastic
-from house.models import House
+from house.models import House, Availability
 from house.utils import index_to_es
 
 
@@ -14,6 +15,24 @@ def synchronise_es():
         index_to_es(obj)
 
 
+def clean_house_availability_dates():
+    """
+    Warning: this rewrites all the dates
+    """
+    for house in House.objects.all():
+        availabilities = list(house.availability_set.all().values('dates', 'periodic'))
+        house.availability_set.all().delete()
+        try:
+            Availability.objects.add_date_ranges(house=house, date_list=availabilities)
+        except ValidationError as e:
+            # FIXME: Log errors somewhere
+            print(house.title)
+            print(availabilities)
+            print(e)
+            print("*"*100)
+            continue
+
+
 class Command(BaseCommand):
     """ Periodic Cleanup of System """
 
@@ -22,7 +41,8 @@ class Command(BaseCommand):
     # FIXME: need to remove dangling facilities, welcome_tags, etc
 
     cleanup_func = {
-        'Synchronise ElasticSearch Index - House': synchronise_es
+        'Synchronise ElasticSearch Index - House': synchronise_es,
+        'Clean [Reset by re-population] Availability dates for all Houses': clean_house_availability_dates,
     }
 
     def ask_user_input(self, verbose):
