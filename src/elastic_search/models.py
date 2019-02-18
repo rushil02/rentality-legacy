@@ -1,4 +1,4 @@
-from elasticsearch_dsl import Text, Completion, Keyword, Integer, DateRange, HalfFloat, GeoPoint
+from elasticsearch_dsl import Text, Completion, Keyword, Integer, DateRange, HalfFloat, GeoPoint, InnerDoc, Nested, Range
 
 from elastic_search.core.models import BaseModel
 from elastic_search.core.utils import get_index_name
@@ -24,13 +24,17 @@ class Location(BaseModel):
         }
 
 
+class Availability(InnerDoc):
+    date_range = DateRange()
+
+
 class House(BaseModel):
     title = Text(index=False)
     address = Text()
     location = Text()
     home_type = Keyword()
     rent = Integer()
-    availability = DateRange()
+    availabilities = Nested(Availability, multi=True)
     min_stay = Integer()
     uuid = Keyword()
     geo_point = GeoPoint()
@@ -48,3 +52,6 @@ class House(BaseModel):
             'number_of_shards': 1,
             'number_of_replicas': 0
         }
+
+    def add_availability(self, lower, upper):
+        self.availabilities.append(Availability(date_range=Range(gte=lower, lt=upper)))

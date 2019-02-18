@@ -3,6 +3,7 @@ import traceback
 from django.core.exceptions import ValidationError
 from django.core.management import BaseCommand, CommandError
 
+from elastic_search.core.utils import recreate_indexes
 from elastic_search.models import House as HouseElastic
 from house.models import House, Availability
 from house.utils import index_to_es
@@ -31,6 +32,14 @@ def clean_house_availability_dates():
             print(e)
             print("*"*100)
             continue
+
+
+def clean_house_image_thumbnails():
+    """
+    Use when there are images but either none is selected as thumbnail,
+    :return:
+    """
+    pass
 
 
 class Command(BaseCommand):

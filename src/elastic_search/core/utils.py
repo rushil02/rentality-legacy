@@ -62,4 +62,15 @@ def create_mappings():
             #  TODO: Activity Log
             raise Exception(e)
 
+
+def recreate_indexes():
+    client = create_connection()
+    for klass in get_mapping_classes():
+        try:
+            klass.init()
+        except Exception as e:
+            #  TODO: Activity Log
+            raise Exception(e)
+
+# TODO: no mechanism to remove dangling indexes
 # TODO: Update mappings mechanism required : Re-index mechanism

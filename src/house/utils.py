@@ -1,5 +1,5 @@
+from django.utils import timezone
 from easy_thumbnails.files import get_thumbnailer
-
 from elastic_search.models import House
 
 
@@ -22,33 +22,9 @@ def index_to_es(obj):
         user_image=image, rent=obj.rent, min_stay=obj.min_stay, title=obj.title, thumbnail=thumbnail,
         geo_point={"lat": obj.location.location.y, "lon": obj.location.location.x}, create_time=obj.updated_on
     )
+
+    for availability in obj.get_availability(from_year=timezone.now().year, till_year=timezone.now().year):
+        es_obj.add_availability(availability.lower, availability.upper)
+
     es_obj.find_delete_duplicates()
     es_obj.save()
-
-
-class HouseAvailability(object):
-    def __init__(self, house, date_range):
-        """
-
-        :param house:
-        :param date_range:
-        """
-        self.house = house
-        self.date_range = date_range
-
-        self._is_valid = None
-
-    def is_valid(self):
-        if self._is_valid is None:
-            self._is_valid = self.check_dates()
-        return self._is_valid
-
-    def check_dates(self):
-        # FIXME: URGENT
-        house_dates = self.house.availability_set.filter()
-        booked_dates = self.house.application_set.all()
-
-        if self.house.availability_set.filter(dates__contains=self.date_range).count() > 0:
-            return True
-        else:
-            return False

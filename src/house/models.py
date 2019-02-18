@@ -17,7 +17,7 @@ from easy_thumbnails.files import get_thumbnailer
 from django.contrib.postgres.fields import JSONField
 from django.conf import settings
 
-from house.helpers import check_house_availability, filter_past_dates, filter_small_date_ranges
+from house.helpers import check_house_availability, filter_past_dates, filter_small_date_ranges, get_available_dates
 
 
 def get_file_path(instance, filename):
@@ -237,8 +237,8 @@ class House(models.Model):
     def get_rules(self):
         return self.houserule_set.all().select_related('rule')
 
-    def get_availability(self):
-        return self.availability_set.all()
+    def get_availability(self, from_year=None, till_year=None):
+        return get_available_dates(self, from_year, till_year)
 
     def set_status(self, status):
         if status == 'P':
@@ -406,11 +406,13 @@ class Availability(models.Model):
                 try:
                     self.dates = filter_past_dates(date_range=self.dates)
                 except AssertionError:
-                    raise ValidationError({'dates': ValidationError('The selected dates are not valid.', code='expired')})
+                    raise ValidationError(
+                        {'dates': ValidationError('The selected dates are not valid.', code='expired')})
             try:
                 self.dates = filter_small_date_ranges(self.dates)
             except AssertionError:
-                raise ValidationError({'dates': ValidationError('The selected dates are not valid.', code='invalid_small')})
+                raise ValidationError(
+                    {'dates': ValidationError('The selected dates are not valid.', code='invalid_small')})
 
 
 class Image(models.Model):

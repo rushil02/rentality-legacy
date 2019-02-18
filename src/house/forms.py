@@ -7,7 +7,6 @@ from psycopg2.extras import DateRange
 from easy_thumbnails.widgets import ImageClearableFileInput
 
 from house.models import House, Image, Availability, HouseRule
-from house.utils import HouseAvailability
 from rentality import settings
 from utils.form_thumbnailer import ImageFileInput
 
@@ -267,5 +266,5 @@ class ApplyForm(forms.Form):
         except KeyError:
             raise ValidationError("Invalid Dates")
 
-        if not HouseAvailability(house=self._obj, date_range=DateRange(self.cleaned_data['move_in_date'], self.cleaned_data['move_out_date'])).is_valid():
+        if not self._obj.check_availability(lower=self.cleaned_data['move_in_date'], upper=self.cleaned_data['move_out_date']):
             raise ValidationError("Chosen Dates are not available for booking.")

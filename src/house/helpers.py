@@ -141,7 +141,7 @@ def get_available_dates(house, from_year=None, till_year=None):
     for availability in availabilities:
         if availability.periodic:
             # `from_year` is set to `from_year - 1` to accommodate availabilities starting from previous year
-            # It is expected here that periodic date ranges with more than 365 days of booking are already cleaned.
+            # It is expected here that periodic date ranges with more than 365 days of availability are already cleaned.
             for year in range(from_year - 1, till_year + 1):
                 diff = year - availability.dates.lower.year
                 new_range = DateRange(
