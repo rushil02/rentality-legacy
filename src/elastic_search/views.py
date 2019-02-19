@@ -37,18 +37,34 @@ def search_house(request):
     slice_start = int(request.GET.get('pagination-start', 0))
     slice_end = int(request.GET.get('pagination-end', 10))
 
-    if location and location == 'null':
+    if not location or location == 'null':
         return JsonResponse({'details': "Invalid Data"}, status=status.HTTP_400_BAD_REQUEST)
 
     in_loc = None
-    if in_loc_id:
+    if in_loc_id and in_loc_id != 'null':
         try:
-            in_loc = Location.get(id=in_loc_id)
+            resp = Location.get(id=in_loc_id)
         except NotFoundError:
             pass
         else:
-            if in_loc.geo_point:
-                in_loc = in_loc.geo_point
+            if resp.geo_point:
+                in_loc = resp.geo_point
+            else:
+                in_loc = None
+    else:
+        try:
+            q = location
+            s = Location.search()
+            s = s.source(fields=['verbose', 'parent_verbose', 'geo_point'])
+            s = s.filter('term', extra="australia").query(
+                Q("multi_match", query=q, fields=['verbose', 'extra'], fuzziness="AUTO")
+            )[0]
+            resp = s.execute()[0]
+        except Exception:
+            pass
+        else:
+            if resp.geo_point:
+                in_loc = resp.geo_point
             else:
                 in_loc = None
 
