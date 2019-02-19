@@ -11,6 +11,6 @@ app_name = 'es'
 
 urlpatterns = [
     path('location_sugg', suggestions, name='loc_sugg'),
-    path('house/<text>', search_house, name='house_search'),
+    path('house', search_house, name='house_search'),
 
 ]

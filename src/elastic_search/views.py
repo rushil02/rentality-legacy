@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from elasticsearch import NotFoundError
 from elasticsearch_dsl import Q
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -27,7 +28,34 @@ def suggestions(request):
 
 
 @api_view(['GET'])
-def search_house(request, text):
-    s = House.search().query('match', address='a')
-    results = s.execute()
-    return JsonResponse(results.to_dict())
+def search_house(request):
+    in_loc_id = request.GET.get('loc_sugg', None)
+    location = request.GET.get('location', '')
+    start_date = request.GET.get('start-date', '')
+    end_date = request.GET.get('end-date', '')
+    slice_start = int(request.GET.get('pagination-start', 0))
+    slice_end = int(request.GET.get('pagination-end', 10))
+
+    in_loc = None
+    if in_loc_id:
+        try:
+            in_loc = Location.get(id=in_loc_id)
+        except NotFoundError:
+            pass
+        else:
+            if in_loc.geo_point:
+                in_loc = in_loc.geo_point
+            else:
+                in_loc = None
+
+    if in_loc:
+        s = House.search().filter(
+            'geo_distance', distance='50km', geo_point=in_loc, distance_type='plane'
+        ).sort('-create_time', 'rent')[slice_start:slice_end]
+    else:
+        s = House.search().query(
+            Q("multi_match", query=location, fields=['address', 'location'], fuzziness="AUTO")
+        ).sort('-create_time', 'rent')[slice_start:slice_end]
+
+    results = s.execute().to_dict()
+    return JsonResponse(results['hits']['hits'], safe=False, status=status.HTTP_200_OK)
