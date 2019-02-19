@@ -28,6 +28,7 @@ urlpatterns = [
     path('del/<uuid:house_uuid>', delete, name='delete_object'),
     path('rem/<uuid:house_uuid>', remove_from_public, name='remove_public'),
 
+    # FIXME: Remove
     path('test/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='test'),
 
     # APIs

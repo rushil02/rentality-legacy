@@ -68,7 +68,7 @@ def search_house(request):
 
             end_date = datetime.strptime(end_date, "%d-%m-%Y").date()
             print(end_date)
-
+            # FIXME: Implement this
             # s = s.filter('range', availabilities={'gte': start_date, 'lte': end_date, 'relation': "contains"})
     except Exception:
         pass
