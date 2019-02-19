@@ -17,7 +17,7 @@
                         <li><a href="{% url 'essentials:get_policy' policy_type="ToS" %}">Terms of Service</a></li>
                         <li><a href="{% url 'essentials:get_policy' policy_type="PP" %}">Privacy Policy</a></li>
                         <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="faq/" %}">FAQs</a></li>
-                        <li><a href="">Cookies</a></li>
+                        <li><a href="{% url 'essentials:get_policy' policy_type="CP" %}">Cookies</a></li>
                         <li><a href="{% url 'blog:home' %}">Blog</a></li>
                         <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="about-us/" %}">About Us</a></li>
                         <li><a href="">Help</a></li>
