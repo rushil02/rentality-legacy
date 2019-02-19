@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.http import JsonResponse
 from elasticsearch import NotFoundError
 from elasticsearch_dsl import Q
@@ -19,7 +20,7 @@ def suggestions(request):
         # FIXME: Temp filter, remove "australia" later
         s = s.filter('term', extra="australia").query(
             Q("multi_match", query=q, fields=['verbose', 'extra'], fuzziness="AUTO")
-        ) # .sort({"_score": {"order": "desc", "mode": "max"}})
+        )  # .sort({"_score": {"order": "desc", "mode": "max"}})
 
         resp = s.execute().to_dict()['hits']['hits']
         return Response(resp, status=status.HTTP_200_OK)
@@ -36,6 +37,9 @@ def search_house(request):
     slice_start = int(request.GET.get('pagination-start', 0))
     slice_end = int(request.GET.get('pagination-end', 10))
 
+    if location and location == 'null':
+        return JsonResponse({'details': "Invalid Data"}, status=status.HTTP_400_BAD_REQUEST)
+
     in_loc = None
     if in_loc_id:
         try:
@@ -51,11 +55,24 @@ def search_house(request):
     if in_loc:
         s = House.search().filter(
             'geo_distance', distance='50km', geo_point=in_loc, distance_type='plane'
-        ).sort('-create_time', 'rent')[slice_start:slice_end]
+        )
     else:
         s = House.search().query(
             Q("multi_match", query=location, fields=['address', 'location'], fuzziness="AUTO")
-        ).sort('-create_time', 'rent')[slice_start:slice_end]
+        )
 
+    try:
+        if start_date and end_date and "null" not in [start_date, end_date]:
+            start_date = datetime.strptime(start_date, "%d-%m-%Y").date()
+            print(start_date)
+
+            end_date = datetime.strptime(end_date, "%d-%m-%Y").date()
+            print(end_date)
+
+            # s = s.filter('range', availabilities={'gte': start_date, 'lte': end_date, 'relation': "contains"})
+    except Exception:
+        pass
+
+    s = s.sort('-create_time', 'rent')[slice_start:slice_end]
     results = s.execute().to_dict()
     return JsonResponse(results['hits']['hits'], safe=False, status=status.HTTP_200_OK)

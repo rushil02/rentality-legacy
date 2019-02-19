@@ -15,12 +15,18 @@
 
 {% endblock %}
 
+
+{% block additional_scripts %}
+    <link href="{% static 'style/auto-comp.css' %}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
 {% block content %}
 
     <!-- page map filter start -->
     <div class="page-map-filter position-sticky sticky-top">
         <div class="container">
-            <form action="{% url 'user:search' %}" method="GET" id="search_form">
+            <form action="{% url 'user:search' %}" method="GET" id="search_form" autocomplete="off">
                 {{ search_form.start_date }}
                 {{ search_form.end_date }}
                 <div class="row">
@@ -116,6 +122,7 @@
 {% endblock %}
 
 {% block page_scripts %}
+
     <script>
         $(document).ready(function () {
             let start_date = $('#id_start_date').val();
@@ -123,7 +130,13 @@
             if (start_date && end_date) {
                 $('#placeholder-date').val($('#id_start_date').val() + ' to ' + $('#id_end_date').val());
             }
-        })
+        });
+
+        $('body > .page-map-filter .calendar').on('pickmeup-change', function (e) {
+            $('body > .page-map-filter #placeholder-date').val(e.detail.formatted_date[0] + ' to ' + e.detail.formatted_date[1]);
+            $('body > .page-map-filter #id_start_date').val(e.detail.formatted_date[0]);
+            $('body > .page-map-filter #id_end_date').val(e.detail.formatted_date[1]);
+        });
     </script>
 
     <!-- page map api start -->
@@ -277,7 +290,7 @@
 
         $(window).scroll(function () {
             if (process && data_available) {
-                if (first_iter_check || ($(window).scrollTop() + 1.3*($(window).height())) >= $(document).height()) {
+                if (first_iter_check || ($(window).scrollTop() + 1.3 * ($(window).height())) >= $(document).height()) {
                     process = false;
                     $('.page-map .lists').append('<div id="loading" style="margin-top: 60px; text-align: center;"><img src="static/image/loading.gif">');
 
@@ -287,8 +300,8 @@
 
                     $.getJSON("{% url 'es:house_search' %}?loc_sugg=" + searchParams.get("loc_sugg") +
                         "&location=" + searchParams.get('location') +
-                        "&start-date=" + searchParams.get('start-date') +
-                        "&end-date=" + searchParams.get('end-date') +
+                        "&start-date=" + searchParams.get('start_date') +
+                        "&end-date=" + searchParams.get('end_date') +
                         "&pagination-start=" + pagination_start +
                         "&pagination-end=" + pagination_end, function (data) {
                         if (data.length > 0) {
@@ -424,5 +437,69 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKUjY7-juS0VSLNUBm0-oG2PnO5BquNp4&callback=initMap">
     </script>
     <!-- page map api end -->
+
+    <!-- Location Search start -->
+    <script>
+        let curr_search, curr_choice;
+
+        function get_verbose(obj) {
+            return obj['_source']['verbose']
+        }
+
+        function get_parent_verbose(obj) {
+            return obj['_source']['parent_verbose']
+        }
+
+        function closeAllLists(elmnt) {
+            $('#id_js_autocomplete-list').remove();
+        }
+
+        function display_autocomplete(inp, arr) {
+            closeAllLists();
+
+            a = document.createElement("DIV");
+            a.setAttribute("id", "id_js_autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+
+            inp.parentNode.appendChild(a);
+            curr_search = {};
+
+            for (i = 0; i < arr.length; i++) {
+                /*create a DIV element for each matching element:*/
+                b = document.createElement("DIV");
+                /*make the matching letters bold:*/
+                b.innerHTML = "<strong>" + get_verbose(arr[i]) + "</strong> " + get_parent_verbose(arr[i]);
+                /*insert a input field that will hold the current array item's value:*/
+                b.innerHTML += "<input type='hidden' value='" + arr[i]['_id'] + "'>";
+                curr_search[arr[i]['_id']] = arr[i]['_source'];
+
+                b.addEventListener("click", function (e) {
+                    /*insert the value for the autocomplete text field:*/
+                    inp.value = curr_search[this.getElementsByTagName("input")[0].value]['verbose'];
+                    curr_choice = this.getElementsByTagName("input")[0].value;
+                    closeAllLists();
+                });
+                a.appendChild(b);
+            }
+        }
+
+        var timeout = null;
+        $('input#id_location').keyup(function (inp) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                $.getJSON("{% url 'es:loc_sugg' %}", {'location': inp.target.value}, function (data) {
+                    display_autocomplete(inp.target, data);
+                })
+            }, 500);
+        });
+
+        $('#search_form').submit(function (e) {
+            $('#search_form').append($("<input>").attr("type", "hidden").attr("name", "loc_sugg").val(curr_choice));
+            return true;
+        })
+
+    </script>
+    <!-- Location Search end -->
+
 
 {% endblock %}

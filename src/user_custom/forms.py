@@ -182,7 +182,7 @@ class HomePageSearchForm(forms.Form):
     start_date = forms.DateField(
         label='Start date', required=False,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Start Date', 'hidden': True, 'data-toggle': 'datepicker',
+            'placeholder': 'Start Date', 'hidden': True, 'data-toggle': 'datepicker', 'required': False
         }, )
     )
     end_date = forms.DateField(
