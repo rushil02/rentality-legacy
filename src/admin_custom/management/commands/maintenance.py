@@ -9,6 +9,7 @@ from elastic_search.models import House as HouseElastic, Location as LocationEla
 from house.models import House, Availability
 from house.utils import index_to_es as index_house_to_es
 from cities_custom.utils import index_to_es as index_location_to_es
+from admin_custom.models import ActivityLog
 
 
 def synchronise_es_house():
@@ -28,11 +29,23 @@ def clean_house_availability_dates():
         try:
             Availability.objects.add_date_ranges(house=house, date_list=availabilities)
         except ValidationError as e:
-            # FIXME: Log errors somewhere
-            print(house.title)
-            print(availabilities)
-            print(e)
-            print("*" * 100)
+            availabilities = map(lambda availability: {
+                    'start_date': availability['dates'].lower,
+                    'end_date': availability['dates'].upper,
+                    'periodic': availability['periodic']
+                },
+                availabilities
+            )
+            ActivityLog.objects.create_log(
+                request=None, 
+                actor=None, 
+                entity=house, 
+                level='C',
+                view='clean_house_availability_dates',
+                message='Validation Failed for Availability for house = {}'.format(house.uuid),
+                traceback=traceback.format_exc(),
+                availabilities=availabilities
+            )
             continue
 
 

@@ -30,6 +30,8 @@ from rest_framework import status
 from promotions.models import PromotionalCode
 from user_custom.models import Account
 from utils.mailer import send_template_mail
+from admin_custom.models import ActivityLog
+from stripe.error import StripeError
 
 
 @login_required
@@ -112,6 +114,15 @@ class CreateApplicationView(CreateAPIView):
                     applier_type='T'
                 )
             except ValueError as e:
+                ActivityLog.objects.create_log(
+                    request=request, 
+                    actor=request.user, 
+                    entity=house, 
+                    level='I',
+                    view='CreateApplicationView',
+                    message='Invalid Promo Code',
+                    arguments=request.data
+                )
                 return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
             tenant_meta = serializer.validated_data['tenant_details']
@@ -138,30 +149,62 @@ class CreateApplicationView(CreateAPIView):
                 meta=fee_model.to_json_dict()
             ).save()
 
-            charge = self.process_payment(request, serializer.validated_data['stripe_token'], fee_model, house)
-            Order.objects.create(application=app_obj, charge_id=charge.id, payment_gateway=self.PaymentGateway)
+            try:
+                charge = self.process_payment(request, serializer.validated_data['stripe_token'], fee_model, house)
+            except StripeError as e:
+                ActivityLog.objects.create_log(
+                    request=request, 
+                    actor=request.user, 
+                    entity=app_obj, 
+                    level='E',
+                    view='CreateApplicationView',
+                    message='Payment Failed',
+                    arguments=request.data
+                )
+                ApplicationState.objects.create(
+                    application=app_obj,
+                    new_state='E',
+                    actor=request.user
+                )
+                print(str(e))
+                return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                Order.objects.create(application=app_obj, charge_id=charge.id, payment_gateway=self.PaymentGateway)
+                ApplicationState.objects.create(
+                    application=app_obj,
+                    new_state='B',
+                    actor=request.user
+                )
+                ActivityLog.objects.create_log(
+                    request=request, 
+                    actor=request.user, 
+                    entity=app_obj, 
+                    level='I',
+                    view='CreateApplicationView',
+                    message='Application Booked',
+                    arguments=request.data
+                )
+                email_context = {'application': app_obj, 'current_site': get_current_site(request)}
 
-            email_context = {'application': app_obj, 'current_site': get_current_site(request)}
+                send_template_mail(
+                    subject="Rentality - Booking Confirmed",
+                    template_name='emails/tenant/booking/confirmed.html',
+                    context=email_context,
+                    from_email='support@rentality.com.au',
+                    recipient_list=[self.request.user.email],
+                    text_message="Your booking has been confirmed. Please enable text/html to view this email correctly."
+                )
 
-            send_template_mail(
-                subject="Rentality - Booking Confirmed",
-                template_name='emails/tenant/booking/confirmed.html',
-                context=email_context,
-                from_email='support@rentality.com.au',
-                recipient_list=[self.request.user.email],
-                text_message="Your booking has been confirmed. Please enable text/html to view this email correctly."
-            )
+                send_template_mail(
+                    subject="Rentality - Booking Made",
+                    template_name='emails/home_owner/booking/confirmed.html',
+                    context=email_context,
+                    from_email='support@rentality.com.au',
+                    recipient_list=[house.home_owner.user.email],
+                    text_message="A booking has been made. Please enable text/html to view this email correctly."
+                )
 
-            send_template_mail(
-                subject="Rentality - Booking Made",
-                template_name='emails/home_owner/booking/confirmed.html',
-                context=email_context,
-                from_email='support@rentality.com.au',
-                recipient_list=[house.home_owner.user.email],
-                text_message="A booking has been made. Please enable text/html to view this email correctly."
-            )
-
-            return Response({"details": "success", "msg": ""}, status=status.HTTP_201_CREATED)
+                return Response({"details": "success", "msg": ""}, status=status.HTTP_201_CREATED)
 
 
 class BookingAmountView(APIView):
