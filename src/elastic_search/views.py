@@ -80,10 +80,8 @@ def search_house(request):
     try:
         if start_date and end_date and "null" not in [start_date, end_date]:
             start_date = datetime.strptime(start_date, "%d-%m-%Y").date()
-            print(start_date)
 
             end_date = datetime.strptime(end_date, "%d-%m-%Y").date()
-            print(end_date)
             # FIXME: Implement this
             # s = s.filter('range', availabilities={'gte': start_date, 'lte': end_date, 'relation': "contains"})
     except Exception:

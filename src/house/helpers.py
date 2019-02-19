@@ -88,6 +88,24 @@ def merge_dates(date_range_1, date_range_2):
     )
 
 
+def filter_dates_wrt_lower(date_range_list, container_range):
+    """
+    Silently filter dates where lower date is within the required range.
+    :param date_range_list - list of psycopg2.extras.DateRange objects
+    :param container_range - psycopg2.extras.DateRange object
+    :return: list of psycopg2.extras.DateRange objects
+    """
+    res = []
+    for date_range in date_range_list:
+        if date_range.upper < container_range.lower or date_range.lower > container_range.upper:
+            continue
+        else:
+            res.append(DateRange(
+                lower=max(date_range.lower, container_range.lower), upper=date_range.upper
+            ))
+    return res
+
+
 def filter_past_dates(date_range):
     """
     Removes dates which cannot be booked as they are past the minimum buffer required for booking start_date
@@ -192,7 +210,7 @@ def get_available_dates(house, from_year=None, till_year=None):
                 available_dates.append(updated_date_range)
             return
 
-        for index, app in enumerate(curr_apps):
+        for app in curr_apps:
             try:
                 sub_ranges = date_range_difference(principal_range, app)
             except OutOfLowerBoundException:
@@ -210,7 +228,7 @@ def get_available_dates(house, from_year=None, till_year=None):
                         available_dates.append(updated_date_range)
 
                 if sub_ranges['right'] is not None:
-                    del applications[index]
+                    del applications[0]
                     get_and_update_diffs(sub_ranges['right'])
 
                 return

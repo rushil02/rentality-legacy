@@ -147,6 +147,10 @@
                                 <div class="image">
                                     <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_small'|default:default_property_small }}"
                                          class="w-100" alt="" title="">
+                                    <div class="{% if house.is_marked_leased %} leased-img-tag {% else %} d-none {% endif %}">
+                                        LEASED
+                                    </div>
+
                                 </div>
                                 <h1>{{ house.title|title }} | {{ house.home_type }}</h1>
                                 <h2>{{ house.get_location|title }}</h2>

@@ -6,6 +6,26 @@ body {
     display: block;
 }
 
+
+.image > .leased-img-tag {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #39ffaf !important;
+    border-radius: 45px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #39ffaf;
+    padding-top: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+    transition: all .25s ease-in-out;
+}
+
 /*************************/
 /***** warning start *****/
 /*************************/
@@ -7639,7 +7659,7 @@ body > .header .search .cities #mobile-city {
     transition: all 1s ease;
 }
 
-.profile-image > #add-image a.btn{
+.profile-image > #add-image a.btn {
     font-size: 16px;
     font-weight: 400;
     color: #2a2b32;
@@ -7650,7 +7670,7 @@ body > .header .search .cities #mobile-city {
     transition: all .25s ease-in-out;
 }
 
-.profile-image > #add-image a.btn:hover{
+.profile-image > #add-image a.btn:hover {
     color: #fff;
     background-color: #2a2b32;
 }
@@ -7725,17 +7745,14 @@ body > .header .search .cities #mobile-city {
 
 
 #wait-for-ajax {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .8 )
-                url('http://i.stack.imgur.com/FhHRx.gif')
-                50% 50%
-                no-repeat;
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, .8) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
 }
 
 /* When the body has the loading class, we turn

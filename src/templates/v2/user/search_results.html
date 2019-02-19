@@ -272,20 +272,26 @@
         var pagination_end = 12;
 
         function get_html(data) {
-            return '' +
+            console.log(data);
+            var html = '' +
                 '        <a href="/property/info/' + data["uuid"] + '"  class="list" data-lat="-33.436050" data-lng="151.095432" data-rating="#93c94c">\n' +
                 '            <div class="rating">\n' +
                 '                <img src="' + data["user_image"] + '" class="rounded-circle" alt=""\n' +
                 '                     title="">\n' +
                 '            </div>\n' +
                 '            <div class="image">\n' +
-                '                <img src="' + data["thumbnail"] + '" class="w-100" alt="" title="">\n' +
+                '                <img src="' + data["thumbnail"] + '" class="w-100" alt="" title="">\n';
+            if (data.leased) {
+                html += '<div class="leased-img-tag">LEASED</div>'
+            }
+            html += '' +
                 '            </div>\n' +
                 '            <h1>' + data['title'] + ' | ' + data['home_type'] + '</h1>\n' +
                 '            <h2>' + data['location'] + '</h2>\n' +
                 '            <div>Min<span>' + data['min_stay'] + '</span></div>\n' +
                 '            <div>Rent<span> $' + data['rent'] + '/week</span></div>\n' +
                 '        </a>';
+            return html
         }
 
         $(window).scroll(function () {

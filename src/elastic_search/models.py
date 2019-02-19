@@ -1,4 +1,6 @@
-from elasticsearch_dsl import Text, Completion, Keyword, Integer, DateRange, HalfFloat, GeoPoint, InnerDoc, Nested, Range
+from elasticsearch_dsl import (
+    Text, Completion, Keyword, Integer, DateRange, HalfFloat, GeoPoint, InnerDoc, Nested, Range, Boolean
+)
 
 from elastic_search.core.models import BaseModel
 from elastic_search.core.utils import get_index_name
@@ -30,6 +32,7 @@ class Availability(InnerDoc):
 
 class House(BaseModel):
     title = Text(index=False)
+    leased = Boolean(index=False)
     address = Text()
     location = Text()
     home_type = Keyword()

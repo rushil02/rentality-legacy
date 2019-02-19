@@ -20,7 +20,8 @@ def index_to_es(obj):
     es_obj = House(
         obj_pk=obj.pk, address=obj.address, location=obj.get_location(), home_type=obj.home_type.name, uuid=obj.uuid,
         user_image=image, rent=obj.rent, min_stay=obj.min_stay, title=obj.title, thumbnail=thumbnail,
-        geo_point={"lat": obj.location.location.y, "lon": obj.location.location.x}, create_time=obj.updated_on
+        geo_point={"lat": obj.location.location.y, "lon": obj.location.location.x}, create_time=obj.updated_on,
+        leased=obj.is_marked_leased()
     )
 
     for availability in obj.get_availability(from_year=timezone.now().year, till_year=timezone.now().year):

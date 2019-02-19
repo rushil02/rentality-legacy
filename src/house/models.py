@@ -1,7 +1,7 @@
 import os
 import time
 import uuid
-from datetime import date
+from datetime import date, timedelta
 from itertools import chain
 
 from django.utils import timezone
@@ -17,7 +17,8 @@ from easy_thumbnails.files import get_thumbnailer
 from django.contrib.postgres.fields import JSONField
 from django.conf import settings
 
-from house.helpers import check_house_availability, filter_past_dates, filter_small_date_ranges, get_available_dates
+from house.helpers import check_house_availability, filter_past_dates, filter_small_date_ranges, get_available_dates, \
+    filter_dates_wrt_lower
 
 
 def get_file_path(instance, filename):
@@ -239,6 +240,21 @@ class House(models.Model):
 
     def get_availability(self, from_year=None, till_year=None):
         return get_available_dates(self, from_year, till_year)
+
+    def is_marked_leased(self):
+        # FIXME: Connect to dynamic business model
+        MAX_ESCROW_BUFFER = 90  # days
+        constraint_range = DateRange(lower=timezone.now().date(),
+                                     upper=(timezone.now() + timedelta(days=MAX_ESCROW_BUFFER)).date())
+        if self.application_set.filter(date__overlap=constraint_range).exists():
+            if len(filter_dates_wrt_lower(get_available_dates(
+                    self, from_year=constraint_range.lower.year, till_year=constraint_range.upper.year
+            ), constraint_range)) > 0:
+                return False
+            else:
+                return True
+        else:
+            return False
 
     def set_status(self, status):
         if status == 'P':
