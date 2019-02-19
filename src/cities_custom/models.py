@@ -39,6 +39,14 @@ class PostalCodeCustom(PostalCode):
     def get_geo_loc_point(self):
         return self.location
 
+    def get_parents(self):
+        return force_text(', '.join([e for e in [
+            force_text(self.district_name),
+            force_text(self.subregion_name),
+            force_text(self.region_name),
+            force_text(self.country),
+        ] if e]))
+
 
 class CityCustom(City):
     class Meta:
@@ -69,6 +77,11 @@ class CityCustom(City):
     def get_geo_loc_point(self):
         return self.location
 
+    def get_parents(self):
+        sub_r = self.subregion.name_std if self.subregion else None
+        r = self.region.name_std if self.region else None
+        return force_text(', '.join([force_text(e) for e in [sub_r, r, force_text(self.country)] if e]))
+
 
 class RegionCustom(Region):
     class Meta:
@@ -87,6 +100,9 @@ class RegionCustom(Region):
 
     def get_geo_loc_point(self):
         return None
+
+    def get_parents(self):
+        return force_text(self.country)
 
 
 class SubRegionCustom(Subregion):
@@ -107,6 +123,9 @@ class SubRegionCustom(Subregion):
     def get_geo_loc_point(self):
         return None
 
+    def get_parents(self):
+        return force_text(', '.join([force_text(e) for e in [self.region.name_std, self.parent.country]]))
+
 
 class DistrictCustom(District):
     class Meta:
@@ -125,3 +144,8 @@ class DistrictCustom(District):
 
     def get_geo_loc_point(self):
         return self.location
+
+    def get_parents(self):
+        sub_r = self.city.subregion.name_std if self.city.subregion else None
+        r = self.city.region.name_std if self.city.region else None
+        return force_text(', '.join([force_text(e) for e in [self.city.name_std, sub_r, r, self.city.country] if e]))

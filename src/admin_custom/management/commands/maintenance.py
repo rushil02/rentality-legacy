@@ -58,7 +58,7 @@ def synchronise_es_location():
         buffer = []
         for i, location in enumerate(_model.objects.all().select_related(*related_models)):
             obj = index_location_to_es(
-                verbose=location.get_verbose(), geo_point=location.get_geo_loc_point(),
+                verbose=location.get_verbose(), parent_verbose=location.get_parents(), geo_point=location.get_geo_loc_point(),
                 identifier=location.get_identifier(), keywords=location.get_all_keywords(), commit=False
             )
             buffer.append(obj)
@@ -68,7 +68,7 @@ def synchronise_es_location():
 
             if i % 10 == 0:
                 print(
-                    'Loading: %s%s %d [%d]' % (
+                    'Loading: %s%s %d%% [%d]    ' % (
                         "#" * int((i / total) * 100),
                         " " * int(((total - i) / total) * 100),
                         int((i / total) * 100),

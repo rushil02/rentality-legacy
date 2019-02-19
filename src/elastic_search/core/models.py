@@ -25,18 +25,11 @@ class BaseModel(Document):
         s.delete()
 
     def find_delete_duplicates(self):
+        if self.REF_FIELD:
+            if not getattr(self, self.REF_FIELD):
+                raise AssertionError("Argument Missing. ES DSL model object does not contain reference field."
+                                     " Initialize with argument `%s`" % self.REF_FIELD)
         self.delete_by_ref(getattr(self, self.REF_FIELD))
 
     class IndexInfo:
         index_this_model = False
-
-    def __init__(self, *args, **kwargs):
-        if self.REF_FIELD:
-            try:
-                kwargs[self.REF_FIELD]
-            except KeyError:
-                raise AssertionError("Argument Missing. ES DSL model object does not contain reference field."
-                                     " Initialize with argument `%s`" % self.REF_FIELD)
-        super(BaseModel, self).__init__(*args, **kwargs)
-
-

@@ -10,6 +10,9 @@ from house.serializers import AvailabilityPublicSerializer, NetAvailableDatesSer
 
 
 class AvailabilityView(APIView):
+    """
+    Used to show dates to home owner and not prospective tenants
+    """
     permission_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = AvailabilityPublicSerializer
 

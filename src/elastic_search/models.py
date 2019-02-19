@@ -6,15 +6,11 @@ from elastic_search.core.utils import get_index_name
 
 class Location(BaseModel):
     obj_pk = Keyword(required=True)
-    verbose = Text()
+    verbose = Text(boost=5.0)
+    parent_verbose = Text()
     geo_point = GeoPoint()
 
-    extra = Text(
-        multi=True,
-        fields={
-            'suggester': Completion(preserve_separators=False)
-        }
-    )
+    extra = Text(multi=True)
 
     class IndexInfo(BaseModel.IndexInfo):
         index_this_model = True

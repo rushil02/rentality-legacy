@@ -3,7 +3,7 @@ from django.utils import timezone
 from elastic_search.models import Location
 
 
-def index_to_es(verbose, geo_point, identifier, keywords=None, commit=True):
+def index_to_es(verbose, parent_verbose, geo_point, identifier, keywords=None, commit=True):
     """
     Index location information to ElasticSearch
     :param commit: option to save in ES DB ot return an unsaved object
@@ -18,6 +18,7 @@ def index_to_es(verbose, geo_point, identifier, keywords=None, commit=True):
 
     es_obj = Location(
         verbose=verbose,
+        parent_verbose=parent_verbose,
         geo_point=geo_point,
         extra=keywords,
         obj_pk=identifier,

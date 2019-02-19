@@ -3,6 +3,11 @@
 {% load static %}
 {% load thumbnail %}
 
+{% block additional_scripts %}
+    <link href="{% static 'style/auto-comp.css' %}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
 
 {% block body %}
     <!-- mobile menu start -->
@@ -63,7 +68,7 @@
                 <div class="row">
                     <div class="col-xl-2"></div>
                     <div class="col-12 col-xl-8">
-                        <form action="{% url 'user:search' %}" method="GET" id="search_form">
+                        <form autocomplete="off" action="{% url 'user:search' %}" method="GET" id="search_form">
                             {{ search_form.start_date }}
                             {{ search_form.end_date }}
                             <div class="detail">
@@ -320,58 +325,58 @@
     </div>
     <!-- start not end -->
     <!-- color boxes start -->
-{#    <div class="color-boxes">#}
-{#        <div class="container">#}
-{#            <div class="lists">#}
-{#                <div class="row">#}
-{#                    <div class="col-6 col-md-3">#}
-{#                        <div class="list">#}
-{#                            <div class="image">#}
-{#                                <img src="{% static 'image/color-boxes/1.svg' %}" alt="" title="">#}
-{#                            </div>#}
-{#                            <h1>Home Listed</h1>#}
-{#                            <p>#}
-{#                                <span class="counter">132</span>#}
-{#                            </p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="col-6 col-md-3">#}
-{#                        <div class="list">#}
-{#                            <div class="image">#}
-{#                                <img src="{% static 'image/color-boxes/2.svg' %}" alt="" title="">#}
-{#                            </div>#}
-{#                            <h1>Active User</h1>#}
-{#                            <p>#}
-{#                                <span class="counter">1187</span>#}
-{#                            </p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="col-6 col-md-3">#}
-{#                        <div class="list">#}
-{#                            <div class="image">#}
-{#                                <img src="{% static 'image/color-boxes/3.svg' %}" alt="" title="">#}
-{#                            </div>#}
-{#                            <h1>Total Leased</h1>#}
-{#                            <p>#}
-{#                                <span class="counter">86</span>#}
-{#                            </p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="col-6 col-md-3">#}
-{#                        <div class="list">#}
-{#                            <div class="image">#}
-{#                                <img src="{% static 'image/color-boxes/4.svg' %}" alt="" title="">#}
-{#                            </div>#}
-{#                            <h1>Satisfied Customer</h1>#}
-{#                            <p>#}
-{#                                <span class="counter">97</span>%#}
-{#                            </p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+    {#    <div class="color-boxes">#}
+    {#        <div class="container">#}
+    {#            <div class="lists">#}
+    {#                <div class="row">#}
+    {#                    <div class="col-6 col-md-3">#}
+    {#                        <div class="list">#}
+    {#                            <div class="image">#}
+    {#                                <img src="{% static 'image/color-boxes/1.svg' %}" alt="" title="">#}
+    {#                            </div>#}
+    {#                            <h1>Home Listed</h1>#}
+    {#                            <p>#}
+    {#                                <span class="counter">132</span>#}
+    {#                            </p>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                    <div class="col-6 col-md-3">#}
+    {#                        <div class="list">#}
+    {#                            <div class="image">#}
+    {#                                <img src="{% static 'image/color-boxes/2.svg' %}" alt="" title="">#}
+    {#                            </div>#}
+    {#                            <h1>Active User</h1>#}
+    {#                            <p>#}
+    {#                                <span class="counter">1187</span>#}
+    {#                            </p>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                    <div class="col-6 col-md-3">#}
+    {#                        <div class="list">#}
+    {#                            <div class="image">#}
+    {#                                <img src="{% static 'image/color-boxes/3.svg' %}" alt="" title="">#}
+    {#                            </div>#}
+    {#                            <h1>Total Leased</h1>#}
+    {#                            <p>#}
+    {#                                <span class="counter">86</span>#}
+    {#                            </p>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                    <div class="col-6 col-md-3">#}
+    {#                        <div class="list">#}
+    {#                            <div class="image">#}
+    {#                                <img src="{% static 'image/color-boxes/4.svg' %}" alt="" title="">#}
+    {#                            </div>#}
+    {#                            <h1>Satisfied Customer</h1>#}
+    {#                            <p>#}
+    {#                                <span class="counter">97</span>%#}
+    {#                            </p>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
     <!-- color boxes end -->
 
     <!-- comment start
@@ -450,6 +455,71 @@
         {#);#}
     </script>
     <!-- counter end -->
+
+    <!-- Location Search start -->
+    <script>
+        let curr_search, curr_choice;
+
+        function get_verbose(obj) {
+            return obj['_source']['verbose']
+        }
+
+        function get_parent_verbose(obj) {
+            return obj['_source']['parent_verbose']
+        }
+
+        function closeAllLists(elmnt) {
+            $('#id_js_autocomplete-list').remove();
+        }
+
+        function display_autocomplete(inp, arr) {
+            closeAllLists();
+
+            a = document.createElement("DIV");
+            a.setAttribute("id", "id_js_autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+
+            inp.parentNode.appendChild(a);
+            curr_search = {};
+
+            for (i = 0; i < arr.length; i++) {
+                /*create a DIV element for each matching element:*/
+                b = document.createElement("DIV");
+                /*make the matching letters bold:*/
+                b.innerHTML = "<strong>" + get_verbose(arr[i]) + "</strong> " + get_parent_verbose(arr[i]);
+                /*insert a input field that will hold the current array item's value:*/
+                b.innerHTML += "<input type='hidden' value='" + arr[i]['_id'] + "'>";
+                curr_search[arr[i]['_id']] = arr[i]['_source'];
+
+                b.addEventListener("click", function (e) {
+                    /*insert the value for the autocomplete text field:*/
+                    inp.value = curr_search[this.getElementsByTagName("input")[0].value]['verbose'];
+                    curr_choice = this.getElementsByTagName("input")[0].value;
+                    closeAllLists();
+                });
+                a.appendChild(b);
+            }
+            console.log(curr_search);
+
+        }
+
+        var timeout = null;
+        $('input#id_location').keyup(function (inp) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                $.getJSON("{% url 'es:loc_sugg' %}", {'location': inp.target.value}, function (data) {
+                    display_autocomplete(inp.target, data);
+                })
+            }, 500);
+        });
+
+        $('#search_form').submit(function (e) {
+            $('#search_form').append($("<input>").attr("type", "hidden").attr("name", "loc_sugg").val(curr_choice));
+            return true;
+        })
+
+    </script>
+    <!-- Location Search end -->
 
     {# FIXME: complete checks before submission #}
     <!-- Datepicker start -->

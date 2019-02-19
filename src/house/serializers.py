@@ -138,7 +138,7 @@ class AvailabilityPublicSerializer(serializers.ModelSerializer):
         fields = ('dates', 'periodic')
 
     def create(self, validated_data):  # TODO: Check working
-        return self.Meta.model.objects.add_date_range(**validated_data)
+        return self.Meta.model.objects.add_date_ranges(**validated_data)
 
     def update(self, *args, **kwargs):
         """ Update is not supposed to be used with current structure and validations """
