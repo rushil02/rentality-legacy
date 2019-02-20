@@ -65,10 +65,10 @@ class HouseForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             ),
             'bedrooms': forms.NumberInput(
-                attrs={'class': 'form-control', 'placeholder': 1}
+                attrs={'class': 'form-control', 'placeholder': 0}
             ),
             'bathrooms': forms.NumberInput(
-                attrs={'class': 'form-control', 'placeholder': 1}
+                attrs={'class': 'form-control', 'placeholder': 0}
             ),
             'parking': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 0}

@@ -107,7 +107,7 @@ class NavbarComponent extends Component {
                                 <ul className="list-inline">
                                     <li className="list-inline-item"><a href={reverse(routes.home)}>Home</a></li>
                                     <li className="list-inline-item"><a href={reverse(routes.blogs)}>Blog</a></li>
-                                    <li className="list-inline-item"><a href={reverse(routes.howItWorks)}>How Its Work</a>
+                                    <li className="list-inline-item"><a href={reverse(routes.howItWorks)}>How It Works</a>
                                     </li>
                                     <li className="list-inline-item"><a href={reverse(routes.listHome)}>List Your Home</a>
                                     </li>
