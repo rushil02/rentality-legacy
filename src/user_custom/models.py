@@ -140,13 +140,18 @@ class PersonalityTag(models.Model):
 
 # FIXME: Migrate all payment process in reference to this model
 class Account(models.Model):
+    """
+    Stores all the Payment Gateway accounts that exist for a user.
+
+    details ->  holds the information of a user in particular to a gateway. It is JSONField
+                since this detail is used by the custom modules which describe the functioning,
+                and may or may not require any additional details other than only customer
+                related account(s).
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     details = JSONField(default={})
-    PAYMENT_GATEWAY_CHOICES = (
-        ('S', 'Stripe'),
-        ('A', 'Assembly')
-    )
-    payment_gateway = models.CharField(max_length=2, choices=PAYMENT_GATEWAY_CHOICES)
+    payment_gateway = models.ForeignKey('admin_custom.PaymentGateway', on_delete=models.PROTECT)
+    create_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "%s" % self.user

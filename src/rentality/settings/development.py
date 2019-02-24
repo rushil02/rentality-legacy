@@ -21,4 +21,10 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "media_root")
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'test_emails')
 
+
+# Email settings (using Sendgrid via API) Should be always disabled in development
+# SENDGRID_API_KEY = get_env_var("SENDGRID_API_KEY")
+# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+
 ALLOWED_HOSTS = ['*']

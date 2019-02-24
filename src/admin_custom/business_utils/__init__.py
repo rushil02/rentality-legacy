@@ -1,4 +1,4 @@
-from billing.utils.fee_models import model_A
+from .fee_configurations import model_A
 
 # Register all models here
 BILLING_FEE_MODELS = {

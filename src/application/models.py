@@ -1,6 +1,4 @@
-import random
 import uuid
-import string
 
 from cities.models import PostalCode
 from django.db import models
@@ -12,6 +10,7 @@ from django.conf import settings
 from cities_custom.serializers import PostalCodeSerializer, PostalCodeAllDetailSerializer
 from house.models import House, HomeType
 from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
+from utils.model_utils import next_ref_code
 
 STATUS_CHOICES = (
     ('P', 'Pending'),
@@ -39,10 +38,8 @@ class Application(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-    REF_CODE_LENGTH = 6
-
     def __str__(self):
-        return "'%s' applied for %s" % (self.tenant, self.house)
+        return "%s: '%s' applied for %s" % (self.ref_code, self.tenant, self.house)
 
     def __init__(self, *args, **kwargs):
         super(Application, self).__init__(*args, **kwargs)
@@ -68,49 +65,14 @@ class Application(models.Model):
             self._house_native_obj = _house_native_obj
         return self._house_native_obj
 
-    def _create_ref_code(self):
+    @staticmethod
+    def _create_ref_code():
         try:
             obj = Application.objects.latest('created_on')
         except Application.DoesNotExist:
             return 'AA0001'
-        new_code = ""
-        prev_code = obj.ref_code[::-1]
-        i = 0
-        while (i < self.REF_CODE_LENGTH):
-            subcode = prev_code[i]
-            try:
-                int(subcode)
-            except ValueError:
-                try:
-                    new_char = string.ascii_uppercase[string.ascii_uppercase.index(subcode) + 1]
-                except IndexError:
-                    new_code += string.ascii_uppercase[0]
-                    i += 1
-                    continue
-                else:
-                    new_code += new_char
-                    i += 1
-                    break
-            else:
-                try:
-                    new_char = string.digits[string.digits.index(subcode) + 1]
-                except IndexError:
-                    new_code += string.digits[0]
-                    i += 1
-                    continue
-                else:
-                    new_code += new_char
-                    i += 1
-                    break
-
-        if i == self.REF_CODE_LENGTH:
-            initial = [string.digits[0], string.ascii_uppercase[0]]
-            new_code = random.choice(initial) + new_code[::1]
-
         else:
-            new_code = new_code + prev_code[i:]
-
-        return new_code[::-1]
+            return next_ref_code(obj.ref_code)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -138,7 +100,7 @@ class ApplicationState(models.Model):
 
 class AccountDetail(models.Model):
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
-    fee = models.ForeignKey('billing.Fee', on_delete=models.PROTECT)
+    transaction_config = models.ForeignKey('admin_custom.TransactionConfiguration', on_delete=models.PROTECT)
     tenant = JSONField()
     home_owner = JSONField()
     meta = JSONField()

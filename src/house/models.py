@@ -56,6 +56,7 @@ class ActiveHouseManager(HouseManager):
 
 
 class House(models.Model):
+    # FIXME: Can this model be broken? Although all attrs are accessed together always (except Promos)
     """
     tags -> contain many-to-many relation with model 'Tags' containing 'who-is-welcomed [rules]' or facility
 
@@ -106,6 +107,7 @@ class House(models.Model):
 
     rent = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Per Week in AUD")
     promo_codes = models.ManyToManyField('promotions.PromotionalCode', blank=True)
+    transaction_config = models.ForeignKey('admin_custom.TransactionConfiguration', on_delete=models.PROTECT)
 
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),

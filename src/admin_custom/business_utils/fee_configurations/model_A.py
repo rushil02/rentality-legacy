@@ -7,7 +7,9 @@ Fee model
 """
 from decimal import Decimal
 
-from billing.utils.fee_models.base import TenantAccountBase, HomeOwnerAccountBase, FeeModelBase, Charge
+from admin_custom.business_utils.fee_configurations.base import (
+    TenantAccountBase, HomeOwnerAccountBase, FeeModelBase, Charge
+)
 
 
 class TenantAccount(TenantAccountBase):

@@ -1,139 +1,76 @@
-from django.contrib.postgres.fields import JSONField
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from billing.utils import get_available_models as get_available_billing_models
-from .utils.business_models import get_available_models as get_available_business_models
+from utils.model_utils import next_ref_code
 
 
-class Order(models.Model):
+class PaymentGatewayTransaction(models.Model):
     """
-    payment_gateway -> whether it is 'stripe' or 'assembly'
+    Stores the interaction and events between rentality and payment gateway.
     """
-    application = models.ForeignKey('application.Application', on_delete=models.PROTECT)
-    charge_id = models.CharField(max_length=64)
-    payment_gateway = models.CharField(max_length=50)
-
-    def __str__(self):
-        return "%s" % self.application
-
-
-class FeeManager(models.Manager):
-    def get_default(self):
-        return self.get(active=True)
-
-
-# FIXME: Add checks for default and model delete
-class Fee(models.Model):
-    """
-    Once a fee object is created, it should not be deletable or editable
-    """
-    tenant_charge = models.DecimalField(max_digits=5, decimal_places=2)
-    home_owner_charge = models.DecimalField(max_digits=5, decimal_places=2)
-    GST = models.DecimalField(max_digits=5, decimal_places=2)
-    # FIXME: change to default later
-    active = models.BooleanField(
-        verbose_name="Default",
-        default=False,
-        help_text="A house/application can have different Fee objects attached. You can set it as the default."
+    ref_code = models.CharField(unique=True, max_length=20, blank=True)
+    application = models.ForeignKey('application.Application', on_delete=models.PROTECT, null=True, blank=True)
+    TYPE = (  # FIXME: get from payment gateway module (not model)
     )
-
-    BILLING_MODELS = get_available_billing_models()
-
-    billing_model = models.CharField(max_length=1, choices=BILLING_MODELS)
-    created_on = models.DateTimeField(auto_now_add=True)
-
-    objects = FeeManager()
+    transaction_type = models.CharField(max_length=2, choices=TYPE)
+    transaction_id = models.CharField(max_length=64)
+    user_account = models.ForeignKey('user_custom.Account', on_delete=models.PROTECT)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    create_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "T - %s; H - %s" % (self.tenant_charge, self.home_owner_charge)
+        return "%s" % self.ref_code
+
+    def _create_ref_code(self):
+        try:
+            obj = PaymentGatewayTransaction.objects.latest('created_on')
+        except PaymentGatewayTransaction.DoesNotExist:
+            ref_code = 'AA0001'
+        else:
+            ref_code = next_ref_code(obj.ref_code.split('_')[1])
+        return "%s_%s" % (self.transaction_type, ref_code)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk is None:
+            self.ref_code = self._create_ref_code()
+        super(PaymentGatewayTransaction, self).save(force_insert=False, force_update=False, using=None,
+                                                    update_fields=None)
 
 
-# FIXME: join this model and write validations
-class PaymentGateway(models.Model):
+class LedgerRecord(models.Model):
     """
-    Stores readable information of payment gateway. Primarily created to maintain consistency across various
-    model relations.
-
-    meta -> stores information for monetary validations and checks while creating a Fee model,
-    can be used to store other information. Expected structure -
-    {
-        'expenses': {
-            'payout': {
-                'breakdown': [
-                    {
-                        'verbose': string,
-                        'fee': {
-                            'percentage': {
-                                'principal': string - 'verbose of any other breakdown or `principal`'
-                                'value': float/integer,
-                            },
-                            'fixed': float/integer
-                        },
-                        'description': string,
-                        'tax': {
-                            'inclusive': boolean,
-                            'fee': {
-                                'percentage': float/integer,
-                                'fixed': float/integer
-                            }
-                        },
-                    },
-                    ...
-                ]
-            },
-            'payin': {
-                'breakdown': [
-                    {
-                        'verbose': string,
-                        'fee': {
-                            'percentage': {
-                                'principal': string - 'verbose of any other breakdown or `principal`'
-                                'value': float/integer,
-                            },
-                            'fixed': float/integer
-                        },
-                        'description': string,
-                        'tax': {
-                            'inclusive': boolean,
-                            'fee': {
-                                'percentage': float/integer,
-                                'fixed': float/integer
-                            }
-                        },
-                    },
-                    ...
-                ]
-            },
-        }
-    }
-
+    Stores actual Credits and Debits to and from rentality
     """
-    name = models.CharField(max_length=50)
-    meta = JSONField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
+    ref_code = models.CharField(unique=True, max_length=20, blank=True)
+    description = models.TextField()
+    PAYMENT_TYPE = (
+        ('Cr', 'Credit'),
+        ('De', 'Debit')
+    )
+    payment_type = models.CharField(max_length=2, choices=PAYMENT_TYPE)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    pg_transaction = models.OneToOneField(
+        'billing.PaymentGatewayTransaction', on_delete=models.PROTECT, null=True, blank=True,
+        verbose_name="Payment Gateway Transaction"
+    )
+    create_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "%s" % self.name
+        return "%s" % self.ref_code
 
+    def _create_ref_code(self):
+        try:
+            obj = LedgerRecord.objects.latest('created_on')
+        except LedgerRecord.DoesNotExist:
+            ref_code = 'AA0001'
+        else:
+            ref_code = next_ref_code(obj.ref_code.split('_')[1])
+        return "%s_%s" % (self.payment_type, ref_code)
 
-# class TransactionModel(models.Model):
-#     """
-#     Maps all Business Constraints and Financial Services together
-#     To be Mapped Directly to an Application and/or Order FIXME
-#     """
-#     gateway = models.ForeignKey()
-
-
-# class BusinessModel(models.Model):
-#     """
-#     All business related details are stored in meta, which is recognized to be flexible as one model can
-#     constraint on the basis of length of booking while another on amount.
-#     Each Transaction model should state its required constants.
-#     """
-#     meta = JSONField()
-#     verbose = models.CharField(max_length=50)
-#     BEHAVIOUR_MODELS = get_available_business_models()
-#     behaviour_model = models.CharField(max_length=1, choices=BEHAVIOUR_MODELS,
-#                                        help_text="Defines behaviour and constraints unique to business model")
-#     created_on = models.DateTimeField(auto_now_add=True)
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk is None:
+            self.ref_code = self._create_ref_code()
+        super(LedgerRecord, self).save(force_insert=False, force_update=False, using=None,
+                                       update_fields=None)

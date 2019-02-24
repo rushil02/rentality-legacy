@@ -1,7 +1,7 @@
 """
 Create all validation functions to be used for validating promotion codes here.
 
-Each method is expected to return a boolean for validation and corresponding error message or "" if True (valid).
+Each method is expected to return a boolean for validation.
 """
 from django import forms
 from django.utils import timezone
