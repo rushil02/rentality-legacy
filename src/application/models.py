@@ -17,7 +17,8 @@ STATUS_CHOICES = (
     ('A', 'Accepted'),
     ('D', 'Declined'),
     ('T', 'Timeout'),
-    ('E', 'Transaction Error')
+    ('E', 'Transaction Error'),
+    ('B', 'Booked')
 )
 
 
@@ -86,7 +87,7 @@ class Application(models.Model):
 
 class ApplicationState(models.Model):
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT)
-    old_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    old_state = models.CharField(max_length=1, null=True, blank=True, choices=STATUS_CHOICES)
     new_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
     actor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
