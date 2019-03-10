@@ -29,7 +29,7 @@ def get_behaviours():
 
 
 def get_behaviour_description(key):
-    return inspect.getfile(BEHAVIOURS[key]['behaviour_class']).__doc__
+    return inspect.getdoc(BEHAVIOURS[key]['behaviour_class'])
 
 
 def get_behaviour_class(key):

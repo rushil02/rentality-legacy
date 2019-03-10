@@ -9,9 +9,10 @@ Business constraints
       be on the same day.
 """
 from business_core.constraints_models.base import ConstraintsModelBase
+from .exceptions import ConstraintError
 
-
-class ConstraintsModel(ConstraintsModelBase):
+class ConstraintsModelA(ConstraintsModelBase):
+    MIN_STAY_DEFAULT = 28
     REQUIRED_ATTRS = {
         'min_stay': {
             'type': 'positive-integer',
@@ -36,8 +37,20 @@ class ConstraintsModel(ConstraintsModelBase):
     }
 
     def __init__(self, **kwargs):
-        kwargs.get('rent')
-        super(ConstraintsModel, self).__init__()
+        self.business_model_meta = kwargs.get('businness_model_meta', {})
+        self.errors = []
+        self.min_stay = self.business_model_meta.get('min_stay', self.MIN_STAY_DEFAULT)
+        super().__init__()
 
-    def validate(self):
-        ...
+    def validate(self, house_math, raise_exception):
+        if self.min_stay > house_math.min_stay:
+            self.errors.append("House minimum stay cannot be less than {}".format(self.min_stay))
+        if raise_exception and self.errors:
+            raise ConstraintError("Constraints validation failed.", self.errors)
+        elif self.errors:
+            return False
+        else:
+            return True
+    
+    def get_errors(self):
+        return self.errors
