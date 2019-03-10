@@ -210,6 +210,12 @@ class CancellationPolicy(models.Model):
 
 class BusinessModelConfigurationManager(models.Manager):  # TODO
     def get_location_default(self, bank_location, house_location):
+        """
+        `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
+        :param bank_location:
+        :param house_location:
+        :return:
+        """
         ...
         return self.get()
 
@@ -259,6 +265,8 @@ class BusinessModelConfiguration(models.Model):
     default = models.BooleanField(default=False)
 
     created_on = models.DateTimeField(auto_now_add=True)
+
+    objects = BusinessModelConfigurationManager()
 
     def __str__(self):
         return "%s" % self.code

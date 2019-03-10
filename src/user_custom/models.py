@@ -90,6 +90,9 @@ class User(AbstractUser):
         if object_is_new:
             UserProfile.objects.create(user=self)
 
+    def get_bank_location(self):
+        return self.geodetails.get_bank_location()
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -133,6 +136,9 @@ class GeoDetails(models.Model):
 
     def __str__(self):
         return self.user
+
+    def get_bank_location(self):
+        return self.bank_location
 
 
 class PersonalityTag(models.Model):

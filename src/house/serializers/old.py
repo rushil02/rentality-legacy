@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from admin_custom.models import CancellationPolicy
 from cities_custom.serializers import LocationCitySerializer, PostalCodeSerializer
 from essentials.serializers import PolicyPublicSerializer
 from house.models import House, Image, Facility, NeighbourhoodDescriptor, WelcomeTag, HouseRule, Rule, \
-    CancellationPolicy, Availability, HomeType
+    Availability, HomeType
 
 
 class HouseSerializer(serializers.ModelSerializer):

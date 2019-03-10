@@ -44,24 +44,37 @@ class House(object):
     @classmethod
     def build(cls, house):
         """
-        It is assumed that promo codes are already clean and validated
+        To create a new Financial House object. This will ignore the existing recorded financial
+        or agreement info of business config, and create from fresh sources.
+
+        If the data is being calculated for a known business_config, use `load(...)` method.
+
+        It is assumed that promo codes are already clean and validated.
+
         :param house: `house.models.House` object
         :return:
         """
-        config =
+        config = BusinessModel.init_default(house.home_owner.user.get_bank_location(), house.get_location())
         _promo_codes = []
         for promo_code in house.promo_codes:
-            _promo_codes.append(PromoCode(obj=promo_code))
-
+            _promo_code = PromoCode(obj=promo_code)
+            _promo_codes.append()
+            if _promo_code.can_change_business_model_config:
+                config = BusinessModel(_promo_code.get_business_model_config())
         obj = cls(rent=house.rent, min_stay=house.min_stay, max_stay=house.max_stay, promo_codes=_promo_codes)
-        config = BusinessModelConfiguration.objects.get()
-        obj.set_business_model_config()
+        obj.set_business_model_config(config)
         return obj
 
     @classmethod
     def load(cls, house, business_model_config):
-        obj = cls(house)
-        obj.set
+        """
+        Creates a Financial House object with given business_model_config
+        :param house: `house.models.House` object
+        :param business_model_config: 'admin_custom.models.BusinessModelConfiguration' object
+        :return:
+        """
+        obj = cls(rent=house.rent, min_stay=house.min_stay, max_stay=house.max_stay, promo_codes=house.promo_codes)
+        obj.set_business_model_config(BusinessModel(business_model_config))
 
     def validate(self):
         ...
@@ -113,8 +126,8 @@ class Booking(object):
         """
         :param application: 'application.models.Application'
         """
-        self.house = House(house=application.house_meta, )
-        self.application = Application(house, date_range, promotional_codes, **kwargs)
+        self.house = House.load(application.house_deserailized(),)
+        # self.application = Application(house, date_range, promotional_codes, **kwargs)
 
         self.promo_codes = list(self.application.promo_codes) + list(self.application.house.promo_codes.all())
 

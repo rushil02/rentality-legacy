@@ -58,6 +58,8 @@ class ActiveHouseManager(HouseManager):
 class House(models.Model):
     # FIXME: Can this model be broken? Although all attrs are accessed together always (except Promos)
     """
+    Minimum home_owner, title, location are required to create a house object.
+
     tags -> contain many-to-many relation with model 'Tags' containing 'who-is-welcomed [rules]' or facility
 
     status description ->
@@ -97,7 +99,6 @@ class House(models.Model):
         'cities.PostalCode',
         on_delete=models.PROTECT,
         verbose_name=_('location'),
-        null=True, blank=True
     )
 
     home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
@@ -107,7 +108,8 @@ class House(models.Model):
 
     rent = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Per Week in AUD")
     promo_codes = models.ManyToManyField('promotions.PromotionalCode', blank=True)
-    transaction_config = models.ForeignKey('admin_custom.TransactionConfiguration', on_delete=models.PROTECT)
+
+    business_config = models.ForeignKey('admin_custom.BusinessModelConfiguration', on_delete=models.PROTECT)
 
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),
@@ -127,7 +129,8 @@ class House(models.Model):
     rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)
     other_rules = models.TextField(blank=True)
 
-    cancellation_policy = models.ForeignKey('house.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
+    # FIXME: [URGENT] check related cancellation_policy exists in the related business model configuration.
+    cancellation_policy = models.ForeignKey('admin_custom.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
 
     other_people_description = models.TextField(blank=True)
 
@@ -269,6 +272,7 @@ class House(models.Model):
         else:
             return ""
 
+    # FIXME: Write tests for this
     def verify_data_for_publishing(self):
         """
         Tests if all required fields are present in the object
@@ -285,7 +289,7 @@ class House(models.Model):
                 if field.related_model.objects.filter(house=self).count() == 0:
                     errors[field_name] = ValidationError('This field is required', code='required')
             else:
-                if getattr(self, field_name) in (None, '', ' '):
+                if not getattr(self, field_name):
                     errors[field_name] = ValidationError('This field is required', code='required')
 
         if bool(errors):
@@ -539,18 +543,6 @@ class Rule(models.Model):
     """
     verbose = models.CharField(max_length=50)
     options = ArrayField(models.CharField(max_length=50))
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "%s" % self.verbose
-
-
-class CancellationPolicy(models.Model):
-    verbose = models.TextField(verbose_name='Policy Name')
-    description = models.TextField()
-    properties = JSONField()
-    official_policy = models.ForeignKey('essentials.Policy', on_delete=models.PROTECT, null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 

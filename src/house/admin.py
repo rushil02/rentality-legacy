@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from house.models import House, Image, HomeType, HouseProfile, Availability, Facility, HouseRule, Rule, \
-    CancellationPolicy
+from house.models import House, Image, HomeType, HouseProfile, Availability, Facility, HouseRule, Rule
 
 
 class HouseAdmin(admin.ModelAdmin):
@@ -37,4 +36,3 @@ admin.site.register(Availability, AvailabilityAdmin)
 admin.site.register(HouseProfile)
 admin.site.register(HouseRule)
 admin.site.register(Rule)
-admin.site.register(CancellationPolicy)
