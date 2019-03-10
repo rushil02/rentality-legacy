@@ -16,11 +16,12 @@ Example of handled data and behaviour -
       check-out date of Booking 'A' and check-in date of booking 'B' cannot be onn the same day.
 """
 
-from . import constraints_model_A
+from .constraints_model_A import ConstraintsModelA
+import inspect
 
 # Register all models here
 CONSTRAINTS_MODELS = {
-    'A': {'verbose': 'Business Constraints A', 'constraints_model_file': constraints_model_A}
+    'A': {'verbose': 'Business Constraints A', 'constraints_model_class': ConstraintsModelA}
 }
 
 
@@ -32,8 +33,8 @@ def get_constraints_models():
 
 
 def get_constraints_model_description(key):
-    return CONSTRAINTS_MODELS[key]['constraints_model_file'].__doc__
+    return inspect.getdoc(CONSTRAINTS_MODELS[key]['constraints_model_class'])
 
 
 def get_constraints_model_class(key):
-    return CONSTRAINTS_MODELS[key]['constraints_model_file'].ConstraintsModel
+    return CONSTRAINTS_MODELS[key]['constraints_model_class']

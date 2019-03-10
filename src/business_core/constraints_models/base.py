@@ -10,3 +10,12 @@ class ConstraintsModelBase(ABC):
 
     def __init__(self):
         pass
+    
+    @abstractmethod
+    def validate(self):
+        pass
+    
+    @abstractmethod
+    def get_errors(self):
+        pass
+

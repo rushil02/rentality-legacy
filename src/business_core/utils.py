@@ -80,8 +80,11 @@ class House(object):
         obj.set_business_model_config(BusinessModel(business_model_config))
         return obj
 
-    def validate(self):
-        ...
+    def validate(self, raise_exception=False):
+        return self.business_model_config.validate(self, raise_exception)
+    
+    def get_errors(self):
+        return self.business_model_config.get_errors()
 
 
 class Application(object):
@@ -116,7 +119,7 @@ class BusinessModel(object):
         """
         self._business_model_config = business_model_config
         self.CONSTRAINTS_MODEL = get_constraints_model_class(business_model_config.constraints_model)(
-            business_model_config.meta)
+            businness_model_meta=business_model_config.meta)
         self.BEHAVIOUR = get_behaviour_class(business_model_config.behaviour)(business_model_config.meta)
 
     def to_dict(self):
@@ -124,8 +127,13 @@ class BusinessModel(object):
 
     @classmethod
     def init_default(cls, bank_location, house_location):
-        return cls(business_model_config=BusinessModelConfiguration.objects.get_location_default())
-
+        return cls(business_model_config=BusinessModelConfiguration.objects.get_location_default(bank_location, house_location))
+    
+    def validate(self, house_math, raise_exception=False):
+        return self.CONSTRAINTS_MODEL.validate(house_math, raise_exception)
+    
+    def get_errors(self):
+        return self.CONSTRAINTS_MODEL.get_errors()
 
 class Booking(object):
     """
