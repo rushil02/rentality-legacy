@@ -1,34 +1,6 @@
-from .fee_configurations import model_A
-
-# Register all models here
-BILLING_FEE_MODELS = {
-    'A': {'verbose': '4 weeks of payment only', 'model_file': model_A},
-}
-
-
-def get_available_models():
-    models = []
-    for key in BILLING_FEE_MODELS:
-        models.append((key, BILLING_FEE_MODELS[key]['verbose']))
-    return tuple(models)
-
-
-def get_model_description(key):
-    return BILLING_FEE_MODELS[key]['model_file'].__doc__
-
-
-class Application(object):
-    """
-    Only processes the information required to create a financial object. It does not save or synchronize
-    with `application.models.Application`.
-    """
-
-    def __init__(self, house, date_range, guests_num, promotional_codes):
-        self.house = house
-        self.rent = self.house.rent
-        self.date_range = date_range
-        self.guests_num = guests_num
-        self.promo_codes = promotional_codes or []
+from .fee_behaviours import get_behaviours as get_fee_behaviour_models
+from .fee_behaviours import get_behaviour_description as get_fee_behaviour_description
+from .utils import Booking
 
 
 class Fee(object):
@@ -71,3 +43,4 @@ class Fee(object):
             return Fee.objects.get_default()
         elif len(fee_models_in_promo) == 1:
             return fee_models_in_promo[0]
+

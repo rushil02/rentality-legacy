@@ -6,6 +6,7 @@ from elastic_search.models import Location
 def index_to_es(verbose, parent_verbose, geo_point, identifier, keywords=None, commit=True):
     """
     Index location information to ElasticSearch
+    :param parent_verbose: Display text of parent location
     :param commit: option to save in ES DB ot return an unsaved object
     :param identifier: unique identifier of object
     :param verbose: Text to display to user

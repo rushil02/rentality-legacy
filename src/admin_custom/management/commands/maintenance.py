@@ -15,8 +15,23 @@ from admin_custom.models import ActivityLog
 def synchronise_es_house():
     HouseElastic._index.delete()
     HouseElastic.init()
-    for obj in House.active_objects.all():
+    print("Loading Active Houses ...", flush=True)
+    qs = House.active_objects.all()
+    total = len(qs)
+    for i, obj in enumerate(qs):
         index_house_to_es(obj)
+
+        if i % 10 == 0:
+            print(
+                'Loading: %s%s %d%% [%d]    ' % (
+                    "#" * int((i / total) * 100),
+                    " " * int(((total - i) / total) * 100),
+                    int((i / total) * 100),
+                    i
+                ),
+                end='\r', flush=True
+            )
+    print("\nSynchronisation ... Complete [%d objects]" % total, flush=True)
 
 
 def clean_house_availability_dates():
@@ -67,9 +82,10 @@ def synchronise_es_location():
 
     def _load_data(_model, related_models, verbose):
         print("Loading %s ..." % verbose, flush=True)
-        total = _model.objects.all().count()
+        qs = _model.objects.all().select_related(*related_models)
+        total = len(qs)
         buffer = []
-        for i, location in enumerate(_model.objects.all().select_related(*related_models)):
+        for i, location in enumerate(qs):
             obj = index_location_to_es(
                 verbose=location.get_verbose(), parent_verbose=location.get_parents(), geo_point=location.get_geo_loc_point(),
                 identifier=location.get_identifier(), keywords=location.get_all_keywords(), commit=False

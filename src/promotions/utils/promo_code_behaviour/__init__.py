@@ -1,13 +1,22 @@
-from billing.utils.fee_models import model_A
+import inspect
 
-# Register all models here
-PROMO_CODE_MODELS = {
-    'A': {'verbose': 'Percentage Discount', 'model_file': model_A},
+# Register all behaviours here
+PROMO_CODE_BEHAVIOURS = {
+    'A': {'verbose': 'Percentage Discount', 'behaviour_class': ''},
+    'B': {'verbose': 'Flat Discount', 'behaviour_class': ''},
 }
 
 
-def get_models():
-    models = []
-    for key in PROMO_CODE_MODELS:
-        models.append((key, PROMO_CODE_MODELS[key]['verbose']))
-    return tuple(models)
+def get_behaviours():
+    behaviours = []
+    for key in PROMO_CODE_BEHAVIOURS:
+        behaviours.append((key, PROMO_CODE_BEHAVIOURS[key]['verbose']))
+    return tuple(behaviours)
+
+
+def get_behaviour_description(key):
+    return inspect.getfile(PROMO_CODE_BEHAVIOURS[key]['behaviour_class']).__doc__
+
+
+def get_behaviour_class(key):
+    return PROMO_CODE_BEHAVIOURS[key]['behaviour_class']

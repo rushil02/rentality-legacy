@@ -1,13 +1,14 @@
 """
-Fee model
+Fee behaviour
     - only 4 weeks of rent is paid by the tenant
     - both tenant and home_owner are charged
     - tenant is charged service fee only for 4 weeks or less
     - home owner is charged service fee for the whole booking
 """
+
 from decimal import Decimal
 
-from admin_custom.business_utils.fee_configurations.base import (
+from admin_custom.business_core.fee_behaviours.base import (
     TenantAccountBase, HomeOwnerAccountBase, FeeModelBase, Charge
 )
 

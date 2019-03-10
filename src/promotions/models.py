@@ -131,9 +131,6 @@ class PromotionalCode(models.Model):
 
     objects = PromotionalCodeManager()
 
-    class Meta:
-        proxy = True
-
     def __str__(self):
         return "%s" % self.code
 
@@ -323,6 +320,3 @@ class PromotionalCodeReferee(models.Model):
     promo = models.ForeignKey('promotions.PromotionalCode', on_delete=models.PROTECT)
     referee = models.ForeignKey('promotions.Referee', on_delete=models.PROTECT)
 
-
-class TenantPromoCode(models.Model):
-    pass

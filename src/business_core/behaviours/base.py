@@ -1,10 +1,10 @@
 """
-Base file to describe Fee and Billing Financial models
+Base file to describe the Business behaviour expected by the system. It lists all the classes
+and methods that will be explicitly called by rest of the system.
 """
 
-# FIXME: Requires validation checks, All checks can be migrated here (duration limit, etc)
-from datetime import timedelta
-from decimal import Decimal, ROUND_UP
+from abc import ABC, abstractmethod
+from decimal import Decimal
 
 
 class Charge(object):
@@ -18,8 +18,8 @@ class Charge(object):
         :param principal: amount
         :param value: amount
         """
-        if charge is None and value is None:
-            raise ValueError("Need at least one argument - charge or value")
+        if bool(charge) is bool(value):
+            raise ValueError("Need only one argument - charge or value")
         self._charge = charge
         self._value = value
         self.principal = principal
@@ -49,14 +49,16 @@ class TenantAccountBase(object):
 
     def __init__(self, stay_duration, weekly_rent, fee, promo_codes):
         """
-        :param stay_duration:
-        :param weekly_rent:
+        :param stay_duration: [Decimal] length of stay in weeks
+        :param weekly_rent: Positive Integer
         :param fee:
         :param promo_codes: iterable of promo_code objects applicable for tenant
         """
+        assert (isinstance(stay_duration, Decimal))
+        assert (isinstance(weekly_rent, Decimal))
+        assert (isinstance(fee, Decimal))
         self.stay_duration = stay_duration
         self.weekly_rent = weekly_rent
-        self.fee = fee
         self.promo_codes = promo_codes
 
     @property
@@ -189,52 +191,40 @@ class HomeOwnerAccountBase(object):
         return json_di
 
 
-class FeeModelBase(object):
-    TenantAccountModel = TenantAccountBase
-    HomeOwnerAccountModel = HomeOwnerAccountBase
+class BehaviourBase(ABC):
+    TenantAccount = TenantAccountBase
+    HomeOwnerAccount = HomeOwnerAccountBase
 
-    def __init__(self, application, fee):
+    def __init__(self, application, meta):
         """
-        :param application: 'billing.utils.application' object or a child class object
-        :param fee: model object instance passed from the DB
+        :param application: `business_core.utils.Application` object
+        :param meta: specific meta information from 'admin_custom.models.BusinessModelConfiguration.meta`
         """
         self.application = application
-        self.fee = fee
+        self._meta = meta
 
-        self.tenant_account = self.TenantAccountModel(
-            stay_duration=self.stay_duration, weekly_rent=self.application.rent,
-            fee=self.fee, promo_codes=self.application.promo_codes
-        )
-        self.home_owner_account = self.HomeOwnerAccountModel(
-            stay_duration=self.stay_duration, weekly_rent=self.application.rent,
-            fee=self.fee, promo_codes=self.application.house.promo_codes.all()
-        )
+    def get_meta_attr(self, key):
+        """
+        :param key: nested key can be accesssed using `__` [double underscore]
+        :return: value
+        """
+        ...
 
-    @property
-    def source_amount(self):
-        return int(self.tenant_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP) * 100)
+    def on_booking(self):
+        """
+        Information/Signal Handler for next view
+        :return:
+        """
+        ...
 
-    @property
-    def destination_amount(self):
-        return int(self.home_owner_account.payable_amount.quantize(Decimal('.01'), rounding=ROUND_UP) * 100)
+    def process_payin(self):
+        """
+        Abstract method on when to process payin
+        :return:
+        """
 
-    @property
-    def stay_duration(self):
-        return (self.application.date_range[1] - self.application.date_range[0] + timedelta(days=1)).days / 7
-
-    def to_dict(self):
-        return dict(
-            source_amount=self.source_amount,
-            destination_amount=self.destination_amount,
-            stay_duration=self.stay_duration,
-        )
-
-    def to_json_dict(self):
-        representation = self.to_dict()
-        json_di = dict()
-        for key in representation:
-            if isinstance(representation[key], Decimal):
-                json_di[key] = float(representation[key])
-            else:
-                json_di[key] = representation[key]
-        return json_di
+    def process_payout(self):
+        """
+        Abstract method on when to process payout
+        :return:
+        """
