@@ -1,9 +1,9 @@
 """
 Business behaviour models package
 
-Maintains a dictionary object representing registered business models via their
-primary class. Once a business model is registered it should not be removed until
-the data is cleaned; and [Important] House objects or Application objects might
+Maintains a dictionary object representing registered business behaviour models via
+their primary class. Once a business model is registered it should not be removed
+until the data is cleaned; and [Important] House objects or Application objects might
 hold live objects of this business model.
 
 Example of handled data and behaviour -

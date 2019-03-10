@@ -78,6 +78,7 @@ class House(object):
             _promo_codes.append(PromoCode(obj=promo_code))
         obj = cls(rent=house.rent, min_stay=house.min_stay, max_stay=house.max_stay, promo_codes=_promo_codes)
         obj.set_business_model_config(BusinessModel(business_model_config))
+        return obj
 
     def validate(self):
         ...
@@ -90,6 +91,12 @@ class Application(object):
     """
 
     def __init__(self, house, date_range, promotional_codes, **kwargs):
+        """
+        :param house: 'House` object
+        :param date_range: [datetime.date, datetime.date]
+        :param promotional_codes: [`PromoCode` object, ...]
+        :param kwargs: any other given attribute will be set as Application's attribute
+        """
         self.house = house
         self.rent = self.house.rent
         self.date_range = date_range
@@ -107,7 +114,7 @@ class BusinessModel(object):
         """
         :param business_model_config: 'admin_custom.models.BusinessModelConfiguration' object
         """
-        self.business_model_config = business_model_config
+        self._business_model_config = business_model_config
         self.CONSTRAINTS_MODEL = get_constraints_model_class(business_model_config.constraints_model)(
             business_model_config.meta)
         self.BEHAVIOUR = get_behaviour_class(business_model_config.behaviour)(business_model_config.meta)
@@ -127,7 +134,7 @@ class Booking(object):
 
     def __init__(self, application):
         """
-        :param application: 'application.models.Application'
+        :param application: 'Application' object
         """
         self.house = House.load(application.house_deserailized(),)
         # self.application = Application(house, date_range, promotional_codes, **kwargs)
