@@ -1,9 +1,11 @@
 import inspect
 
 # Register all behaviours here
+from promotions.utils.promo_code_behaviour.flat_discount import FlatDiscountBehaviour
+
 PROMO_CODE_BEHAVIOURS = {
     'A': {'verbose': 'Percentage Discount', 'behaviour_class': ''},
-    'B': {'verbose': 'Flat Discount', 'behaviour_class': ''},
+    'B': {'verbose': 'Flat Discount', 'behaviour_class': FlatDiscountBehaviour},
 }
 
 

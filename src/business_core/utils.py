@@ -58,7 +58,7 @@ class House(object):
         _promo_codes = []
         for promo_code in house.promo_codes:
             _promo_code = PromoCode(obj=promo_code)
-            _promo_codes.append()
+            _promo_codes.append(_promo_code)
             if _promo_code.can_change_business_model_config:
                 config = BusinessModel(_promo_code.get_business_model_config())
         obj = cls(rent=house.rent, min_stay=house.min_stay, max_stay=house.max_stay, promo_codes=_promo_codes)
@@ -73,7 +73,10 @@ class House(object):
         :param business_model_config: 'admin_custom.models.BusinessModelConfiguration' object
         :return:
         """
-        obj = cls(rent=house.rent, min_stay=house.min_stay, max_stay=house.max_stay, promo_codes=house.promo_codes)
+        _promo_codes = []
+        for promo_code in house.promo_codes:
+            _promo_codes.append(PromoCode(obj=promo_code))
+        obj = cls(rent=house.rent, min_stay=house.min_stay, max_stay=house.max_stay, promo_codes=_promo_codes)
         obj.set_business_model_config(BusinessModel(business_model_config))
 
     def validate(self):

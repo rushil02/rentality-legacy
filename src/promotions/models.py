@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from promotions.code_validations import VALIDATORS as AVAILABLE_VALIDATORS
-from promotions.utils.promo_code_behaviour import get_models as get_promo_behaviour_models
+from promotions.utils.promo_code_behaviour import get_behaviours
 
 
 class MetaValueDoesNotExit(Exception):
@@ -102,10 +102,8 @@ class PromotionalCode(models.Model):
     description = models.TextField(blank=True)
     tnc = models.TextField(blank=True, verbose_name='Terms & Conditions')
 
-    value = models.DecimalField(max_digits=12, decimal_places=5, null=True, blank=True)
-
-    BEHAVIOUR_MODELS = get_promo_behaviour_models()
-    behaviour = models.CharField(max_length=1, choices=BEHAVIOUR_MODELS)
+    BEHAVIOURS = get_behaviours()
+    behaviour = models.CharField(max_length=1, choices=BEHAVIOURS)
 
     active = models.BooleanField(default=False)
 

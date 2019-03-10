@@ -101,7 +101,7 @@ class ApplicationState(models.Model):
 
 class AccountDetail(models.Model):
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
-    transaction_config = models.ForeignKey('admin_custom.TransactionConfiguration', on_delete=models.PROTECT)
+    business_config = models.ForeignKey('admin_custom.BusinessModelConfiguration', on_delete=models.PROTECT)
     tenant = JSONField()
     home_owner = JSONField()
     meta = JSONField()
