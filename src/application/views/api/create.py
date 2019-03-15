@@ -1,4 +1,8 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+
+from application.models import Application
+from house.permissions import IsOwnerOfHouse
 
 
 class CreateBookingView(APIView):
@@ -11,7 +15,10 @@ class CreateBookingView(APIView):
 
     def post(self, request, house_uuid):
         ...  # Validate and get house model object, if serializer is valid
-        house = House()
+        application = Application()
+
+
+
         house_math_obj = HouseMath.build(house)
         house.business_config = house_math_obj.get_business_config()
         errors = house_math_obj.validate()
@@ -25,3 +32,4 @@ class CreateBookingView(APIView):
         if house_uuid:
             house = get_object_or_404(House.objects.all(), uuid=house_uuid)
         serializer = self.serializer_class
+

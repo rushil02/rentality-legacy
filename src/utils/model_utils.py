@@ -1,6 +1,7 @@
 import random
 import string
 
+
 # TODO: Test this before production
 def next_ref_code(old_ref_code, sub_code_block_size=4):
     """
@@ -55,3 +56,22 @@ def next_ref_code(old_ref_code, sub_code_block_size=4):
         new_code = new_code + prev_code[i:]
 
     return new_code[::-1]
+
+
+def get_nested_info(di, key):
+    """
+    Get nested information from a json like object with dict and arrays
+    :param di: python dictionary-array multi object
+    :param key: `__` separated key string
+    :return: value
+    """
+
+    keys = key.split('__')
+    parent = di
+    for key in keys:
+        try:
+            key = int(key)
+        except ValueError:
+            pass
+        parent = parent[key]
+    return parent

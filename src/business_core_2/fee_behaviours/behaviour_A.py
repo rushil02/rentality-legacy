@@ -8,7 +8,7 @@ Fee behaviour
 
 from decimal import Decimal
 
-from admin_custom.business_core.fee_behaviours.base import (
+from .base import (
     TenantAccountBase, HomeOwnerAccountBase, FeeModelBase, Charge
 )
 

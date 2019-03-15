@@ -6,6 +6,8 @@ and methods that will be explicitly called by rest of the system.
 from abc import ABC, abstractmethod
 from decimal import Decimal
 
+from utils.model_utils import get_nested_info
+
 
 class Charge(object):
     """
@@ -19,7 +21,7 @@ class Charge(object):
         :param value: amount
         """
         if bool(charge) is bool(value):
-            raise ValueError("Need only one argument - charge or value")
+            raise ValueError("Need strictly one argument - charge or value")
         self._charge = charge
         self._value = value
         self.principal = principal
@@ -205,17 +207,18 @@ class BehaviourBase(ABC):
 
     def get_meta_attr(self, key):
         """
-        :param key: nested key can be accesssed using `__` [double underscore]
+        :param key: nested key can be accessed using `__` [double underscore]
         :return: value
         """
-        ...
+        return get_nested_info()
 
-    def on_booking(self):
+    @abstractmethod
+    def booking(self):
         """
-        Information/Signal Handler for next view
+        Information/Signal Handler for next
         :return:
         """
-        ...
+        raise NotImplementedError
 
     def process_payin(self):
         """

@@ -9,7 +9,7 @@ class PromotionalCodeForm(forms.ModelForm):
     class Meta:
         model = PromotionalCode
         fields = (
-            'code', 'verbose', 'description', 'tnc', 'value_type', 'invert_discount', 'principal', 'value', 'active',
+            'code', 'verbose', 'description', 'tnc', 'active',
             'applied_by', 'applicable_on', 'allowed_users'
         )
 

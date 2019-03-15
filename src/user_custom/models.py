@@ -91,7 +91,7 @@ class User(AbstractUser):
             UserProfile.objects.create(user=self)
 
     def get_bank_location(self):
-        return self.geodetails.get_bank_location()
+        return self.userprofile.get_bank_location()
 
 
 class UserProfile(models.Model):
@@ -109,6 +109,16 @@ class UserProfile(models.Model):
     )
     sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='O')
     dob = models.DateField(_('Date of Birth'), blank=True, null=True)
+
+    billing_street_address = models.TextField(null=True, blank=True)
+    billing_region = models.ForeignKey('cities.Region', on_delete=models.PROTECT, null=True, blank=True)
+
+    ACC_TYPE = (
+        ('B', 'Business'),
+        ('I', 'Individual')
+    )
+    account_type = models.CharField(max_length=1, choices=ACC_TYPE)
+
     receive_newsletter = models.BooleanField(default=True)
     profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True, upload_to=get_file_path)
     personality_tags = models.ManyToManyField('user_custom.PersonalityTag', blank=True)
@@ -126,19 +136,8 @@ class UserProfile(models.Model):
     def get_personality_tags(self):
         return self.personality_tags.all()
 
-
-class GeoDetails(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    billing_street_address = models.TextField(null=True, blank=True)
-    billing_region = models.ForeignKey('cities.Region', on_delete=models.PROTECT, null=True, blank=True)
-    bank_location = models.ForeignKey('cities.Country', on_delete=models.PROTECT, null=True, blank=True)
-    updated_on = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.user
-
     def get_bank_location(self):
-        return self.bank_location
+        return self.billing_region.country
 
 
 class PersonalityTag(models.Model):
@@ -166,8 +165,9 @@ class Account(models.Model):
     """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     details = JSONField(default={})
-    payment_gateway = models.ForeignKey('admin_custom.PaymentGateway', on_delete=models.PROTECT)
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
     create_time = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return "%s" % self.user

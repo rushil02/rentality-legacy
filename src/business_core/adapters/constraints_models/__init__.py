@@ -8,10 +8,8 @@ objects of this constraints model.
 
 Example of handled data and behaviour -
     - Minimum length of booking
-    - Rent is calculated per day
     - Maximum buffer for advanced booking
     - Minimum buffer for advanced booking
-    - Booking is calculated per night (not per day), therefore check-out date is not included
     - Mandatory one-day buffer between consecutive booking on the same house, therefore
       check-out date of Booking 'A' and check-in date of booking 'B' cannot be onn the same day.
 """
@@ -33,7 +31,7 @@ def get_constraints_models():
 
 
 def get_constraints_model_description(key):
-    return inspect.getdoc(CONSTRAINTS_MODELS[key]['constraints_model_class'])
+    return inspect.getfile(CONSTRAINTS_MODELS[key]['constraints_model_class']).__doc__
 
 
 def get_constraints_model_class(key):

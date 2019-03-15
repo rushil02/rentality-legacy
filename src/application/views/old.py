@@ -14,11 +14,11 @@ from django.http import Http404
 from rest_framework import generics, status
 from application.serializers import BookingAmountDetailsSerializer, BookingInfoSerializer, \
     ApplicationCreateSerializer
-from billing.models import Fee
+from billing.models import Fee, Order
 import pytz
 from psycopg2.extras import DateRange
 
-from billing.utils import Fee as BillingFee
+from business_core.utils import BusinessModel as BillingFee
 from house.forms import ApplyForm
 from house.models import House
 from house.serializers import HouseSerializer, HouseDetailsPublicSerializer

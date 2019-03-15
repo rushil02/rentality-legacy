@@ -95,7 +95,9 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'billing.apps.BillingConfig',
     'application.apps.ApplicationConfig',
-    'promotions.apps.PromotionsConfig'
+    'promotions.apps.PromotionsConfig',
+    'payment_gateway.apps.PaymentGatewayConfig',
+    'business_core.apps.BusinessCoreConfig'
 ]
 
 MIDDLEWARE = [

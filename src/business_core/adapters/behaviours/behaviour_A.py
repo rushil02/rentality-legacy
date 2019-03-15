@@ -1,4 +1,4 @@
-from business_core.behaviours.base import BehaviourBase
+from business_core.adapters.behaviours.base import BehaviourBase
 
 
 class BehaviourA(BehaviourBase):
@@ -17,4 +17,4 @@ class BehaviourA(BehaviourBase):
     - Payout Trigger - 24 hours after check-in date
     -
     """
-    ...
+    pass

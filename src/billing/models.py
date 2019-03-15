@@ -4,6 +4,15 @@ from django.db import models
 from utils.model_utils import next_ref_code
 
 
+# FIXME: Remove
+class Order(object):
+    pass
+
+
+class Fee(object):
+    pass
+
+
 class PaymentGatewayTransaction(models.Model):
     """
     Stores the interaction and events between rentality and payment gateway.
@@ -13,7 +22,7 @@ class PaymentGatewayTransaction(models.Model):
     TYPE = (  # FIXME: get from payment gateway module (not model)
     )
     transaction_type = models.CharField(max_length=2, choices=TYPE)
-    transaction_id = models.CharField(max_length=64)
+    transaction_id = models.TextField()
     user_account = models.ForeignKey('user_custom.Account', on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     create_time = models.DateTimeField(auto_now_add=True)

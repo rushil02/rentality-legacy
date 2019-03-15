@@ -2,6 +2,7 @@ import os
 import time
 import uuid
 from datetime import date, timedelta
+from decimal import Decimal
 from itertools import chain
 
 from django.utils import timezone
@@ -109,7 +110,7 @@ class House(models.Model):
     rent = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Per Week in AUD")
     promo_codes = models.ManyToManyField('promotions.PromotionalCode', blank=True)
 
-    business_config = models.ForeignKey('admin_custom.BusinessModelConfiguration', on_delete=models.PROTECT)
+    business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
 
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),
@@ -130,7 +131,7 @@ class House(models.Model):
     other_rules = models.TextField(blank=True)
 
     # FIXME: [URGENT] check related cancellation_policy exists in the related business model configuration.
-    cancellation_policy = models.ForeignKey('admin_custom.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
+    cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
 
     other_people_description = models.TextField(blank=True)
 
@@ -168,6 +169,9 @@ class House(models.Model):
 
     def get_home_type_display(self):
         return "%s" % self.home_type.name
+
+    def get_rent_per_day(self):
+        return Decimal(self.rent)/7
 
     # FIXME: needs to be removed
     def get_thumbnail_2(self):

@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from business_core.utils import House as HouseMath, BusinessModel
+from business_core.utils import House as HouseHandler, BusinessModel
 from house.helpers import get_available_dates
 from house.models import Availability, House
 from house.permissions import IsOwnerOfHouse
@@ -94,7 +94,7 @@ class EditHouseView(APIView):
     def post(self, request, house_uuid):
         ...  # Validate and get house model object, if serializer is valid
         house = House()
-        house_math_obj = HouseMath.build(house)
+        house_math_obj = HouseHandler.build(house, '')
         house.business_config = house_math_obj.get_business_config()
         errors = house_math_obj.validate()
         if errors:

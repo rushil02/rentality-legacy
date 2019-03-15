@@ -7,11 +7,11 @@ cleaned; and [Important] House objects or Application objects might hold live ob
 cancellation behaviour.
 """
 
-from . import cancellation_behaviour_A
+from .cancellation_behaviour_A import BA
 
 # Register all behaviours here
 CANCELLATION_BEHAVIOURS = {
-    'A': {'verbose': 'Cancellation behaviour A', 'cancellation_behaviour_file': cancellation_behaviour_A}
+    'A': {'verbose': 'Cancellation behaviour A', 'cancellation_behaviour_file': BA}
 }
 
 

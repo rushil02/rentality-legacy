@@ -1,4 +1,5 @@
 import uuid
+from decimal import Decimal
 
 from cities.models import PostalCode
 from django.db import models
@@ -10,7 +11,7 @@ from django.conf import settings
 from cities_custom.serializers import PostalCodeSerializer, PostalCodeAllDetailSerializer
 from house.models import House, HomeType
 from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
-from utils.model_utils import next_ref_code
+from utils.model_utils import next_ref_code, get_nested_info
 
 STATUS_CHOICES = (
     ('P', 'Pending'),
@@ -26,11 +27,11 @@ class Application(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     house = models.ForeignKey('house.House', on_delete=models.PROTECT)
     ref_code = models.CharField(unique=True, max_length=20, blank=True)
-    house_meta = JSONField(null=True, blank=True)
+    house_meta = JSONField(null=True, blank=True, help_text="Frozen information of house")
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.PROTECT)
-    tenant_meta = JSONField(null=True, blank=True)
+    tenant_meta = JSONField(null=True, blank=True, help_text="Additional details provided by the tenant")
     rent = models.PositiveIntegerField()
-    meta = JSONField(null=True, blank=True)
+    meta = JSONField(null=True, blank=True, help_text="Additional details provided in regards to the application")
 
     # FIXME: need to change this variable to date_range or stay_date_range
     date = DateRangeField(verbose_name=_('stay dates'))
@@ -45,6 +46,31 @@ class Application(models.Model):
     def __init__(self, *args, **kwargs):
         super(Application, self).__init__(*args, **kwargs)
         self._house_native_obj = None
+
+    def get_stay_date_range(self):
+        return [self.date.lower, self.date.upper]
+
+    def get_rent_per_day(self):
+        return Decimal(self.rent) / 7
+
+    def get_all_promo_codes(self):
+        return self.promotional_code
+
+    def get_house_meta_info(self, key):
+        """
+        Gets value from house meta. `__` [double-underscore] can be used for nested keys.
+        :param key: str
+        :return: value
+        """
+        return get_nested_info(self.house_meta, key)
+
+    def get_meta_info(self, key):
+        """
+        Gets value from house meta. `__` [double-underscore] can be used for nested keys.
+        :param key: str
+        :return: value
+        """
+        return get_nested_info(self.meta, key)
 
     @property
     def house_native_obj(self):
@@ -65,6 +91,9 @@ class Application(models.Model):
 
             self._house_native_obj = _house_native_obj
         return self._house_native_obj
+
+    def get_business_model_config(self):
+        return self.accountdetail.business_config
 
     @staticmethod
     def _create_ref_code():
@@ -101,7 +130,8 @@ class ApplicationState(models.Model):
 
 class AccountDetail(models.Model):
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
-    business_config = models.ForeignKey('admin_custom.BusinessModelConfiguration', on_delete=models.PROTECT)
+    business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGatewayLocation', on_delete=models.PROTECT)
     tenant = JSONField()
     home_owner = JSONField()
     meta = JSONField()
