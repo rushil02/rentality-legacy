@@ -158,5 +158,5 @@ class CountryBankAccountConfiguration(models.Model):
             'tenant': {...}
         }
     """
-    country = models.OneToOneField('cities.Country')
+    country = models.OneToOneField('cities.Country', on_delete=models.PROTECT)
     meta = JSONField(help_text="Holds information required to create a bank account in the selected country.")
