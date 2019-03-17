@@ -42,6 +42,7 @@ urlpatterns = [
     path('blogs/', include('blog.urls')),
     path('apply/', include('application.urls')),
     path('promo/', include('promotions.urls')),
+    path('pg/', include('payment_gateway.urls')),
 
     path('ess/', include('essentials.urls')),
 

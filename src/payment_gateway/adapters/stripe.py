@@ -1,3 +1,11 @@
+"""
+Home Owner -
+    Accounts are different from Bank Accounts
+    Bank Accounts can be in any country with relevant transaction currency.
+    Any number of bank accounts / Debit Cards can be associated with Home Owner Account (Custom Account).
+
+Tenant -
+"""
 import stripe
 
 from .base import PaymentGatewayBase, AccountBase, PGTransactionError, PGTransaction, AccountDoesNotExist
@@ -109,10 +117,17 @@ class HomeOwnerAccount(AccountBase):
     def get_account(self):
         ...
 
-    def create_account(self, user, source):
+    def create_account(self, user, source, **kwargs):
         try:
             resp = stripe.Account.create(
-                email=user.email,
+                type='custom',
+                country='',
+                email=kwargs['email'],
+                business_type=kwargs['account_type'],
+                external_account={
+                    'object':'bank_account',
+
+                },
                 source=source
             )
         except Exception as e:
@@ -178,6 +193,8 @@ class StripePaymentGateway(PaymentGatewayBase):
         else:
             create_account()
 
+    def create_home_owner_account(self, user_info):
+        execute_request()
     def get_or_create_tenant_account(self, *args, **kwargs):
         pass
 

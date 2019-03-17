@@ -15,7 +15,7 @@ class Fee(object):
 
 class PaymentGatewayTransaction(models.Model):
     """
-    Stores the interaction and events between rentality and payment gateway.
+    Stores the monetary (virtual and actual) interaction and events between rentality and payment gateway.
     """
     ref_code = models.CharField(unique=True, max_length=20, blank=True)
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT, null=True, blank=True)

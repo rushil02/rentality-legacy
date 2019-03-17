@@ -1,6 +1,17 @@
 """
 Base file to describe the behaviour expected by the system. It lists all the classes
 and methods that will be explicitly called by rest of the system.
+
+Basic Expected behaviour    [Updated - 16 March 2019]
+    - PCI compliance only affects card and bank information handing.
+    - Accounts can be created without interfacing with PG (due to PCI) on frontend
+      by user. This doesn't mean they necessarily have to; but are only equipped to
+      do so. On contrary, some PG's might constraint account creation by mandatory
+      association with Bank Account / Debit Card Details.
+    - Payment Charges follow
+    - Home Owner Accounts
+        -
+    - Tenant Accounts
 """
 
 from abc import ABC, abstractmethod, ABCMeta
@@ -55,19 +66,25 @@ class PaymentGatewayBase(ABC):
     HomeOwnerAccount = AccountBase
     TenantAccount = AccountBase
 
-    def __init__(self, home_owner_account, tenant_account):
+    def __init__(self):
         self.transactions = []
-        self.home_owner_account = self.HomeOwnerAccount(home_owner_account)
-        self.tenant_account = self.TenantAccount(tenant_account)
+        self.home_owner_account = None
+        self.tenant_account = None
+
+    @classmethod
+    def init(cls, home_owner_account, tenant_account):
+        obj = cls()
+        obj.home_owner_account = obj.HomeOwnerAccount(home_owner_account)
+        obj.tenant_account = obj.TenantAccount(tenant_account)
 
     # region Methods required to be implemented in each payment gateway wrapper
 
     @abstractmethod
-    def get_or_create_home_owner_account(self, *args, **kwargs):
+    def create_home_owner_account(self, *args, **kwargs):
         raise NotImplementedError
 
     @abstractmethod
-    def get_or_create_tenant_account(self, *args, **kwargs):
+    def create_tenant_account(self, *args, **kwargs):
         raise NotImplementedError
 
     @abstractmethod
@@ -83,7 +100,6 @@ class PaymentGatewayBase(ABC):
         raise NotImplementedError
 
     # endregion
-
 
     def get_transaction_types(self):
         return self.TRANSACTION_TYPES

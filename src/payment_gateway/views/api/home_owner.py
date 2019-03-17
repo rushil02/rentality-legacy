@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from house.models import House
 from payment_gateway.models import PaymentGatewayLocation
+from payment_gateway.serializers import HomeOwnerInfoSerializer
 from payment_gateway.utils import PaymentGateway
 
 
@@ -27,13 +28,25 @@ class AddHomeOwnerView(APIView):
         if pg_code != payment_gateway_location.payment_gateway.code:
             return Response({'details': 'invalid PG code'}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(data=request.data, fields=payment_gateway_location.get_required_home_owner_fields())
+        serializer = HomeOwnerInfoSerializer(
+            data=request.data, fields=payment_gateway_location.get_required_home_owner_fields()
+        )
+        if serializer.is_valid(raise_exception=True):
+            pg = PaymentGateway(payment_gateway_location)
+            pg.account_creator()
+
+        return Response(status=status.HTTP_200_OK)
 
 
+class GetPGDetails(APIView):
+    """
+    API to fetch the relevant Payment Gateway and list of required attributes
+    to create an Account on the same.
+    """
+    permission_classes = (IsAuthenticated,)
 
-
-    def get(self, house_uuid=None):
-        location = self.request.user.get_bank_location()
+    def get(self, request, house_uuid=None):
+        location = request.user.get_bank_location()
         if house_uuid:
             house_location = get_object_or_404(House, uuid=house_uuid)
         else:

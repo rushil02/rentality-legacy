@@ -111,7 +111,7 @@ class UserProfile(models.Model):
     dob = models.DateField(_('Date of Birth'), blank=True, null=True)
 
     billing_street_address = models.TextField(null=True, blank=True)
-    billing_region = models.ForeignKey('cities.Region', on_delete=models.PROTECT, null=True, blank=True)
+    billing_postcode = models.ForeignKey('cities.PostalCode', on_delete=models.PROTECT, null=True, blank=True)
 
     ACC_TYPE = (
         ('B', 'Business'),
@@ -165,9 +165,8 @@ class Account(models.Model):
     """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     details = JSONField(default={})
-    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)  # FIXME: Should this be paymentgatewaylocation?
     create_time = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self):
         return "%s" % self.user

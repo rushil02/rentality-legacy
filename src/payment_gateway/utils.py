@@ -1,4 +1,4 @@
-from .adapters import get_behaviour_class
+from .adapters import get_adaptor_class
 
 
 class PaymentGateway(object):
@@ -24,9 +24,8 @@ class PaymentGateway(object):
     def __init__(self, payment_gateway_location):
         """
         :param payment_gateway_location: `admin_custom.models.PaymentGatewayLocation` object
-        :param home_owner_account: `user_custom.models.Account` object
         """
-        self._payment_gateway = get_behaviour_class(payment_gateway_location.payment_gateway.code)
+        self._payment_gateway = get_adaptor_class(payment_gateway_location.payment_gateway.code)()
 
 
     def get_transaction_record(self):
@@ -41,8 +40,14 @@ class PaymentGateway(object):
     def perform_refund(self, amount):
         self._payment_gateway.process_refund(amount)
 
-    def account_creator(self):
-        pass
+    def create_account(self, user, **kwargs):
+        user_details = {
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'dob': ''
+        }
+        self._payment_gateway.create_home_owner_account()
 
 
 def get_field_for_serializer(field):

@@ -1,25 +1,25 @@
 import inspect
 from .stripe import StripePaymentGateway
 
-# Register all models here
+# Register all adaptors here
 PAYMENT_GATEWAYS = {
-    'stripe': {'verbose': 'Stripe', 'behaviour_class': StripePaymentGateway}
+    'stripe': {'verbose': 'Stripe', 'adaptor_class': StripePaymentGateway}
 }
 
 
-def get_behaviours():
-    behaviours = []
+def get_adapters():
+    adaptors = []
     for key in PAYMENT_GATEWAYS:
-        behaviours.append((key, PAYMENT_GATEWAYS[key]['verbose']))
-    return tuple(behaviours)
+        adaptors.append((key, PAYMENT_GATEWAYS[key]['verbose']))
+    return tuple(adaptors)
 
 
-def get_behaviour_description(key):
-    return inspect.getfile(PAYMENT_GATEWAYS[key]['behaviour_class']).__doc__
+def get_adapter_description(key):
+    return inspect.getfile(PAYMENT_GATEWAYS[key]['adaptor_class']).__doc__
 
 
-def get_behaviour_class(code):
-    return PAYMENT_GATEWAYS[code]['behaviour_class']
+def get_adaptor_class(code):
+    return PAYMENT_GATEWAYS[code]['adaptor_class']
 
 
 

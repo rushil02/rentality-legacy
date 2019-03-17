@@ -20,7 +20,6 @@ from .common import *
 SECRET_KEY = get_env_var('SECRET_KEY')
 
 
-# SECURITY WARNING: don't run with debug turned on in production!
 def _get_debug_val():
     debug = get_env_var('DEBUG')
     if debug == "True":
@@ -31,6 +30,7 @@ def _get_debug_val():
         raise ValueError('Django DEBUG value is improperly configured')
 
 
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = _get_debug_val()
 
 # Distributed settings
@@ -74,6 +74,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'formtools',
     'django_summernote',
+    'django_celery_results',
+    'django_celery_beat',
 
     # all-auth providers
     'allauth.socialaccount.providers.facebook',
@@ -336,3 +338,9 @@ MESSAGE_TAGS = {
 
 STRIPE_PUBLISHABLE_KEY = get_env_var('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = get_env_var('STRIPE_SECRET_KEY')
+
+# Celery
+CELERY_BROKER_URL = 'amqp://%s:%s@rabbitmq:5672//' % (get_env_var('RABBITMQ_DEFAULT_USER'), get_env_var('RABBITMQ_DEFAULT_PASS'))
+
+# Using the database to store task state and results.
+CELERY_RESULT_BACKEND = 'django-db'
