@@ -46,7 +46,7 @@ class GetPGDetails(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, house_uuid=None):
-        location = request.user.get_bank_location()
+        location = request.user.get_billing_location()
         if house_uuid:
             house_location = get_object_or_404(House, uuid=house_uuid)
         else:

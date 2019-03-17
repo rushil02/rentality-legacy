@@ -16,11 +16,17 @@ class Fee(object):
 class PaymentGatewayTransaction(models.Model):
     """
     Stores the monetary (virtual and actual) interaction and events between rentality and payment gateway.
+
+    `application` - To store if a payment gateway transaction is happening for an application.
+    
+    `payment_gateway` - Stores for which payment gateway this transaction is going through.
+    
     """
     ref_code = models.CharField(unique=True, max_length=20, blank=True)
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT, null=True, blank=True)
     TYPE = (  # FIXME: get from payment gateway module (not model)
     )
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
     transaction_type = models.CharField(max_length=2, choices=TYPE)
     transaction_id = models.TextField()
     user_account = models.ForeignKey('user_custom.Account', on_delete=models.PROTECT)

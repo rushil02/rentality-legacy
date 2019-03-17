@@ -129,9 +129,16 @@ class ApplicationState(models.Model):
 
 
 class AccountDetail(models.Model):
+    """
+    Stores Monetary information related to an application.
+    Relation of Payment Gateway and Application is through Payment Gateway Transaction.
+
+    `tenant` - Freeze tenant infomation for a application
+
+    `home_owner` - Freeze home_owner infomation for a application
+    """
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
     business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
-    payment_gateway = models.ForeignKey('payment_gateway.PaymentGatewayLocation', on_delete=models.PROTECT)
     tenant = JSONField()
     home_owner = JSONField()
     meta = JSONField()

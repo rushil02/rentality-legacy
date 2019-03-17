@@ -108,10 +108,12 @@ class PaymentGatewayLocation(models.Model):
             'home_owner': {'required_fields': {'field_name": {'verbose': '', 'type': 'string', 'regex': ''}},
             'tenant': {...}
         }
+    
+    `home_owner_billing_location` - Stores illing location for home owner duh
     """
     payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
 
-    home_owner_bank_location = models.ForeignKey(
+    home_owner_billing_location = models.ForeignKey(
         'cities.Country', on_delete=models.PROTECT,
         help_text="Select country for this Payment Gateway used in reference to the Home Owner's Bank account location."
     )
@@ -137,3 +139,24 @@ class PaymentGatewayLocation(models.Model):
 
     def get_required_home_owner_fields(self):
         return self.meta['home_owner']['required_fields']
+
+
+class CountryBankAccountConfiguration(models.Model):
+    """
+    Maps a country to fields required to save a bank account.
+
+    `meta` is used to resolve such purpose and store necessary information required by the
+    system / payment gateway to store bank account fields required in that country. The data filled
+    by the user will be passed directly to the payment gateway for PCI compliance.
+
+    Currently bank Account of Home owner required only.
+
+    meta -> JSON object
+    Expected structure -
+        {
+            'home_owner': {'fields': {'field_name": {'verbose': '', 'type': 'string', 'regex': '', order:''}},
+            'tenant': {...}
+        }
+    """
+    country = models.OneToOneField('cities.Country')
+    meta = JSONField(help_text="Holds information required to create a bank account in the selected country.")

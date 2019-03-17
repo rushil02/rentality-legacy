@@ -136,8 +136,8 @@ class UserProfile(models.Model):
     def get_personality_tags(self):
         return self.personality_tags.all()
 
-    def get_bank_location(self):
-        return self.billing_region.country
+    def get_billing_location(self):
+        return self.billing_postcode.country
 
 
 class PersonalityTag(models.Model):
@@ -165,7 +165,7 @@ class Account(models.Model):
     """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     details = JSONField(default={})
-    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)  # FIXME: Should this be paymentgatewaylocation?
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
     create_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
