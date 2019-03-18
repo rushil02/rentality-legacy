@@ -1,4 +1,6 @@
 from cities.models import PostalCode, City, Region, Subregion, District
+from django.contrib.postgres.fields import JSONField
+from django.db import models
 
 from django.utils.encoding import force_text
 
@@ -149,3 +151,21 @@ class DistrictCustom(District):
         sub_r = self.city.subregion.name_std if self.city.subregion else None
         r = self.city.region.name_std if self.city.region else None
         return force_text(', '.join([force_text(e) for e in [self.city.name_std, sub_r, r, self.city.country] if e]))
+
+
+class CountryCharacteristics(models.Model):
+    """
+    Extends Country model to store characteristics of different attributes used in a country.
+    Example - Postal code pattern
+
+    bank_account_info -> JSON object
+    Expected structure -
+        {
+            'home_owner': {'fields': {'field_name": {'verbose': '', 'type': 'string', 'regex': '', order:''}},
+            'tenant': {...}
+        }
+    """
+    country = models.OneToOneField('cities.Country', on_delete=models.PROTECT)
+    bank_account_info = JSONField(
+        help_text="Holds information required to create a bank account in the selected country."
+    )

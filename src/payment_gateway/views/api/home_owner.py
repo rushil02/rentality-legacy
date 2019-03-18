@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
+from cities_custom.models import CountryCharacteristics
 from house.models import House
-from payment_gateway.models import PaymentGatewayLocation, CountryBankAccountConfiguration
+from payment_gateway.models import PaymentGatewayLocation
 from payment_gateway.serializers import HomeOwnerInfoSerializer
 from payment_gateway.utils import PaymentGateway
 
@@ -57,15 +58,13 @@ class GetPGDetails(APIView):
         return Response(payment_gateway_location.get_required_home_owner_fields(), status=status.HTTP_200_OK)
 
 
-class GetBankAccountDetailsFieldsForCountry(APIView):
+class GetBankAccountDetailsFieldsForCountry(APIView):  # FIXME: Test
     """
-    API to fetch fields needed to displayed to a user at his onboarding to fill bank account
-    details. This data will not get captured in the system. It will be directly passed to Payment Gateway.
-    The system will recieve a source token from front end. 
+    API to fetch fields needed to display to a user to fill bank account details.
     """
 
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        fields = CountryBankAccountConfiguration.objects.get(country__postal_codes__userprofile__user=request.user).meta
+    def get(self, request, country):
+        fields = CountryCharacteristics.objects.get(country=country).bank_account_info
         return Response(fields, status=status.HTTP_200_OK)

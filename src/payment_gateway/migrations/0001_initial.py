@@ -28,23 +28,6 @@ def create_default_payment_gateway_location(apps, schema_editor):
     stripe_aus_default.save()
 
 
-def create_default_country_bank_account_conf(apps, schema_editor):
-    Country = apps.get_model('cities', 'Country')
-    aus = Country.objects.get(code='AU')
-    CountryBankAccountConfiguration = apps.get_model('payment_gateway', 'CountryBankAccountConfiguration')
-    conf = CountryBankAccountConfiguration(country=aus, meta={
-        'home_owner':{
-            'fields': {
-                'account_number': {
-                    'verbose': 'Account Number',
-                    'type': 'string',
-                    'regex': ''
-                }
-            }
-        }
-    })
-    conf.save()
-
 
 class Migration(migrations.Migration):
 
@@ -89,5 +72,4 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(create_default_payment_gateways),
         migrations.RunPython(create_default_payment_gateway_location),
-        migrations.RunPython(create_default_country_bank_account_conf)
     ]

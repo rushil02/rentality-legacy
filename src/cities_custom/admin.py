@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from cities_custom.models import CountryCharacteristics
+
+admin.site.register(CountryCharacteristics)

@@ -133,9 +133,9 @@ class AccountDetail(models.Model):
     Stores Monetary information related to an application.
     Relation of Payment Gateway and Application is through Payment Gateway Transaction.
 
-    `tenant` - Freeze tenant infomation for a application
+    `tenant` - Freeze tenant information for an application
 
-    `home_owner` - Freeze home_owner infomation for a application
+    `home_owner` - Freeze home_owner information for an application
     """
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
     business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
