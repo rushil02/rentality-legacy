@@ -116,7 +116,7 @@ class Application(models.Model):
 
 class ApplicationState(models.Model):
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT)
-    old_state = models.CharField(max_length=1, null=True, blank=True, choices=STATUS_CHOICES)
+    old_state = models.OneToOneField('self', on_delete=models.PROTECT, null=True, blank=True)
     new_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
     actor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -130,15 +130,20 @@ class ApplicationState(models.Model):
 
 class AccountDetail(models.Model):
     """
-    Stores Monetary information related to an application.
-    Relation of Payment Gateway and Application is through Payment Gateway Transaction.
+    Stores information required to process the behaviour of an application and stores
+    consequent financial information.
+
+    Note: Relation of Payment Gateway and Application is through Payment Gateway Transaction.
 
     `tenant` - Freeze tenant information for an application
 
     `home_owner` - Freeze home_owner information for an application
     """
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
+    
     business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
+    cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT)
+
     tenant = JSONField()
     home_owner = JSONField()
     meta = JSONField()

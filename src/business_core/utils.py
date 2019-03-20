@@ -82,7 +82,7 @@ class House(object):
 
         obj.allocate_business_model(default=BusinessModel.init_default(
             house=obj,
-            bank_location=db_obj.home_owner.user.get_bank_location(),
+            billing_location=db_obj.home_owner.user.get_billing_location(),
             house_location=db_obj.get_location()
         ))
         return obj
@@ -210,9 +210,9 @@ class BusinessModel(object):
         return ...
 
     @classmethod
-    def init_default(cls, house, bank_location, house_location):
+    def init_default(cls, house, billing_location, house_location):
         return cls(house=house,
-                   business_model_config=BusinessModelConfigurationDB.objects.get_location_default(bank_location,
+                   business_model_config=BusinessModelConfigurationDB.objects.get_location_default(billing_location,
                                                                                                    house_location))
 
     def validate_house(self, raise_exception=False):

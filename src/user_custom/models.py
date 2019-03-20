@@ -90,8 +90,8 @@ class User(AbstractUser):
         if object_is_new:
             UserProfile.objects.create(user=self)
 
-    def get_bank_location(self):
-        return self.userprofile.get_bank_location()
+    def get_billing_location(self):
+        return self.userprofile.get_billing_location()
 
 
 class UserProfile(models.Model):
@@ -112,6 +112,7 @@ class UserProfile(models.Model):
 
     billing_street_address = models.TextField(null=True, blank=True)
     billing_postcode = models.ForeignKey('cities.PostalCode', on_delete=models.PROTECT, null=True, blank=True)
+    billing_country = models.ForeignKey('cities.Country', on_delete=models.PROTECT, null=True, blank=True)
 
     ACC_TYPE = (
         ('B', 'Business'),

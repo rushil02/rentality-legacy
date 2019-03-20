@@ -76,10 +76,10 @@ class PaymentGateway(models.Model):
 
 
 class PaymentGatewayLocationManager(models.Manager):  # TODO
-    def get_location_default(self, bank_location, house_location):
+    def get_location_default(self, billing_location, house_location):
         """
         `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
-        :param bank_location:
+        :param billing_location:
         :param house_location:
         :return:
         """

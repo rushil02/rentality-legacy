@@ -130,7 +130,7 @@ class House(models.Model):
     rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)
     other_rules = models.TextField(blank=True)
 
-    # FIXME: [URGENT] check related cancellation_policy exists in the related business model configuration.
+    # FIXME: [URGENT] validate related cancellation_policy exists in the related business model configuration.
     cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
 
     other_people_description = models.TextField(blank=True)

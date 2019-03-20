@@ -18,13 +18,13 @@ class AddHomeOwnerView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, pg_code, house_uuid=None):
-        location = self.request.user.get_bank_location()
+        location = self.request.user.get_billing_location()
         if house_uuid:
             house_location = get_object_or_404(House, uuid=house_uuid)
         else:
             house_location = None
         payment_gateway_location = PaymentGatewayLocation.objects.get_location_default(
-            bank_location=location, house_location=house_location
+            billing_location=location, house_location=house_location
         )
         if pg_code != payment_gateway_location.payment_gateway.code:
             return Response({'details': 'invalid PG code'}, status=status.HTTP_400_BAD_REQUEST)
@@ -53,7 +53,7 @@ class GetPGDetails(APIView):
         else:
             house_location = None
         payment_gateway_location = PaymentGatewayLocation.objects.get_location_default(
-            bank_location=location, house_location=house_location
+            billing_location=location, house_location=house_location
         )
         return Response(payment_gateway_location.get_required_home_owner_fields(), status=status.HTTP_200_OK)
 

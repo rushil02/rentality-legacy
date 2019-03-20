@@ -11,7 +11,10 @@ PROMO_CODE_BEHAVIOURS = {
 
 def get_behaviours():
     behaviours = []
-    for key in PROMO_CODE_BEHAVIOURS:
+    # Since this method returns a tuple derived from a dictionary, the
+    # structure needs to be consistent for the same data. This is resolved
+    # by using `sorted` on the dictionary on the basis of its keys.
+    for key in sorted(PROMO_CODE_BEHAVIOURS):
         behaviours.append((key, PROMO_CODE_BEHAVIOURS[key]['verbose']))
     return tuple(behaviours)
 

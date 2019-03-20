@@ -12,7 +12,10 @@ class CancellationPolicy(models.Model):
     verbose = models.TextField(verbose_name='Policy Name')
     description = models.TextField()
     properties = JSONField()
-    official_policy = models.ForeignKey('essentials.Policy', on_delete=models.PROTECT, null=True, blank=True)
+    official_policy = models.ForeignKey(
+        'essentials.Policy', on_delete=models.PROTECT, null=True, blank=True,
+        related_name='cancellation_policies'
+    )
 
     BEHAVIOURS = get_cancellation_behaviours()
     behaviour = models.CharField(max_length=1, choices=BEHAVIOURS)
@@ -25,10 +28,10 @@ class CancellationPolicy(models.Model):
 
 
 class BusinessModelConfigurationManager(models.Manager):  # TODO
-    def get_location_default(self, bank_location, house_location):
+    def get_location_default(self, billing_location, house_location):
         """
         `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
-        :param bank_location:
+        :param billing_location:
         :param house_location:
         :return:
         """
@@ -62,7 +65,7 @@ class BusinessModelConfiguration(models.Model):
                                  help_text="Defines behaviours unique to business model")
     behaviour_description = models.TextField(help_text="This will be shown to the user.")
 
-    home_owner_bank_location = models.ForeignKey(
+    home_owner_billing_location = models.ForeignKey(
         'cities.Country', on_delete=models.PROTECT, null=True, blank=True,
         help_text="Select country to constraint this configuration to the Home Owner's Bank account location."
     )

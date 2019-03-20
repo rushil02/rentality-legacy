@@ -25,7 +25,10 @@ CONSTRAINTS_MODELS = {
 
 def get_constraints_models():
     constraints_models = []
-    for key in CONSTRAINTS_MODELS:
+    # Since this method returns a tuple derived from a dictionary, the
+    # structure needs to be consistent for the same data. This is resolved
+    # by using `sorted` on the dictionary on the basis of its keys.
+    for key in sorted(CONSTRAINTS_MODELS):
         constraints_models.append((key, CONSTRAINTS_MODELS[key]['verbose']))
     return tuple(constraints_models)
 

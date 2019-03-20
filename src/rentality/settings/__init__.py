@@ -99,7 +99,8 @@ INSTALLED_APPS = [
     'application.apps.ApplicationConfig',
     'promotions.apps.PromotionsConfig',
     'payment_gateway.apps.PaymentGatewayConfig',
-    'business_core.apps.BusinessCoreConfig'
+    'business_core.apps.BusinessCoreConfig',
+    'financials.apps.FinancialsConfig'
 ]
 
 MIDDLEWARE = [
