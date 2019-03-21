@@ -8,7 +8,7 @@ import django.db.models.deletion
 
 def create_default_payment_gateways(apps, schema_editor):
     PaymentGateway = apps.get_model('payment_gateway', 'PaymentGateway')
-    stripe = PaymentGateway(name='Stripe', code='stripe', meta={})
+    stripe = PaymentGateway(id=1, name='Stripe', code='stripe', meta={})
     stripe.save()
 
 

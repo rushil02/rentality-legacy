@@ -6,6 +6,13 @@ import django.db.models.deletion
 
 
 def populate_default_cancellation_policy(apps, schema_editor):
+    AccountDetail = apps.get_model('application', 'AccountDetail')
+    CancellationPolicy = apps.get_model('business_core', 'CancellationPolicy')
+    for account_detail in AccountDetail.objects.all():
+        account_detail.cancellation_policy = CancellationPolicy.objects.get(
+            id=account_detail.application.house_meta['cancellation_policy']['id']
+        )
+        account_detail.save() 
     # FIXME: @pranav Get cancellation policy from house meta, and set the is directly.
     pass
 
