@@ -2,11 +2,32 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+from utils.model_utils import next_ref_code
+
+
+# FIXME: Update LedgerRecord manually
 
 
 def migrate_billing_data(apps, schema_editor):
-    pass
-    # FIXME: @pranav
+    PaymentGatewayTransaction = apps.get_model('financials', 'PaymentGatewayTransaction')
+    PaymentGateway = apps.get_model('payment_gateway', 'PaymentGateway')
+    Order = apps.get_model('billing', 'Order')
+    orders = Order.objects.all()
+    ref_code = 'AA0001'
+    stripe = PaymentGateway.objects.get(id=1)
+
+    for order in orders:
+        PaymentGatewayTransaction.objects.create(
+            ref_code=ref_code,
+            transaction_type='DC',
+            transaction_id=order.charge_id,
+            amount=order.application.accountdetail.meta['source_amount'],
+            application=order.application,
+            payment_gateway=stripe,
+            user_account=order.application.tenant.user.account_set.all()[0]
+        )
+        ref_code = next_ref_code(ref_code) #FIXME
+    # FIXME: create time not captured
 
 
 class Migration(migrations.Migration):

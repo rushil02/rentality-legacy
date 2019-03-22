@@ -5,11 +5,16 @@ import django.db.models.deletion
 
 
 def migrate_cancellation_policy(apps, schema_editor):
-    # FIXME: @pranav migrate cancellation policies here
     # Old field cancellation_policy; new field can_policy; set new field to old value by pk!
 
-    PaymentGateway = apps.get_model('house', 'PaymentGateway')
-    pass
+    House = apps.get_model('house', 'House')
+    CancellationPolicy = apps.get_model('business_core', 'CancellationPolicy')
+
+    houses = House.objects.all()
+    for house in houses:
+        if house.cancellation_policy:
+            house.can_policy = CancellationPolicy.objects.get(id=house.cancellation_policy.id)
+            house.save()
 
 
 class Migration(migrations.Migration):

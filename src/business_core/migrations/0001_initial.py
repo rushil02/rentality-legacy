@@ -6,7 +6,6 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-# FIXME: Fix this default data population apprpriately
 def create_default_cancellation_policies(apps, schema_editor):
     OldCancellationPolicy = apps.get_model('house', 'CancellationPolicy')
     CancellationPolicy = apps.get_model('business_core', 'CancellationPolicy')
