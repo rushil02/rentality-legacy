@@ -47,6 +47,7 @@ class ApplicationPage extends Component {
             },
             isLoading: false,
             errors: {},
+            canSave: true
         };
     }
 
@@ -322,6 +323,7 @@ class ApplicationPage extends Component {
     };
 
     handleSubmitButton = async () => {
+        this.setState({ canSave: false });
         let errors = this.validateFields();
 
         if (Object.entries(errors).length === 0 && errors.constructor === Object) {
@@ -330,6 +332,7 @@ class ApplicationPage extends Component {
                 `${reverse(routes.application.complete)}?valid=${backendErrors.valid}&msg=${backendErrors.msg}`
               );
         }
+        this.setState({ canSave: true });
     };
 
     handleSaveButton = () => {
@@ -401,7 +404,8 @@ class ApplicationPage extends Component {
                                         {/*Application*/}
                                     {/*</button>*/}
                                     <button type="button" className="btn btn-link"
-                                            onClick={this.handleSubmitButton}>Book Now
+                                            onClick={this.handleSubmitButton}
+                                            disabled={!this.state.canSave}>Book Now
                                     </button>
                                 </div>
                             </div>
