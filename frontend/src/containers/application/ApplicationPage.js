@@ -293,7 +293,6 @@ class ApplicationPage extends Component {
             "emailAddress",
             "phoneNumber",
             "gender",
-            "comments",
         ];
 
         let agreementFields = [
