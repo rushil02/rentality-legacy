@@ -69,7 +69,7 @@
             padding-right: 50px;
         }
 
-        .mail .column::after {
+        .mail .column .column-after {
             content: '.';
             display: block;
             clear: both;
@@ -171,6 +171,7 @@
                 <span>Move out</span><br>
                 {{ application.date.upper }}
             </div>
+            <div class="column-after"></div>
         </div>
          <div class="column no-background">
             <div class="left">
@@ -179,6 +180,7 @@
             <div class="right">
                 {{ application.meta.guests }}
             </div>
+            <div class="column-after"></div>
         </div>
         <div class="column no-background">
             <div class="left">
@@ -191,12 +193,14 @@
                 <br>
                 {{ application.tenant_meta.contact_num }}
             </div>
+            <div class="column-after"></div>
         </div>
         <div class="column no-background">
             <div class="left">
                 Room Type
                 <p> {{ application.house_native_obj.get_home_type_display }}</p>
             </div>
+            <div class="column-after"></div>
         </div>
         <div class="column no-background no-border">
             <div class="left">
@@ -205,6 +209,7 @@
             <div class="right">
                 $ {{ application.accountdetail.home_owner_amount }} AUD
             </div>
+            <div class="column-after"></div>
         </div>
 
     </div>
