@@ -909,6 +909,41 @@ body > .bests .list div + div {
 /***** bests end *****/
 /*********************/
 
+/*********************/
+/**video demo starts**/
+/*********************/
+
+body > .video-demo {
+    padding-top: 88px;
+    padding-bottom: 90px;
+}
+
+body > .video-demo h1.title {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+body > .video-demo h2.sub-title{
+    color: #4d4d4d;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+body > .video-demo .video-container{
+    margin-top: 25px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+/*********************/
+/***video demo ends***/
+/*********************/
+
 /************************/
 /***** cities start *****/
 /************************/
@@ -1112,6 +1147,7 @@ body > .logo .item .list img {
 
 body > .start-now {
     padding-bottom: 76px;
+    border-bottom: 1px solid #c4cbd9;
 }
 
 body > .start-now .lists .list:hover {
