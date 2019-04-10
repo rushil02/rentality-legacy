@@ -916,6 +916,7 @@ body > .bests .list div + div {
 body > .video-demo {
     padding-top: 88px;
     padding-bottom: 90px;
+    border-bottom: 1px solid #c4cbd9;
 }
 
 body > .video-demo h1.title {
@@ -1149,7 +1150,6 @@ body > .logo .item .list img {
 
 body > .start-now {
     padding-bottom: 76px;
-    border-bottom: 1px solid #c4cbd9;
 }
 
 body > .start-now .lists .list:hover {
@@ -6980,6 +6980,11 @@ body > .header .search .cities #mobile-city {
     body > .start-now .lists .list p {
         margin-top: 24px;
         min-height: auto;
+    }
+
+    body > .video-demo {
+        padding-top: 42px;
+        padding-bottom: 42px;
     }
 
     body > .color-boxes {
