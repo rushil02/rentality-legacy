@@ -64,10 +64,10 @@
             </div>
         </div>
         <div class="search">
-            <div class="container-fluid">
+            <div class="container-fluid search-container">
                 <div class="row">
-                    <div class="col-xl-2"></div>
-                    <div class="col-12 col-xl-8">
+                    <div class="col-xl-1"></div>
+                    <div class="col-12 col-xl-10">
                         <form autocomplete="off" action="{% url 'user:search' %}" method="GET" id="search_form">
                             {{ search_form.start_date }}
                             {{ search_form.end_date }}
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2"></div>
+                    <div class="col-xl-1"></div>
                 </div>
             </div>
         </div>
@@ -152,7 +152,7 @@
                                     </div>
 
                                 </div>
-                                <h1>{{ house.title|title }} | {{ house.home_type }}</h1>
+                                <h1>{{ house.title|title }}<br/>{{ house.home_type }}</h1>
                                 <h2>{{ house.get_location|title }}</h2>
                                 <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
                                 </div>
@@ -174,7 +174,7 @@
                 <h2 class="sub-title">Check out the video below to see exactly how Rentality works</h2>
             </div>
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/0fAQhSRLQnM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+                <iframe src="https://www.youtube.com/embed/2JOkRAdTDNE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
                 style="position:absolute; top:0; left:0;width: 100%; height: 100%;"
                 ></iframe>
             </div>
@@ -262,7 +262,7 @@
                                     <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_large'|default:default_property_large }}"
                                          class="w-100" alt="" title="">
                                 </div>
-                                <h1>{{ house.title|title }} | {{ house.home_type }}</h1>
+                                <h1>{{ house.title|title }}<br/>{{ house.home_type }}</h1>
                                 <h2>{{ house.get_location|title }}</h2>
                                 <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
                                 </div>
@@ -273,6 +273,7 @@
                 </div>
             </div>
         </div>
+        <h3 class="endorse-header">Endorse By ...</h3>
     </div>
     <!-- cities end -->
     <!-- logo start -->
