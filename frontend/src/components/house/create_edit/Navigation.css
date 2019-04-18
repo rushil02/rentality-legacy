@@ -1,0 +1,105 @@
+
+#root > .page-form .right .button {
+    text-align: right;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#root > .page-form .right .button.top-margin {
+    margin-top: 100px;
+}
+
+#root > .page-form .right .button > button {
+    font-size: 16px;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+}
+
+#root > .page-form .right .button > a {
+    font-size: 16px;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+}
+
+#root > .page-form .right .button > button:not(:last-child) {
+    margin-right: 20px;
+}
+
+#root > .page-form .right .button > a:not(:last-child) {
+    margin-right: 20px;
+}
+
+#root > .page-form .right .button > button:hover, #root > .page-form .right .button > button:focus {
+    text-decoration: none;
+}
+
+#root > .page-form .right .button > a:hover, #root > .page-form .right .button > button:focus {
+    text-decoration: none;
+}
+
+#root > .page-form .right .button > button:nth-child(1) {
+    font-weight: 400;
+    color: #2a2b32;
+    border: 1px solid #2a2b32;
+    padding: 12px 50px;
+}
+
+#root > .page-form .right .button > button:nth-child(1):hover {
+    background-color: #2a2b32;
+    color: #ffffff;
+}
+
+#root > .page-form .right .button > button#save {
+    font-weight: 400;
+    color: #2a2b32;
+    border: 1px solid #2a2b32;
+    padding: 12px 50px;
+}
+
+#root > .page-form .right .button > button#save:hover {
+    background-color: #2a2b32;
+    color: #ffffff;
+}
+
+#root > .page-form .right .button > a:nth-child(2) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #36ffb1;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+    text-transform: uppercase;
+}
+
+#root > .page-form .right .button > a:nth-child(2):hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+#root > .page-form .right .button > button:nth-child(3) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #36ffb1;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+    text-transform: uppercase;
+}
+
+#root > .page-form .right .button > button:nth-child(3):hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+#root > .page-form .right .button > a:nth-child(4) {
+    font-size: 16px;
+    font-weight: 700;
+    color: #36ffb1;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+    text-transform: uppercase;
+    float: left;
+}
+
+#root > .page-form .right .button > a:nth-child(4):hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}

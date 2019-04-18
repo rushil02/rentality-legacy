@@ -45,6 +45,7 @@ urlpatterns = [
     path('pg/', include('payment_gateway.urls')),
 
     path('ess/', include('essentials.urls')),
+    path('cities/', include('cities_custom.urls')),
 
     # TODO: no individual messaging urls needed ?
     path('messaging/', include('messaging.urls')),

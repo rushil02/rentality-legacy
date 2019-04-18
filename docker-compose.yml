@@ -2,116 +2,96 @@ version: '3.6'
 services:
   nginx:
     build: ./nginx
-    image: registry.gitlab.com/rushil0195/rentality/nginx:latest
+    image: 'registry.gitlab.com/rushil0195/rentality/nginx:latest'
     ports:
-      - "8000:80"
+      - '8000:80'
     volumes:
-      - ./nginx/config/common.conf:/etc/nginx/conf.d/common.conf
-      - ./nginx/config/localhost.conf:/etc/nginx/conf.d/default.conf
-      - ./static_dev/static_root:/static
-      - ./static_dev/media_root:/media
+      - './nginx/config/common.conf:/etc/nginx/conf.d/common.conf'
+      - './nginx/config/localhost.conf:/etc/nginx/conf.d/default.conf'
+      - './static_dev/static_root:/static'
+      - './static_dev/media_root:/media'
     depends_on:
       - web
-#      - sys_monitor
   postgres:
-    image: mdillon/postgis:10-alpine
+    image: 'mdillon/postgis:10-alpine'
     environment:
       POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
       POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
     ports:
-      - 5431:5432
+      - '5431:5432'
     volumes:
-      - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
-      - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
-      - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
-      - pgdata:/var/lib/postgresql/data
+      - './secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER'
+      - './secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD'
+      - './secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB'
+      - 'pgdata:/var/lib/postgresql/data'
   elasticsearch:
-    # Set vm.max_map_count=262144 in /etc/sysctl.conf
+    # Set vm.max_map_count=262144 in /etc/sysctl.conf in HOST system
     image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     environment:
-      - "cluster.name=rentality-cluster"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.name=rentality-cluster
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     volumes:
-      - esdata:/usr/share/elasticsearch/data
+      - 'esdata:/usr/share/elasticsearch/data'
     ports:
-      - 9200:9200
+      - '9200:9200'
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.4.3
+    image: 'docker.elastic.co/kibana/kibana:6.4.3'
     ports:
-      - 5601:5601
-#  timeseriesdb:
-#    image: timescale/timescaledb:1.0.0-pg10
-#    environment:
-#      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
-#      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-#      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
-#    ports:
-#      - 5430:5432
-#    volumes:
-#      # FIXME: add settings
-#      - ./secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER
-#      - ./secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD
-#      - ./secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB
-#      - tsdbdata:/var/lib/postgresql/data
+      - '5601:5601'
   frontend:
     build: ./frontend
-    image: registry.gitlab.com/rushil0195/rentality/frontend:latest
-    entrypoint: ['npm', 'run', 'dev']
-    volumes: 
-      - ./frontend:/app
-      - ./src/static/v2/frontend:/src/static/v2/frontend
+    image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
+    entrypoint:
+      - npm
+      - run
+      - dev
+    volumes:
+      - './frontend:/app/frontend'
+      - './src/static/v2/frontend:/app/frontend/dist'
   web:
     build: ./src
-    image: registry.gitlab.com/rushil0195/rentality/web:latest
+    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
     volumes:
-      - ./static_dev/static_root:/rentality/static_dev/static_root
-      - ./static_dev/media_root:/rentality/static_dev/media_root
-      - ./secrets:/run/secrets
-      - ./src:/rentality/src
+      - './static_dev/static_root:/rentality/static_dev/static_root'
+      - './static_dev/media_root:/rentality/static_dev/media_root'
+      - './secrets:/run/secrets'
+      - './src:/rentality/src'
     depends_on:
       - postgres
+      - frontend
       - elasticsearch
-#      - timeseriesdb
-      - rabbitmq
     ports:
-      - "8001:8000"
-    entrypoint: ['./entrypoint.dev.sh']
-  celery:
+      - '8001:8000'
+    entrypoint:
+      - ./entrypoint.dev.sh
+  celery-worker:
     build: ./src
-    image: registry.gitlab.com/rushil0195/rentality/web:latest
+    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
     volumes:
-      - ./static_dev/static_root:/rentality/static_dev/static_root
-      - ./static_dev/media_root:/rentality/static_dev/media_root
-      - ./secrets:/run/secrets
-      - ./src:/rentality/src
+      - './static_dev/static_root:/rentality/static_dev/static_root'
+      - './static_dev/media_root:/rentality/static_dev/media_root'
+      - './secrets:/run/secrets'
+      - './src:/rentality/src'
     depends_on:
       - postgres
       - elasticsearch
-      #      - timeseriesdb
       - rabbitmq
     entrypoint: celery -A rentality worker -l info
-#  sys_monitor:
-#    image: grafana/grafana:5.3.1
-#    ports:
-#      - 3000:3000
-#    depends_on:
-#      - postgres
-#      - timeseriesdb
   rabbitmq:
-    image: rabbitmq:3.7.13-management
+    image: 'rabbitmq:3.7.13-management'
     environment:
       RABBITMQ_DEFAULT_USER_FILE: /run/secrets/RABBITMQ_DEFAULT_USER
       RABBITMQ_DEFAULT_PASS_FILE: /run/secrets/RABBITMQ_DEFAULT_PASS
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
     volumes:
-      - ./secrets/RABBITMQ_DEFAULT_USER:/run/secrets/RABBITMQ_DEFAULT_USER
-      - ./secrets/RABBITMQ_DEFAULT_PASS:/run/secrets/RABBITMQ_DEFAULT_PASS
+      - './secrets/RABBITMQ_DEFAULT_USER:/run/secrets/RABBITMQ_DEFAULT_USER'
+      - './secrets/RABBITMQ_DEFAULT_PASS:/run/secrets/RABBITMQ_DEFAULT_PASS'
     depends_on:
       - postgres
 volumes:
-  pgdata:
-  esdata:
-  tsdbdata:
+  pgdata: null
+  esdata: null
+  tsdbdata: null

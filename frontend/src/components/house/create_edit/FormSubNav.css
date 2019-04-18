@@ -1,0 +1,27 @@
+#root > .page-form .right .header {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #bbb8b7;
+}
+
+#root > .page-form .right .header.top-border {
+    padding-top: 30px;
+    border-top: 1px solid #bbb8b7;
+}
+
+#root > .page-form .right .header .title {
+    color: #2a2b32;
+    font-size: 17px;
+    font-weight: 400;
+    text-align: center;
+}
+
+#root > .page-form .right .header .active .title {
+    color: #3fc692;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+a.nostyle:link, a.nostyle:visited {
+    text-decoration: inherit;
+    color: inherit;
+}

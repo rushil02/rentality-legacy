@@ -1,13 +1,14 @@
 from django.urls import path
 
 from house.serializers import HouseDetailsPublicSerializer
+from house.views.api.create import EditHouseView, FormOptionsView, AvailabilityView, AvailabilityListView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, ImageUploadView, FacilityView, NearbyFacilitiesView, \
     home_owner_account_details, WelcomeTagView, apply_temp, remove_from_public, delete, HouseDetailPublicView, \
     ImagesPublicView, ThumbnailPublicView
 
-from house.views.api import NetAvailableDatesView
+from house.views.api import NetAvailableDatesView, create_react
 
 app_name = 'house'
 
@@ -31,10 +32,20 @@ urlpatterns = [
     # FIXME: Remove
     path('test/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='test'),
 
+    # React Entry-points
+    path('create/', create_react, name='create_react'),
+    path('edit/<uuid:house_uuid>', create_react, name='create_react_edit'),
+
     # APIs
     path('detail/<uuid:house_uuid>', HouseDetailPublicView.as_view(), name='detail_api'),
     path('all-images/<uuid:house_uuid>', ImagesPublicView.as_view(), name='all_images'),
     path('thumbnail/<uuid:house_uuid>', ThumbnailPublicView.as_view(), name='thumbnail'),
     path('current-availability/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='curr_avail'),
 
+    # Creation APIs
+    path('create/info/<uuid:house_uuid>', EditHouseView.as_view(), name='all_info_api'),
+    path('create/form-options', FormOptionsView.as_view(), name='create_form_options'),
+    path('create/availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
+    path('create/availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
+    path('create/availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(), name='availability_delete_api'),
 ]

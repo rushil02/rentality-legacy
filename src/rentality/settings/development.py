@@ -28,3 +28,8 @@ EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'test_emails')
 # SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+
+# Used to use Django settings in Template when in DEBUG=True mode
+# These settings are not available in production or when this setting is not explicitly present
+# WARNING: Always return true for check in list
+INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()

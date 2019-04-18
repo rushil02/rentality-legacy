@@ -1,0 +1,28 @@
+.alert {
+    width: auto;
+    float: right;
+    min-width: 250px;
+}
+
+.alert-row {
+    width: 100%;
+}
+
+.alerts-holder {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    padding: 20px;
+    z-index: 3;
+    flex-wrap: wrap;
+
+}
+
+.alert > button.close {
+    position: absolute;
+    right: 15px;
+}
+
+.alert > p {
+    margin-right: 30px;
+}

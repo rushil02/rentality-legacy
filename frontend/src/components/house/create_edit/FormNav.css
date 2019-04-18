@@ -1,0 +1,61 @@
+#root > .page-form {
+    padding-top: 50px;
+    padding-bottom: 120px;
+}
+
+
+#root > .page-form .full-header {
+    font-size: 15px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 40px;
+    background-color: #ededed;
+    border-radius: 10px;
+    padding-top: 10px;
+}
+
+#root > .page-form .full-header .progress {
+    border-radius: 0;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    margin-top: 10px;
+    height: 10px;
+    background-color: rgba(63, 198, 146, 0.1);
+}
+
+#root > .page-form .full-header .progress .progress-bar {
+    background-color: #3fc692 !important;
+}
+
+#root > .page-form .full-header .active {
+    font-weight: 700;
+    color: #3fc692;
+}
+
+#root > .page-form .full-header .number {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 99px;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #afafaf;
+    margin-right: 15px;
+}
+
+#root > .page-form .full-header .active .number {
+    background-color: #3fc692;
+
+}
+
+#root > .page-form .full-header a.nostyle:link, a.nostyle:visited {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+a.nostyle:link, a.nostyle:visited {
+    text-decoration: inherit;
+    color: inherit;
+}

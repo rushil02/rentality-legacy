@@ -1,7 +1,7 @@
 FROM node:11-alpine
-WORKDIR /src/static/v2/frontend
 WORKDIR /app
-COPY package.json .
+COPY ./package.json .
 RUN npm install
+WORKDIR /app/frontend
 COPY . .
 RUN npm run build
