@@ -48,7 +48,7 @@ def create_react(request, house_uuid):
             'guests': form.cleaned_data['guests'],
             'duration': float("{0:.1f}".format(round(duration, 1))),
         }
-        return render(request, 'react_base.html', {"extra_data": context})
+        return render(request, 'react/base.html', {"extra_data": context})
     else:
         messages.add_message(request, messages.ERROR,
                              "%s" % '; '.join(str(x) for x in form.errors.values()))

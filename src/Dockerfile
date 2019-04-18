@@ -18,6 +18,6 @@ EXPOSE 8000
 
 COPY . .
 
-COPY --from=frontend-builder /src/static/v2/frontend/index.js ./static/v2/frontend/index.js
+COPY --from=frontend-builder /app/frontend/dist/ ./static/v2/frontend/
 
 ENTRYPOINT [ "./entrypoint.sh" ]

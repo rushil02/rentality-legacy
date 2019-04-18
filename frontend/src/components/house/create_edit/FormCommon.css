@@ -1,0 +1,95 @@
+#root > .page-form .right h1.title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#root > .page-form .right h1.title i {
+    background-image: url('/static/image/popover.svg');
+    background-repeat: no-repeat;
+    background-position: center right;
+    margin-left: 30px;
+    width: 16px;
+    height: 16px;
+    cursor: alias;
+    font-style: unset;
+    margin-bottom: -4px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #8f8f8f;
+    padding-right: 26px;
+}
+
+
+#root > .page-form .right .input .form-control {
+    font-size: 15px;
+    font-weight: 400;
+    padding-left: 50px;
+    padding-right: 0;
+    border: none;
+    border-bottom: 1px solid #c7cdd9;
+    border-radius: 0;
+    height: calc(2.25rem + 15px);
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+#root > .page-form .right .input.big .form-control {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+#root > .page-form .right .input.style-gray .form-control {
+    background-color: #e9e9ea !important;
+    height: calc(2.25rem + 34px) !important;
+    padding-left: 60px !important;
+    padding-right: 20px !important;
+    border-bottom: 0 !important;
+    border-radius: 5px !important;
+}
+
+#root > .page-form .right .input .form-control:hover,
+#root > .page-form .right .input .form-control:focus {
+    box-shadow: none;
+}
+
+#root > .page-form .right .input .form-control::placeholder {
+    opacity: 1;
+    color: #676767;
+}
+
+#root > .page-form .right .input.no-background .form-control {
+    padding-left: 0;
+    background: none;
+}
+
+#root > .page-form .right .input.no-background.number-disp {
+    padding-left: 0;
+    background: none;
+}
+
+#root > .page-form .right .input .address.form-control {
+    background-image: url('/static/image/form-1/address.svg');
+}
+
+#root > .page-form .right .input .title.form-control {
+    background-image: url('/static/image/form-1/title.svg');
+}
+
+#root > .page-form .right .input .address-hidden.form-control {
+    background-image: url('/static/image/form-1/key.svg');
+}
+
+#root > .page-form .right .input.bathroom.number-disp {
+    background-image: url('/static/image/form-1/bathroom.svg');
+}
+
+#root > .page-form .right .input.bedroom.number-disp {
+    background-image: url('/static/image/form-1/bedroom.svg');
+}
+
+#root > .page-form .right .input.parking.number-disp {
+    background-image: url('/static/image/form-1/parking.svg');
+}

@@ -6,30 +6,55 @@ from rest_framework.views import APIView
 
 from business_core.utils import House as HouseHandler, BusinessModel
 from house.helpers import get_available_dates
-from house.models import Availability, House
-from house.permissions import IsOwnerOfHouse
-from house.serializers import AvailabilityPublicSerializer, NetAvailableDatesSerailizer, HouseAuthSerializer
+from house.models import Availability, House, HomeType, Facility
+from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
+from house.serializers import HouseAuthSerializer, AvailabilityAuthSerializer
+
+
+class AvailabilityListView(APIView):
+    """
+    Used to show Availability dates to home owner.
+    """
+    permission_classes = (IsAuthenticated, )
+    serializer_class = AvailabilityAuthSerializer
+
+    def get(self, request, house_uuid):
+        objs = Availability.objects.filter(house__uuid=house_uuid, house__home_owner__user=request.user)
+        serializer = self.serializer_class(objs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AvailabilityView(APIView):
     """
-    Used to show dates to home owner and not prospective tenants
+    Create, Update, Delete Availability
     """
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-    serializer_class = AvailabilityPublicSerializer
+    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
+    serializer_class = AvailabilityAuthSerializer
 
-    def get(self, request, house_uuid):
-        objs = Availability.objects.filter(house__uuid=house_uuid)
-        serializer = self.serializer_class(objs, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, house_uuid):
-        house = get_object_or_404(House.objects.all(), uuid=house_uuid)
-        serializer = self.serializer_class(request.data, many=True)
+    def post(self, request, house_uuid, **kwargs):
+        house = get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            house = get_object_or_404(House.objects.all(), uuid=house_uuid)
             serializer.save(house=house)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, house_uuid, obj_id=None):
+        if obj_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        availability = Availability.objects.get(pk=obj_id, house__uuid=house_uuid)
+        self.check_object_permissions(request, availability)
+        availability.delete()
+        return Response(status=status.HTTP_200_OK)
+
+    def put(self, request, house_uuid, obj_id=None):
+        if obj_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        availability = Availability.objects.get(pk=obj_id, house__uuid=house_uuid)
+        self.check_object_permissions(request, availability)
+        serializer = self.serializer_class(availability, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class GetHouseListingConstraintsView(APIView):
@@ -104,6 +129,25 @@ class EditHouseView(APIView):
             return ...  # 200/201 Response
 
     def get(self, request, house_uuid):
-        if house_uuid:
-            house = get_object_or_404(House.objects.all(), uuid=house_uuid)
-        serializer = self.serializer_class
+        house = get_object_or_404(House.objects.all().prefetch_related('availability_set'), uuid=house_uuid)
+        self.check_object_permissions(request, house)
+        serializer = self.serializer_class(house)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FormOptionsView(APIView):
+    """
+    Lists all options available for choices, and required fields to publish for listing
+    """
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        data = {
+            'field_options': {
+                'furnished': {item[0]: item[1] for item in House.FURNISHED_OPTIONS},
+                'home_type': {home_type.id: home_type.name for home_type in HomeType.objects.all()},
+            },
+            'required_fields': House.REQUIRED_FIELDS,
+        }
+        return Response(data, status=status.HTTP_200_OK)
