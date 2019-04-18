@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('user_custom', '0005_auto_20190320_1817'),
+        ('user_custom', '0006_auto_20190418_1113'),
         ('payment_gateway', '0001_initial'),
         ('application', '0002_auto_20190131_0059'),
     ]

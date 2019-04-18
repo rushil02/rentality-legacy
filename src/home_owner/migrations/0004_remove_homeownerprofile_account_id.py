@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('home_owner', '0003_homeownerprofile_user'),
-        ('user_custom', '0005_auto_20190320_1817'),
+        ('user_custom', '0006_auto_20190418_1113'),
     ]
 
     operations = [
