@@ -1,15 +1,48 @@
 # Rentality
 
-## Setup
+## Setup [FOR DEV ONLY]
 
-**FOR DEV ONLY**
+##### First Time Build Will Take Time...
 
-- Copy `docker-compose.dev.yml` file and paste as `docker-compose.override.yml`
+- To start the containers -
+```
+docker-compose up -d --build  
+```
+First time builds or after database reset will require to run the following command.
+```
+# After starting containers initialize the data with
+sh ./post-installation.sh
 
-This will keep refreshing the server as you edit the files.
+# Select yes for all subsequent questions
+```
 
-Otherwise make necessary changes and run `docker-compose up -d --build` to update server.
-## Commands
+- To see console logger of a particular service - 
+```
+docker attach rentality_<service_name_in_docker_compose_file>_1 
+```
+
+- To attach and execute commands inside a service container -
+```
+docker-compose exec <service_name_in_docker_compose_file> sh
+# Shell will attach to contianer
+<command_to_execute>      
+```
+
+- OR to directly execute command
+```
+docker-compose exec <service_name_in_docker_compose_file> <command_to_execute>
+```
+
+- Override docker-compose by creating new docker-compose file, eg - docker-compose.override.yml. And add '-f' flag to all 
+docker commands -
+```
+docker-compose up -d --build -f ./docker-compose.override.yml
+```
+
+By default, Django and Webpack keep refreshing the server as you edit the files.
+
+
+#### Other Commands
 
 ```
 # Build the images
@@ -36,9 +69,4 @@ docker system prune
 # Volume Clean - Clears volumes 
 # BEWARE - THIS WILL REMOVE THE DATA INSIDE VOLUMES LIKE DATABASE
 docker volume prune
-```
-```
-# After starting containers initialize the data with
-# Only for Development Purpose Only
-./post-installation.sh
 ```
