@@ -11,6 +11,12 @@ import stripe
 from .base import PaymentGatewayBase, AccountBase, PGTransactionError, PGTransaction, AccountDoesNotExist
 from rentality.settings.common import get_env_var
 
+from django.conf import settings
+
+
+#FIXME: Remove After new implementation of wrapper. Added to use in migrations.
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 
 def execute_request(request, *args, **kwargs):
     return request(*args, **kwargs)
@@ -23,6 +29,10 @@ def create_account(country, account_type='custom', *args, **kwargs):
 
 def get_account(id):
     return execute_request(stripe.Account.retrieve, id)
+
+
+def get_all_accounts(limit=100):
+    return execute_request(stripe.Account.list, limit=limit)
 
 
 def create_charge(customer, target_account_id, amount, destination_amount, *args, **kwargs):
