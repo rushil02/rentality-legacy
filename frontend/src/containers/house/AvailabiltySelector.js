@@ -6,7 +6,7 @@ import {reverse} from "named-urls";
 import routes from "../../routes";
 import {alertUser} from "../common/Alert";
 import {omit} from 'lodash';
-
+import format from "date-fns/format";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -19,18 +19,28 @@ export default class AvailabilitySelectorHandler extends Component {
         };
 
         this.formOptions = this.props.formOptions; // FIXME: this is a method, call with apt args
-
     }
 
-    onAdd = (startDate, endDate) => {
+    static getDerivedStateFromProps(props, state) {
+        /*
+        Dates are already converted to Date objects from string
+         */
+        if (Object.entries(state.data).length === 0 && state.data.constructor === Object) {
+            return {'data': props.availabilities}
+        }
+        return null
+    }
+
+    onAdd = (startDate, endDate, onComplete) => {
         let dataToSend = {
             "date_range": {
-                "lower": startDate,
-                "upper": endDate
+                "lower": format(startDate, 'YYYY-MM-DD'),
+                "upper": format(endDate, 'YYYY-MM-DD')
             }
         };
         axios.post(reverse(routes.house.create.availability.create, {houseUUID: this.props.houseUUID}), dataToSend)
             .then(result => {
+
                 this.setState(prevState => ({
                         data: {
                             ...prevState.data,
@@ -38,16 +48,19 @@ export default class AvailabilitySelectorHandler extends Component {
                         }
                     })
                 );
+                onComplete()
             }).catch(error => {
-            alertUser.init({stockAlertType: 'unknownError'})
-        })
+
+                alertUser.init({stockAlertType: 'unknownError'})
+            }
+        );
     };
 
-    onUpdate = (objID, startDate, endDate) => {
+    onUpdate = (objID, startDate, endDate, onComplete) => {
         let dataToSend = {
             "date_range": {
-                "lower": startDate,
-                "upper": endDate
+                "lower": format(startDate, 'YYYY-MM-DD'),
+                "upper": format(endDate, 'YYYY-MM-DD')
             }
         };
         axios.put(reverse(routes.house.create.availability.update, {
@@ -55,6 +68,7 @@ export default class AvailabilitySelectorHandler extends Component {
             objID: objID
         }), dataToSend)
             .then(result => {
+                console.log("data is set");
                 this.setState(prevState => ({
                         data: {
                             ...prevState.data,
@@ -62,9 +76,11 @@ export default class AvailabilitySelectorHandler extends Component {
                         }
                     })
                 );
+                onComplete()
             }).catch(error => {
-            alertUser.init({stockAlertType: 'unknownError'})
-        })
+                alertUser.init({stockAlertType: 'unknownError'})
+            }
+        )
 
     };
 
@@ -77,9 +93,9 @@ export default class AvailabilitySelectorHandler extends Component {
                 };
                 this.setState(newState);
             }).catch(error => {
-            alertUser.init({stockAlertType: 'unknownError'})
-        })
-
+                alertUser.init({stockAlertType: 'unknownError'})
+            }
+        )
     };
 
 
@@ -96,14 +112,8 @@ export default class AvailabilitySelectorHandler extends Component {
         this.props.saveAvailabilityChange(this.state.data);
     };
 
-    static getDerivedStateFromProps(props, state) {
-        if (Object.entries(state.data).length === 0 && state.data.constructor === Object) {
-            return {'data': props.availabilities}
-        }
-        return null
-    }
-
     render() {
+        let newKey = 'new' + Object.values(this.state.data).length;
         return (
             <React.Fragment>
                 {Object.values(this.state.data).map((object, i) => {
@@ -123,8 +133,8 @@ export default class AvailabilitySelectorHandler extends Component {
                     modeNew={true}
                     startDate={new Date()}
                     endDate={new Date()}
-                    key={'new'}
-                    idKey={'new'}
+                    key={newKey}
+                    idKey={newKey}
                     validate={this.validateRange}
                     onAdd={this.onAdd}
                     onRemove={this.onRemove}
@@ -137,17 +147,14 @@ export default class AvailabilitySelectorHandler extends Component {
 
 
 class AvailabilitySelector extends Component {
-    /*
-    Dates are already converted to Date objects from string
-     */
     constructor(props) {
         super(props);
         this.state = {
             modeEditing: false,
-            modeNew: this.props.modeNew,
             error: '',
             tempStartDate: this.props.startDate || '',
             tempEndDate: this.props.endDate || '',
+            inSyncMode: false
         };
 
         this.objID = this.props.idKey;
@@ -162,42 +169,50 @@ class AvailabilitySelector extends Component {
     };
 
     toggleEditState = (val) => {
-        this.setState({modeEditing: val})
+        if (val === null || val === undefined) {
+            this.setState(prevState => ({modeEditing: !prevState.modeEditing}))
+        } else {
+            this.setState({modeEditing: val})
+        }
     };
 
     onClickSave = () => {
         let validResult = this.props.validate(this.state.tempStartDate, this.state.tempEndDate);
-
+        console.log(validResult);
         if (validResult.error) {
             // Failed
             this.setState({
                 error: validResult.message
             });
-            alertUser.init({alertType: 'danger', message: "Please enter a valid Date Range", autoHide: true})
+            alertUser.init({alertType: 'danger', message: "Please enter a valid Date Range", autoHide: true});
+            return false
         } else {
+            this.setState({inSyncMode: true});
             // Passed
             if (this.props.modeNew) {
-                this.props.onAdd(this.state.tempStartDate, this.state.tempEndDate)
+                this.props.onAdd(this.state.tempStartDate, this.state.tempEndDate, this.onComplete)
             } else {
-                this.props.onUpdate(this.state.tempStartDate, this.state.tempEndDate)
+                this.props.onUpdate(this.objID, this.state.tempStartDate, this.state.tempEndDate, this.onComplete);
+                this.toggleEditState(false)
             }
-            this.setState({
-                error: false,
-                modeNew: false,
-                modeEditing: false
-            })
+            return true
         }
 
     };
 
     onRemove = () => {
+        this.setState({inSyncMode: true});
         this.props.onRemove(this.objID);
+    };
+
+    onComplete = () => {
+        this.setState({inSyncMode:false})
     };
 
     render() {
         return (
             <AvailabilitySelectorComponent
-                modeNew={this.state.modeNew}
+                modeNew={this.props.modeNew}
                 modeEditing={this.state.modeEditing}
                 startDate={this.state.tempStartDate}
                 endDate={this.state.tempEndDate}
@@ -209,6 +224,7 @@ class AvailabilitySelector extends Component {
                 error={this.state.error}
                 onSave={this.onClickSave}
                 onRemove={this.onRemove}
+                inSyncMode={this.state.inSyncMode}
             />
         );
     }

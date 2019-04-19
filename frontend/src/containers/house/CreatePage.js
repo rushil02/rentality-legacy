@@ -100,7 +100,12 @@ class CreatePage extends Component {
     };
 
     saveAvailabilityChange = (data) => {
-
+        this.setState(prevState => (
+            {
+                ...prevState,
+                availabilityData: data
+            })
+        );
     };
 
     getFormOptions = (key) => {

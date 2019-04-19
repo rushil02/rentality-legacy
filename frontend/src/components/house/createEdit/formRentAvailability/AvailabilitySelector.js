@@ -18,6 +18,7 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus, faPen, faTimes, faCheck} from '@fortawesome/free-solid-svg-icons'
 import './AvailabilitySelector.css';
+import {PulseLoader} from 'react-spinners';
 
 
 const defineds = {
@@ -71,93 +72,127 @@ export default class AvailabilitySelectorComponent extends Component {
         super(props);
     }
 
-    displayInfoCard = (startDate, endDate) => {
-        let editButton, addNewDisplayText;
-
+    getInfoText = () => {
+        let addNewDisplayText;
         if (this.props.modeEditing) {
-            editButton =
-                <button className="btn btn-primary btn-circle btn-xl" type="button"
-                        title={"Save"}
-                        data-toggle="collapse"
-                        ref={(button) => {
-                            this.toggleCalendarButton = button;
-                        }}
-                        onClick={() => this.props.onSave()}
-                        data-target={"#collapsibleCalendar-" + this.props.idKey} aria-expanded="false"
-                        aria-controls={"collapsibleCalendar-" + this.props.idKey}>
-                    <FontAwesomeIcon icon={faCheck}/>
-                </button>
-            ;
-
+            addNewDisplayText = <span>Select dates</span>;
         } else {
             if (this.props.modeNew) {
-                editButton =
-                    <button className="btn btn-primary btn-circle btn-xl" type="button"
-                            title={"Add"}
-                            data-toggle="collapse"
-                            ref={(button) => {
-                                this.toggleCalendarButton = button;
-                            }}
-                            onClick={() => this.props.toggleEditState(true)}
-                            data-target={"#collapsibleCalendar-" + this.props.idKey} aria-expanded="false"
-                            aria-controls={"collapsibleCalendar-" + this.props.idKey}>
-                        <FontAwesomeIcon icon={faPlus}/>
-                    </button>
+                addNewDisplayText = <span>Click to Add Dates</span>;
             } else {
-                editButton =
-                    <button className="btn btn-primary btn-circle btn-xl" type="button"
-                            title={"Edit"}
-                            data-toggle="collapse"
-                            ref={(button) => {
-                                this.toggleCalendarButton = button;
-                            }}
-                            onClick={() => this.props.toggleEditState(true)}
-                            data-target={"#collapsibleCalendar-" + this.props.idKey} aria-expanded="false"
-                            aria-controls={"collapsibleCalendar-" + this.props.idKey}>
-                        <FontAwesomeIcon icon={faPen}/>
-                    </button>
+                addNewDisplayText = <span>
+                    <b>{this.props.srcStartDate.toDateString()}</b> to <b>{this.props.srcEndDate.toDateString()}</b>
+                </span>;
+            }
+        }
+        return (addNewDisplayText)
+    };
+
+    getSyncIndicator = () => {
+        return (
+            <PulseLoader
+                // css={override}
+                sizeUnit={"px"}
+                size={10}
+                color={'#3fc692'}
+                loading={this.props.inSyncMode}
+            />
+        )
+    };
+
+    getEditButton = () => {
+        let buttonConfig = {};
+        if (this.props.modeEditing) {
+            buttonConfig = {
+                title: "Save",
+                action: (e) => {
+                    console.log("ehrea");
+                    e.stopPropagation();
+                    this.props.onSave()
+                },
+                icon: faCheck,
+            };
+        } else {
+            if (this.props.modeNew) {
+                buttonConfig = {
+                    title: "Add",
+                    action: (e) => {
+                        e.stopPropagation();
+                        this.props.toggleEditState(true);
+                    },
+                    icon: faPlus,
+                };
+            } else {
+                buttonConfig = {
+                    title: "Edit",
+                    action: (e) => {
+                        e.stopPropagation();
+                        this.props.toggleEditState(true);
+                    },
+                    icon: faPen,
+                };
             }
         }
 
-        if (this.props.modeEditing){
-            addNewDisplayText = <span>Select dates</span>;
-        } else {
-            addNewDisplayText = <span>Click to Add Dates</span>;
-        }
 
+        return (
+            <button className="btn btn-primary btn-circle btn-xl" type="button"
+                    title={buttonConfig.title}
+                    onClick={buttonConfig.action}
+                    aria-controls={"collapsibleCalendar-" + this.props.idKey}>
+                <FontAwesomeIcon icon={buttonConfig.icon}/>
+            </button>
+        )
+
+
+    };
+
+    getRemoveButton = () => {
         if (this.props.modeNew) {
-            return (
-                <div className="card-body" onClick={() => {
-                    this.toggleCalendarButton.click()
-                }}>
-                    <div className="card-text-content-custom">
-                        {addNewDisplayText}
-                    </div>
-                    <div className="invalid-feedback">{this.props.error || ''}</div>
-                    <div className="card-button-group-custom">
-                        {editButton}
-                    </div>
-                </div>
-            )
-
+            return (" ")
         } else {
-            return (
-                <div className="card-body">
-                    <div className="card-text-content-custom">
-                        <span><b>{this.props.srcStartDate.toDateString()}</b> to <b>{this.props.srcEndDate.toDateString()}</b></span>
-                    </div>
-                    <div className="invalid-feedback">{this.props.error || ''}</div>
-                    <div className="card-button-group-custom">
-                        {editButton}
-                        <button className="btn btn-danger btn-circle btn-xl cancel-custom" type="button"
-                                title={"Delete"} onClick={(e) => this.props.onRemove()}
-                                >
-                            <FontAwesomeIcon icon={faTimes}/>
-                        </button>
-                    </div>
-                </div>
+            return (<button className="btn btn-danger btn-circle btn-xl cancel-custom" type="button"
+                            title={"Delete"}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                this.props.onRemove()
+                            }}>
+                    <FontAwesomeIcon icon={faTimes}/>
+                </button>
             )
         }
+
+    };
+
+    getInfoCard = () => {
+        let action;
+        if (this.props.modeNew) {
+            action = () => {
+                this.props.toggleEditState();
+            }
+        } else {
+            action = () => {
+                // Empty on purpose - Do nothing
+            }
+        }
+
+        return (
+            <div className="card-body" onClick={action}>
+                <div className="card-text-content-custom">
+                    {this.getInfoText()}
+                </div>
+                <div className='loading-container'>
+                    {this.getSyncIndicator()}
+                </div>
+                <div className="invalid-feedback">
+                    {this.props.error || ''}
+                </div>
+                <div className="card-button-group-custom">
+                    {this.getEditButton()}
+                    {this.getRemoveButton()}
+                </div>
+            </div>
+        )
     };
 
     handleSelect = (range) => {
@@ -172,17 +207,23 @@ export default class AvailabilitySelectorComponent extends Component {
             color: '#3fc692'
         };
 
-        let monthsScreenNum;
+        let monthsScreenNum, show;
         if (window.innerWidth <= 1400) {
             monthsScreenNum = 1
         } else {
             monthsScreenNum = 2
         }
 
+        if (this.props.modeEditing) {
+            $("#collapsibleCalendar-" + this.props.idKey).collapse('show');
+        } else {
+            $("#collapsibleCalendar-" + this.props.idKey).collapse('hide');
+        }
+
         return (
             <React.Fragment>
                 <div className="card mb-3">
-                    {this.displayInfoCard()}
+                    {this.getInfoCard()}
                     <div className="collapse availability-selector-container"
                          id={"collapsibleCalendar-" + this.props.idKey}>
                         <DateRangePicker
