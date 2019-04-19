@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from "axios";
 import {reverse} from "named-urls";
 import routes from "../../routes";
-import CreatePageComponent from "components/house/create_edit/CreatePage"
+import CreatePageComponent from "components/house/createEdit/CreatePage"
 import {alertUser} from "../common/Alert";
 
 

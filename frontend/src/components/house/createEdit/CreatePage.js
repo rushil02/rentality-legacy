@@ -1,13 +1,13 @@
 import React, {Component, Suspense} from 'react';
 import {HashRouter, Route, Switch} from 'react-router-dom'
-import FormNav from "./FormNav"
-import FormSubNav from "./FormSubNav";
-import Navigation from "./Navigation";
+import FormNav from "./nav/FormNav"
+import FormSubNav from "./nav/FormSubNav";
+import Navigation from "./nav/Navigation";
 import './FormCommon.css'
+import SpinnerComponent from "components/common/LoadingSpinner";
 
-const FormRentAvailabilityComponent = React.lazy(() => import("./FormRentAvailability"));
-// import FormRentAvailabilityComponent from './FormRentAvailability';
-import FormPrimaryComponent from './FormPrimary';
+const FormRentAvailabilityComponent = React.lazy(() => import("./formRentAvailability/FormRentAvailability"));
+import FormPrimaryComponent from './formPrimary/FormPrimary';
 
 
 class CreatePageComponent extends Component {
@@ -40,7 +40,8 @@ class CreatePageComponent extends Component {
                                                 numParkSpaces={this.props.mainData.numParkSpaces}
                                             />}/>
                                         <Route path="/2" render={() =>
-                                            <Suspense fallback={<div>Loading...</div>}>
+                                            <Suspense
+                                                fallback={<SpinnerComponent height={"400px"}/>}>
                                                 <FormRentAvailabilityComponent
                                                     houseUUID={this.props.houseUUID}
                                                     formOptions={this.props.formOptions}

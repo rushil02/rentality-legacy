@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AvailabilitySelectorComponent from "components/house/create_edit/AvailabilitySelector";
+import AvailabilitySelectorComponent from "components/house/createEdit/formRentAvailability/AvailabilitySelector";
 import {differenceInDays} from 'date-fns';
 import axios from "axios";
 import {reverse} from "named-urls";

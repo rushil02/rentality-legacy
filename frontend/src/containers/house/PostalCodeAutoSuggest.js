@@ -3,12 +3,12 @@ import axios from 'axios';
 import {reverse} from 'named-urls';
 import routes from "routes";
 import {debounce} from 'lodash';
-import PostalCodeAutoSuggestComponent from "components/house/create_edit/PostalCodeAutoSuggest";
+import PostalCodeAutoSuggestComponent from "components/house/createEdit/formPrimary/PostalCodeAutoSuggest";
 import {alertUser} from 'containers/common/Alert';
 
 const defaultVerboseDisplay = "Enter Postal code to select Suburb, City, State";
 
-export default class PostalCodeAutoSuggest extends React.Component {
+export default class PostalCodeAutoSuggest extends Component {
     constructor(props) {
         super(props);
 
