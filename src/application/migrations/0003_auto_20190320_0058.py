@@ -5,16 +5,6 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-def populate_default_cancellation_policy(apps, schema_editor):
-    # FIXME: @pranav Get cancellation policy from house meta, and set the is directly.
-    pass
-
-
-def populate_state_history(apps, schema_editor):
-    # FIXME: @pranav Create relevant entries in Application state
-    pass
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ('business_core', '0001_initial'),
@@ -78,6 +68,4 @@ class Migration(migrations.Migration):
             field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
                                        to='application.ApplicationState'),
         ),
-        migrations.RunPython(populate_default_cancellation_policy),
-        migrations.RunPython(populate_state_history)
     ]

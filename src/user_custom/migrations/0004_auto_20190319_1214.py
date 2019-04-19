@@ -2,40 +2,7 @@
 
 from django.conf import settings
 from django.db import migrations, models
-from django.core.exceptions import ObjectDoesNotExist
 import django.utils.timezone
-
-
-def add_user_accounts_with_stripe(apps, schema_editor):
-    PaymentGateway = apps.get_model('payment_gateway', 'PaymentGateway')
-    User = apps.get_model('user_custom', 'User')
-    Account = apps.get_model('user_custom', 'Account')
-
-    stripe = PaymentGateway.objects.get(name='Stripe', code='stripe')
-    users = User.objects.all()
-    for user in users:
-        try:
-            account = user.account_set.get(payment_gateway=stripe)
-            details = dict()
-            if account.details.get('customer_id'):
-                details['customer_id'] = account.details.get('customer_id')
-            elif user.tenant.customer_id:
-                details['customer_id'] = user.tenant.customer_id
-            if account.details.get('account_id'):
-                details['account_id'] = account.details.get('account_id')
-            elif user.home_owner.account_id:
-                details['account_id'] = user.home_owner.account_id
-            account.details = details
-            account.save()
-        except ObjectDoesNotExist:
-            details = dict()
-            account = Account(user=user, payment_gateway=stripe)
-            if user.tenant.customer_id:
-                details['customer_id'] = user.tenant.customer_id
-            if user.home_owner.account_id:
-                details['account_id'] = user.home_owner.account_id
-            account.details = details
-            account.save()
 
 
 class Migration(migrations.Migration):
@@ -47,6 +14,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RemoveField(
+            model_name='account',
+            name='payment_gateway',
+        ),
         migrations.AddField(
             model_name='account',
             name='create_time',
@@ -76,10 +47,9 @@ class Migration(migrations.Migration):
             name='billing_street_address',
             field=models.TextField(blank=True, null=True),
         ),
-        migrations.AlterField(
+        migrations.AddField(
             model_name='account',
             name='payment_gateway',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='payment_gateway.PaymentGateway'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='payment_gateway.PaymentGateway', default=1),
         ),
-        migrations.RunPython(add_user_accounts_with_stripe),
     ]

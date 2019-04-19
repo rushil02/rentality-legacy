@@ -8,7 +8,7 @@ import django.db.models.deletion
 
 def create_default_payment_gateways(apps, schema_editor):
     PaymentGateway = apps.get_model('payment_gateway', 'PaymentGateway')
-    stripe = PaymentGateway(name='Stripe', code='stripe', meta={})
+    stripe = PaymentGateway(id=1, name='Stripe', code='stripe', meta={})
     stripe.save()
 
 
@@ -17,15 +17,18 @@ def create_default_payment_gateway_location(apps, schema_editor):
     PaymentGateway = apps.get_model('payment_gateway', 'PaymentGateway')
     Country = apps.get_model('cities', 'Country')
     stripe = PaymentGateway.objects.get(code='stripe')
-    aus = Country.objects.get(code='AU')
-    stripe_aus_default = PaymentGatewayLocation(
-        payment_gateway=stripe,
-        home_owner_billing_location=aus,
-        meta={},
-        active=True,
-        default=True
-    )
-    stripe_aus_default.save()
+    try:
+        aus = Country.objects.get(code='AU')
+        stripe_aus_default = PaymentGatewayLocation(
+            payment_gateway=stripe,
+            home_owner_billing_location=aus,
+            meta={},
+            active=True,
+            default=True
+        )
+        stripe_aus_default.save()
+    except Country.DoesNotExist:
+        pass
 
 
 class Migration(migrations.Migration):

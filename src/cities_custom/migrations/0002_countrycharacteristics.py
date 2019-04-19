@@ -8,18 +8,21 @@ import django.db.models.deletion
 
 def create_country_characteristics(apps, schema_editor):
     Country = apps.get_model('cities', 'Country')
-    aus = Country.objects.get(code='AU')
-    CountryCharacteristics = apps.get_model('cities_custom', 'CountryCharacteristics')
-    conf = CountryCharacteristics(country=aus, bank_account_info={
-        'fields': {
-            'account_number': {
-                'verbose': 'Account Number',
-                'type': 'string',
-                'regex': ''
+    try:
+        aus = Country.objects.get(code='AU')
+        CountryCharacteristics = apps.get_model('cities_custom', 'CountryCharacteristics')
+        conf = CountryCharacteristics(country=aus, bank_account_info={
+            'fields': {
+                'account_number': {
+                    'verbose': 'Account Number',
+                    'type': 'string',
+                    'regex': ''
+                }
             }
-        }
-    })
-    conf.save()
+        })
+        conf.save()
+    except Country.DoesNotExist:
+        pass
 
 
 class Migration(migrations.Migration):

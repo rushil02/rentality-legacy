@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('application', '0003_auto_20190320_0058'),
+        ('application', '0004_auto_20190322_0814'),
         ('billing', '0004_paymentgateway'),
         # To first transfer data from Order to PaymentGatewayTransaction and/or LedgerRecord
         ('financials', '0001_initial'),
