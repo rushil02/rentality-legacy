@@ -5,6 +5,8 @@ from user_custom.views import set_timezone, check_user, \
     dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
     CustomSignupView, search, get_stripe_publishable_key, PersonalityTagView, UserInfoView
 
+from user_custom.views.api.profile import GetEditUserProfileView, ProfilePicUploadView
+
 app_name = 'user'
 
 urlpatterns = [
@@ -30,6 +32,8 @@ urlpatterns = [
     path('vfxr', TemplateView.as_view(template_name='others/validation_email_1.html'), name='validation_email_1'),
 
     # APIs
+    #FIXME: Deprecated cu-info
     path('cu-info/', UserInfoView.as_view(), name='info'),
-
+    path('user-profile/', GetEditUserProfileView.as_view(), name='get-edit-user-profile'),
+    path('upload-profile-pic/', ProfilePicUploadView.as_view(), name='upload-profile-pic'),
 ]

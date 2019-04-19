@@ -10,7 +10,7 @@ from house.models import House
 from tenant.models import HousePreference
 from user_custom.forms import ProfileForm1, ProfileForm2, EditProfileForm, UserChangeForm
 from user_custom.models import PersonalityTag
-from user_custom.serializers import PersonalityTagSerializer, UserInfoSerializer, UserProfileSerializer
+from user_custom.serializers.common import PersonalityTagSerializer, UserInfoSerializer, UserProfileSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 

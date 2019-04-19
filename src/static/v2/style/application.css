@@ -1640,7 +1640,7 @@ body > .page-signup-login .form .form-control {
 
 body > .page-signup-login .form select.form-control {
     color: #939393;
-    height: calc(2.25rem + 2px);
+    height: calc(2.25rem + 20px);
     -moz-appearance: none;
     -webkit-appearance: none;
 }
