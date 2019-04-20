@@ -27,16 +27,39 @@ class CancellationPolicy(models.Model):
         return "%s" % self.verbose
 
 
-class BusinessModelConfigurationManager(models.Manager):  # TODO
+class BusinessModelConfigurationManager(models.Manager):
+    location_priority = ['city', 'region', 'country']
+
+    def __get_postal_code_attrs(self, postal_code):
+        postal_code_attrs = []
+        for location_type in self.location_priority:
+            location = getattr(postal_code, location_type)
+            if location:
+                postal_code_attrs.append(location)
+        return postal_code_attrs
+
     def get_location_default(self, billing_location, house_location):
         """
         `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
-        :param billing_location:
-        :param house_location:
+        :param billing_location - Country
+        :param house_location - Postal Code
         :return:
         """
-        ...
-        return self.get()
+
+        house_location_attrs = self.__get_postal_code_attrs(house_location)
+
+        for 
+
+        for location_type in location_priority:
+            try:
+                location_content_type = ContentType.objects.get(app_label='cities', model=location_priority)
+                location_obj = getattr(house_location, location_type)
+                return self.get(home_owner_billing_location=billing_location, house_location_type=location_content_type, house_location_id=location_obj.id)
+            except BusinessModelConfiguration.DoesNotExist as e:
+                if location_type == 'country':
+                    raise e
+                else:
+                    continue
 
 
 class BusinessModelConfiguration(models.Model):

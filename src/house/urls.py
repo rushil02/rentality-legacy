@@ -1,8 +1,7 @@
 from django.urls import path
 
 from house.serializers import HouseDetailsPublicSerializer
-from house.views.api.create import EditHouseView, FormOptionsView, AvailabilityView, AvailabilityListView, \
-    CreateHouseView
+from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, ImageUploadView, FacilityView, NearbyFacilitiesView, \
@@ -44,8 +43,8 @@ urlpatterns = [
     path('current-availability/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='curr_avail'),
 
     # Creation APIs
-    path('create/api', CreateHouseView.as_view(), name='create_api'),
-    path('create/edit/<uuid:house_uuid>', EditHouseView.as_view(), name='edit_api'),
+    path('create/api', HouseView.as_view(), name='create_api'),
+    path('create/edit/<uuid:house_uuid>', HouseView.as_view(), name='edit_api'),
     path('form-options', FormOptionsView.as_view(), name='create_form_options'),
     path('availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
     path('availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),

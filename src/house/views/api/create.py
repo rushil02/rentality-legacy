@@ -12,13 +12,32 @@ from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
 from house.serializers import HouseAuthSerializer, AvailabilityAuthSerializer
 
 
-class CreateHouseView(APIView):
+class HouseView(APIView):
     """
     Create House
     Set Business-config
+
+    Rent, date, promocode, location
+
+    CRUD
+
+    Delete make inactive
+
+    Add promo code
+    List
+    Unlist
+
+    Put Activity Log
+    
     """
     permission_classes = (IsAuthenticated, IsOwnerOfHouse)
     serializer_class = HouseAuthSerializer
+
+    def get(self, request, house_uuid):
+        house = get_object_or_404(House.objects.all().prefetch_related('availability_set'), uuid=house_uuid)
+        self.check_object_permissions(request, house)
+        serializer = self.serializer_class(house)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -28,6 +47,19 @@ class CreateHouseView(APIView):
             )
             serializer.save(home_owner=request.user.home_owner, business_config=business_config)
             return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, house_uuid):
+        ...  # Validate and get house model object, if serializer is valid
+        house = House()
+        self.check_object_permissions(request, house)
+        house_math_obj = HouseHandler.build(house, '')
+        house.business_config = house_math_obj.get_business_config()
+        errors = house_math_obj.validate()
+        if errors:
+            raise ...
+        else:
+            house.save()
+            return ...  # 200/201 Response
 
 
 class AvailabilityListView(APIView):
@@ -116,34 +148,7 @@ class PromoCodeView(APIView):
     Removes/Adds promo-code in reference to a house.
     Edit Business-config and Re-validate house (if required)
     """
-    ...
-
-
-class EditHouseView(APIView):
-    """
-    Edit House
-    Edit Business-config and Re-validate house (if required)
-    """
-    permission_classes = (IsAuthenticated, IsOwnerOfHouse)
-    serializer_class = HouseAuthSerializer
-
-    def post(self, request, house_uuid):
-        ...  # Validate and get house model object, if serializer is valid
-        house = House()
-        house_math_obj = HouseHandler.build(house, '')
-        house.business_config = house_math_obj.get_business_config()
-        errors = house_math_obj.validate()
-        if errors:
-            raise ...
-        else:
-            house.save()
-            return ...  # 200/201 Response
-
-    def get(self, request, house_uuid):
-        house = get_object_or_404(House.objects.all().prefetch_related('availability_set'), uuid=house_uuid)
-        self.check_object_permissions(request, house)
-        serializer = self.serializer_class(house)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    ...    
 
 
 class FormOptionsView(APIView):
