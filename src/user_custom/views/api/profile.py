@@ -23,7 +23,9 @@ class GetEditUserProfileView(APIView):
         user = request.user
         profile_serializer = UserProfileSerializer(user.userprofile, data=request.data)
         info_serializer = UserInfoSerializer(user, data=request.data)
-        if profile_serializer.is_valid() and info_serializer.is_valid():
+        profile_valid = profile_serializer.is_valid()
+        info_valid = info_serializer.is_valid()
+        if profile_valid and info_valid:
             profile_serializer.save()
             info_serializer.save()
             return Response(dict(**profile_serializer.data, **info_serializer.data), status=status.HTTP_200_OK)
