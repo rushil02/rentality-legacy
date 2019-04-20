@@ -6,8 +6,7 @@ export default class SamplePage extends Component {
     componentDidMount = () => {
         getProfileData().then(
             (result) => {
-            console.log("Inside Component");
-            console.log(result.data);
+                console.log(result);
            }
         );
 
