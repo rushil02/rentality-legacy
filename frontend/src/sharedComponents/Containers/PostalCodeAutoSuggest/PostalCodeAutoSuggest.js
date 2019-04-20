@@ -3,7 +3,7 @@ import axios from 'axios';
 import {reverse} from 'named-urls';
 import routes from "routes";
 import {debounce} from 'lodash';
-import PostalCodeAutoSuggestComponent from "components/house/createEdit/formPrimary/PostalCodeAutoSuggest";
+import PostalCodeAutoSuggestComponent from "sharedComponents/Components/PostalCodeAutoSuggest/PostalCodeAutoSuggest";
 import {alertUser} from 'containers/common/Alert';
 
 const defaultVerboseDisplay = "Enter Postal code to select Suburb, City, State";
@@ -17,7 +17,8 @@ export default class PostalCodeAutoSuggest extends Component {
             verbose: defaultVerboseDisplay,
             objID: '',
             suggestions: [],
-            error: this.props.error
+            error: this.props.error,
+            showsuburb: this.props.showsuburb
         };
 
         this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 500, {trailing: true});
@@ -64,7 +65,7 @@ export default class PostalCodeAutoSuggest extends Component {
             value: suggestion.code,
             objID: suggestion.id
         });
-        this.props.onFieldChange('postalCode', suggestion.id);
+        this.props.onFieldChange(this.props.datakey, suggestion.id);
     };
 
     render() {
@@ -78,9 +79,8 @@ export default class PostalCodeAutoSuggest extends Component {
                 onSuggestionSelected={this.onSuggestionSelected}
                 verbose={this.state.verbose}
                 error={this.state.error}
+                showsuburb={this.state.showsuburb}
             />
         );
     }
 }
-
-

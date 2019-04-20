@@ -19,15 +19,17 @@ export default class PostalCodeAutoSuggestComponent extends Component {
 
     render() {
         const inputProps = {
-            placeholder: "Postal Code",
+            placeholder: this.props.placeholder || "Postal Code",
             value: this.props.value,
             onChange: this.props.onChange,
             type: 'number',
+            showsuburb: this.props.showsuburb
         };
 
         return (
             <React.Fragment>
-                <div className="col-md-3">
+
+                <div className={this.props.showsuburb? "col-md-3 col-sm-12" : "col-md-12"}>
                     <Autosuggest
                         id="location"
                         suggestions={this.props.suggestions}
@@ -39,13 +41,14 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                         inputProps={inputProps}
                     />
                 </div>
-                <div className="col-md-9">
+                {this.props.showsuburb &&
+                <div className="col-md-9 col-sm-12">
                     <div className="input">
                         <div id="location-verbose" className="form-control no-background">
                             {this.props.verbose}
                         </div>
                     </div>
-                </div>
+                </div>}
                 <div className="col-12">
                     <small className="form-text text-muted">
                     </small>

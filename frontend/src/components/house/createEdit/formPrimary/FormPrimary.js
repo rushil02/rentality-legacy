@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PostalCodeAutoSuggest from "containers/house/PostalCodeAutoSuggest";
+import PostalCodeAutoSuggest from "../../../../sharedComponents/Containers/PostalCodeAutoSuggest/PostalCodeAutoSuggest";
 import HomeTypeSelectorComponent from './HomeTypeSelector';
 import FurnishedSelectorComponent from "./FurnishedSelector";
 
@@ -66,6 +66,8 @@ export default class FormPrimaryComponent extends Component {
                                     error={this.props.errors.postalCode || ''}
                                     value={this.props.postalCode}
                                     onFieldChange={this.props.onFieldChange}
+                                    datakey="postalCode"
+                                    showsuburb={true}
                                 />
 
                                 <div className="col-md-12 col-lg-6">
