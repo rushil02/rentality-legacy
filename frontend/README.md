@@ -33,7 +33,8 @@ only concerned with the styling and layout of the elements.
 #### Approach towards Independent Containers
 TODO
 #### User Centric Design
-Making users aware of what's happening in the most abstract manner
+- Making users aware of what's happening in the most abstract manner.
+- Do **NOT** use success alert messages, eg 'Information saved successfully!'
 * ##### Strict Use of Alerts with all APIs
 * ##### Synchronised validations 
 Requires rigorous optimization for server level validations  
