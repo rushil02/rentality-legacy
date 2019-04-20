@@ -41,7 +41,7 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                         inputProps={inputProps}
                     />
                 </div>
-                {this.props.showsuburb &&
+                {this.props.showsuburb == 1 &&
                 <div className="col-md-9 col-sm-12">
                     <div className="input">
                         <div id="location-verbose" className="form-control no-background">

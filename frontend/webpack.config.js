@@ -45,6 +45,7 @@ module.exports = {
     entry: {
         index: './src/entry_points/index.js',
         home_owner: './src/entry_points/HomeOwner.js',
+        user: './src/entry_points/User.js',
     },
     output: {
         filename: '[name].js',

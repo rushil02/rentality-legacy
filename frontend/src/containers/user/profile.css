@@ -1,0 +1,45 @@
+.page-form {
+    padding-top: 50px;
+    padding-bottom: 120px;
+}
+.page-form .button {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.page-form .button.top-margin {
+    margin-top: 80px;
+}
+
+.page-form .button > button {
+    font-size: 16px;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+    font-size: 16px;
+    font-weight: 700;
+    color: #36ffb1;
+    background-color: #2a2b32;
+    padding: 11px 59px;
+    text-transform: uppercase;
+}
+
+.page-form .button > button:hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+.page-form .button > button:hover, .page-form .button > button:focus {
+    text-decoration: none;
+}
+
+#root > .page-form .right h1.title {
+    margin-bottom: 0;
+}
+
+.page-form .input.top-margin {
+    margin-top: 70px;
+}
+
+.page-form .input {
+    margin-top: 10px;
+}

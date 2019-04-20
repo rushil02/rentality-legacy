@@ -60,6 +60,7 @@ export default class FormPrimaryComponent extends Component {
 
                                     </small>
 
+
                                 </div>
 
                                 <PostalCodeAutoSuggest
@@ -67,7 +68,7 @@ export default class FormPrimaryComponent extends Component {
                                     value={this.props.postalCode}
                                     onFieldChange={this.props.onFieldChange}
                                     datakey="postalCode"
-                                    showsuburb={true}
+                                    showsuburb={1}
                                 />
 
                                 <div className="col-md-12 col-lg-6">
