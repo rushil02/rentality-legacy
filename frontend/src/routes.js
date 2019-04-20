@@ -22,6 +22,7 @@ export default {
             applySummary: 'apply/summary/:houseUUID',
             houseCreate: 'property/create/',
             houseEdit: 'property/edit/:houseUUID',
+            samplePage: 'property/samplePage'
         }
     ),
 
@@ -49,7 +50,8 @@ export default {
         }),
     }),
     user: include('/', {
-        info: 'cu-info'
+        info: 'cu-info',
+        userProfile: 'user-profile/'
     }),
     cities: include('/cities', {
         postalCodeVerbose: 'postal-code-vo'
