@@ -27,7 +27,7 @@ class CancellationPolicy(models.Model):
         return "%s" % self.verbose
 
 
-class BusinessModelConfigurationManager(models.Manager):  # TODO
+class BusinessModelConfigurationManager(models.Manager):  # TODO !URGENT
     def get_location_default(self, billing_location, house_location):
         """
         `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
@@ -41,12 +41,12 @@ class BusinessModelConfigurationManager(models.Manager):  # TODO
 
 class BusinessModelConfiguration(models.Model):
     """
-    Maps all Business Constraints and Financial Services together.
-    Connected directly to an Application and House.
-    Each such configuration can be limited to location of home owner (in
-    reference to bank account) and/or location of house. In case of null value,
-    the model will not be constrained and will be available to all
-    geographical locations.
+    -   Maps all Business Constraints and Financial Services together.
+    -   Connected directly to an Application and House.
+    -   Each such configuration can be limited to location of home owner (in
+        reference to bank account) and/or location of house. In case of null
+        value, the model will not be constrained and will be available to all
+        geographical locations.
     """
     verbose = models.CharField(max_length=50)
     code = models.CharField(max_length=10, help_text="Verbose identifier used internally", unique=True)

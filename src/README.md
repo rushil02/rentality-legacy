@@ -37,6 +37,8 @@ Checklists to create each view functionality -
 * Input Validations
 * Object/Queryset Fetch logic
 * Check if User has Object level Permissions
+  - When using DRF you can use permission_classes to set/define custom permissions. **IMPORTANT:** Bes sure to call 
+  `self.check_object_permissions(request, object)` in the view method.
 * Check if Business logic / Functionality is applicable to fetched Object 
 * Apply Business Logic / Functionality
 * Return appropriate Response
@@ -51,18 +53,20 @@ Checklists to create each view functionality -
 #### Writing REST APIs
 **These will include to be as the parameters of code review/evaluation, as they facilitate agility in development.**
 * Utilise all HTTP methods (GET / POST / PUT / DELETE) appropriately.
+* PUT method for all purposes is used as PATCH, therefore any partial update must be accepted. 
 * Write symmetrical APIs for multiple HTTP methods on the same URL, ie. What you send is what you receive!
 * The above point inherently means 2 constraints,  
-  - All HTTP methods in a view should evaluate with the same Serializer. Multiple URL pattens are allowed to match to 
-  one View.
+  - All HTTP methods in a view (and/or to a URL) should evaluate with the same Serializer. Multiple URL pattens are 
+  allowed to match to one View.
   - Nested Serializers cannot be used when the child serializer is read-only, particularly when the View uses PUT or 
   POST methods.   
-* For all such Child serializers (which are read-only), rather use separate Serializer another API endpoint for a GET 
-request.
+* For all such Child serializers (which are read-only), rather use separate Serializer with another API endpoint for a
+GET request.
 * For all Writable Child serializers, the implementation will depend on the frontend architecture and the coupling 
 between multiple components. There are two possible cases when choosing writable Nested serialization, 
   - One-to-Many/Many-to-Many: Use appropriate Custom List Serializers from `./utils/serializers.py`
-  - One-to-One: Do not use Views to decouple data; write custom create/update methods in the parent Serializer.   
+  - One-to-One/Many-to-One: Do not use Views to decouple data; write custom create/update methods in the parent 
+  Serializer.   
 
 ***
 ## Useful APIs
