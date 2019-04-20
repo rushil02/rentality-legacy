@@ -65,6 +65,14 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-12">
+                                    {{ form.country }}
+                                    {% if form.country.errors %}
+                                        {% for error in form.country.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
                                     {{ form.contact_num }}
                                     {% if form.contact_num.errors %}
                                         {% for error in form.contact_num.errors %}

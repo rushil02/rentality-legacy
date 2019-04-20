@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from user_custom.serializers import UserTimezoneSerializer
+from user_custom.serializers.common import UserTimezoneSerializer
 from django.conf import settings
 
 

@@ -14,6 +14,7 @@ from allauth.account.forms import ResetPasswordForm as AllAuthResetPasswordForm
 from allauth.account.forms import ResetPasswordKeyForm as AllAuthResetPasswordKeyForm
 
 from utils.form_thumbnailer import ImageClearableFileInput
+from cities.models import Country, PostalCode
 
 
 class ProfileForm1(forms.ModelForm):
@@ -47,9 +48,39 @@ class UserChangeForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        userprofile = kwargs.get('instance')
+        if userprofile.billing_country:
+            self.fields['billing_country'] = forms.ModelChoiceField(
+                queryset=Country.objects.all(), 
+                empty_label='Country',
+                required=False,
+                widget=forms.Select(attrs={
+                    'class': 'form-control',
+                    'readonly': 'true'
+                })
+            )
+        else:
+            self.fields['billing_country'] = forms.ModelChoiceField(
+                queryset=Country.objects.all(), 
+                empty_label='Country',
+                required=True,
+                widget=forms.Select(attrs={
+                    'class': 'form-control',
+                })
+            )
+        if userprofile.billing_postcode:
+            print(userprofile.billing_postcode.code)
+            self.fields['billing_postcode'] = forms.CharField(required=False, max_length=20, initial=userprofile.billing_postcode.code)
+        else:
+            self.fields['billing_postcode'] = forms.CharField(required=False, max_length=20)
+
+
     class Meta:
         model = UserProfile
-        exclude = ['user', 'updated_on', ]
+        exclude = ['user', 'updated_on', 'account_type']
         widgets = {
             'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Contact number'}),
             'dob': forms.DateInput(
@@ -61,8 +92,24 @@ class EditProfileForm(forms.ModelForm):
                 attrs={'required': False, 'style': "visibility: hidden"},
                 template='%(template)s <a id="thumbnail-anchor" href="%(source_url)s" target="_blank">%(thumb)s</a>'
             ),
+            'billing_street_address': forms.Textarea(attrs={
+                'class': 'form-control', 'placeholder': 'Billing Street Address'
+            }),
+            'billing_postcode': forms.TextInput(attrs={
+                'class': 'form-control', 'placeholder': 'Billing Postal Code'
+            })
         }
 
+    def clean_billing_postcode(self):
+        billing_postcode_number = self.cleaned_data['billing_postcode']
+        if billing_postcode_number:
+            try:
+                postal_code = PostalCode.objects.filter(code=billing_postcode_number)[0]
+                return postal_code
+            except IndexError:
+                raise forms.ValidationError("Postal Code does not exist.")
+        else:
+            return None
 
 class ProfilePictureForm(forms.ModelForm):
     class Meta:
@@ -124,6 +171,7 @@ class CustomSignupForm(AllAuthSignupForm):
         ('O', 'Other')
     )
     gender = forms.ChoiceField(choices=SEX_TYPE, widget=forms.RadioSelect())
+    country = forms.ModelChoiceField(queryset=Country.objects.all(), required=True, empty_label='Country')
 
     def __init__(self, *args, **kwargs):
         super(CustomSignupForm, self).__init__(*args, **kwargs)
@@ -133,19 +181,15 @@ class CustomSignupForm(AllAuthSignupForm):
         self.fields['password1'].widget.attrs['placeholder'] = 'Password'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Password (again)'
-
-    # def clean_policy_agreement(self):
-    #     agreement = self.cleaned_data['policy_agreement']
-    #     if not agreement:
-    #         raise forms.ValidationError(
-    #             _("Please accept the terms and conditions to signup and use our services."),
-    #             code='Policy agreement not accepted'
-    #         )
+        self.fields['country'].widget.attrs['class'] = 'form-control'
 
     def custom_signup(self, request, user):
         UserProfile.objects.update_or_create(
-            user=user, defaults=dict(contact_num=self.cleaned_data['contact_num'],
-                                     sex=self.cleaned_data['gender'])
+            user=user, defaults=dict(
+                contact_num=self.cleaned_data['contact_num'],
+                sex=self.cleaned_data['gender'],
+                billing_country=self.cleaned_data['country']
+            )
         )
 
 

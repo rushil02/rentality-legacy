@@ -108,6 +108,36 @@
                             {% endif %}
                         </div>
                         <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ form2.billing_street_address }}
+                            </div>
+                            {% if form2.billing_street_address.errors %}
+                                {% for error in form2.billing_street_address.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ form2.billing_postcode }}
+                            </div>
+                            {% if form2.billing_postcode.errors %}
+                                {% for error in form2.billing_postcode.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input no-background">
+                                {{ form2.billing_country }}
+                            </div>
+                            {% if form2.billing_country.errors %}
+                                {% for error in form2.billing_country.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
                             <div class="select">
                                 Gender
                                 {{ form2.sex }}
@@ -116,7 +146,7 @@
                                 {{ form2.sex.help_text }}
                             </small>
                             {% if form2.sex.errors %}
-                                {% for error in form1.last_name.errors %}
+                                {% for error in form2.sex.errors %}
                                     <div class="invalid-feedback">{{ error }}</div>
                                 {% endfor %}
                             {% endif %}

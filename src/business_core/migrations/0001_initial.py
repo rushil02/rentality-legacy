@@ -6,13 +6,22 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-# FIXME: Fix this default data population apprpriately
 def create_default_cancellation_policies(apps, schema_editor):
-    # FIXME: IMPORTANT This data should be exactly copied from previous model in house
+    OldCancellationPolicy = apps.get_model('house', 'CancellationPolicy')
     CancellationPolicy = apps.get_model('business_core', 'CancellationPolicy')
-    CancellationPolicy.objects.create(id=1, verbose='Strict', description="", properties={}, behaviour='A')
-    CancellationPolicy.objects.create(id=2, verbose='Flexible', description="", properties={}, behaviour='A')
-    CancellationPolicy.objects.create(id=3, verbose='Moderate', description="", properties={}, behaviour='A')
+    for i in range(1, 4):
+        try:
+            old = OldCancellationPolicy.objects.get(id=i)
+            CancellationPolicy.objects.create(
+                id=i, 
+                verbose=old.verbose, 
+                description=old.description, 
+                properties=old.properties, 
+                behaviour='A', #FIXME
+                official_policy=old.official_policy
+            )
+        except OldCancellationPolicy.DoesNotExist:
+            pass
 
 
 def create_default_business_config(apps, schema_editor):
