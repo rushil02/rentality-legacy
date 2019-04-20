@@ -92,10 +92,11 @@ export default class FormPrimaryComponent extends Component {
                                     <div className="invalid-feedback">{this.props.errors.furnished}</div>}
                                 </div>
                                 <div className="col-md-12 col-lg-6">
-                                    <div className="input number-disp bedroom">
+                                    <div className="input number-disp bedroom" onClick={() => {this.bedroomInput.focus()}}>
                                         <label>Number of Bedrooms</label>
                                         <input
                                             type="number" name="main-form-bedrooms" id="id_main-form-bedrooms"
+                                            ref={(input) => { this.bedroomInput = input; }}
                                             min="0" value={this.props.numBedrooms}
                                             onChange={(e) => this.props.onFieldChange("numBedrooms", e.target.value)}
                                         />
@@ -106,9 +107,10 @@ export default class FormPrimaryComponent extends Component {
 
                                 </div>
                                 <div className="col-md-12 col-lg-6">
-                                    <div className="input number-disp bathroom">
+                                    <div className="input number-disp bathroom" onClick={() => {this.bathroomsInput.focus()}}>
                                         <label>Number of Bathrooms</label>
                                         <input type="number" name="main-form-bathrooms" id="id_main-form-bathrooms"
+                                               ref={(input) => { this.bathroomsInput = input; }}
                                                min="0" value={this.props.numBathrooms}
                                                onChange={(e) => this.props.onFieldChange("numBathrooms", e.target.value)}
                                         />
@@ -117,9 +119,10 @@ export default class FormPrimaryComponent extends Component {
 
                                 </div>
                                 <div className="col-md-12 col-lg-6">
-                                    <div className="input number-disp parking">
+                                    <div className="input number-disp parking" onClick={() => {this.parkSpaceInput.focus()}}>
                                         <label>Number of parking spaces</label>
                                         <input type="number" name="main-form-parking" id="id_main-form-parking" min="0"
+                                               ref={(input) => { this.parkSpaceInput = input; }}
                                                value={this.props.numParkSpaces}
                                                onChange={(e) => this.props.onFieldChange("numParkSpaces", e.target.value)}
                                         />

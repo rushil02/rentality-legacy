@@ -37,17 +37,16 @@ export default {
         verifyHouseDiscount: 'verify-promo-use/house/home_owner'
     }),
     house: include('/property', {
-        detail: 'detail/:houseUUID',
-        create: include('create', {
-            allInfo: 'info/:houseUUID',
-            formOptions: 'form-options',
-            availability: include('availability', {
-                list: 'list/:houseUUID',
-                create: ':houseUUID',
-                update: ':houseUUID/:objID',
-                remove: ':houseUUID/:objID',
-            }),
-        })
+        formOptions: 'form-options',
+        detail: 'create/edit/:houseUUID',
+        edit: 'create/edit/:houseUUID',
+        create: 'create/api',
+        availability: include('availability', {
+            list: 'list/:houseUUID',
+            create: ':houseUUID',
+            update: ':houseUUID/:objID',
+            remove: ':houseUUID/:objID',
+        }),
     }),
     user: include('/', {
         info: 'cu-info'

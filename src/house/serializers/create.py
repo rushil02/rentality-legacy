@@ -19,11 +19,11 @@ class HouseAuthSerializer(serializers.ModelSerializer):
     staff).
     """
 
-    availabilities = AvailabilityAuthSerializer(many=True, source='availability_set')
-
     class Meta:
         model = House
         fields = (
             'title', 'address_hidden', 'address', 'location', 'home_type', 'furnished', 'bedrooms', 'bathrooms',
-            'parking', 'rent', 'min_stay', 'max_stay', 'max_people_allowed', 'availabilities'
+            'parking', 'rent', 'min_stay', 'max_stay', 'max_people_allowed', 'description', 'other_rules',
+            'cancellation_policy', 'other_people_description', 'access_restrictions', 'neighbourhood_description',
+            'neighbourhood_facilities'
         )

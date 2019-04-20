@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import Select from 'react-select'
 
 
-function substituteVerbose(key, verbose){
+function substituteVerbose(key, verbose) {
     const subs = {
-        'Y' : 'Furnished',
-        'N' : 'Unfurnished'
+        'Y': 'Furnished',
+        'N': 'Unfurnished'
     };
 
     if (subs.hasOwnProperty(key)) {
@@ -61,17 +61,18 @@ export default class FurnishedSelectorComponent extends Component {
                 "padding-bottom": "6px",
             }),
 
-            container: () => ({
+            container: (provided, state) => ({
                 "background-image": "url(/static/image/form-1/kitchen.svg)",
                 "position": "relative",
                 "font-size": "15px",
                 "color": "#676767",
                 "font-weight": "400",
-                "border-bottom": "1px solid #c7cdd9",
+                "border-bottom": state.isFocused ? "1px solid #3fc692" : "1px solid #c7cdd9",
                 "background-repeat": "no-repeat",
                 "background-position": "left center",
                 "padding-left": "40px",
                 "margin-top": "5px",
+                "box-shadow": state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial",
             })
         };
 

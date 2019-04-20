@@ -59,7 +59,6 @@ export default class PostalCodeAutoSuggest extends Component {
     };
 
     onSuggestionSelected = (event, {suggestion}) => {
-        console.log(suggestion.id);
         this.setState({
             verbose: suggestion.name_full,
             value: suggestion.code,

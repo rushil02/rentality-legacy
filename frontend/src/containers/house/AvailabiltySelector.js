@@ -38,7 +38,7 @@ export default class AvailabilitySelectorHandler extends Component {
                 "upper": format(endDate, 'YYYY-MM-DD')
             }
         };
-        axios.post(reverse(routes.house.create.availability.create, {houseUUID: this.props.houseUUID}), dataToSend)
+        axios.post(reverse(routes.house.availability.create, {houseUUID: this.props.houseUUID}), dataToSend)
             .then(result => {
 
                 this.setState(prevState => ({
@@ -63,7 +63,7 @@ export default class AvailabilitySelectorHandler extends Component {
                 "upper": format(endDate, 'YYYY-MM-DD')
             }
         };
-        axios.put(reverse(routes.house.create.availability.update, {
+        axios.put(reverse(routes.house.availability.update, {
             houseUUID: this.props.houseUUID,
             objID: objID
         }), dataToSend)
@@ -86,7 +86,7 @@ export default class AvailabilitySelectorHandler extends Component {
 
     onRemove = (objID) => {
         console.log(objID, this.props.houseUUID);
-        axios.delete(reverse(routes.house.create.availability.remove, {houseUUID: this.props.houseUUID, objID: objID}))
+        axios.delete(reverse(routes.house.availability.remove, {houseUUID: this.props.houseUUID, objID: objID}))
             .then(result => {
                 const newState = {
                     data: omit(this.state.data, objID)

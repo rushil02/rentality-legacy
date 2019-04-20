@@ -1,3 +1,8 @@
+#root > .page-form .right .input .form-control:focus {
+    box-shadow: 0 6px 12px -7px #3fc692 !important;
+    border-bottom: 1px solid #3fc692;
+}
+
 #root > .page-form .right h1.title {
     font-size: 20px;
     font-weight: 700;
@@ -34,6 +39,10 @@
     height: calc(2.25rem + 15px);
     background-repeat: no-repeat;
     background-position: left center;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
 }
 
 #root > .page-form .right .input.big .form-control {

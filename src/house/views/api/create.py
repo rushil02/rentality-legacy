@@ -4,11 +4,30 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from business_core.models import BusinessModelConfiguration
 from business_core.utils import House as HouseHandler, BusinessModel
 from house.helpers import get_available_dates
 from house.models import Availability, House, HomeType, Facility
 from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
 from house.serializers import HouseAuthSerializer, AvailabilityAuthSerializer
+
+
+class CreateHouseView(APIView):
+    """
+    Create House
+    Set Business-config
+    """
+    permission_classes = (IsAuthenticated, IsOwnerOfHouse)
+    serializer_class = HouseAuthSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            business_config = BusinessModelConfiguration.objects.get_location_default(
+                request.user.get_billing_location(), serializer.validated_data.get('location')
+            )
+            serializer.save(home_owner=request.user.home_owner, business_config=business_config)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AvailabilityListView(APIView):
@@ -90,14 +109,6 @@ class GetHouseBusinessBehaviourDescriptionView(APIView):
         house = get_object_or_404(House.objects.all(), uuid=house_uuid)
         data = house.business_config.get_description()
         return Response(data, status=status.HTTP_200_OK)
-
-
-class CreateHouseView(APIView):
-    """
-    Create House
-    Set Business-config
-    """
-    ...
 
 
 class PromoCodeView(APIView):

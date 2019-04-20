@@ -138,7 +138,7 @@ class UserProfile(models.Model):
         return self.personality_tags.all()
 
     def get_billing_location(self):
-        return self.billing_postcode.country
+        return self.billing_country
 
 
 class PersonalityTag(models.Model):

@@ -1,7 +1,8 @@
 from django.urls import path
 
 from house.serializers import HouseDetailsPublicSerializer
-from house.views.api.create import EditHouseView, FormOptionsView, AvailabilityView, AvailabilityListView
+from house.views.api.create import EditHouseView, FormOptionsView, AvailabilityView, AvailabilityListView, \
+    CreateHouseView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, ImageUploadView, FacilityView, NearbyFacilitiesView, \
@@ -43,9 +44,11 @@ urlpatterns = [
     path('current-availability/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='curr_avail'),
 
     # Creation APIs
-    path('create/info/<uuid:house_uuid>', EditHouseView.as_view(), name='all_info_api'),
-    path('create/form-options', FormOptionsView.as_view(), name='create_form_options'),
-    path('create/availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
-    path('create/availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
-    path('create/availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(), name='availability_delete_api'),
+    path('create/api', CreateHouseView.as_view(), name='create_api'),
+    path('create/edit/<uuid:house_uuid>', EditHouseView.as_view(), name='edit_api'),
+    path('form-options', FormOptionsView.as_view(), name='create_form_options'),
+    path('availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
+    path('availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
+    path('availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(),
+         name='availability_delete_api'),
 ]

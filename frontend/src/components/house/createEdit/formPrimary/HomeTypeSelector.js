@@ -46,17 +46,22 @@ export default class HomeTypeSelectorComponent extends Component {
                 "padding-bottom": "6px",
             }),
 
-            container: () => ({
+            container: (provided, state) => ({
                 "background-image": "url(/static/image/form-1/type.svg)",
                 "position": "relative",
                 "font-size": "15px",
                 "color": "#676767",
                 "font-weight": "400",
-                "border-bottom": "1px solid #c7cdd9",
+                "border-bottom": state.isFocused ? "1px solid #3fc692" : "1px solid #c7cdd9",
                 "background-repeat": "no-repeat",
                 "background-position": "left center",
                 "padding-left": "40px",
                 "margin-top": "5px",
+                "-webkit-transition": "all 0.30s ease-in-out",
+                "-moz-transition": "all 0.30s ease-in-out",
+                "-ms-transition": "all 0.30s ease-in-out",
+                "-o-transition": "all 0.30s ease-in-out",
+                "box-shadow": state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial",
             })
         };
 

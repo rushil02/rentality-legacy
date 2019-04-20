@@ -28,6 +28,11 @@ body {
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
 }
 
+.react-autosuggest__input:focus {
+    box-shadow: 0 6px 12px -7px #3fc692 !important;
+    border-bottom: 1px solid #3fc692;
+}
+
 .react-autosuggest__input--focused {
     outline: none;
 }

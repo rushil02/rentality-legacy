@@ -1192,6 +1192,16 @@ body {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+}
+
+.input.number-disp:focus-within {
+    box-shadow: 0 6px 12px -7px #3fc692 !important;
+    border-bottom: 1px solid #3fc692;
+    outline: none;
 }
 
 .input.number-disp label{

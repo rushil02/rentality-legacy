@@ -11,6 +11,13 @@ class CreateUpdateListSerializer(serializers.ListSerializer):
         -   Example : Deletes are implicit while updating.
             Converted to : Cannot delete via update query and cannot mass delete. Updates cn only create or
             change values in reference to an id.
+
+    Usage Example -
+        class AwesomeSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = AwesomeModel
+                fields = ...
+                list_serializer_class = CreateUpdateListSerializer.init(AwesomeModel)
     """
 
     default_error_messages = {

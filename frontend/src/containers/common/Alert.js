@@ -21,6 +21,11 @@ const stockAlertList = {
         alertType: "danger",
         autoHide: false
     },
+    'save-success': {
+        message: "Information saved!",
+        alertType: "success",
+        autoHide: true
+    }
 };
 
 export default class Alert extends Component {
