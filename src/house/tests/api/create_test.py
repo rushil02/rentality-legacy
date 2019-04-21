@@ -95,3 +95,44 @@ class CreateHouseTest(TestCase):
         self.assertIsNotNone(house.business_config)
         self.assertEqual(house.business_config.id, 1)
 
+    def test_read_house(self):
+        data = {
+            "title": "Test House",
+            "location": 22    
+        }
+        request = self.factory.post('', data)
+        force_authenticate(request, user=self.user)
+        response = HouseView.as_view()(request)
+        uuid = response.data['uuid']
+        house = House.objects.get(uuid=uuid)
+
+        get_request = self.factory.get('')
+        force_authenticate(get_request, user=self.user)
+        response = HouseView.as_view()(get_request, house_uuid=uuid)
+        self.assertEqual(response.data['uuid'], uuid)
+    
+    def test_edit_house(self):
+        data = {
+            "title": "Test House",
+            "location": 22    
+        }
+        request = self.factory.post('', data)
+        force_authenticate(request, user=self.user)
+        response = HouseView.as_view()(request)
+        uuid = response.data['uuid']
+        house = House.objects.get(uuid=uuid)
+
+        data = {
+            "title": "Testing",
+            "location": 22
+        }
+
+        put_request = self.factory.put('', data)
+        force_authenticate(put_request, user=self.user)
+        response = HouseView.as_view()(put_request, house_uuid=uuid)
+        self.assertEqual(response.data['title'], "Testing")
+
+        get_request = self.factory.get('')
+        force_authenticate(get_request, user=self.user)
+        response = HouseView.as_view()(get_request, house_uuid=uuid)
+        self.assertEqual(response.data['title'], "Testing")

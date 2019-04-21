@@ -15,7 +15,6 @@ from house.serializers import HouseAuthSerializer, AvailabilityAuthSerializer
 class HouseView(APIView):
     """
     Create House
-    Set Business-config
 
     Rent, date, promocode, location
 
@@ -27,40 +26,46 @@ class HouseView(APIView):
     List
     Unlist
 
-    Put Activity Log
+    FIXME: Put Activity Log
 
-    Add welcome tags, nei-fac, rule for house API
+    FIXME: Add welcome tags, nei-fac, rule, availability for house API
     """
     permission_classes = (IsAuthenticated, IsOwnerOfHouse)
     serializer_class = HouseAuthSerializer
 
+    def get_object(self, house_uuid):
+        return get_object_or_404(House.objects.all().prefetch_related('availability_set'), uuid=house_uuid)
+
     def get(self, request, house_uuid):
-        house = get_object_or_404(House.objects.all().prefetch_related('availability_set'), uuid=house_uuid)
+        house = self.get_object(house_uuid)
         self.check_object_permissions(request, house)
         serializer = self.serializer_class(house)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def get_business_model_conf(self, home_owner_billing_location, house_location):
+        return BusinessModelConfiguration.objects.get_location_default(
+                home_owner_billing_location, house_location
+            )
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            business_config = BusinessModelConfiguration.objects.get_location_default(
-                request.user.get_billing_location(), serializer.validated_data.get('location')
-            )
+            business_config = self.get_business_model_conf(request.user.get_billing_location(), serializer.validated_data.get('location'))
             serializer.save(home_owner=request.user.home_owner, business_config=business_config)
             return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, house_uuid):
-        ...  # Validate and get house model object, if serializer is valid
-        house = House()
+        house = self.get_object(house_uuid)
         self.check_object_permissions(request, house)
-        house_math_obj = HouseHandler.build(house, '')
-        house.business_config = house_math_obj.get_business_config()
-        errors = house_math_obj.validate()
-        if errors:
-            raise ...
-        else:
-            house.save()
-            return ...  # 200/201 Response
+        serializer = self.serializer_class(house, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            business_config = business_config = self.get_business_model_conf(request.user.get_billing_location(), serializer.validated_data.get('location'))
+            
+            if house.business_config != business_config:
+                serializer.save(business_config=business_config)
+            else:
+                serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AvailabilityListView(APIView):
