@@ -60,7 +60,7 @@ services:
     depends_on:
       - postgres
       - frontend
-#      - elasticsearch
+      - elasticsearch
     ports:
       - '8001:8000'
     entrypoint:
