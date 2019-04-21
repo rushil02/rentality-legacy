@@ -55,6 +55,7 @@ export default {
         uploadProfilePic: 'upload-profile-pic'
     }),
     cities: include('/cities', {
-        postalCodeVerbose: 'postal-code-vo'
+        postalCodeVerbose: 'postal-code-vo',
+        postalCodeDetails: 'postal-code-details/:objID'
     })
 };

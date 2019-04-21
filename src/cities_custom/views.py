@@ -23,7 +23,7 @@ class PostalCodeVerboseOnlyAPIView(APIView):
         return Response(serializer.data)
 
 
-class PostalCodeDetailAPI(APIView):
+class PostalCodeDetailAPIView(APIView):
     """
     This will return the details of a postal code whose pk is passed through
     """

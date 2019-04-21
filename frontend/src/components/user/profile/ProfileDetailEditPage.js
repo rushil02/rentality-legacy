@@ -12,7 +12,6 @@ class EditUserProfileComponent extends Component {
         return (
             <HashRouter basename="/">
                 <div className="page-form">
-                    {/* <FormNav/> */}
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-xl-1" />
@@ -33,6 +32,7 @@ class EditUserProfileComponent extends Component {
                                                 billingPostcode={this.props.mainData.billingPostcode}
                                                 billingCountry={this.props.mainData.billingCountry}
                                                 gender={this.props.mainData.gender}
+                                                onClickSave={this.props.onClickSave}
                                             />} />
                                         <Route path="/2" render={() =>
                                             <Suspense

@@ -4,6 +4,7 @@ import TextEdit from 'components/InputComponents/text';
 import DatePicker from 'sharedComponents/Components/DatePicker/DatePicker';
 // import DatePicker from 'react-date-picker';
 import format from "date-fns/format";
+import GenderSelectorComponent from './GenderSelector';
 
 export default class FormPrimaryComponent extends Component {
 
@@ -95,22 +96,15 @@ export default class FormPrimaryComponent extends Component {
                                                     </div>
                                                     <div className="col-md-12">
                                                         <div className="input no-background">
-                                                        <div className="form-control">
-                                                            <DatePicker
-                                                                label='Date of Birth'
-                                                                value={this.props.dob}
-                                                                onChange={this.props.onFieldChange}
-                                                                datakey='dob'
-                                                                extraProps={{maxDate: new Date()}}
-                                                            />
-                                                        </div>
-                                                            {/* <input
-                                                                type="date" name="main-form-last-name" required={true}
-                                                                id="id_main-form-last-name"
-                                                                className="form-control last-name" maxLength="250"
-                                                                placeholder="Date" value={this.props.dob}
-                                                                onChange={(e) => this.props.onFieldChange("dob", e.target.value)}
-                                                            /> */}
+                                                            <div className="form-control">
+                                                                <DatePicker
+                                                                    label='Date of Birth'
+                                                                    value={this.props.dob}
+                                                                    onChange={this.props.onFieldChange}
+                                                                    datakey='dob'
+                                                                    extraProps={{ maxDate: new Date() }}
+                                                                />
+                                                            </div>
                                                         </div>
                                                         {this.props.errors.dob &&
                                                             <div className="invalid-feedback">{this.props.errors.dob}</div>}
@@ -130,18 +124,16 @@ export default class FormPrimaryComponent extends Component {
                                                             >
                                                             </textarea>
                                                         </div>
-
                                                         {this.props.errors.billingStreetAddress &&
                                                             <div className="invalid-feedback">{this.props.errors.billingStreetAddress}</div>}
                                                     </div>
                                                     <PostalCodeAutoSuggest
                                                         error={this.props.errors.billingPostcode || ''}
-                                                        value={this.props.postalCode}
+                                                        objID={this.props.billingPostcode}
                                                         onFieldChange={this.props.onFieldChange}
                                                         datakey="billingPostcode"
                                                         showsuburb={0}
                                                     />
-
                                                     <div className="col-md-12">
                                                         <div className="input no-background">
                                                             {/* {{ form2.billing_country }} */}
@@ -151,14 +143,22 @@ export default class FormPrimaryComponent extends Component {
                                                     </div>
                                                     <div className="col-md-12">
                                                         <div className="select">
-                                                            Gender
-
+                                                            <GenderSelectorComponent
+                                                                onFieldChange={this.props.onFieldChange}
+                                                                value={this.props.gender}
+                                                                formOptions={{
+                                                                    'M': 'Male',
+                                                                    'F': 'Female'
+                                                                }}
+                                                            />
+                                                            {this.props.errors.gender &&
+                                                            <div className="invalid-feedback">{this.props.errors.gender}</div>}
                                                         </div>
                                                         <small className="form-text text-muted">
                                                         </small>
                                                     </div>
                                                     <div className="col-md-12">
-                                                        <p><span>Please Note:</span> We wil not disclose your contact
+                                                        <p className="info-note"><span>Please Note:</span> We wil not disclose your contact
                                         details until the booking is confirmed.</p>
                                                     </div>
                                                 </div>
@@ -173,7 +173,7 @@ export default class FormPrimaryComponent extends Component {
                 <div className="col-md-1"></div>
                 <div className="col-md-12">
                     <div className="button">
-                        <button className="btn btn-link">Save</button>
+                        <button className="btn btn-link" onClick={this.props.onClickSave}>Save</button>
                     </div>
                 </div>
             </React.Fragment>

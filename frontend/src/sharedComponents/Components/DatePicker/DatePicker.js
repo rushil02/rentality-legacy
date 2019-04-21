@@ -7,16 +7,6 @@ export default class DatePickerComponent extends Component {
         super(props);
     }
 
-    // redner() {
-    //     let { label, value, onChange, datakey } = this.props;
-    //     value = new Date(value);
-    //     return (
-    //         <React.Fragment>
-
-    //         </React.Fragment>
-    //     );
-    // }
-
     render() {
         /**
          * extraProps are sent as a parameter. Add Date picker properties in extraProps.

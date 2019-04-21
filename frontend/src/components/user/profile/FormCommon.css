@@ -83,6 +83,13 @@
     min-width: 8em;
 }
 
+#root > .page-form p.info-note {
+    font-size: 15px;
+    font-weight: 400;
+    color: #676767;
+    margin-top: 30px;
+}
+
 #root > .page-form .right .input .address.form-control {
     background-image: url('/static/image/form-1/address.svg');
 }
