@@ -18,7 +18,12 @@ export default class DatePickerComponent extends Component {
     // }
 
     render() {
-        let { label, value, onChange, datakey } = this.props;
+        /**
+         * extraProps are sent as a parameter. Add Date picker properties in extraProps.
+         * Eg. extraProps={{maxDate: new Date()}}
+         */
+        let { label, value, onChange, datakey, maxDate } = this.props;
+        const extraProps = this.props.extraProps;
         value = value? new Date(value): '';
         return (
             <div className="row">
@@ -29,6 +34,7 @@ export default class DatePickerComponent extends Component {
                         className="rt-date-picker"
                         onChange={(value) => onChange(datakey, value)}
                         format='dd-MM-y'
+                        {...extraProps}
                     />
                 </div>
             </div>

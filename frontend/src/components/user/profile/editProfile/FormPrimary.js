@@ -101,6 +101,7 @@ export default class FormPrimaryComponent extends Component {
                                                                 value={this.props.dob}
                                                                 onChange={this.props.onFieldChange}
                                                                 datakey='dob'
+                                                                extraProps={{maxDate: new Date()}}
                                                             />
                                                         </div>
                                                             {/* <input

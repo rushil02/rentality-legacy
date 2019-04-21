@@ -2,16 +2,21 @@
     color: black;
 }
 
+.rt-date-picker .react-calendar__tile--hasActive {
+    background-color: #2A2B32;
+    color: #ededed;
+}
+
 .rt-date-picker .react-calendar button:enabled:hover {
-    background-color: #36ffb1;
+    background-color: #32d8a0;
     color:black;
 }
 
 .rt-date-picker .react-calendar__tile:enabled:hover {
-    /* background-color: #36ffb1; */
+    /* background-color: #32d8a0; */
 }
 
 .rt-date-picker .react-calendar__tile--active {
-    background-color: #3fc692;
-    color: white;
+    background-color: #2A2B32;
+    color: #ededed;
 }
