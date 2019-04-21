@@ -1,0 +1,346 @@
+[
+    {
+        "model": "cities.continent",
+        "pk": 6255146,
+        "fields": {
+            "slug": "Africa",
+            "name": "Africa",
+            "code": "AF",
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.continent",
+        "pk": 6255147,
+        "fields": {
+            "slug": "Asia",
+            "name": "Asia",
+            "code": "AS",
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.continent",
+        "pk": 6255148,
+        "fields": {
+            "slug": "Europe",
+            "name": "Europe",
+            "code": "EU",
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.continent",
+        "pk": 6255149,
+        "fields": {
+            "slug": "North America",
+            "name": "North America",
+            "code": "NA",
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.continent",
+        "pk": 6255150,
+        "fields": {
+            "slug": "South America",
+            "name": "South America",
+            "code": "SA",
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.continent",
+        "pk": 6255151,
+        "fields": {
+            "slug": "Oceania",
+            "name": "Oceania",
+            "code": "OC",
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.continent",
+        "pk": 6255152,
+        "fields": {
+            "slug": "Antarctica",
+            "name": "Antarctica",
+            "code": "AN",
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.alternativename",
+        "pk": 1560361,
+        "fields": {
+            "slug": "1560361-Australia",
+            "name": "Australia",
+            "kind": "name",
+            "language_code": "en",
+            "is_preferred": true,
+            "is_short": true,
+            "is_colloquial": false,
+            "is_historic": false
+        }
+    },
+    {
+        "model": "cities.country",
+        "pk": 2077456,
+        "fields": {
+            "slug": "Australia",
+            "name": "Australia",
+            "code": "AU",
+            "code3": "AUS",
+            "population": 21515754,
+            "area": 7686850,
+            "currency": "AUD",
+            "currency_name": "Dollar",
+            "currency_symbol": "$",
+            "language_codes": "en-AU",
+            "phone": "61",
+            "continent": 6255151,
+            "tld": "au",
+            "postal_code_format": "####",
+            "postal_code_regex": "^(\\d{4})$",
+            "capital": "Canberra",
+            "alt_names": [
+                1560361
+            ],
+            "neighbours": []
+        }
+    },
+    {
+        "model": "cities.country",
+        "pk": 2078138,
+        "fields": {
+            "slug": "Christmas-Island",
+            "name": "Christmas Island",
+            "code": "CX",
+            "code3": "CXR",
+            "population": 1500,
+            "area": 135,
+            "currency": "AUD",
+            "currency_name": "Dollar",
+            "currency_symbol": "$",
+            "language_codes": "en,zh,ms-CC",
+            "phone": "61",
+            "continent": 6255147,
+            "tld": "cx",
+            "postal_code_format": "####",
+            "postal_code_regex": "^(\\d{4})$",
+            "capital": "Flying Fish Cove",
+            "alt_names": [
+            ],
+            "neighbours": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 22,
+        "fields": {
+            "slug": "22-2602",
+            "name": "O'Connor",
+            "code": "2602",
+            "location": "SRID=4326;POINT (149.1125 -35.2564)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 23,
+        "fields": {
+            "slug": "23-2602",
+            "name": "Hackett",
+            "code": "2602",
+            "location": "SRID=4326;POINT (149.1635 -35.2495)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 24,
+        "fields": {
+            "slug": "24-2602",
+            "name": "Dickson",
+            "code": "2602",
+            "location": "SRID=4326;POINT (149.1393 -35.2508)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 25,
+        "fields": {
+            "slug": "25-2602",
+            "name": "Downer",
+            "code": "2602",
+            "location": "SRID=4326;POINT (149.1447 -35.2446)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 26,
+        "fields": {
+            "slug": "26-2602",
+            "name": "Lyneham",
+            "code": "2602",
+            "location": "SRID=4326;POINT (149.1307 -35.2398)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 27,
+        "fields": {
+            "slug": "27-2602",
+            "name": "Ainslie",
+            "code": "2602",
+            "location": "SRID=4326;POINT (149.1437 -35.2625)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 28,
+        "fields": {
+            "slug": "28-2602",
+            "name": "Watson",
+            "code": "2602",
+            "location": "SRID=4326;POINT (149.1527 -35.2381)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 18,
+        "fields": {
+            "slug": "18-2601",
+            "name": "Acton",
+            "code": "2601",
+            "location": "SRID=4326;POINT (149.1183 -35.2777)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 19,
+        "fields": {
+            "slug": "19-2601",
+            "name": "City",
+            "code": "2601",
+            "location": "SRID=4326;POINT (149.1293 -35.2813)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 20,
+        "fields": {
+            "slug": "20-2601",
+            "name": "Canberra",
+            "code": "2601",
+            "location": "SRID=4326;POINT (149.1281 -35.2835)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    },
+    {
+        "model": "cities.postalcode",
+        "pk": 21,
+        "fields": {
+            "slug": "21-2601",
+            "name": "Black Mountain",
+            "code": "2601",
+            "location": "SRID=4326;POINT (149.1054 -35.2772)",
+            "country": 2077456,
+            "region_name": "Australian Capital Territory",
+            "subregion_name": "CANBERRA",
+            "district_name": "",
+            "region": null,
+            "subregion": null,
+            "city": null,
+            "district": null,
+            "alt_names": []
+        }
+    }
+]
