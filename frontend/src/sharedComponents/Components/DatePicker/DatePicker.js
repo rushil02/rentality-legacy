@@ -22,18 +22,20 @@ export default class DatePickerComponent extends Component {
          * extraProps are sent as a parameter. Add Date picker properties in extraProps.
          * Eg. extraProps={{maxDate: new Date()}}
          */
-        let { label, value, onChange, datakey, maxDate } = this.props;
+        let { label, value, onChange, datakey } = this.props;
         const extraProps = this.props.extraProps;
-        value = value? new Date(value): '';
+        value = value ? new Date(value) : '';
+        let datePicker;
         return (
-            <div className="row">
-                {Boolean(label) && <div className="col-md-4">{label}</div>}
+            <div className="row" onClick={(e) => { e.preventDefault(); datePicker.toggleCalendar(); }}>
+                {Boolean(label) && <div className="col-md-4" ><label>{label}</label></div>}
                 <div className={`${label ? 'col-md-8' : 'col-md-12'} text-right`}>
                     <DatePicker
                         value={value}
                         className="rt-date-picker"
                         onChange={(value) => onChange(datakey, value)}
                         format='dd-MM-y'
+                        ref={(input) => { datePicker = input; }}
                         {...extraProps}
                     />
                 </div>

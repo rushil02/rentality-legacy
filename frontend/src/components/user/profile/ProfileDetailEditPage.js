@@ -3,8 +3,6 @@ import { HashRouter, Route, Switch } from 'react-router-dom'
 import FormSubNav from "./nav/FormSubNav";
 import './FormCommon.css'
 import SpinnerComponent from "components/common/LoadingSpinner";
-
-const FormRentAvailabilityComponent = React.lazy(() => import("./../../house/createEdit/formRentAvailability/FormRentAvailability"));
 import FormPrimaryComponent from './editProfile/FormPrimary';
 
 
@@ -39,19 +37,7 @@ class EditUserProfileComponent extends Component {
                                         <Route path="/2" render={() =>
                                             <Suspense
                                                 fallback={<SpinnerComponent height={"400px"} />}>
-                                                <FormRentAvailabilityComponent
-                                                    houseUUID={this.props.houseUUID}
-                                                    formOptions={this.props.formOptions}
-                                                    businessConstraints={this.props.businessConstraints}
-                                                    onFieldChange={this.props.onFieldChange}
-                                                    errors={this.props.errors}
-                                                    rent={this.props.mainData.rent}
-                                                    minStay={this.props.mainData.minStay}
-                                                    maxStay={this.props.mainData.maxStay}
-                                                    maxPeopleAllowed={this.props.mainData.maxPeopleAllowed}
-                                                    availabilities={this.props.availabilityData}
-                                                    saveAvailabilityChange={this.props.saveAvailabilityChange}
-                                                />
+
                                             </Suspense>
                                         } />
                                     </Switch>
