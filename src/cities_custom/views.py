@@ -22,3 +22,18 @@ class PostalCodeVerboseOnlyAPIView(APIView):
         serializer = PostalCodeVerboseOnlySerializer(qs, many=True)
         return Response(serializer.data)
 
+
+class PostalCodeDetailAPI(APIView):
+    """
+    This will return the details of a postal code whose pk is passed through
+    """
+
+    def get(self, request, pk):
+        try:
+            postal_code = PostalCodeCustom.objects.get(id=pk)
+            return Response(PostalCodeVerboseOnlySerializer(postal_code).data)
+        except PostalCodeCustom.DoesNotExist:
+            error = {
+                'postal_code': 'Postal code does not exist'
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
