@@ -28,7 +28,8 @@ class HouseView(APIView):
     Unlist
 
     Put Activity Log
-    
+
+    Add welcome tags, nei-fac, rule for house API
     """
     permission_classes = (IsAuthenticated, IsOwnerOfHouse)
     serializer_class = HouseAuthSerializer
@@ -147,6 +148,9 @@ class PromoCodeView(APIView):
     """
     Removes/Adds promo-code in reference to a house.
     Edit Business-config and Re-validate house (if required)
+
+    Can Multiple promo codes have multiple business model confs?
+    If no then add logic of single promo code can be applied of that type.
     """
     ...    
 
@@ -158,7 +162,8 @@ class FormOptionsView(APIView):
 
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
+        #FIXME add cancellation policy
         data = {
             'field_options': {
                 'furnished': {item[0]: item[1] for item in House.FURNISHED_OPTIONS},
