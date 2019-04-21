@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PostalCodeAutoSuggest from "sharedComponents/Containers/PostalCodeAutoSuggest/PostalCodeAutoSuggest";
-import HomeTypeSelectorComponent from './HomeTypeSelector';
-import FurnishedSelectorComponent from "./FurnishedSelector";
 import TextEdit from 'components/InputComponents/text';
-import DatePicker from 'react-date-picker'
+import DatePicker from 'sharedComponents/Components/DatePicker/DatePicker';
+// import DatePicker from 'react-date-picker';
 import format from "date-fns/format";
 
 export default class FormPrimaryComponent extends Component {
@@ -96,13 +95,14 @@ export default class FormPrimaryComponent extends Component {
                                                     </div>
                                                     <div className="col-md-12">
                                                         <div className="input no-background">
-                                                            <label>Date of Birth</label>
-                                                            <div>
-                                                                <DatePicker
-                                                                    value={this.props.dob}
-                                                                    onChange={(value) => this.props.onFieldChange('dob', value)}
-                                                                />
-                                                            </div>
+                                                        <div className="form-control">
+                                                            <DatePicker
+                                                                label='Date of Birth'
+                                                                value={this.props.dob}
+                                                                onChange={this.props.onFieldChange}
+                                                                datakey='dob'
+                                                            />
+                                                        </div>
                                                             {/* <input
                                                                 type="date" name="main-form-last-name" required={true}
                                                                 id="id_main-form-last-name"

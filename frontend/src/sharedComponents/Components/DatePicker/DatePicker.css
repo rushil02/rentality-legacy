@@ -1,0 +1,17 @@
+.rt-date-picker .react-calendar__month-view__days__day--weekend {
+    color: black;
+}
+
+.rt-date-picker .react-calendar button:enabled:hover {
+    background-color: #36ffb1;
+    color:black;
+}
+
+.rt-date-picker .react-calendar__tile:enabled:hover {
+    /* background-color: #36ffb1; */
+}
+
+.rt-date-picker .react-calendar__tile--active {
+    background-color: #3fc692;
+    color: white;
+}
