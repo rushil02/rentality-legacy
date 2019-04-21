@@ -27,8 +27,10 @@ export default class DatePickerComponent extends Component {
         value = value ? new Date(value) : '';
         let datePicker;
         return (
-            <div className="row" onClick={(e) => { e.preventDefault(); datePicker.toggleCalendar(); }}>
-                {Boolean(label) && <div className="col-md-4" ><label>{label}</label></div>}
+            <div className="row">
+                {Boolean(label) && <div className="col-md-4" onClick={(e) => { e.preventDefault(); datePicker.toggleCalendar(); }} >
+                    <label>{label}</label>
+                </div>}
                 <div className={`${label ? 'col-md-8' : 'col-md-12'} text-right`}>
                     <DatePicker
                         value={value}

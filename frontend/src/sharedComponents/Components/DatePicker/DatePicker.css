@@ -7,13 +7,15 @@
     color: #ededed;
 }
 
-.rt-date-picker .react-calendar button:enabled:hover {
+.rt-date-picker .react-calendar button:enabled:hover ,
+.rt-date-picker .react-calendar button:enabled:focus
+ {
     background-color: #32d8a0;
     color:black;
 }
 
-.rt-date-picker .react-calendar__tile:enabled:hover {
-    /* background-color: #32d8a0; */
+.rt-date-picker .react-calendar__tile:enabled:focus {
+    background-color: #32d8a0;
 }
 
 .rt-date-picker .react-calendar__tile--active {
