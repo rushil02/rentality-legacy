@@ -1261,3 +1261,11 @@ body {
 #root.loading #wait-for-ajax {
     display: block;
 }
+/* This will ensure that when the verbose postcode
+location is shown in a small screen, the name is not cut */
+
+#root .col-sm-12 #location-verbose,
+#root .col-md-12 #location-verbose {
+    min-height: calc(2.25rem + 15px);
+    height: 100%;
+}

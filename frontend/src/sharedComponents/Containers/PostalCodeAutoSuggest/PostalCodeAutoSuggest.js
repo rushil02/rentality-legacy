@@ -15,13 +15,45 @@ export default class PostalCodeAutoSuggest extends Component {
         this.state = {
             value: '',
             verbose: defaultVerboseDisplay,
-            objID: '',
+            objID: this.props.objID || '',
             suggestions: [],
             error: this.props.error,
-            showsuburb: this.props.showsuburb
+            fullWidth: this.props.fullWidth
         };
 
         this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 500, {trailing: true});
+    }
+
+    getVerbose = (code) => {
+        this.setState({
+            value: code
+        });
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        /**
+         * This will update the state of the component when new porps are passed from the parent
+         */
+         return {'objID': props.objID}
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.objID !== this.state.objID) {
+            axios.get(reverse(routes.cities.postalCodeDetails, {objID: this.state.objID}), {})
+                .then(result => {
+                    this.setState({
+                        verbose: result.data.name_full,
+                        value: result.data.code,
+                        objID: result.data.id,
+                        error: ""
+                    });
+                })
+                .catch(
+                    error => {
+                        return alertUser.init({ stockAlertType: "connectionError" });
+                    }
+                );
+        }
     }
 
     onChange = (event, {newValue}) => {
@@ -79,7 +111,7 @@ export default class PostalCodeAutoSuggest extends Component {
                 onSuggestionSelected={this.onSuggestionSelected}
                 verbose={this.state.verbose}
                 error={this.state.error}
-                showsuburb={this.state.showsuburb}
+                fullWidth={this.state.fullWidth}
             />
         );
     }

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
 import './PostalCodeAutoSuggest.css';
 
@@ -22,14 +22,13 @@ export default class PostalCodeAutoSuggestComponent extends Component {
             placeholder: this.props.placeholder || "Postal Code",
             value: this.props.value,
             onChange: this.props.onChange,
-            type: 'number',
-            showsuburb: this.props.showsuburb
+            type: 'number'
         };
 
         return (
             <React.Fragment>
 
-                <div className={this.props.showsuburb? "col-md-3 col-sm-12" : "col-md-12"}>
+                <div className={this.props.fullWidth ? "col-md-12" : "col-md-3 col-sm-12"}>
                     <Autosuggest
                         id="location"
                         suggestions={this.props.suggestions}
@@ -41,19 +40,18 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                         inputProps={inputProps}
                     />
                 </div>
-                {this.props.showsuburb == 1 &&
-                <div className="col-md-9 col-sm-12">
+                <div className={this.props.fullWidth ? "col-md-12" : "col-md-9 col-sm-12"}>
                     <div className="input">
                         <div id="location-verbose" className="form-control no-background">
                             {this.props.verbose}
                         </div>
                     </div>
-                </div>}
+                </div>
                 <div className="col-12">
                     <small className="form-text text-muted">
                     </small>
                     {this.props.error &&
-                    <div className="invalid-feedback">{this.props.error}</div>
+                        <div className="invalid-feedback">{this.props.error}</div>
                     }
                 </div>
             </React.Fragment>

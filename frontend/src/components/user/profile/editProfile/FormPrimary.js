@@ -132,7 +132,7 @@ export default class FormPrimaryComponent extends Component {
                                                         objID={this.props.billingPostcode}
                                                         onFieldChange={this.props.onFieldChange}
                                                         datakey="billingPostcode"
-                                                        showsuburb={0}
+                                                        fullWidth={1}
                                                     />
                                                     <div className="col-md-12">
                                                         <div className="input no-background">
