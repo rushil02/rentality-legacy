@@ -8,7 +8,7 @@ from cities.models import PostalCode
 class PostalCodeField(serializers.RelatedField):
     def to_representation(self, value):
         if value:
-            return value.code
+            return value.id
         else:
             return None
     
@@ -26,9 +26,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     def validate_billing_postcode(self, value):
         try:
-            postal_code = PostalCode.objects.filter(code=value)[0]
+            postal_code = PostalCode.objects.get(id=value)
             return postal_code
-        except IndexError:
+        except PostalCode.DoesNotExist:
             raise serializers.ValidationError("Postal Code does not exist.")
     
     def update(self, instance, validated_data):
