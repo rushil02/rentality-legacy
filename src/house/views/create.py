@@ -147,42 +147,6 @@ def create(request):
         return render(request, 'property/create_edit/create.html', {'main_form': main_form})
 
 
-class FacilityView(APIView):
-    permission_classes = (IsAuthenticated,)
-    serializer = FacilitySerializer
-
-    def get(self, request, house_uuid, *args, **kwargs):
-        try:
-            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
-        except House.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            qs = list(Facility.objects.filter(
-                Q(system_default=True) | Q(house=house)
-            ).distinct().values('verbose', 'id').annotate(
-                checked=Exists(Facility.objects.filter(house=house, pk=OuterRef('pk')))))
-            serializer = self.serializer(data=qs, many=True)
-            if serializer.is_valid():
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def post(self, request, house_uuid, *args, **kwargs):
-        try:
-            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
-        except House.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            serializer = self.serializer(data=request.data, many=True)
-            if serializer.is_valid():
-                objs_set = serializer.save()
-                house.facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
-                house.facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False])
-                return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class NearbyFacilitiesView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer = NearbyFacilitySerializer

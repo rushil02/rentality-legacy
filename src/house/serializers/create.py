@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from house.models import House, Availability, Image
+from house.models import House, Availability, Image, Facility
 from utils.serializer_fields import DateRangeField
 
 
@@ -36,3 +36,38 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['image', 'is_thumbnail']
+
+
+class FacilitySerializer(serializers.Serializer):
+    verbose = serializers.CharField()
+    id = serializers.IntegerField(required=False)
+    checked = serializers.BooleanField()
+
+    def validate(self, data):
+        if data.get('id', None) is not None:
+            try:
+                self.facility = Facility.objects.get(id=data['id'], verbose=data['verbose'])
+            except Facility.DoesNotExist:
+                raise serializers.ValidationError("No Facility with id and verbose.")
+        else:
+            self.facility = None
+        return data
+
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Facility` instance, given the validated data.
+        """
+        if not self.facility:
+            if validated_data["checked"] is False:
+                try:
+                    obj = Facility.objects.get(verbose=validated_data['verbose'])
+                except Facility.DoesNotExist:
+                    return None, False
+            else:
+                obj, created = Facility.objects.get_or_create(verbose=validated_data['verbose'])
+
+        else:
+            obj = self.facility
+
+        return obj, validated_data["checked"]

@@ -1,10 +1,9 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.contrib.auth import get_user_model
-from house.views.api.create import FormOptionsView, HouseView
-from house.models import House, HomeType
+from house.views.api.create import FormOptionsView, HouseView, FacilityView
+from house.models import House, HomeType, Facility
 
 from rest_framework.test import APIRequestFactory, force_authenticate
-
 import pprint
 
 class DefaultTestData:
@@ -136,3 +135,118 @@ class CreateHouseTest(TestCase):
         force_authenticate(get_request, user=self.user)
         response = HouseView.as_view()(get_request, house_uuid=uuid)
         self.assertEqual(response.data['title'], "Testing")
+
+
+class FacilityTestCase(TestCase):
+    fixtures = ['tests/fixtures/test_cities.json',]
+
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.user = DefaultTestData.create_test_user()
+        DefaultTestData.create_test_house_data()
+        Facility.objects.create(id=1, verbose='A', system_default=True)
+        Facility.objects.create(verbose='B', system_default=True)
+        Facility.objects.create(verbose='C', system_default=False)
+    
+    def create_house(self):
+        data = {
+            "title": "Test House",
+            "location": 22    
+        }
+        request = self.factory.post('', data)
+        force_authenticate(request, user=self.user)
+        response = HouseView.as_view()(request)
+        self.uuid = response.data['uuid']
+   
+    def test_facility_get(self):
+        self.create_house()
+        get_request = self.factory.get('')
+        force_authenticate(get_request, user=self.user)
+        response = FacilityView.as_view()(get_request, house_uuid=self.uuid)
+        self.assertEqual(len(response.data), 2)
+    
+    def test_add_facilities(self):
+        self.create_house()
+        data = [
+            {
+                "verbose": "E",
+                "checked": True    
+            },
+        ]
+        post_request = self.factory.post('', data, format='json')
+        force_authenticate(post_request, user=self.user)
+        response = FacilityView.as_view()(post_request, house_uuid=self.uuid)
+        self.assertEqual(response.status_code, 201)
+        house = House.objects.get(uuid=self.uuid)
+        self.assertEqual(house.facilities.all().count(), 1)
+        self.assertEqual(Facility.objects.all().count(), 4)
+
+        data = [
+            {
+                "verbose": "F",
+                "checked": False    
+            },
+        ]
+        post_request = self.factory.post('', data, format='json')
+        force_authenticate(post_request, user=self.user)
+        response = FacilityView.as_view()(post_request, house_uuid=self.uuid)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(house.facilities.all().count(), 1)
+        self.assertEqual(Facility.objects.all().count(), 4)
+
+        data = [
+            {
+                "verbose": "E",
+                "checked": False    
+            },
+        ]
+        post_request = self.factory.post('', data, format='json')
+        force_authenticate(post_request, user=self.user)
+        response = FacilityView.as_view()(post_request, house_uuid=self.uuid)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(house.facilities.all().count(), 0)
+        self.assertEqual(Facility.objects.all().count(), 4)
+
+        data = [
+            {
+                "verbose": "A",
+                "id": 1,
+                "checked": False    
+            },
+        ]
+        post_request = self.factory.post('', data, format='json')
+        force_authenticate(post_request, user=self.user)
+        response = FacilityView.as_view()(post_request, house_uuid=self.uuid)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(house.facilities.all().count(), 0)
+        self.assertEqual(Facility.objects.all().count(), 4)
+
+        data = [
+            {
+                "verbose": "A",
+                "id": 1,
+                "checked": True    
+            },
+            {
+                "verbose": "F",
+                "checked": True    
+            },
+        ]
+        post_request = self.factory.post('', data, format='json')
+        force_authenticate(post_request, user=self.user)
+        response = FacilityView.as_view()(post_request, house_uuid=self.uuid)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(house.facilities.all().count(), 2)
+        self.assertEqual(Facility.objects.all().count(), 5)
+
+        data = [
+            {
+                "verbose": "A",
+                "id": 10,
+                "checked": True    
+            }
+        ]
+        post_request = self.factory.post('', data, format='json')
+        force_authenticate(post_request, user=self.user)
+        response = FacilityView.as_view()(post_request, house_uuid=self.uuid)
+        self.assertEqual(response.status_code, 400)
