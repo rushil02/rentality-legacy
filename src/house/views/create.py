@@ -147,24 +147,6 @@ def create(request):
         return render(request, 'property/create_edit/create.html', {'main_form': main_form})
 
 
-class ImageUploadView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request, house_uuid, *args, **kwargs):
-        try:
-            house = House.objects.objects_from_owner(user=request.user).get(uuid=house_uuid)
-        except House.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            file_serializer = ImageSerializer(data=request.data)
-            if file_serializer.is_valid():
-                file_serializer.save(house=house)
-                return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class FacilityView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer = FacilitySerializer

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from house.models import House, Availability
+from house.models import House, Availability, Image
 from utils.serializer_fields import DateRangeField
 
 
@@ -30,3 +30,9 @@ class HouseAuthSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'id', 'uuid', 'created_on', 'updated_on', 'status', 'promo_codes'
         )
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['image', 'is_thumbnail']

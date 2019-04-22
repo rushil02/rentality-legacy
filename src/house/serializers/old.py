@@ -19,12 +19,6 @@ class HouseSerializer(serializers.ModelSerializer):
         return obj.get_thumbnail_2()
 
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ['image', 'is_thumbnail']
-
-
 class FacilitySerializer(serializers.Serializer):
     verbose = serializers.CharField()
     id = serializers.IntegerField(required=False)

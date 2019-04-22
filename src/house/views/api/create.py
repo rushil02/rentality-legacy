@@ -3,13 +3,14 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from business_core.models import BusinessModelConfiguration
 from business_core.utils import House as HouseHandler, BusinessModel
 from house.helpers import get_available_dates
 from house.models import Availability, House, HomeType, Facility
 from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
-from house.serializers import HouseAuthSerializer, AvailabilityAuthSerializer
+from house.serializers import HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer
 
 
 class HouseView(APIView):
@@ -177,3 +178,25 @@ class FormOptionsView(APIView):
             'required_fields': House.REQUIRED_FIELDS,
         }
         return Response(data, status=status.HTTP_200_OK)
+
+
+class ImageUploadView(APIView):
+    """
+    Upload a Image for a house.
+    """
+
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
+    serializer_class = ImageSerializer
+
+    def get_object(self):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid)
+
+    def post(self, request, house_uuid):
+        house = self.get_object()
+        file_serializer = self.serializer_class(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save(house=house)
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
