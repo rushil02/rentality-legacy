@@ -79,6 +79,16 @@ class ActivityLog(models.Model):
     )
     level = models.CharField(max_length=1, choices=CHOICES)
 
+    # OPERATION_TYPE = (
+    #     ('C', 'Create'),
+    #     ('R', 'Read'),
+    #     ('U', 'Update'),
+    #     ('D', 'Delete'),
+    # )
+    # operation_type = models.CharField(max_length=1, choices=OPERATION_TYPE)
+
+    # action = models.CharField(max_length=128)
+
     meta_info = JSONField(null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True)
 
