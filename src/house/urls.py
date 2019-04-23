@@ -35,6 +35,7 @@ urlpatterns = [
 
     # React Entry-points
     path('create/', create_react, name='create_react'),
+    path('samplePage/', create_react, name='create_react'),
     path('edit/<uuid:house_uuid>', create_react, name='create_react_edit'),
 
     # APIs

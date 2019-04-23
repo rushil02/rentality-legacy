@@ -22,7 +22,8 @@ export default {
             applySummary: 'apply/summary/:houseUUID',
             houseCreate: 'property/create/',
             houseEdit: 'property/edit/:houseUUID',
-            userProfile: 'profile/'
+            samplePage: 'property/samplePage',
+            userProfile: 'profile/',
         }
     ),
 
