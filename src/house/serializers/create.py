@@ -38,19 +38,24 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ['image', 'is_thumbnail']
 
 
-class FacilitySerializer(serializers.Serializer):
+class HouseRelatedObjectSerializer(serializers.Serializer):
     verbose = serializers.CharField()
     id = serializers.IntegerField(required=False)
     checked = serializers.BooleanField()
 
+    def __init__(self, *args, **kwargs):
+        model_class = kwargs.pop('model_class')
+        super().__init__(*args, **kwargs)
+        self.model_class = model_class
+
     def validate(self, data):
         if data.get('id', None) is not None:
             try:
-                self.facility = Facility.objects.get(id=data['id'], verbose=data['verbose'])
-            except Facility.DoesNotExist:
-                raise serializers.ValidationError("No Facility with id and verbose.")
+                self.model_object = self.model_class.objects.get(id=data['id'], verbose=data['verbose'])
+            except self.model_class.DoesNotExist:
+                raise serializers.ValidationError("No object with id and verbose.")
         else:
-            self.facility = None
+            self.model_object = None
         return data
 
 
@@ -58,16 +63,16 @@ class FacilitySerializer(serializers.Serializer):
         """
         Create and return a new `Facility` instance, given the validated data.
         """
-        if not self.facility:
+        if not self.model_object:
             if validated_data["checked"] is False:
                 try:
-                    obj = Facility.objects.get(verbose=validated_data['verbose'])
-                except Facility.DoesNotExist:
+                    obj = self.model_class.objects.get(verbose=validated_data['verbose'])
+                except self.model_class.DoesNotExist:
                     return None, False
             else:
-                obj, created = Facility.objects.get_or_create(verbose=validated_data['verbose'])
+                obj, created = self.model_class.objects.get_or_create(verbose=validated_data['verbose'])
 
         else:
-            obj = self.facility
+            obj = self.model_object
 
         return obj, validated_data["checked"]
