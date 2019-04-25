@@ -40,6 +40,12 @@ export default class FacilitesSelectorHandler extends Component {
         return null
     }
 
+    componentDidMount() {
+        if (this.props.houseUUID) {
+            this.loadInitdata(this.props.houseUUID);
+        }
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.houseUUID !== prevProps.houseUUID) {
             this.loadInitdata(this.props.houseUUID);
