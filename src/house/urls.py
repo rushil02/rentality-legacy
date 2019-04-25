@@ -2,7 +2,7 @@ from django.urls import path
 
 from house.serializers import HouseDetailsPublicSerializer
 from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
-    FacilityView
+    FacilityListView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, NearbyFacilitiesView, \
@@ -50,6 +50,6 @@ urlpatterns = [
     path('availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
     path('availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(),
         name='availability_delete_api'),
-    path('images/<uuid:house_uuid>/', ImageUploadView.as_view(), name='add_house_images'),
-    path('facilities/<uuid:house_uuid>/', FacilityView.as_view(), name='facility'),
+    path('images/<uuid:house_uuid>', ImageUploadView.as_view(), name='add_house_images'),
+    path('facilities/<uuid:house_uuid>', FacilityListView.as_view(), name='facility'),
 ]

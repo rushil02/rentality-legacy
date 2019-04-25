@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from "axios";
-import {reverse} from "named-urls";
+import { reverse } from "named-urls";
 import routes from "../../routes";
 import CreatePageComponent from "components/house/createEdit/CreatePage"
 import EditPageComponent from "components/house/createEdit/EditPage"
 
-import {alertUser} from "../common/Alert";
+import { alertUser } from "../common/Alert";
 import format from "date-fns";
 
 
@@ -32,6 +32,9 @@ function initMainData(houseObj) {
         minStay: houseObj.min_stay || 28,
         maxStay: houseObj.max_stay || 0,
         maxPeopleAllowed: houseObj.max_people_allowed || 2,
+
+        // Form 3
+        addNewFacility: houseObj.addNewFacility || "",
     };
 }
 
@@ -53,7 +56,7 @@ function reverseInitMainData(jsObj) {
         rent: jsObj.rent || "",
         min_stay: jsObj.minStay,
         max_stay: jsObj.maxStay,
-        max_people_allowed : jsObj.maxPeopleAllowed,
+        max_people_allowed: jsObj.maxPeopleAllowed,
     };
 }
 
@@ -65,9 +68,12 @@ class CreatePage extends Component {
             formOptions: {},
             mainData: initMainData({}),
             availabilityData: {},
+            facilitiesData: [],
             errors: {}
         };
         this._houseUUID = "";
+        this.syncFacilitiesData = this.syncFacilitiesData.bind(this);
+        this.saveFacilitiesChange = this.saveFacilitiesChange.bind(this);
     }
 
     componentDidMount = () => {
@@ -76,7 +82,7 @@ class CreatePage extends Component {
             this._houseUUID = this.props.match.params.houseUUID;
 
             // Fetch house details
-            axios.get(reverse(routes.house.detail, {houseUUID: this._houseUUID}), {})
+            axios.get(reverse(routes.house.detail, { houseUUID: this._houseUUID }), {})
                 .then(result => {
                     console.log("here", result);
                     this.setState(prevState => (
@@ -85,10 +91,10 @@ class CreatePage extends Component {
                             mainData: initMainData(result.data)
                         })
                     )
-                }).catch(error => alertUser.init({stockAlertType: 'generic'}));
+                }).catch(error => alertUser.init({ stockAlertType: 'generic' }));
 
             // Fetch Availability details
-            axios.get(reverse(routes.house.availability.list, {houseUUID: this._houseUUID}), {})
+            axios.get(reverse(routes.house.availability.list, { houseUUID: this._houseUUID }), {})
                 .then(result => {
                     this.setState(prevState => (
                         {
@@ -99,7 +105,7 @@ class CreatePage extends Component {
                             }, {})
                         })
                     );
-                }).catch(error => alertUser.init({stockAlertType: 'generic'}));
+                }).catch(error => alertUser.init({ stockAlertType: 'generic' }));
 
         }
 
@@ -131,6 +137,32 @@ class CreatePage extends Component {
             })
         );
     };
+
+    saveFacilitiesChange(data) {
+        this.setState({
+            facilitiesData: data
+        });
+    };
+
+    /**
+     * TODO: Use me or remove me.
+     * Tested by adding following in the render
+     * <button type="button" onClick={this.syncFacilitiesData}>Save facilities</button>
+     */
+    syncFacilitiesData(event, onComplete=() => {}) {
+        axios.post(reverse(routes.house.facilities, {
+            houseUUID: this._houseUUID,
+        }), this.state.facilitiesData).then(result => {
+            console.log("data is set", result);
+            this.setState({
+                facilitiesData: result.data
+            });
+            alertUser.init({ stockAlertType: 'save-success' })
+            onComplete();
+        }).catch(error => {
+            alertUser.init({ stockAlertType: 'unknownError' })
+        });
+    }
 
     getFormOptions = (key) => {
         let formOptions = {};
@@ -173,6 +205,8 @@ class CreatePage extends Component {
                         onFieldChange={this.onMainDataFieldChange}
                         saveAvailabilityChange={this.saveAvailabilityChange}
                         availabilityData={this.state.availabilityData}
+                        saveFacilitiesChange={this.saveFacilitiesChange}
+                        facilitiesData={this.state.facilitiesData}
                         onClickSave={this.onSave}
                     />
                 </React.Fragment>

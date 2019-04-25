@@ -207,7 +207,7 @@ class ImageUploadView(APIView):
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class FacilityView(APIView):
+class FacilityListView(APIView):
     permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
     serializer = FacilitySerializer
 

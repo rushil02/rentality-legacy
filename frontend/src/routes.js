@@ -49,6 +49,7 @@ export default {
             update: ':houseUUID/:objID',
             remove: ':houseUUID/:objID',
         }),
+        facilities: 'facilities/:houseUUID',
     }),
     user: include('/', {
         info: 'cu-info',
