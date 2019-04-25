@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import {reverse} from 'named-urls';
 
 import routes from "../routes";
 import UserProfilePage from "containers/user/profile"

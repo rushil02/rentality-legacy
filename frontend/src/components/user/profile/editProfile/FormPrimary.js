@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PostalCodeAutoSuggest from "sharedComponents/Containers/PostalCodeAutoSuggest/PostalCodeAutoSuggest";
-import TextEdit from 'components/InputComponents/text';
 import DatePicker from 'sharedComponents/Components/DatePicker/DatePicker';
-// import DatePicker from 'react-date-picker';
-import format from "date-fns/format";
 import GenderSelectorComponent from './GenderSelector';
 
 export default class FormPrimaryComponent extends Component {

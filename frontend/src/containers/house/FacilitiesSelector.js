@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import FacilitiesSelectorComponent from "components/house/createEdit/formFacilities/FacilitiesSelector";
-import { differenceInDays } from 'date-fns';
 import axios from "utils/ServiceHelper"
 import { reverse } from "named-urls";
 import routes from "../../routes";
 import { alertUser } from "../common/Alert";
-import { omit } from 'lodash';
-import format from "date-fns/format";
-import { th } from 'date-fns/esm/locale';
 
 
 export default class FacilitesSelectorHandler extends Component {
