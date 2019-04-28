@@ -18,13 +18,3 @@ class NetAvailableDatesView(APIView):
         result = get_available_dates(house, from_year=from_year, till_year=till_year)
         serializer = self.serializer_class(result, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class RulesView(APIView):
-    permission_classes = (IsAuthenticated, )
-    serializer_class = RuleSerializer
-
-    def get(self, request):
-        rules = Rule.objects.all()
-        serializer = self.serializer_class(rules, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)

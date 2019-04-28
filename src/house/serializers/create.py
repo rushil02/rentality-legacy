@@ -1,8 +1,8 @@
 from rest_framework import serializers
-
-from house.models import House, Availability, Image, Facility
 from utils.serializer_fields import DateRangeField
+from utils.serializers import UpdateListSerializer
 
+from house.models import House, Availability, Image, Facility, HouseRule, Rule
 
 class AvailabilityAuthSerializer(serializers.ModelSerializer):
     date_range = DateRangeField(source='dates')
@@ -76,3 +76,20 @@ class HouseRelatedObjectSerializer(serializers.Serializer):
             obj = self.model_object
 
         return obj, validated_data["checked"]
+
+
+class RuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rule
+        fields = ('id', 'verbose', 'options')
+
+
+class HouseRuleSerializer(serializers.ModelSerializer):
+    rule = RuleSerializer(required=False)
+    id = serializers.IntegerField(required=True)
+
+    class Meta:
+        model = HouseRule
+        fields = ('rule', 'value', 'comment', 'id')
+        read_only_fields = ('rule',)
+        list_serializer_class = UpdateListSerializer

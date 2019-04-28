@@ -2,14 +2,14 @@ from django.urls import path
 
 from house.serializers import HouseDetailsPublicSerializer
 from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
-    HouseRelatedObjectView
+    HouseRelatedObjectView, HouseRulesView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, \
     home_owner_account_details, apply_temp, remove_from_public, delete, HouseDetailPublicView, \
     ImagesPublicView, ThumbnailPublicView
 
-from house.views.api import NetAvailableDatesView, create_react, RulesView
+from house.views.api import NetAvailableDatesView, create_react
 
 app_name = 'house'
 
@@ -51,5 +51,5 @@ urlpatterns = [
     path('facilities/<uuid:house_uuid>/', HouseRelatedObjectView.as_view(), {"model": "facility"}, name='facility'),
     path('nearby_facilities/<uuid:house_uuid>/', HouseRelatedObjectView.as_view(), {"model": "nearby_facility"}, name='nearby_facility'),
     path('welcome_tags/<uuid:house_uuid>/', HouseRelatedObjectView.as_view(), {"model": "welcome_tags"}, name='welcome_tags'),
-    path('rules', RulesView.as_view(), name='rules'),
+    path('rules/<uuid:house_uuid>', HouseRulesView.as_view(), name='rules'),
 ]
