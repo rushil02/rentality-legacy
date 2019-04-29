@@ -37,10 +37,12 @@ Checklists to create each view functionality -
 * Input Validations
 * Object/Queryset Fetch logic
 * Check if User has Object level Permissions
-  - When using DRF you can use permission_classes to set/define custom permissions. **IMPORTANT:** Bes sure to call 
+  - When using DRF you can use permission_classes to set/define custom permissions. **IMPORTANT:** Be sure to call 
   `self.check_object_permissions(request, object)` in the view method.
 * Check if Business logic / Functionality is applicable to fetched Object 
 * Apply Business Logic / Functionality
+  - Remember to use `transaction.atomic()` for all atomic processes, example - Creating Activity Logs with associated 
+  objects
 * Return appropriate Response
 
 ##### CheckList B

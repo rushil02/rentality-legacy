@@ -1,0 +1,82 @@
+.btn-circle.btn-xl {
+    width: 40px;
+    height: 40px;
+    padding: 6px 0px;
+    border-radius: 35px;
+    font-size: 18px;
+    line-height: 1.33;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+    background-color: transparent;
+    color: #39ffaf;
+    border-color: transparent;
+    margin-left: 20px;
+}
+
+.btn-circle.active {
+    box-shadow: 0 0 0 0.2rem rgba(57, 255, 175, .5)
+}
+
+.btn-circle:hover {
+    background-color: #39ffaf;
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.btn-circle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(57, 255, 175, .5)
+}
+
+.btn-circle.cancel-custom{
+    color: #dc3545;
+    font-size: 20px;
+}
+
+.btn-circle.cancel-custom:hover{
+    background-color: #dc3545;
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.btn-circle.cancel-custom:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5)
+}
+
+
+.card-button-group-custom {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.card-text-content-custom {
+    flex-grow: 1;
+    align-items: center;
+    flex-basis: 40%;
+}
+
+.card-body {
+    display: flex;
+    align-items: center;
+}
+
+.availability-selector-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.invalid-feedback {
+    flex-grow: 1;
+    align-items: center;
+    flex-basis: 20%;
+}

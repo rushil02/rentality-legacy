@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "../node_modules/.bin/webpack --mode development --watch --config webpack.config.js",
+    "dev": "../node_modules/.bin/webpack --mode development --watch --config webpack.config.js --devtool source-map\n",
     "build": "../node_modules/.bin/webpack --mode production --config webpack.config.js"
   },
   "keywords": [],
@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.2.2",
+    "@babel/plugin-syntax-throw-expressions": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
@@ -35,6 +36,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.18.0",
+    "axios-progress-bar": "^1.2.0",
     "babel-polyfill": "^6.26.0",
     "date-fns": "2.0.0-alpha.7",
     "informed": "^1.10.12",
@@ -48,6 +50,7 @@
     "react-dom": "^16.7.0",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^4.3.1",
+    "react-script-loader-hoc": "^1.2.2",
     "react-select": "^2.4.2",
     "react-spinners": "0.5.4",
     "react-stripe-elements": "^2.0.2",

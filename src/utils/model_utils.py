@@ -43,7 +43,7 @@ def next_ref_code(old_ref_code, sub_code_block_size=4):
 
     if i == code_length:
         if code_length % sub_code_block_size == 0:
-            initial = random.choice([string.digits[0], string.ascii_uppercase[0]])
+            initial = random.choice([string.digits[0], string.ascii_uppercase[0]])  # nosec
         else:
             try:
                 int(new_code[-1])

@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 
 from user_custom.views import not_found
 from rentality.sitemap import sitemaps
@@ -46,6 +46,8 @@ urlpatterns = [
 
     path('ess/', include('essentials.urls')),
     path('cities/', include('cities_custom.urls')),
+
+    re_path(r'^rep/', TemplateView.as_view(template_name='react/base.html')),
 
     # TODO: no individual messaging urls needed ?
     path('messaging/', include('messaging.urls')),

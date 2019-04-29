@@ -43,11 +43,10 @@ module.exports = {
     },
     watch: false,
     entry: {
-        index: './src/entry_points/index.js',
-        home_owner: './src/entry_points/HomeOwner.js',
+        index: './src/App.js',
     },
     output: {
-        filename: '[name].js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/static/frontend/',
         chunkFilename: '[name].chunk.js',
