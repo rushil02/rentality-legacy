@@ -145,6 +145,18 @@ container.
 They should not have their own states, to avoid any possibility of independent behaviour of a layout element. They are
 only concerned with the styling and layout of the elements.
 
+#### Services
+- Don't use `axios` directly. Use with `import axios from "utils/ServiceHelper"`.
+- Each Component should have its own services.
+- Create a `Service.js` or `Services/` in components directory.
+- Export functions which are `Promise`. 
+    * `return axios.get` for actual API calls.
+    * `return Promise.resolve` or `return Promise.reject` for mocked data.
+- Import only these functions for service calls.
+- Use `<function>().then` or `<function>().catch` appropriately.
+- Send payload to the service calls functions if required.
+
+Refer `containers/house/SamplePage`.
 
 [comment]: <> (TODO: Complete Section)
 ## Architecture

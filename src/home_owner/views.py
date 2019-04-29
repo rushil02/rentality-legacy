@@ -62,28 +62,28 @@ def home_owner_account_details(request):
                 account.save()
             return redirect(reverse('home_owner:account_details'))
     bank_warning_message = ""
-    if home_owner.account_id:
-        account = get_account(home_owner.account_id)
-        country = Country.objects.get(code=account.country)
-        home_owner_info_form = HomeOwnerInfoForm(
-            business_tax_id_provided=account.legal_entity.get('business_tax_id_provided', False),
-            initial={
-                'country': country,
-                'street_address1': account.legal_entity.address.line1,
-                'city': account.legal_entity.address.city,
-                'state': account.legal_entity.address.state,
-                'zip': account.legal_entity.address.postal_code,
-                'type': account.legal_entity.type,
-                'business_name': account.legal_entity.get('business_name')
-            }
-        )
-        if len(account.external_accounts.data) > 0:
-            bank_warning_message = "A external account with account number ending with {} already exists. " \
-                                   "Entering data again will overwrite the previous information.".format(
-                account.external_accounts.data[0].last4
-            )
-    else:
-        home_owner_info_form = HomeOwnerInfoForm()
+    # if home_owner.account_id:
+    #     account = get_account(home_owner.account_id)
+    #     country = Country.objects.get(code=account.country)
+    #     home_owner_info_form = HomeOwnerInfoForm(
+    #         business_tax_id_provided=account.legal_entity.get('business_tax_id_provided', False),
+    #         initial={
+    #             'country': country,
+    #             'street_address1': account.legal_entity.address.line1,
+    #             'city': account.legal_entity.address.city,
+    #             'state': account.legal_entity.address.state,
+    #             'zip': account.legal_entity.address.postal_code,
+    #             'type': account.legal_entity.type,
+    #             'business_name': account.legal_entity.get('business_name')
+    #         }
+    #     )
+    #     if len(account.external_accounts.data) > 0:
+    #         bank_warning_message = "A external account with account number ending with {} already exists. " \
+    #                                "Entering data again will overwrite the previous information.".format(
+    #             account.external_accounts.data[0].last4
+    #         )
+    # else:
+    home_owner_info_form = HomeOwnerInfoForm()
     user_home_owner_form = UserHomeOwnerForm(instance=request.user)
     user_profile_home_owner_form = UserProfileHomeOwnerForm(instance=request.user.userprofile)
     context = {

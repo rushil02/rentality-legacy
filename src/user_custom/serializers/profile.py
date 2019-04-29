@@ -5,9 +5,20 @@ from django.contrib.auth import get_user_model
 from cities.models import PostalCode
 
 
+class PostalCodeField(serializers.RelatedField):
+    def to_representation(self, value):
+        if value:
+            return value.code
+        else:
+            return None
+    
+    def to_internal_value(self, data):
+        return data
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     billing_country = serializers.StringRelatedField(read_only=True)
-    billing_postcode = serializers.CharField(source='billing_postcode.code')
+    billing_postcode = PostalCodeField(queryset=PostalCode.objects.all())
 
     class Meta:
         model = UserProfile
@@ -25,7 +36,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.sex = self.validated_data.get('sex', instance.sex)
         instance.dob = self.validated_data.get('dob', instance.dob)
         instance.billing_street_address = self.validated_data.get('billing_street_address', instance.billing_street_address)
-        instance.billing_postcode = self.validated_data.get('billing_postcode', {}).get('code', instance.billing_postcode)
+        instance.billing_postcode = self.validated_data.get('billing_postcode', instance.billing_postcode)
         instance.account_type = self.validated_data.get('account_type', instance.account_type)
         instance.save()
         return instance

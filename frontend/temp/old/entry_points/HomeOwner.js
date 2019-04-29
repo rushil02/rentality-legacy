@@ -6,6 +6,8 @@ import {reverse} from 'named-urls';
 import routes from "../routes";
 import CreatePage from "containers/house/CreatePage"
 
+import SamplePage from "containers/house/SamplePage/SamplePage"
+
 import './index.css';
 import Navbar from "containers/common/Navbar";
 import Alert from "containers/common/Alert";
@@ -29,6 +31,10 @@ class App extends Component {
                         <Route
                             path={routes.source.houseEdit}
                             render={(props) => <CreatePage {...props} mode="edit"/>}
+                        />
+                        <Route
+                            path={routes.source.samplePage}
+                            render={(props) => <SamplePage />}
                         />
                     </Switch>
                 </BrowserRouter>

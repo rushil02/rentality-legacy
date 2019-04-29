@@ -25,7 +25,7 @@ def establish_es_connection(try_num=1):
 # Creates a singleton object of connection to transport layer [Paradigm support by elasticsearch-py creator - HonzaKral]
 # https://github.com/elastic/elasticsearch-py/issues/223#issuecomment-96199719
 # https://github.com/elastic/elasticsearch-py/issues/372#issuecomment-192025509
-ES_CONNECTION = establish_es_connection()
+# ES_CONNECTION = establish_es_connection()
 
 
 def create_connection():
