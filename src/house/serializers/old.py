@@ -19,60 +19,6 @@ class HouseSerializer(serializers.ModelSerializer):
         return obj.get_thumbnail_2()
 
 
-class NearbyFacilitySerializer(serializers.Serializer):
-    verbose = serializers.CharField()
-    id = serializers.IntegerField(required=False)
-    checked = serializers.BooleanField()
-
-    def create(self, validated_data):
-        """
-        Create and return a new `Facility` instance, given the validated data.
-        """
-        if not validated_data.get('id', None):
-            if validated_data["checked"] is False:
-                try:
-                    obj = NeighbourhoodDescriptor.objects.get(verbose=validated_data['verbose'])
-                except NeighbourhoodDescriptor.DoesNotExist:
-                    return None, False
-            else:
-                obj, created = NeighbourhoodDescriptor.objects.get_or_create(verbose=validated_data['verbose'])
-
-        else:
-            try:
-                obj = NeighbourhoodDescriptor.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
-            except NeighbourhoodDescriptor.DoesNotExist as e:
-                raise e  # TODO: test this exception
-
-        return obj, validated_data["checked"]
-
-
-class WelcomeTagSerializer(serializers.Serializer):
-    verbose = serializers.CharField()
-    id = serializers.IntegerField(required=False)
-    checked = serializers.BooleanField()
-
-    def create(self, validated_data):
-        """
-        Create and return a new `Facility` instance, given the validated data.
-        """
-        if not validated_data.get('id', None):
-            if validated_data["checked"] is False:
-                try:
-                    obj = WelcomeTag.objects.get(verbose=validated_data['verbose'])
-                except WelcomeTag.DoesNotExist:
-                    return None, False
-            else:
-                obj, created = WelcomeTag.objects.get_or_create(verbose=validated_data['verbose'])
-
-        else:
-            try:
-                obj = WelcomeTag.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
-            except WelcomeTag.DoesNotExist as e:
-                raise e  # TODO: test this exception
-
-        return obj, validated_data["checked"]
-
-
 class AmountSerializer(serializers.Serializer):
     move_in_date = serializers.DateField(required=False)
     move_out_date = serializers.DateField(required=False)

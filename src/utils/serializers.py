@@ -102,3 +102,27 @@ class CreateListSerializer(serializers.ListSerializer):
 
         class _CustomListSerializer(cls):
             model_klass = model
+
+
+class UpdateListSerializer(serializers.ListSerializer):
+    default_error_messages = {
+        'invalid_parameter': 'Invalid Parameters',
+    }
+
+    def update(self, instances, validated_data):
+        # Maps for id->instance and id->data item.
+        item_mapping = {item.id: item for item in instances}
+        data_mapping = {item['id']: item for item in validated_data}
+
+        # Perform creations and updates.
+        ret = []
+        for item_id, data in data_mapping.items():
+            item = item_mapping.get(item_id, None)
+            if item is None:
+                self.fail('invalid_parameter')
+            else:
+                ret.append(self.child.update(item, data))
+        return ret
+
+    def create(self, validated_data):
+        self.fail('invalid_parameter')

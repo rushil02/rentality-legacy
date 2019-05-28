@@ -1,11 +1,10 @@
 from django.db.models import Q, Exists, OuterRef
 
 from rest_framework import serializers
-
-from house.models import House, Availability, Image, Facility
 from utils.serializer_fields import DateRangeField
-from utils.serializers import FullUpdateListSerializer
 
+from utils.serializers import UpdateListSerializer
+from house.models import House, Availability, Image, Facility, HouseRule, Rule
 
 class AvailabilityAuthSerializer(serializers.ModelSerializer):
     date_range = DateRangeField(source='dates')
@@ -79,3 +78,59 @@ class FacilitySerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         """ Update is not allowed """
         raise NotImplementedError
+
+
+class HouseRelatedObjectSerializer(serializers.Serializer):
+    verbose = serializers.CharField()
+    id = serializers.IntegerField(required=False)
+    checked = serializers.BooleanField()
+
+    def __init__(self, *args, **kwargs):
+        model_class = kwargs.pop('model_class')
+        super().__init__(*args, **kwargs)
+        self.model_class = model_class
+
+    def validate(self, data):
+        if data.get('id', None) is not None:
+            try:
+                self.model_object = self.model_class.objects.get(id=data['id'], verbose=data['verbose'])
+            except self.model_class.DoesNotExist:
+                raise serializers.ValidationError("No object with id and verbose.")
+        else:
+            self.model_object = None
+        return data
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Facility` instance, given the validated data.
+        """
+        if not self.model_object:
+            if validated_data["checked"] is False:
+                try:
+                    obj = self.model_class.objects.get(verbose=validated_data['verbose'])
+                except self.model_class.DoesNotExist:
+                    return None, False
+            else:
+                obj, created = self.model_class.objects.get_or_create(verbose=validated_data['verbose'])
+
+        else:
+            obj = self.model_object
+
+        return obj, validated_data["checked"]
+
+
+class RuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rule
+        fields = ('id', 'verbose', 'options')
+
+
+class HouseRuleSerializer(serializers.ModelSerializer):
+    rule = RuleSerializer(required=False)
+    id = serializers.IntegerField(required=True)
+
+    class Meta:
+        model = HouseRule
+        fields = ('rule', 'value', 'comment', 'id')
+        read_only_fields = ('rule',)
+        list_serializer_class = UpdateListSerializer

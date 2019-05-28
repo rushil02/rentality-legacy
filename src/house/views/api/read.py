@@ -1,13 +1,12 @@
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from house.helpers import get_available_dates
-from house.models import Availability, House
-from house.serializers import AvailabilityPublicSerializer, NetAvailableDatesSerailizer
-
+from house.models import House, Rule
+from house.serializers import NetAvailableDatesSerailizer, RuleSerializer
 
 class NetAvailableDatesView(APIView):
     serializer_class = NetAvailableDatesSerailizer
