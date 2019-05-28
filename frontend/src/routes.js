@@ -1,5 +1,5 @@
-import {include} from 'named-urls'
-
+import {include} from 'named-urls';
+import houseListingRoutes from 'houseListing/routes';
 
 export default {
     static_route: '/static/',
@@ -12,6 +12,10 @@ export default {
     listHome: '/property/add/',
     dashboard: '/',
     contactUs: '/pages/contact-us/',
+    auth: include('/accounts', {
+        login: 'login/',
+        signup: 'signup/'
+    }),
 
     // Source [Entry-points] URLs
     // These URLs redirect to new html pages and are expected to be handled accordingly.
@@ -22,9 +26,12 @@ export default {
             create: 'create',
             edit: 'edit/:houseUUID',
         }),
+        samplePage: 'property/samplePage',
+        userProfile: 'profile/',
     }),
 
     // APIs
+    userNavInfo: '/user-nav-info',
     application: include('/apply', {
         bookingDetails: 'amount/:houseUUID',
         create: 'create-app/:houseUUID',
@@ -36,24 +43,17 @@ export default {
         verifyHouseDiscount: 'verify-promo-use/house/home_owner'
     }),
 
-    house: include('/property', {
-        formOptions: 'form-options',
-        detail: 'create/edit/:houseUUID',
-        edit: 'create/edit/:houseUUID',
-        create: 'create/api',
-        availability: include('availability', {
-            list: 'list/:houseUUID',
-            create: ':houseUUID',
-            update: ':houseUUID/:objID',
-            remove: ':houseUUID/:objID',
-        }),
-    }),
+    house: include('/property', houseListingRoutes),
+
     user: include('/', {
         info: 'cu-info',
-        userProfile: 'user-profile/'
+        profile: 'user-profile',
+        uploadProfilePic: 'upload-profile-pic'
     }),
+
     cities: include('/cities', {
-        postalCodeVerbose: 'postal-code-vo'
+        postalCodeSuggestions: 'postal-code-sugg',
+        postalCodeDetails: 'postal-code-details/:objID'
     })
 };
 

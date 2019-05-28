@@ -4,8 +4,10 @@ from django.views.generic import TemplateView
 from user_custom.views import set_timezone, check_user, \
     dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
     CustomSignupView, search, get_stripe_publishable_key, PersonalityTagView, UserInfoView
+from user_custom.views.api.details import UserDetailsView
 
 from user_custom.views.api.profile import GetEditUserProfileView, ProfilePicUploadView
+from user_custom.views.api import edit_profile_react
 
 app_name = 'user'
 
@@ -20,7 +22,6 @@ urlpatterns = [
     path('funtags/', PersonalityTagView.as_view(), name='personality_tags'),
     # path('sel-listing', TemplateView.as_view(template_name='user_common/account_creation/select_listing.html'),
     #      name='sel_listing'),
-    path('profile', edit_profile, name='user_details'),
     path('time', set_timezone, name='set_timezone'),
     path('publishable_key', get_stripe_publishable_key, name='payment_publishable_key'),
     path('shortlist/<str:entity>/<uuid:uuid>', shortlist, name='add_to_shortlist'),
@@ -31,9 +32,17 @@ urlpatterns = [
     # TODO: remove later (or create seperate package, shouldn't be here; immediate requirement defies project structure
     path('vfxr', TemplateView.as_view(template_name='others/validation_email_1.html'), name='validation_email_1'),
 
+    # React Entry-points
+    path('profile', edit_profile_react, name='user_details'),
+    # Older version. Remove once profile is complete
+    path('profile-old', edit_profile, name='user_details-old'),
+
     # APIs
     #FIXME: Deprecated cu-info
     path('cu-info/', UserInfoView.as_view(), name='info'),
-    path('user-profile/', GetEditUserProfileView.as_view(), name='get-edit-user-profile'),
-    path('upload-profile-pic/', ProfilePicUploadView.as_view(), name='upload-profile-pic'),
+    path('user-profile', GetEditUserProfileView.as_view(), name='get-edit-user-profile'),
+    path('upload-profile-pic', ProfilePicUploadView.as_view(), name='upload-profile-pic'),
+
+    # APIs v2
+    path('user-nav-info/', UserDetailsView.as_view(), name='user_nav_info'),
 ]

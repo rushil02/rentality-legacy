@@ -5,6 +5,18 @@ import FurnishedSelectorComponent from "./FurnishedSelector";
 import {FormOptionsCache} from "houseListing/dataContext"
 
 export default function FormPrimaryComponent(props) {
+    const getError = (inputKey) => {
+        if (props.errors.hasOwnProperty(inputKey)) {
+            let errorList = props.errors[inputKey];
+            let disp = [];
+            for (let i = 0; i < errorList.length; i++) {
+                disp.push(<div key={i} className="invalid-feedback">{props.errors[inputKey]}</div>)
+            }
+            return <React.Fragment>{disp}</React.Fragment>
+        } else {
+            return null
+        }
+    };
     let inputRefs = {};
     return (
         <React.Fragment>
@@ -23,8 +35,7 @@ export default function FormPrimaryComponent(props) {
                                         placeholder="Property Name" value={props.title}
                                         onChange={(e) => props.onFieldChange("title", e.target.value)}
                                     />
-                                    {props.errors.title &&
-                                    <div className="invalid-feedback">{props.errors.title}</div>}
+                                    {getError('title')}
                                 </div>
                                 <small className="form-text text-muted">
 
@@ -37,11 +48,10 @@ export default function FormPrimaryComponent(props) {
                                            id="id_main-form-address_hidden" className="form-control address-hidden"
                                            placeholder="Unit Number or House Number" value={props.houseNum}
                                            onChange={(e) => props.onFieldChange("houseNum", e.target.value)}/>
-                                    {props.errors.houseNum &&
-                                    <div className="invalid-feedback">{props.errors.houseNum}</div>}
+                                    {getError('houseNum')}
                                 </div>
                                 <small className="form-text text-muted">
-                                    This is not visible to others until they make a booking.
+                                    This number is not visible to others until they make a booking.
                                 </small>
 
                             </div>
@@ -52,8 +62,7 @@ export default function FormPrimaryComponent(props) {
                                            className="form-control no-background" placeholder="Street Name"
                                            style={{"paddingLeft": "10px"}} value={props.streetName}
                                            onChange={(e) => props.onFieldChange("streetName", e.target.value)}/>
-                                    {props.errors.streetName &&
-                                    <div className="invalid-feedback">{props.errors.streetName}</div>}
+                                    {getError('streetName')}
                                 </div>
                                 <small className="form-text text-muted">
 
@@ -62,8 +71,8 @@ export default function FormPrimaryComponent(props) {
                             </div>
 
                             <PostalCodeAutoSuggest
-                                error={props.errors.postalCode || ''}
-                                value={props.postalCode}
+                                errors={props.errors.postalCodeID || []}
+                                objID={props.postalCodeID}
                                 onFieldChange={props.onFieldChange}
                             />
 
@@ -80,8 +89,7 @@ export default function FormPrimaryComponent(props) {
                                 </FormOptionsCache.Consumer>
                                 <small className="form-text text-muted">
                                 </small>
-                                {props.errors.homeType &&
-                                <div className="invalid-feedback">{props.errors.homeType}</div>}
+                                {getError('homeType')}
                             </div>
                             <div className="col-md-12 col-lg-6">
                                 <FormOptionsCache.Consumer>
@@ -93,11 +101,9 @@ export default function FormPrimaryComponent(props) {
                                         />
                                     }
                                 </FormOptionsCache.Consumer>
-
+                                {getError('furnished')}
                                 <small className="form-text text-muted">
                                 </small>
-                                {props.errors.furnished &&
-                                <div className="invalid-feedback">{props.errors.furnished}</div>}
                             </div>
                             <div className="col-md-12 col-lg-6">
                                 <div className="input number-disp bedroom" onClick={() => {
@@ -113,8 +119,8 @@ export default function FormPrimaryComponent(props) {
                                         onChange={(e) => props.onFieldChange("numBedrooms", e.target.value)}
                                     />
                                 </div>
+                                {getError('numBedrooms')}
                                 <small className="form-text text-muted">
-
                                 </small>
                             </div>
                             <div className="col-md-12 col-lg-6">
@@ -130,6 +136,7 @@ export default function FormPrimaryComponent(props) {
                                            onChange={(e) => props.onFieldChange("numBathrooms", e.target.value)}
                                     />
                                 </div>
+                                {getError('numBathrooms')}
                                 <small className="form-text text-muted"/>
 
                             </div>
@@ -146,6 +153,7 @@ export default function FormPrimaryComponent(props) {
                                            onChange={(e) => props.onFieldChange("numParkSpaces", e.target.value)}
                                     />
                                 </div>
+                                {getError('numParkSpaces')}
                                 <small className="form-text text-muted"/>
                             </div>
                         </div>

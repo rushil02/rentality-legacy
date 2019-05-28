@@ -7,15 +7,26 @@ import routes from "routes";
 import {alertUser} from "core/alert/Alert";
 import {omit} from 'lodash';
 import format from "date-fns/format";
-import {getAvailabilityData} from "houseListing/services";
+import {
+    deleteAvailabilityData,
+    getAvailabilityData,
+    putAvailabilityData,
+    postAvailabilityData
+} from "houseListing/services";
 
 
 export default class AvailabilitySelectorHandler extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            data: props.cache.data,
-        };
+        if (props.cache.data === undefined) {
+            this.state = {
+                data: {},
+            };
+        } else {
+            this.state = {
+                data: props.cache.data,
+            };
+        }
     }
 
     componentDidMount() {
@@ -30,53 +41,53 @@ export default class AvailabilitySelectorHandler extends Component {
             });
     }
 
+    componentWillUnmount() {
+        this.props.cache.updateStoreObject('availabilityData', () => this.state.data);
+    }
 
-    onAdd = (startDate, endDate, onComplete) => {
+
+    onAdd = (startDate, endDate) => {
         let dataToSend = {
             "date_range": {
                 "lower": format(startDate, 'YYYY-MM-DD'),
                 "upper": format(endDate, 'YYYY-MM-DD')
             }
         };
-        axios.post(reverse(routes.house.availability.create, {houseUUID: this.props.houseUUID}), dataToSend)
+
+        postAvailabilityData(this.props.houseUUID, dataToSend)
             .then(result => {
 
                 this.setState(prevState => ({
                         data: {
                             ...prevState.data,
-                            [result.data.id]: result.data
+                            [result.getData('objID')]: result
                         }
                     })
                 );
-                onComplete()
-            }).catch(error => {
-
+            })
+            .catch(error => {
                 alertUser.init({stockAlertType: 'unknownError'})
-            }
-        );
+            });
+
     };
 
-    onUpdate = (objID, startDate, endDate, onComplete) => {
+    onUpdate = (objID, startDate, endDate, successCallback) => {
         let dataToSend = {
             "date_range": {
                 "lower": format(startDate, 'YYYY-MM-DD'),
                 "upper": format(endDate, 'YYYY-MM-DD')
             }
         };
-        axios.put(reverse(routes.house.availability.update, {
-            houseUUID: this.props.houseUUID,
-            objID: objID
-        }), dataToSend)
+        putAvailabilityData(this.props.houseUUID, objID, dataToSend)
             .then(result => {
-                console.log("data is set");
                 this.setState(prevState => ({
                         data: {
                             ...prevState.data,
-                            [result.data.id]: result.data
+                            [result.getData('objID')]: result
                         }
                     })
                 );
-                onComplete()
+                successCallback()
             }).catch(error => {
                 alertUser.init({stockAlertType: 'unknownError'})
             }
@@ -85,9 +96,8 @@ export default class AvailabilitySelectorHandler extends Component {
     };
 
     onRemove = (objID) => {
-        console.log(objID, this.props.houseUUID);
-        axios.delete(reverse(routes.house.availability.remove, {houseUUID: this.props.houseUUID, objID: objID}))
-            .then(result => {
+        deleteAvailabilityData(this.props.houseUUID, objID)
+            .then(() => {
                 const newState = {
                     data: omit(this.state.data, objID)
                 };
@@ -108,21 +118,19 @@ export default class AvailabilitySelectorHandler extends Component {
         }
     };
 
-    // componentWillUnmount() {
-    //     this.props.saveAvailabilityChange(this.state.data);
-    // };
 
     render() {
         let newKey = 'new' + Object.values(this.state.data).length;
         return (
             <React.Fragment>
                 {Object.values(this.state.data).map((object, i) => {
+                    let dateRange = object.getData('dateRange');
                     return <AvailabilitySelector
                         modeNew={false}
-                        startDate={new Date(object.date_range.lower)}
-                        endDate={new Date(object.date_range.upper)}
-                        key={object.id.toString()}
-                        idKey={object.id}
+                        startDate={new Date(dateRange.getData('startDate'))}
+                        endDate={new Date(dateRange.getData('endDate'))}
+                        key={object.getData('objID').toString()}
+                        idKey={object.getData('objID')}
                         validate={this.validateRange}
                         onAdd={this.onAdd}
                         onRemove={this.onRemove}
@@ -178,7 +186,6 @@ class AvailabilitySelector extends Component {
 
     onClickSave = () => {
         let validResult = this.props.validate(this.state.tempStartDate, this.state.tempEndDate);
-        console.log(validResult);
         if (validResult.error) {
             // Failed
             this.setState({
@@ -190,9 +197,9 @@ class AvailabilitySelector extends Component {
             this.setState({inSyncMode: true});
             // Passed
             if (this.props.modeNew) {
-                this.props.onAdd(this.state.tempStartDate, this.state.tempEndDate, this.onComplete)
+                this.props.onAdd(this.state.tempStartDate, this.state.tempEndDate)
             } else {
-                this.props.onUpdate(this.objID, this.state.tempStartDate, this.state.tempEndDate, this.onComplete);
+                this.props.onUpdate(this.objID, this.state.tempStartDate, this.state.tempEndDate, () => this.setState({inSyncMode: false}));
                 this.toggleEditState(false)
             }
             return true
@@ -205,9 +212,6 @@ class AvailabilitySelector extends Component {
         this.props.onRemove(this.objID);
     };
 
-    onComplete = () => {
-        this.setState({inSyncMode: false})
-    };
 
     render() {
         return (

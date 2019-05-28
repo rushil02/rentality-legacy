@@ -7,6 +7,7 @@ import './FormCommon.css'
 import SpinnerComponent from "components/common/LoadingSpinner";
 
 const FormRentAvailabilityComponent = React.lazy(() => import("./formRentAvailability/FormRentAvailability"));
+const FormRentFacilitiesComponent = React.lazy(() => import("./formFacilities/FacilitiesSelector"));
 import FormPrimaryComponent from './formPrimary/FormPrimary';
 
 
@@ -54,6 +55,21 @@ class CreatePageComponent extends Component {
                                                     maxPeopleAllowed={this.props.mainData.maxPeopleAllowed}
                                                     availabilities={this.props.availabilityData}
                                                     saveAvailabilityChange={this.props.saveAvailabilityChange}
+                                                />
+                                            </Suspense>
+                                        }/>
+                                        <Route path="/3" render={() =>
+                                            <Suspense
+                                                fallback={<SpinnerComponent height={"400px"}/>}>
+                                                <FormRentFacilitiesComponent
+                                                    houseUUID={this.props.houseUUID}
+                                                    formOptions={this.props.formOptions}
+                                                    businessConstraints={this.props.businessConstraints}
+                                                    onFieldChange={this.props.onFieldChange}
+                                                    errors={this.props.errors}
+                                                    addNewFacility={this.props.mainData.addNewFacility}
+                                                    facilitiesData={this.props.facilitiesData}
+                                                    saveFacilitiesChange={this.props.saveFacilitiesChange}
                                                 />
                                             </Suspense>
                                         }/>

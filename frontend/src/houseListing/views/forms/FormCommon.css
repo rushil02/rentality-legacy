@@ -38,7 +38,7 @@
     border-radius: 0;
     height: calc(2.25rem + 15px);
     background-repeat: no-repeat;
-    background-position: left center;
+    background-position: 5px center;
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
@@ -101,4 +101,23 @@
 
 #root > .page-form .right .input.parking.number-disp {
     background-image: url('/static/image/form-1/parking.svg');
+}
+
+a.default-button-style, button.default-button-style {
+    font-size: 16px;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+    font-weight: 400;
+    color: #2a2b32;
+    background-color: transparent;
+    padding: 12px 50px;
+    cursor:pointer;
+    border: 1px solid #2a2b32;
+}
+
+a.default-button-style:hover, a.default-button-style:focus,
+button.default-button-style:hover,  button.default-button-style:focus {
+    text-decoration: none;
+    background-color: #2a2b32;
+    color: #ffffff !important;
 }

@@ -106,7 +106,6 @@ export default class AvailabilitySelectorComponent extends Component {
             buttonConfig = {
                 title: "Save",
                 action: (e) => {
-                    console.log("ehrea");
                     e.stopPropagation();
                     this.props.onSave()
                 },

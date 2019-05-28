@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import AvailabilitySelectorHandler from "./AvailabilitySelectorContainer";
-import {AvailabilityCache, UUIDCache} from 'houseListing/dataContext'
+import {AvailabilityCache} from 'houseListing/dataContext'
 
 export default class FormRentAvailabilityComponent extends Component {
 
@@ -105,14 +105,10 @@ export default class FormRentAvailabilityComponent extends Component {
                                 <div className="col-md-12 col-lg-12">
                                     <AvailabilityCache.Consumer>
                                         {cache =>
-                                            <UUIDCache.Consumer>
-                                                {houseUUID =>
-                                                    <AvailabilitySelectorHandler
-                                                        houseUUID={houseUUID}
-                                                        cache={cache}
-                                                    />
-                                                }
-                                            </UUIDCache.Consumer>
+                                            <AvailabilitySelectorHandler
+                                                houseUUID={this.props.houseUUID}
+                                                cache={cache}
+                                            />
                                         }
                                     </AvailabilityCache.Consumer>
                                 </div>

@@ -1,9 +1,10 @@
 from django.urls import path
 
-from .views import PostalCodeVerboseOnlyAPIView
+from .views import PostalCodeSuggestionsAPIView, PostalCodeDetailAPIView
 
 app_name = 'cities_custom'
 
 urlpatterns = [
-    path('postal-code-vo', PostalCodeVerboseOnlyAPIView.as_view(), name='postal_code_verbose_only')
+    path('postal-code-sugg', PostalCodeSuggestionsAPIView.as_view(), name='postal_code_suggestions'),
+    path('postal-code-details/<int:pk>', PostalCodeDetailAPIView.as_view(), name='postal_code_details')
 ]

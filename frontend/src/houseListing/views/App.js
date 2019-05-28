@@ -1,42 +1,28 @@
 import React, {Component} from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {reverse} from 'named-urls';
 
 import routes from "routes";
 import {getFormOptions} from "../services";
 import {StoreProvider} from "../dataContext"
-import ComponentErrorBoundary from "../../core/errorHelpers/ComponentErrorBoundary";
-import Error404 from "core/errorHelpers/Error404";
-import AppComponent from "./AppComponent";
-import {FormOptions} from "../models";
+import {CreateAppComponent, EditAppComponent} from "./AppComponent";
+import {FormOptions, Navigator} from "../models";
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mode: 'create',
-            errors: {},
             formOptions: {
                 data: new FormOptions({}),
-                sync: () => {
-                    // Fetch Form options
-                    getFormOptions()
-                        .then(result => {
-                            this.setState(prevState => ({
-                                ...prevState,
-                                formOptions: {
-                                    ...prevState.formOptions,
-                                    data: result
-                                }
-                            }));
-                        });
-                }
+                sync: this.setFormOptions
             },
+            navigator: {
+                data: new Navigator(this.nextToEditMode),
+                sync: () => this.forceUpdate()
+            }
         };
-        this.houseUUID = "";
     }
 
-    componentDidMount() {
-
+    setFormOptions = () => {
         // Fetch Form options
         getFormOptions()
             .then(result => {
@@ -50,34 +36,27 @@ export default class App extends Component {
             });
     };
 
-    onRender = (routeProps) => {
-        if (routeProps.match.params["0"] === 'edit') {
-            this.houseUUID = routeProps.match.params.houseUUID
-        }
-        return (
-            <StoreProvider houseUUID={this.houseUUID} formOptions={this.state.formOptions}>
-                <AppComponent mode={routeProps.match.params["0"]}/>
-            </StoreProvider>
-        )
+    componentDidMount() {
+        // Fetch Form options
+        this.state.formOptions.sync();
+    };
+
+    nextToEditMode = (houseUUID) => {
+        // this.props.routerProps.history.replace(reverse(routes.react.houseListing.edit, {houseUUID: houseUUID})+ '/1');
+        
+        this.props.routerProps.history.push(reverse(routes.react.houseListing.edit, {houseUUID: houseUUID})+ '/2');
+        this.forceUpdate();
     };
 
     render() {
         return (
-            <React.Fragment>
-                <ComponentErrorBoundary>
-                    <BrowserRouter>
-                        <Switch>
-                            <Route
-                                exact
-                                path={routes.react.houseListing.base + "(create|edit)/:houseUUID?"}
-                                render={(props) => this.onRender(props)}
-                            />
-                            <Route render={(props) => <Error404/>}/>
-                        </Switch>
-                    </BrowserRouter>
-                </ComponentErrorBoundary>
-            </React.Fragment>
+            <StoreProvider formOptions={this.state.formOptions} navigator={this.state.navigator}>
+                {this.props.mode === 'edit' ?
+                    <EditAppComponent houseUUID={this.props.routerProps.match.params.houseUUID}/>
+                    :
+                    <CreateAppComponent/>
+                }
+            </StoreProvider>
         );
     }
 }
-

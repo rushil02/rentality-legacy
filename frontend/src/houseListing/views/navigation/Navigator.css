@@ -46,6 +46,21 @@
     text-transform: uppercase;
 }
 
+#root > .page-form .right .button > a.btn.btn-link.error-btn{
+    color: red;
+    background-color: #e6e6e6;
+    pointer-events: none;
+}
+
+#root > .page-form .right .button > a.btn.btn-link.loading-btn{
+    pointer-events: none;
+}
+
+#root > .page-form .right .button > a.btn.btn-link.done-btn{
+
+}
+
+
 #root > .page-form .right .button > a.btn.btn-link:hover {
     color: #2a2b32;
     background-color: #36ffb1;

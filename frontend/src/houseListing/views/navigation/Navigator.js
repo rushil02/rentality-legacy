@@ -4,50 +4,84 @@ import FormSubNav from "./FormSubNav";
 import FormNav from "./FormNav";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCog} from '@fortawesome/free-solid-svg-icons'
-import {NavigationContext} from "houseListing/dataContext";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
+import {withRouter} from "react-router-dom";
+import {reverse} from "named-urls";
+import routes from "routes";
 
-
-export default class Navigator extends Component {
+class Navigator extends Component {
     constructor(props) {
-        console.log(props);
         super(props);
         this.state = {};
     }
 
+    onNext = (data) => {
+        if (this.props.mode === 'create') {
+            this.props.navContext.data.nextToEditMode(data.getData('UUID'))
+        } else {
+            this.props.history.push('/' + (this.props.navContext.data.currForm + 1))
+        }
+
+    };
+
+    onBack = () => {
+        this.props.history.push('/' + (this.props.navContext.data.currForm - 1))
+    };
+
+
+
+
     render() {
         return (
-            <NavigationContext.Consumer>
-                {navContext => {
-                    return NavigatorComponent(this.props, navContext)
-                }}
-            </NavigationContext.Consumer>
+            <NavigatorComponent
+                navContext={this.props.navContext}
+                onNext={this.onNext}
+                onBack={this.onBack}
+                mode={this.props.mode}
+                children={this.props.children}
+            />
         )
     }
 }
 
+export default withRouter(Navigator);
 
-function NavigatorComponent(props, navContext) {
+
+function NavigatorComponent(props) {
     let backBtn;
+    let currFormState;
+    let currFormCallback;
+    try {
+        currFormState = props.navContext.data.getCurrentFormState()
+    } catch (e) {
+        console.log("Default btn state");
+        currFormState = 'initial'
+    }
+    try {
+        currFormCallback = props.navContext.data.getCurrentSaveCallback()
+    } catch (e) {
+        currFormCallback = new Promise(function () {
+        })
+    }
 
-    if (navContext.data.currForm === 1) {
+    if (props.navContext.data.currForm === 1) {
         backBtn = "";
     } else {
-        backBtn = <a type="button" className="btn btn-link float-left" id="prev-step">Back</a>
+        backBtn = <a type="button" className="btn btn-link float-left" id="prev-step" onClick={props.onBack}>Back</a>
     }
 
     return (
         <React.Fragment>
-            <FormNav mode={props.mode} currForm={navContext.data.currForm}/>
+            <FormNav mode={props.mode} currForm={props.navContext.data.currForm}/>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-xl-1"/>
                     <div className="col-xl-10">
                         <div className="right">
                             <FormSubNav mode={props.mode}/>
-                            <div className="col-12">
-                                <div className="float-right">
-                                    <div className="dropdown">
+                            <div className="row">
+                                <div className="col-12">
+                                    <div className="dropdown float-right">
                                         <div id="form-settings" className="dropdown-toggle" data-toggle="dropdown"
                                              aria-haspopup="true"
                                              aria-expanded="false">
@@ -71,13 +105,15 @@ function NavigatorComponent(props, navContext) {
                                     <div className="button top-margin">
                                         {backBtn}
                                         <APIRequestButton
-                                            textOption={'save'}
-                                            callback={navContext.data.saveCallback}
+                                            textOption={'saveNext'}
+                                            callback={currFormCallback}
+                                            onSuccess={props.onNext}
+                                            onFailure={() => {
+                                            }}
                                             layoutClasses={"btn btn-link float-right"}
+                                            containerID={"main-input-page"}
+                                            formState={currFormState}
                                         />
-                                        {/*<a type="button" className="btn btn-link float-right" id="next-step"*/}
-                                           {/*onClick={navContext.data.saveCallback}>Save &*/}
-                                            {/*Next</a>*/}
                                     </div>
                                 </div>
                             </div>

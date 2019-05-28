@@ -1,11 +1,11 @@
 from django.urls import path
 
 from house.serializers import HouseDetailsPublicSerializer
-from house.views.api.create import EditHouseView, FormOptionsView, AvailabilityView, AvailabilityListView, \
-    CreateHouseView
+from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
+    FacilityListView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
-from house.views import info, create, edit, ImageUploadView, FacilityView, NearbyFacilitiesView, \
+from house.views import info, create, edit, NearbyFacilitiesView, \
     home_owner_account_details, WelcomeTagView, apply_temp, remove_from_public, delete, HouseDetailPublicView, \
     ImagesPublicView, ThumbnailPublicView
 
@@ -17,8 +17,6 @@ urlpatterns = [
     path('info/<uuid:house_uuid>', info, name='info'),
     path('add/', create, name='create'),
     path('add/<uuid:house_uuid>/', edit, name='create_edit'),
-    path('images/<uuid:house_uuid>/', ImageUploadView.as_view(), name='add_house_images'),
-    path('facilities/<uuid:house_uuid>/', FacilityView.as_view(), name='facility'),
     path('nearby_facilities/<uuid:house_uuid>/', NearbyFacilitiesView.as_view(), name='nearby_facility'),
     path('payment_details/<uuid:house_uuid>/', home_owner_account_details, name='payment'),
     path('welcome_tags/<uuid:house_uuid>/', WelcomeTagView.as_view(), name='welcome_tags'),
@@ -44,11 +42,13 @@ urlpatterns = [
     path('current-availability/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='curr_avail'),
 
     # Creation APIs
-    path('create/api', CreateHouseView.as_view(), name='create_api'),
-    path('create/edit/<uuid:house_uuid>', EditHouseView.as_view(), name='edit_api'),
+    path('create/api', HouseView.as_view(), name='create_api'),
+    path('create/edit/<uuid:house_uuid>', HouseView.as_view(), name='edit_api'),
     path('form-options', FormOptionsView.as_view(), name='create_form_options'),
     path('availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
     path('availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
     path('availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(),
-         name='availability_delete_api'),
+        name='availability_delete_api'),
+    path('images/<uuid:house_uuid>', ImageUploadView.as_view(), name='add_house_images'),
+    path('facilities/<uuid:house_uuid>', FacilityListView.as_view(), name='facility'),
 ]

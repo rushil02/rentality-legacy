@@ -2,9 +2,6 @@
 
 {% load static %}
 
-{# FIXME: Remove urgent staff tag only #}
-{% load staff_custom_tags %}
-
 {% block head_scripts %}
     <!-- css start -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext"
@@ -28,18 +25,7 @@
     <div id="root">
 
     </div>
-    <script>
-        window.django = {
-            csrf: "{{ csrf_token }}",
-            user: {
-                username: "{{ request.user.get_short_name }}",
-                full_name: "{{ request.user.get_full_name }}",
-            },
-            extra_data: {{ extra_data | js }}
-        };
-    </script>
     {% block entry_point %}
-
         <script src="{% static "frontend/index.bundle.js" %}"></script>
     {% endblock entry_point %}
 

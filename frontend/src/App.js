@@ -15,8 +15,9 @@ import Error404 from "core/errorHelpers/Error404";
 import Footer from "core/footer/Footer";
 import ComponentErrorBoundary from "./core/errorHelpers/ComponentErrorBoundary";
 import {ComponentLoadingSpinner} from "./core/loadingSpinners/LoadingSpinner";
+import {UserStore} from "core/auth/userContext";
 
-const HouseListing = React.lazy(() => import("houseListing/views/App"));
+const HouseListing = React.lazy(() => import("houseListing/Router"));
 
 class App extends Component {
     constructor(props) {
@@ -27,23 +28,25 @@ class App extends Component {
         return (
             <React.Fragment>
                 <ComponentErrorBoundary>
-                    <Navbar/>
-                    <Alert/>
-                    <BrowserRouter>
-                        <Switch>
-                            <Route
-                                path={routes.react.houseListing.base}
-                                render={(props) =>
-                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
-                                        <HouseListing/>
-                                    </Suspense>}
-                            />
-                            <Route
-                                render={(props) => <Error404/>}
-                            />
-                        </Switch>
-                    </BrowserRouter>
-                    <Footer/>
+                    <UserStore>
+                        <Navbar/>
+                        <Alert/>
+                        <BrowserRouter>
+                            <Switch>
+                                <Route
+                                    path={routes.react.houseListing.base}
+                                    render={(props) =>
+                                        <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                            <HouseListing {...props}/>
+                                        </Suspense>}
+                                />
+                                <Route
+                                    render={(props) => <Error404/>}
+                                />
+                            </Switch>
+                        </BrowserRouter>
+                        <Footer/>
+                    </UserStore>
                 </ComponentErrorBoundary>
             </React.Fragment>
         );

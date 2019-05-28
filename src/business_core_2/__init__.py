@@ -1,6 +1,5 @@
 from .fee_behaviours import get_behaviours as get_fee_behaviour_models
 from .fee_behaviours import get_behaviour_description as get_fee_behaviour_description
-from .utils import Booking
 
 
 class Fee(object):

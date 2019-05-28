@@ -5,6 +5,7 @@ import routes from "routes";
 import {debounce} from 'lodash';
 import PostalCodeAutoSuggestComponent from "./PostalCodeAutoSuggest";
 import {alertUser} from 'core/alert/Alert';
+import {getPostalCodeData, getPostalCodeSuggestions} from "houseListing/services";
 
 const defaultVerboseDisplay = "Enter Postal code to select Suburb, City, State";
 
@@ -15,36 +16,64 @@ export default class PostalCodeAutoSuggest extends Component {
         this.state = {
             value: '',
             verbose: defaultVerboseDisplay,
-            objID: '',
             suggestions: [],
-            error: this.props.error
+            errors: [],
+            objID: '',
         };
 
-        this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 500, {trailing: true});
+        this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 350, {trailing: true});
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.objID) {
+            if (this.props.objID !== this.state.objID) {
+                this.updateDisplay();
+            }
+        }
+    }
+
+    componentDidMount() {
+        if (this.props.objID) {
+            this.updateDisplay();
+        }
+    }
+
+    updateDisplay = () => {
+        getPostalCodeData(this.props.objID)
+            .then(result => {
+                this.setState({
+                    verbose: result.name_full,
+                    value: result.code,
+                    objID: result.id,
+                });
+            })
+            .catch(
+                error => alertUser.init({stockAlertType: "connectionError"})
+            )
+    };
 
     onChange = (event, {newValue}) => {
         this.setState({
             value: newValue,
             verbose: defaultVerboseDisplay,
-            objID: ''
         });
+        this.props.onFieldChange('postalCodeID', '');
     };
 
     onSuggestionsFetchRequested = ({value}) => {
-        axios.get(reverse(routes.cities.postalCodeVerbose), {params: {query: value}})
+        getPostalCodeSuggestions(value)
             .then(result => {
-                if (result.data.length === 0) {
+                if (result.length === 0) {
                     this.setState({
-                        error: "Invalid Postal Code"
+                        errors: ["Invalid Postal Code"]
                     });
                 } else {
                     this.setState({
-                        error: ""
+                        errors: []
                     });
                 }
                 this.setState({
-                    suggestions: result.data,
+                    suggestions: result,
                 });
             })
             .catch(
@@ -64,7 +93,7 @@ export default class PostalCodeAutoSuggest extends Component {
             value: suggestion.code,
             objID: suggestion.id
         });
-        this.props.onFieldChange('postalCode', suggestion.id);
+        this.props.onFieldChange('postalCodeID', suggestion.id);
     };
 
     render() {
@@ -77,7 +106,7 @@ export default class PostalCodeAutoSuggest extends Component {
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                 onSuggestionSelected={this.onSuggestionSelected}
                 verbose={this.state.verbose}
-                error={this.state.error}
+                errors={this.state.errors.concat(this.props.errors)}
             />
         );
     }

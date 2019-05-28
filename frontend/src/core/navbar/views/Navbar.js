@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import NavbarComponent from './components/Navbar';
+import {UserContext} from "../../auth/userContext";
+import AuthNavbarComponent from "./components/AuthNavbarComponent";
+import AnonNavbarComponent from "./components/AnonNavbarComponent";
 
 
 class Navbar extends Component {
@@ -7,7 +9,15 @@ class Navbar extends Component {
     render() {
         return (
             <React.Fragment>
-                <NavbarComponent/>
+                <UserContext.Consumer>
+                    {userContext => {
+                        if (userContext.isAuthenticated()) {
+                            return <AuthNavbarComponent user={userContext.data}/>
+                        } else {
+                            return <AnonNavbarComponent/>
+                        }
+                    }}
+                </UserContext.Consumer>
             </React.Fragment>
         );
     }

@@ -22,8 +22,14 @@ export default class PostalCodeAutoSuggestComponent extends Component {
             placeholder: "Postal Code",
             value: this.props.value,
             onChange: this.props.onChange,
-            type: 'number',
+            type: 'text',
         };
+
+        let errorDisp = [];
+        for (let i = 0; i < this.props.errors.length; i++) {
+            errorDisp.push(<div key={i} className="invalid-feedback">{this.props.errors[i]}</div>)
+        }
+
 
         return (
             <React.Fragment>
@@ -49,9 +55,7 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                 <div className="col-12">
                     <small className="form-text text-muted">
                     </small>
-                    {this.props.error &&
-                    <div className="invalid-feedback">{this.props.error}</div>
-                    }
+                    {errorDisp}
                 </div>
             </React.Fragment>
         )

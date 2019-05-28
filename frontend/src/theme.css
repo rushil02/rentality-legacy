@@ -1217,13 +1217,14 @@ body {
     border: none;
     color: #2a2b32;
     height: auto;
-    -moz-appearance: none;
-    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
     display: flex;
     flex-wrap: nowrap;
     position: relative;
     text-align: right;
     outline: none;
+    background-color: inherit;
 }
 
 .input.number-disp .form-control::-webkit-outer-spin-button,
@@ -1231,9 +1232,6 @@ body {
     margin-left: 30px;
 }
 
-.input.number-disp .form-control[type=number] {
-    -moz-appearance: textfield;
-}
 
 /************************/
 /***** footer start *****/
