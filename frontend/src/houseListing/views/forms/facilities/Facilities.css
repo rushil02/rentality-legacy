@@ -35,10 +35,14 @@
     border: 1px solid #cacaca;
     background-color: #ffffff;
     box-shadow: none;
+    bottom: .15rem;
+    top: unset;
 }
 
 #root > .page-form .right .checkbox .list-inline li .custom-control-label::after {
     width: 25px;
     height: 25px;
     margin-top: -4px;
+    bottom: .15rem;
+    top: unset;
 }

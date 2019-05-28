@@ -215,7 +215,7 @@ class FacilityListView(APIView):
 
     def get_object(self, house_uuid):
         return get_object_or_404(House.objects.all(), uuid=house_uuid)
-    
+
     def get_facilities(self, house):
         return list(Facility.objects.filter(
             Q(system_default=True) | Q(house=house)
@@ -236,9 +236,8 @@ class FacilityListView(APIView):
             house.facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
             house.facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False and obj[0]])
             qs = self.get_facilities(house)
-            serializer = self.serializer(data=qs, many=True)
-            if serializer.is_valid(raise_exception=True):
-                return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
+            serializer = self.serializer(qs, many=True)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class HouseRelatedObjectView(APIView):

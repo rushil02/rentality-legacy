@@ -83,6 +83,8 @@ export class Navigator {
         this.currForm = formID;
         if (!this._forms.hasOwnProperty(formID)) {
             this._forms[formID] = {state: formState, saveCallback: callback, verbose: formName};
+        } else {
+            this._forms[formID].saveCallback = callback
         }
     };
 

@@ -19,6 +19,7 @@ export default class FacilitiesSelectorHandler extends Component {
                 data: props.cache.data,
             };
         }
+        this.onSave = this.onSave.bind(this)
     }
 
     componentDidMount() {
@@ -58,7 +59,8 @@ export default class FacilitiesSelectorHandler extends Component {
 
     };
 
-    onFacilityAdd = (text) => {
+    onFacilityAdd = (input) => {
+        let text = input.value;
         this.setState(prevState => ({
                 data: {
                     ...prevState.data,
@@ -67,27 +69,30 @@ export default class FacilitiesSelectorHandler extends Component {
             })
         );
 
+        input.value = "";
+        input.focus();
+
         this.props.navContext.data.updateFormState(this.formID, 'hasChanged');
         this.props.navContext.sync();
     };
 
 
-    onSave = (e) => {
+    onSave(e) {
         e.stopPropagation();
-        const that = this;
-        console.log("AJWEJOAEW");
-        return new Promise(function (resolve, reject) {
-            postFacilityData(that.props.houseUUID, that.state.data)
+        console.log("AJWEJOAasdasdasEW");
+        debugger
+        return new Promise((resolve, reject) => {
+            postFacilityData(this.props.houseUUID, this.state.data)
                 .then(facilityList => {
-                    that.setState({data:facilityList});
-                    that.props.navContext.data.updateFormState(that.formID, 'saved');
-                    that.props.navContext.sync();
+                    this.setState(facilityList);
+                    this.props.navContext.data.updateFormState(this.formID, 'saved');
+                    this.props.navContext.sync();
                     resolve(facilityList);
                 })
                 .catch(error => {
                     alertUser.init({stockAlertType: 'unknownError'});
-                    that.props.navContext.data.updateFormState(that.formID, 'error');
-                    that.props.navContext.sync();
+                    this.props.navContext.data.updateFormState(that.formID, 'error');
+                    this.props.navContext.sync();
                     reject(error)
                 })
         })
@@ -124,12 +129,17 @@ export default class FacilitiesSelectorHandler extends Component {
                                                        ref={(input) => {
                                                            addField = input;
                                                        }}
+                                                       onKeyPress={(e) => {
+                                                           if (e.key === 'Enter') {
+                                                               this.onFacilityAdd(addField)
+                                                           }
+                                                       }}
                                                        placeholder="Add other facilities"/>
                                             </div>
                                         </div>
                                         <div className="col-md-2">
                                             <button type="submit" className="default-button-style"
-                                                    onClick={() => this.onFacilityAdd(addField.value)}
+                                                    onClick={() => this.onFacilityAdd(addField)}
                                             > Add
                                             </button>
                                         </div>
