@@ -45,11 +45,11 @@ urlpatterns = [
     path('form-options', FormOptionsView.as_view(), name='create_form_options'),
     path('availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
     path('availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
-    path('availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(),
-        name='availability_delete_api'),
-    path('images/<uuid:house_uuid>/', ImageUploadView.as_view(), name='add_house_images'),
-    path('facilities/<uuid:house_uuid>/', HouseRelatedObjectView.as_view(), {"model": "facility"}, name='facility'),
-    path('nearby_facilities/<uuid:house_uuid>/', HouseRelatedObjectView.as_view(), {"model": "nearby_facility"}, name='nearby_facility'),
-    path('welcome_tags/<uuid:house_uuid>/', HouseRelatedObjectView.as_view(), {"model": "welcome_tags"}, name='welcome_tags'),
+    path('availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(), name='availability_delete_api'),
+    path('images/<uuid:house_uuid>', ImageUploadView.as_view(), name='add_house_images'),
+    path('facilities/<uuid:house_uuid>', FacilityListView.as_view(), name='facility'),
+
+    path('nearby_facilities/<uuid:house_uuid>', HouseRelatedObjectView.as_view(), {"model": "nearby_facility"}, name='nearby_facility'),
+    path('welcome_tags/<uuid:house_uuid>', HouseRelatedObjectView.as_view(), {"model": "welcome_tags"}, name='welcome_tags'),
     path('rules/<uuid:house_uuid>', HouseRulesView.as_view(), name='rules'),
 ]

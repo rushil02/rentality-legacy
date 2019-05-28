@@ -13,7 +13,7 @@
 }
 
 #root > .page-form .right .checkbox .list-inline li .custom-checkbox .custom-control-input ~ .custom-control-label::after {
-    transition: all .25s ease-in-out;
+    transition: all .20s cubic-bezier(.65,.05,.36,1);
     opacity: 0;
 }
 
