@@ -6,7 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from house.helpers import get_available_dates
 from house.models import House, Rule
-from house.serializers import NetAvailableDatesSerailizer, RuleSerializer
+from house.serializers import NetAvailableDatesSerailizer
+
 
 class NetAvailableDatesView(APIView):
     serializer_class = NetAvailableDatesSerailizer

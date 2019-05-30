@@ -1,8 +1,7 @@
 from django.urls import path
 
-from house.serializers import HouseDetailsPublicSerializer
 from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
-    FacilityListView, HouseRelatedObjectView, HouseRulesView
+    FacilityListView, HouseRuleListView, HouseRuleListCreateView, ImagesListView, ImageView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, \
@@ -46,10 +45,16 @@ urlpatterns = [
     path('availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
     path('availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
     path('availability/<uuid:house_uuid>/<int:obj_id>', AvailabilityView.as_view(), name='availability_delete_api'),
-    path('images/<uuid:house_uuid>', ImageUploadView.as_view(), name='add_house_images'),
     path('facilities/<uuid:house_uuid>', FacilityListView.as_view(), name='facility'),
+    path('rules/list/<uuid:house_uuid>', HouseRuleListView.as_view(), name='rules_list'),
+    path('rules/update/<uuid:house_uuid>', HouseRuleListCreateView.as_view(), name='rules_update'),
 
-    path('nearby_facilities/<uuid:house_uuid>', HouseRelatedObjectView.as_view(), {"model": "nearby_facility"}, name='nearby_facility'),
-    path('welcome_tags/<uuid:house_uuid>', HouseRelatedObjectView.as_view(), {"model": "welcome_tags"}, name='welcome_tags'),
-    path('rules/<uuid:house_uuid>', HouseRulesView.as_view(), name='rules'),
+    path('image/<uuid:house_uuid>/<uuid:image_uuid>', ImageView.as_view(), name='add_house_images'),
+    path('image/upload/<uuid:house_uuid>', ImageUploadView.as_view(), name='add _house_images'),
+    path('image/list/<uuid:house_uuid>', ImagesListView.as_view(), name='add_house_images'),
+
+    path('nearby_facilities/<uuid:house_uuid>', FacilityListView.as_view(), {"model": "nearby_facility"},
+         name='nearby_facility'),
+    path('welcome_tags/<uuid:house_uuid>', FacilityListView.as_view(), {"model": "welcome_tags"}, name='welcome_tags'),
+
 ]

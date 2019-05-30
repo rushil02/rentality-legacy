@@ -36,10 +36,18 @@ class HouseAuthSerializer(serializers.ModelSerializer):
         )
 
 
+class ImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['image', 'is_thumbnail', 'uuid']
+        read_only_fields = ('uuid',)
+
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ['image', 'is_thumbnail']
+        fields = ['image', 'is_thumbnail', 'uuid']
+        read_only_fields = ('uuid', 'image')
 
 
 class FacilitySerializer(serializers.Serializer):
@@ -119,18 +127,53 @@ class HouseRelatedObjectSerializer(serializers.Serializer):
         return obj, validated_data["checked"]
 
 
-class RuleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rule
-        fields = ('id', 'verbose', 'options')
-
-
-class HouseRuleSerializer(serializers.ModelSerializer):
-    rule = RuleSerializer(required=False)
-    id = serializers.IntegerField(required=True)
+class HouseRuleReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HouseRule
-        fields = ('rule', 'value', 'comment', 'id')
-        read_only_fields = ('rule',)
-        list_serializer_class = UpdateListSerializer
+        fields = ('value', 'comment')
+
+
+class RuleReadSerializer(serializers.ModelSerializer):
+    """ Used when fetching rules for a house. """
+    house_rule = HouseRuleReadSerializer(many=True)
+
+    class Meta:
+        model = Rule
+        fields = ('id', 'verbose', 'options', 'house_rule')
+
+
+class HouseRuleCreateSerializer(serializers.ModelSerializer):
+    rule_id = serializers.IntegerField(required=True)
+
+    class Meta:
+        model = HouseRule
+        fields = ('value', 'comment', 'rule_id')
+
+    def validate(self, data):
+        """
+        Check that rule id exists in the system and value is one of the choices in list.
+        """
+        try:
+            Rule.objects.get(id=data['rule_id'], options__contains=[data['value']])
+        except Rule.DoesNotExist:
+            raise serializers.ValidationError("Invalid Rule Parameters")
+        else:
+            return data
+
+    def create(self, validated_data):
+        """
+        Create/Update and return a `HouseRule` instance, given the validated data.
+
+        If HouseRule does not exist, Create a new one, else fetch existing object.
+        """
+        obj, created = HouseRule.objects.update_or_create(
+            rule__id=validated_data['rule_id'], house=validated_data['house'],
+            defaults={'value': validated_data['value'], 'comment': validated_data['comment']}
+        )
+
+        return obj
+
+    def update(self, instance, validated_data):
+        """ Update is not allowed; Handled by Create """
+        raise NotImplementedError

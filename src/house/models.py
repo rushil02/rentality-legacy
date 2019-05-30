@@ -470,7 +470,7 @@ class Image(models.Model):
             try:
                 obj = Image.objects.filter(house=self.house, is_thumbnail=False)[0]
             except IndexError:
-                pass
+                return data
             else:
                 obj.is_thumbnail = True
                 obj.save()
