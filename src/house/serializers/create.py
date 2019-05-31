@@ -1,10 +1,7 @@
-from django.db.models import Q, Exists, OuterRef
-
 from rest_framework import serializers
 from utils.serializer_fields import DateRangeField
+from house.models import House, Availability, Image, Facility, HouseRule, Rule, NeighbourhoodDescriptor, WelcomeTag
 
-from utils.serializers import UpdateListSerializer
-from house.models import House, Availability, Image, Facility, HouseRule, Rule
 
 class AvailabilityAuthSerializer(serializers.ModelSerializer):
     date_range = DateRangeField(source='dates')
@@ -88,43 +85,80 @@ class FacilitySerializer(serializers.Serializer):
         raise NotImplementedError
 
 
-class HouseRelatedObjectSerializer(serializers.Serializer):
+class NeighbourhoodDescriptorSerializer(serializers.Serializer):
+    """
+    Read Create
+    """
     verbose = serializers.CharField()
-    id = serializers.IntegerField(required=False)
+    id = serializers.IntegerField(required=False, allow_null=True)
     checked = serializers.BooleanField()
 
-    def __init__(self, *args, **kwargs):
-        model_class = kwargs.pop('model_class')
-        super().__init__(*args, **kwargs)
-        self.model_class = model_class
-
     def validate(self, data):
+        """ Checks for given id and verbose match"""
         if data.get('id', None) is not None:
             try:
-                self.model_object = self.model_class.objects.get(id=data['id'], verbose=data['verbose'])
-            except self.model_class.DoesNotExist:
-                raise serializers.ValidationError("No object with id and verbose.")
-        else:
-            self.model_object = None
+                NeighbourhoodDescriptor.objects.get(id=data['id'], verbose=data['verbose'])
+            except NeighbourhoodDescriptor.DoesNotExist:
+                raise serializers.ValidationError("No NeighbourhoodDescriptor with id and verbose.")
         return data
 
     def create(self, validated_data):
         """
-        Create and return a new `Facility` instance, given the validated data.
-        """
-        if not self.model_object:
-            if validated_data["checked"] is False:
-                try:
-                    obj = self.model_class.objects.get(verbose=validated_data['verbose'])
-                except self.model_class.DoesNotExist:
-                    return None, False
-            else:
-                obj, created = self.model_class.objects.get_or_create(verbose=validated_data['verbose'])
+        Find/Create and return a new `NeighbourhoodDescriptor` instance, given the validated data.
 
-        else:
-            obj = self.model_object
+        If NeighbourhoodDescriptor does not exist, Create a new one, else fetch existing object.
+        """
+        try:
+            obj = NeighbourhoodDescriptor.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
+        except NeighbourhoodDescriptor.DoesNotExist:
+            if validated_data["checked"] is False:
+                obj = None
+            else:
+                obj, created = NeighbourhoodDescriptor.objects.get_or_create(verbose=validated_data['verbose'])
 
         return obj, validated_data["checked"]
+
+    def update(self, instance, validated_data):
+        """ Update is not allowed """
+        raise NotImplementedError
+
+
+class WelcomeTagSerializer(serializers.Serializer):
+    """
+    Read Create
+    """
+    verbose = serializers.CharField()
+    id = serializers.IntegerField(required=False, allow_null=True)
+    checked = serializers.BooleanField()
+
+    def validate(self, data):
+        """ Checks for given id and verbose match"""
+        if data.get('id', None) is not None:
+            try:
+                WelcomeTag.objects.get(id=data['id'], verbose=data['verbose'])
+            except WelcomeTag.DoesNotExist:
+                raise serializers.ValidationError("No NeighbourhoodDescriptor with id and verbose.")
+        return data
+
+    def create(self, validated_data):
+        """
+        Find/Create and return a new `NeighbourhoodDescriptor` instance, given the validated data.
+
+        If NeighbourhoodDescriptor does not exist, Create a new one, else fetch existing object.
+        """
+        try:
+            obj = WelcomeTag.objects.get(id=validated_data['id'], verbose=validated_data['verbose'])
+        except WelcomeTag.DoesNotExist:
+            if validated_data["checked"] is False:
+                obj = None
+            else:
+                obj, created = WelcomeTag.objects.get_or_create(verbose=validated_data['verbose'])
+
+        return obj, validated_data["checked"]
+
+    def update(self, instance, validated_data):
+        """ Update is not allowed """
+        raise NotImplementedError
 
 
 class HouseRuleReadSerializer(serializers.ModelSerializer):
@@ -177,3 +211,5 @@ class HouseRuleCreateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """ Update is not allowed; Handled by Create """
         raise NotImplementedError
+
+

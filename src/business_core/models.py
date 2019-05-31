@@ -11,6 +11,11 @@ from .adapters.cancellation_behaviours import get_cancellation_behaviours
 from cities.models import City, Region, Country
 
 
+class CancellationPolicyManager(models.Manager):
+    def get_applicable_cancellation_policies(self, house):
+        return self.get_queryset().filter(businessmodelconfiguration=house.business_config)
+
+
 class CancellationPolicy(models.Model):
     verbose = models.TextField(verbose_name='Policy Name')
     description = models.TextField()
@@ -25,6 +30,8 @@ class CancellationPolicy(models.Model):
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    objects = CancellationPolicyManager()
 
     def __str__(self):
         return "%s" % self.verbose
@@ -60,11 +67,11 @@ class BusinessModelConfigurationManager(models.Manager):
             house_location_kwargs = [
                 {
                     'house_location_type': location_content_type,
-                    'house_location_id':house_location_attr.id,
+                    'house_location_id': house_location_attr.id,
                 },
                 {
                     'house_location_type__isnull': True,
-                    'house_location_id__isnull':True,
+                    'house_location_id__isnull': True,
                 }
             ]
             for i in range(0, 2):
@@ -100,7 +107,9 @@ class BusinessModelConfigurationManager(models.Manager):
         ]
         for home_owner_billing_location_not_null, house_location_type in priority:
             for filtered_business_conf in filtered_business_confs:
-                if bool(filtered_business_conf.home_owner_billing_location) == home_owner_billing_location_not_null and type(filtered_business_conf.house_location) == house_location_type:
+                if bool(
+                        filtered_business_conf.home_owner_billing_location) == home_owner_billing_location_not_null and type(
+                        filtered_business_conf.house_location) == house_location_type:
                     return filtered_business_conf
 
 

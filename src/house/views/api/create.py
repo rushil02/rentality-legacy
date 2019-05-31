@@ -8,16 +8,14 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from django.db.models import Q, Exists, OuterRef, Prefetch
 
-from business_core.models import BusinessModelConfiguration
-from business_core.utils import House as HouseHandler
+from business_core.models import BusinessModelConfiguration, CancellationPolicy
+from business_core.serializers import CancellationPolicySerializer
 from house.models import Availability, House, HomeType, Facility, NeighbourhoodDescriptor, WelcomeTag, HouseRule, Rule, \
     Image
 from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
-from house.serializers import RuleReadSerializer, ImageUploadSerializer
-from house.serializers.create import HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer, \
-    HouseRelatedObjectSerializer, HouseRuleReadSerializer, HouseRuleCreateSerializer, FacilitySerializer, \
-    RuleReadSerializer
-from utils.api_thumbnailer import resize_image
+from house.serializers import ImageUploadSerializer, NeighbourhoodDescriptorSerializer, \
+    WelcomeTagSerializer, HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer, \
+    HouseRuleCreateSerializer, FacilitySerializer, RuleReadSerializer
 
 
 class HouseView(APIView):
@@ -257,7 +255,7 @@ class ImagesListView(APIView):
 
 class FacilityListView(APIView):
     permission_classes = (IsAuthenticated,)
-    serializer = FacilitySerializer
+    serializer_class = FacilitySerializer
 
     def get_object(self, request, house_uuid):
         return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
@@ -271,24 +269,24 @@ class FacilityListView(APIView):
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
         qs = self.get_facilities(house)
-        serializer = self.serializer(qs, many=True)
+        serializer = self.serializer_class(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, house_uuid):
-        house = self.get_object(house_uuid)
-        serializer = self.serializer(data=request.data, many=True)
+        house = self.get_object(request, house_uuid)
+        serializer = self.serializer_class(data=request.data, many=True)
         if serializer.is_valid(raise_exception=True):
             objs_set = serializer.save()
             house.facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
             house.facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False and obj[0]])
             qs = self.get_facilities(house)
-            serializer = self.serializer(qs, many=True)
+            serializer = self.serializer_class(qs, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class HouseRuleListView(APIView):
     permission_classes = (IsAuthenticated,)
-    serializer = RuleReadSerializer
+    serializer_class = RuleReadSerializer
 
     def get_object(self, request, house_uuid):
         return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
@@ -300,68 +298,8 @@ class HouseRuleListView(APIView):
 
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        serializer = self.serializer(self.get_rules(house), many=True)
+        serializer = self.serializer_class(self.get_rules(house), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# class HouseRelatedObjectView(APIView):
-#     permission_classes = (IsAuthenticated, IsOwnerOfHouse)
-#     serializer = HouseRelatedObjectSerializer
-#     model_mapping = {
-#         "facility": {
-#             "model_class": Facility,
-#             "house_attr": 'facilities'
-#         },
-#         "nearby_facility": {
-#             "model_class": NeighbourhoodDescriptor,
-#             "house_attr": 'neighbourhood_facilities'
-#         },
-#         "welcome_tags": {
-#             "model_class": WelcomeTag,
-#             "house_attr": 'welcome_tags'
-#         }
-#     }
-#
-#     def get_object(self, house_uuid):
-#         return get_object_or_404(House.objects.all(), uuid=house_uuid)
-#
-#     def get_queryset(self, house, model):
-#         return list(self.get_model_class(model).objects.filter(
-#             Q(system_default=True) | Q(house=house)
-#         ).distinct().values('verbose', 'id').annotate(
-#             checked=Exists(self.get_model_class(model).objects.filter(house=house, pk=OuterRef('pk')))))
-#
-#     @classmethod
-#     def get_model_class(cls, model):
-#         return cls.model_mapping[model]["model_class"]
-#
-#     @classmethod
-#     def get_house_attr(cls, model):
-#         return cls.model_mapping[model]["house_attr"]
-#
-#     def get(self, request, house_uuid, **kwargs):
-#         house = self.get_object(house_uuid)
-#         self.check_object_permissions(request, house)
-#         model = self.kwargs.pop('model')
-#         qs = self.get_queryset(house, model)
-#         serializer = self.serializer(model_class=self.get_model_class(model), data=qs, many=True)
-#         if serializer.is_valid(raise_exception=True):
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#
-#     def post(self, request, house_uuid, **kwargs):
-#         house = self.get_object(house_uuid)
-#         self.check_object_permissions(request, house)
-#         model = self.kwargs.pop('model')
-#         serializer = self.serializer(model_class=self.get_model_class(model), data=request.data, many=True)
-#         if serializer.is_valid(raise_exception=True):
-#             objs_set = serializer.save()
-#             getattr(house, self.get_house_attr(model)).add(*[obj[0] for obj in objs_set if obj[1] is True])
-#             getattr(house, self.get_house_attr(model)).remove(
-#                 *[obj[0] for obj in objs_set if obj[1] is False and obj[0]])
-#             qs = self.get_queryset(house, model)
-#             serializer = self.serializer(model_class=self.get_model_class(model), data=qs, many=True)
-#             if serializer.is_valid(raise_exception=True):
-#                 return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
 
 
 class HouseRuleListCreateView(APIView):
@@ -373,11 +311,108 @@ class HouseRuleListCreateView(APIView):
 
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        self.check_object_permissions(request, house)
         serializer = self.serializer_class(data=request.data, many=True)
         if serializer.is_valid(raise_exception=True):
             objs_set = serializer.save(house=house)
             serializer = self.serializer_class(objs_set, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-# class
+
+class ApplicableCancellationPolicyListView(APIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CancellationPolicySerializer
+
+    def get_object(self, request, house_uuid):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+
+    def get(self, request, house_uuid):
+        house = self.get_object(request, house_uuid)
+        qs = CancellationPolicy.objects.get_applicable_cancellation_policies(house=house)
+        serializer = self.serializer_class(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CancellationPolicyView(APIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CancellationPolicySerializer
+
+    def get_object(self, request, house_uuid):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+
+    def get(self, request, house_uuid):
+        house = self.get_object(request, house_uuid)
+        serializer = self.serializer_class(house.cancellation_policy)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, house_uuid):
+        house = self.get_object(request, house_uuid)
+        try:
+            policy = CancellationPolicy.objects.get(id=request.data['obj_id'], businessmodelconfiguration__house=house)
+        except CancellationPolicy.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            house.cancellation_policy = policy
+            house.save()
+            return Response(status=status.HTTP_200_OK)
+
+
+class NeighbourhoodDescriptorListView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = NeighbourhoodDescriptorSerializer
+
+    def get_object(self, request, house_uuid):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+
+    def get_descriptors(self, house):
+        return list(NeighbourhoodDescriptor.objects.filter(
+            Q(system_default=True) | Q(house=house)
+        ).distinct().values('verbose', 'id').annotate(
+            checked=Exists(NeighbourhoodDescriptor.objects.filter(house=house, pk=OuterRef('pk')))))
+
+    def get(self, request, house_uuid):
+        house = self.get_object(request, house_uuid)
+        qs = self.get_descriptors(house)
+        serializer = self.serializer_class(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, house_uuid):
+        house = self.get_object(request, house_uuid)
+        serializer = self.serializer_class(data=request.data, many=True)
+        if serializer.is_valid(raise_exception=True):
+            objs_set = serializer.save()
+            house.neighbourhood_facilities.add(*[obj[0] for obj in objs_set if obj[1] is True])
+            house.neighbourhood_facilities.remove(*[obj[0] for obj in objs_set if obj[1] is False and obj[0]])
+            qs = self.get_descriptors(house)
+            serializer = self.serializer_class(qs, many=True)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class WelcomeTagsListView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = WelcomeTagSerializer
+
+    def get_object(self, request, house_uuid):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+
+    def get_tags(self, house):
+        return list(WelcomeTag.objects.filter(
+            Q(system_default=True) | Q(house=house)
+        ).distinct().values('verbose', 'id').annotate(
+            checked=Exists(WelcomeTag.objects.filter(house=house, pk=OuterRef('pk')))))
+
+    def get(self, request, house_uuid):
+        house = self.get_object(request, house_uuid)
+        qs = self.get_tags(house)
+        serializer = self.serializer_class(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, house_uuid):
+        house = self.get_object(request, house_uuid)
+        serializer = self.serializer_class(data=request.data, many=True)
+        if serializer.is_valid(raise_exception=True):
+            objs_set = serializer.save()
+            house.welcome_tags.add(*[obj[0] for obj in objs_set if obj[1] is True])
+            house.welcome_tags.remove(*[obj[0] for obj in objs_set if obj[1] is False and obj[0]])
+            qs = self.get_tags(house)
+            serializer = self.serializer_class(qs, many=True)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)

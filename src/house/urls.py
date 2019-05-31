@@ -1,7 +1,8 @@
 from django.urls import path
 
 from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
-    FacilityListView, HouseRuleListView, HouseRuleListCreateView, ImagesListView, ImageView
+    FacilityListView, HouseRuleListView, HouseRuleListCreateView, ImagesListView, ImageView, \
+    ApplicableCancellationPolicyListView, CancellationPolicyView, NeighbourhoodDescriptorListView, WelcomeTagsListView
 from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 from house.views import info, create, edit, \
@@ -48,13 +49,13 @@ urlpatterns = [
     path('facilities/<uuid:house_uuid>', FacilityListView.as_view(), name='facility'),
     path('rules/list/<uuid:house_uuid>', HouseRuleListView.as_view(), name='rules_list'),
     path('rules/update/<uuid:house_uuid>', HouseRuleListCreateView.as_view(), name='rules_update'),
-
     path('image/<uuid:house_uuid>/<uuid:image_uuid>', ImageView.as_view(), name='add_house_images'),
     path('image/upload/<uuid:house_uuid>', ImageUploadView.as_view(), name='add _house_images'),
     path('image/list/<uuid:house_uuid>', ImagesListView.as_view(), name='add_house_images'),
-
-    path('nearby_facilities/<uuid:house_uuid>', FacilityListView.as_view(), {"model": "nearby_facility"},
-         name='nearby_facility'),
-    path('welcome_tags/<uuid:house_uuid>', FacilityListView.as_view(), {"model": "welcome_tags"}, name='welcome_tags'),
-
+    path('can-pol/list/<uuid:house_uuid>', ApplicableCancellationPolicyListView.as_view(),
+         name='cancellation_policies'),
+    path('can-pol/<uuid:house_uuid>', CancellationPolicyView.as_view(), name='get_cancellation_policy'),
+    path('can-pol/update/<uuid:house_uuid>', CancellationPolicyView.as_view(), name='set_cancellation_policy'),
+    path('neighbourhood-desc/<uuid:house_uuid>', NeighbourhoodDescriptorListView.as_view(), name='nearby_facility'),
+    path('welcome-tags/<uuid:house_uuid>', WelcomeTagsListView.as_view(), name='welcome_tags'),
 ]
