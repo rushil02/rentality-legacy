@@ -46,15 +46,16 @@
     "prop-types": "^15.6.2",
     "react": "16.8.6",
     "react-autosuggest": "^9.4.3",
-    "react-date-picker": "7.5.0",
     "react-date-range": "^1.0.0-beta",
     "react-dom": "^16.7.0",
+    "react-dropzone": "^10.1.5",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^4.3.1",
     "react-script-loader-hoc": "^1.2.2",
     "react-select": "^2.4.2",
     "react-spinners": "0.5.4",
     "react-stripe-elements": "^2.0.2",
+    "react-upload-images": "^1.0.2",
     "title-case": "^2.1.1"
   }
 }

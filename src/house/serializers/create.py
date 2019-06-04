@@ -202,7 +202,7 @@ class HouseRuleCreateSerializer(serializers.ModelSerializer):
         If HouseRule does not exist, Create a new one, else fetch existing object.
         """
         obj, created = HouseRule.objects.update_or_create(
-            rule__id=validated_data['rule_id'], house=validated_data['house'],
+            rule_id=validated_data['rule_id'], house=validated_data['house'],
             defaults={'value': validated_data['value'], 'comment': validated_data['comment']}
         )
 

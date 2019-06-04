@@ -44,7 +44,7 @@ export default class Alert extends Component {
                 }))
             } else {
                 if (availableAlertTypes.indexOf(alertType) === -1) {
-                    console.log("Invalid alertType : " + alertType)
+                    console.error("Invalid alertType : " + alertType)
                 } else {
                     this.setState(prevState => ({
                         alertList: [...prevState.alertList, {

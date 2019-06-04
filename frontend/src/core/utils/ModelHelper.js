@@ -2,7 +2,15 @@ export default class APIModelAdapter {
     /**
      *
      * @param dbObj
-     * @param status - options: [empty, saved, hasChanged], default: saved
+     * @param status - settings: [empty, saved, hasChanged], default: saved
+     *
+     * fieldMap() - returns an object with each field as key and value as another object as it's settings
+     *              Example - {comment: {key: 'house_rule', parser: this.parseComment}},
+     *              Setting options - key : field from server/DB
+     *                                parser: [optional] to manipulate obtained value from DB
+     *                                adapter: [optional] to created a nested APIModelAdapter
+     *                                default: if value is not provided bt DB
+     *              Note: `parser` and `adapter` do not work together. `adapter` has precedence over `parser` setting.
      */
     constructor(dbObj, status) {
         this._attrs = {};
@@ -16,20 +24,40 @@ export default class APIModelAdapter {
         this.changedFields = []
     }
 
-    _constructAttribute = (key, options, source) => {
-        let defaultVal;
-        if (options.adapter) {
-            defaultVal = options.hasOwnProperty('default') ? options.default : {};
-            this._attrs[key] = new options.adapter(source[options.key] || defaultVal);
+    _parseAttr(data, settings) {
+        if (settings.parser) {
+            return settings.parser(data)
         } else {
-            if (source[options.key] !== undefined) { // Explicit check for undefined only, as `false` can also be a value
-                this._attrs[key] = source[options.key]
+            return data
+        }
+    }
+
+    _constructAttribute = (field, settings, source) => {
+        let defaultVal;
+        // Checks and warns if a dbOBj doesn't contain specified fields
+        // dbObj and empty objects are differentiated using status 'saved' and 'empty' respectively.
+        if (source[settings.key] === undefined && this.status !== 'empty') {
+            console.warn(`${settings.key} Not Found in Response. May cause unexpected behaviour.`)
+        }
+        if (settings.adapter) {
+            defaultVal = settings.hasOwnProperty('default') ? settings.default : {};
+            this._attrs[field] = new settings.adapter(source[settings.key] || defaultVal);
+        } else {
+            // Explicit check for undefined and null only, as `false` can also be a value
+            // Checking for undefined allows to create empty objects, while a primitive check is done above
+            // for absent fields.
+            if (source[settings.key] !== undefined && source[settings.key] !== null) {
+                if (settings.parser) {
+                    this._attrs[field] = settings.parser(source[settings.key])
+                } else {
+                    this._attrs[field] = source[settings.key]
+                }
             } else {
-                defaultVal = options.hasOwnProperty('default') ? options.default : "";
-                this._attrs[key] = source[options.key] || defaultVal;
+                // Default is blank string; maintains boolean logic and input display logic
+                this._attrs[field] = settings.hasOwnProperty('default') ? settings.default : "";
             }
         }
-        this.reverseFieldMap[options.key] = key;
+        this.reverseFieldMap[settings.key] = field;
     };
 
     fieldMap() {
@@ -52,11 +80,11 @@ export default class APIModelAdapter {
 
     // Used for backend error serialization
     // Clears all other errors if any
-    parseUpdateError = (errorMap) => {
+    parseError(errorMap) {
         this.errors = {};
         let errors = Object.entries(errorMap);
         for (let i = 0; i < errors.length; i++) {
-            if (errors[i][1] != null && errors[i][1] !== '') {
+            if (errors[i][1] && errors[i][1] !== '') {
                 this.errors[this.reverseFieldMap[errors[i][0]]] = errors[i][1]
             }
         }
@@ -101,16 +129,16 @@ export default class APIModelAdapter {
                 if (this._fieldMap[i][1].adapter) {
                     ret[this._fieldMap[i][1].key] = this.getData(this._fieldMap[i][0]).serialize('__all__')
                 } else {
-                    ret[this._fieldMap[i][1].key] = this.getData(this._fieldMap[i][0])
+                    ret[this._fieldMap[i][1].key] = this.getData(this._fieldMap[i][0]) === '' ? null : this.getData(this._fieldMap[i][0]);
                 }
             }
-        } else if (!fields || fields === '__partial__') {
+        } else if (fields === '__partial__') {
             fields = this.changedFields;
             for (let i = 0; i < fields.length; i++) {
                 if (this.fieldMap()[fields[i]].adapter) {
                     ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]).serialize('__all__')
                 } else {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i])
+                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i])  === '' ? null : this.getData(fields[i])
                 }
             }
         } else {
@@ -118,13 +146,117 @@ export default class APIModelAdapter {
                 if (this.fieldMap()[fields[i]].adapter) {
                     ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]).serialize('__all__')
                 } else {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i])
+                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i])  === '' ? null : this.getData(fields[i])
                 }
             }
         }
         return ret
     }
 }
+
+
+export class APIModelListAdapter {
+    /**
+     * List of APIModels
+     * @param objModel - APIModelAdapter class
+     * @param status - settings: [empty, saved, hasChanged], default: saved
+     * @param dbData - array of dbObj
+     * @param uniqueKey - [optional] unique field
+     */
+
+    constructor(dbData, objModel, uniqueKey, status) {
+        this._data = {};
+        this._model = objModel;
+        this._key = uniqueKey;
+
+        this.status = status || 'saved';
+
+        this._constructObjModel(dbData);
+
+    }
+
+    getList() {
+        return this._data
+    }
+
+    updateObject(objID, field, value) {
+        this._data[objID].setData(field, value);
+        this.status = 'hasChanged';
+        return this
+    }
+
+
+    _constructObjModel = (data) => {
+        let indexOffset = Object.entries(this._data).length;
+        data.map((dbObj, index) => {
+            let key = this._key ? dbObj[this._key] : (index + indexOffset);
+            this._data[key] = new this._model(dbObj);
+        });
+    };
+
+    appendPagination(dbData) {
+        // Accepts list of objects from DB
+        this._constructObjModel(dbData);
+        return this
+    }
+
+    update(modelObj, key) {
+        /**
+         * @param modelObj:
+         * @param key: [optional]
+         */
+        if(!key && !this._key){
+            console.error("No key provided for append to work.")
+        }
+
+        this._data[key || modelObj.getData(this._key)] = modelObj;
+        return this
+    }
+
+    updateMultiple(modelObjs) {
+        if(!this._key){
+            console.error("Concat cannot work without list level key")
+        }
+        modelObjs.map((item) => {
+            this.append(item)
+        });
+    }
+
+    serialize(listPartialUpdate, objPartialUpdate) {
+        let respData = [];
+        if (listPartialUpdate) {
+            Object.values(this._data).map((item) => {
+                if (item.status === "hasChanged") {
+                    respData.push(item.serialize(objPartialUpdate))
+                }
+            });
+        } else {
+            Object.values(this._data).map((item) => {
+                respData.push(item.serialize(objPartialUpdate))
+            });
+        }
+        return respData
+    }
+
+    parseErrors(errorList, listPartialUpdate) {
+        let counter = 0;
+        if (listPartialUpdate) {
+            Object.values(this._data).map((item) => {
+                if (item.status === "hasChanged") {
+                    item.parseError(errorList[counter]);
+                    counter++;
+                }
+            });
+        } else {
+            Object.values(this._data).map((item) => {
+                item.parseError(errorList[counter]);
+                counter++;
+            });
+        }
+        return data
+    }
+}
+
 
 export class DateRangeModel extends APIModelAdapter {
 

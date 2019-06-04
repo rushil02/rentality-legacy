@@ -7,6 +7,8 @@ export const FormOptionsCache = React.createContext({});
 export const MainDataCache = React.createContext({});
 export const AvailabilityCache = React.createContext({});
 export const FacilityCache = React.createContext({});
+export const RulesCache = React.createContext({});
+export const ImagesCache = React.createContext({});
 
 
 // Common Store Provider for multiple Contexts
@@ -14,7 +16,7 @@ export class StoreProvider extends StoreHelper {
 
     // Initializer
     getStore() {
-        return ['mainData', 'availabilityData', 'facilitiesData']
+        return ['mainData', 'availabilityData', 'facilitiesData', 'rulesData', 'imagesData']
     }
 
     render() {
@@ -24,7 +26,11 @@ export class StoreProvider extends StoreHelper {
                     <MainDataCache.Provider value={this.state.mainData}>
                         <AvailabilityCache.Provider value={this.state.availabilityData}>
                             <FacilityCache.Provider value={this.state.facilitiesData}>
-                                {this.props.children}
+                                <RulesCache.Provider value={this.state.rulesData}>
+                                    <ImagesCache.Provider value={this.state.imagesData}>
+                                        {this.props.children}
+                                    </ImagesCache.Provider>
+                                </RulesCache.Provider>
                             </FacilityCache.Provider>
                         </AvailabilityCache.Provider>
                     </MainDataCache.Provider>

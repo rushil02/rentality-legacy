@@ -28,9 +28,6 @@ class Navigator extends Component {
         this.props.history.push('/' + (this.props.navContext.data.currForm - 1))
     };
 
-
-
-
     render() {
         return (
             <NavigatorComponent

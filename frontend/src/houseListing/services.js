@@ -1,9 +1,9 @@
-import $ from 'jquery';
-import axios from "core/utils/serviceHelper";
+import axios, {handleError} from "core/utils/serviceHelper";
 import {reverse} from 'named-urls';
 import routes from "routes";
 import {alertUser} from "core/alert/Alert";
-import {Availability, House, FormOptions, Facility} from "./models";
+import {Availability, House, FormOptions, Facility, Rule, Image} from "./models";
+import {APIModelListAdapter} from "../core/utils/ModelHelper";
 
 
 export function getHouseData(houseUUID) {
@@ -13,7 +13,7 @@ export function getHouseData(houseUUID) {
                 resolve(new House(result.data));
             })
             .catch(error => {
-                reject(error);
+                reject(handleError(error).error);
             });
     });
 }
@@ -50,8 +50,7 @@ export function getFormOptions() {
             .then(result => {
                 resolve(new FormOptions(result.data));
             }).catch(error => {
-            reject(error)
-
+                reject(handleError(error).error);
         });
 
     });
@@ -62,37 +61,23 @@ export function getFacilityData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios.get(reverse(routes.house.facilities, {houseUUID: houseUUID}))
             .then(result => {
-                let ret = {};
-                $.each(result.data, (index, dbObj) => {
-                    ret[dbObj.id] = new Facility(dbObj);
-                });
-                resolve(ret);
+                resolve(new APIModelListAdapter(result.data, Facility, 'id'));
             })
             .catch(error => {
-                reject(error);
+                reject(handleError(error).error);
             })
     })
 }
 
 
 export function postFacilityData(houseUUID, data) {
-    let respData = [];
-    Object.values(data).map((item, i) => {
-        console.log(item);
-        respData.push(item.serialize())
-    });
-
     return new Promise(function (resolve, reject) {
-        axios.post(reverse(routes.house.facilities, {houseUUID: houseUUID}), respData)
+        axios.post(reverse(routes.house.facilities, {houseUUID: houseUUID}), data.serialize(true))
             .then(result => {
-                let ret = [];
-                $.each(result.data, (index, dbObj) => {
-                    ret.push(new Facility(dbObj));
-                });
-                resolve(ret);
+                resolve(new APIModelListAdapter(result.data, Facility, 'id'));
             })
             .catch(error => {
-                reject(error);
+                reject(handleError(error).error);
             })
     })
 }
@@ -104,7 +89,7 @@ export function getPostalCodeData(value) {
                 resolve(result.data);
             })
             .catch(error => {
-                reject(error);
+                reject(handleError(error).error);
             })
     })
 }
@@ -116,7 +101,7 @@ export function getPostalCodeSuggestions(value) {
                 resolve(result.data);
             })
             .catch(error => {
-                reject(error);
+                reject(handleError(error).error);
             })
     })
 }
@@ -127,13 +112,13 @@ export function getAvailabilityData(houseUUID) {
         axios.get(reverse(routes.house.availability.list, {houseUUID: houseUUID}))
             .then(result => {
                 let ret = {};
-                $.each(result.data, (index, dbObj) => {
+                result.data.map((dbObj) => {
                     ret[dbObj.id] = new Availability(dbObj);
                 });
                 resolve(ret);
             })
             .catch(error => {
-                reject(error);
+                handleError(error)
             });
     });
 }
@@ -164,6 +149,7 @@ export function putAvailabilityData(houseUUID, objID, data) {
     });
 }
 
+
 export function deleteAvailabilityData(houseUUID, objID) {
     return new Promise(function (resolve, reject) {
         axios.delete(reverse(routes.house.availability.remove, {houseUUID: houseUUID, objID: objID}))
@@ -172,6 +158,47 @@ export function deleteAvailabilityData(houseUUID, objID) {
             })
             .catch(error => {
                 reject(error.response);
+            });
+    });
+}
+
+
+export function getRulesData(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.get(reverse(routes.house.rules.list, {houseUUID: houseUUID}))
+            .then(result => {
+                resolve(APIModelListAdapter(result.data, Rule, 'id'));
+            })
+            .catch(error => {
+                handleError(error)
+            });
+    });
+}
+
+
+export function postRulesData(houseUUID, data) {
+    return new Promise(function (resolve, reject) {
+        axios.post(reverse(routes.house.rules.update, {houseUUID: houseUUID}), data.serialize(true))
+            .then(result => {
+                resolve(result.data);
+            })
+            .catch(error => {
+                if (handleError(error).badRequest) {
+                    reject(data.parseErrors(error.response.data, true));
+                }
+            });
+    });
+}
+
+
+export function getImagesData(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.get(reverse(routes.house.image.list, {houseUUID: houseUUID}))
+            .then(result => {
+                resolve(APIModelList(result.data, Image, 'uuid'));
+            })
+            .catch(error => {
+                handleError(error)
             });
     });
 }

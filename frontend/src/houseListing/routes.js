@@ -12,4 +12,12 @@ export default {
         remove: ':houseUUID/:objID',
     }),
     facilities: 'facilities/:houseUUID',
+    rules: include('rules', {
+        list: 'list/:houseUUID',
+        update: 'update/:houseUUID'
+    }),
+    image: include('image', {
+        list: 'list/:houseUUID',
+        update: 'update/:houseUUID'
+    }),
 }

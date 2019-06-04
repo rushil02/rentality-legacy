@@ -45,13 +45,14 @@
     -o-transition: all 0.30s ease-in-out;
 }
 
+
 #root > .page-form .right .input.big .form-control {
     font-size: 20px;
     font-weight: 400;
 }
 
 #root > .page-form .right .input.style-gray .form-control {
-    background-color: #e9e9ea !important;
+    background-color: #e9e9ea61 !important;
     height: calc(2.25rem + 34px) !important;
     padding-left: 60px !important;
     padding-right: 20px !important;

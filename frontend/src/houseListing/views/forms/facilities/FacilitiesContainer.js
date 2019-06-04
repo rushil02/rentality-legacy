@@ -3,6 +3,7 @@ import {alertUser} from "core/alert/Alert";
 import {getFacilityData, patchHouseData, postFacilityData, postHouseData} from "houseListing/services";
 import {Facility, House} from "../../../models";
 import "./Facilities.css";
+import {APIModelListAdapter} from "core/utils/ModelHelper";
 
 
 export default class FacilitiesSelectorHandler extends Component {
@@ -12,7 +13,7 @@ export default class FacilitiesSelectorHandler extends Component {
         super(props);
         if (props.cache.data === undefined) {
             this.state = {
-                data: [],
+                data: new APIModelListAdapter([], Facility, 'id', 'empty'),
             };
         } else {
             this.state = {
@@ -24,19 +25,23 @@ export default class FacilitiesSelectorHandler extends Component {
 
     componentDidMount() {
         this.props.navContext.data.loadForm(this.formID, this.onSave, 'initial', "Facilities");
-        this.props.navContext.sync();
+        if (this.state.data.status === 'empty') {
+            getFacilityData(this.props.houseUUID)
+                .then(result => {
+                    this.setState(prevState => (
+                        {
+                            ...prevState,
+                            data: result
+                        })
+                    );
+                    this.props.navContext.data.updateFormState(this.formID, 'saved');
+                    this.props.navContext.sync();
+                });
+        } else {
+            this.props.navContext.data.updateFormState(this.formID, this.state.data.status);
 
-        getFacilityData(this.props.houseUUID)
-            .then(result => {
-                this.setState(prevState => (
-                    {
-                        ...prevState,
-                        data: result
-                    })
-                );
-                this.props.navContext.data.updateFormState(this.formID, 'saved');
-                this.props.navContext.sync();
-            });
+        }
+        this.props.navContext.sync();
 
     };
 
@@ -48,51 +53,47 @@ export default class FacilitiesSelectorHandler extends Component {
 
     onFacilityUpdate = (objID, value) => {
         this.setState(prevState => ({
-                data: {
-                    ...prevState.data,
-                    [objID]: prevState.data[objID].setData('checked', value)
-                }
+                ...prevState,
+                data: prevState.data.updateObject(objID, 'checked', value)
             })
         );
         this.props.navContext.data.updateFormState(this.formID, 'hasChanged');
         this.props.navContext.sync();
-
     };
 
     onFacilityAdd = (input) => {
         let text = input.value;
-        this.setState(prevState => ({
-                data: {
-                    ...prevState.data,
-                    [text]: new Facility({id: null, verbose: text, checked: true})
-                }
-            })
-        );
+        if (text !== "") {
+            this.setState(prevState => ({
+                    data: prevState.data.update(new Facility({id: null, verbose: text, checked: true}), text)
+                })
+            );
 
-        input.value = "";
+            input.value = "";
+
+            this.props.navContext.data.updateFormState(this.formID, 'hasChanged');
+            this.props.navContext.sync();
+        }
         input.focus();
 
-        this.props.navContext.data.updateFormState(this.formID, 'hasChanged');
-        this.props.navContext.sync();
     };
 
 
-    onSave(e) {
+    onSave = (e) => {
+        const that = this;
         e.stopPropagation();
-        console.log("AJWEJOAasdasdasEW");
-        debugger
         return new Promise((resolve, reject) => {
-            postFacilityData(this.props.houseUUID, this.state.data)
+            postFacilityData(that.props.houseUUID, that.state.data)
                 .then(facilityList => {
-                    this.setState(facilityList);
-                    this.props.navContext.data.updateFormState(this.formID, 'saved');
-                    this.props.navContext.sync();
+                    that.setState({data: facilityList});
+                    that.props.navContext.data.updateFormState(that.formID, 'saved');
+                    that.props.navContext.sync();
                     resolve(facilityList);
                 })
                 .catch(error => {
                     alertUser.init({stockAlertType: 'unknownError'});
-                    this.props.navContext.data.updateFormState(that.formID, 'error');
-                    this.props.navContext.sync();
+                    that.props.navContext.data.updateFormState(that.formID, 'error');
+                    that.props.navContext.sync();
                     reject(error)
                 })
         })
@@ -114,7 +115,7 @@ export default class FacilitiesSelectorHandler extends Component {
                                 <div className="col-md-12">
                                     <div className="checkbox">
                                         <ul className="list-inline" id="facilities-list">
-                                            {Object.entries(this.state.data).map((data, i) =>
+                                            {Object.entries(this.state.data.getList()).map((data) =>
                                                 <FacilitiesComponent data={data[1]} key={data[0].toString()}
                                                                      onChange={this.onFacilityUpdate}/>
                                             )}

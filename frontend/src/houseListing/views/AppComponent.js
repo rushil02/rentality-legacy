@@ -1,7 +1,7 @@
 import React, {Suspense} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import {ComponentLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
-import {MainDataCache, NavigationContext, FacilityCache} from '../dataContext'
+import {MainDataCache, NavigationContext, FacilityCache, RulesCache, ImagesCache} from '../dataContext'
 import Navigator from './navigation/Navigator';
 
 import './forms/FormCommon.css'
@@ -55,6 +55,31 @@ export function EditAppComponent(props) {
                                                 houseUUID={houseUUID}
                                             />}
                                         </FacilityCache.Consumer>
+                                    </Suspense>
+                                }/>
+                                <Route exact path="/4" render={(routerProps) =>
+                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                        <RulesCache.Consumer>
+                                            {cache => <MainDataCache.Consumer>
+                                                {mainDataCache => <RulesContainer
+                                                    cache={cache}
+                                                    mainDataCache={mainDataCache}
+                                                    navContext={navContext}
+                                                    houseUUID={houseUUID}
+                                                />}
+                                            </MainDataCache.Consumer>}
+                                        </RulesCache.Consumer>
+                                    </Suspense>
+                                }/>
+                                <Route exact path="/5" render={(routerProps) =>
+                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                        <ImagesCache.Consumer>
+                                            {cache => <UploadImagesFormContainer
+                                                cache={cache}
+                                                navContext={navContext}
+                                                houseUUID={houseUUID}
+                                            />}
+                                        </ImagesCache.Consumer>
                                     </Suspense>
                                 }/>
                                 <Route render={() => <Redirect to="/1"/>}/>

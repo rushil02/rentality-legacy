@@ -18,10 +18,13 @@ export class House extends APIModelAdapter {
             numParkSpaces: {key: 'parking', default: 0},
 
             // Form Rent & availability
-            rent: {key: 'rent', default: 0},
+            rent: {key: 'rent'},
             minStay: {key: 'min_stay', default: 28},
             maxStay: {key: 'max_stay', default: 0},
             maxPeopleAllowed: {key: 'max_people_allowed', default: 2},
+
+            // Form Rules
+            otherRules: {key: 'other_rules'},
 
             // Others
             UUID: {key: 'uuid'}
@@ -44,7 +47,7 @@ export class Availability extends APIModelAdapter {
 export class Facility extends APIModelAdapter {
     fieldMap() {
         return {
-            objID: {key: 'id',},
+            objID: {key: 'id', default: null},
             verbose: {key: 'verbose',},
             checked: {key: 'checked',},
         }
@@ -122,4 +125,63 @@ export class Navigator {
         return this._forms[formID]
     }
 
+}
+
+
+export class Rule extends APIModelAdapter {
+    fieldMap() {
+        return {
+            ruleID: {key: 'id',},
+            verbose: {key: 'verbose',},
+            options: {key: 'options',},
+            selected: {key: 'house_rule', parser: this.parseSelected},
+            comment: {key: 'house_rule', parser: this.parseComment},
+        }
+    }
+
+    parseSelected(data) {
+        if (data[0]) {
+            return data[0].value
+        }
+        return ""
+    };
+
+    parseComment(data) {
+        if (data[0]) {
+            return data[0].comment
+        }
+        return ""
+    };
+
+    parseUpdateError(errorMap) {
+        this.errors = {};
+        if (errorMap.value && errorMap.value !== '') {
+            this.errors.selected = errorMap.value
+        }
+        if (errorMap.comment && errorMap.comment !== '') {
+            this.errors.comment = errorMap.comment
+        }
+        if (errorMap.rule_id && errorMap.rule_id !== '') {
+            this.errors.ruleID = errorMap.rule_id
+        }
+    }
+
+    serialize(fields) {
+        return ({
+            "rule_id": this.getData('ruleID'),
+            "value": this.getData('selected'),
+            "comment": this.getData('comment')
+        })
+    }
+}
+
+
+export class Image extends APIModelAdapter {
+    fieldMap() {
+        return {
+            imagePath: {key: 'image',},
+            isThumbnail: {key: 'is_thumbnail', default:false},
+            uuid: {key: 'uuid',},
+        }
+    }
 }
