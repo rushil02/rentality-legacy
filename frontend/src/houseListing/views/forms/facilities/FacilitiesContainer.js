@@ -65,7 +65,7 @@ export default class FacilitiesSelectorHandler extends Component {
         let text = input.value;
         if (text !== "") {
             this.setState(prevState => ({
-                    data: prevState.data.update(new Facility({id: null, verbose: text, checked: true}), text)
+                    data: prevState.data.update(new Facility({id: null, verbose: text, checked: true}, 'hasChanged'), text)
                 })
             );
 
@@ -116,8 +116,11 @@ export default class FacilitiesSelectorHandler extends Component {
                                     <div className="checkbox">
                                         <ul className="list-inline" id="facilities-list">
                                             {Object.entries(this.state.data.getList()).map((data) =>
-                                                <FacilitiesComponent data={data[1]} key={data[0].toString()}
-                                                                     onChange={this.onFacilityUpdate}/>
+                                                <FacilitiesComponent
+                                                    data={data[1]} key={data[0].toString()}
+                                                    onChange={this.onFacilityUpdate}
+                                                    objReference={data[0]}
+                                                />
                                             )}
                                         </ul>
                                     </div>
@@ -165,12 +168,12 @@ function FacilitiesComponent(props) {
                     type="checkbox"
                     className="custom-control-input"
                     checked={props.data.getData('checked')}
-                    id={`facility-checkbox-${props.data.getData('objID')}`}
+                    id={`facility-checkbox-${props.objReference}`}
                     onChange={(e) => {
-                        props.onChange(props.data.getData('objID'), e.target.checked)
+                        props.onChange(props.objReference, e.target.checked)
                     }}
                 />
-                <label className="custom-control-label" htmlFor={`facility-checkbox-${props.data.getData('objID')}`}>
+                <label className="custom-control-label" htmlFor={`facility-checkbox-${props.objReference}`}>
                     {props.data.getData('verbose')}
                 </label>
             </div>

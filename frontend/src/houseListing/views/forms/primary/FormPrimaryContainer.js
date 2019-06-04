@@ -74,7 +74,6 @@ export default class FormPrimaryContainer extends Component {
                         resolve(house);
                     })
                     .catch(error => {
-                        that.state.data.parseUpdateError(error.data);
                         that.forceUpdate();
                         that.props.navContext.data.updateFormState(that.formID, 'error');
                         that.props.navContext.sync();

@@ -26,7 +26,7 @@ export function postHouseData(data) {
                 resolve(new House(result.data));
             })
             .catch(error => {
-                reject(error.response);
+                reject(data.parseError(error.response.data));
             });
     });
 }
@@ -38,7 +38,7 @@ export function patchHouseData(houseUUID, data) {
                 resolve(new House(result.data));
             })
             .catch(error => {
-                reject(error.response);
+                reject(data.parseError(error.response.data));
             });
     });
 }
@@ -124,6 +124,7 @@ export function getAvailabilityData(houseUUID) {
 }
 
 
+// FIXME: Migrate Availability code to new services/model paradigm for Lists
 export function postAvailabilityData(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios.post(reverse(routes.house.availability.create, {houseUUID: houseUUID}), data)
@@ -167,7 +168,7 @@ export function getRulesData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios.get(reverse(routes.house.rules.list, {houseUUID: houseUUID}))
             .then(result => {
-                resolve(APIModelListAdapter(result.data, Rule, 'id'));
+                resolve(new APIModelListAdapter(result.data, Rule, 'id'));
             })
             .catch(error => {
                 handleError(error)
@@ -195,7 +196,7 @@ export function getImagesData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios.get(reverse(routes.house.image.list, {houseUUID: houseUUID}))
             .then(result => {
-                resolve(APIModelList(result.data, Image, 'uuid'));
+                resolve(new APIModelListAdapter(result.data, Image, 'uuid'));
             })
             .catch(error => {
                 handleError(error)

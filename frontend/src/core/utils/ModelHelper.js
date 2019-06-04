@@ -88,6 +88,7 @@ export default class APIModelAdapter {
                 this.errors[this.reverseFieldMap[errors[i][0]]] = errors[i][1]
             }
         }
+        return this
     };
 
     updateError = (errorMap) => {
@@ -253,10 +254,34 @@ export class APIModelListAdapter {
                 counter++;
             });
         }
-        return data
+        return this
+    }
+
+    updateStatus = (newStatus) =>{
+        this.status = newStatus;
+        return this
     }
 }
 
+
+export function mergeModelStates(stateList){
+    /**
+     * Useful when a page has single controller attached to multiple routes (APIs)
+     */
+
+    if(stateList.length === 0){
+        throw Error("`stateList` is empty")
+    }
+
+    // Checks are in order of display priority
+    if (stateList.indexOf('hasChanged') >= 0){
+        return 'hasChanged'
+    } else if (stateList.indexOf('empty') >= 0){
+        return 'empty'
+    } else {
+        return 'saved'
+    }
+}
 
 export class DateRangeModel extends APIModelAdapter {
 

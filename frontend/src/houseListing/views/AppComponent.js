@@ -11,7 +11,8 @@ import routes from "../../routes";
 const FormPrimaryContainer = React.lazy(() => import("./forms/primary/FormPrimaryContainer"));
 const FormRentAvailabilityContainer = React.lazy(() => import("./forms/rentAvailability/FormRentAvailabilityContainer"));
 const FacilitiesContainer = React.lazy(() => import("./forms/facilities/FacilitiesContainer"));
-
+const RulesContainer = React.lazy(() => import("./forms/rules/RulesContainer"));
+const UploadImagesFormContainer= React.lazy(() => import("./forms/mediaUpload/UploadImagesForm"));
 
 // Add all forms here
 export function EditAppComponent(props) {

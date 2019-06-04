@@ -98,7 +98,11 @@ export class Navigator {
     };
 
     getCurrentFormState = () => {
-        return this._forms[this.currForm].state
+        if (Array.isArray(this._forms[this.currForm].state)) {
+            return this.mergeFormStates(this._forms[this.currForm].state)
+        } else {
+            return this._forms[this.currForm].state
+        }
     };
 
     getCurrentSaveCallback = () => {
@@ -113,12 +117,39 @@ export class Navigator {
         this._forms[this.currForm].state = newState
     };
 
-    updateFormState = (formID, formState) => {
+    updateFormState = (formID, formState, subCompIndex) => {
+        /**
+         * subCompIndex - [Optional] Sub-Component Index - Used for composite Form States
+         */
+
         // Extra Check for direct conversion from dataState to formState
         if (formState === 'empty') {
             formState = 'initial';
         }
-        this._forms[formID]['state'] = formState;
+        if (subCompIndex !== undefined && subCompIndex !== false && subCompIndex !== null) {
+            this._forms[formID].state[subCompIndex] = formState;
+        } else {
+            this._forms[formID].state = formState;
+        }
+    };
+
+    mergeFormStates = (stateList) => {
+        /**
+         * Since structure of FormState is not controlled, composite formState can be used in the form
+         * of a list, where index of list represents any controlled components within the form.
+         * Useful when a page has single form controller attached to multiple routes (APIs)
+         */
+
+        // Checks are in order of display priority
+        if (stateList.indexOf('error') >= 0) {
+            return 'error'
+        } else if (stateList.indexOf('hasChanged') >= 0) {
+            return 'hasChanged'
+        } else if (stateList.indexOf('saved') >= 0) {
+            return 'saved'
+        } else {
+            return 'initial'
+        }
     };
 
     getFormDetails = (formID) => {
@@ -153,7 +184,7 @@ export class Rule extends APIModelAdapter {
         return ""
     };
 
-    parseUpdateError(errorMap) {
+    parseError(errorMap) {
         this.errors = {};
         if (errorMap.value && errorMap.value !== '') {
             this.errors.selected = errorMap.value
@@ -180,7 +211,7 @@ export class Image extends APIModelAdapter {
     fieldMap() {
         return {
             imagePath: {key: 'image',},
-            isThumbnail: {key: 'is_thumbnail', default:false},
+            isThumbnail: {key: 'is_thumbnail', default: false},
             uuid: {key: 'uuid',},
         }
     }
