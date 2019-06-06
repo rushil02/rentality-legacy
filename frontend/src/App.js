@@ -18,6 +18,7 @@ import {ComponentLoadingSpinner} from "./core/loadingSpinners/LoadingSpinner";
 import {UserStore} from "core/auth/userContext";
 
 const HouseListing = React.lazy(() => import("houseListing/Router"));
+const SearchPage = React.lazy(() => import ("search/Router"));
 
 class App extends Component {
     constructor(props) {
@@ -39,6 +40,14 @@ class App extends Component {
                                         <Suspense fallback={<ComponentLoadingSpinner/>}>
                                             <HouseListing {...props}/>
                                         </Suspense>}
+                                />
+                                <Route 
+                                    path={routes.react.searchPage}
+                                    render={
+                                        (props) => 
+                                            <Suspense fallback={<ComponentLoadingSpinner />}>
+                                                <SearchPage {...props} />
+                                            </Suspense> }
                                 />
                                 <Route
                                     render={(props) => <Error404/>}

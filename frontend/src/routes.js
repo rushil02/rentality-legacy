@@ -26,6 +26,7 @@ export default {
             create: 'create',
             edit: 'edit/:houseUUID',
         }),
+        searchPage: 'search',
         samplePage: 'property/samplePage',
         userProfile: 'profile/',
     }),

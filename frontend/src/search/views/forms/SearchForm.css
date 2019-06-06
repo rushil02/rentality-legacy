@@ -1,0 +1,159 @@
+#root > .page-map-filter {
+    background-color: #e8e8e9;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    z-index: 1;
+}
+
+#root > .page-map-filter .form-control {
+    font-size: 13px;
+    font-weight: 400;
+    padding-right: 0;
+    border: none;
+    border-bottom: 1px solid #c7cdd9;
+    border-radius: 0;
+    height: calc(2.25rem + 10px);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 30px;
+    border-bottom: 1px solid #c3c3c5;
+    color: #2a2b32;
+}
+
+#root > .page-map-filter .form-control:hover,
+#root > .page-map-filter .form-control:focus {
+    box-shadow: none;
+}
+
+#root > .page-map-filter .form-control::placeholder {
+    opacity: 1;
+    color: #2a2b32;
+}
+
+#root > .page-map-filter .form-control.search {
+    background-image: url('/static/image/page-map/filter/search.svg');
+}
+
+#root > .page-map-filter .form-control.date {
+    background-image: url('/static/image/page-map/filter/date.svg');
+}
+
+#root > .page-map-filter .form-control.type {
+    background-image: url('/static/image/page-map/filter/type.svg');
+}
+
+#root > .page-map-filter .form-control.amount {
+    background-image: url('/static/image/page-map/filter/amount.svg');
+}
+
+#root > .page-map-filter .btn {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2a2b32;
+    background-color: #fafafa;
+    border-radius: 99px;
+    padding: 10px 0;
+}
+
+#root > .page-map-filter .btn:hover {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+#root > .page-map-filter .btn:hover, #root > .page-map-filter .btn:focus {
+    text-decoration: none;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu {
+    border: none;
+    border-radius: 0;
+    margin-top: 30px;
+    min-width: 630px;
+    padding: 0;
+    background-color: #2a2b32;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #2a2b32 transparent;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu {
+    border: none;
+    border-radius: 0;
+    margin-top: 30px;
+    min-width: 624px;
+    padding: 0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    left: -10px !important;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #ffffff transparent;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu .calendar {
+    margin-left: 0;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance {
+    box-shadow: none !important;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance:not(:first-child) {
+    margin-left: 0 !important;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance:nth-child(2) .pmu-month {
+    background-color: #ffffff !important;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance .pmu-prev {
+    position: absolute !important;
+    top: 24px !important;
+    left: 30px !important;
+    color: transparent !important;
+    background-image: url(/static/image/chevron-left.png) !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    width: 9px !important;
+    height: 14px !important;
+    z-index: 9999 !important;
+}
+
+#root > .page-map-filter .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance .pmu-next {
+    position: absolute !important;
+    top: 24px !important;
+    left: 585px !important;
+    color: transparent !important;
+    background-image: url(/static/image/chevron-right.png) !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    width: 9px !important;
+    height: 14px !important;
+    z-index: 9999 !important;
+    transform: none !important;
+}
