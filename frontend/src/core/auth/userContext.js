@@ -45,7 +45,6 @@ export class UserStore extends Component {
 
 
     render() {
-        console.log("usercollection", this.state);
         return (
             <UserContext.Provider value={this.state}>
                 {this.props.children}

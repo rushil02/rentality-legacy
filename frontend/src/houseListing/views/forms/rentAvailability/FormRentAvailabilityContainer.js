@@ -35,7 +35,6 @@ export default class FormRentAvailabilityContainer extends Component {
                     this.props.navContext.data.updateFormState(this.formID, 'saved');
                 });
         } else {
-            console.log("HERE");
             this.props.navContext.data.updateFormState(this.formID, this.state.data.status);
         }
         this.props.navContext.sync();

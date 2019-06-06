@@ -7,7 +7,6 @@ import {alertUser} from "core/alert/Alert";
 
 
 export function getUserNavDetails(houseUUID) {
-    console.log("User Service");
     return new Promise(function (resolve, reject) {
         axios.get(reverse(routes.userNavInfo), {})
             .then(result => {

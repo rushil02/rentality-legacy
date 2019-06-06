@@ -37,15 +37,12 @@ class CreatePage extends Component {
                             mainData: result
                         })
                     );
-                            console.log(this.state.mainData);
-
                 });
 
 
             // Fetch Availability details
             getAvailabilityData(this._houseUUID)
                 .then(result => {
-                    console.log(result._attrs);
                     this.setState(prevState => (
                         {
                             ...prevState,
@@ -62,7 +59,6 @@ class CreatePage extends Component {
         // Fetch Form options
         axios.get(reverse(routes.house.formOptions), {})
             .then(result => {
-                console.log(result);
                 this.setState({
                     formOptions: result.data
                 })

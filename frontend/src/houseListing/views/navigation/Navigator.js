@@ -51,7 +51,6 @@ function NavigatorComponent(props) {
     try {
         currFormState = props.navContext.data.getCurrentFormState()
     } catch (e) {
-        console.log("Default btn state");
         currFormState = 'initial'
     }
     try {
