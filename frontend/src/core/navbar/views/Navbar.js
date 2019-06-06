@@ -11,7 +11,7 @@ class Navbar extends Component {
             <React.Fragment>
                 <UserContext.Consumer>
                     {userContext => {
-                        if (userContext.isAuthenticated()) {
+                        if (userContext.isAuthenticated) {
                             return <AuthNavbarComponent user={userContext.data}/>
                         } else {
                             return <AnonNavbarComponent/>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-
+import {Redirect} from "react-router-dom";
 import {createContext} from 'react';
+
 import {getUserNavDetails} from "./services";
 import {User} from "./models";
 
@@ -12,12 +13,10 @@ export class UserStore extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            authenticated: false,
-            userDetails: {
-                isAuthenticated: () => this.state.authenticated,
-                data: new User({}),
-                sync: () => this.setUser()
-            },
+            isAuthenticated: false,
+            isSynced: false,
+            data: new User({}, 'empty'),
+            sync: () => this.setUser()
         };
     }
 
@@ -26,17 +25,17 @@ export class UserStore extends Component {
             .then(result => {
                 this.setState(prevState => ({
                     ...prevState,
-                    authenticated:true,
-                    userDetails: {
-                        ...prevState.userDetails,
-                        data: result
-                    }
+                    isAuthenticated: true,
+                    isSynced: true,
+                    data: result
                 }));
             })
             .catch(error => {
-                console.log(error);
-                return error
-            });
+                this.setState(prevState => ({
+                    ...prevState,
+                    isSynced: true,
+                }));
+            })
     };
 
 
@@ -46,9 +45,9 @@ export class UserStore extends Component {
 
 
     render() {
-        console.log(this.state.userDetails);
+        console.log("usercollection", this.state);
         return (
-            <UserContext.Provider value={this.state.userDetails}>
+            <UserContext.Provider value={this.state}>
                 {this.props.children}
             </UserContext.Provider>
         )

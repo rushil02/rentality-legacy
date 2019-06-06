@@ -12,6 +12,7 @@ export default {
     listHome: '/property/add/',
     dashboard: '/',
     contactUs: '/pages/contact-us/',
+
     auth: include('/accounts', {
         login: 'login/',
         signup: 'signup/'

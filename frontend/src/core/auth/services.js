@@ -3,6 +3,7 @@ import {reverse} from 'named-urls';
 import routes from "routes";
 
 import {User} from "./models";
+import {alertUser} from "core/alert/Alert";
 
 
 export function getUserNavDetails(houseUUID) {
@@ -13,7 +14,11 @@ export function getUserNavDetails(houseUUID) {
                 resolve(new User(result.data));
             })
             .catch(error => {
-                reject(error);
+                if (error.response.status === 403) {
+                    reject(error)
+                } else {
+                    alertUser.init({stockAlertType: 'generic'});
+                }
             });
     });
 }

@@ -176,7 +176,9 @@ export class APIModelListAdapter {
 
     }
 
+    // FIXME: Rename method - returns an object not list
     getList() {
+        // returns object
         return this._data
     }
 

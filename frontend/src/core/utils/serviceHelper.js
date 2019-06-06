@@ -9,7 +9,6 @@ export default axios;
 
 export function handleError(error) {
     // Generic handler to filter out all Errors except 400 - Bad Request, which should be handled by the view
-    console.log(error);
     if (error.response.status === 400) {
         return {badRequest: true, error: error}
     } else if (error.response.status === 401) {

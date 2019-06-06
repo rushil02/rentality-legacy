@@ -16,6 +16,7 @@ import Footer from "core/footer/Footer";
 import ComponentErrorBoundary from "./core/errorHelpers/ComponentErrorBoundary";
 import {ComponentLoadingSpinner} from "./core/loadingSpinners/LoadingSpinner";
 import {UserStore} from "core/auth/userContext";
+import {PrivateRoute} from "core/auth/utils";
 
 const HouseListing = React.lazy(() => import("houseListing/Router"));
 
@@ -33,7 +34,7 @@ class App extends Component {
                         <Alert/>
                         <BrowserRouter>
                             <Switch>
-                                <Route
+                                <PrivateRoute
                                     path={routes.react.houseListing.base}
                                     render={(props) =>
                                         <Suspense fallback={<ComponentLoadingSpinner/>}>
