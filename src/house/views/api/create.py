@@ -16,6 +16,7 @@ from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
 from house.serializers import ImageUploadSerializer, NeighbourhoodDescriptorSerializer, \
     WelcomeTagSerializer, HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer, \
     HouseRuleCreateSerializer, FacilitySerializer, RuleReadSerializer
+from utils.api_thumbnailer import resize_image
 
 
 class HouseView(APIView):
@@ -192,7 +193,7 @@ class FormOptionsView(APIView):
 
 class ImageUploadView(APIView):
     """
-    Upload a Image for a house.
+    Upload an Image for a house.
     """
 
     parser_classes = (MultiPartParser, FormParser)
@@ -206,8 +207,13 @@ class ImageUploadView(APIView):
         house = self.get_object(request, house_uuid)
         file_serializer = self.serializer_class(data=request.data)
         if file_serializer.is_valid():
-            file_serializer.save(house=house)
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+            image = file_serializer.save(house=house)
+            response = {
+                'is_thumbnail': image.is_thumbnail,
+                'image': resize_image(image.image, 'th_col_3'),
+                'uuid': image.uuid
+            }
+            return Response(response, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -217,23 +223,36 @@ class ImageView(APIView):
     serializer_class = ImageSerializer
 
     def get(self, request, house_uuid, image_uuid):
-        obj = Image.objects.get(uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
+        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
         serializer = self.serializer_class(obj)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, house_uuid, image_uuid):
-        obj = Image.objects.get(uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
+        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
         obj.delete()
-        new_thumbnail = Image.objects.get(house__uuid=house_uuid, is_thumbnail=True)
-        serializer = self.serializer_class(new_thumbnail)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            new_thumbnail = Image.objects.get(house__uuid=house_uuid, is_thumbnail=True)
+        except Image.DoesNotExist:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            response = {
+                'is_thumbnail': new_thumbnail.is_thumbnail,
+                'image': resize_image(new_thumbnail.image, 'th_col_3'),
+                'uuid': new_thumbnail.uuid
+            }
+            return Response(response, status=status.HTTP_200_OK)
 
     def patch(self, request, house_uuid, image_uuid):
-        obj = Image.objects.get(uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
+        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
         serializer = self.serializer_class(obj, data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            image = serializer.save()
+            response = {
+                'is_thumbnail': image.is_thumbnail,
+                'image': resize_image(image.image, 'th_col_3'),
+                'uuid': image.uuid
+            }
+            return Response(response, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -241,16 +260,18 @@ class ImageView(APIView):
 class ImagesListView(APIView):
     """
     Fetch List of Images of a house.
-    Delete an image from list
     """
 
     permission_classes = (IsAuthenticated,)
-    serializer_class = ImageSerializer
 
     def get(self, request, house_uuid):
         qs = Image.objects.filter(house__uuid=house_uuid, house__home_owner__user=request.user)
-        serializer = self.serializer_class(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response = []
+        for obj in qs:
+            response.append(
+                {'image': resize_image(obj.image, 'th_col_3'), 'is_thumbnail': obj.is_thumbnail, 'uuid': obj.uuid}
+            )
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class FacilityListView(APIView):
@@ -319,7 +340,7 @@ class HouseRuleListCreateView(APIView):
 
 
 class ApplicableCancellationPolicyListView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = CancellationPolicySerializer
 
     def get_object(self, request, house_uuid):
@@ -333,7 +354,7 @@ class ApplicableCancellationPolicyListView(APIView):
 
 
 class CancellationPolicyView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = CancellationPolicySerializer
 
     def get_object(self, request, house_uuid):

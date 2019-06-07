@@ -50,7 +50,7 @@ export function getFormOptions() {
             .then(result => {
                 resolve(new FormOptions(result.data));
             }).catch(error => {
-                reject(handleError(error).error);
+            reject(handleError(error).error);
         });
 
     });
@@ -200,6 +200,62 @@ export function getImagesData(houseUUID) {
             })
             .catch(error => {
                 handleError(error)
+            });
+    });
+}
+
+
+export function postImagesFiles(houseUUID, data, progressTracker) {
+    let config = {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    };
+    return new Promise(function (resolve, reject) {
+        console.log("ASD");
+        let formData = new FormData();
+        formData.append('image', data);
+        axios.post(reverse(routes.house.image.upload, {houseUUID: houseUUID}), formData, config)
+            .then(result => {
+                resolve(new Image(result.data));
+            })
+            .catch(error => {
+                if (handleError(error).badRequest) {
+                    alertUser.init({message: error.response.data.image, alertType: 'danger', autoHide: true});
+                }
+            });
+    });
+
+}
+
+export function updateImageData(houseUUID, imageUUID, data) {
+    return new Promise(function (resolve, reject) {
+        axios.patch(reverse(routes.house.image.update, {houseUUID: houseUUID, imageUUID: imageUUID}), data.serialize(['isThumbnail']))
+            .then(result => {
+                resolve(new Image(result.data));
+            })
+            .catch(error => {
+                if (handleError(error).badRequest) {
+                    reject(data.parseError(error.response.data));
+                }
+            });
+    });
+}
+
+export function deleteImage(houseUUID, imageUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.delete(reverse(routes.house.image.update, {houseUUID: houseUUID, imageUUID: imageUUID}))
+            .then(result => {
+                if (Object.entries(result.data).length > 0) {
+                    resolve(new Image(result.data));
+                } else {
+                    resolve()
+                }
+            })
+            .catch(error => {
+                if (handleError(error).badRequest) {
+                    reject(data.parseError(error.response.data));
+                }
             });
     });
 }

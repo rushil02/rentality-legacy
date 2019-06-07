@@ -98,10 +98,12 @@ export default class AvailabilitySelectorHandler extends Component {
     onRemove = (objID) => {
         deleteAvailabilityData(this.props.houseUUID, objID)
             .then(() => {
-                const newState = {
+                this.setState(prevState => (
+                    {
+                        ...prevState,
                     data: omit(this.state.data, objID)
-                };
-                this.setState(newState);
+                    })
+                );
             }).catch(error => {
                 alertUser.init({stockAlertType: 'unknownError'})
             }

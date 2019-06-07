@@ -13,6 +13,8 @@ export function handleError(error) {
         return {badRequest: true, error: error}
     } else if (error.response.status === 401) {
         alertUser.init({stockAlertType: 'generic'});
+    } else if (error.response.status === 404) {
+        alertUser.init({stockAlertType: 'generic'});
     } else {
         alertUser.init({stockAlertType: 'generic'});
     }

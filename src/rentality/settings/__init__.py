@@ -314,6 +314,8 @@ FLAT_PAGE_TEMPLATES = (
 # https://easy-thumbnails.readthedocs.io/en/stable/usage/
 THUMBNAIL_ALIASES = {
     '': {
+        'th_col_3': {'size': (263, 196), 'crop': "smart", 'autocrop': True, 'upscale': True},
+
         'profile_navbar': {'size': (41, 41), 'crop': "smart", 'autocrop': True, 'upscale': True},
         'profile_search_page': {'size': (31, 31), 'crop': "smart", 'autocrop': True, 'upscale': True},
         'house_search_page': {'size': (263, 196), 'crop': "smart", 'autocrop': True, 'upscale': True},

@@ -1,3 +1,5 @@
+import {omit} from "lodash";
+
 export default class APIModelAdapter {
     /**
      *
@@ -182,6 +184,10 @@ export class APIModelListAdapter {
         return this._data
     }
 
+    getObject(key){
+        return this._data[key]
+    }
+
     updateObject(objID, field, value) {
         this._data[objID].setData(field, value);
         this.status = 'hasChanged';
@@ -205,23 +211,36 @@ export class APIModelListAdapter {
 
     update(modelObj, key) {
         /**
+         * Create or Update an object in reference to a key
+         *
          * @param modelObj:
-         * @param key: [optional]
+         * @param key: [optional] for overriding key set in constructor
          */
         if(!key && !this._key){
             console.error("No key provided for append to work.")
+        }
+
+        // Warn for no data, and return
+        if(!modelObj){
+            console.warn("No Object provided");
+            return this
         }
 
         this._data[key || modelObj.getData(this._key)] = modelObj;
         return this
     }
 
+    remove(key){
+        this._data = omit(this._data, key);
+        return this
+    }
+
     updateMultiple(modelObjs) {
         if(!this._key){
-            console.error("Concat cannot work without list level key")
+            console.error("Multi update cannot work without list level key")
         }
         modelObjs.map((item) => {
-            this.append(item)
+            this.update(item)
         });
     }
 
