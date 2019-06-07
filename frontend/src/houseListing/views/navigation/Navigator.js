@@ -74,7 +74,7 @@ function NavigatorComponent(props) {
                     <div className="col-xl-1"/>
                     <div className="col-xl-10">
                         <div className="right">
-                            <FormSubNav mode={props.mode}/>
+                            <FormSubNav mode={props.mode} currForm={props.navContext.data.currForm}/>
                             <div className="row">
                                 <div className="col-12">
                                     <div className="dropdown float-right">

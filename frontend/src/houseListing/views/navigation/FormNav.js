@@ -15,7 +15,7 @@ export default function FormNav(props) {
     };
 
     let disableLinks = (props.mode === 'create');
-    let progressVal = Math.round((100/12) * props.currForm);
+    let progressVal = Math.round((100 / 12) * props.currForm);
 
     return (
         <React.Fragment>
@@ -23,8 +23,10 @@ export default function FormNav(props) {
                 <div className="full-header">
                     <div className="row">
                         <div id="full-header-1" className="col-md-4 text-center">
-                            <NavLink to="/1" className="nostyle form-change"><span className="number">1</span><span
-                                    className="text">Basic Home info</span></NavLink>
+                            <NavLink to="/1" className="nostyle form-change"
+                                     isActive={() => !![1, 2, 3, 4].includes(props.currForm)}><span
+                                className="number">1</span><span
+                                className="text">Basic Home info</span></NavLink>
                         </div>
                         <div id="full-header-2" className="col-md-4 text-center">
                             {disableLinks ?
@@ -32,7 +34,9 @@ export default function FormNav(props) {
                                     className="number">2</span><span
                                     className="text">Detail Description</span></NavLink>
                                 :
-                                <NavLink to="/5" className="nostyle form-change"><span className="number">2</span><span
+                                <NavLink to="/5" className="nostyle form-change"
+                                         isActive={() => !![5, 6, 7, 8].includes(props.currForm)}><span
+                                    className="number">2</span><span
                                     className="text">Detail Description</span></NavLink>
                             }
                         </div>
@@ -42,13 +46,16 @@ export default function FormNav(props) {
                                     className="number">3</span><span
                                     className="text">About you</span></NavLink>
                                 :
-                                <NavLink to="/9" className="nostyle form-change"><span className="number">3</span><span
+                                <NavLink to="/9" className="nostyle form-change"
+                                         isActive={() => !![9, 10, 11, 12].includes(props.currForm)}><span
+                                    className="number">3</span><span
                                     className="text">About you</span></NavLink>
                             }
                         </div>
                     </div>
                     <div className="progress">
-                        <div id="progress-bar" className="progress-bar bg-success" style={{"width": progressVal+"%"}} aria-valuenow={progressVal} aria-valuemin="0" aria-valuemax="100"/>
+                        <div id="progress-bar" className="progress-bar bg-success" style={{"width": progressVal + "%"}}
+                             aria-valuenow={progressVal} aria-valuemin="0" aria-valuemax="100"/>
                     </div>
                 </div>
             </div>
