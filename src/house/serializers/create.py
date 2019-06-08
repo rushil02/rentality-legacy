@@ -22,14 +22,12 @@ class HouseAuthSerializer(serializers.ModelSerializer):
         model = House
         fields = (
             'title', 'address_hidden', 'address', 'location', 'home_type', 'furnished', 'bedrooms', 'bathrooms',
-            'facilities',
-            'parking', 'rent', 'min_stay', 'max_stay', 'max_people_allowed', 'description', 'rules', 'other_rules',
+            'parking', 'rent', 'min_stay', 'max_stay', 'max_people_allowed', 'description', 'other_rules',
             'cancellation_policy', 'other_people_description', 'access_restrictions', 'neighbourhood_description',
-            'neighbourhood_facilities', 'welcome_tags', 'id', 'uuid', 'created_on', 'updated_on', 'status',
-            'promo_codes'
+            'id', 'uuid', 'created_on', 'updated_on', 'status',
         )
         read_only_fields = (
-            'id', 'uuid', 'created_on', 'updated_on', 'status', 'promo_codes'
+            'id', 'uuid', 'created_on', 'updated_on', 'status', 'promo_codes', 'cancellation_policy',
         )
 
 

@@ -34,6 +34,19 @@ export default class APIModelAdapter {
         }
     }
 
+    _silentUpdate(key, value){
+        /**
+         * Doesn't update the status of model or the fields that have changed.
+         * Any data modified using this method will not be available n partial serializer/ PATCH.
+         *
+         * This is useful when some fields have updated via other processes and need to be reflected without
+         * explicit sync of current model.
+         */
+
+        this._attrs[key] = value;
+        return this
+    }
+
     _constructAttribute = (field, settings, source) => {
         let defaultVal;
         // Checks and warns if a dbOBj doesn't contain specified fields
@@ -145,6 +158,9 @@ export default class APIModelAdapter {
                 }
             }
         } else {
+            if (!Array.isArray(fields)){
+                console.error("Provided fields is not a list");
+            }
             for (let i = 0; i < fields.length; i++) {
                 if (this.fieldMap()[fields[i]].adapter) {
                     ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]).serialize('__all__')

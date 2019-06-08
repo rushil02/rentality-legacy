@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {deleteImage, getImagesData, getRulesData, postImagesFiles, updateImageData} from "houseListing/services";
+import {deleteImage, getImagesData, postImagesFiles, updateImageData} from "houseListing/services";
 import Dropzone from 'react-dropzone';
 import './UploadImagesForm.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faImages as faImagesSolid, faTimes, faStar as faStarSolid} from "@fortawesome/free-solid-svg-icons";
-import {faImages as faImagesRegular, faStar as faStarRegular} from "@fortawesome/free-regular-svg-icons";
-import {APIModelListAdapter} from "../../../../core/utils/ModelHelper";
-import {omit} from "lodash";
+import {faStar as faStarRegular} from "@fortawesome/free-regular-svg-icons";
+import {APIModelListAdapter} from "core/utils/ModelHelper";
 
 
 export default class UploadImagesForm extends Component {

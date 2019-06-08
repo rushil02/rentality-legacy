@@ -21,4 +21,8 @@ export default {
         upload: 'upload/:houseUUID',
         update: ':houseUUID/:imageUUID',
     }),
+    canPol: include('can-pol', {
+        list: 'list/:houseUUID',
+        update: 'update/:houseUUID'
+    })
 }

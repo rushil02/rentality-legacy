@@ -1,7 +1,14 @@
 import React, {Suspense} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import {ComponentLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
-import {MainDataCache, NavigationContext, FacilityCache, RulesCache, ImagesCache} from '../dataContext'
+import {
+    MainDataCache,
+    NavigationContext,
+    FacilityCache,
+    RulesCache,
+    ImagesCache,
+    CancellationPolicyCache
+} from '../dataContext'
 import Navigator from './navigation/Navigator';
 
 import './forms/FormCommon.css'
@@ -12,7 +19,9 @@ const FormPrimaryContainer = React.lazy(() => import("./forms/primary/FormPrimar
 const FormRentAvailabilityContainer = React.lazy(() => import("./forms/rentAvailability/FormRentAvailabilityContainer"));
 const FacilitiesContainer = React.lazy(() => import("./forms/facilities/FacilitiesContainer"));
 const RulesContainer = React.lazy(() => import("./forms/rules/RulesContainer"));
-const UploadImagesFormContainer= React.lazy(() => import("./forms/mediaUpload/UploadImagesForm"));
+const UploadImagesFormContainer = React.lazy(() => import("./forms/mediaUpload/UploadImagesForm"));
+const CancellationPolicyContainer = React.lazy(() => import("./forms/cancellationPolicy/CancellationPolicyContainer"));
+
 
 // Add all forms here
 export function EditAppComponent(props) {
@@ -81,6 +90,20 @@ export function EditAppComponent(props) {
                                                 houseUUID={houseUUID}
                                             />}
                                         </ImagesCache.Consumer>
+                                    </Suspense>
+                                }/>
+                                <Route exact path="/6" render={(routerProps) =>
+                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                        <CancellationPolicyCache.Consumer>
+                                            {cache => <MainDataCache.Consumer>
+                                                {mainDataCache => <CancellationPolicyContainer
+                                                    cache={cache}
+                                                    mainDataCache={mainDataCache}
+                                                    navContext={navContext}
+                                                    houseUUID={houseUUID}
+                                                />}
+                                            </MainDataCache.Consumer>}
+                                        </CancellationPolicyCache.Consumer>
                                     </Suspense>
                                 }/>
                                 <Route render={() => <Redirect to="/1"/>}/>

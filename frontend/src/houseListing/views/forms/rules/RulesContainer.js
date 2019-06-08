@@ -112,7 +112,7 @@ export default class RulesContainer extends Component {
                         })
                     );
                     req1Done = true;
-                    that.props.navContext.data.updateFormState(this.formID, 'saved', 0);
+                    that.props.navContext.data.updateFormState(that.formID, 'saved', 0);
                     that.props.navContext.sync();
                     if (req1Done && req2Done) {
                         if (that.props.navContext.data.getCurrentFormState() === 'error') {
@@ -124,7 +124,7 @@ export default class RulesContainer extends Component {
                 })
                 .catch(errorData => {
                     req1Done = true;
-                    that.props.navContext.data.updateFormState(this.formID, 'error', 0);
+                    that.props.navContext.data.updateFormState(that.formID, 'error', 0);
                     that.props.navContext.sync();
                     if (req1Done && req2Done) {
                         reject()
@@ -140,7 +140,7 @@ export default class RulesContainer extends Component {
                         })
                     );
                     req2Done = true;
-                    that.props.navContext.data.updateFormState(this.formID, 'saved', 1);
+                    that.props.navContext.data.updateFormState(that.formID, 'saved', 1);
                     that.props.navContext.sync();
                    if (req1Done && req2Done) {
                         if (that.props.navContext.data.getCurrentFormState() === 'error') {
@@ -152,7 +152,7 @@ export default class RulesContainer extends Component {
                 })
                 .catch(error => {
                     req2Done = true;
-                    that.props.navContext.data.updateFormState(this.formID, 'error', 1);
+                    that.props.navContext.data.updateFormState(that.formID, 'error', 1);
                     that.props.navContext.sync();
                     if (req1Done && req2Done) {
                         reject()

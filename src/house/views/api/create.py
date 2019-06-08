@@ -368,7 +368,7 @@ class CancellationPolicyView(APIView):
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
         try:
-            policy = CancellationPolicy.objects.get(id=request.data['obj_id'], businessmodelconfiguration__house=house)
+            policy = CancellationPolicy.objects.get(id=request.data['id'], businessmodelconfiguration__house=house)
         except CancellationPolicy.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:

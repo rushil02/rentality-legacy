@@ -27,7 +27,8 @@ export class House extends APIModelAdapter {
             otherRules: {key: 'other_rules'},
 
             // Others
-            UUID: {key: 'uuid'}
+            UUID: {key: 'uuid'},
+            cancellationPolicyID: {key: 'cancellation_policy', default: null}
         }
     };
 
@@ -213,6 +214,18 @@ export class Image extends APIModelAdapter {
             imagePath: {key: 'image',},
             isThumbnail: {key: 'is_thumbnail', default: false},
             uuid: {key: 'uuid',},
+        }
+    }
+}
+
+
+export class CancellationPolicy extends APIModelAdapter {
+    fieldMap() {
+        return {
+            objID: {key: 'id',},
+            verbose: {key: 'verbose',},
+            description: {key: 'description',},
+            officialPolicy: {key: 'official_policy', default: null}
         }
     }
 }

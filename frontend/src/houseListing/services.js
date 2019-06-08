@@ -2,7 +2,7 @@ import axios, {handleError} from "core/utils/serviceHelper";
 import {reverse} from 'named-urls';
 import routes from "routes";
 import {alertUser} from "core/alert/Alert";
-import {Availability, House, FormOptions, Facility, Rule, Image} from "./models";
+import {Availability, House, FormOptions, Facility, Rule, Image, CancellationPolicy} from "./models";
 import {APIModelListAdapter} from "../core/utils/ModelHelper";
 
 
@@ -26,7 +26,9 @@ export function postHouseData(data) {
                 resolve(new House(result.data));
             })
             .catch(error => {
-                reject(data.parseError(error.response.data));
+                if(handleError(error).badRequest) {
+                    reject(data.parseError(error.response.data));
+                }
             });
     });
 }
@@ -256,6 +258,32 @@ export function deleteImage(houseUUID, imageUUID) {
                 if (handleError(error).badRequest) {
                     reject(data.parseError(error.response.data));
                 }
+            });
+    });
+}
+
+export function getCancellationPolicies(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.get(reverse(routes.house.canPol.list, {houseUUID: houseUUID}))
+            .then(result => {
+                resolve(new APIModelListAdapter(result.data, CancellationPolicy, 'id'));
+            })
+            .catch(error => {
+                handleError(error)
+            });
+    });
+}
+
+
+export function postCancellationPolicy(houseUUID, data) {
+    console.log(data);
+    return new Promise(function (resolve, reject) {
+        axios.post(reverse(routes.house.canPol.update, {houseUUID: houseUUID}), data.serialize(['objID']))
+            .then(result => {
+                resolve();
+            })
+            .catch(error => {
+                reject(handleError(error))
             });
     });
 }

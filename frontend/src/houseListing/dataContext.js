@@ -9,6 +9,7 @@ export const AvailabilityCache = React.createContext({});
 export const FacilityCache = React.createContext({});
 export const RulesCache = React.createContext({});
 export const ImagesCache = React.createContext({});
+export const CancellationPolicyCache = React.createContext({});
 
 
 // Common Store Provider for multiple Contexts
@@ -16,7 +17,7 @@ export class StoreProvider extends StoreHelper {
 
     // Initializer
     getStore() {
-        return ['mainData', 'availabilityData', 'facilitiesData', 'rulesData', 'imagesData']
+        return ['mainData', 'availabilityData', 'facilitiesData', 'rulesData', 'imagesData', 'canPolicyData']
     }
 
     render() {
@@ -28,7 +29,9 @@ export class StoreProvider extends StoreHelper {
                             <FacilityCache.Provider value={this.state.facilitiesData}>
                                 <RulesCache.Provider value={this.state.rulesData}>
                                     <ImagesCache.Provider value={this.state.imagesData}>
-                                        {this.props.children}
+                                        <CancellationPolicyCache.Provider value={this.state.canPolicyData}>
+                                            {this.props.children}
+                                        </CancellationPolicyCache.Provider>
                                     </ImagesCache.Provider>
                                 </RulesCache.Provider>
                             </FacilityCache.Provider>
