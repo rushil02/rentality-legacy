@@ -31,6 +31,9 @@ export class House extends APIModelAdapter {
             accessRestrictions: {key: 'access_restrictions'},
             otherPeopleDescription: {key: 'other_people_description'},
 
+            // Neighbourhood
+            neighbourhoodDescription: {key: 'neighbourhood_description'},
+
             // Others
             UUID: {key: 'uuid'},
             cancellationPolicyID: {key: 'cancellation_policy', default: null}
@@ -132,10 +135,14 @@ export class Navigator {
         if (formState === 'empty') {
             formState = 'initial';
         }
-        if (subCompIndex !== undefined && subCompIndex !== false && subCompIndex !== null) {
-            this._forms[formID].state[subCompIndex] = formState;
+        if (Array.isArray(this._forms[this.currForm].state) && subCompIndex === undefined) {
+            console.error("Initial form state was of composite type. Please provide relevant index while updating form state.")
         } else {
-            this._forms[formID].state = formState;
+            if (subCompIndex !== undefined && subCompIndex !== false && subCompIndex !== null) {
+                this._forms[formID].state[subCompIndex] = formState;
+            } else {
+                this._forms[formID].state = formState;
+            }
         }
     };
 
@@ -233,4 +240,15 @@ export class CancellationPolicy extends APIModelAdapter {
             officialPolicy: {key: 'official_policy', default: null}
         }
     }
+}
+
+export class NeighbourhoodDescriptor extends APIModelAdapter {
+    fieldMap() {
+        return {
+            objID: {key: 'id', default: null},
+            verbose: {key: 'verbose',},
+            checked: {key: 'checked',},
+        }
+    }
+
 }

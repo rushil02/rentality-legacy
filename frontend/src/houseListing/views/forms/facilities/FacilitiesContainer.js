@@ -20,7 +20,6 @@ export default class FacilitiesSelectorHandler extends Component {
                 data: props.cache.data,
             };
         }
-        this.onSave = this.onSave.bind(this)
     }
 
     componentDidMount() {

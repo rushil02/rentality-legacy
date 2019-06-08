@@ -24,5 +24,6 @@ export default {
     canPol: include('can-pol', {
         list: 'list/:houseUUID',
         update: 'update/:houseUUID'
-    })
+    }),
+    neighbourhoodDescriptors: 'neighbourhood-desc/:houseUUID',
 }

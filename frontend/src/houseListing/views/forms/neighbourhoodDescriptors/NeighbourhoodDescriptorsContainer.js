@@ -1,22 +1,22 @@
 import React, {Component} from 'react';
-import {getHouseData, getRulesData, patchHouseData, postFacilityData, postRulesData} from "houseListing/services";
-import {RulesComponent} from "./RulesComponent";
-import {House, Rule} from "../../../models";
 import {APIModelListAdapter} from "../../../../core/utils/ModelHelper";
+import {House, NeighbourhoodDescriptor} from "../../../models";
+import {getHouseData, getNeighbourhoodDescriptors, patchHouseData, postNeighbourhoodDescriptors} from "../../../services";
+import {NeighborhoodDescriptorsComponent} from "./NeighbourhoodDescriptorsComponent";
 
 
-export default class RulesContainer extends Component {
-    formID = 4;
+export default class NeighbourhoodDescriptorsContainer extends Component {
+    formID = 8;
 
     constructor(props) {
         super(props);
+
         this.state = {
-            rules: new APIModelListAdapter([], Rule, 'id', 'empty'),
+            descriptors: new APIModelListAdapter([], NeighbourhoodDescriptor, 'id', 'empty'),
             house: new House({}, 'empty'),
         };
-
         if (props.cache.data !== undefined) {
-            this.state.rules = props.cache.data;
+            this.state.descriptors = props.cache.data;
         }
         if (props.mainDataCache.data !== undefined) {
             this.state.house = props.mainDataCache.data;
@@ -24,22 +24,21 @@ export default class RulesContainer extends Component {
     }
 
     componentDidMount() {
-        // Since we have multiple APIs, we can exploit composite formStates
-        this.props.navContext.data.loadForm(this.formID, this.onSave, ['initial', 'initial'], "Rules");
-        if (this.state.rules.status === 'empty') {
-            getRulesData(this.props.houseUUID)
+        this.props.navContext.data.loadForm(this.formID, this.onSave, ['initial', 'initial'], "Neighbourhood");
+        if (this.state.descriptors.status === 'empty') {
+            getNeighbourhoodDescriptors(this.props.houseUUID)
                 .then(result => {
                     this.setState(prevState => (
                         {
                             ...prevState,
-                            rules: result,
+                            descriptors: result,
                         })
                     );
-                    this.props.navContext.data.updateFormState(this.formID, this.state.rules.status, 0);
+                    this.props.navContext.data.updateFormState(this.formID, this.state.descriptors.status, 0);
                     this.props.navContext.sync();
                 });
         } else {
-            this.props.navContext.data.updateFormState(this.formID, this.state.rules.status, 0);
+            this.props.navContext.data.updateFormState(this.formID, this.state.descriptors.status, 0);
         }
 
         if (this.state.house.status === 'empty') {
@@ -59,56 +58,63 @@ export default class RulesContainer extends Component {
             this.props.navContext.data.updateFormState(this.formID, this.state.house.status, 1);
         }
         this.props.navContext.sync();
-    };
+    }
 
     componentWillUnmount() {
-        this.props.cache.updateStoreObject('rulesData', () => this.state.rules);
+        this.props.cache.updateStoreObject('neighborhoodDescriptorsData', () => this.state.descriptors);
         this.props.cache.updateStoreObject('mainData', () => this.state.house);
         this.props.navContext.data.unloadForm();
     }
 
-    onOptionChange = (objID, value) => {
-        this.setState(prevState => ({
-                ...prevState,
-                rules: prevState.rules.updateObject(objID, 'selected', value)
-            })
-        );
-        this.props.navContext.data.updateFormState(this.formID, 'hasChanged', 0);
-        this.props.navContext.sync();
-    };
-
-    onCommentChange = (objID, value) => {
-        this.setState(prevState => ({
-                ...prevState,
-                rules: prevState.rules.updateObject(objID, 'comment', value)
-            })
-        );
-        this.props.navContext.data.updateFormState(this.formID, 'hasChanged', 0);
-        this.props.navContext.sync();
-    };
-
-    onOtherRulesChange = (value) => {
+    onOtherDescriptionChange = (value) => {
         this.setState(prevState => ({
             ...prevState,
-            house: prevState.house.setData('otherRules', value)
+            house: prevState.house.setData('neighbourhoodDescription', value)
         }));
         this.props.navContext.data.updateFormState(this.formID, 'hasChanged', 1);
         this.props.navContext.sync();
     };
 
+    onNBDescriptorAdd = (input) => {
+        let text = input.value;
+        if (text !== "") {
+            this.setState(prevState => ({
+                    descriptors: prevState.descriptors.update(new NeighbourhoodDescriptor({id: null, verbose: text, checked: true}, 'hasChanged'), text)
+                })
+            );
+
+            input.value = "";
+
+            this.props.navContext.data.updateFormState(this.formID, 'hasChanged', 0);
+            this.props.navContext.sync();
+        }
+        input.focus();
+
+    };
+
+    onNBDescriptorUpdate = (objID, value) => {
+        this.setState(prevState => ({
+                ...prevState,
+                data: prevState.descriptors.updateObject(objID, 'checked', value)
+            })
+        );
+        this.props.navContext.data.updateFormState(this.formID, 'hasChanged', 0);
+        this.props.navContext.sync();
+    };
+
     onSave = (e) => {
-        e.stopPropagation();
+         e.stopPropagation();
         const that = this;
         return new Promise((resolve, reject) => {
             let req1Done = false;
             let req2Done = false;
 
-            postRulesData(that.props.houseUUID, that.state.rules)
+            postNeighbourhoodDescriptors(that.props.houseUUID, that.state.descriptors)
                 .then(result => {
                     that.setState(prevState => (
                         {
                             ...prevState,
-                            rules: prevState.rules.updateStatus('saved'),
+                            rules: prevState.descriptors.updateStatus('saved'),
                         })
                     );
                     req1Done = true;
@@ -163,14 +169,15 @@ export default class RulesContainer extends Component {
     };
 
     render() {
-        return (
-            <RulesComponent
-                data={this.state.rules.getList()}
-                otherRules={this.state.house.getData('otherRules')}
-                onOtherRulesChange={this.onOtherRulesChange}
-                onCommentChange={this.onCommentChange}
-                onOptionChange={this.onOptionChange}
+        return(
+            <NeighborhoodDescriptorsComponent
+                data={this.state.descriptors.getList()}
+                otherDescription={this.state.house.getData('neighbourhoodDescription')}
+                onOtherDescriptionChange={this.onOtherDescriptionChange}
+                onNBDescriptorChange={this.onNBDescriptorUpdate}
+                onNBDescriptorAdd = {this.onNBDescriptorAdd}
             />
         )
     }
+
 }

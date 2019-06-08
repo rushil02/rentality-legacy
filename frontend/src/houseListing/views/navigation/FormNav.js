@@ -37,7 +37,7 @@ export default function FormNav(props) {
                                 <NavLink to="/5" className="nostyle form-change"
                                          isActive={() => !![5, 6, 7, 8].includes(props.currForm)}><span
                                     className="number">2</span><span
-                                    className="text">Detail Description</span></NavLink>
+                                    className="text">Details & Description</span></NavLink>
                             }
                         </div>
                         <div id="full-header-3" className="col-md-4 text-center">

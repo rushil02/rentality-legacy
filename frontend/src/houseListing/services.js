@@ -2,7 +2,16 @@ import axios, {handleError} from "core/utils/serviceHelper";
 import {reverse} from 'named-urls';
 import routes from "routes";
 import {alertUser} from "core/alert/Alert";
-import {Availability, House, FormOptions, Facility, Rule, Image, CancellationPolicy} from "./models";
+import {
+    Availability,
+    House,
+    FormOptions,
+    Facility,
+    Rule,
+    Image,
+    CancellationPolicy,
+    NeighbourhoodDescriptor
+} from "./models";
 import {APIModelListAdapter} from "../core/utils/ModelHelper";
 
 
@@ -286,4 +295,29 @@ export function postCancellationPolicy(houseUUID, data) {
                 reject(handleError(error))
             });
     });
+}
+
+
+export function getNeighbourhoodDescriptors(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.get(reverse(routes.house.neighbourhoodDescriptors, {houseUUID: houseUUID}))
+            .then(result => {
+                resolve(new APIModelListAdapter(result.data, NeighbourhoodDescriptor, 'id'));
+            })
+            .catch(error => {
+                handleError(error)
+            });
+    });
+}
+
+export function postNeighbourhoodDescriptors(houseUUID, data) {
+    return new Promise(function (resolve, reject) {
+        axios.post(reverse(routes.house.neighbourhoodDescriptors, {houseUUID: houseUUID}), data.serialize(true))
+            .then(result => {
+                resolve(new APIModelListAdapter(result.data, NeighbourhoodDescriptor, 'id'));
+            })
+            .catch(error => {
+                reject(handleError(error).error);
+            })
+    })
 }

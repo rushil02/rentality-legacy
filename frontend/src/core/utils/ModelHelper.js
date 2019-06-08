@@ -34,7 +34,7 @@ export default class APIModelAdapter {
         }
     }
 
-    _silentUpdate(key, value){
+    _silentUpdate(key, value) {
         /**
          * Doesn't update the status of model or the fields that have changed.
          * Any data modified using this method will not be available n partial serializer/ PATCH.
@@ -154,18 +154,18 @@ export default class APIModelAdapter {
                 if (this.fieldMap()[fields[i]].adapter) {
                     ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]).serialize('__all__')
                 } else {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i])  === '' ? null : this.getData(fields[i])
+                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]) === '' ? null : this.getData(fields[i])
                 }
             }
         } else {
-            if (!Array.isArray(fields)){
+            if (!Array.isArray(fields)) {
                 console.error("Provided fields is not a list");
             }
             for (let i = 0; i < fields.length; i++) {
                 if (this.fieldMap()[fields[i]].adapter) {
                     ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]).serialize('__all__')
                 } else {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i])  === '' ? null : this.getData(fields[i])
+                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]) === '' ? null : this.getData(fields[i])
                 }
             }
         }
@@ -180,7 +180,7 @@ export class APIModelListAdapter {
      * @param objModel - APIModelAdapter class
      * @param status - settings: [empty, saved, hasChanged], default: saved
      * @param dbData - array of dbObj
-     * @param uniqueKey - [optional] unique field
+     * @param uniqueKey - [optional] unique field present in dbData
      */
 
     constructor(dbData, objModel, uniqueKey, status) {
@@ -200,7 +200,7 @@ export class APIModelListAdapter {
         return this._data
     }
 
-    getObject(key){
+    getObject(key) {
         return this._data[key]
     }
 
@@ -232,12 +232,12 @@ export class APIModelListAdapter {
          * @param modelObj:
          * @param key: [optional] for overriding key set in constructor
          */
-        if(!key && !this._key){
+        if (!key && !this._key) {
             console.error("No key provided for append to work.")
         }
 
         // Warn for no data, and return
-        if(!modelObj){
+        if (!modelObj) {
             console.warn("No Object provided");
             return this
         }
@@ -246,13 +246,13 @@ export class APIModelListAdapter {
         return this
     }
 
-    remove(key){
+    remove(key) {
         this._data = omit(this._data, key);
         return this
     }
 
     updateMultiple(modelObjs) {
-        if(!this._key){
+        if (!this._key) {
             console.error("Multi update cannot work without list level key")
         }
         modelObjs.map((item) => {
@@ -294,26 +294,26 @@ export class APIModelListAdapter {
         return this
     }
 
-    updateStatus = (newStatus) =>{
+    updateStatus = (newStatus) => {
         this.status = newStatus;
         return this
     }
 }
 
 
-export function mergeModelStates(stateList){
+export function mergeModelStates(stateList) {
     /**
      * Useful when a page has single controller attached to multiple routes (APIs)
      */
 
-    if(stateList.length === 0){
+    if (stateList.length === 0) {
         throw Error("`stateList` is empty")
     }
 
     // Checks are in order of display priority
-    if (stateList.indexOf('hasChanged') >= 0){
+    if (stateList.indexOf('hasChanged') >= 0) {
         return 'hasChanged'
-    } else if (stateList.indexOf('empty') >= 0){
+    } else if (stateList.indexOf('empty') >= 0) {
         return 'empty'
     } else {
         return 'saved'
