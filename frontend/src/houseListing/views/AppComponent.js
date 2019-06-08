@@ -21,6 +21,7 @@ const FacilitiesContainer = React.lazy(() => import("./forms/facilities/Faciliti
 const RulesContainer = React.lazy(() => import("./forms/rules/RulesContainer"));
 const UploadImagesFormContainer = React.lazy(() => import("./forms/mediaUpload/UploadImagesForm"));
 const CancellationPolicyContainer = React.lazy(() => import("./forms/cancellationPolicy/CancellationPolicyContainer"));
+const InfoForTenantsContainer = React.lazy(() => import("./forms/infoForTenants/InfoForTenantsContainer"));
 
 
 // Add all forms here
@@ -104,6 +105,17 @@ export function EditAppComponent(props) {
                                                 />}
                                             </MainDataCache.Consumer>}
                                         </CancellationPolicyCache.Consumer>
+                                    </Suspense>
+                                }/>
+                                <Route exact path="/7" render={(routerProps) =>
+                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                        <MainDataCache.Consumer>
+                                            {cache => <InfoForTenantsContainer
+                                                cache={cache}
+                                                navContext={navContext}
+                                                houseUUID={houseUUID}
+                                            />}
+                                        </MainDataCache.Consumer>
                                     </Suspense>
                                 }/>
                                 <Route render={() => <Redirect to="/1"/>}/>

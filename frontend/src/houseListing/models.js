@@ -26,6 +26,11 @@ export class House extends APIModelAdapter {
             // Form Rules
             otherRules: {key: 'other_rules'},
 
+            // Info for Guests
+            description: {key: 'description'},
+            accessRestrictions: {key: 'access_restrictions'},
+            otherPeopleDescription: {key: 'other_people_description'},
+
             // Others
             UUID: {key: 'uuid'},
             cancellationPolicyID: {key: 'cancellation_policy', default: null}
