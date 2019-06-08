@@ -1,0 +1,108 @@
+/**************************/
+/***** page map start *****/
+/**************************/
+
+#root > .page-map {
+    margin-bottom: 50px;
+}
+
+.page-map.active {
+    width: 560px;
+}
+
+#root > .page-map .list {
+    display: block;
+    margin-top: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+#root > .page-map .list:hover, #root > .page-map .list:focus {
+    text-decoration: none;
+}
+
+#root > .page-map .list .image {
+    position: relative;
+    overflow: hidden;
+}
+
+#root > .page-map .list .image img {
+    transition: all .25s ease-in-out;
+    transform: scale(1, 1) rotate(0deg);
+}
+
+#root > .page-map .list:hover .image img {
+    transform: scale(1.15, 1.15) rotate(-5deg);
+}
+
+#root > .page-map .list h1 {
+    color: #4d4d4d;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+#root > .page-map .list:hover h1 {
+    color: #36ffb1;
+}
+
+#root > .page-map .list h2 {
+    color: #bcbcbc;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#root > .page-map .list div {
+    color: #9d9d9d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#root > .page-map .list div span {
+    color: #4d4d4d;
+    font-weight: 700;
+    margin-left: 8px;
+}
+
+#root > .page-map .list div + div {
+    margin-top: 6px;
+}
+
+#root > .page-map .list .rating {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+#root > .page-map .list .rating span {
+    font-size: 15px;
+    font-weight: 400;
+    color: #39ac1e;
+    margin-right: 5px;
+}
+
+.image > .leased-img-tag {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #39ffaf !important;
+    border-radius: 45px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #39ffaf;
+    padding-top: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+    transition: all .25s ease-in-out;
+}
+
+/************************/
+/***** page map end *****/
+/************************/

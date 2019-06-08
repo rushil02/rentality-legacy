@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import routes from 'routes'
 import PostalCodeSearchField from "./fields/PostalCodeSearch/PostalCodeSearchField";
+import DateInput from "./fields/DateInput/DateInput";
+import HouseType from "./fields/HouseType/HouseType";
+import Rent from './fields/Rent';   
 import './SearchForm.css'
 
 
@@ -8,11 +11,43 @@ export default class SearchForm extends Component {
     constructor(props){
         super(props);
         this.state = {
-            params: this.props.params
+            rent: null,
+            location: '',
+            loc_sugg: '',
+            home_type: null,
+            ...this.props.params,
         }
     }
+
+    onRentChanged = (e, value) => {
+        this.setState({
+            rent: e.target.value
+        });
+    };
+
+    onHouseTypeChanged = (e) => {
+        this.setState({
+            home_type: e.target.value
+        });
+        console.log(e.target.value);
+    };
+
+    onPostalCodeSuggestionChanged = (suggestion) => {
+        console.log(suggestion._id);
+        this.setState({
+            location_sugg: suggestion._id
+        });
+    };
+
+    onPostalCodeValueChanged = (value) => {
+        console.log(value);
+        this.setState({
+            location: value
+        });
+    };
+
     render(){
-        const { location } = this.props.params;
+        console.log(this.state);
         return (
             <React.Fragment>
                 <div className="page-map-filter position-sticky sticky-top">
@@ -21,31 +56,19 @@ export default class SearchForm extends Component {
                             
                             <div className="row">
                                 
-                                <PostalCodeSearchField value={location}/>
-                                <div className="col-md-3">
-                                    <div>
-                                        <div className="dropdown">
-                                            <input type="text" className="form-control date" placeholder="Select Dates" readOnly
-                                                id="placeholder-date"
-                                                data-toggle="dropdown" required />
-                                                <div className="dropdown-menu">
-                                                    <div className="calendar"></div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-2">
-                                    
-                                </div>
-                                <div className="col-md-2">
-                                    
-                                </div>
+                                <PostalCodeSearchField value={this.state.location} onChange={this.onPostalCodeSuggestionChanged} onValueChange={this.onPostalCodeValueChanged}/>
+                                <DateInput />
+                                <HouseType value={this.state.home_type} onChange={this.onHouseTypeChanged}/>
+                                <Rent value={this.state.rent} onChange={this.onRentChanged} />
                                 <div className="col-md-2">    
-                                    <button className="btn btn-link btn-block">Search</button>
+                                    <button className="btn btn-link btn-block" 
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        this.props.onSearchClicked(this.state)}
+                                    }>
+                                        Search
+                                    </button>
                                 </div>
-                            </div>
-                            <div id="other-filter" className="collapse text-center">
-                                ...
                             </div>
                         </form>
                     </div>

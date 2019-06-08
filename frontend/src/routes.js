@@ -10,6 +10,7 @@ export default {
     blogs: '/blogs/',
     howItWorks: '/pages/how-it-works/',
     listHome: '/property/add/',
+    propertyInfo: '/property/info/:houseUUID',
     dashboard: '/',
     contactUs: '/pages/contact-us/',
     auth: include('/accounts', {
@@ -55,6 +56,9 @@ export default {
     cities: include('/cities', {
         postalCodeSuggestions: 'postal-code-sugg',
         postalCodeDetails: 'postal-code-details/:objID'
+    }),
+    search: include('/es', {
+        house: 'house/search'
     })
 };
 

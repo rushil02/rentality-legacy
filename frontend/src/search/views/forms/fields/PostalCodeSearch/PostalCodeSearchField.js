@@ -31,6 +31,7 @@ export default class PostalCodeSearchField extends Component{
         this.setState({
             value: newValue
         });
+        this.props.onValueChange(newValue);
     }
 
     // Autosuggest will call this function every time you need to clear suggestions.
@@ -56,6 +57,7 @@ export default class PostalCodeSearchField extends Component{
     onSuggestionSelected = (event, { suggestion }) => {
         // this.props.onFieldChange('postalCodeID', suggestion.id);
         console.log(event, suggestion);
+        this.props.onChange(suggestion);
     };
 
     render(){
