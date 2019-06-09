@@ -17,6 +17,8 @@ function formatDateDisplay(startDate, endDate, defaultText) {
 }
 
 function convertDate(dateString){
+    if(!dateString)
+        return new Date();
     let a = dateString.split('-');
     let b = a[1] + '/' + a[0] + '/' + a[2];
     return new Date(b);
@@ -68,7 +70,7 @@ export default class DateInput extends Component {
                         readOnly
                         className="form-control date"
                         onClick={this.toggleDatePickerVisibility}
-                        // onBlur={this.setDatePickerInvisible}
+                        onBlur={this.setDatePickerInvisible}
                         value={formatDateDisplay(
                             this.state.dateRangePicker.selection.startDate, this.state.dateRangePicker.selection.endDate
                         )}
