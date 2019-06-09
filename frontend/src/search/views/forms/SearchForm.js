@@ -43,6 +43,13 @@ export default class SearchForm extends Component {
         });
     };
 
+    onDateRangeChange = (startDate, endDate) => {
+        this.setState({
+            start_date: startDate,
+            end_date: endDate
+        });
+    }
+
     render(){
         return (
             <React.Fragment>
@@ -53,7 +60,7 @@ export default class SearchForm extends Component {
                             <div className="row">
                                 
                                 <PostalCodeSearchField value={this.state.location} onChange={this.onPostalCodeSuggestionChanged} onValueChange={this.onPostalCodeValueChanged}/>
-                                <DateInput />
+                                <DateInput startDate={this.state.start_date} endDate={this.state.end_date} onChange={this.onDateRangeChange}/>
                                 <HouseType value={this.state.home_type} onChange={this.onHouseTypeChanged}/>
                                 <Rent value={this.state.rent} onChange={this.onRentChanged} />
                                 <div className="col-md-2">    
