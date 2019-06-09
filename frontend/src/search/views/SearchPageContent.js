@@ -9,7 +9,7 @@ export default class SearchPageContent extends Component{
                     <div className="container">
                         <div className="lists">
                             <div className="row" id="search-results">
-                                {this.props.houses.map((data=>{
+                                {this.props.houses.map((data => {
                                     return <HouseComponent key={data._id} house={data}/>
                                 }))}
                             </div>
