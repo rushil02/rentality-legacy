@@ -47,3 +47,9 @@ class UserInfoSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ('first_name', 'last_name', 'email')
         read_only_fields = ('email',)
+
+
+class ProfileImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_pic']

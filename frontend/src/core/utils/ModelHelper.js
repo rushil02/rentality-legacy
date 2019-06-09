@@ -11,7 +11,10 @@ export default class APIModelAdapter {
      *              Setting options - key : field from server/DB
      *                                parser: [optional] to manipulate obtained value from DB
      *                                adapter: [optional] to created a nested APIModelAdapter
-     *                                default: if value is not provided bt DB
+     *                                default: if value is not provided by DB
+     *                                readOnly: if attribute is not to be changed in DB,
+     *                                          will raise warning whenever value is changed,
+     *                                          readOnly attributes are not serialized
      *              Note: `parser` and `adapter` do not work together. `adapter` has precedence over `parser` setting.
      */
     constructor(dbObj, status) {
@@ -76,6 +79,9 @@ export default class APIModelAdapter {
     };
 
     fieldMap() {
+        /**
+         * To be overridden by all child implementations
+         */
     };
 
     // FIXME : Nesting paradigm is ambiguous and untested
@@ -122,7 +128,7 @@ export default class APIModelAdapter {
 
     setData = (key_list, value) => {
         // Accepts a list of keys in order of hierarchy from parent to child
-        // FIXME : Nesting not tested
+        // FIXME : Nesting not tested - does not work with adapters !URGENT
         if (key_list.isArray) {
             let currAttr = this._attrs;
             for (let i = 0; i < key_list.length - 1; i++) {
@@ -130,44 +136,46 @@ export default class APIModelAdapter {
             }
             currAttr[key_list.length - 1] = value;
         } else {
+            if (this.fieldMap()[key_list].readOnly) {
+                console.warn('You are trying to change readOnly data. The data will not be serialized.');
+            }
             this._attrs[key_list] = value;
+
         }
         this.changedFields.push(key_list);
         this.status = "hasChanged";
         return this
     };
 
+    _serializeData(field, settings) {
+        if (settings.readOnly) {
+            return undefined // This will unset the key from JSON object
+        }
+        if (settings.adapter) {
+            return this.getData(field).serialize('__all__')
+        } else {
+            return this.getData(field) === '' ? null : this.getData(field);
+        }
+    }
+
     // Use while sending Data to server
     serialize(fields) {
         let ret = {};
         if (!fields || fields === '__all__') {
-            for (let i = 0; i < this._fieldMap.length; i++) {
-                if (this._fieldMap[i][1].adapter) {
-                    ret[this._fieldMap[i][1].key] = this.getData(this._fieldMap[i][0]).serialize('__all__')
-                } else {
-                    ret[this._fieldMap[i][1].key] = this.getData(this._fieldMap[i][0]) === '' ? null : this.getData(this._fieldMap[i][0]);
-                }
+            let _fieldMap = Object.entries(this.fieldMap());
+            for (let i = 0; i < _fieldMap.length; i++) {
+                ret[_fieldMap[i][1].key] = this._serializeData(_fieldMap[i][0], _fieldMap[i][1]);
             }
         } else if (fields === '__partial__') {
             fields = this.changedFields;
             for (let i = 0; i < fields.length; i++) {
-                if (this.fieldMap()[fields[i]].adapter) {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]).serialize('__all__')
-                } else {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]) === '' ? null : this.getData(fields[i])
-                }
+                ret[this.fieldMap()[fields[i]].key] = this._serializeData(fields[i], this.fieldMap()[fields[i]]);
             }
         } else {
             if (!Array.isArray(fields)) {
                 console.error("Provided fields is not a list");
             }
-            for (let i = 0; i < fields.length; i++) {
-                if (this.fieldMap()[fields[i]].adapter) {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]).serialize('__all__')
-                } else {
-                    ret[this.fieldMap()[fields[i]].key] = this.getData(fields[i]) === '' ? null : this.getData(fields[i])
-                }
-            }
+            ret[this.fieldMap()[fields[i]].key] = this._serializeData(fields[i], this.fieldMap()[fields[i]]);
         }
         return ret
     }

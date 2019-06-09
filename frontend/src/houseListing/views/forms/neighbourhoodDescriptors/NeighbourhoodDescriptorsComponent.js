@@ -19,7 +19,7 @@ export function NeighborhoodDescriptorsComponent(props) {
                                         <textarea
                                             name="main-form-neighbourhood_description" rows="8" cols="40"
                                             className="form-control" id="id_main-form-neighbourhood_description"
-                                            placeholder="Examples - "
+                                            placeholder="Examples -&#10;10 min walk to university&#10;5 min walk to bus stop or train station&#10;15 min walk to shipping centre"
                                             value={props.otherDescription}
                                             onChange={(e) => props.onOtherDescriptionChange(e.target.value)}/>
                                     </div>

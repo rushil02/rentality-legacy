@@ -1,5 +1,6 @@
 import {include} from 'named-urls';
 import houseListingRoutes from 'houseListing/routes';
+import userRoutes from 'user/routes';
 
 export default {
     static_route: '/static/',
@@ -22,13 +23,9 @@ export default {
     // These URLs redirect to new html pages and are expected to be handled accordingly.
     // FIXME: Prepend needs to be removed after complete frontend migrations to react
     react: include('/rep', {
-        houseListing: include('house/list', {
-            base: '',
-            create: 'create',
-            edit: 'edit/:houseUUID',
-        }),
+        houseListing: include('house/list', houseListingRoutes.interface),
         samplePage: 'property/samplePage',
-        userProfile: 'profile/',
+        user: include('', userRoutes.interface),
     }),
 
     // APIs
@@ -44,13 +41,9 @@ export default {
         verifyHouseDiscount: 'verify-promo-use/house/home_owner'
     }),
 
-    house: include('/property', houseListingRoutes),
+    house: include('/property', houseListingRoutes.APIs),
 
-    user: include('/', {
-        info: 'cu-info',
-        profile: 'user-profile',
-        uploadProfilePic: 'upload-profile-pic'
-    }),
+    user: include('/', userRoutes.APIs),
 
     cities: include('/cities', {
         postalCodeSuggestions: 'postal-code-sugg',

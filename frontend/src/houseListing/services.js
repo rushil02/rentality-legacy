@@ -223,7 +223,6 @@ export function postImagesFiles(houseUUID, data, progressTracker) {
         }
     };
     return new Promise(function (resolve, reject) {
-        console.log("ASD");
         let formData = new FormData();
         formData.append('image', data);
         axios.post(reverse(routes.house.image.upload, {houseUUID: houseUUID}), formData, config)

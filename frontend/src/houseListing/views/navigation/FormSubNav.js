@@ -80,16 +80,16 @@ export default class FormSubNav extends Component {
                 <React.Fragment>
                     <div className="row sub-header-row">
                         <div className="col-md-3">
-                            {getNavLink("/1", "Profile Photo", false)}
+                            {getNavLink("/9", "Profile Photo", false)}
                         </div>
                         <div className="col-md-3">
-                            {getNavLink("/2", "Rent & Availability", disableLinks)}
+                            {getNavLink("/10", "Fun Tags", disableLinks)}
                         </div>
                         <div className="col-md-3">
-                            {getNavLink("/3", "Facilities", disableLinks)}
+                            {getNavLink("/11", "Welcome", disableLinks)}
                         </div>
                         <div className="col-md-3">
-                            {getNavLink("/4", "Rules", disableLinks)}
+                            {getNavLink("/12", "Bank Details", disableLinks)}
                         </div>
                     </div>
 

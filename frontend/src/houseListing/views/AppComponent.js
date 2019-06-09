@@ -9,6 +9,7 @@ import {
     ImagesCache,
     CancellationPolicyCache,
     NeighborhoodDescriptorsCache,
+    UserProfilePicCache
 } from '../dataContext'
 import Navigator from './navigation/Navigator';
 
@@ -24,6 +25,7 @@ const UploadImagesFormContainer = React.lazy(() => import("./forms/mediaUpload/U
 const CancellationPolicyContainer = React.lazy(() => import("./forms/cancellationPolicy/CancellationPolicyContainer"));
 const InfoForTenantsContainer = React.lazy(() => import("./forms/infoForTenants/InfoForTenantsContainer"));
 const NeighborhoodDescriptorsContainer = React.lazy(() => import("./forms/neighbourhoodDescriptors/NeighbourhoodDescriptorsContainer"));
+const UploadProfilePictureContainer = React.lazy(() => import("./forms/uploadProfilePicture/UploadProfilePictureContainer"));
 
 
 // Add all forms here
@@ -132,6 +134,16 @@ export function EditAppComponent(props) {
                                                 />}
                                             </MainDataCache.Consumer>}
                                         </NeighborhoodDescriptorsCache.Consumer>
+                                    </Suspense>
+                                }/>
+                                <Route exact path="/9" render={(routerProps) =>
+                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                        <UserProfilePicCache.Consumer>
+                                            {cache => <UploadProfilePictureContainer
+                                                cache={cache}
+                                                navContext={navContext}
+                                            />}
+                                        </UserProfilePicCache.Consumer>
                                     </Suspense>
                                 }/>
                                 <Route render={() => <Redirect to="/1"/>}/>
