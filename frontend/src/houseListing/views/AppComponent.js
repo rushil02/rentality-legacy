@@ -9,7 +9,9 @@ import {
     ImagesCache,
     CancellationPolicyCache,
     NeighborhoodDescriptorsCache,
-    UserProfilePicCache
+    UserProfilePicCache,
+    WelcomeTagsCache,
+    PersonalityTagsCache,
 } from '../dataContext'
 import Navigator from './navigation/Navigator';
 
@@ -26,6 +28,8 @@ const CancellationPolicyContainer = React.lazy(() => import("./forms/cancellatio
 const InfoForTenantsContainer = React.lazy(() => import("./forms/infoForTenants/InfoForTenantsContainer"));
 const NeighborhoodDescriptorsContainer = React.lazy(() => import("./forms/neighbourhoodDescriptors/NeighbourhoodDescriptorsContainer"));
 const UploadProfilePictureContainer = React.lazy(() => import("./forms/uploadProfilePicture/UploadProfilePictureContainer"));
+const WelcomeTagsContainer = React.lazy(() => import("./forms/welcomeTags/WelcomeTagsContainer"));
+const FunTagsContainer = React.lazy(() => import("./forms/funTags/FunTagsContainer"));
 
 
 // Add all forms here
@@ -144,6 +148,28 @@ export function EditAppComponent(props) {
                                                 navContext={navContext}
                                             />}
                                         </UserProfilePicCache.Consumer>
+                                    </Suspense>
+                                }/>
+                                <Route exact path="/10" render={(routerProps) =>
+                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                        <PersonalityTagsCache.Consumer>
+                                            {cache => <FunTagsContainer
+                                                cache={cache}
+                                                houseUUID={houseUUID}
+                                                navContext={navContext}
+                                            />}
+                                        </PersonalityTagsCache.Consumer>
+                                    </Suspense>
+                                }/>
+                                <Route exact path="/11" render={(routerProps) =>
+                                    <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                        <WelcomeTagsCache.Consumer>
+                                            {cache => <WelcomeTagsContainer
+                                                cache={cache}
+                                                navContext={navContext}
+                                                houseUUID={houseUUID}
+                                            />}
+                                        </WelcomeTagsCache.Consumer>
                                     </Suspense>
                                 }/>
                                 <Route render={() => <Redirect to="/1"/>}/>

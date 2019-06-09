@@ -175,7 +175,10 @@ export default class APIModelAdapter {
             if (!Array.isArray(fields)) {
                 console.error("Provided fields is not a list");
             }
-            ret[this.fieldMap()[fields[i]].key] = this._serializeData(fields[i], this.fieldMap()[fields[i]]);
+            for (let i = 0; i < fields.length; i++) {
+                ret[this.fieldMap()[fields[i]].key] = this._serializeData(fields[i], this.fieldMap()[fields[i]]);
+            }
+
         }
         return ret
     }

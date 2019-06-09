@@ -12,7 +12,7 @@ class UserTimezoneSerializer(serializers.Serializer):
 
 class PersonalityTagSerializer(serializers.Serializer):
     verbose = serializers.CharField()
-    id = serializers.IntegerField(required=False)
+    id = serializers.IntegerField(required=False, allow_null=True)
     checked = serializers.BooleanField()
 
     def create(self, validated_data):

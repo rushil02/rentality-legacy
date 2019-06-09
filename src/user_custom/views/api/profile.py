@@ -2,8 +2,10 @@ from rest_framework.views import APIView, Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from django.db.models import Q, Exists, OuterRef
 
-from user_custom.models import UserProfile
+from user_custom.models import UserProfile, PersonalityTag
+from user_custom.serializers.common import PersonalityTagSerializer
 from user_custom.serializers.profile import UserProfileSerializer, UserInfoSerializer, ProfileImageUploadSerializer
 from rest_framework.exceptions import ParseError
 
@@ -63,3 +65,30 @@ class ProfilePicUploadView(APIView):
     def delete(self, request):
         UserProfile.objects.filter(user=request.user).update(profile_pic=None)
         return Response(status=status.HTTP_200_OK)
+
+
+class PersonalityTagView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer = PersonalityTagSerializer
+
+    def get_tags(self, user_profile):
+        return list(PersonalityTag.objects.filter(
+            Q(system_default=True) | Q(userprofile=user_profile)
+        ).values('verbose', 'id').annotate(
+            checked=Exists(PersonalityTag.objects.filter(userprofile=user_profile, pk=OuterRef('pk')))))
+
+    def get(self, request, *args, **kwargs):
+        qs = self.get_tags(request.user.userprofile)
+        serializer = self.serializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer(data=request.data, many=True)
+        if serializer.is_valid(raise_exception=True):
+            user_profile = request.user.userprofile
+            objs_set = serializer.save()
+            user_profile.personality_tags.add(*[obj[0] for obj in objs_set if obj[1] is True])
+            user_profile.personality_tags.remove(*[obj[0] for obj in objs_set if obj[1] is False])
+            qs = self.get_tags(request.user.userprofile)
+            serializer = self.serializer(qs, many=True)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)

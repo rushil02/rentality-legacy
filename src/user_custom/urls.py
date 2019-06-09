@@ -3,10 +3,10 @@ from django.views.generic import TemplateView
 
 from user_custom.views import set_timezone, check_user, \
     dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
-    CustomSignupView, search, get_stripe_publishable_key, PersonalityTagView, UserInfoView
+    CustomSignupView, search, get_stripe_publishable_key, UserInfoView
 from user_custom.views.api.details import UserDetailsView
 
-from user_custom.views.api.profile import GetEditUserProfileView, ProfilePicUploadView
+from user_custom.views.api.profile import GetEditUserProfileView, ProfilePicUploadView, PersonalityTagView
 from user_custom.views.api import edit_profile_react
 
 app_name = 'user'
@@ -19,7 +19,6 @@ urlpatterns = [
     path('accounts/signup/', CustomSignupView.as_view(), name="account_signup"),
     path('notifications', Notifications.as_view(), name='notifications'),
     path('dashboard', dashboard, name='dashboard'),
-    path('funtags/', PersonalityTagView.as_view(), name='personality_tags'),
     # path('sel-listing', TemplateView.as_view(template_name='user_common/account_creation/select_listing.html'),
     #      name='sel_listing'),
     path('time', set_timezone, name='set_timezone'),
@@ -44,5 +43,7 @@ urlpatterns = [
     path('upload-profile-pic', ProfilePicUploadView.as_view(), name='upload-profile-pic'),
 
     # APIs v2
-    path('user-nav-info/', UserDetailsView.as_view(), name='user_nav_info'),
+    path('user-nav-info', UserDetailsView.as_view(), name='user_nav_info'),
+    path('personality-tags', PersonalityTagView.as_view(), name='personality_tags'),
+
 ]

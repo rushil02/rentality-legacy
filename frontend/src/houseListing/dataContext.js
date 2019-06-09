@@ -12,6 +12,8 @@ export const ImagesCache = React.createContext({});
 export const CancellationPolicyCache = React.createContext({});
 export const NeighborhoodDescriptorsCache = React.createContext({});
 export const UserProfilePicCache = React.createContext({});
+export const PersonalityTagsCache = React.createContext({});
+export const WelcomeTagsCache = React.createContext({});
 
 
 // Common Store Provider for multiple Contexts
@@ -20,7 +22,7 @@ export class StoreProvider extends StoreHelper {
     // Initializer
     getStore() {
         return ['mainData', 'availabilityData', 'facilitiesData', 'rulesData', 'imagesData', 'canPolicyData',
-            'neighborhoodDescriptorsData', 'userProfilePic']
+            'neighborhoodDescriptorsData', 'userProfilePic', 'welcomeTagsData', 'personalityTagsData']
     }
 
     render() {
@@ -36,7 +38,12 @@ export class StoreProvider extends StoreHelper {
                                             <NeighborhoodDescriptorsCache.Provider
                                                 value={this.state.neighborhoodDescriptorsData}>
                                                 <UserProfilePicCache.Provider value={this.state.userProfilePic}>
-                                                {this.props.children}
+                                                    <WelcomeTagsCache.Provider value={this.state.welcomeTagsData}>
+                                                        <PersonalityTagsCache.Provider
+                                                            value={this.state.personalityTagsData}>
+                                                            {this.props.children}
+                                                        </PersonalityTagsCache.Provider>
+                                                    </WelcomeTagsCache.Provider>
                                                 </UserProfilePicCache.Provider>
                                             </NeighborhoodDescriptorsCache.Provider>
                                         </CancellationPolicyCache.Provider>

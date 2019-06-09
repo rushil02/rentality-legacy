@@ -8,5 +8,6 @@ export default {
         info: 'cu-info',
         profile: 'user-profile',
         uploadProfilePic: 'upload-profile-pic',
+        personalityTags: 'personality-tags',
     }
 }

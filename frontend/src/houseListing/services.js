@@ -10,7 +10,7 @@ import {
     Rule,
     Image,
     CancellationPolicy,
-    NeighbourhoodDescriptor
+    NeighbourhoodDescriptor, WelcomeTag
 } from "./models";
 import {APIModelListAdapter} from "../core/utils/ModelHelper";
 
@@ -314,6 +314,30 @@ export function postNeighbourhoodDescriptors(houseUUID, data) {
         axios.post(reverse(routes.house.neighbourhoodDescriptors, {houseUUID: houseUUID}), data.serialize(true))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, NeighbourhoodDescriptor, 'id'));
+            })
+            .catch(error => {
+                reject(handleError(error).error);
+            })
+    })
+}
+
+export function getWelcomeTags(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.get(reverse(routes.house.welcomeTags, {houseUUID: houseUUID}))
+            .then(result => {
+                resolve(new APIModelListAdapter(result.data, WelcomeTag, 'id'));
+            })
+            .catch(error => {
+                handleError(error)
+            });
+    });
+}
+
+export function postWelcomeTags(houseUUID, data) {
+    return new Promise(function (resolve, reject) {
+        axios.post(reverse(routes.house.welcomeTags, {houseUUID: houseUUID}), data.serialize(true))
+            .then(result => {
+                resolve(new APIModelListAdapter(result.data, WelcomeTag, 'id'));
             })
             .catch(error => {
                 reject(handleError(error).error);

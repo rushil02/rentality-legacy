@@ -252,3 +252,15 @@ export class NeighbourhoodDescriptor extends APIModelAdapter {
     }
 
 }
+
+
+export class WelcomeTag extends APIModelAdapter {
+    fieldMap() {
+        return {
+            objID: {key: 'id', default: null},
+            verbose: {key: 'verbose',},
+            checked: {key: 'checked',},
+        }
+    }
+}
+

@@ -1,8 +1,9 @@
 import axios, {handleError} from "../core/utils/serviceHelper";
 import {reverse} from "named-urls";
-import {UserProfile} from "./models";
+import {PersonalityTag, UserProfile} from "./models";
 import routes from "routes";
 import {alertUser} from "../core/alert/Alert";
+import {APIModelListAdapter} from "../core/utils/ModelHelper";
 
 
 export function getUserProfileData() {
@@ -63,4 +64,29 @@ export function deleteProfilePic() {
                 handleError(error)
             });
     });
+}
+
+
+export function getPersonalityTags(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.get(reverse(routes.user.personalityTags, {houseUUID: houseUUID}))
+            .then(result => {
+                resolve(new APIModelListAdapter(result.data, PersonalityTag, 'id'));
+            })
+            .catch(error => {
+                handleError(error)
+            });
+    });
+}
+
+export function postPersonalityTags(houseUUID, data) {
+    return new Promise(function (resolve, reject) {
+        axios.post(reverse(routes.user.personalityTags, {houseUUID: houseUUID}), data.serialize(true))
+            .then(result => {
+                resolve(new APIModelListAdapter(result.data, PersonalityTag, 'id'));
+            })
+            .catch(error => {
+                reject(handleError(error).error);
+            })
+    })
 }

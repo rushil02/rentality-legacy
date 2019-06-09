@@ -32,5 +32,6 @@ export default {
             update: 'update/:houseUUID'
         }),
         neighbourhoodDescriptors: 'neighbourhood-desc/:houseUUID',
+        welcomeTags: 'welcome-tags/:houseUUID',
     }
 }

@@ -16,3 +16,14 @@ export class UserProfile extends APIModelAdapter {
         }
     }
 }
+
+export class PersonalityTag extends APIModelAdapter {
+    fieldMap() {
+        return {
+            objID: {key: 'id', default: null},
+            verbose: {key: 'verbose',},
+            checked: {key: 'checked',},
+        }
+    }
+}
+
