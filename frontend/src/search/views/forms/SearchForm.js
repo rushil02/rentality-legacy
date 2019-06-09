@@ -29,25 +29,21 @@ export default class SearchForm extends Component {
         this.setState({
             home_type: e.target.value
         });
-        console.log(e.target.value);
     };
 
     onPostalCodeSuggestionChanged = (suggestion) => {
-        console.log(suggestion._id);
         this.setState({
             location_sugg: suggestion._id
         });
     };
 
     onPostalCodeValueChanged = (value) => {
-        console.log(value);
         this.setState({
             location: value
         });
     };
 
     render(){
-        console.log(this.state);
         return (
             <React.Fragment>
                 <div className="page-map-filter position-sticky sticky-top">

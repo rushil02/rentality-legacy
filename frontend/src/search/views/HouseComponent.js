@@ -6,7 +6,6 @@ import './HouseComponent.css'
 export default class HouseComponent extends Component{
     render(){
         const { house: { _source } } = this.props;
-        console.log(_source);
         const url = reverse(routes.propertyInfo, { houseUUID: _source.uuid });
         return (
             <React.Fragment>

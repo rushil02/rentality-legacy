@@ -58,7 +58,8 @@ export default {
         postalCodeDetails: 'postal-code-details/:objID'
     }),
     search: include('/es', {
-        house: 'house/search'
+        house: 'house/search',
+        location: 'location_sugg'
     })
 };
 

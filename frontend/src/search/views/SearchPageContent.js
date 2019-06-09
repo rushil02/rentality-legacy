@@ -3,7 +3,6 @@ import HouseComponent from './HouseComponent';
 
 export default class SearchPageContent extends Component{
     render(){
-        console.log(this.props.houses);
         return (
             <React.Fragment>
                 <div className="page-map">
@@ -11,7 +10,6 @@ export default class SearchPageContent extends Component{
                         <div className="lists">
                             <div className="row" id="search-results">
                                 {this.props.houses.map((data=>{
-                                    console.log(data);
                                     return <HouseComponent house={data}/>
                                 }))}
                             </div>

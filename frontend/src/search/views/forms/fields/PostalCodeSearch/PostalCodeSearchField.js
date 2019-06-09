@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import Autosuggest from 'react-autosuggest';
 import { getPostalCodeSuggestions } from 'search/services';
 import './PostalCodeSearchField.css';
+import { debounce } from 'lodash';
 
 function getSuggestionValue(suggestion) {
-    console.log(suggestion);
     return suggestion._source.verbose;
 }
 
@@ -25,6 +25,7 @@ export default class PostalCodeSearchField extends Component{
             value: this.props.value,
             suggestions: []
         };
+        this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 350, { trailing: true });
     }
 
     onChange(e, {newValue}){
@@ -47,7 +48,7 @@ export default class PostalCodeSearchField extends Component{
         // this.setState({
         //     suggestions: getSuggestions(value)
         // });
-        getPostalCodeSuggestions().then((data) => {
+        getPostalCodeSuggestions({location: value}).then((data) => {
             this.setState({
                 suggestions: data
             });}
@@ -56,7 +57,6 @@ export default class PostalCodeSearchField extends Component{
 
     onSuggestionSelected = (event, { suggestion }) => {
         // this.props.onFieldChange('postalCodeID', suggestion.id);
-        console.log(event, suggestion);
         this.props.onChange(suggestion);
     };
 
@@ -73,7 +73,7 @@ export default class PostalCodeSearchField extends Component{
                 <Autosuggest
                     id="location"
                     suggestions={this.state.suggestions}
-                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                    onSuggestionsFetchRequested={this.debouncedFetchSuggestions}
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     onSuggestionSelected={this.onSuggestionSelected}
                     getSuggestionValue={getSuggestionValue}

@@ -15,7 +15,6 @@ export default class App extends Component{
 
     componentDidMount(){
         getFilteredHouses(this.state.params).then((data) => {
-            console.log(data);
             this.setState({
                 houses: data
             });
