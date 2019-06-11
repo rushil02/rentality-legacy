@@ -1636,6 +1636,12 @@ body > .page-signup-login .form .form-control {
     border-bottom: 1px solid #c7cdd9;
     border-radius: 0;
     height: calc(2.25rem + 20px);
+    background: transparent;
+}
+
+body > .page-signup-login .form .form-control:focus {
+    box-shadow: 0 6px 12px -7px #3fc692 !important;
+    border-bottom: 1px solid #3fc692;
 }
 
 body > .page-signup-login .form select.form-control {

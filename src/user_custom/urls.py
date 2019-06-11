@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 from user_custom.views import set_timezone, check_user, \
     dashboard, Notifications, shortlist, shortlist_view, edit_profile, SignUpInfoWizard, \
-    CustomSignupView, search, get_stripe_publishable_key, UserInfoView
+    CustomSignupView, search, get_stripe_publishable_key, UserInfoView, BusinessSignupView
 from user_custom.views.api.details import UserDetailsView
 
 from user_custom.views.api.profile import GetEditUserProfileView, ProfilePicUploadView, PersonalityTagView
@@ -17,6 +17,8 @@ urlpatterns = [
     path('search', search, name='search'),
 
     path('accounts/signup/', CustomSignupView.as_view(), name="account_signup"),
+    path('accounts/signup/business/', BusinessSignupView.as_view(), name="business_account_signup"),
+
     path('notifications', Notifications.as_view(), name='notifications'),
     path('dashboard', dashboard, name='dashboard'),
     # path('sel-listing', TemplateView.as_view(template_name='user_common/account_creation/select_listing.html'),

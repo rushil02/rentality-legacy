@@ -2,9 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-
-from user_custom.models import UserProfile, Account
-from .models import User
+from .models import User, UserProfile, Account
 
 
 class CustomUserAdmin(UserAdmin):
@@ -26,7 +24,12 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'sex', 'account_type', 'business_name')
+    list_filter = ('account_type', 'sex')
+
+
 # Register your models here.
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(UserProfile)
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Account)

@@ -60,7 +60,8 @@ services:
     depends_on:
       - postgres
       - frontend
-#      - elasticsearch
+      - migration
+    #      - elasticsearch
     ports:
       - '8001:8000'
     entrypoint:
@@ -91,6 +92,19 @@ services:
       - './secrets/RABBITMQ_DEFAULT_PASS:/run/secrets/RABBITMQ_DEFAULT_PASS'
     depends_on:
       - postgres
+  migration:
+    build: ./src
+    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
+    volumes:
+      - './static_dev/static_root:/rentality/static_dev/static_root'
+      - './static_dev/media_root:/rentality/static_dev/media_root'
+      - './secrets:/run/secrets'
+      - './src:/rentality/src'
+    depends_on:
+      - postgres
+      - frontend
+    entrypoint: python manage.py migrate --noinput
+
 volumes:
   pgdata: null
   esdata: null

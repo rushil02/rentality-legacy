@@ -32,6 +32,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='userprofile',
+            name='business_name',
+            field=models.CharField(blank=True, max_length=150, null=True),
+        ),
+        migrations.AddField(
+            model_name='userprofile',
             name='billing_country',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
                                     to=settings.CITIES_COUNTRY_MODEL),
