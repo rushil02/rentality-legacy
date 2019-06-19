@@ -1,10 +1,4 @@
-#root > .page-form {
-    padding-top: 50px;
-    padding-bottom: 120px;
-}
-
-
-#root > .page-form .full-header {
+.fullHeader {
     font-size: 15px;
     font-weight: 500;
     color: #000000;
@@ -14,7 +8,7 @@
     padding-top: 10px;
 }
 
-#root > .page-form .full-header .progress {
+.fullHeader .progress {
     border-radius: 0;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -23,16 +17,16 @@
     background-color: rgba(63, 198, 146, 0.1);
 }
 
-#root > .page-form .full-header .progress .progress-bar {
+.fullHeader .progress .progressBar {
     background-color: #3fc692 !important;
 }
 
-#root > .page-form .full-header .active {
+.fullHeader .active {
     font-weight: 700;
-    color: #3fc692;
+    color: #3fc692 !important;
 }
 
-#root > .page-form .full-header .number {
+.fullHeader .number {
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -45,17 +39,11 @@
     margin-right: 15px;
 }
 
-#root > .page-form .full-header .active .number {
+.fullHeader .active .number {
     background-color: #3fc692;
-
 }
 
-#root > .page-form .full-header a.nostyle:link, a.nostyle:visited {
-    text-decoration: inherit;
-    color: inherit;
-}
-
-a.nostyle:link, a.nostyle:visited {
+a.noStyle:link, a.noStyle:visited {
     text-decoration: inherit;
     color: inherit;
 }

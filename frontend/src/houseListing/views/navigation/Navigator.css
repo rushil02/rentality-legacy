@@ -1,72 +1,51 @@
+.pageForm {
+    padding-top: 50px;
+    padding-bottom: 120px;
+}
 
-#root > .page-form .right .button {
+.button {
     text-align: right;
-    margin-top: 50px;
+    margin-top: 100px;
     margin-bottom: 50px;
 }
 
-#root > .page-form .right .button.top-margin {
-    margin-top: 100px;
-}
-
-#root > .page-form .right .button > button {
+.button > .btn {
     font-size: 16px;
     border-radius: 99px;
-    transition: all .25s ease-in-out;
-}
-
-#root > .page-form .right .button > a {
-    font-size: 16px;
-    border-radius: 99px;
-    transition: all .25s ease-in-out;
-}
-
-#root > .page-form .right .button > button:not(:last-child) {
-    margin-right: 20px;
-}
-
-#root > .page-form .right .button > a:not(:last-child) {
-    margin-right: 20px;
-}
-
-#root > .page-form .right .button > button:hover, #root > .page-form .right .button > button:focus {
-    text-decoration: none;
-}
-
-#root > .page-form .right .button > a:hover, #root > .page-form .right .button > button:focus {
-    text-decoration: none;
-}
-
-#root > .page-form .right .button > a.btn.btn-link{
-    font-size: 16px;
     font-weight: 700;
-    color: #36ffb1;
-    background-color: #2a2b32;
+    color: #36ffb1 !important;
+    background-color: #2a2b32 !important;
     padding: 11px 59px;
     text-transform: uppercase;
+    transition: all .25s ease-in-out;
 }
 
-#root > .page-form .right .button > a.btn.btn-link.error-btn{
-    color: red;
-    background-color: #e6e6e6;
-    pointer-events: none;
+.button > .btn:not(:last-child) {
+    margin-right: 20px;
 }
 
-#root > .page-form .right .button > a.btn.btn-link.loading-btn{
-    pointer-events: none;
-}
-
-#root > .page-form .right .button > a.btn.btn-link.done-btn{
-
-}
-
-
-#root > .page-form .right .button > a.btn.btn-link:hover {
+.button > .btn:hover, .button > .btn:focus {
+    text-decoration: none;
     color: #2a2b32;
     background-color: #36ffb1;
 }
 
-#root > .page-form .right #form-settings {
+.button > a.btn.errorBtn {
+    color: red !important;
+    background-color: #e6e6e6 !important;
+    pointer-events: none !important;
+}
+
+.button > a.btn.loadingBtn {
+    pointer-events: none !important;
+}
+
+.button > a.btn.doneBtn {
+
+}
+
+
+.formSettings {
     padding-top: 15px;
     padding-left: 10px;
     padding-right: 10px;
@@ -76,19 +55,19 @@
     -o-transition: all 0.30s ease-in-out;
 }
 
-#root > .page-form .right #form-settings:hover {
+.formSettings:hover {
     border-bottom: 1px solid #3fc692;
     box-shadow: 0 6px 6px -7px #3fc692 !important;
 }
 
-#root > .page-form .right #dropdown-list {
+.dropdownList {
     border: none;
     border-radius: 4px;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     margin-top: 20px;
 }
 
-#root > .page-form .right #dropdown-list:after {
+.dropdownList:after {
     content: '';
     display: block;
     position: absolute;

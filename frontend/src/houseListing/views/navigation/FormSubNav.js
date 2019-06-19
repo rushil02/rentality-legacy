@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {NavLink} from "react-router-dom";
 
-import './FormSubNav.css'
-import {alertUser} from "../../../core/alert/Alert";
+import styles from './FormSubNav.css'
+import parentStyles from './FormNav.css'
+
+import {alertUser} from "core/alert/Alert";
 
 function preventClick(e) {
     e.preventDefault();
@@ -16,14 +18,14 @@ function preventClick(e) {
 function getNavLink(path, verbose, disabled) {
     if (disabled) {
         return (
-            <NavLink to={path} className="nostyle form-change" onClick={preventClick}>
-                <div id="sub-title-1" className="title">{verbose}</div>
+            <NavLink to={path} className={parentStyles.noStyle} onClick={preventClick} activeClassName={styles.active}>
+                <div id="sub-title-1" className={styles.title}>{verbose}</div>
             </NavLink>
         )
     } else {
         return (
-            <NavLink to={path} className="nostyle form-change">
-                <div id="sub-title-1" className="title">{verbose}</div>
+            <NavLink to={path} className={parentStyles.noStyle} activeClassName={styles.active}>
+                <div id="sub-title-1" className={styles.title}>{verbose}</div>
             </NavLink>
         )
     }
@@ -103,7 +105,7 @@ export default class FormSubNav extends Component {
             <React.Fragment>
                 <div className="row">
                     <div className="col-md-12">
-                        <div className="header">
+                        <div className={styles.header}>
                             {this.createSubNav()}
                         </div>
                     </div>
