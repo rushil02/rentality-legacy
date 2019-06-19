@@ -67,7 +67,7 @@ export default class AuthNavbarComponent extends Component {
                                     <li className="list-inline-item"><a href={reverse(routes.howItWorks)}>How It
                                         Works</a>
                                     </li>
-                                    <li className="list-inline-item"><a href={reverse(routes.listHome)}>List Your
+                                    <li className="list-inline-item"><a href={reverse(routes.react.houseListing.create)}>List Your
                                         Home</a>
                                     </li>
                                 </ul>

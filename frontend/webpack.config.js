@@ -2,6 +2,12 @@ const path = require('path');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const cssThemeModules = [
+    path.resolve(__dirname, 'src', 'theme.css'),
+    path.resolve(__dirname, 'src', 'core', 'alert', 'components', 'Alert.css'),
+    path.resolve(__dirname, 'src', 'core', 'navbar', 'views', 'components', 'Navbar.css'),
+];
+
 module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
@@ -20,6 +26,17 @@ module.exports = {
             },
             {
                 test: /\.(css|less)$/,
+                exclude: cssThemeModules,
+                use: ["style-loader", {
+                    loader: "css-loader",
+                    options: {
+                        modules: true,
+                    },
+                }]
+            },
+            {
+                test: /\.(css|less)$/,
+                include: cssThemeModules,
                 use: ["style-loader", "css-loader"]
             },
             {

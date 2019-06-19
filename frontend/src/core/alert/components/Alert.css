@@ -2,11 +2,11 @@
     width: auto;
     float: right;
     min-width: 250px;
+    pointer-events: initial;
 }
 
 .alert-row {
     width: 100%;
-    pointer-events: initial;
 }
 
 .alerts-holder {

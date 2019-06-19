@@ -2,6 +2,7 @@ import {Component} from 'react';
 import React from "react";
 import {reverse} from 'named-urls';
 import routes from 'routes';
+import styles from "./style.css";
 
 export default class ComponentErrorBoundary extends Component {
     constructor(props) {
@@ -29,7 +30,7 @@ export default class ComponentErrorBoundary extends Component {
                         <div className="row" style={{paddingTop: "10%", marginBottom: "10%"}}>
                             <div className="col-sm-3"/>
                             <div className="col-sm-6">
-                                <div className="card page-error-card">
+                                <div className={"card " + styles.pageErrorCard}>
                                     <div className="card-body">
                                         <h1>Something went wrong!</h1>
 
@@ -37,9 +38,9 @@ export default class ComponentErrorBoundary extends Component {
                                             <br/>
                                         </p>
                                         <div className="float-right">
-                                        <a href={reverse(routes.contactUs)} className="btn btn-outline-primary">
-                                            Contact us
-                                        </a>
+                                            <a href={reverse(routes.contactUs)} className="btn btn-outline-primary">
+                                                Contact us
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

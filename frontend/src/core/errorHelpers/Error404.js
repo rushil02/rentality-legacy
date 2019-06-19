@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "./style.css";
+import styles from "./style.css";
 
 export default class Error404 extends Component {
     render() {
@@ -9,7 +9,7 @@ export default class Error404 extends Component {
                     <div className="row" style={{paddingTop: "10%", marginBottom:"10%"}}>
                         <div className="col-sm-3"/>
                         <div className="col-sm-6">
-                            <div className="card page-error-card">
+                            <div className={"card " + styles.pageErrorCard}>
                                 <div className="card-body">
                                     <h1>404</h1>
                                     <h5 className="card-title">Oops, the page you're looking for does not exist.</h5>

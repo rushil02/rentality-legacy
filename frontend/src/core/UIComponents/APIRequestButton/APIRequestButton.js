@@ -105,7 +105,7 @@ export default class APIRequestButton extends Component {
 
         if (this.state.status === 'default') {
             return (
-                <a type="button" className={layoutClasses} onClick={this.onActionClick}>
+                <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
                     <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
                         {_textOptions.default}
                     </div>
@@ -114,7 +114,7 @@ export default class APIRequestButton extends Component {
 
         } else if (this.state.status === 'error') {
             this.attachListener();
-            layoutClasses += ' error-btn';
+            layoutClasses += this.props.errorClass ? ' ' + this.props.errorClass : '';
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick}>
                     <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
@@ -124,7 +124,7 @@ export default class APIRequestButton extends Component {
             )
 
         } else if (this.state.status === 'loading') {
-            layoutClasses += ' loading-btn';
+            layoutClasses += this.props.loadingClass ? ' ' + this.props.loadingClass : '';
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick}>
 
@@ -148,9 +148,9 @@ export default class APIRequestButton extends Component {
 
         } else if (this.state.status === 'done') {
             this.attachListener();
-            layoutClasses += ' done-btn';
+            layoutClasses += this.props.doneClass ? ' ' + this.props.doneClass : '';
             return (
-                <a type="button" className={layoutClasses} onClick={this.onActionClick}>
+                <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
                     <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
                         {_textOptions.done}
                     </div>

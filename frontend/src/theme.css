@@ -25,49 +25,7 @@ body {
     }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1426.98px) {
-    #root > .menu.white .right .list-inline li.setting {
-        margin-left: 0;
-    }
 
-    #root > .menu.session .right .list-inline li.setting {
-        margin-left: 0;
-    }
-}
-
-@media screen and (min-width: 1365px) and (max-width: 1519.98px) {
-    #root > .menu.white .center .list-inline li a {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-    }
-}
-
-@media screen and (min-width: 768px) and (max-width: 1365.98px) {
-    #root > .menu {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    #root > .menu .center .list-inline li a {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-    }
-
-    #root > .menu .right ul li:not(:last-child) {
-        margin-right: 8px;
-    }
-}
-
-@media screen and (min-width: 1200px) and (max-width: 1329.98px) {
-    #root > .menu .center .list-inline li a {
-        padding-left: 2.5px !important;
-        padding-right: 2.5px !important;
-    }
-
-    #root > .menu .right ul li:not(:last-child) {
-        margin-right: 8px;
-    }
-}
 
 @media screen and (min-width: 1199.98px) {
     .page-form-payment-left {
@@ -1397,3 +1355,5 @@ body {
 /************************************/
 /***** Axios Progress Bar End *****/
 /************************************/
+
+

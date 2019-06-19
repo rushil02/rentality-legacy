@@ -1,6 +1,8 @@
 import React from 'react';
 import {GridLoader, PulseLoader} from 'react-spinners';
 import './LoadingSpinner.css';
+import styles from "./LoadingSpinner.css";
+
 
 // const override = css`
 //     display: block;
@@ -16,7 +18,7 @@ export class ComponentLoadingSpinner extends React.Component {
     render() {
         return (
             <div style={{"height": "50vh"}}>
-                <div className='loading-container'>
+                <div className={styles.loadingContainer}>
                     <GridLoader
                         // css={override}
                         sizeUnit={"px"}
@@ -39,7 +41,7 @@ export class ResponseLoadingSpinner extends React.Component {
     render() {
         return (
             <div style={{"height": this.props.height}}>
-                <div className='loading-container'>
+                <div className={styles.loadingContainer}>
                     <PulseLoader
                         // css={override}
                         sizeUnit={"px"}
@@ -62,7 +64,7 @@ export class ComponentRefreshLoadingSpinner extends React.Component {
     render() {
         return (
             <div style={{"height": this.props.height}}>
-                <div className='loading-container'>
+                <div className={styles.loadingContainer}>
                     <GridLoader
                         // css={override}
                         sizeUnit={"px"}
