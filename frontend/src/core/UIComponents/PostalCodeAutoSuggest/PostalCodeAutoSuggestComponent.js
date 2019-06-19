@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Autosuggest from 'react-autosuggest';
-import './PostalCodeAutoSuggest.css';
+import theme from './PostalCodeAutoSuggest.css';
+
 
 function getSuggestionValue(suggestion) {
     return suggestion.code;
@@ -36,6 +37,7 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                 <div className="col-md-3">
                     <Autosuggest
                         id="location"
+                        theme={this.props.theme || theme}
                         suggestions={this.props.suggestions}
                         onSuggestionsFetchRequested={this.props.onSuggestionsFetchRequested}
                         onSuggestionsClearRequested={this.props.onSuggestionsClearRequested}
@@ -47,7 +49,7 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                 </div>
                 <div className="col-md-9">
                     <div className="input">
-                        <div id="location-verbose" className="form-control no-background">
+                        <div id="location-verbose" className="form-control no-background readonly-custom-input">
                             {this.props.verbose}
                         </div>
                     </div>

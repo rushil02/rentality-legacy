@@ -1,8 +1,8 @@
-.react-autosuggest__container {
+.container {
     position: relative;
 }
 
-.react-autosuggest__input {
+.input {
     background-image: url('/static/image/form-1/address.svg');
     width: 100%;
     font-size: 15px;
@@ -24,41 +24,26 @@
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
 }
 
-.react-autosuggest__input:focus {
+
+.inputFocused {
+    outline: none;
     box-shadow: 0 6px 12px -7px #3fc692 !important;
     border-bottom: 1px solid #3fc692;
 }
 
-.react-autosuggest__input--focused {
-    outline: none;
-}
-
-.react-autosuggest__input--open {
+.inputOpen {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
 
-.react-autosuggest__suggestions-container {
+.suggestionsContainer {
     display: none;
 }
 
-.react-autosuggest__suggestions-container--open {
+.suggestionsContainerOpen {
     display: block;
     position: absolute;
-    /*top: 51px;*/
     width: 70vw;
-    /*min-width: 350px;*/
-    /*margin: 0px;*/
-    /*padding: 0px;*/
-    /*border: 1px solid #aaa;*/
-    /*background-color: #fff;*/
-    /*border-bottom-left-radius: 4px;*/
-    /*border-bottom-right-radius: 4px;*/
-    /*max-height: 200px;*/
-    /*overflow-y: auto;*/
-    /*overflow-x: visible;*/
-    /*z-index: 2;*/
-
     top: 100%;
     margin-left: 40px;
     background-color: hsl(0, 0%, 100%);
@@ -72,7 +57,7 @@
     box-sizing: border-box;
 }
 
-.react-autosuggest__suggestions-list {
+.suggestionsList {
     margin: 0;
     list-style-type: none;
     max-height: 300px;
@@ -82,10 +67,10 @@
     position: relative;
     -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
-    padding-left: 0 ;
+    padding-left: 0;
 }
 
-.react-autosuggest__suggestion {
+.suggestion {
     background-color: transparent;
     color: inherit;
     cursor: default;
@@ -101,27 +86,7 @@
     box-sizing: border-box;
 }
 
-.react-autosuggest__suggestion--highlighted {
+.suggestionHighlighted {
     background-color: #2684FF;
     color: white;
-}
-
-input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-}
-
-input::placeholder {
-    color: #6c757d;
-    opacity: 1;
-}
-
-div.input > #location-verbose {
-    padding-top: 0.8rem;
-    text-overflow: ellipsis;
-    padding-left: 10px !important;
 }

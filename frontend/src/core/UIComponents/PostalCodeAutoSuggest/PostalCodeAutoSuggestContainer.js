@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import {reverse} from 'named-urls';
-import routes from "routes";
 import {debounce} from 'lodash';
-import PostalCodeAutoSuggestComponent from "./PostalCodeAutoSuggest";
+import PostalCodeAutoSuggestComponent from "./PostalCodeAutoSuggestComponent";
 import {alertUser} from 'core/alert/Alert';
-import {getPostalCodeData, getPostalCodeSuggestions} from "houseListing/services";
+import {getPostalCodeData, getPostalCodeSuggestions} from "./services";
 
 const defaultVerboseDisplay = "Enter Postal code to select Suburb, City, State";
+
 
 export default class PostalCodeAutoSuggest extends Component {
     constructor(props) {
@@ -100,6 +98,7 @@ export default class PostalCodeAutoSuggest extends Component {
         return (
             <PostalCodeAutoSuggestComponent
                 onChange={this.onChange}
+                theme={this.props.theme}
                 value={this.state.value}
                 suggestions={this.state.suggestions}
                 onSuggestionsFetchRequested={this.debouncedFetchSuggestions}
