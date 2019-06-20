@@ -62,7 +62,7 @@ function NavigatorComponent(props) {
     if (props.navContext.data.currForm === 1) {
         backBtn = "";
     } else {
-        backBtn = <a type="button" className="btn float-left" id="prev-step" onClick={props.onBack}>Back</a>
+        backBtn = <a type="button" className={"btn float-left " + styles.btn} id="prev-step" onClick={props.onBack}>Back</a>
     }
 
     return (

@@ -26,8 +26,8 @@
 
 .button > .btn:hover, .button > .btn:focus {
     text-decoration: none;
-    color: #2a2b32;
-    background-color: #36ffb1;
+    color: #2a2b32 !important;
+    background-color: #36ffb1 !important;
 }
 
 .button > a.btn.errorBtn {
