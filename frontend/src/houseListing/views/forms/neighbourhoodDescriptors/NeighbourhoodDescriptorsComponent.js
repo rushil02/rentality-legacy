@@ -1,7 +1,5 @@
 import React from 'react';
-
-import "./NeigbourhoodDescriptors.css";
-
+import commonStyles from "../FormCommon.css";
 
 export function NeighborhoodDescriptorsComponent(props) {
     let addField;
@@ -11,7 +9,7 @@ export function NeighborhoodDescriptorsComponent(props) {
                 <div className="row">
                     <div className="col-md-1"/>
                     <div className="col-md-10">
-                        <h1 className="title">What is the neighbourhood like?</h1>
+                        <h1 className={commonStyles.pageTitle}>What is the neighbourhood like?</h1>
                         <div className="black-textarea">
                             <div className="row">
                                 <div className="col-md-9 col-lg-9 col-xl-6">
@@ -26,7 +24,7 @@ export function NeighborhoodDescriptorsComponent(props) {
                                 </div>
                             </div>
                         </div>
-                        <h1 className="title">What facilities are there around the area?</h1>
+                        <h1 className={commonStyles.pageTitle}>What facilities are there around the area?</h1>
                         <div className="selection">
                             <div className="btn-group btn-group-toggle">
                                 {Object.entries(props.data).map((data) =>
@@ -56,7 +54,7 @@ export function NeighborhoodDescriptorsComponent(props) {
                                     </div>
                                 </div>
                                 <div className="col-md-2">
-                                    <button type="button" className="btn btn-link anything-else-add"
+                                    <button type="button" className="default-button-style"
                                             onClick={() => props.onNBDescriptorAdd(addField)}>Add
                                     </button>
                                 </div>

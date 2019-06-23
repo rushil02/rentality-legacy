@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {alertUser} from "core/alert/Alert";
-import {getPersonalityTags, postPersonalityTags} from "user/services";
-import {PersonalityTag} from "user/models";
+import {getPersonalityTags, postPersonalityTags} from "userAccount/services";
+import {PersonalityTag} from "userAccount/models";
 
 import {APIModelListAdapter} from "core/utils/ModelHelper";
+
+import commonStyles from "../FormCommon.css";
 
 
 export default class FunTagsContainer extends Component {
@@ -113,7 +115,7 @@ export default class FunTagsContainer extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title">Select the hashtag that best describes you or your hobbies</h1>
+                            <h1 className={commonStyles.pageTitle}>Select the hashtag that best describes you or your hobbies</h1>
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="selection">
@@ -126,7 +128,7 @@ export default class FunTagsContainer extends Component {
                                                 />
                                             )}
                                         </div>
-                                        <div className="row">
+                                        <div className="row" style={{marginTop: "50px"}}>
                                             <div className="col-md-6 col-sm-12">
                                                 <div className="input big no-background">
                                                     <input type="text" className="form-control anything-else"

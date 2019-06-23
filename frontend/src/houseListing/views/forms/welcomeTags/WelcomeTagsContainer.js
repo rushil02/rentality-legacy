@@ -4,6 +4,7 @@ import {getWelcomeTags, postWelcomeTags} from "houseListing/services";
 import {WelcomeTag} from "houseListing/models";
 
 import {APIModelListAdapter} from "core/utils/ModelHelper";
+import commonStyles from "../FormCommon.css"
 
 
 export default class WelcomeTagsContainer extends Component {
@@ -100,10 +101,7 @@ export default class WelcomeTagsContainer extends Component {
                     reject(error)
                 })
         })
-
-
     };
-
 
     render() {
         let addField;
@@ -113,7 +111,7 @@ export default class WelcomeTagsContainer extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title">Select the groups that are welcome in your home</h1>
+                            <h1 className={commonStyles.pageTitle}>Select the groups that are welcome in your home</h1>
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="checkbox">

@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {deleteProfilePic, getProfilePicLink, uploadProfilePic} from "user/services";
+import {deleteProfilePic, getProfilePicLink, uploadProfilePic} from "userAccount/services";
 import Dropzone from "react-dropzone";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPortrait, faTimes, faPencilAlt} from "@fortawesome/free-solid-svg-icons";
 
-import "./UploadProfilePicture.css";
+import styles from "./UploadProfilePicture.css";
+import commonStyles from "../FormCommon.css"
+
 
 export default class UploadProfilePictureContainer extends Component {
     formID = 9;
@@ -26,7 +28,6 @@ export default class UploadProfilePictureContainer extends Component {
         this.props.navContext.data.loadForm(this.formID, this.onSave, 'saved', "Rent & Availability");
 
         if (!this.state.imagePath) {
-            // Fetch house details
             getProfilePicLink(this.props.houseUUID)
                 .then(result => {
                     this.setState(prevState => (
@@ -47,7 +48,6 @@ export default class UploadProfilePictureContainer extends Component {
 
     onRemove = (e) => {
         e.stopPropagation();
-        console.log("asdaa");
         deleteProfilePic()
             .then(result => {
                 this.setState(prevState => (
@@ -87,43 +87,43 @@ export default class UploadProfilePictureContainer extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title">Show your tenant what you look like.</h1>
+                            <h1 className={commonStyles.pageTitle}>Show your tenant what you look like.</h1>
                             <div className="d-flex justify-content-center">
                                 <div className="col-4">
 
                                     <Dropzone onDrop={this.handleDrop} multiple={false}>
                                         {({getRootProps, getInputProps}) => (
-                                            <div {...getRootProps({className: 'dropzone'})}>
+                                            <div {...getRootProps({className: styles.dropzone})}>
                                                 <input {...getInputProps()} />
                                                 {this.state.imagePath ?
                                                     <React.Fragment>
-                                                        <div className={'image-container img-thumbnail'}
+                                                        <div className={styles.imageContainer + ' img-thumbnail'}
                                                              style={{
                                                                  backgroundImage: `url(${this.state.imagePath})`,
                                                              }}>
                                                         </div>
-                                                        <div className={"tools"}>
-                                                            <div className={'tool action'}>
+                                                        <div className={styles.tools}>
+                                                            <div className={styles.tool}>
                                                                 <FontAwesomeIcon icon={faPencilAlt} size="3x"
                                                                                  color={"#39b88a"}
                                                                                  title={"Change Profile Picture"}
-                                                                                 className={"clickable"}
+                                                                                 className={styles.clickable}
 
                                                                 />
                                                             </div>
-                                                            <div className={'tool delete'}>
+                                                            <div className={styles.tool}>
                                                                 <FontAwesomeIcon icon={faTimes} size="3x"
                                                                                  title={"Delete Picture"}
                                                                                  color={"red"}
                                                                                  onClick={(e) => this.onRemove(e)}
-                                                                                 className={"clickable"}
+                                                                                 className={styles.clickable}
                                                                 />
                                                             </div>
                                                         </div>
                                                     </React.Fragment>
                                                     :
 
-                                                    <div className={"empty-container"}>
+                                                    <div className={styles.emptyContainer}>
                                                         <FontAwesomeIcon icon={faPortrait} size="8x" color={"#3fc692"}/>
 
                                                         <p style={{marginTop: "5px", marginBottom: 0}}

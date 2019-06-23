@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {House} from "../../../models";
 import {getHouseData, patchHouseData} from "../../../services";
 
-import "./InfoForTenants.css"
+import commonStyles from "../FormCommon.css"
 
 
 export default class InfoForTenantsContainer extends Component {
@@ -100,7 +100,7 @@ export default class InfoForTenantsContainer extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title" style={{marginBottom: '20px'}}>What is your home like?</h1>
+                            <h1 className={commonStyles.pageTitle} style={{marginBottom: '20px'}}>What is your home like?</h1>
                             <div className="black-textarea">
                                 <div className="row">
                                     <div className="col-md-9 col-lg-9 col-xl-6">
@@ -116,7 +116,7 @@ export default class InfoForTenantsContainer extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <h1 className="title" style={{marginBottom: '20px'}}>Are there other people living in the
+                            <h1 className={commonStyles.pageTitle} style={{marginBottom: '20px'}}>Are there other people living in the
                                 house ?</h1>
                             <div className="black-textarea">
                                 <p>If Yes, What are they like ?</p>
@@ -135,7 +135,7 @@ export default class InfoForTenantsContainer extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <h1 className="title" style={{marginBottom: '20px'}}>Are there any area restrictions for the
+                            <h1 className={commonStyles.pageTitle} style={{marginBottom: '20px'}}>Are there any area restrictions for the
                                 tenant?</h1>
                             <div className="black-textarea">
                                 <div className="row">

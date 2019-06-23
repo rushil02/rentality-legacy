@@ -1,87 +1,16 @@
-#root > .page-form .right .paragraph p {
-    font-size: 15px;
-    font-weight: 400;
-    color: #676767;
-}
-
-#root > .page-form .right .paragraph p.gray {
-    color: #b3b3b3;
-    margin-bottom: 10px;
-}
-
-#root > .page-form .right .paragraph div.more-info {
+div.moreInfo {
     position: relative;
     margin-bottom: 60px;
 }
 
-#root > .page-form .right .paragraph a.more-info-link {
+a.moreInfoLink {
     position: relative;
     color: #676767;
     float: right;
 }
 
-
-#root > .page-form .right .checkbox .list-inline li {
-    width: 215px;
+p.description {
     font-size: 15px;
     font-weight: 400;
     color: #676767;
-    margin-bottom: 25px;
-}
-
-#root > .page-form .right .checkbox.auto-width {
-    margin-top: 23px;
-}
-
-#root > .page-form .right .checkbox.auto-width .list-inline {
-    margin-bottom: 0;
-}
-
-#root > .page-form .right .checkbox.auto-width .list-inline li {
-    width: auto;
-    margin-right: 20px;
-}
-
-#root > .page-form .right .checkbox .list-inline li:not(:last-child) {
-    margin-right: 0;
-}
-
-#root > .page-form .right .checkbox.auto-width .list-inline li:not(:last-child) {
-    margin-right: 20px;
-}
-
-#root > .page-form .right .checkbox .list-inline li .custom-control-label {
-    line-height: 25px;
-    padding-left: 15px;
-}
-
-#root > .page-form .right .checkbox .list-inline li .custom-control-label.black {
-    font-weight: 700;
-    color: #000000;
-}
-
-#root > .page-form .right .checkbox .list-inline li .custom-control-label::before {
-    width: 25px;
-    height: 25px;
-    margin-top: -4px;
-    border: 1px solid #cacaca;
-    background-color: #ffffff;
-    box-shadow: none;
-}
-
-#root > .page-form .right .checkbox .list-inline li .custom-control-label::after {
-    width: 25px;
-    height: 25px;
-    margin-top: -4px;
-}
-
-#root > .page-form .right .checkbox .list-inline li .custom-checkbox .custom-control-input ~ .custom-control-label::after {
-    transition: all .25s ease-in-out;
-    opacity: 0;
-}
-
-#root > .page-form .right .checkbox .list-inline li .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
-    background-image: url('/static/image/form-1/check.svg');
-    background-size: unset;
-    opacity: 1;
 }

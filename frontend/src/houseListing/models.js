@@ -100,7 +100,6 @@ export class Navigator {
         }
     };
 
-
     // For safety - Destroy current Form reference on form Unmount
     unloadForm = () => {
         this.currForm = undefined;

@@ -5,7 +5,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const cssThemeModules = [
     path.resolve(__dirname, 'src', 'theme.css'),
     path.resolve(__dirname, 'src', 'core', 'alert', 'components', 'Alert.css'),
+    path.resolve(__dirname, 'src', 'core', 'footer', 'Footer.css'),
     path.resolve(__dirname, 'src', 'core', 'navbar', 'views', 'components', 'Navbar.css'),
+    /node_modules/,
 ];
 
 module.exports = {

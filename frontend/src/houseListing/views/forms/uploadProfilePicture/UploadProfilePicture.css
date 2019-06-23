@@ -1,4 +1,4 @@
-#root #form-9 .dropzone {
+.dropzone {
     cursor: pointer;
     text-align: center;
     height: calc(25vw);
@@ -13,7 +13,7 @@
     border-radius: .25rem;
 }
 
-#root #form-9 .empty-container{
+.emptyContainer{
     border: 1px solid #bbc4cd;
     border-radius: .25rem;
     height: 100%;
@@ -25,7 +25,7 @@
     align-content: center;
 }
 
-#root #form-9 .image-container {
+.imageContainer {
     height: 100%;
     width: 100%;
     background-repeat: no-repeat;
@@ -36,7 +36,7 @@
     -o-transition: all 0.30s ease-in-out;
 }
 
-#root #form-9 .tools {
+.tools {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -57,13 +57,13 @@
     -webkit-box-sizing: border-box;
 }
 
-#root #form-9 .tools:hover {
+.tools:hover {
     background-color: rgba(255, 255, 255, 0.7);
     opacity: 1;
 }
 
 
-#root #form-9 .tool {
+.tool {
     flex: 0 0 50%;
     display: flex;
     justify-content: center;
@@ -73,6 +73,6 @@
     -o-transition: all 0.30s ease-in-out;
 }
 
-#root #form-9 .clickable {
+.clickable {
     cursor: pointer;
 }

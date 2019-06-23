@@ -5,7 +5,8 @@ import {APIModelListAdapter} from "core/utils/ModelHelper";
 import {CancellationPolicy, House, Rule} from "houseListing/models";
 import {getCancellationPolicies, getHouseData, postCancellationPolicy} from "houseListing/services";
 
-import "./CancellationPolicy.css";
+import styles from "./CancellationPolicy.css";
+import commonStyles from "../FormCommon.css";
 
 
 export default class CancellationPolicyContainer extends Component {
@@ -103,7 +104,8 @@ export default class CancellationPolicyContainer extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title">Which Cancellation Policy would you like to opt for?</h1>
+                            <h1 className={commonStyles.pageTitle}>Which Cancellation Policy would you like to opt
+                                for?</h1>
                             <div className="paragraph">
                                 {Object.entries(this.state.data.getList()).map((item) =>
                                     <CancellationPolicyComponent
@@ -113,9 +115,16 @@ export default class CancellationPolicyContainer extends Component {
                                     />
                                 )}
                             </div>
+                            <div className="col-md-1"/>
+                            <div className="col-md-12" style={{marginTop: "50px"}}>
+                                <p><b>Please note: The tenant is allowed to cancel the booking without penalty within 24
+                                    hours of the
+                                    booking being approved by the homeowner. (As required by legislation)</b></p>
+                            </div>
 
                         </div>
                         <div className="col-md-1"/>
+
                     </div>
                 </div>
             </React.Fragment>
@@ -129,21 +138,21 @@ function CancellationPolicyComponent(props) {
         <React.Fragment>
             <div className="checkbox auto-width">
                 <ul className="list-inline">
-                    <li className="list-inline-item">
+                    <li className="list-inline-item" style={{marginBottom: "0"}}>
                         <div className="custom-control custom-checkbox">
                             <input type="checkbox" id={`checkbox-${props.objRef}`} className="custom-control-input"
-                                   onChange={(e) => props.onChange(props.data)}
+                                   onChange={(e) => props.isSelected ? e.preventDefault() : props.onChange(props.data)}
                                    checked={props.isSelected}/>
-                            <label className="custom-control-label black"
+                            <label className="custom-control-label" style={{fontWeight: '700', color: '#000000'}}
                                    htmlFor={`checkbox-${props.objRef}`}>{props.data.getData('verbose')}</label>
                         </div>
                     </li>
                 </ul>
             </div>
 
-            <p>{props.data.getData('description')}</p>
-            <div className={"more-info"}>
-                <a className={"more-info-link"} target="_blank"
+            <p className={styles.description}>{props.data.getData('description')}</p>
+            <div className={styles.moreInfo}>
+                <a className={styles.moreInfoLink} target="_blank"
                    href={props.data.getData('officialPolicy') ? props.data.getData('officialPolicy') : reverse(routes.howItWorks)}>More
                     Information</a>
             </div>

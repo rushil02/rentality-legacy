@@ -42,10 +42,7 @@ export default class App extends Component {
     };
 
     nextToEditMode = (houseUUID) => {
-        // this.props.routerProps.history.replace(reverse(routes.react.houseListing.edit, {houseUUID: houseUUID})+ '/1');
-        
-        this.props.routerProps.history.push(reverse(routes.react.houseListing.edit, {houseUUID: houseUUID})+ '/2');
-        this.forceUpdate();
+        this.props.routerProps.history.replace(reverse(routes.react.houseListing.edit, {houseUUID: houseUUID})+ '/2');
     };
 
     render() {
