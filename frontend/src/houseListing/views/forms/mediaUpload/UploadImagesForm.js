@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {deleteImage, getImagesData, postImagesFiles, updateImageData} from "houseListing/services";
 import Dropzone from 'react-dropzone';
-import './UploadImagesForm.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faImages as faImagesSolid, faTimes, faStar as faStarSolid} from "@fortawesome/free-solid-svg-icons";
 import {faStar as faStarRegular} from "@fortawesome/free-regular-svg-icons";
 import {APIModelListAdapter} from "core/utils/ModelHelper";
+
+import styles from './UploadImagesForm.css';
+import commonStyles from "../FormCommon.css"
 
 
 export default class UploadImagesForm extends Component {
@@ -108,12 +110,12 @@ export default class UploadImagesForm extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title">Upload Images of your House</h1>
+                            <h1 className={commonStyles.pageTitle}>Upload Images of your House</h1>
                             <div className="row">
                                 <div className="col-lg-3 col-6">
                                     <Dropzone onDrop={this.handleDrop}>
                                         {({getRootProps, getInputProps}) => (
-                                            <div {...getRootProps({className: 'dropzone'})}>
+                                            <div {...getRootProps({className: styles.dropzone})}>
                                                 <input {...getInputProps()} />
                                                 <FontAwesomeIcon icon={faImagesSolid} size="3x" color={"#3fc692"}/>
 
@@ -144,19 +146,19 @@ function ImageComponent(props) {
     if (props.data.getData('isThumbnail')) {
         return (
             <div className="col-lg-3 col-6" style={{marginBottom: '20px'}}>
-                <div className={'image-container img-thumbnail thumbnail'}
+                <div className={styles.imageContainer + ' img-thumbnail ' + styles.thumbnail}
                      style={{backgroundImage: `url(${props.data.getData('imagePath')})`}}>
                 </div>
-                <div className={"tools"}>
-                    <div className={'tool action'}>
+                <div className={styles.tools}>
+                    <div className={styles.tool}>
                         <FontAwesomeIcon icon={faStarSolid} size="3x" color={"#39b88a"}
                                          title={"Current Thumbnail"}
                         />
                     </div>
-                    <div className={'tool delete'}>
+                    <div className={styles.tool}>
                         <FontAwesomeIcon icon={faTimes} size="3x"
                                          title={"Delete Picture"}
-                                         className={"clickable"}
+                                         className={styles.clickable}
                                          color={"red"} onClick={(e) => props.onRemove(props.objRef)}
                         />
                     </div>
@@ -167,25 +169,25 @@ function ImageComponent(props) {
         return (
             <div className="col-lg-3 col-6" style={{marginBottom: '20px'}}>
                 <div className={'img-thumbnail'}>
-                    <div className={'image-container img-thumbnail'}
+                    <div className={styles.imageContainer + ' img-thumbnail'}
                          style={{backgroundImage: `url(${props.data.getData('imagePath')})`, marginBottom: 0}}>
                     </div>
-                    <div className={"tools"}>
-                        <div className={'tool action'}>
+                    <div className={styles.tools}>
+                        <div className={styles.tool}>
                             <FontAwesomeIcon icon={faStarRegular} size="3x"
                                              color={"#39b88a"}
                                              title={"Set as Thumbnail"}
                                              onClick={(e) => props.onSetThumbnail(props.objRef)}
-                                             className={"clickable"}
+                                             className={styles.clickable}
 
                             />
                         </div>
-                        <div className={'tool delete'}>
+                        <div className={styles.tool}>
                             <FontAwesomeIcon icon={faTimes} size="3x"
                                              title={"Delete Picture"}
                                              color={"red"}
                                              onClick={(e) => props.onRemove(props.objRef)}
-                                             className={"clickable"}
+                                             className={styles.clickable}
                             />
                         </div>
                     </div>

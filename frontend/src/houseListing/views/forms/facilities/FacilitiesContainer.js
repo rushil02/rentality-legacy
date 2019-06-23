@@ -4,6 +4,8 @@ import {getFacilityData, postFacilityData} from "houseListing/services";
 import {Facility} from "houseListing/models";
 import {APIModelListAdapter} from "core/utils/ModelHelper";
 
+import commonStyles from "../FormCommon.css"
+
 
 export default class FacilitiesSelectorHandler extends Component {
     formID = 3;
@@ -108,7 +110,7 @@ export default class FacilitiesSelectorHandler extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title">Select all the facilities you offer in the home</h1>
+                            <h1 className={commonStyles.pageTitle}>Select all the facilities you offer in the home</h1>
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="checkbox">

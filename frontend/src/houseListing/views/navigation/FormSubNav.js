@@ -6,6 +6,9 @@ import parentStyles from './FormNav.css'
 
 import {alertUser} from "core/alert/Alert";
 
+import routes from "routes";
+import {reverse} from "named-urls";
+
 function preventClick(e) {
     e.preventDefault();
     alertUser.init({
@@ -17,15 +20,24 @@ function preventClick(e) {
 
 function getNavLink(path, verbose, disabled) {
     if (disabled) {
+        if (path === '/1') {
+
+            path = reverse(routes.react.houseListing.create);
+            return (
+                <NavLink to={path} className={parentStyles.noStyle} activeClassName={styles.active}>
+                    <div className={styles.title}>{verbose}</div>
+                </NavLink>
+            )
+        }
         return (
             <NavLink to={path} className={parentStyles.noStyle} onClick={preventClick} activeClassName={styles.active}>
-                <div id="sub-title-1" className={styles.title}>{verbose}</div>
+                <div className={styles.title}>{verbose}</div>
             </NavLink>
         )
     } else {
         return (
             <NavLink to={path} className={parentStyles.noStyle} activeClassName={styles.active}>
-                <div id="sub-title-1" className={styles.title}>{verbose}</div>
+                <div className={styles.title}>{verbose}</div>
             </NavLink>
         )
     }
@@ -42,7 +54,7 @@ export default class FormSubNav extends Component {
                 <React.Fragment>
                     <div className="row sub-header-row">
                         <div className="col-md-3">
-                            {getNavLink("/1", "About the Property", false)}
+                            {getNavLink("/1", "About the Property", disableLinks)}
                         </div>
                         <div className="col-md-3">
                             {getNavLink("/2", "Rent & Availability", disableLinks)}
@@ -62,7 +74,7 @@ export default class FormSubNav extends Component {
                 <React.Fragment>
                     <div className="row sub-header-row">
                         <div className="col-md-3">
-                            {getNavLink("/5", "Images", false)}
+                            {getNavLink("/5", "Images", disableLinks)}
                         </div>
                         <div className="col-md-3">
                             {getNavLink("/6", "Cancellation Policy", disableLinks)}
@@ -82,7 +94,7 @@ export default class FormSubNav extends Component {
                 <React.Fragment>
                     <div className="row sub-header-row">
                         <div className="col-md-3">
-                            {getNavLink("/9", "Profile Photo", false)}
+                            {getNavLink("/9", "Profile Photo", disableLinks)}
                         </div>
                         <div className="col-md-3">
                             {getNavLink("/10", "Fun Tags", disableLinks)}
