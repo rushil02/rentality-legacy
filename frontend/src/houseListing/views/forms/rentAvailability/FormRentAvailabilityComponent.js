@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import AvailabilitySelectorHandler from "./AvailabilitySelectorContainer";
 import {AvailabilityCache} from 'houseListing/dataContext'
 
+import commonStyles from "../FormCommon.css";
+
 export default class FormRentAvailabilityComponent extends Component {
 
     render() {
@@ -11,7 +13,7 @@ export default class FormRentAvailabilityComponent extends Component {
                     <div className="row">
                         <div className="col-md-1"/>
                         <div className="col-md-10">
-                            <h1 className="title">Rental details</h1>
+                            <h1 className={commonStyles.pageTitle}>Rental details</h1>
                             <div className="row">
                                 <div className="col-md-12 col-lg-6">
                                     <div className="input number-disp no-background" onClick={() => {
@@ -99,7 +101,7 @@ export default class FormRentAvailabilityComponent extends Component {
 
                                 </div>
                             </div>
-                            <h1 className="title">Set your availability</h1>
+                            <h1 className={commonStyles.pageTitle}>Set your availability</h1>
 
                             <div className="row">
                                 <div className="col-md-12 col-lg-12">

@@ -1,0 +1,23 @@
+.address {
+    background-image: url('/static/image/form-1/address.svg');
+}
+
+.title {
+    background-image: url('/static/image/form-1/title.svg');
+}
+
+.addressHidden {
+    background-image: url('/static/image/form-1/key.svg');
+}
+
+.bathroom {
+    background-image: url('/static/image/form-1/bathroom.svg');
+}
+
+.bedroom {
+    background-image: url('/static/image/form-1/bedroom.svg');
+}
+
+.parking {
+    background-image: url('/static/image/form-1/parking.svg');
+}

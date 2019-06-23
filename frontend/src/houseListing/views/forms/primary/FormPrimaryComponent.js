@@ -1,8 +1,12 @@
 import React from 'react';
-import PostalCodeAutoSuggest from "./PostalCodeAutoSuggestContainer";
+import PostalCodeAutoSuggest from "core/UIComponents/PostalCodeAutoSuggest/PostalCodeAutoSuggestContainer";
 import HomeTypeSelectorComponent from './HomeTypeSelector';
 import FurnishedSelectorComponent from "./FurnishedSelector";
-import {FormOptionsCache} from "houseListing/dataContext"
+import {FormOptionsCache} from "houseListing/dataContext";
+
+import styles from "./FormPrimary.css";
+import commonStyles from "../FormCommon.css"
+
 
 export default function FormPrimaryComponent(props) {
     const getError = (inputKey) => {
@@ -24,14 +28,14 @@ export default function FormPrimaryComponent(props) {
                 <div className="row">
                     <div className="col-md-1"/>
                     <div className="col-md-10">
-                        <h1 className="title">About the Property</h1>
+                        <h1 className={commonStyles.pageTitle}>About the Property</h1>
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="input title">
                                     <input
                                         type="text" name="main-form-title" required={true}
                                         id="id_main-form-title"
-                                        className="form-control title" maxLength="250"
+                                        className={"form-control " + styles.title} maxLength="250"
                                         placeholder="Property Name" value={props.title}
                                         onChange={(e) => props.onFieldChange("title", e.target.value)}
                                     />
@@ -45,7 +49,7 @@ export default function FormPrimaryComponent(props) {
                             <div className="col-md-6">
                                 <div className="input address">
                                     <input type="text" name="main-form-address_hidden"
-                                           id="id_main-form-address_hidden" className="form-control address-hidden"
+                                           id="id_main-form-address_hidden" className={"form-control " + styles.addressHidden}
                                            placeholder="Unit Number or House Number" value={props.houseNum}
                                            onChange={(e) => props.onFieldChange("houseNum", e.target.value)}/>
                                     {getError('houseNum')}
@@ -106,7 +110,7 @@ export default function FormPrimaryComponent(props) {
                                 </small>
                             </div>
                             <div className="col-md-12 col-lg-6">
-                                <div className="input number-disp bedroom" onClick={() => {
+                                <div className={"input number-disp " + styles.bedroom} onClick={() => {
                                     inputRefs.bedroomInput.focus()
                                 }}>
                                     <label>Number of Bedrooms</label>
@@ -124,7 +128,7 @@ export default function FormPrimaryComponent(props) {
                                 </small>
                             </div>
                             <div className="col-md-12 col-lg-6">
-                                <div className="input number-disp bathroom" onClick={() => {
+                                <div className={"input number-disp " + styles.bathroom} onClick={() => {
                                     inputRefs.bathroomsInput.focus()
                                 }}>
                                     <label>Number of Bathrooms</label>
@@ -141,7 +145,7 @@ export default function FormPrimaryComponent(props) {
 
                             </div>
                             <div className="col-md-12 col-lg-6">
-                                <div className="input number-disp parking" onClick={() => {
+                                <div className={"input number-disp " + styles.parking}  onClick={() => {
                                     inputRefs.parkSpaceInput.focus()
                                 }}>
                                     <label>Number of parking spaces</label>

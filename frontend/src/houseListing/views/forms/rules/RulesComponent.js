@@ -1,6 +1,8 @@
 import React from 'react';
 import {ComponentLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
-import "./Rules.css";
+import styles from "./Rules.css";
+import commonStyles from "../FormCommon.css"
+
 
 export function RulesComponent(props) {
     if (Object.entries(props.data).length === 0) {
@@ -11,7 +13,7 @@ export function RulesComponent(props) {
             <div className="row">
                 <div className="col-md-1"/>
                 <div className="col-md-10">
-                    <h1 className="title">What are your house rules ?</h1>
+                    <h1 className={commonStyles.pageTitle}>What are your house rules ?</h1>
                     <div className="big-list">
                         {Object.entries(props.data).map((item) =>
                             <ChoiceRuleDOM data={item[1]} key={item[0]}
@@ -20,24 +22,23 @@ export function RulesComponent(props) {
                             />
                         )}
                     </div>
-                    <div className="green-textarea">
-                        <h2>Is there anything else that your guest need to be be aware of? </h2>
+                    <div>
+                        <h2 className={styles.title}>Is there anything else that your guest need to be be aware of? </h2>
                         <div className="row">
                             <div className="col-md-9 col-lg-9 col-xl-6">
                                 <div className="textarea">
                                     <textarea
                                         rows="10"
-                                        className="form-control"
+                                        className={"form-control " + styles.otherRules }
                                         placeholder="Examples -&#10;Noise level&#10;Shared spaces&#10;Animals living on the premise ?&#10;No Shoes in the house ?"
                                         cols="40"
                                         value={props.otherRules}
                                         onChange={(e) => props.onOtherRulesChange(e.target.value)}
                                     />
-
                                 </div>
                             </div>
                         </div>
-                        <p>Please Note: these house rules will be accepted by the guest before they book your
+                        <p className={styles.noteInfo}>Please Note: these house rules will be accepted by the guest before they book your
                             accommodation.</p>
                     </div>
                 </div>
@@ -66,15 +67,15 @@ function ChoiceRuleDOM(props) {
         }
     };
     return (
-        <div className="list rule">
-            <h2>{verbose}</h2>
+        <div className={styles.rule}>
+            <h2 className={styles.ruleVerbose}>{verbose}</h2>
             <div className="row">
                 <div className="col-md-12 col-lg-12 col-xl-5">
-                    <div className="checkbox auto-width">
+                    <div className="checkbox" style={{marginTop:'23px'}}>
                         {getError('selected')}
-                        <ul className="list-inline">
+                        <ul className="list-inline" style={{marginBottom: '0'}}>
                             {options.map((data) =>
-                                <li className="list-inline-item" key={data}>
+                                <li className={"list-inline-item " + styles.autoWidth} key={data}>
                                     <div className="custom-control">
                                         <div className="form-check" style={{paddingLeft: 0}}>
                                             <input className="form-check-input custom-radio-button" type="radio"
@@ -92,8 +93,8 @@ function ChoiceRuleDOM(props) {
                     </div>
                 </div>
                 <div className="col-md-12 col-lg-12 col-xl-7">
-                    <div className="input no-background style-gray">
-                        <input type="text" className="form-control"
+                    <div className="input no-background">
+                        <input type="text" className={"form-control " + styles.comments}
                                placeholder="Comment or Special Instructions"
                                value={comment} onChange={(e) => {
                             props.onCommentChange(ruleID, e.target.value)

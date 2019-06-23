@@ -17,7 +17,7 @@ import {
 } from 'date-fns';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlus, faPen, faTimes, faCheck} from '@fortawesome/free-solid-svg-icons'
-import './AvailabilitySelector.css';
+import styles from './AvailabilitySelector.css';
 import {PulseLoader} from 'react-spinners';
 
 
@@ -80,6 +80,7 @@ export default class AvailabilitySelectorComponent extends Component {
             if (this.props.modeNew) {
                 addNewDisplayText = <span>Click to Add Dates</span>;
             } else {
+                console.log(this.props.srcStartDate);
                 addNewDisplayText = <span>
                     <b>{this.props.srcStartDate.toDateString()}</b> to <b>{this.props.srcEndDate.toDateString()}</b>
                 </span>;
@@ -135,10 +136,12 @@ export default class AvailabilitySelectorComponent extends Component {
 
 
         return (
-            <button className="btn btn-primary btn-circle btn-xl" type="button"
-                    title={buttonConfig.title}
-                    onClick={buttonConfig.action}
-                    aria-controls={"collapsibleCalendar-" + this.props.idKey}>
+            <button
+                className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
+                type="button"
+                title={buttonConfig.title}
+                onClick={buttonConfig.action}
+                aria-controls={"collapsibleCalendar-" + this.props.idKey}>
                 <FontAwesomeIcon icon={buttonConfig.icon}/>
             </button>
         )
@@ -150,12 +153,15 @@ export default class AvailabilitySelectorComponent extends Component {
         if (this.props.modeNew) {
             return (" ")
         } else {
-            return (<button className="btn btn-danger btn-circle btn-xl cancel-custom" type="button"
-                            title={"Delete"}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                this.props.onRemove()
-                            }}>
+            return (
+                <button
+                    className={"btn btn-danger btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl + " " + styles.cancelCustom}
+                    type="button"
+                    title={"Delete"}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        this.props.onRemove()
+                    }}>
                     <FontAwesomeIcon icon={faTimes}/>
                 </button>
             )
@@ -176,17 +182,17 @@ export default class AvailabilitySelectorComponent extends Component {
         }
 
         return (
-            <div className="card-body" onClick={action}>
-                <div className="card-text-content-custom">
+            <div className={"card-body " + styles.cardBody} onClick={action}>
+                <div className={styles.cardTextContent}>
                     {this.getInfoText()}
                 </div>
                 <div className='loading-container'>
                     {this.getSyncIndicator()}
                 </div>
-                <div className="invalid-feedback">
+                <div className={"invalid-feedback " + styles.invalidFeedback}>
                     {this.props.error || ''}
                 </div>
-                <div className="card-button-group-custom">
+                <div className={styles.cardButtonGroup}>
                     {this.getEditButton()}
                     {this.getRemoveButton()}
                 </div>
@@ -223,7 +229,7 @@ export default class AvailabilitySelectorComponent extends Component {
             <React.Fragment>
                 <div className="card mb-3">
                     {this.getInfoCard()}
-                    <div className="collapse availability-selector-container"
+                    <div className={"collapse " + styles.availabilitySelectorContainer}
                          id={"collapsibleCalendar-" + this.props.idKey}>
                         <DateRangePicker
                             ranges={[selectionRange]}
