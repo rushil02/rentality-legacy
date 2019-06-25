@@ -51,6 +51,7 @@
     "react-dom": "^16.7.0",
     "react-dropzone": "^10.1.5",
     "react-google-maps": "^9.4.5",
+    "react-infinite-scroller": "1.2.4",
     "react-router-dom": "^4.3.1",
     "react-script-loader-hoc": "^1.2.2",
     "react-select": "^2.4.2",

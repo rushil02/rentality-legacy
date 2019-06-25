@@ -10,6 +10,7 @@ export default {
     home: '/',
     blogs: '/blogs/',
     howItWorks: '/pages/how-it-works/',
+    propertyInfo: '/property/info/:houseUUID',
     dashboard: '/',
     contactUs: '/pages/contact-us/',
 
@@ -24,6 +25,7 @@ export default {
     react: include('/rep', {
         houseListing: include('house/list', houseListingRoutes.interface),
         user: include('user', userRoutes.interface),
+        searchPage: 'search',
     }),
 
     // APIs
@@ -48,7 +50,11 @@ export default {
         postalCodeDetails: 'postal-code-details/:objID',
         countrySuggestions: 'country-sugg',
         countryDetails: 'country-details/:objID'
-    })
+    }),
+    search: include('/es', {
+        house: 'house/search',
+        location: 'location_sugg'
+    }),
 };
 
 
