@@ -1,6 +1,6 @@
 import {include} from 'named-urls';
 import houseListingRoutes from 'houseListing/routes';
-import userRoutes from 'user/routes';
+import userRoutes from 'userAccount/routes';
 
 export default {
     static_route: '/static/',
@@ -10,7 +10,6 @@ export default {
     home: '/',
     blogs: '/blogs/',
     howItWorks: '/pages/how-it-works/',
-    listHome: '/property/add/',
     dashboard: '/',
     contactUs: '/pages/contact-us/',
 
@@ -20,12 +19,11 @@ export default {
     }),
 
     // Source [Entry-points] URLs
-    // These URLs redirect to new html pages and are expected to be handled accordingly.
+    // These URLs represent browser state
     // FIXME: Prepend needs to be removed after complete frontend migrations to react
     react: include('/rep', {
         houseListing: include('house/list', houseListingRoutes.interface),
-        samplePage: 'property/samplePage',
-        user: include('', userRoutes.interface),
+        user: include('user', userRoutes.interface),
     }),
 
     // APIs
@@ -47,7 +45,9 @@ export default {
 
     cities: include('/cities', {
         postalCodeSuggestions: 'postal-code-sugg',
-        postalCodeDetails: 'postal-code-details/:objID'
+        postalCodeDetails: 'postal-code-details/:objID',
+        countrySuggestions: 'country-sugg',
+        countryDetails: 'country-details/:objID'
     })
 };
 

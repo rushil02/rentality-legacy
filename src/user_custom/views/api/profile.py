@@ -31,10 +31,24 @@ class GetEditUserProfileView(APIView):
         profile_valid = profile_serializer.is_valid()
         info_valid = info_serializer.is_valid()
         if profile_valid and info_valid:
+            # TODO: Validate what PII can be changed
             profile_serializer.save()
             info_serializer.save()
             return Response(dict(**profile_serializer.data, **info_serializer.data), status=status.HTTP_200_OK)
         return Response(dict(**profile_serializer.errors, **info_serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+
+
+class BillingCountryView(APIView):
+    """
+    Get and Post country
+    Accepts post only if country can be changed - based on whether an account exists
+    """
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+
+        return Response(status=status.HTTP_200_OK)
+
 
 
 class ProfilePicUploadView(APIView):

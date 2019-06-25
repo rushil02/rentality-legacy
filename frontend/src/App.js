@@ -19,6 +19,7 @@ import {UserStore} from "core/auth/userContext";
 import {PrivateRoute} from "core/auth/utils";
 
 const HouseListing = React.lazy(() => import("houseListing/Router"));
+const User = React.lazy(() => import("userAccount/Router"));
 
 class App extends Component {
     constructor(props) {
@@ -39,6 +40,13 @@ class App extends Component {
                                     render={(props) =>
                                         <Suspense fallback={<ComponentLoadingSpinner/>}>
                                             <HouseListing {...props}/>
+                                        </Suspense>}
+                                />
+                                <PrivateRoute
+                                    path={routes.react.user.base}
+                                    render={(props) =>
+                                        <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                            <User {...props}/>
                                         </Suspense>}
                                 />
                                 <Route

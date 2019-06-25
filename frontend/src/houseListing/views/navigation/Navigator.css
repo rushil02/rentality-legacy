@@ -30,20 +30,6 @@
     background-color: #36ffb1 !important;
 }
 
-.button > a.btn.errorBtn {
-    color: red !important;
-    background-color: #e6e6e6 !important;
-    pointer-events: none !important;
-}
-
-.button > a.btn.loadingBtn {
-    pointer-events: none !important;
-}
-
-.button > a.btn.doneBtn {
-
-}
-
 
 .formSettings {
     padding-top: 15px;

@@ -1,0 +1,35 @@
+.profilePage {
+    padding-top: 50px;
+    padding-bottom: 120px;
+}
+
+.profilePage .header {
+    border-bottom: 1px solid #bbb8b7;
+    text-align: right;
+    margin-bottom: 40px;
+}
+
+.btn {
+    font-size: 17px;
+    font-weight: 400;
+    color: #2a2b32;
+    transition: all .25s ease-in-out;
+    padding: 20px 0;
+}
+
+.btn:hover, .active {
+    color: #3fc692;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.listInline li:not(:last-child) {
+    margin-right: 80px;
+}
+
+h1.title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 20px;
+}

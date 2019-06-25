@@ -1,6 +1,6 @@
 import axios, {handleError} from "../core/utils/serviceHelper";
 import {reverse} from "named-urls";
-import {PersonalityTag, UserProfile} from "./models";
+import {PersonalityTag, UserPII} from "./models";
 import routes from "routes";
 import {alertUser} from "../core/alert/Alert";
 import {APIModelListAdapter} from "../core/utils/ModelHelper";
@@ -10,10 +10,24 @@ export function getUserProfileData() {
     return new Promise(function (resolve, reject) {
         axios.get(reverse(routes.user.profile))
             .then(response => {
-                resolve(new UserProfile(response.data));
+                resolve(new UserPII(response.data));
             })
             .catch(error => {
                 handleError(error)
+            });
+    });
+}
+
+export function patchUserProfileData(data) {
+    return new Promise(function (resolve, reject) {
+        axios.patch(reverse(routes.user.profile), data.serialize('__partial__'))
+            .then(response => {
+                resolve(new UserPII(response.data));
+            })
+            .catch(error => {
+                if(handleError(error).badRequest) {
+                    reject(data.parseError(error.response.data));
+                }
             });
     });
 }

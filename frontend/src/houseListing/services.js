@@ -93,31 +93,6 @@ export function postFacilityData(houseUUID, data) {
     })
 }
 
-export function getPostalCodeData(value) {
-    return new Promise(function (resolve, reject) {
-        axios.get(reverse(routes.cities.postalCodeDetails, {objID: value}))
-            .then(result => {
-                resolve(result.data);
-            })
-            .catch(error => {
-                reject(handleError(error).error);
-            })
-    })
-}
-
-export function getPostalCodeSuggestions(value) {
-    return new Promise(function (resolve, reject) {
-        axios.get(reverse(routes.cities.postalCodeSuggestions), {params: {query: value}})
-            .then(result => {
-                resolve(result.data);
-            })
-            .catch(error => {
-                reject(handleError(error).error);
-            })
-    })
-}
-
-
 export function getAvailabilityData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios.get(reverse(routes.house.availability.list, {houseUUID: houseUUID}))

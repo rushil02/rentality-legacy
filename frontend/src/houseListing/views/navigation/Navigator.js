@@ -109,10 +109,6 @@ function NavigatorComponent(props) {
                                                 onSuccess={props.onNext}
                                                 onFailure={() => {
                                                 }}
-                                                layoutClasses={"btn float-right " + styles.btn}
-                                                errorClass={styles.errorBtn}
-                                                loadingClass={styles.loadingBtn}
-                                                doneClass={styles.doneBtn}
                                                 containerID={"main-input-page"}
                                                 formState={currFormState}
                                             />

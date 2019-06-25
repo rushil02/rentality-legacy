@@ -9,17 +9,18 @@ from house.views import info, create, edit, \
     home_owner_account_details, apply_temp, remove_from_public, delete, HouseDetailPublicView, \
     ImagesPublicView, ThumbnailPublicView
 
-from house.views.api import NetAvailableDatesView, create_react
+from house.views.api import NetAvailableDatesView
 
 app_name = 'house'
 
 urlpatterns = [
     path('info/<uuid:house_uuid>', info, name='info'),
-    path('add/', create, name='create'),
-    path('add/<uuid:house_uuid>/', edit, name='create_edit'),
-    path('payment_details/<uuid:house_uuid>/', home_owner_account_details, name='payment'),
+    # path('add/', create, name='create'),
+    # path('add/<uuid:house_uuid>/', edit, name='create_edit'),
+    # path('payment_details/<uuid:house_uuid>/', home_owner_account_details, name='payment'),
 
     # path('edit/<int:form_num>/<uuid:uuid>', add_edit_house, name='edit'),
+
     path('search', search_house_page, name='search_house'),
     path('search-api', search_house_api, name='search_house_api'),
     path('postal-location', LocationAutocomplete.as_view(), name='postal_code_api'),
@@ -28,10 +29,6 @@ urlpatterns = [
 
     # FIXME: Remove
     path('test/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='test'),
-
-    # React Entry-points
-    path('create/', create_react, name='create_react'),
-    path('edit/<uuid:house_uuid>', create_react, name='create_react_edit'),
 
     # APIs
     path('detail/<uuid:house_uuid>', HouseDetailPublicView.as_view(), name='detail_api'),

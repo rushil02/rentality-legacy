@@ -2,10 +2,11 @@ import {include} from 'named-urls';
 
 export default {
     interface: {
+        base: '',
         userProfile: 'profile/',
+        paymentInfo: 'paymentInfo',
     },
     APIs: {
-        info: 'cu-info',
         profile: 'user-profile',
         uploadProfilePic: 'upload-profile-pic',
         personalityTags: 'personality-tags',

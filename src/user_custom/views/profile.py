@@ -69,10 +69,3 @@ class PersonalityTagView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserInfoView(APIView):
-    permission_classes = (IsAuthenticated, )
-
-    def get(self, request, *args, **kwargs):
-        user_info_serializer = UserInfoSerializer(request.user)
-        user_profile_serializer = UserProfileSerializer(request.user.userprofile)
-        return Response(dict(**user_info_serializer.data, **user_profile_serializer.data))

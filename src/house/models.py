@@ -128,16 +128,16 @@ class House(models.Model):
 
     facilities = models.ManyToManyField('house.Facility', blank=True)
     rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)
-    other_rules = models.TextField(blank=True)
+    other_rules = models.TextField(blank=True, null=True)
 
     # FIXME: [URGENT] validate related cancellation_policy exists in the related business model configuration.
     cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
 
-    other_people_description = models.TextField(blank=True)
+    other_people_description = models.TextField(blank=True, null=True)
 
-    access_restrictions = models.TextField(blank=True)
+    access_restrictions = models.TextField(blank=True, null=True)
 
-    neighbourhood_description = models.TextField(blank=True)
+    neighbourhood_description = models.TextField(blank=True, null=True)
     neighbourhood_facilities = models.ManyToManyField('house.NeighbourhoodDescriptor', blank=True)
 
     welcome_tags = models.ManyToManyField('house.WelcomeTag', blank=True)
