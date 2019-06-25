@@ -9,13 +9,15 @@ export default class APIModelAdapter {
      * fieldMap() - returns an object with each field as key and value as another object as it's settings
      *              Example - {comment: {key: 'house_rule', parser: this.parseComment}},
      *              Setting options - key : field from server/DB
-     *                                parser: [optional] to manipulate obtained value from DB
+     *                                parser: [optional] to manipulate obtained value from DB. This setting
+     *                                        will not work if 'adapter' setting is also provided
      *                                adapter: [optional] to created a nested APIModelAdapter
-     *                                default: if value is not provided by DB
-     *                                readOnly: if attribute is not to be changed in DB,
+     *                                default: [optional] if value is not provided by DB else it is ''
+     *                                readOnly: [optional] if attribute is not to be changed in DB,
      *                                          will raise warning whenever value is changed,
      *                                          readOnly attributes are not serialized
-     *              Note: `parser` and `adapter` do not work together. `adapter` has precedence over `parser` setting.
+     *                                required: [optional] TODO - Raise ValidationError when serializing for db and when user is entering data - to raise error, just update this.errors from component
+     *                                regex: [optional] TODO - Validates user input to match the given regex - will require debounced check on keypress
      */
     constructor(dbObj, status) {
         this._attrs = {};
@@ -40,7 +42,7 @@ export default class APIModelAdapter {
     _silentUpdate(key, value) {
         /**
          * Doesn't update the status of model or the fields that have changed.
-         * Any data modified using this method will not be available n partial serializer/ PATCH.
+         * Any data modified using this method will not be available in partial serializer/ PATCH.
          *
          * This is useful when some fields have updated via other processes and need to be reflected without
          * explicit sync of current model.

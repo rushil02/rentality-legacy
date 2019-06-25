@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {reverse} from "named-urls";
 import routes from "../../routes";
 
+import "./Footer.css";
 
 export default class Footer extends Component {
     render() {

@@ -2,11 +2,15 @@ import React, {Component} from 'react';
 
 import {PulseLoader} from "react-spinners";
 
+import styles from "./APIRequestButton.css";
+
+
 /**
  * APIRequestButton
  *
  * props -
  *      cTextOptions - key for textOptions
+ *      initialState - initial State of button
  *      containerID - [optional] ID of Form container to track all child inputs to reset state on change to default
  *                    Works only with input based forms
  *      textOption - either a key available in `textOptions`, or a similar Object similar
@@ -51,11 +55,10 @@ const _formStateMap = {
 // cTextOptions : Object like in 'textOptions' above
 export default class APIRequestButton extends Component {
 
-
     constructor(props) {
         super(props);
         this.state = {
-            status: "default"
+            status: props.initialState || "default"
         };
         this.container = null;
     }
@@ -78,11 +81,16 @@ export default class APIRequestButton extends Component {
         this.props.callback(e)
             .then((result) => {
                 this.setState({status: "done"});
-                this.props.onSuccess(result);
+                if (this.props.onSuccess !== undefined) {
+                    this.props.onSuccess(result);
+                }
             })
             .catch((error) => {
+                console.log(error);
                 this.setState({status: "error"});
-                this.props.onFailure(error);
+                if (this.props.onFailure !== undefined) {
+                    this.props.onFailure(error);
+                }
             })
     };
 
@@ -101,7 +109,7 @@ export default class APIRequestButton extends Component {
             this.container = document.getElementById(this.props.containerID);
         }
 
-        let layoutClasses = this.props.layoutClasses || '';
+        let layoutClasses = this.props.layoutClasses || 'btn float-right ' + styles.btn;
 
         if (this.state.status === 'default') {
             return (
@@ -114,7 +122,7 @@ export default class APIRequestButton extends Component {
 
         } else if (this.state.status === 'error') {
             this.attachListener();
-            layoutClasses += this.props.errorClass ? ' ' + this.props.errorClass : '';
+            layoutClasses += this.props.errorClass ? ' ' + this.props.errorClass : ' ' + styles.errorBtn;
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick}>
                     <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
@@ -124,7 +132,7 @@ export default class APIRequestButton extends Component {
             )
 
         } else if (this.state.status === 'loading') {
-            layoutClasses += this.props.loadingClass ? ' ' + this.props.loadingClass : '';
+            layoutClasses += this.props.loadingClass ? ' ' + this.props.loadingClass : ' ' + styles.loadingBtn;
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick}>
 
@@ -148,7 +156,7 @@ export default class APIRequestButton extends Component {
 
         } else if (this.state.status === 'done') {
             this.attachListener();
-            layoutClasses += this.props.doneClass ? ' ' + this.props.doneClass : '';
+            layoutClasses += this.props.doneClass ? ' ' + this.props.doneClass : ' ' + styles.doneBtn;
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
                     <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>

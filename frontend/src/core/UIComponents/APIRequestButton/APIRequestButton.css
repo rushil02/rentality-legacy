@@ -1,0 +1,30 @@
+a.btn {
+    font-size: 16px;
+    border-radius: 99px;
+    font-weight: 700;
+    color: #36ffb1 !important;
+    background-color: #2a2b32 !important;
+    padding: 11px 59px;
+    text-transform: uppercase;
+    transition: all .25s ease-in-out;
+}
+
+a.btn:hover, a.btn:focus {
+    text-decoration: none;
+    color: #2a2b32 !important;
+    background-color: #36ffb1 !important;
+}
+
+a.btn.errorBtn {
+    color: red !important;
+    background-color: #e6e6e6 !important;
+    pointer-events: none !important;
+}
+
+a.btn.loadingBtn {
+    pointer-events: none !important;
+}
+
+a.btn.doneBtn {
+
+}

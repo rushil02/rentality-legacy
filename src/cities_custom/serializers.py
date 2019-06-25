@@ -1,4 +1,4 @@
-from cities.models import City, PostalCode
+from cities.models import City, PostalCode, Country
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
@@ -36,3 +36,9 @@ class PostalCodeAllDetailSerializer(serializers.ModelSerializer):
                 self.fields[field].allow_blank = True
             elif isinstance(self.fields[field], serializers.ManyRelatedField):
                 self.fields[field].allow_empty = True
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ['name', 'id', 'postal_code_regex', 'phone']

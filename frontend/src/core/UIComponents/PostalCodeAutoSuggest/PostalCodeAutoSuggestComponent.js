@@ -24,6 +24,7 @@ export default class PostalCodeAutoSuggestComponent extends Component {
             value: this.props.value,
             onChange: this.props.onChange,
             type: 'text',
+            autoComplete: 'Mlep(clay)nos',
         };
 
         let errorDisp = [];
@@ -37,7 +38,9 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                 <div className="col-md-3">
                     <Autosuggest
                         id="location"
-                        theme={this.props.theme || theme}
+                        theme={{...theme, ...this.props.theme}}
+                        highlightFirstSuggestion={true}
+                        focusInputOnSuggestionClick={false}
                         suggestions={this.props.suggestions}
                         onSuggestionsFetchRequested={this.props.onSuggestionsFetchRequested}
                         onSuggestionsClearRequested={this.props.onSuggestionsClearRequested}

@@ -55,7 +55,7 @@ export default class PostalCodeAutoSuggest extends Component {
             value: newValue,
             verbose: defaultVerboseDisplay,
         });
-        this.props.onFieldChange('postalCodeID', '');
+        this.props.onFieldChange(this.props.identifier || 'postalCodeID', '');
     };
 
     onSuggestionsFetchRequested = ({value}) => {
@@ -91,7 +91,7 @@ export default class PostalCodeAutoSuggest extends Component {
             value: suggestion.code,
             objID: suggestion.id
         });
-        this.props.onFieldChange('postalCodeID', suggestion.id);
+        this.props.onFieldChange(this.props.identifier || 'postalCodeID', suggestion.id);
     };
 
     render() {
@@ -110,5 +110,3 @@ export default class PostalCodeAutoSuggest extends Component {
         );
     }
 }
-
-

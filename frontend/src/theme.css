@@ -254,6 +254,25 @@ button.default-button-style:hover, button.default-button-style:focus {
 }
 
 
+a.imp-button-style, button.imp-button-style {
+    font-size: 16px;
+    border-radius: 99px;
+    font-weight: 700;
+    color: #36ffb1 !important;
+    background-color: #2a2b32 !important;
+    padding: 11px 59px;
+    text-transform: uppercase;
+    transition: all .25s ease-in-out;
+}
+
+a.imp-button-style:hover, a.imp-button-style:focus,
+button.imp-button-style:hover, button.imp-button-style:focus {
+    text-decoration: none;
+    color: #2a2b32 !important;
+    background-color: #36ffb1 !important;
+}
+
+
 /************** TextArea *************/
 textarea.form-control {
     border: 1px solid #56ffbd !important;
