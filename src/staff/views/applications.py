@@ -14,6 +14,7 @@ def applications_list(request):
                                                                  'house__home_owner__user')})
 
 
+@staff_member_required
 def application_details(request, uuid):
     return render(request, 'staff/application/details.html', {'application': get_object_or_404(Application, uuid=uuid)})
 

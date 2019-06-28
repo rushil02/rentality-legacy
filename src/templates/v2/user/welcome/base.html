@@ -38,7 +38,7 @@
                 <div class="col-3 col-md-8 col-lg-6 col-xl-5 center align-self-center">
                     <ul class="list-inline">
                         <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
-                        <li class="list-inline-item"><a href="{% url 'blog:home' %}">Blog</a></li>
+                        <li class="list-inline-item"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="faq/" %}">FAQ</a></li>
                         <li class="list-inline-item"><a
                                 href="{% url 'django.contrib.flatpages.views.flatpage' url="how-it-works/" %}">How It
                             Works</a></li>
@@ -59,15 +59,15 @@
     <div class="header d-flex">
         <div class="w-100 align-self-center">
             <div class="container">
-                <h1 class="title">Creating a Global Community for Temporary <span>Home</span> Rentals</h1>
+                <h1 class="title">Creating a Global Community for <br /> Mid-Term Rental</h1>
                 <h2 class="sub-title">Book your Home for the next few months </h2>
             </div>
         </div>
         <div class="search">
-            <div class="container-fluid">
+            <div class="container-fluid search-container">
                 <div class="row">
-                    <div class="col-xl-2"></div>
-                    <div class="col-12 col-xl-8">
+                    <div class="col-xl-1"></div>
+                    <div class="col-12 col-xl-10">
                         <form autocomplete="off" action="{% url 'user:search' %}" method="GET" id="search_form">
                             {{ search_form.start_date }}
                             {{ search_form.end_date }}
@@ -97,19 +97,19 @@
                         <div class="cities">
                             <div id="city">
                                 <label class="btn btn-link">
-                                    Canberra
-                                </label>
-                                <label class="btn btn-link">
-                                    Brisbane
+                                    Melbourne
                                 </label>
                                 <label class="btn btn-link">
                                     Sydney
                                 </label>
                                 <label class="btn btn-link">
+                                    Brisbane
+                                </label>
+                                <label class="btn btn-link">
                                     Adelaide
                                 </label>
                                 <label class="btn btn-link">
-                                    Melbourne
+                                    Canberra
                                 </label>
                                 <label class="btn btn-link">
                                     Perth
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2"></div>
+                    <div class="col-xl-1"></div>
                 </div>
             </div>
         </div>
@@ -152,7 +152,7 @@
                                     </div>
 
                                 </div>
-                                <h1>{{ house.title|title }} | {{ house.home_type }}</h1>
+                                <h1>{{ house.title|title }}<br/>{{ house.home_type }}</h1>
                                 <h2>{{ house.get_location|title }}</h2>
                                 <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
                                 </div>
@@ -165,6 +165,23 @@
         </div>
     </div>
     <!-- bests end -->
+
+    <!-- video demo -->
+    <div class="video-demo">
+        <div class="container">
+            <div class="video-header">
+                <h1 class="title">How does Rentality Work?</h1>
+                <h2 class="sub-title">Check out the video below to see exactly how easy it is to rent with Rentality.</h2>
+            </div>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/2JOkRAdTDNE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+                style="position:absolute; top:0; left:0;width: 100%; height: 100%;"
+                ></iframe>
+            </div>
+        </div>
+    </div>
+    <!-- video demo end -->
+
     <!-- cities start -->
     <div class="cities">
         <div class="container">
@@ -173,14 +190,14 @@
             <div class="big-lists">
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="{% url 'user:search' %}?location=Perth" class="big-list">
+                        <a href="{% url 'user:search' %}?location=Melbourne" class="big-list">
                             <div class="image">
-                                <img src="{% static 'image/cities/perth-home-page.jpg' %}" class="w-100" alt=""
+                                <img src="{% static 'image/cities/melbourne-home-page.jpg' %}" class="w-100" alt=""
                                      title="">
                                 <div class="bottom">
                                     <div class="row">
                                         <div class="col-6">
-                                            <h1>Perth<br>Australia</h1>
+                                            <h1>Melbourne<br>Australia</h1>
                                         </div>
                                         <div class="col-6 align-self-center text-right">
                                             {#                                            34533#}
@@ -192,14 +209,14 @@
                     </div>
                     <div class="col-md-6">
                         <div class="big-lists-right">
-                            <a href="{% url 'user:search' %}?location=Canberra" class="big-list">
+                            <a href="{% url 'user:search' %}?location=Perth" class="big-list">
                                 <div class="image">
-                                    <img src="{% static 'image/cities/canberra-home-page.jpg' %}" class="w-100" alt=""
+                                    <img src="{% static 'image/cities/perth-home-page.jpg' %}" class="w-100" alt=""
                                          title="">
                                     <div class="bottom">
                                         <div class="row">
                                             <div class="col-6">
-                                                <h1>Canberra<br>Australia</h1>
+                                                <h1>Perth<br>Australia</h1>
                                             </div>
                                             <div class="col-6 align-self-center text-right">
                                                 {#                                                1644#}
@@ -245,7 +262,7 @@
                                     <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_large'|default:default_property_large }}"
                                          class="w-100" alt="" title="">
                                 </div>
-                                <h1>{{ house.title|title }} | {{ house.home_type }}</h1>
+                                <h1>{{ house.title|title }}<br/>{{ house.home_type }}</h1>
                                 <h2>{{ house.get_location|title }}</h2>
                                 <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
                                 </div>
@@ -268,11 +285,6 @@
             </div>
             <div class="item">
                 <div class="list">
-                    <img src="{% static 'image/logo/2.png' %}" alt="" title="">
-                </div>
-            </div>
-            <div class="item">
-                <div class="list">
                     <img src="{% static 'image/logo/3.png' %}" alt="" title="">
                 </div>
             </div>
@@ -284,6 +296,11 @@
             <div class="item">
                 <div class="list">
                     <img src="{% static 'image/logo/5.png' %}" alt="" title="">
+                </div>
+            </div>
+            <div class="item">
+                <div class="list">
+                    <img src="{% static 'image/logo/6.png' %}" alt="" title="">
                 </div>
             </div>
         </div>
@@ -328,6 +345,7 @@
         </div>
     </div>
     <!-- start not end -->
+
     <!-- color boxes start -->
     {#    <div class="color-boxes">#}
     {#        <div class="container">#}
