@@ -13,7 +13,7 @@
                 <div class="col-md-6">
                     <h1>Sign Up</h1>
                     <div class="form">
-                        <form action="{% url 'account_signup' %}" method="post">
+                        <form action="{% url 'account_signup' %}" method="post" onsubmit="return gtag_report_conversion()">
                             {% csrf_token %}
                             <div class="row">
                                 {% if form.non_field_errors %}
@@ -150,3 +150,23 @@
     </div>
     <!-- page signup login end -->
 {% endblock content %}
+
+{% block page_scripts %}
+    <!-- Event snippet for User Sign Up conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+    <script>
+        function gtag_report_conversion(url) {
+            var callback = function () {
+                if (typeof (url) != 'undefined') {
+                    window.location = url;
+                }
+            };
+            gtag('event', 'conversion', {
+                'send_to': 'AW-734507876/qLNcCL7o36QBEOTmnt4C',
+                'event_callback': callback
+            });
+            return true;
+        }
+    </script>
+
+{% endblock page_scripts %}

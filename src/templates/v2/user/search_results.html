@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block head_title_add %}
-
+    Search |
 {% endblock %}
 
 {% block page_description %}
@@ -17,6 +17,11 @@
 
 
 {% block additional_scripts %}
+    <!-- Event snippet for Search Page conversion page -->
+    <script>
+        gtag('event', 'conversion', {'send_to': 'AW-734507876/cGiECIHz36QBEOTmnt4C'});
+    </script>
+
     <link href="{% static 'style/auto-comp.css' %}" rel="stylesheet" type="text/css">
 
 {% endblock %}
