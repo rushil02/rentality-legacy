@@ -39,7 +39,7 @@ export function EditAppComponent(props) {
         <BrowserRouter basename={reverse(routes.react.houseListing.edit, {houseUUID: houseUUID})}>
             <NavigationContext.Consumer>
                 {navContext =>
-                    <Navigator mode={'edit'} navContext={navContext} housesUUID={houseUUID}>
+                    <Navigator mode={'edit'} navContext={navContext} houseUUID={houseUUID}>
                         <Switch>
                             <Route exact path="/1" render={(routerProps) =>
                                 <Suspense fallback={<ComponentLoadingSpinner/>}>

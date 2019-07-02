@@ -21,27 +21,16 @@ from utils.api_thumbnailer import resize_image
 
 class HouseView(APIView):
     """
-    Create House
-
-    Rent, date, promocode, location
-
-    CRUD
-
-    Delete make inactive
-
-    Add promo code
-    List
-    Unlist
+    CRUD House
+    Delete -> changes state of the house to `Deleted` which is inaccessible by all users
 
     FIXME: Put Activity Log
-
-    FIXME: rule, availability for house API
     """
     permission_classes = (IsAuthenticated, IsOwnerOfHouse)
     serializer_class = HouseAuthSerializer
 
     def get_object(self, house_uuid):
-        return get_object_or_404(House.objects.all().prefetch_related('availability_set'), uuid=house_uuid)
+        return get_object_or_404(House.objects.all(), uuid=house_uuid)
 
     def get(self, request, house_uuid):
         house = self.get_object(house_uuid)
@@ -75,6 +64,13 @@ class HouseView(APIView):
             else:
                 serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, house_uuid):
+        house = self.get_object(house_uuid)
+        self.check_object_permissions(request, house)
+        house.set_status('D')
+        house.save()
+        return Response(status=status.HTTP_200_OK)
 
 
 class AvailabilityListView(APIView):
@@ -187,6 +183,7 @@ class FormOptionsView(APIView):
                 'home_type': {home_type.id: home_type.name for home_type in HomeType.objects.all()},
             },
             'required_fields': House.REQUIRED_FIELDS,
+            'status': 'j',
         }
         return Response(data, status=status.HTTP_200_OK)
 
@@ -222,13 +219,22 @@ class ImageView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ImageSerializer
 
+    def get_object(self, request, house_uuid):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+
     def get(self, request, house_uuid, image_uuid):
-        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
+        # NOTE: Following two queries can be merged into single query; but this is traded in favour of maintainability
+        # Since House Manager uses non standard manager with filters where basic behaviour is altered
+        house = self.get_object(request, house_uuid)
+        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house=house)
         serializer = self.serializer_class(obj)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, house_uuid, image_uuid):
-        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
+        # NOTE: Following two queries can be merged into single query; but this is traded in favour of maintainability
+        # Since House Manager uses non standard manager with filters where basic behaviour is altered
+        house = self.get_object(request, house_uuid)
+        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house=house)
         obj.delete()
         try:
             new_thumbnail = Image.objects.get(house__uuid=house_uuid, is_thumbnail=True)
@@ -243,7 +249,10 @@ class ImageView(APIView):
             return Response(response, status=status.HTTP_200_OK)
 
     def patch(self, request, house_uuid, image_uuid):
-        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house__uuid=house_uuid, house__home_owner__user=request.user)
+        # NOTE: Following two queries can be merged into single query; but this is traded in favour of maintainability
+        # Since House Manager uses non standard manager with filters where basic behaviour is altered
+        house = self.get_object(request, house_uuid)
+        obj = get_object_or_404(Image.objects.all(), uuid=image_uuid, house=house)
         serializer = self.serializer_class(obj, data=request.data)
         if serializer.is_valid(raise_exception=True):
             image = serializer.save()
@@ -264,8 +273,14 @@ class ImagesListView(APIView):
 
     permission_classes = (IsAuthenticated,)
 
+    def get_object(self, request, house_uuid):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+
     def get(self, request, house_uuid):
-        qs = Image.objects.filter(house__uuid=house_uuid, house__home_owner__user=request.user)
+        # NOTE: Following two queries can be merged into single query; but this is traded in favour of maintainability
+        # Since House Manager uses non standard manager with filters where basic behaviour is altered
+        house = self.get_object(request, house_uuid)
+        qs = Image.objects.filter(house=house)
         response = []
         for obj in qs:
             response.append(

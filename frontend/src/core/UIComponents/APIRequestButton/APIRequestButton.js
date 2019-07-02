@@ -9,22 +9,35 @@ import styles from "./APIRequestButton.css";
  * APIRequestButton
  *
  * props -
- *      cTextOptions - key for textOptions
+ *      textOption - key available in `textOptions`
+ *      cTextOptions - Object like in 'textOptions' with text for 4 states [default, above, done, error]
+ *      loaderSize - in pixels, Size for the loading animation SVG
+ *      loaderColor - Colour for the loading animation SVG
+ *
+ *      Following accept CSS classes string
+ *          layoutClasses -
+ *          loadingContainerClasses -
+ *          textDoneClasses -
+ *          textDefaultClasses -
+ *          textErrorClasses -
+ *          textLoadingClasses -
+ *
  *      initialState - initial State of button
+ *
  *      containerID - [optional] ID of Form container to track all child inputs to reset state on change to default
  *                    Works only with input based forms
- *      textOption - either a key available in `textOptions`, or a similar Object similar
+ *
  *      callback - Promise function
  *      onSuccess - ran when callback is a success
  *      onFailure - ran when callback is failed (IMP! - If something fails in OnSuccess function, onFailure function
  *                  will be called.)
  *
- *      Following 2 props are to be used together
  *      formState - [optional] Current State of the form. Recognises following states -
  *                      - 'saved' [as done]
  *                      - 'initial' [as default]
  *                      - 'hasChanged' [as default]
  *                      - 'error' [as error]
+ *                  This disables internal state management except for loading state while in API request.
  *
  * Possible States of Button => {default, loading, done, error}
  */
@@ -41,7 +54,20 @@ const textOptions = {
         loading: 'Saving',
         done: 'Next',
         error: 'Error!'
-    }
+    },
+    saveExit: {
+        default: 'Save & Exit',
+        loading: 'Saving',
+        done: 'Saved',
+        error: 'Error!'
+    },
+    cDelete: {
+        default: 'Delete',
+        loading: 'Deleting',
+        done: 'Deleted',
+        error: 'Error!'
+    },
+
 };
 
 const _formStateMap = {
@@ -52,7 +78,6 @@ const _formStateMap = {
 };
 
 
-// cTextOptions : Object like in 'textOptions' above
 export default class APIRequestButton extends Component {
 
     constructor(props) {
@@ -104,7 +129,7 @@ export default class APIRequestButton extends Component {
     }
 
     render() {
-        let _textOptions = textOptions[this.props.textOption] || this.props.cTextOptions;
+        let _textOptions = this.props.textOption ? textOptions[this.props.textOption] : this.props.cTextOptions;
         if (this.props.containerID) {
             this.container = document.getElementById(this.props.containerID);
         }
@@ -114,7 +139,7 @@ export default class APIRequestButton extends Component {
         if (this.state.status === 'default') {
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
-                    <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
+                    <div className={this.props.textDefaultClasses || styles.text}>
                         {_textOptions.default}
                     </div>
                 </a>
@@ -125,7 +150,7 @@ export default class APIRequestButton extends Component {
             layoutClasses += this.props.errorClass ? ' ' + this.props.errorClass : ' ' + styles.errorBtn;
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick}>
-                    <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
+                    <div className={this.props.textErrorClasses || styles.text}>
                         {_textOptions.error}
                     </div>
                 </a>
@@ -136,9 +161,7 @@ export default class APIRequestButton extends Component {
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick}>
 
-                    <div style={{
-                        "textAlign": "center", float: "left", position: "relative", width: "40%", "paddingRight": "10px"
-                    }}>
+                    <div className={this.props.loadingContainerClasses || styles.loadingContainer}>
                         <PulseLoader
                             // css={override}
                             sizeUnit={"px"}
@@ -148,7 +171,7 @@ export default class APIRequestButton extends Component {
                         />
                     </div>
 
-                    <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
+                    <div className={this.props.textLoadingClasses || styles.text}>
                         {_textOptions.loading}
                     </div>
                 </a>
@@ -159,7 +182,7 @@ export default class APIRequestButton extends Component {
             layoutClasses += this.props.doneClass ? ' ' + this.props.doneClass : ' ' + styles.doneBtn;
             return (
                 <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
-                    <div style={{"textAlign": "center", float: "right", position: "relative", width: "auto"}}>
+                    <div className={this.props.textDoneClasses || styles.text}>
                         {_textOptions.done}
                     </div>
                 </a>

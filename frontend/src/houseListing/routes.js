@@ -11,6 +11,8 @@ export default {
         detail: 'create/edit/:houseUUID',
         edit: 'create/edit/:houseUUID',
         create: 'create/api',
+        activate: 'activate/:houseUUID',
+        deactivate: 'deactivate/:houseUUID',
         availability: include('availability', {
             list: 'list/:houseUUID',
             create: ':houseUUID',

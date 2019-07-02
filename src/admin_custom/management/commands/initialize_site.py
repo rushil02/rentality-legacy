@@ -69,7 +69,7 @@ def create_personality_tags():
 
 def create_welcome_tags():
     TAGS = [
-        'Pet Owners ', 'Students', 'Smokers', '40+', 'Retiree', 'Parents with children', 'Backpackers',
+        'Pet Owners', 'Students', 'Smokers', '40+', 'Retiree', 'Parents with children', 'Backpackers',
         'LGBTQ+ Friendly',
         'Female Only', 'Everyone'
     ]

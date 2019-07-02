@@ -28,3 +28,18 @@ a.btn.loadingBtn {
 a.btn.doneBtn {
 
 }
+
+.text {
+    text-align: center;
+    float: right;
+    position: relative;
+    width: auto;
+}
+
+.loadingContainer {
+    text-align: center;
+    float: left;
+    position: relative;
+    width: 40%;
+    padding-right: 10px
+}

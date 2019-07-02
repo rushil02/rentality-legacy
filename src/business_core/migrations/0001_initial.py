@@ -17,7 +17,7 @@ def create_default_cancellation_policies(apps, schema_editor):
                 verbose=old.verbose, 
                 description=old.description, 
                 properties=old.properties, 
-                behaviour='A', #FIXME
+                behaviour='A',  # FIXME
                 official_policy=old.official_policy
             )
         except OldCancellationPolicy.DoesNotExist:

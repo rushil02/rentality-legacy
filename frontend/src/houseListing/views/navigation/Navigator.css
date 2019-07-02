@@ -39,6 +39,7 @@
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
     -o-transition: all 0.30s ease-in-out;
+    cursor: pointer;
 }
 
 .formSettings:hover {
@@ -64,4 +65,70 @@
     border-style: solid;
     border-width: 0 10px 10px 10px;
     border-color: transparent transparent #ffffff transparent;
+}
+
+
+.dropdownItem {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    display: inline-block;
+    cursor: pointer;
+    width: 100%;
+    text-align: right;
+}
+
+.deleteText {
+    float: right;
+    position: relative;
+    color: red;
+}
+
+.activateListingText {
+    text-align: center;
+    float: right;
+    position: relative;
+    width: auto;
+    color: #3fc692;
+}
+
+.deactivateListingText {
+    text-align: center;
+    float: right;
+    position: relative;
+    width: auto;
+    color: red;
+}
+
+.modalContent {
+    padding: 50px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.25);
+}
+
+.modalContent h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2b32;
+    margin-bottom: 40px;
+}
+
+.buttonGroup {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.deleteAPIBtn {
+    font-size: 16px;
+    border-radius: 99px;
+    font-weight: 700;
+    color: red !important;
+    background-color: #2a2b32 !important;
+    padding: 11px 59px;
+    text-transform: uppercase;
+    transition: all .25s ease-in-out;
 }

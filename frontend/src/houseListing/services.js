@@ -35,12 +35,13 @@ export function postHouseData(data) {
                 resolve(new House(result.data));
             })
             .catch(error => {
-                if(handleError(error).badRequest) {
+                if (handleError(error).badRequest) {
                     reject(data.parseError(error.response.data));
                 }
             });
     });
 }
+
 
 export function patchHouseData(houseUUID, data) {
     return new Promise(function (resolve, reject) {
@@ -50,6 +51,44 @@ export function patchHouseData(houseUUID, data) {
             })
             .catch(error => {
                 reject(data.parseError(error.response.data));
+            });
+    });
+}
+
+
+export function deleteHouse(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.delete(reverse(routes.house.edit, {houseUUID: houseUUID}))
+            .then(res => {
+                resolve()
+            })
+            .catch(error => {
+                reject(handleError(error).error);
+            });
+    });
+}
+
+
+export function activateHouse(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.post(reverse(routes.house.activate, {houseUUID: houseUUID}))
+            .then(res => {
+                resolve()
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+export function deactivateHouse(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.post(reverse(routes.house.deactivate, {houseUUID: houseUUID}))
+            .then(res => {
+                resolve()
+            })
+            .catch(error => {
+                reject(handleError(error).error);
             });
     });
 }
@@ -215,7 +254,10 @@ export function postImagesFiles(houseUUID, data, progressTracker) {
 
 export function updateImageData(houseUUID, imageUUID, data) {
     return new Promise(function (resolve, reject) {
-        axios.patch(reverse(routes.house.image.update, {houseUUID: houseUUID, imageUUID: imageUUID}), data.serialize(['isThumbnail']))
+        axios.patch(reverse(routes.house.image.update, {
+            houseUUID: houseUUID,
+            imageUUID: imageUUID
+        }), data.serialize(['isThumbnail']))
             .then(result => {
                 resolve(new Image(result.data));
             })

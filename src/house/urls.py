@@ -10,6 +10,7 @@ from house.views import info, create, edit, \
     ImagesPublicView, ThumbnailPublicView
 
 from house.views.api import NetAvailableDatesView
+from house.views.api.actions import ActivateHouseListing, DeactivateHouseListing
 
 app_name = 'house'
 
@@ -27,9 +28,6 @@ urlpatterns = [
     path('del/<uuid:house_uuid>', delete, name='delete_object'),
     path('rem/<uuid:house_uuid>', remove_from_public, name='remove_public'),
 
-    # FIXME: Remove
-    path('test/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='test'),
-
     # APIs
     path('detail/<uuid:house_uuid>', HouseDetailPublicView.as_view(), name='detail_api'),
     path('all-images/<uuid:house_uuid>', ImagesPublicView.as_view(), name='all_images'),
@@ -38,7 +36,7 @@ urlpatterns = [
 
     # Creation APIs
     path('create/api', HouseView.as_view(), name='create_api'),
-    path('create/edit/<uuid:house_uuid>', HouseView.as_view(), name='edit_api'),
+    path('create/edit/<uuid:house_uuid>', HouseView.as_view(), name='edit_api'),  # handles Read, Update, Delete
     path('form-options', FormOptionsView.as_view(), name='create_form_options'),
     path('availability/list/<uuid:house_uuid>', AvailabilityListView.as_view(), name='availability_info_api'),
     path('availability/<uuid:house_uuid>', AvailabilityView.as_view(), name='availability_update_api'),
@@ -55,4 +53,9 @@ urlpatterns = [
     path('can-pol/update/<uuid:house_uuid>', CancellationPolicyView.as_view(), name='set_cancellation_policy'),
     path('neighbourhood-desc/<uuid:house_uuid>', NeighbourhoodDescriptorListView.as_view(), name='nearby_facility'),
     path('welcome-tags/<uuid:house_uuid>', WelcomeTagsListView.as_view(), name='welcome_tags'),
+
+    # Actions
+    path('activate/<uuid:house_uuid>', ActivateHouseListing.as_view(), name='activate_listing'),
+    path('deactivate/<uuid:house_uuid>', DeactivateHouseListing.as_view(), name='deactivate_listing'),
+
 ]
