@@ -38,6 +38,7 @@ export default function FormPrimaryComponent(props) {
                                         className={"form-control " + styles.title} maxLength="250"
                                         placeholder="Property Name" value={props.title}
                                         onChange={(e) => props.onFieldChange("title", e.target.value)}
+                                        autoComplete={"off"}
                                     />
                                     {getError('title')}
                                 </div>
@@ -50,7 +51,7 @@ export default function FormPrimaryComponent(props) {
                                 <div className="input address">
                                     <input type="text" name="main-form-address_hidden"
                                            id="id_main-form-address_hidden" className={"form-control " + styles.addressHidden}
-                                           placeholder="Unit Number or House Number" value={props.houseNum}
+                                           placeholder="Unit Number or House Number" value={props.houseNum} autoComplete={"off"}
                                            onChange={(e) => props.onFieldChange("houseNum", e.target.value)}/>
                                     {getError('houseNum')}
                                 </div>
@@ -64,7 +65,7 @@ export default function FormPrimaryComponent(props) {
                                 <div className="input">
                                     <input type="text" name="main-form-address" id="id_main-form-address"
                                            className="form-control no-background" placeholder="Street Name"
-                                           style={{"paddingLeft": "10px"}} value={props.streetName}
+                                           style={{"paddingLeft": "10px"}} value={props.streetName} autoComplete={"off"}
                                            onChange={(e) => props.onFieldChange("streetName", e.target.value)}/>
                                     {getError('streetName')}
                                 </div>
