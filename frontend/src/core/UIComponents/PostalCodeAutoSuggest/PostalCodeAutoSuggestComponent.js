@@ -24,7 +24,7 @@ export default class PostalCodeAutoSuggestComponent extends Component {
             value: this.props.value,
             onChange: this.props.onChange,
             type: 'text',
-            autoComplete: 'Mlep(clay)nos',
+            autoComplete: 'off',
         };
 
         let errorDisp = [];

@@ -11,22 +11,26 @@ export default class APIModelAdapter {
      *              Setting options - key : field from server/DB
      *                                parser: [optional] to manipulate obtained value from DB. This setting
      *                                        will not work if 'adapter' setting is also provided
-     *                                adapter: [optional] to created a nested APIModelAdapter
-     *                                default: [optional] if value is not provided by DB else it is ''
+     *                                adapter: [optional] to create a nested APIModelAdapter
+     *                                default: [optional] used if value is not provided by DB else it is assigned ''
      *                                readOnly: [optional] if attribute is not to be changed in DB,
      *                                          will raise warning whenever value is changed,
      *                                          readOnly attributes are not serialized
      *                                required: [optional] TODO - Raise ValidationError when serializing for db and when user is entering data - to raise error, just update this.errors from component
      *                                regex: [optional] TODO - Validates user input to match the given regex - will require debounced check on keypress
+     *                                many: [optional, default - False] TODO - Field is set as list using 'APIModelListAdapter', constructor and serializer implementation required
      */
+
     constructor(dbObj, status) {
         this._attrs = {};
         this.errors = {};
-        this._fieldMap = Object.entries(this.fieldMap());
+        this._fieldMap = this.fieldMap();
         this.reverseFieldMap = {};
         this.status = status || 'saved';
-        for (let i = 0; i < this._fieldMap.length; i++) {
-            this._constructAttribute(this._fieldMap[i][0], this._fieldMap[i][1], dbObj)
+
+        const fieldMapList = Object.entries(this._fieldMap);
+        for (let i = 0; i < fieldMapList.length; i++) {
+            this._constructAttribute(fieldMapList[i][0], fieldMapList[i][1], dbObj)
         }
         this.changedFields = []
     }
@@ -138,7 +142,7 @@ export default class APIModelAdapter {
             }
             currAttr[key_list.length - 1] = value;
         } else {
-            if (this.fieldMap()[key_list].readOnly) {
+            if (this._fieldMap[key_list].readOnly) {
                 console.warn('You are trying to change readOnly data. The data will not be serialized.');
             }
             this._attrs[key_list] = value;
@@ -164,25 +168,42 @@ export default class APIModelAdapter {
     serialize(fields) {
         let ret = {};
         if (!fields || fields === '__all__') {
-            let _fieldMap = Object.entries(this.fieldMap());
+            let _fieldMap = Object.entries(this._fieldMap);
             for (let i = 0; i < _fieldMap.length; i++) {
                 ret[_fieldMap[i][1].key] = this._serializeData(_fieldMap[i][0], _fieldMap[i][1]);
             }
         } else if (fields === '__partial__') {
             fields = this.changedFields;
             for (let i = 0; i < fields.length; i++) {
-                ret[this.fieldMap()[fields[i]].key] = this._serializeData(fields[i], this.fieldMap()[fields[i]]);
+                ret[this._fieldMap[fields[i]].key] = this._serializeData(fields[i], this._fieldMap[fields[i]]);
             }
         } else {
             if (!Array.isArray(fields)) {
                 console.error("Provided fields is not a list");
             }
             for (let i = 0; i < fields.length; i++) {
-                ret[this.fieldMap()[fields[i]].key] = this._serializeData(fields[i], this.fieldMap()[fields[i]]);
+                ret[this._fieldMap[fields[i]].key] = this._serializeData(fields[i], this._fieldMap[fields[i]]);
             }
-
         }
         return ret
+    }
+
+    bulkUpdate(data, source = 'DB') {
+        /**
+         * data -> object of field and value pairs, source can be raw db or internal from FE
+         * source -> 'DB' or 'int' (database or internal)
+         * Returns self to work similar to 'setData'
+         */
+
+        for (let [field, value] of Object.entries(data)) {
+            if (source === 'DB') {
+                field = this.reverseFieldMap[field];
+                field ? this.setData(field, value) : null;
+            } else if (source ==='int') {
+                this._fieldMap.hasOwnProperty(field) ? this.setData(field, value) : null;
+            }
+        }
+        return this
     }
 }
 
@@ -193,7 +214,7 @@ export class APIModelListAdapter {
      * @param objModel - APIModelAdapter class
      * @param status - settings: [empty, saved, hasChanged], default: saved
      * @param dbData - array of dbObj
-     * @param uniqueKey - [optional] unique field present in dbData
+     * @param uniqueKey - [optional] unique field present in dbData, NOT as defined in the objModel
      */
 
     constructor(dbData, objModel, uniqueKey, status) {
@@ -208,8 +229,13 @@ export class APIModelListAdapter {
     }
 
     // FIXME: Rename method - returns an object not list
-    getList() {
+    getList() { // Deprecated
         // returns object
+        return this._data
+    }
+
+    getObjectList() {
+        // returns list of objects
         return this._data
     }
 
@@ -342,4 +368,36 @@ export class DateRangeModel extends APIModelAdapter {
         }
     };
 
+}
+
+
+export class PostalLocation extends APIModelAdapter {
+
+    fieldMap() {
+        return {
+            id: {key: 'id',},
+            type: {key: 'type',},
+            coords: {key: 'geometry', parser: this.parseGeometry},
+            properties: {key: 'properties', parser: this.parseProperties},
+        }
+    };
+
+    parseGeometry(data) {
+        if (data) {
+            return data.coordinates
+        }
+        return []
+    };
+
+    parseProperties(data) {
+        if (data) {
+            return {
+                code: data['code'],
+                name: data['name'],
+                region: data['region_name'],
+                country: data['country']['name']
+            }
+        }
+        return {name: '', region: '', country: ''}
+    }
 }

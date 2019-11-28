@@ -20,7 +20,8 @@ import {PrivateRoute} from "core/auth/utils";
 
 const HouseListing = React.lazy(() => import("houseListing/Router"));
 const User = React.lazy(() => import("userAccount/Router"));
-const SearchPage = React.lazy(() => import ("search/Router"));
+const Apply = React.lazy(() => import("apply/Router"));
+// const SearchPage = React.lazy(() => import ("search/Router"));
 
 
 class App extends Component {
@@ -44,12 +45,20 @@ class App extends Component {
                                             <HouseListing {...props}/>
                                         </Suspense>}
                                 />
-                                <Route
-                                    path={routes.react.searchPage}
+                                {/*<Route*/}
+                                {/*    path={routes.react.searchPage}*/}
+                                {/*    render={*/}
+                                {/*        (props) =>*/}
+                                {/*            <Suspense fallback={<ComponentLoadingSpinner />}>*/}
+                                {/*                <SearchPage {...props} />*/}
+                                {/*            </Suspense> }*/}
+                                {/*/>*/}
+                                 <Route
+                                    path={routes.react.apply.base}
                                     render={
                                         (props) =>
                                             <Suspense fallback={<ComponentLoadingSpinner />}>
-                                                <SearchPage {...props} />
+                                                <Apply {...props} />
                                             </Suspense> }
                                 />
                                 <PrivateRoute

@@ -3,6 +3,7 @@
         "@babel/preset-env", "@babel/preset-react"
     ],
     "plugins": [
+        "@babel/plugin-proposal-throw-expressions",
         "transform-class-properties",
         "syntax-dynamic-import",
         "emotion"

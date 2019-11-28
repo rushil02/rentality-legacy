@@ -10,11 +10,11 @@ import styles from "./APIRequestButton.css";
  *
  * props -
  *      textOption - key available in `textOptions`
- *      cTextOptions - Object like in 'textOptions' with text for 4 states [default, above, done, error]
+ *      cTextOptions - Object like in 'textOptions' with text for 4 states [default, loading, done, error]
  *      loaderSize - in pixels, Size for the loading animation SVG
  *      loaderColor - Colour for the loading animation SVG
  *
- *      Following accept CSS classes string
+ *      Following are the accepted prop keys for CSS classes [string]
  *          layoutClasses -
  *          loadingContainerClasses -
  *          textDoneClasses -
