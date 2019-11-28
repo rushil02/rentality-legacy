@@ -26,8 +26,7 @@ services:
       - './secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB'
       - 'pgdata:/var/lib/postgresql/data'
   elasticsearch:
-    # Set vm.max_map_count=262144 in /etc/sysctl.conf in HOST system
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:6.4.2'
     environment:
       - cluster.name=rentality-cluster
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
@@ -42,13 +41,10 @@ services:
   frontend:
     build: ./frontend
     image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
-    entrypoint:
-      - npm
-      - run
-      - dev
+    entrypoint: npm run dev
     volumes:
-      - './frontend:/app/frontend'
-      - './src/static/v2/frontend:/app/frontend/dist'
+      - './frontend/src:/app/src'
+      - './src/static/v2/frontend:/app/dist'
   web:
     build: ./src
     image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
@@ -61,7 +57,7 @@ services:
       - postgres
       - frontend
       - migration
-    #      - elasticsearch
+      - elasticsearch
     ports:
       - '8001:8000'
     entrypoint:
@@ -104,7 +100,6 @@ services:
       - postgres
       - frontend
     entrypoint: python manage.py migrate --noinput
-
 volumes:
   pgdata: null
   esdata: null

@@ -8,6 +8,9 @@ const cssThemeModules = [
     path.resolve(__dirname, 'src', 'core', 'footer', 'Footer.css'),
     path.resolve(__dirname, 'src', 'core', 'navbar', 'views', 'components', 'Navbar.css'),
     /node_modules/,
+    path.resolve(__dirname, 'src', 'search'),
+    path.resolve(__dirname, 'src', 'apply', 'views', 'houseDetail', 'DateRangeCalendar.css'),
+    path.resolve(__dirname, 'src', 'apply', 'views', 'houseDetail', 'ImageCarousel.css'),
 ];
 
 module.exports = {
@@ -20,8 +23,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                exclude: /node_modules/,
+                test: /\.(js|jsx)$/,
+                exclude: [/node_modules/,],
                 use: {
                     loader: "babel-loader"
                 }
@@ -42,13 +45,17 @@ module.exports = {
                 use: ["style-loader", "css-loader"]
             },
             {
-                test: /\.(png|jpg|gif)$/i,
+                test: /\.(eot|png|jpg|gif)$/i,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {}
                     }
                 ]
+            },
+            {
+                test: /\.(eot|woff|woff2|ttf|png|jpg|gif)$/,
+                loader: 'url-loader?limit=30000&name=[name]-[hash].[ext]'
             },
             {
                 test: /\.svg/,
@@ -72,11 +79,6 @@ module.exports = {
 
     },
     resolve: {
-        modules: [path.resolve(__dirname, 'src'), path.resolve(__dirname, '..', 'node_modules')],
+        modules: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules')],
     },
-    // optimization: {  FIXME: Not working
-    //     splitChunks: {
-    //         chunks: 'all'
-    //     }
-    // }
 };

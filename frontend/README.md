@@ -1,5 +1,22 @@
-# Code Structure and Application Architecture
+#### Building from customised external packages (local)
+\#1 Pack the package using npm to *.tgz format (https://docs.npmjs.com/cli/pack.html)
+```
+npm pack .
+```
+\#2 Copy compressed file to 'frontend/ext_lib/' folder.
 
+\#3 Add entry to package.json as in the following example.
+``` package.json
+"dependencies": {
+    "react-date-range": "file:ext_lib/react-date-range-1.0.0-beta.tgz",
+}
+```
+
+\#Note: You might have to delete the node_modules folder for the new package to install. 
+Known bug - https://npm.community/t/checkpermissions-missing-write-access-with-file-dependency/2922/3
+
+
+#### Code Structure and Application Architecture
 The File/Folder structure closely represents Django's code structure, where templates reside in each app-package. App-package
 conventions are closely analogous to the naming in Django app layer, however there can be different packages depending
 on the Process/Functionality. Each App package (depending on functionality) should commonly contain the following files - 
