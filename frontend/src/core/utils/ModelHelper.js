@@ -2,6 +2,12 @@ import {omit} from "lodash";
 
 export default class APIModelAdapter {
     /**
+     * Construct JS objects for easy manipulation for API and user interactions.
+     *
+     * bulkUpdate() vs constructor()
+     * Both facilitate setting data for the object from DB's data (using key value pairs as from BE),
+     * but following is the difference in their functioning -
+     *      - bulkUpdate uses setData() method and therefore all fields are marked as changed.
      *
      * @param dbObj
      * @param status - settings: [empty, saved, hasChanged], default: saved
@@ -65,7 +71,7 @@ export default class APIModelAdapter {
         }
         if (settings.adapter) {
             defaultVal = settings.hasOwnProperty('default') ? settings.default : {};
-            this._attrs[field] = new settings.adapter(source[settings.key] || defaultVal);
+            this._attrs[field] = new settings.adapter(source[settings.key] || defaultVal, this.status);
         } else {
             // Explicit check for undefined and null only, as `false` can also be a value
             // Checking for undefined allows to create empty objects, while a primitive check is done above
@@ -90,17 +96,30 @@ export default class APIModelAdapter {
          */
     };
 
-    // FIXME : Nesting paradigm is ambiguous and untested
-    getData = (keyList) => {
-        // Accepts a list of keys in order of hierarchy from parent to child
-        if (keyList.isArray) {
-            let currAttr = this._attrs;
-            for (let i = 0; i < keyList.length; i++) {
-                currAttr = currAttr[i]
+    getData = (key, parentList) => {
+        /**
+         * 'parentList' is an array used for nested 'APIModelAdapter' model objects. Array is in
+         * order of hierarchy of nesting. If 'parentList' is provided 'key' represents the attribute
+         * in the innermost nested object.
+         *
+         * @param key - attribute key
+         * @param parentList - [optional] array of parents in hierarchy
+         */
+
+        let modelObj = this;
+        if (parentList && Array.isArray(parentList)) {
+            for (let i = 0; i < parentList.length; i++) {
+                if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
+                    modelObj = modelObj.getData(parentList[i]);
+                } else {
+                    throw `${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`
+                }
             }
-            return currAttr
+        }
+        if (modelObj._fieldMap.hasOwnProperty(key)) {
+            return modelObj._attrs[key]
         } else {
-            return this._attrs[keyList]
+            throw `${key} is not a valid key in ${this.constructor.name}`
         }
     };
 
@@ -132,25 +151,45 @@ export default class APIModelAdapter {
     };
 
 
-    setData = (key_list, value) => {
-        // Accepts a list of keys in order of hierarchy from parent to child
-        // FIXME : Nesting not tested - does not work with adapters !URGENT
-        if (key_list.isArray) {
-            let currAttr = this._attrs;
-            for (let i = 0; i < key_list.length - 1; i++) {
-                currAttr = currAttr[i]
+    setData = (key, value, parentList) => {
+        /**
+         * Use to change data by user actions.
+         * 'parentList' is an array used for nested 'APIModelAdapter' model objects. Array is in
+         * order of hierarchy of nesting. If 'parentList' is provided 'key' represents the attribute
+         * in the innermost nested object.
+         *
+         * #TODO: Add functionality to validate content and raise errors
+         * @param key - attribute key
+         * @param value - new value
+         * @param parentList - [optional] array of parents in hierarchy
+         */
+
+        let modelObj = this;
+
+        if (parentList && Array.isArray(parentList)) {
+            for (let i = 0; i < parentList.length; i++) {
+                if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
+                    modelObj.status = "hasChanged";
+                    modelObj.changedFields.push(key);
+                    modelObj = modelObj.getData(parentList[i]);
+                } else {
+                    throw `${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`
+                }
             }
-            currAttr[key_list.length - 1] = value;
-        } else {
-            if (this._fieldMap[key_list].readOnly) {
+        }
+
+        if (modelObj._fieldMap.hasOwnProperty(key)) {
+
+            if (modelObj._fieldMap[key].readOnly) {
                 console.warn('You are trying to change readOnly data. The data will not be serialized.');
             }
-            this._attrs[key_list] = value;
-
+            modelObj.status = "hasChanged";
+            modelObj.changedFields.push(key);
+            modelObj._attrs[key] = value;
+            return this
+        } else {
+            throw `${key} is not a valid key in ${this.constructor.name}`
         }
-        this.changedFields.push(key_list);
-        this.status = "hasChanged";
-        return this
     };
 
     _serializeData(field, settings) {
@@ -188,19 +227,35 @@ export default class APIModelAdapter {
         return ret
     }
 
-    bulkUpdate(data, source = 'DB') {
+    bulkUpdate(data, source = 'int', parentList) {
         /**
+         * NOTE: Silently suppresses if any extra attribute is provided which is not in fieldMap.
+         *
          * data -> object of field and value pairs, source can be raw db or internal from FE
          * source -> 'DB' or 'int' (database or internal)
          * Returns self to work similar to 'setData'
          */
 
+        let modelObj = this;
+
+        if (parentList && Array.isArray(parentList)) {
+            for (let i = 0; i < parentList.length; i++) {
+                if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
+                    modelObj.status = "hasChanged";
+                    modelObj.changedFields.push(key);
+                    modelObj = modelObj.getData(parentList[i]);
+                } else {
+                    throw `${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`
+                }
+            }
+        }
+
         for (let [field, value] of Object.entries(data)) {
             if (source === 'DB') {
-                field = this.reverseFieldMap[field];
-                field ? this.setData(field, value) : null;
-            } else if (source ==='int') {
-                this._fieldMap.hasOwnProperty(field) ? this.setData(field, value) : null;
+                field = modelObj.reverseFieldMap[field];
+                field ? modelObj.setData(field, value) : null;
+            } else if (source === 'int') {
+                modelObj._fieldMap.hasOwnProperty(field) ? modelObj.setData(field, value) : null;
             }
         }
         return this
@@ -272,7 +327,7 @@ export class APIModelListAdapter {
          * @param key: [optional] for overriding key set in constructor
          */
         if (!key && !this._key) {
-            console.error("No key provided for append to work.")
+            console.error("No key provided for update to work.")
         }
 
         // Warn for no data, and return
