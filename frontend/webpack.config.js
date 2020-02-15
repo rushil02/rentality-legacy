@@ -1,4 +1,7 @@
 const path = require('path');
+const publicKeys = require('dotenv').config({path: '/run/secrets/PUBLIC_KEYS'});
+const webpack = require('webpack');
+const fs = require('fs');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -13,12 +16,26 @@ const cssThemeModules = [
     path.resolve(__dirname, 'src', 'apply', 'views', 'houseDetail', 'ImageCarousel.css'),
 ];
 
+// Parse Environment Variables
+function getEnvVariablesMap () {
+    const envMap = publicKeys.parsed;
+    if (!fs.existsSync('/run/secrets/PUBLIC_KEYS')) throw Error("Environment variables NOT found (PUBLIC_KEYS missing)");
+    let envPluginMap = {};
+    for (let key in envMap){
+        if(envMap.hasOwnProperty(key)) {
+            envPluginMap[`process.env.${key}`] = `"${envMap[key]}"`;
+        }
+    }
+    return envPluginMap
+}
+
 module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: '[name].css',
             chunkFilename: '[id].css',
         }),
+        new webpack.DefinePlugin(getEnvVariablesMap()),
     ],
     module: {
         rules: [
@@ -76,7 +93,6 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/static/frontend/',
         chunkFilename: '[name].chunk.js',
-
     },
     resolve: {
         modules: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules')],

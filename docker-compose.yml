@@ -38,6 +38,9 @@ services:
     image: 'docker.elastic.co/kibana/kibana:6.4.3'
     ports:
       - '5601:5601'
+  shared:
+    build: ./secrets
+    image: 'registry.gitlab.com/rushil0195/rentality/shared:latest'
   frontend:
     build: ./frontend
     image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
@@ -46,7 +49,10 @@ services:
       - './frontend/src:/app/src'
       - './src/static/v2/frontend:/app/dist'
   web:
-    build: ./src
+    build:
+      context: ./src
+      args:
+        test_mode: "true"
     image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
     volumes:
       - './static_dev/static_root:/rentality/static_dev/static_root'
@@ -98,7 +104,7 @@ services:
       - './src:/rentality/src'
     depends_on:
       - postgres
-      - frontend
+      - frontend # TODO: Can remove this dependency. Test required!
     entrypoint: python manage.py migrate --noinput
 volumes:
   pgdata: null

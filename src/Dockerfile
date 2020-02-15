@@ -2,22 +2,27 @@ FROM registry.gitlab.com/rushil0195/rentality/frontend:latest as frontend-builde
 
 FROM registry.gitlab.com/rushil0195/rentality/base:latest
 
-ENV PYTHONUNBUFFERED=1
+ARG test_mode=false
+ENV PYTHONUNBUFFERED=1 PIPENV_DEV=$test_mode
 
 WORKDIR /rentality/src
 
-COPY requirements.txt .
-
 RUN apk update && \
-    apk add postgresql-libs jpeg-dev zlib-dev && \
-    apk add --virtual .build-deps gcc musl-dev postgresql-dev build-base python-dev py-pip && \
-    python -m pip install -r requirements.txt --no-cache-dir && \
-    apk --purge del .build-deps
+    apk add postgresql-libs jpeg-dev zlib-dev
+
+RUN pip install --upgrade pip
 
 EXPOSE 8000
 
+COPY Pipfile Pipfile.lock ./
+
+RUN apk add --virtual .build-deps gcc musl-dev postgresql-dev build-base python-dev py-pip && \
+    pip install pipenv && \
+    pipenv install --deploy --system && \
+    apk --purge del .build-deps
+
 COPY . .
 
-COPY --from=frontend-builder /app/frontend/dist/ ./static/v2/frontend/
+COPY --from=frontend-builder /app/dist/ ./static/v2/frontend/
 
 ENTRYPOINT [ "./entrypoint.sh" ]

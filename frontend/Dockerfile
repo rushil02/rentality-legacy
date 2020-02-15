@@ -1,3 +1,5 @@
+FROM registry.gitlab.com/rushil0195/rentality/shared:latest as shared
+
 FROM node:11-alpine
 
 # Required if accessing packages on git via npm
@@ -17,4 +19,6 @@ COPY webpack.config.js .
 
 COPY src ./src
 
-RUN npm run build
+COPY --from=shared /shared/PUBLIC_KEYS /run/secrets/PUBLIC_KEYS
+
+RUN ["npm", "run", "build"]
