@@ -9,16 +9,22 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 # Setup docker
-req-install: ## Install and setup docker-ce and docker-compose
-	sudo chmod +x ./bin/docker-setup.sh
-	sudo ./bin/docker-setup.sh
+req-install: ## Install and setup requisites: docker-ce and docker-compose
+	@sudo chmod +x ./bin/docker-setup.sh
+	@sudo ./bin/docker-setup.sh
+	@echo "Login to Gitlab for docker container registry (Use your conventional Gitlab credentials)"
+	sudo docker login registry.gitlab.com
+	@echo "All configurations are set. System restart maybe required."
+	@echo "Use 'make run' command to start development. Development port is running on 0.0.0.0:8001"
+	@newgrp docker
+
 
 # Build and run the container
 build: ## Rebuilds container without cache
 	docker-compose build --no-cache
 
 run: ## Spin up the project in development mode
-	sudo sysctl vm.max_map_count=262144
+	@sudo sysctl vm.max_map_count=262144
 	docker-compose down && docker-compose up -d --build
 
 # Backend
