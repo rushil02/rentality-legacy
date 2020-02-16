@@ -6,7 +6,7 @@ import ComponentErrorBoundary from "core/errorHelpers/ComponentErrorBoundary";
 import Error404 from "core/errorHelpers/Error404";
 import PayoutInfoContainer from "../houseListing/views/forms/payoutInfo/PayoutInfoContainer";
 
-const PaymentInfoContainer = React.lazy(() => import("./views/paymentInfo/PaymentInfoContainer"));
+// const PaymentInfoContainer = React.lazy(() => import("./views/paymentInfo/PaymentInfoContainer"));
 
 
 export default class Router extends Component {
