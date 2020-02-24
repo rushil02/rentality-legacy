@@ -94,9 +94,7 @@ export class Navigator {
     loadForm = (formID, callback, formState, formName) => {
         this.currForm = formID;
         if (!this._forms.hasOwnProperty(formID)) {
-            this._forms[formID] = {state: formState, saveCallback: callback, verbose: formName};
-        } else {
-            this._forms[formID].saveCallback = callback
+            this._forms[formID] = {state: formState, saveCallbacks: {'default': callback, }, verbose: formName};
         }
     };
 
@@ -114,8 +112,53 @@ export class Navigator {
     };
 
     getCurrentSaveCallback = () => {
-        return this._forms[this.currForm].saveCallback
+        if(Object.keys(this._forms[this.currForm].saveCallbacks).length === 1){
+            return this._forms[this.currForm].saveCallbacks['default'];
+        } else {
+            let that = this;
+            return function (e) {
+                return new Promise(function (resolve, reject){
+                    let allResults = {};
+                    let allErrors = {};
+                    for (let [key, callback] of Object.entries(that._forms[that.currForm].saveCallbacks)){
+                        if (Promise.resolve(callback) == callback){
+                            callback(e)
+                                .then((result) => {
+                                    allResults[key] = result;
+                                })
+                                .catch((error) => {
+                                    allErrors[key] = error;
+                            })
+                        } else {
+                            try{
+                                allResults[key] = callback(e);
+                            }
+                            catch(e){
+                                allErrors[key] = e;
+                            }
+                        }
+                    }
+                    if(Object.keys(allErrors).length === 0){
+                        resolve(allResults);
+                    } else {
+                        reject(allErrors);
+                    }    
+                })
+            }
+        }
     };
+
+    addSaveCallback = (key, callback) => {
+        this._forms[this.currForm].saveCallbacks[key] = callback;
+    }
+
+    removeSaveCallback = (formNumber, key) => {
+        if(this._forms.hasOwnProperty(formNumber)){
+            if(this._forms[formNumber].saveCallbacks.hasOwnProperty(key)){
+                delete this._forms[formNumber].saveCallbacks[key];
+            }
+        }
+    }
 
     getCurrentVerbose = () => {
         return this._forms[this.currForm].verbose

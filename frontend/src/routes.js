@@ -1,6 +1,7 @@
 import {include} from 'named-urls';
 import houseListingRoutes from 'houseListing/routes';
 import userRoutes from 'userAccount/routes';
+import applyRoutes from 'apply/routes';
 
 export default {
     static_route: '/static/',
@@ -26,6 +27,7 @@ export default {
         houseListing: include('house/list', houseListingRoutes.interface),
         user: include('user', userRoutes.interface),
         searchPage: 'search',
+        apply: include('apply', applyRoutes.interface),
     }),
 
     // APIs

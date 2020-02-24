@@ -13,6 +13,7 @@ import {
     putAvailabilityData,
     postAvailabilityData
 } from "houseListing/services";
+import {NavigationContext} from 'houseListing/dataContext';
 
 
 export default class AvailabilitySelectorHandler extends Component {
@@ -124,33 +125,41 @@ export default class AvailabilitySelectorHandler extends Component {
     render() {
         let newKey = 'new' + Object.values(this.state.data).length;
         return (
-            <React.Fragment>
-                {Object.values(this.state.data).map((object, i) => {
-                    let dateRange = object.getData('dateRange');
-                    return <AvailabilitySelector
-                        modeNew={false}
-                        startDate={new Date(dateRange.getData('startDate'))}
-                        endDate={new Date(dateRange.getData('endDate'))}
-                        key={object.getData('objID').toString()}
-                        idKey={object.getData('objID')}
-                        validate={this.validateRange}
-                        onAdd={this.onAdd}
-                        onRemove={this.onRemove}
-                        onUpdate={this.onUpdate}
-                    />;
-                })}
-                <AvailabilitySelector
-                    modeNew={true}
-                    startDate={new Date()}
-                    endDate={new Date()}
-                    key={newKey}
-                    idKey={newKey}
-                    validate={this.validateRange}
-                    onAdd={this.onAdd}
-                    onRemove={this.onRemove}
-                    onUpdate={this.onUpdate}
-                />
-            </React.Fragment>
+            <NavigationContext.Consumer>
+                {navContext =>
+                    <React.Fragment>
+                        {Object.values(this.state.data).map((object, i) => {
+                            let dateRange = object.getData('dateRange');
+                            return <AvailabilitySelector
+                                modeNew={false}
+                                startDate={new Date(dateRange.getData('startDate'))}
+                                endDate={new Date(dateRange.getData('endDate'))}
+                                key={object.getData('objID').toString()}
+                                idKey={object.getData('objID')}
+                                validate={this.validateRange}
+                                onAdd={this.onAdd}
+                                onRemove={this.onRemove}
+                                onUpdate={this.onUpdate}
+                                navContext={navContext}
+                                formID={this.props.formID}
+                            />;
+                        })}
+                        <AvailabilitySelector
+                            modeNew={true}
+                            startDate={new Date()}
+                            endDate={new Date()}
+                            key={newKey}
+                            idKey={newKey}
+                            validate={this.validateRange}
+                            onAdd={this.onAdd}
+                            onRemove={this.onRemove}
+                            onUpdate={this.onUpdate}
+                            navContext={navContext}
+                            formID={this.props.formID}
+                        />
+                    </React.Fragment>
+                }       
+            </NavigationContext.Consumer>
         )
     }
 }
@@ -164,7 +173,7 @@ class AvailabilitySelector extends Component {
             error: '',
             tempStartDate: this.props.startDate || '',
             tempEndDate: this.props.endDate || '',
-            inSyncMode: false
+            inSyncMode: false,
         };
 
         this.objID = this.props.idKey;
@@ -210,10 +219,28 @@ class AvailabilitySelector extends Component {
     };
 
     onRemove = () => {
-        this.setState({inSyncMode: true});
-        this.props.onRemove(this.objID);
+        if(this.props.modeNew){
+            this.toggleEditState(false);
+        } else {
+            this.setState({inSyncMode: true});
+            this.props.onRemove(this.objID);
+        }
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(prevState.modeEditing===false && this.state.modeEditing===true){
+            this.props.navContext.data.addSaveCallback(this.objID, this.onClickSave);
+            this.props.navContext.sync();
+        } else if(prevState.modeEditing===true && this.state.modeEditing===false) {
+            this.props.navContext.data.removeSaveCallback(this.props.formID, this.objID);
+            this.props.navContext.sync();
+        }
+    }
+
+    componentWillUnmount(){
+        this.props.navContext.data.removeSaveCallback(this.props.formID, this.objID);
+        this.props.navContext.sync();
+    }
 
     render() {
         return (

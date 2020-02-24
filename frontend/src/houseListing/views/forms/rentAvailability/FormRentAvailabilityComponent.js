@@ -110,6 +110,7 @@ export default class FormRentAvailabilityComponent extends Component {
                                             <AvailabilitySelectorHandler
                                                 houseUUID={this.props.houseUUID}
                                                 cache={cache}
+                                                formID={this.props.formID}
                                             />
                                         }
                                     </AvailabilityCache.Consumer>
