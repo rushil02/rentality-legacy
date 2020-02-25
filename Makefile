@@ -26,6 +26,9 @@ run: ## Spin up the project in development mode
 	@sudo sysctl vm.max_map_count=262144
 	docker-compose down && docker-compose up -d --build
 
+fast-run: ## Spin up the project without build 
+	@docker-compose up -d
+
 # Backend
 start-pipenv: ## Install all build libraries in web container to enable package installation and open the container. Useful for all `pipenv` manipulations.
 	docker-compose exec web apk add gcc musl-dev postgresql-dev build-base python-dev py-pip

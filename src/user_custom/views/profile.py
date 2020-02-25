@@ -36,7 +36,7 @@ def edit_profile(request):
         if form1.is_valid() and form2.is_valid():
             form1.save()
             form2.save()
-            return redirect(reverse('user:user_details'))
+            return redirect('/rep/user/profile')
 
     return render(request, 'user/profile/edit_details.html', context)
 
