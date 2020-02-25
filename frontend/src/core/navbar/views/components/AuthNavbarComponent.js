@@ -89,7 +89,7 @@ export default class AuthNavbarComponent extends Component {
                                         </div>
                                     </li>
                                     <li className="list-inline-item person">
-                                        <a href={reverse(routes.dashboard)} style={{textTransform: 'capitalize'}}>
+                                        <a href={reverse(routes.react.dashboard.base)} style={{textTransform: 'capitalize'}}>
                                             <div className="image">
                                                 <img
                                                     src={profileImage ? profileImage : reverse(routes.static_route) + "image/placeholders/profile.png"}
