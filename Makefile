@@ -11,27 +11,51 @@ help: ## This help.
 # Setup docker
 req-install: ## Install and setup requisites: docker-ce and docker-compose
 	@sudo chmod +x ./bin/docker-setup.sh
-	@./bin/docker-setup.sh
-	@echo "Login to Gitlab for docker container registry (Use your conventional Gitlab credentials)"
-	sudo docker login registry.gitlab.com
+	@sh ./bin/docker-setup.sh
 	@echo "All configurations are set. System restart maybe required."
-	@echo "Use 'make run' command to start development. Development server will run on 0.0.0.0:8001"
+	@echo "Login to Gitlab for docker container registry (Use your conventional Gitlab credentials)"
+	@echo "Command - docker login registry.gitlab.com"
+	@echo "After registry login, use 'make run' command to start development. Development server will run on 0.0.0.0:8001"
+	newgrp docker
 
+# First time data setup
+initialize: ## Sync with DB and Populate with default data
+	@sh ./bin/post-installation.sh
 
 # Build and run the container
 build: ## Rebuilds container without cache
 	docker-compose build --no-cache
 
-run: ## Spin up the project in development mode
+run: ## Build and spin up the project in development mode for first time on system start
 	@sudo sysctl vm.max_map_count=262144
 	docker-compose down && docker-compose up -d --build
 
-# Backend
-start-pipenv: ## Install all build libraries in web container to enable package installation and open the container. Useful for all `pipenv` manipulations.
-	docker-compose exec web apk add gcc musl-dev postgresql-dev build-base python-dev py-pip
-	docker-compose exec web pipenv install --deploy
-	docker-compose exec web sh
+rerun: ## Run the project again
+	docker-compose down && docker-compose up -d
 
+
+# Logging
+be-logs: ## View recent backend logs
+	@docker-compose logs web
+
+fe-logs: ## View recent frontend logs
+	@docker-compose logs frontend
+
+be-attach: ## Attach to backend logger
+	@docker attach rentality_web_1
+
+fe-attach: ## Attach to frontend logger
+	@docker attach rentality_frontend_1
+
+
+# Backend
+cd-backend: ## Start STANDALONE container from web image which will be ready for development and package installations
+	@sh ./bin/isolated-BE-container.sh
+
+
+# Frontend
+# npm-install: ##
+# 	docker-compose exec frontend npm install
 # Docker release - build, tag and push the container
 # release: build publish ## Make a release by building and publishing the `{version}` ans `latest` tagged containers to ECR
 

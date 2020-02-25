@@ -1,5 +1,7 @@
 #!/bin/bash
-docker-compose exec web sh sync_services.sh
+docker-compose exec web python manage.py collectstatic --noinput
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py initialize_site
 
 read -p "Import Cities Data? [y/n]" opt
 

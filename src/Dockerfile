@@ -2,8 +2,8 @@ FROM registry.gitlab.com/rushil0195/rentality/frontend:latest as frontend-builde
 
 FROM registry.gitlab.com/rushil0195/rentality/base:latest
 
-ARG test_mode=false
-ENV PYTHONUNBUFFERED=1 PIPENV_DEV=$test_mode
+ARG dev_mode=false
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /rentality/src
 
@@ -14,12 +14,13 @@ RUN pip install --upgrade pip
 
 EXPOSE 8000
 
-COPY Pipfile Pipfile.lock ./
+RUN apk add gcc musl-dev postgresql-dev build-base python-dev py-pip curl && pip install gunicorn &&\
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py --output /tmp/get-poetry.py && \
+    python /tmp/get-poetry.py
 
-RUN apk add --virtual .build-deps gcc musl-dev postgresql-dev build-base python-dev py-pip && \
-    pip install pipenv && \
-    pipenv install --deploy --system && \
-    apk --purge del .build-deps
+COPY poetry.lock pyproject.toml poetry.toml ./
+
+RUN . $HOME/.poetry/env && poetry install --no-dev --no-root
 
 COPY . .
 
