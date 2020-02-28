@@ -143,7 +143,7 @@ export function getAvailabilityData(houseUUID) {
                 resolve(ret);
             })
             .catch(error => {
-                handleError(error)
+                reject(handleError(error).error)
             });
     });
 }

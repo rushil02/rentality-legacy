@@ -48,7 +48,7 @@ export default class SearchForm extends Component {
             start_date: startDate,
             end_date: endDate
         });
-    }
+    };
 
     render(){
         return (
@@ -64,7 +64,7 @@ export default class SearchForm extends Component {
                                 <HouseType value={this.state.home_type} onChange={this.onHouseTypeChanged}/>
                                 <Rent value={this.state.rent} onChange={this.onRentChanged} />
                                 <div className="col-md-2">    
-                                    <button className="btn btn-link btn-block" 
+                                    <button className="imp-button-style"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         this.props.onSearchClicked(this.state)}

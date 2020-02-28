@@ -1,4 +1,5 @@
 import APIModelAdapter from "core/utils/ModelHelper";
+import {format} from "date-fns";
 
 export class House extends APIModelAdapter {
     // Declare all Defaults here
@@ -82,17 +83,39 @@ export class HomeOwnerInfo extends APIModelAdapter {
 export class Application extends APIModelAdapter {
     fieldMap() {
         return {
-            bookingStartDate: {key: 'start_date', default: new Date()},
-            bookingEndDate: {key: 'start_date', default: new Date()},
-            numGuests: {key: 'num_guests', default: 1},
-            promoCodes: {key: 'promo_codes', default:[]},
+            applicant: {key: 'tenant_details', adapter: Applicant},
+            bookingInfo: {key: 'booking_info', adapter: BookingInfo},
+            message: {key: 'tenant_message'},
+            houseRulesAgreement:{key: 'agree_to_house_rules', default: false},
+            houseAmountAgreement:{key: 'agree_to_pay', default: false},
+            rentalityRulesAgreement:{key: 'agree_to_tnc', default: false},
+        }
+    }
+}
+
+export class Applicant extends APIModelAdapter {
+    fieldMap() {
+        return {
             firstName: {key: 'first_name'},
             lastName: {key: 'last_name'},
             email: {key: 'email'},
-            contactNum: {key: 'phone_number'},
+            contactNum: {key: 'contact_num'},
             sex: {key: 'sex'},
-            message: {key: 'message'},
-            paymentID: {key: 'payment_id'},
         }
+    }
+}
+
+export class BookingInfo extends APIModelAdapter {
+    fieldMap() {
+        return {
+            bookingStartDate: {key: 'start_date', default: new Date(), serializer: this.dateSerializer},
+            bookingEndDate: {key: 'end_date', default: new Date(), serializer: this.dateSerializer},
+            numGuests: {key: 'guests', default: 1},
+            promoCodes: {key: 'promo_codes', default:[]},
+        }
+    }
+
+    dateSerializer(date){
+        return format(date, "YYYY-MM-DD")
     }
 }

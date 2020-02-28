@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {applyBooking, getApplicantData, getHomeOwnerDetails, getHouseData} from "apply/services";
-import {House, Image, CancellationPolicy, HomeOwnerInfo, Application} from "apply/models";
+import {House, Image, CancellationPolicy, HomeOwnerInfo, Application, Applicant} from "apply/models";
 import HouseDetailPageComponent from "./HouseDetailPageComponent";
 import {APIModelListAdapter, PostalLocation} from "core/utils/ModelHelper";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
+import {alertUser} from "core/alert/Alert";
 
 
 export default class HouseDetailPage extends Component {
@@ -59,7 +60,9 @@ export default class HouseDetailPage extends Component {
             .then(result => {
                 this.setState(prevState => ({
                     ...prevState,
-                    application: prevState.application.bulkUpdate(result, 'DB'),
+                    application: prevState.application.setData('applicant',
+                        prevState.application.getData('applicant').bulkUpdate(result, 'DB')
+                    )
                 }))
             })
     }
@@ -70,28 +73,38 @@ export default class HouseDetailPage extends Component {
             application: prevState.application.bulkUpdate({
                 bookingStartDate: startDate,
                 bookingEndDate: endDate
-            }, 'int'),
+            }, 'int', ['bookingInfo']),
         }))
     };
 
-    handleApplicationChange = (field, value) => {
+    handleApplicationChange = (field, value, parent) => {
         this.setState(prevState => ({
             ...prevState,
-            application: prevState.application.setData(field, value)
+            application: prevState.application.setData(field, value, parent)
         }))
     };
 
     submitApplication = () => {
         let that = this;
-        return new Promise(function (resolve, reject){
+        return new Promise(function (resolve, reject) {
             applyBooking(that.houseUUID, that.state.application)
-                .then(() => {
-                    console.log("Submitted successfully");
-                    resolve()
+                .then(result => {
+                    console.log("Submitted successfully", result);
+                    resolve(result)
                 })
                 .catch(error => {
-                    console.log("submission error", error);
-                    reject()
+                    if (error.badRequest) {
+                        alertUser.init({
+                            message:"Please fill in all the details to make a booking.",
+                            alertType:'warning',
+                            autoHide:true
+                        });
+                        that.setState(prevState => ({
+                            ...prevState,
+                            application: prevState.application.parseError(error.error.response.data),
+                        }));
+                    }
+                    reject(error)
                 })
         })
     };

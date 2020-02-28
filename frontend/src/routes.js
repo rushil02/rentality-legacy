@@ -1,6 +1,7 @@
 import {include} from 'named-urls';
 import houseListingRoutes from 'houseListing/routes';
 import userRoutes from 'userAccount/routes';
+import applyRoutes from 'apply/routes'
 
 export default {
     static_route: '/static/',
@@ -26,20 +27,24 @@ export default {
         houseListing: include('house/list', houseListingRoutes.interface),
         user: include('user', userRoutes.interface),
         searchPage: 'search',
+        apply:  include('apply', applyRoutes.interface),
     }),
 
-    // APIs
+    /********************************* APIs *********************************/
     userNavInfo: '/user-nav-info',
-    application: include('/apply', {
-        bookingDetails: 'amount/:houseUUID',
-        create: 'create-app/:houseUUID',
-        tenant: 'tenant-details',
-        complete: 'comp'
-    }),
-    promo: include('/promo', {
-        verifyApplicationDiscount: 'verify-promo-use/application/tenant',
-        verifyHouseDiscount: 'verify-promo-use/house/home_owner'
-    }),
+    // application: include('/apply', {
+    //     bookingDetails: 'amount/:houseUUID',
+    //     create: 'create-app/:houseUUID',
+    //     tenant: 'tenant-details',
+    //     complete: 'comp'
+    // }),
+
+    // promo: include('/promo', {
+    //     verifyApplicationDiscount: 'verify-promo-use/application/tenant',
+    //     verifyHouseDiscount: 'verify-promo-use/house/home_owner'
+    // }),
+
+    apply: include( '/app', applyRoutes.APIs),
 
     house: include('/property', houseListingRoutes.APIs),
 

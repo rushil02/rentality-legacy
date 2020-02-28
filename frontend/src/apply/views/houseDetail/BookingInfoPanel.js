@@ -152,6 +152,7 @@ export default class BookingInfoPanel extends Component {
                                             minDate={this.state.minDate}
                                             disabledDates={this.state.unavailableDates}
                                             months={1}
+                                            minRangeLength={28}
                                             showDateDisplay={false}
                                             minRange={1}
                                         />

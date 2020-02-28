@@ -8,6 +8,6 @@ export default {
         homeOwnerDetails: '/ho/gen-info/:houseUUID', // URL starts from root
         availableDates: '/property/current-availability/:houseUUID', // URL starts from root
         unavailableDates: '/property/current-unavailability/:houseUUID', // URL starts from root
-        applyBooking: '/book/:houseUUID'
+        applyBooking: 'initiate/:houseUUID'
     }
 }

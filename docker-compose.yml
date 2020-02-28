@@ -46,7 +46,7 @@ services:
     image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
     entrypoint: npm run dev
     volumes:
-      - './frontend/src:/app/src'
+      - './frontend:/app'
       - './src/static/v2/frontend:/app/dist'
   web:
     build:

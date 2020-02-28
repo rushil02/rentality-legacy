@@ -52,10 +52,13 @@ fe-attach: ## Attach to frontend logger
 cd-backend: ## Start STANDALONE container from web image which will be ready for development and package installations
 	@sh ./bin/isolated-BE-container.sh
 
+# Frontend
+cd-frontend: ## Start STANDALONE container from frontend image which will be ready for development and package installations
+	@sh ./bin/isolated-FE-container.sh
+
 
 # Frontend
-# npm-install: ##
-# 	docker-compose exec frontend npm install
+
 # Docker release - build, tag and push the container
 # release: build publish ## Make a release by building and publishing the `{version}` ans `latest` tagged containers to ECR
 

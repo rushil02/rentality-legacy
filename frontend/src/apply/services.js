@@ -58,10 +58,10 @@ export function applyBooking(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios.post(reverse(routes.apply.applyBooking, {houseUUID: houseUUID}), data.serialize())
             .then(result => {
-                resolve();
+                resolve(result);
             })
             .catch(error => {
-                reject(handleError(error).error);
+                reject(handleError(error));
             })
     })
 }
