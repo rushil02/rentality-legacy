@@ -4,7 +4,6 @@ from business_core.models import CancellationPolicy
 from cities_custom.serializers import PostalCodeSerializer
 from essentials.serializers import PolicyPublicSerializer
 from house.models import HouseRule, House, Image
-from user_custom.serializers.profile import UserPublicSerializer
 
 
 class HouseRulesPublicSerializer(serializers.ModelSerializer):
@@ -57,3 +56,29 @@ class DateRangeSerializer(serializers.Serializer):
 
     def get_end_date(self, obj):
         return obj.upper
+
+
+class HouseShortInfoSerializer(serializers.ModelSerializer):
+    """
+    Serializes minimal information of the house
+    """
+    home_type = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='name'
+    )
+    location = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='name_full'
+    )
+    cancellation_policy = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='verbose'
+    )
+    status = serializers.CharField(source='get_status_display')
+
+    class Meta:
+        model = House
+        fields = (
+            'uuid', 'title', 'address_hidden', 'address', 'location', 'home_type',
+            'rent', 'cancellation_policy', 'status',
+        )

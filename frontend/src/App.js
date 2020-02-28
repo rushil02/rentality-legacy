@@ -21,6 +21,7 @@ import {PrivateRoute} from "core/auth/utils";
 const HouseListing = React.lazy(() => import("houseListing/Router"));
 const User = React.lazy(() => import("userAccount/Router"));
 const Apply = React.lazy(() => import("apply/Router"));
+const Dashboard = React.lazy(() => import("dashboard/Router"));
 // const SearchPage = React.lazy(() => import ("search/Router"));
 
 
@@ -66,6 +67,13 @@ class App extends Component {
                                     render={(props) =>
                                         <Suspense fallback={<ComponentLoadingSpinner/>}>
                                             <User {...props}/>
+                                        </Suspense>}
+                                />
+                                <PrivateRoute
+                                    path={routes.react.dashboard.base}
+                                    render={(props) =>
+                                        <Suspense fallback={<ComponentLoadingSpinner/>}>
+                                            <Dashboard {...props}/>
                                         </Suspense>}
                                 />
                                 <Route

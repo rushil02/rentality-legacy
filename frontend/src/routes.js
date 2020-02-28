@@ -1,7 +1,8 @@
 import {include} from 'named-urls';
 import houseListingRoutes from 'houseListing/routes';
 import userRoutes from 'userAccount/routes';
-import applyRoutes from 'apply/routes'
+import applyRoutes from 'apply/routes';
+import dashboardRoutes from 'dashboard/routes';
 
 export default {
     static_route: '/static/',
@@ -12,7 +13,7 @@ export default {
     blogs: '/blogs/',
     howItWorks: '/pages/how-it-works/',
     propertyInfo: '/property/info/:houseUUID',
-    dashboard: '/',
+    // dashboard: '/',
     contactUs: '/pages/contact-us/',
 
     auth: include('/accounts', {
@@ -27,7 +28,8 @@ export default {
         houseListing: include('house/list', houseListingRoutes.interface),
         user: include('user', userRoutes.interface),
         searchPage: 'search',
-        apply:  include('apply', applyRoutes.interface),
+        apply: include('apply', applyRoutes.interface),
+        dashboard: include('dashboard', dashboardRoutes.interface),
     }),
 
     /********************************* APIs *********************************/
@@ -60,6 +62,7 @@ export default {
         house: 'house/search',
         location: 'location_sugg'
     }),
+    dashboard: include('/dashboard', dashboardRoutes.APIs),
 };
 
 

@@ -56,7 +56,6 @@ export default class FormRentAvailabilityContainer extends Component {
 
 
     onSave = (e) => {
-        e.stopPropagation();
         const that = this;
         return new Promise(function (resolve, reject) {
             patchHouseData(that.props.houseUUID, that.state.data)
@@ -86,6 +85,7 @@ export default class FormRentAvailabilityContainer extends Component {
                 maxPeopleAllowed={this.state.data.getData('maxPeopleAllowed')}
                 errors={this.state.data.errors}
                 houseUUID={this.props.houseUUID}
+                formID={this.formID}
             />
         )
     }

@@ -30,9 +30,11 @@ run: ## Build and spin up the project in development mode for first time on syst
 	@sudo sysctl vm.max_map_count=262144
 	docker-compose down && docker-compose up -d --build
 
-rerun: ## Run the project again
+restart: ## Shutdown and Run the project again
 	docker-compose down && docker-compose up -d
 
+fast-run: ## Spin up the project without build
+	@docker-compose up -d
 
 # Logging
 be-logs: ## View recent backend logs

@@ -22,7 +22,7 @@ conventions are closely analogous to the naming in Django app layer, however the
 on the Process/Functionality. Each App package (depending on functionality) should commonly contain the following files - 
 - routes.js (URL definitions)
 - services.js (Transfer/Interaction layer ~ Controller) 
-- adapters.js (DTO and validations ~ Model)
+- models.js (DTO and validations ~ Model)
 - view (~ View & Templates)       
   - [App.js] ---- Can be stateful/ or stateless depending on functionality, or can just be a dispatcher.            
   - [functionality/purpose] ---- Can use Recursive Nesting #1
@@ -83,7 +83,7 @@ export default {
 }
 ```
 
-#### Adapters
+#### Models
 Data transformation and validation
 
 ```

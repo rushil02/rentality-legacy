@@ -150,7 +150,7 @@ export default class AvailabilitySelectorComponent extends Component {
     };
 
     getRemoveButton = () => {
-        if (this.props.modeNew) {
+        if (this.props.modeNew && !this.props.modeEditing) {
             return (" ")
         } else {
             return (
