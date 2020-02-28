@@ -50,7 +50,6 @@ class BillingCountryView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-
 class ProfilePicUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAuthenticated,)

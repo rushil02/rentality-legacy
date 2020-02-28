@@ -39,4 +39,19 @@ class UserInfoSerializer(serializers.ModelSerializer):
 class ProfileImageUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['profile_pic']
+        fields = ('profile_pic',)
+
+
+class UserPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('first_name', 'last_name', )
+
+
+class UserProfilePublicSerializer(serializers.ModelSerializer):
+    personality_tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
+    user = UserPublicSerializer(read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ('personality_tags', 'profile_pic', 'business_name', 'user')

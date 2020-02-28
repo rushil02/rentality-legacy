@@ -166,7 +166,7 @@ class Account(models.Model):
                 related account(s).
     """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    details = JSONField(default={})
+    details = JSONField(default=dict)
     payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
     create_time = models.DateTimeField(auto_now_add=True)
 

@@ -14,6 +14,7 @@ class LocationCitySerializer(serializers.ModelSerializer):
 class PostalCodeSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PostalCodeCustom
+        depth = 1
         geo_field = "location"
         exclude = ['slug', ]
 

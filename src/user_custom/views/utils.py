@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -52,3 +53,14 @@ def set_timezone(request):
 @permission_classes((IsAuthenticated,))
 def get_stripe_publishable_key(request):
     return Response({'publishable_key': settings.STRIPE_PUBLISHABLE_KEY}, status=status.HTTP_200_OK)
+
+
+def create_user_for_anon(first_name, email, send_mail=True, **kwargs):
+    user_class = get_user_model()
+    user = user_class.objects.create_user(
+        email=email, password=user_class.objects.make_random_password(),
+        first_name=first_name, **kwargs
+    )
+    if send_mail:
+        ...  # TODO: send email
+    return user
