@@ -69,9 +69,37 @@ def date_range_difference(date_range_1, date_range_2):
     return ranges
 
 
+def date_range_difference_residual(principal_range, *args):
+    """
+    Subtracts all dates (all additional arguments) from principal_range
+    WARNING: Expects SORTED list of ranges which are to be subtracted and they cannot overlap each other.
+
+    :param principal_range: psycopg2.extras.DateRange object
+    :param args: psycopg2.extras.DateRange object
+    :return: list
+    """
+
+    if len(args) > 0:
+        try:
+            sub_ranges = date_range_difference(principal_range, args[0])
+        except OutOfLowerBoundException:
+            return date_range_difference_residual(principal_range, *args[1:])
+        except OutOfUpperBoundException:
+            return [principal_range]
+        else:
+            result = []
+            if sub_ranges['left']:
+                result.append(sub_ranges['left'])
+            if sub_ranges['right']:
+                result.append(date_range_difference_residual(sub_ranges['right'], *args[1:]))
+            return result
+    else:
+        return [principal_range]
+
+
 def merge_dates(date_range_1, date_range_2):
     """
-    Merege 2 Date Ranges if possible or raise error [in reference to date_range_1]
+    Merge 2 Date Ranges if possible or raise error [in reference to date_range_1]
     :param date_range_1:
     :param date_range_2:
     :return:
@@ -134,9 +162,11 @@ def validate_date_range(house, date_range):
         return False, None
 
 
+# FIXME: Remove Periodic info in accordance with updated model
 def get_available_dates(house, from_year=None, till_year=None):
     """
-    Important: The availability records of a house should not have duplicate, overlapping or colliding date_ranges.
+    The availability records of a house if contain duplicate, overlapping or colliding date_ranges, then this method
+    itself will filter and merge appropriately.
 
     :param house: house object
     :param from_year: integer - 2xxx
@@ -197,7 +227,6 @@ def get_available_dates(house, from_year=None, till_year=None):
         Finds all available dates within a single principal_range and Updates available_dates directly
 
         :param principal_range: psycopg2.extras.DateRange object
-        :param applications:
         :return: None
         """
         nonlocal available_dates, applications
@@ -237,3 +266,48 @@ def get_available_dates(house, from_year=None, till_year=None):
         get_and_update_diffs(avail_obj)
 
     return available_dates
+
+
+def get_unavailable_dates(house, from_date=None, till_date=None, inc_last=True):
+    """
+    Important: The availability records of a house should not have duplicate, overlapping or colliding date_ranges.
+
+    :param house: 'house.models.House' object
+    :param from_date: 'datetime.date' object
+    :param till_date: 'datetime.date' object
+    :param inc_last: 'boolean' - if true, till_date is only validated for Date Range's lower date
+                     value and not the complete date Range
+    :return: list of 'psycopg2.extras.DateRange' objects
+    """
+
+    applications = list(house.application_set.all().values_list('date', flat=True))
+    applications.sort(key=lambda x: x.lower)
+
+    availabilities = list(house.availability_set.all().values_list('dates', flat=True))
+    availabilities.sort(key=lambda x: x.lower)
+
+    available_dates = []
+
+    if len(applications) == 0:
+        for availability in availabilities:
+            valid, updated_date_range = validate_date_range(house=house, date_range=availability)
+            if valid:
+                available_dates.append(updated_date_range)
+    else:
+        for availability in availabilities:
+            residual_date_ranges = date_range_difference_residual(availability, *applications)
+            for date_range in residual_date_ranges:
+                valid, updated_date_range = validate_date_range(house=house, date_range=date_range)
+                if valid:
+                    available_dates.append(updated_date_range)
+
+    # invert dates, ie. convert available to unavailable dates
+    unavailable_dates = []
+    lower_date = None
+    for date_range in available_dates:
+        upper_date = date_range.lower
+        unavailable_dates.append(DateRange(lower=lower_date, upper=upper_date))
+        lower_date = date_range.upper
+    unavailable_dates.append(DateRange(lower=lower_date, upper=None))
+
+    return unavailable_dates

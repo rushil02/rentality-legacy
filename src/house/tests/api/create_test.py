@@ -1,10 +1,11 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from house.views.api.create import FormOptionsView, HouseView, HouseRelatedObjectView, HouseRulesView
+from house.views.api.create import FormOptionsView, HouseView, FacilityListView, HouseRuleListCreateView, \
+    HouseRuleListView
 from house.models import House, HomeType, Facility, Rule, HouseRule
 
 from rest_framework.test import APIRequestFactory, force_authenticate
-import pprint
+
 
 class DefaultTestData:
     @classmethod
@@ -53,7 +54,7 @@ class GetFormOptionsTestCase(TestCase):
 
 
 class CreateHouseTest(TestCase):
-    fixtures = ['tests/fixtures/test_cities.json',]
+    fixtures = ['tests/fixtures/test_cities.json', ]
 
     test_cases = [
         {
@@ -139,9 +140,9 @@ class CreateHouseTest(TestCase):
             "location": 22
         }
 
-        put_request = self.factory.put('', data)
-        force_authenticate(put_request, user=self.user)
-        response = HouseView.as_view()(put_request, house_uuid=uuid)
+        patch_request = self.factory.patch('', data)
+        force_authenticate(patch_request, user=self.user)
+        response = HouseView.as_view()(patch_request, house_uuid=uuid)
         self.assertEqual(response.data['title'], "Testing")
 
         get_request = self.factory.get('')
@@ -158,8 +159,8 @@ class FacilityTestCase(TestCase):
         self.user = DefaultTestData.create_test_user()
         DefaultTestData.create_test_house_data()
         Facility.objects.create(id=1, verbose='A', system_default=True)
-        Facility.objects.create(verbose='B', system_default=True)
-        Facility.objects.create(verbose='C', system_default=False)
+        Facility.objects.create(id=2, verbose='B', system_default=True)
+        Facility.objects.create(id=3, verbose='C', system_default=False)
     
     def create_house(self):
         data = {
@@ -175,7 +176,7 @@ class FacilityTestCase(TestCase):
         self.create_house()
         get_request = self.factory.get('')
         force_authenticate(get_request, user=self.user)
-        response = HouseRelatedObjectView.as_view()(get_request, house_uuid=self.uuid, model="facility")
+        response = FacilityListView.as_view()(get_request, house_uuid=self.uuid)
         self.assertEqual(len(response.data), 2)
     
     def test_add_facilities(self):
@@ -183,12 +184,13 @@ class FacilityTestCase(TestCase):
         data = [
             {
                 "verbose": "E",
-                "checked": True    
+                "checked": True,
+                "id": None
             },
         ]
         post_request = self.factory.post('', data, format='json')
         force_authenticate(post_request, user=self.user)
-        response = HouseRelatedObjectView.as_view()(post_request, house_uuid=self.uuid, model="facility")
+        response = FacilityListView.as_view()(post_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         house = House.objects.get(uuid=self.uuid)
         self.assertEqual(house.facilities.all().count(), 1)
@@ -197,12 +199,13 @@ class FacilityTestCase(TestCase):
         data = [
             {
                 "verbose": "F",
-                "checked": False    
+                "checked": False,
+                "id": None
             },
         ]
         post_request = self.factory.post('', data, format='json')
         force_authenticate(post_request, user=self.user)
-        response = HouseRelatedObjectView.as_view()(post_request, house_uuid=self.uuid, model="facility")
+        response = FacilityListView.as_view()(post_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(house.facilities.all().count(), 1)
         self.assertEqual(Facility.objects.all().count(), 4)
@@ -210,12 +213,13 @@ class FacilityTestCase(TestCase):
         data = [
             {
                 "verbose": "E",
-                "checked": False    
+                "checked": False,
+                "id": None
             },
         ]
         post_request = self.factory.post('', data, format='json')
         force_authenticate(post_request, user=self.user)
-        response = HouseRelatedObjectView.as_view()(post_request, house_uuid=self.uuid, model="facility")
+        response = FacilityListView.as_view()(post_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(house.facilities.all().count(), 0)
         self.assertEqual(Facility.objects.all().count(), 4)
@@ -229,7 +233,7 @@ class FacilityTestCase(TestCase):
         ]
         post_request = self.factory.post('', data, format='json')
         force_authenticate(post_request, user=self.user)
-        response = HouseRelatedObjectView.as_view()(post_request, house_uuid=self.uuid, model="facility")
+        response = FacilityListView.as_view()(post_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(house.facilities.all().count(), 0)
         self.assertEqual(Facility.objects.all().count(), 4)
@@ -242,12 +246,13 @@ class FacilityTestCase(TestCase):
             },
             {
                 "verbose": "F",
-                "checked": True    
+                "checked": True,
+                "id": None
             },
         ]
         post_request = self.factory.post('', data, format='json')
         force_authenticate(post_request, user=self.user)
-        response = HouseRelatedObjectView.as_view()(post_request, house_uuid=self.uuid, model="facility")
+        response = FacilityListView.as_view()(post_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(house.facilities.all().count(), 2)
         self.assertEqual(Facility.objects.all().count(), 5)
@@ -261,7 +266,7 @@ class FacilityTestCase(TestCase):
         ]
         post_request = self.factory.post('', data, format='json')
         force_authenticate(post_request, user=self.user)
-        response = HouseRelatedObjectView.as_view()(post_request, house_uuid=self.uuid, model="facility")
+        response = FacilityListView.as_view()(post_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 400)
 
 
@@ -287,14 +292,14 @@ class EditHouseRulesTestCase(TestCase):
         self.create_house()
         get_request = self.factory.get('')
         force_authenticate(get_request, user=self.user)
-        response = HouseRulesView.as_view()(get_request, house_uuid=self.uuid)
+        response = HouseRuleListCreateView.as_view()(get_request, house_uuid=self.uuid)
         self.assertEqual(len(response.data), 5)
 
         data = [
         ]
         put_request = self.factory.put('', data, format='json')
         force_authenticate(put_request, user=self.user)
-        response = HouseRulesView.as_view()(put_request, house_uuid=self.uuid)
+        response = HouseRuleListCreateView.as_view()(put_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(HouseRule.objects.filter(house__uuid=self.uuid).count(), 5)
 
@@ -306,7 +311,7 @@ class EditHouseRulesTestCase(TestCase):
         ]
         put_request = self.factory.put('', data, format='json')
         force_authenticate(put_request, user=self.user)
-        response = HouseRulesView.as_view()(put_request, house_uuid=self.uuid)
+        response = HouseRuleListCreateView.as_view()(put_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(HouseRule.objects.filter(house__uuid=self.uuid).count(), 5)
 
@@ -317,7 +322,7 @@ class EditHouseRulesTestCase(TestCase):
         ]
         put_request = self.factory.put('', data, format='json')
         force_authenticate(put_request, user=self.user)
-        response = HouseRulesView.as_view()(put_request, house_uuid=self.uuid)
+        response = HouseRuleListCreateView.as_view()(put_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(HouseRule.objects.filter(house__uuid=self.uuid).count(), 5)
 
@@ -331,7 +336,7 @@ class EditHouseRulesTestCase(TestCase):
         ]
         put_request = self.factory.put('', data, format='json')
         force_authenticate(put_request, user=self.user)
-        response = HouseRulesView.as_view()(put_request, house_uuid=self.uuid)
+        response = HouseRuleListCreateView.as_view()(put_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(HouseRule.objects.filter(house__uuid=self.uuid).count(), 5)
         self.assertEqual(HouseRule.objects.get(id=rule.id).value, "Other")
@@ -350,7 +355,7 @@ class EditHouseRulesTestCase(TestCase):
         ]
         put_request = self.factory.put('', data, format='json')
         force_authenticate(put_request, user=self.user)
-        response = HouseRulesView.as_view()(put_request, house_uuid=self.uuid)
+        response = HouseRuleListCreateView.as_view()(put_request, house_uuid=self.uuid)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(HouseRule.objects.filter(house__uuid=self.uuid).count(), 5)
         self.assertEqual(HouseRule.objects.get(id=rule1.id).value, "Not Acceptable")

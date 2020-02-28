@@ -62,16 +62,6 @@ def get_rent_info(request, house_uuid):
     pass
 
 
-class HouseDetailPublicView(RetrieveModelMixin, GenericAPIView):
-    serializer_class = HouseDetailsPublicSerializer
-    queryset = House.objects.all()
-    lookup_field = 'uuid'
-    lookup_url_kwarg = 'house_uuid'
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-
 class ImagesPublicView(GenericAPIView):
     serializer_class = ImagePublicSerializer
 

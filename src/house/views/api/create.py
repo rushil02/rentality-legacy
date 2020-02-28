@@ -13,7 +13,7 @@ from business_core.serializers import CancellationPolicySerializer
 from house.models import Availability, House, HomeType, Facility, NeighbourhoodDescriptor, WelcomeTag, HouseRule, Rule, \
     Image
 from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
-from house.serializers import ImageUploadSerializer, NeighbourhoodDescriptorSerializer, \
+from house.serializers.create import ImageUploadSerializer, NeighbourhoodDescriptorSerializer, \
     WelcomeTagSerializer, HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer, \
     HouseRuleCreateSerializer, FacilitySerializer, RuleReadSerializer
 from utils.api_thumbnailer import resize_image

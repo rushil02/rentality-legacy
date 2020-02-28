@@ -3,14 +3,19 @@ from django.urls import path
 from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
     FacilityListView, HouseRuleListView, HouseRuleListCreateView, ImagesListView, ImageView, \
     ApplicableCancellationPolicyListView, CancellationPolicyView, NeighbourhoodDescriptorListView, WelcomeTagsListView
+from house.views.api.actions import ActivateHouseListing, DeactivateHouseListing
+from house.views.api.read import HouseDetailsPublicView, NetAvailableDatesView, NetUnavailableDatesView
+
 from house.views.old import search_house_page, search_house_api
+
 from utils.api_utils import location_list, LocationAutocomplete
+
 from house.views import info, create, edit, \
-    home_owner_account_details, apply_temp, remove_from_public, delete, HouseDetailPublicView, \
+    home_owner_account_details, apply_temp, remove_from_public, delete, \
     ImagesPublicView, ThumbnailPublicView
 
-from house.views.api import NetAvailableDatesView
-from house.views.api.actions import ActivateHouseListing, DeactivateHouseListing
+# from house.views.api import NetAvailableDatesView
+
 
 app_name = 'house'
 
@@ -29,10 +34,11 @@ urlpatterns = [
     path('rem/<uuid:house_uuid>', remove_from_public, name='remove_public'),
 
     # APIs
-    path('detail/<uuid:house_uuid>', HouseDetailPublicView.as_view(), name='detail_api'),
+    path('detail/<uuid:house_uuid>', HouseDetailsPublicView.as_view(), name='detail_api'),
     path('all-images/<uuid:house_uuid>', ImagesPublicView.as_view(), name='all_images'),
     path('thumbnail/<uuid:house_uuid>', ThumbnailPublicView.as_view(), name='thumbnail'),
     path('current-availability/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='curr_avail'),
+    path('current-unavailability/<uuid:house_uuid>', NetUnavailableDatesView.as_view(), name='curr_avail_rev'),
 
     # Creation APIs
     path('create/api', HouseView.as_view(), name='create_api'),

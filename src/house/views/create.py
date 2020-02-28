@@ -17,7 +17,6 @@ from house.forms import HouseDetailsForm1, HouseDetailsForm2, HouseDetailsForm3,
     HousePhotoFormSet, HouseDeleteForm, HouseRemoveTypeForm, HouseMarkLeasedForm, HouseRemoveForm, HouseForm, \
     AvailabilityFormSet, HouseRuleFormSet, SubmitOptionsForm
 from house.models import House, Image, Facility, HouseRule, NeighbourhoodDescriptor, WelcomeTag
-from house.serializers import ImageSerializer
 from cities.models import Country
 from payments.stripe_wrapper import create_account, get_account
 from user_custom.forms import ProfilePictureForm
