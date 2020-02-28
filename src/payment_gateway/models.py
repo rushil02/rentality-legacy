@@ -89,7 +89,7 @@ class PaymentGatewayLocationManager(models.Manager):  # TODO
 
 class PaymentGatewayLocation(models.Model):
     """
-    Maps available payment gateways ('admin_custom.PaymentGateway') to locations it is active
+    Maps available payment gateways ('payment_gateway.PaymentGateway') to locations it is active
     in or default to.
 
     Each payment gateway will have specific requirements depending on the country it is being

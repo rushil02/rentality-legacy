@@ -23,13 +23,23 @@ class PaymentGateway(object):
 
     def __init__(self, payment_gateway_location):
         """
-        :param payment_gateway_location: `admin_custom.models.PaymentGatewayLocation` object
+        :param payment_gateway_location: `payment_gateway.models.PaymentGatewayLocation` object
         """
         self._payment_gateway = get_adaptor_class(payment_gateway_location.payment_gateway.code)()
 
-
     def get_transaction_record(self):
         return
+
+    def parse_PII(self, user):
+        return {
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'dob': user.userprofile.dob,
+            'country': user.get_billing_location(),  # FIXME: PArse
+            'street_address': user.userprofile.billing_street_address,
+
+        }
 
     def perform_pay_in(self, amount):
         self._payment_gateway.process_pay_in(amount)
@@ -40,13 +50,16 @@ class PaymentGateway(object):
     def perform_refund(self, amount):
         self._payment_gateway.process_refund(amount)
 
-    def create_account(self, user, **kwargs):
-        user_details = {
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'dob': ''
-        }
+    def create_pay_out_account(self, user, **kwargs):
+        self._payment_gateway.create_home_owner_account()
+
+    def update_pay_out_account(self, user, **kwargs):
+        self._payment_gateway.create_home_owner_account()
+
+    def create_pay_in_account(self, user, **kwargs):
+        self._payment_gateway.create_home_owner_account()
+
+    def update_pay_in_account(self, user, **kwargs):
         self._payment_gateway.create_home_owner_account()
 
 

@@ -205,6 +205,7 @@ class StripePaymentGateway(PaymentGatewayBase):
 
     def create_home_owner_account(self, user_info):
         execute_request()
+
     def get_or_create_tenant_account(self, *args, **kwargs):
         pass
 

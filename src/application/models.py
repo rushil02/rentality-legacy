@@ -14,12 +14,17 @@ from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
 from utils.model_utils import next_ref_code, get_nested_info
 
 STATUS_CHOICES = (
+    ('I', 'Incomplete'),
     ('P', 'Pending'),
     ('A', 'Accepted'),
     ('D', 'Declined'),
-    ('T', 'Timeout'),
-    ('E', 'Transaction Error'),
-    ('B', 'Booked')
+    ('E', 'Error'),
+    ('B', 'Booked'),
+    ('C', 'Cancelled'),
+    ('O', 'In-Effect/In-Stay'),
+    ('Z', 'Complete'),
+    ('X', 'In-Dispute'),
+    ('R', 'Dispute Resolved'),
 )
 
 

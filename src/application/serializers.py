@@ -44,8 +44,7 @@ class GuestDetailsSerializer(serializers.Serializer):
 class ApplicationCreateSerializer(serializers.Serializer):
     booking_info = BookingInfoSerializer()
     tenant_message = serializers.CharField()
-    agree_to_pay = serializers.BooleanField()
     tenant_details = GuestDetailsSerializer()
-    stripe_token = serializers.CharField()
     agree_to_tnc = serializers.BooleanField()
+    agree_to_pay = serializers.BooleanField()
     agree_to_house_rules = serializers.BooleanField()
