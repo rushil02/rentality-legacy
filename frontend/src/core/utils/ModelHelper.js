@@ -379,7 +379,11 @@ export class APIModelListAdapter {
     }
 
     getObjectList() {
-        // returns list of objects
+        // returns list of (id, object)
+        return Object.entries(this._data)
+    }
+
+    getObjects() {
         return this._data
     }
 

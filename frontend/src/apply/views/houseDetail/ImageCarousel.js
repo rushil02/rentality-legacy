@@ -49,13 +49,13 @@ export default class ImageCarousel extends Component {
                        dialogClassName={styles.imageDisplayModal} backdropClassName={styles.imageDisplayBackdrop}
                        centered>
                     <Slider {...settingsModalSlider} initialSlide={this.state.clickedImage}>
-                        {Object.entries(this.props.images.getObjectList()).map((item, index) =>
+                        {this.props.images.getObjectList().map((item, index) =>
                             <img src={item[1].getData('image')} alt={item[0]} key={item[0]}/>
                         )}
                     </Slider>
                 </Modal>
                 <Slider {...settingsSlider}>
-                    {Object.entries(this.props.images.getObjectList()).map((item, index) =>
+                    {this.props.images.getObjectList().map((item, index) =>
 
                         <img src={item[1].getData('image')} alt={item[0]} key={item[0]}
                              onClick={() => this.setState({showImageModal: true, clickedImage: index})}/>

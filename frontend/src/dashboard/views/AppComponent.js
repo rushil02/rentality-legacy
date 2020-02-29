@@ -60,7 +60,7 @@ export default class AppComponent extends Component {
                         <div className="row">
                             <div className="col-md-12 col-lg-12 col-xl-12">
                                 <h2>Property Listing </h2>
-                                {Object.entries(this.props.houses.getObjectList()).map((house, index) =>  <GetHouseListing key={house[0]} house={house[1]}/>)}                              
+                                {this.props.houses.getObjectList().map((house, index) =>  <GetHouseListing key={house[0]} house={house[1]}/>)}
                                 <h2>Bookings </h2>
                                 <div className={styles.board}>
                                     <div className="row">

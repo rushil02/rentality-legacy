@@ -171,7 +171,7 @@ export default class NeighbourhoodDescriptorsContainer extends Component {
     render() {
         return(
             <NeighborhoodDescriptorsComponent
-                data={this.state.descriptors.getList()}
+                data={this.state.descriptors.getObjects()}
                 otherDescription={this.state.house.getData('neighbourhoodDescription')}
                 onOtherDescriptionChange={this.onOtherDescriptionChange}
                 onNBDescriptorChange={this.onNBDescriptorUpdate}

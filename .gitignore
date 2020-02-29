@@ -30,3 +30,5 @@ services/
 rentality/
 bin/old/
 nginx/production/
+
+src/__test_emails
