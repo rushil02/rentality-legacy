@@ -1,18 +1,18 @@
-import APIModelAdapter, { DateRangeModel } from "core/utils/ModelHelper";
+import APIModelAdapter, {DateRangeModel} from "core/utils/ModelHelper";
 
 export class PostalCodeSearchModel extends APIModelAdapter {
     //Declare all defaults here
 
     fieldMap() {
         return {
-            id: { key: "_id" },
+            id: {key: "_id"},
             parent_verbose: {
                 key: "_source",
                 parser: this.parentVerboseParser
             },
             // geo_point_lat: {key:'geo_point_lat',},
             // geo_point_lon: {key:'geo_point_lon',},
-            verbose: { key: "_source", parser: this.verboseParser }
+            verbose: {key: "_source", parser: this.verboseParser}
         };
     }
 
@@ -36,19 +36,19 @@ export class ESHouse extends APIModelAdapter {
 
     fieldMap() {
         return {
-            address: { key: "address" },
+            address: {key: "address"},
             // create_time: {key: 'create_time'},
             // geo_point_lat: {key:'geo_point_lat',},
             // geo_point_lon: {key:'geo_point_lon',},
-            homeType: { key: "home_type" },
-            leased: { key: "leased" },
-            location: { key: "location" },
-            minStay: { key: "min_stay" },
-            rent: { key: "rent" },
-            thumbnail: { key: "thumbnail" },
-            title: { key: "title" },
-            userImage: { key: "user_image" },
-            uuid: { key: "uuid" }
+            homeType: {key: "home_type"},
+            leased: {key: "leased"},
+            location: {key: "location"},
+            minStay: {key: "min_stay"},
+            rent: {key: "rent"},
+            thumbnail: {key: "thumbnail"},
+            title: {key: "title"},
+            userImage: {key: "user_image"},
+            uuid: {key: "uuid"}
         };
     }
 }
@@ -56,9 +56,9 @@ export class ESHouse extends APIModelAdapter {
 export class SearchFormModel extends APIModelAdapter {
     fieldMap() {
         return {
-            location: { key: "location" },
-            locationSuggestion: { key: "loc_sugg" },
-            homeType: { key: "home_type" },
+            location: {key: "location"},
+            locationSuggestion: {key: "loc_sugg"},
+            homeType: {key: "home_type"},
             startDate: {
                 key: "start_date",
                 default: this.getDate(4),
@@ -69,7 +69,9 @@ export class SearchFormModel extends APIModelAdapter {
                 default: this.getDate(34),
                 parser: this.dateParser
             },
-            rent: { key: "rent" }
+            rent: {key: "rent"},
+            paginationStart: {key: "pagination-start", default: 0},
+            paginationEnd: {key: "pagination-end", default: 12}
         };
     }
 
@@ -84,5 +86,10 @@ export class SearchFormModel extends APIModelAdapter {
         let a = dateString.split("-");
         let b = a[2] + "-" + a[1] + "-" + a[0];
         return new Date(b);
+    }
+
+    nextPagination = (offset) => {
+        this.setData('paginationStart', this.getData('paginationStart') + offset);
+        this.setData('paginationEnd', this.getData('paginationEnd') + offset);
     }
 }

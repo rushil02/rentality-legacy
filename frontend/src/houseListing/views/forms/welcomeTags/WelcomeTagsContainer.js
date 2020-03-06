@@ -116,7 +116,7 @@ export default class WelcomeTagsContainer extends Component {
                                 <div className="col-md-12">
                                     <div className="checkbox">
                                         <ul className="list-inline" id="tags-list">
-                                            {Object.entries(this.state.data.getList()).map((data) =>
+                                            {this.state.data.getObjectList().map((data) =>
                                                 <WelcomeTagCheckbox
                                                     data={data[1]} key={data[0].toString()}
                                                     onChange={this.onTagUpdate}

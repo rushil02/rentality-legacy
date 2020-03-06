@@ -107,7 +107,7 @@ export default class CancellationPolicyContainer extends Component {
                             <h1 className={commonStyles.pageTitle}>Which Cancellation Policy would you like to opt
                                 for?</h1>
                             <div className="paragraph">
-                                {Object.entries(this.state.data.getList()).map((item) =>
+                                {this.state.data.getObjectList().map((item) =>
                                     <CancellationPolicyComponent
                                         data={item[1]} key={item[0].toString()}
                                         onChange={this.onPolicyUpdate} objRef={item[0]}

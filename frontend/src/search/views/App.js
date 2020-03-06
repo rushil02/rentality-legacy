@@ -1,27 +1,27 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import queryString from "query-string";
 import SearchForm from "./forms/SearchForm";
 import SearchPageContent from "./SearchPageContent";
-import { getFilteredHouses } from "search/services";
-import { ESHouse, SearchFormModel } from "search/models";
-import { APIModelListAdapter } from "core/utils/ModelHelper";
+import {getFilteredHouses} from "search/services";
+import {ESHouse, SearchFormModel} from "search/models";
+import {APIModelListAdapter} from "core/utils/ModelHelper";
 
 const OFFSET = 12;
-
-const loader = <div className="loader">Loading ...</div>;
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: true,
+            loadingMore: false,
             searchForm: new SearchFormModel(
                 queryString.parse(this.props.routerProps.location.search)
             ),
             houses: new APIModelListAdapter([], ESHouse, undefined, "empty", [
                 "_source"
             ]),
-            hasMoreItems: true
+            hasMoreItems: true,
+            pageNum: 1
         };
     }
 
@@ -40,6 +40,17 @@ export default class App extends Component {
         });
     }
 
+
+    handleScroll = (e) => {
+        e.preventDefault();
+        if (!this.state.loadingMore &&
+            this.state.hasMoreItems &&
+            (window.scrollY + 1.5 * window.innerHeight > document.documentElement.scrollHeight)) {
+            console.log(this.state.loadingMore, this.state.hasMoreItems);
+            this.loadMore()
+        }
+    };
+
     onSearchValueChange = (field, value) => {
         console.log(field, value);
         this.setState(prevState => ({
@@ -55,11 +66,16 @@ export default class App extends Component {
     };
 
     onSearchClicked = () => {
+        this.setState({loading: true, hasMoreItems: true});
+        this.state.searchForm.setData('paginationStart', 0);
+        this.state.searchForm.setData('paginationEnd', OFFSET);
+
         const that = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             getFilteredHouses(that.state.searchForm.serialize())
                 .then(data => {
                     that.setState({
+                        loading: false,
                         houses: new APIModelListAdapter(
                             data,
                             ESHouse,
@@ -76,24 +92,22 @@ export default class App extends Component {
         });
     };
 
-    loadMore = page => {
-        const newParams = {
-            ...this.state.params,
-            "pagination-start": page * OFFSET,
-            "pagination-end": (page + 1) * OFFSET
-        };
-        getFilteredHouses(newParams).then(data => {
-            let hasMoreItems = true;
-            if (data.length === 0) {
-                hasMoreItems = false;
-            }
+    loadMore = () => {
+        this.state.searchForm.nextPagination(OFFSET);
+        this.setState({loadingMore: true});
 
-            this.setState({
-                houses: this.state.houses.appendPagination(data, ["_source"]),
-                hasMoreItems,
-                params: newParams
+        getFilteredHouses(this.state.searchForm.serialize())
+            .then(data => {
+                if (data.length < OFFSET) {
+                    this.setState({hasMoreItems: false, loadingMore: false})
+                }
+                this.setState({
+                    houses: this.state.houses.appendPagination(data, ["_source"]),
+                });
+            })
+            .catch(error => {
+                this.setState({hasMoreItems: false, loadingMore: false})
             });
-        });
     };
 
     render() {
@@ -106,21 +120,13 @@ export default class App extends Component {
                     onDateRangeChange={this.onDateRangeChange}
                 />
 
-                <SearchPageContent houses={this.state.houses} />
+                <SearchPageContent
+                    houses={this.state.houses}
+                    loading={this.state.loading}
+                    loadingMore={this.state.loadingMore}
+                    handleScroll={this.handleScroll}
+                />
 
-                {/*<InfiniteScroll*/}
-                {/*    pageStart={0}*/}
-                {/*    loadMore={this.loadMore}*/}
-                {/*    hasMore={this.state.hasMoreItems}*/}
-                {/*    loader={loader}*/}
-                {/*>*/}
-                {/*    <SearchPageContent*/}
-                {/*        houses={this.state.houses}*/}
-                {/*        params={this.state.params}*/}
-                {/*        loadMore={this.loadMore}*/}
-                {/*        hasMore={this.state.hasMoreItems}*/}
-                {/*    />*/}
-                {/*</InfiniteScroll>*/}
             </React.Fragment>
         );
     }

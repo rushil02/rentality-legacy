@@ -165,7 +165,7 @@ export default class RulesContainer extends Component {
     render() {
         return (
             <RulesComponent
-                data={this.state.rules.getList()}
+                data={this.state.rules.getObjectList()}
                 otherRules={this.state.house.getData('otherRules')}
                 onOtherRulesChange={this.onOtherRulesChange}
                 onCommentChange={this.onCommentChange}

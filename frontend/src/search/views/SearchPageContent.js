@@ -1,19 +1,27 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import HouseComponent from "./HouseComponent";
-import { ComponentLoadingSpinner } from "core/loadingSpinners/LoadingSpinner";
+import {ComponentLoadingSpinner, ResponseLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
 import styles from "./HouseComponent.css";
 
 export default class SearchPageContent extends Component {
+    componentDidMount() {
+        window.addEventListener('scroll', this.props.handleScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.props.handleScroll);
+    }
+
     render() {
         if (this.props.loading) {
-            return <ComponentLoadingSpinner />;
+            return <ComponentLoadingSpinner/>;
         } else {
             if (!this.props.houses.getList().length) {
                 return (
                     <React.Fragment>
                         <div className={"container " + styles.noData}>
                             <div className="row">
-                                <div className="col-sm-3" />
+                                <div className="col-sm-3"/>
                                 <div className="col-sm-6">
                                     <p
                                         className="card-text"
@@ -26,7 +34,7 @@ export default class SearchPageContent extends Component {
                                     </p>
                                 </div>
 
-                                <div className="col-sm-3" />
+                                <div className="col-sm-3"/>
                             </div>
                         </div>
                     </React.Fragment>
@@ -51,6 +59,7 @@ export default class SearchPageContent extends Component {
                                     </div>
                                 </div>
                             </div>
+                            {this.props.loadMore ? <ResponseLoadingSpinner/> : null}
                         </div>
                     </React.Fragment>
                 );

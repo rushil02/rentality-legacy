@@ -14,33 +14,32 @@
     width: 560px;
 }
 
-.pageMap .list {
+.list {
     display: block;
     margin-top: 30px;
     position: relative;
     overflow: hidden;
 }
 
-.pageMap .list:hover,
-.pageMap .list:focus {
+.list:hover, .list:focus {
     text-decoration: none;
 }
 
-.pageMap .list .image {
+.list .image {
     position: relative;
     overflow: hidden;
 }
 
-.pageMap .list .image img {
+.list .image img {
     transition: all 0.25s ease-in-out;
     transform: scale(1, 1) rotate(0deg);
 }
 
-.pageMap .list:hover .image img {
+.list:hover .image img {
     transform: scale(1.15, 1.15) rotate(-5deg);
 }
 
-.pageMap .list h1 {
+.list h1 {
     color: #4d4d4d;
     font-size: 15px;
     font-weight: 500;
@@ -48,11 +47,11 @@
     margin-bottom: 0;
 }
 
-.pageMap .list:hover h1 {
+.list:hover h1 {
     color: #36ffb1;
 }
 
-.pageMap .list h2 {
+.list h2 {
     color: #bcbcbc;
     font-size: 15px;
     font-weight: 400;
@@ -60,29 +59,29 @@
     margin-bottom: 8px;
 }
 
-.pageMap .list div {
+.list div {
     color: #9d9d9d;
     font-size: 14px;
     font-weight: 400;
 }
 
-.pageMap .list div span {
+.list div span {
     color: #4d4d4d;
     font-weight: 700;
     margin-left: 8px;
 }
 
-.pageMap .list div + div {
+.list div + div {
     margin-top: 6px;
 }
 
-.pageMap .list .rating {
+.list .rating {
     position: absolute;
     right: 0;
     bottom: 0;
 }
 
-.pageMap .list .rating span {
+.list .rating span {
     font-size: 15px;
     font-weight: 400;
     color: #39ac1e;

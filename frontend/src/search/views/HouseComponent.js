@@ -10,11 +10,11 @@ export default class HouseComponent extends Component{
         return (
             <React.Fragment>
                 <div className="col-md-4 col-lg-3">        
-                    <a href={url} className="list" data-lat='{_source.geo_point.lat}' data-lng='{_source.geo_point.lon}' data-rating="#93c94c">
-                        <div className="rating">
+                    <a href={url} className={styles.list} data-lat='{_source.geo_point.lat}' data-lng='{_source.geo_point.lon}' data-rating="#93c94c">
+                        <div className={styles.rating}>
                             <img src={house.getData('userImage')} className="rounded-circle" alt="" title="" />
                         </div>
-                        <div className="image">
+                        <div className={styles.image}>
                             <img src={house.getData('thumbnail')} className="w-100" alt="" title="" />
                             {house.getData('leased') && <div className={styles.leasedImgTag}>LEASED</div>}
                         </div>

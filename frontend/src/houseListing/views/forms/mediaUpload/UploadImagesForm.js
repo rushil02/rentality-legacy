@@ -126,7 +126,7 @@ export default class UploadImagesForm extends Component {
                                         )}
                                     </Dropzone>
                                 </div>
-                                {Object.entries(this.state.data.getList()).map((item) =>
+                                {this.state.data.getObjectList().map((item) =>
                                     <ImageComponent objRef={item[0]} data={item[1]} key={item[0]}
                                                     onRemove={this.onRemove} onSetThumbnail={this.onSetThumbnail}/>
                                 )}

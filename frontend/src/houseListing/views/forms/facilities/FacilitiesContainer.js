@@ -115,7 +115,7 @@ export default class FacilitiesSelectorHandler extends Component {
                                 <div className="col-md-12">
                                     <div className="checkbox">
                                         <ul className="list-inline" id="facilities-list">
-                                            {Object.entries(this.state.data.getList()).map((data) =>
+                                            {this.state.data.getObjectList().map((data) =>
                                                 <FacilitiesComponent
                                                     data={data[1]} key={data[0].toString()}
                                                     onChange={this.onFacilityUpdate}
