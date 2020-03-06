@@ -57,7 +57,6 @@ class ActiveHouseManager(HouseManager):
 
 
 class House(models.Model):
-    # FIXME: Can this model be broken? Although all attrs are accessed together always (except Promos)
     """
     Minimum home_owner, title, location are required to create a house object.
 
@@ -77,6 +76,8 @@ class House(models.Model):
         'bathrooms', 'parking', 'rent', 'min_stay', 'facilities', 'rules', 'cancellation_policy', 'max_people_allowed',
         'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image', 'description'
     )
+
+    # region Fields
 
     home_owner = models.ForeignKey(
         'home_owner.HomeOwnerProfile',
@@ -157,6 +158,12 @@ class House(models.Model):
     active_objects = ActiveHouseManager()
     all_objects = HouseManager()
 
+    # endregion
+
+    def __str__(self):
+        return "%s [%s]" % (self.title, self.address)
+
+    # region Attribute getters
     # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
     def get_thumbnail(self):
@@ -180,22 +187,6 @@ class House(models.Model):
             url = thumbnailer.get_thumbnail({'crop': 'smart', 'size': (540, 360)})
             return '/media/' + str(url)
         return self.get_thumbnail()
-
-    def is_thumbnail_available(self):
-        try:
-            Image.objects.get(house=self, is_thumbnail=True)
-        except Image.DoesNotExist:
-            return False
-        else:
-            return True
-
-    def is_public(self):
-        if self.status == 'P':
-            return True
-        return False
-
-    def __str__(self):
-        return "%s [%s]" % (self.title, self.address)
 
     def get_images(self):
         return self.image_set.all()
@@ -225,16 +216,6 @@ class House(models.Model):
         # TODO: Expand rent information on the basis of time, number of guests, etc.
         return self.rent
 
-    def save(self, *args, **kwargs):
-        object_is_new = not self.pk
-        super(House, self).save(*args, **kwargs)
-        if object_is_new:
-            HouseProfile.objects.create(house=self)
-            rules = []
-            for rule in Rule.objects.all():
-                rules.append(HouseRule(house=self, rule=rule, value=rule.options[0]))
-            HouseRule.objects.bulk_create(rules)
-
     def get_facilities(self):
         return self.facilities.all()
 
@@ -249,6 +230,37 @@ class House(models.Model):
 
     def get_availability(self, from_year=None, till_year=None):
         return get_available_dates(self, from_year, till_year)
+
+    def get_complete_address(self):
+        if self.address_hidden:
+            return "%s, %s, %s" % (self.address_hidden, self.address, self.get_location() or "")
+        else:
+            return ""
+
+    # endregion
+
+    def is_thumbnail_available(self):
+        try:
+            Image.objects.get(house=self, is_thumbnail=True)
+        except Image.DoesNotExist:
+            return False
+        else:
+            return True
+
+    def is_public(self):
+        if self.status == 'P':
+            return True
+        return False
+
+    def save(self, *args, **kwargs):
+        object_is_new = not self.pk
+        super(House, self).save(*args, **kwargs)
+        if object_is_new:
+            HouseProfile.objects.create(house=self)
+            rules = []
+            for rule in Rule.objects.all():
+                rules.append(HouseRule(house=self, rule=rule, value=rule.options[0]))
+            HouseRule.objects.bulk_create(rules)
 
     def is_marked_leased(self):
         # FIXME: Connect to dynamic business model
@@ -269,12 +281,6 @@ class House(models.Model):
         if status == 'P':
             self.verify_data_for_publishing()
         self.status = status
-
-    def get_complete_address(self):
-        if self.address_hidden:
-            return "%s, %s, %s" % (self.address_hidden, self.address, self.get_location() or "")
-        else:
-            return ""
 
     # FIXME: Write tests for this
     def verify_data_for_publishing(self):

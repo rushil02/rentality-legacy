@@ -3,6 +3,8 @@ import copy
 from django.utils import timezone
 from psycopg2.extras import DateRange
 
+from application.utils import APP_BINDING_STATES
+
 
 class OutOfLowerBoundException(Exception):
     pass
@@ -20,7 +22,7 @@ def check_house_availability(house, date_range):
     """
 
     # if dates are already booked
-    if house.application_set.filter(date__overlap=date_range).exists():
+    if house.application_set.filter(status__in=APP_BINDING_STATES).filter(date__overlap=date_range).exists():
         return False
     else:
         # if dates are available
@@ -180,8 +182,7 @@ def get_available_dates(house, from_year=None, till_year=None):
         till_year = timezone.now().year + 1
 
     assert till_year >= from_year, "Invalid Arguments: `till_year` should be grater than or equal to `from_year`"
-
-    applications = list(house.application_set.all().values_list('date', flat=True))
+    applications = list(house.application_set.filter(status__in=APP_BINDING_STATES).values_list('date', flat=True))
     availabilities = house.availability_set.all()
 
     # construct availabilities for periodic date ranges within the given range by till_date and from_date
@@ -280,7 +281,7 @@ def get_unavailable_dates(house, from_date=None, till_date=None, inc_last=True):
     :return: list of 'psycopg2.extras.DateRange' objects
     """
 
-    applications = list(house.application_set.all().values_list('date', flat=True))
+    applications = list(house.application_set.filter(status__in=APP_BINDING_STATES).values_list('date', flat=True))
     applications.sort(key=lambda x: x.lower)
 
     availabilities = list(house.availability_set.all().values_list('dates', flat=True))

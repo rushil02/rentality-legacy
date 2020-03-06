@@ -57,10 +57,21 @@ def get_stripe_publishable_key(request):
 
 def create_user_for_anon(first_name, email, send_mail=True, **kwargs):
     user_class = get_user_model()
+    password = user_class.objects.make_random_password()
+
     user = user_class.objects.create_user(
-        email=email, password=user_class.objects.make_random_password(),
-        first_name=first_name, **kwargs
+        email=email, password=password,
+        first_name=first_name, last_name=kwargs.get('last_name', None)
     )
+
+    user_profile = user.userprofile
+    user_profile.sex = kwargs.get('sex', 'O')
+    user_profile.contact_num = kwargs.get('contact_num', None)
+    user_profile.save()
+
+    # send password via mail
+    print(password)
+
     if send_mail:
         ...  # TODO: send email
     return user

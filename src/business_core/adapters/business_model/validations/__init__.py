@@ -14,12 +14,12 @@ Example of handled data and behaviour -
       check-out date of Booking 'A' and check-in date of booking 'B' cannot be onn the same day.
 """
 
-from .constraints_model_A import ConstraintsModelA
+from .models import ValidationModelOneOne
 import inspect
 
 # Register all models here
 CONSTRAINTS_MODELS = {
-    'A': {'verbose': 'Business Constraints A', 'constraints_model_class': ConstraintsModelA}
+    'A': {'verbose': 'Validation constraint 1.1', 'constraints_model_class': ValidationModelOneOne}
 }
 
 

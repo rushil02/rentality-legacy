@@ -1,4 +1,16 @@
-from business_core.adapters.behaviours.base import BehaviourBase
+from .base import BehaviourBase
+
+
+def tenant_intend():
+    return 'Incomplete'
+
+
+def tenant_update():
+    return
+
+
+def tenant_execute_intent():
+    return
 
 
 class BehaviourA(BehaviourBase):
@@ -17,4 +29,17 @@ class BehaviourA(BehaviourBase):
     - Payout Trigger - 24 hours after check-in date
     -
     """
-    pass
+
+    STATE_MAP = {
+        'tenant': {
+            '_no_app_': {
+                'intend': tenant_intend,
+            },
+            'incomplete': {
+                'update': tenant_update,
+                'execute_intent': tenant_execute_intent,
+            },
+        }
+    }
+
+    STATE_START = 'intend'

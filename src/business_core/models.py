@@ -5,9 +5,9 @@ from django.db import models
 
 from django.db.models import Q
 
-from .adapters.behaviours import get_behaviours
-from .adapters.constraints_models import get_constraints_models
-from .adapters.cancellation_behaviours import get_cancellation_behaviours
+from .adapters.business_model.behaviours import get_behaviours
+from .adapters.business_model.validations import get_constraints_models
+from .adapters.cancellation import get_cancellation_behaviours
 from cities.models import City, Region, Country
 
 
@@ -18,6 +18,8 @@ class CancellationPolicyManager(models.Manager):
 
 class CancellationPolicy(models.Model):
     verbose = models.TextField(verbose_name='Policy Name')
+    code = models.CharField(max_length=10, help_text="Verbose identifier used internally", unique=True)
+
     description = models.TextField()
     properties = JSONField()
     official_policy = models.ForeignKey(
@@ -109,7 +111,7 @@ class BusinessModelConfigurationManager(models.Manager):
             for filtered_business_conf in filtered_business_confs:
                 if bool(
                         filtered_business_conf.home_owner_billing_location) == home_owner_billing_location_not_null and type(
-                        filtered_business_conf.house_location) == house_location_type:
+                    filtered_business_conf.house_location) == house_location_type:
                     return filtered_business_conf
 
 
@@ -128,8 +130,11 @@ class BusinessModelConfiguration(models.Model):
     meta = JSONField()
 
     CONSTRAINTS_MODELS = get_constraints_models()
-    constraints_model = models.CharField(max_length=1, choices=CONSTRAINTS_MODELS,
-                                         help_text="Defines constraints unique to business model")
+    constraints_model = models.CharField(
+        max_length=1, choices=CONSTRAINTS_MODELS,
+        help_text="Defines constraints unique to business model",
+        verbose_name='Validation constraints model'
+    )
     constraints_description = models.TextField(help_text="This will be shown to the user.")
 
     cancellation_policies = models.ManyToManyField('business_core.CancellationPolicy')
@@ -166,3 +171,9 @@ class BusinessModelConfiguration(models.Model):
 
     def get_description(self):
         return {'constraints': self.constraints_description, 'behaviour': self.behaviour_description}
+
+    def get_constraints_meta(self):
+        return self.meta['constraints']
+
+    def get_behaviour_meta(self):
+        return self.meta

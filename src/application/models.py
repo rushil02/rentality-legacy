@@ -8,24 +8,9 @@ from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
-from cities_custom.serializers import PostalCodeSerializer, PostalCodeAllDetailSerializer
-from house.models import House, HomeType
 from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
 from utils.model_utils import next_ref_code, get_nested_info
-
-STATUS_CHOICES = (
-    ('I', 'Incomplete'),
-    ('P', 'Pending'),
-    ('A', 'Accepted'),
-    ('D', 'Declined'),
-    ('E', 'Error'),
-    ('B', 'Booked'),
-    ('C', 'Cancelled'),
-    ('O', 'In-Effect/In-Stay'),
-    ('Z', 'Complete'),
-    ('X', 'In-Dispute'),
-    ('R', 'Dispute Resolved'),
-)
+from .utils import STATUS_CHOICES
 
 
 class Application(models.Model):
@@ -40,7 +25,7 @@ class Application(models.Model):
 
     # FIXME: need to change this variable to date_range or stay_date_range
     date = DateRangeField(verbose_name=_('stay dates'))
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     promotional_code = models.ManyToManyField('promotions.PromotionalCode', blank=True)  # FIXME: Needs to be plural
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -77,25 +62,27 @@ class Application(models.Model):
         """
         return get_nested_info(self.meta, key)
 
-    @property
-    def house_native_obj(self):
-        # FIXME: Make Complete Wrapper
-        if self._house_native_obj is None:
-            house_serializer = HouseAllDetailsSerializer(data=self.house_meta)
-            house_serializer.is_valid()
-            _house_native_obj = House(**house_serializer.validated_data)
-
-            del self.house_meta['location']['alt_names']
-            location_serializer = PostalCodeAllDetailSerializer(data=self.house_meta['location'])
-            location_serializer.is_valid(raise_exception=True)
-            _house_native_obj.location = PostalCode(**location_serializer.validated_data)
-
-            home_type_serializer = HomeTypeSerializer(data=self.house_meta['home_type'])
-            home_type_serializer.is_valid()
-            _house_native_obj.home_type = HomeType(**home_type_serializer.validated_data)
-
-            self._house_native_obj = _house_native_obj
-        return self._house_native_obj
+    # @property # FIXME: Move somewhere else
+    # def house_native_obj(self):
+    #   from cities_custom.serializers import PostalCodeAllDetailSerializer
+    #   from house.models import House, HomeType
+    #     # FIXME: Make Complete Wrapper
+    #     if self._house_native_obj is None:
+    #         house_serializer = HouseAllDetailsSerializer(data=self.house_meta)
+    #         house_serializer.is_valid()
+    #         _house_native_obj = House(**house_serializer.validated_data)
+    #
+    #         del self.house_meta['location']['alt_names']
+    #         location_serializer = PostalCodeAllDetailSerializer(data=self.house_meta['location'])
+    #         location_serializer.is_valid(raise_exception=True)
+    #         _house_native_obj.location = PostalCode(**location_serializer.validated_data)
+    #
+    #         home_type_serializer = HomeTypeSerializer(data=self.house_meta['home_type'])
+    #         home_type_serializer.is_valid()
+    #         _house_native_obj.home_type = HomeType(**home_type_serializer.validated_data)
+    #
+    #         self._house_native_obj = _house_native_obj
+    #     return self._house_native_obj
 
     def get_business_model_config(self):
         return self.accountdetail.business_config
@@ -113,21 +100,40 @@ class Application(models.Model):
              update_fields=None):
         if self.pk is None:
             self.ref_code = self._create_ref_code()
-        if self.house_meta is None:
             self.house_meta = HouseAllDetailsSerializer(self.house).data
         super(Application, self).save(force_insert=False, force_update=False, using=None,
                                       update_fields=None)
+
+    def update_status(self, new_state, actor):
+        self.status = new_state
+        self.save()
+        ApplicationState.objects.update_status(self, new_state, actor)
+
+
+class ApplicationStateManager(models.Manager):
+    def update_status(self, app, state, actor):
+        try:
+            old_state = self.get_queryset().filter(application=app).latest('created_on')
+        except self.model.DoesNotExist:
+            old_state = None
+        new_state = self.model(application=app, old_state=old_state, new_state=state, actor=actor)
+        new_state.save()
 
 
 class ApplicationState(models.Model):
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT)
     old_state = models.OneToOneField('self', on_delete=models.PROTECT, null=True, blank=True)
-    new_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    actor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
+    new_state = models.CharField(max_length=2, choices=STATUS_CHOICES)
+    ACTOR_CHOICES = (
+        ('T', "Tenant"),
+        ('H', "Home Owner"),
+        ('A', "Admin/Staff"),
+        ('S', "System")
     )
+    actor = models.CharField(max_length=1, choices=ACTOR_CHOICES)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    objects = ApplicationStateManager()
 
     def __str__(self):
         return "%s" % self.application
@@ -145,7 +151,7 @@ class AccountDetail(models.Model):
     `home_owner` - Freeze home_owner information for an application
     """
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
-    
+
     business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
     cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT)
 
@@ -158,8 +164,8 @@ class AccountDetail(models.Model):
 
     @property
     def tenant_amount(self):
-        return float(self.meta['source_amount'])/100
+        return float(self.meta['source_amount']) / 100
 
     @property
     def home_owner_amount(self):
-        return float(self.meta['destination_amount'])/100
+        return float(self.meta['destination_amount']) / 100

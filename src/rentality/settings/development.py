@@ -19,7 +19,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "static_root
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "media_root")
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'test_emails')
+EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), '__test_emails')
 
 
 # Email settings (using Sendgrid via API) Should be always disabled in development

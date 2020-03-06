@@ -194,31 +194,50 @@ class HomeOwnerAccountBase(object):
 
 
 class BehaviourBase(ABC):
+    """
+    Use as base class for all Business Model Config behaviour adapters
+
+    `STATE_MAP` is used to maintain all possible operations by relevant
+    actors. '_no_app_' is special general state to mark application initial
+    (unsaved) state.
+
+    """
+    # {actor: {curr_state: {event: def(), ...}, ...}, ...}
+    STATE_MAP = {}
+    STATE_START = None
+
     TenantAccount = TenantAccountBase
     HomeOwnerAccount = HomeOwnerAccountBase
 
-    def __init__(self, application, meta):
+    def __init__(self, meta, house=None, application=None):
         """
         :param application: `business_core.utils.Application` object
         :param meta: specific meta information from 'admin_custom.models.BusinessModelConfiguration.meta`
         """
         self.application = application
         self._meta = meta
+        self._state_map = {}
 
     def get_meta_attr(self, key):
         """
         :param key: nested key can be accessed using `__` [double underscore]
         :return: value
         """
-        return get_nested_info()
+        return get_nested_info(key)
 
-    @abstractmethod
-    def booking(self):
-        """
-        Information/Signal Handler for next
-        :return:
-        """
-        raise NotImplementedError
+    def cancel(self):
+        return {'state': 'cancelled'}
+
+    def on_event(self, curr_state, event, actor):
+        return self.STATE_MAP[actor][curr_state][event]()
+
+    # @abstractmethod
+    # def booking(self):
+    #     """
+    #     Information/Signal Handler for next
+    #     :return:
+    #     """
+    #     raise NotImplementedError
 
     def process_payin(self):
         """

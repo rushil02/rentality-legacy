@@ -1,6 +1,6 @@
 class ConstraintError(Exception):
     """
-    Custom Exception when constarints are not met.
+    Custom Exception when constraints are not met.
     :param message
     :param errors - List of error messages
     """
