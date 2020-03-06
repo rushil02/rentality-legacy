@@ -10,8 +10,10 @@ import {withRouter} from "react-router-dom";
 import {activateHouse, deleteHouse} from "houseListing/services";
 import {alertUser} from "core/alert/Alert";
 import {FormOptionsCache} from "houseListing/dataContext";
+import { reverse } from 'named-urls';
+import routes from "routes";
 
-const exitRoute = '/dashboard';
+const exitRoute = reverse(routes.react.dashboard.base);
 
 
 class Navigator extends Component {

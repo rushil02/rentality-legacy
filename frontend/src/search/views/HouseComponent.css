@@ -2,40 +2,45 @@
 /***** page map start *****/
 /**************************/
 
-.page-map {
+.noData {
+    padding: 24vh 0;
+}
+
+.pageMap {
     margin-bottom: 50px;
 }
 
-.page-map.active {
+.pageMap.active {
     width: 560px;
 }
 
-.page-map .list {
+.pageMap .list {
     display: block;
     margin-top: 30px;
     position: relative;
     overflow: hidden;
 }
 
-.page-map .list:hover, .page-map .list:focus {
+.pageMap .list:hover,
+.pageMap .list:focus {
     text-decoration: none;
 }
 
-.page-map .list .image {
+.pageMap .list .image {
     position: relative;
     overflow: hidden;
 }
 
-.page-map .list .image img {
-    transition: all .25s ease-in-out;
+.pageMap .list .image img {
+    transition: all 0.25s ease-in-out;
     transform: scale(1, 1) rotate(0deg);
 }
 
-.page-map .list:hover .image img {
+.pageMap .list:hover .image img {
     transform: scale(1.15, 1.15) rotate(-5deg);
 }
 
-.page-map .list h1 {
+.pageMap .list h1 {
     color: #4d4d4d;
     font-size: 15px;
     font-weight: 500;
@@ -43,11 +48,11 @@
     margin-bottom: 0;
 }
 
-.page-map .list:hover h1 {
+.pageMap .list:hover h1 {
     color: #36ffb1;
 }
 
-.page-map .list h2 {
+.pageMap .list h2 {
     color: #bcbcbc;
     font-size: 15px;
     font-weight: 400;
@@ -55,36 +60,36 @@
     margin-bottom: 8px;
 }
 
-.page-map .list div {
+.pageMap .list div {
     color: #9d9d9d;
     font-size: 14px;
     font-weight: 400;
 }
 
-.page-map .list div span {
+.pageMap .list div span {
     color: #4d4d4d;
     font-weight: 700;
     margin-left: 8px;
 }
 
-.page-map .list div + div {
+.pageMap .list div + div {
     margin-top: 6px;
 }
 
-.page-map .list .rating {
+.pageMap .list .rating {
     position: absolute;
     right: 0;
     bottom: 0;
 }
 
-.page-map .list .rating span {
+.pageMap .list .rating span {
     font-size: 15px;
     font-weight: 400;
     color: #39ac1e;
     margin-right: 5px;
 }
 
-.image > .leased-img-tag {
+.image > .leasedImgTag {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -100,7 +105,7 @@
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 8px;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
 /************************/

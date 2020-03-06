@@ -361,26 +361,25 @@ export class APIModelListAdapter {
      * @param uniqueKey - [optional] unique field present in dbData, NOT as defined in the objModel
      */
 
-    constructor(dbData, objModel, uniqueKey, status) {
+    constructor(dbData, objModel, uniqueKey, status, removeParents) {
         this._data = {};
         this._model = objModel;
         this._key = uniqueKey;
 
         this.status = status || 'saved';
 
-        this._constructObjModel(dbData);
+        this._constructObjModel(dbData, removeParents);
 
     }
 
-    // FIXME: Rename method - returns an object not list
-    getList() { // Deprecated
-        // returns object
-        return this._data
+    getList() {
+        // returns list of objects
+        return Object.values(this._data)
     }
 
     getObjectList() {
         // returns list of objects
-        return this._data
+        return Object.entries(this._data)
     }
 
     getObject(key) {
@@ -394,17 +393,22 @@ export class APIModelListAdapter {
     }
 
 
-    _constructObjModel = (data) => {
+    _constructObjModel = (data, removeParents) => {
         let indexOffset = Object.entries(this._data).length;
         data.map((dbObj, index) => {
             let key = this._key ? dbObj[this._key] : (index + indexOffset);
+            if (removeParents){
+                removeParents.forEach(parent => {
+                    dbObj = dbObj[parent];
+                });
+            }
             this._data[key] = new this._model(dbObj);
         });
     };
 
-    appendPagination(dbData) {
+    appendPagination(dbData, removeParents) {
         // Accepts list of objects from DB
-        this._constructObjModel(dbData);
+        this._constructObjModel(dbData, removeParents);
         return this
     }
 
