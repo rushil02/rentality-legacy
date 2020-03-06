@@ -11,7 +11,6 @@ const cssThemeModules = [
     path.resolve(__dirname, 'src', 'core', 'footer', 'Footer.css'),
     path.resolve(__dirname, 'src', 'core', 'navbar', 'views', 'components', 'Navbar.css'),
     /node_modules/,
-    path.resolve(__dirname, 'src', 'search'),
     path.resolve(__dirname, 'src', 'apply', 'views', 'houseDetail', 'DateRangeCalendar.css'),
     path.resolve(__dirname, 'src', 'apply', 'views', 'houseDetail', 'ImageCarousel.css'),
 ];

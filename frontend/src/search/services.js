@@ -1,36 +1,36 @@
-import { PostalCodeSearchModel, ESHouse } from './models'
+import { PostalCodeSearchModel } from "./models";
 import axios, { handleError } from "core/utils/serviceHelper";
 import routes from "routes";
+import { reverse } from "named-urls";
 
-
-export function getPostalCodeSuggestions(params){
-    return new Promise(function(resolve, reject){
-        var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');    
-        axios.get(routes.search.location + '?' + queryString)
+export function getPostalCodeSuggestions(value) {
+    return new Promise(function(resolve, reject) {
+        // var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+        axios
+            .get(reverse(routes.search.location), {
+                params: { location: value }
+            })
             .then(result => {
-                result = result.data.map(function (data) {
-                    return Object.assign(new PostalCodeSearchModel(), data);
-                });
-                resolve(result);
+                resolve(result.data);
             })
             .catch(error => {
-                handleError(error)
+                reject(handleError(error));
             });
     });
 }
 
-export function getFilteredHouses(params){
-    var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+export function getFilteredHouses(params) {
+    // var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return new Promise(function(resolve, reject) {
-        axios.get(routes.search.house + '?' + queryString)
+        axios
+            .get(reverse(routes.search.house), {
+                params: params
+            })
             .then(result => {
-                result = result.data.map(function(data){
-                    return Object.assign(new ESHouse(), data);
-                });
-                resolve(result);
+                resolve(result.data);
             })
             .catch(error => {
-                handleError(error)
+                reject(handleError(error));
             });
     });
 }

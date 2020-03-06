@@ -1,44 +1,51 @@
-import React, {Component} from 'react';
-import Autosuggest from 'react-autosuggest';
-import { getPostalCodeSuggestions } from 'search/services';
-import './PostalCodeSearchField.css';
-import { debounce } from 'lodash';
+import React, { Component } from "react";
+import Autosuggest from "react-autosuggest";
+import { getPostalCodeSuggestions } from "search/services";
+import theme from "./PostalCodeSearchField.css";
+import { debounce } from "lodash";
+import { PostalCodeSearchModel } from "search/models";
+import { APIModelListAdapter } from "core/utils/ModelHelper";
 
 function getSuggestionValue(suggestion) {
-    return suggestion._source.verbose;
+    return suggestion.getData("verbose");
 }
-
 
 const renderSuggestion = suggestion => {
     return (
         <div>
-            <strong>{suggestion._source.verbose}</strong> {suggestion._source.parent_verbose}
+            <strong>{getSuggestionValue(suggestion)}</strong>{" "}
+            {suggestion.getData("parent_verbose")}
         </div>
-    )
+    );
 };
 
-
-export default class PostalCodeSearchField extends Component{
-    constructor(props){
+export default class PostalCodeSearchField extends Component {
+    constructor(props) {
         super(props);
         this.state = {
-            value: this.props.value,
-            suggestions: []
+            suggestions: new APIModelListAdapter(
+                [],
+                PostalCodeSearchModel,
+                "_id",
+                "empty"
+            )
         };
-        this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 350, { trailing: true });
-    }
-
-    onChange(e, {newValue}){
-        this.setState({
-            value: newValue
-        });
-        this.props.onValueChange(newValue);
+        this.debouncedFetchSuggestions = debounce(
+            this.onSuggestionsFetchRequested,
+            350,
+            { trailing: true }
+        );
     }
 
     // Autosuggest will call this function every time you need to clear suggestions.
     onSuggestionsClearRequested = () => {
         this.setState({
-            suggestions: []
+            suggestions: new APIModelListAdapter(
+                [],
+                PostalCodeSearchModel,
+                "_id",
+                "empty"
+            )
         });
     };
 
@@ -48,38 +55,61 @@ export default class PostalCodeSearchField extends Component{
         // this.setState({
         //     suggestions: getSuggestions(value)
         // });
-        getPostalCodeSuggestions({location: value}).then((data) => {
-            this.setState({
-                suggestions: data
-            });}
-        );
+        getPostalCodeSuggestions(value)
+            .then(data => {
+                this.setState({
+                    suggestions: new APIModelListAdapter(
+                        data,
+                        PostalCodeSearchModel,
+                        "_id",
+                        "saved"
+                    )
+                });
+            })
+
+            .catch(error => {
+                console.log(error);
+            });
     };
 
-    onSuggestionSelected = (event, { suggestion }) => {
-        // this.props.onFieldChange('postalCodeID', suggestion.id);
-        this.props.onChange(suggestion);
+    onSuggestionSelected = (e, { suggestion }) => {
+        e.preventDefault();
+        this.props.onChange("locationSuggestion", suggestion.getData("id"));
+        this.props.onChange("location", suggestion.getData("verbose"));
     };
 
-    render(){
+    render() {
+        let suggestionObjects = this.state.suggestions.getList();
         const inputProps = {
             placeholder: "City, State, Postal Code",
-            value: this.state.value,
-            onChange: this.onChange.bind(this),
-            type: 'text',
+            value: this.props.value,
+            onChange: e => {
+                e.preventDefault();
+                this.props.onChange("location", e.target.value);
+            },
+            type: "text"
         };
+        console.log("In render", this.props.value);
 
         return (
             <React.Fragment>
-                <Autosuggest
-                    id="location"
-                    suggestions={this.state.suggestions}
-                    onSuggestionsFetchRequested={this.debouncedFetchSuggestions}
-                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                    onSuggestionSelected={this.onSuggestionSelected}
-                    getSuggestionValue={getSuggestionValue}
-                    renderSuggestion={renderSuggestion}
-                    inputProps={inputProps}
-                />
+                <div className="col-md-2">
+                    <Autosuggest
+                        // id="location"
+                        suggestions={suggestionObjects}
+                        onSuggestionsFetchRequested={
+                            this.debouncedFetchSuggestions
+                        }
+                        onSuggestionsClearRequested={
+                            this.onSuggestionsClearRequested
+                        }
+                        onSuggestionSelected={this.onSuggestionSelected}
+                        getSuggestionValue={getSuggestionValue}
+                        renderSuggestion={renderSuggestion}
+                        inputProps={inputProps}
+                        theme={theme}
+                    />
+                </div>
             </React.Fragment>
         );
     }

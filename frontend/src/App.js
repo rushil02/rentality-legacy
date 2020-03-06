@@ -22,7 +22,7 @@ const HouseListing = React.lazy(() => import("houseListing/Router"));
 const User = React.lazy(() => import("userAccount/Router"));
 const Apply = React.lazy(() => import("apply/Router"));
 const Dashboard = React.lazy(() => import("dashboard/Router"));
-// const SearchPage = React.lazy(() => import ("search/Router"));
+const SearchPage = React.lazy(() => import ("search/Router"));
 
 
 class App extends Component {
@@ -46,14 +46,14 @@ class App extends Component {
                                             <HouseListing {...props}/>
                                         </Suspense>}
                                 />
-                                {/*<Route*/}
-                                {/*    path={routes.react.searchPage}*/}
-                                {/*    render={*/}
-                                {/*        (props) =>*/}
-                                {/*            <Suspense fallback={<ComponentLoadingSpinner />}>*/}
-                                {/*                <SearchPage {...props} />*/}
-                                {/*            </Suspense> }*/}
-                                {/*/>*/}
+                                <Route
+                                   path={routes.react.searchPage}
+                                   render={
+                                       (props) =>
+                                          <Suspense fallback={<ComponentLoadingSpinner />}>
+                                                <SearchPage {...props} />
+                                            </Suspense> }
+                                />
                                  <Route
                                     path={routes.react.apply.base}
                                     render={

@@ -1,38 +1,88 @@
-export class PostalCodeSearchModel {
-    constructor(){
-        this._id = '';
-        this._index = '';
-        this._score = '';
-        this._source = {
-            geo_point:{
-                lat: null,
-                lon: null
+import APIModelAdapter, { DateRangeModel } from "core/utils/ModelHelper";
+
+export class PostalCodeSearchModel extends APIModelAdapter {
+    //Declare all defaults here
+
+    fieldMap() {
+        return {
+            id: { key: "_id" },
+            parent_verbose: {
+                key: "_source",
+                parser: this.parentVerboseParser
             },
-            parent_verbose: '',
-            verbose: ''
+            // geo_point_lat: {key:'geo_point_lat',},
+            // geo_point_lon: {key:'geo_point_lon',},
+            verbose: { key: "_source", parser: this.verboseParser }
+        };
+    }
+
+    verboseParser(value) {
+        if (value) {
+            return value["verbose"];
+        }
+        return "";
+    }
+
+    parentVerboseParser(value) {
+        if (value) {
+            return value["parent_verbose"];
+        }
+        return "";
+    }
+}
+
+export class ESHouse extends APIModelAdapter {
+    //Declare all defaults here
+
+    fieldMap() {
+        return {
+            address: { key: "address" },
+            // create_time: {key: 'create_time'},
+            // geo_point_lat: {key:'geo_point_lat',},
+            // geo_point_lon: {key:'geo_point_lon',},
+            homeType: { key: "home_type" },
+            leased: { key: "leased" },
+            location: { key: "location" },
+            minStay: { key: "min_stay" },
+            rent: { key: "rent" },
+            thumbnail: { key: "thumbnail" },
+            title: { key: "title" },
+            userImage: { key: "user_image" },
+            uuid: { key: "uuid" }
         };
     }
 }
 
-export class ESHouse{
-    constructor(){
-        this._id = '';
-        this._source = {
-            adress: '',
-            create_time: '',
-            geo_point: {
-                lat: null,
-                lon: null
+export class SearchFormModel extends APIModelAdapter {
+    fieldMap() {
+        return {
+            location: { key: "location" },
+            locationSuggestion: { key: "loc_sugg" },
+            homeType: { key: "home_type" },
+            startDate: {
+                key: "start_date",
+                default: this.getDate(4),
+                parser: this.dateParser
             },
-            home_type: '',
-            leased: '',
-            location: '',
-            min_stay: '',
-            rent: '',
-            thumbnail: '',
-            title: '',
-            user_image: '',
-            uuid: ''
-        }
+            endDate: {
+                key: "end_date",
+                default: this.getDate(34),
+                parser: this.dateParser
+            },
+            rent: { key: "rent" }
+        };
+    }
+
+    getDate(daysToAdd) {
+        let date = new Date();
+        date.setDate(date.getDate() + daysToAdd);
+        return date;
+    }
+
+    dateParser(dateString) {
+        if (!dateString) return new Date();
+        let a = dateString.split("-");
+        let b = a[2] + "-" + a[1] + "-" + a[0];
+        return new Date(b);
     }
 }
