@@ -100,7 +100,7 @@
 }
 
 .modalContent {
-    padding: 50px 25px;
+    padding: 40px 35px 30px 35px;
     border: none;
     border-radius: 10px;
     font-size: 15px;
@@ -115,6 +115,11 @@
     font-weight: 700;
     color: #2a2b32;
     margin-bottom: 40px;
+}
+
+.modalContent p{
+    margin-top: 0;
+    margin-bottom: 2rem;
 }
 
 .buttonGroup {
