@@ -59,14 +59,14 @@ class InitiateBookingView(APIView):
 
         if application.is_valid(raise_exception=True):
 
-            # Validate Application
             booking = Booking.create(
                 house_db=house,
                 booking_info=application.validated_data['booking_info'],
                 actor='tenant',
                 booking_date=timezone.localdate()
             )
-
+            
+            # Validate Application
             errors = booking.validate()
             if errors:
                 return Response({'data': 'booking validation failed', 'errors': errors}, status=HTTP_400_BAD_REQUEST)

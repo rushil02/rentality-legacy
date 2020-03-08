@@ -111,7 +111,7 @@ class House(object):
         if self.min_stay > stay_length:
             errors.append('Minimum length of stay should be greater than %s days.' % self.min_stay)
 
-        if self.max_stay > stay_length:
+        if self.max_stay < stay_length:
             errors.append('Maximum length of stay should be less than %s days.' % self.max_stay)
 
         if self.max_people_allowed < application.guests_num:

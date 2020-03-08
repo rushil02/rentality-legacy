@@ -40,6 +40,6 @@ class ValidationModelOneOne(ValidationsModelBase):
 
     def validate_application(self, application):
         errors = []
-        if self.min_buffer < application.get_booking_buffer_days():
+        if self.min_buffer > application.get_booking_buffer_days():
             errors.append("Check-in date is too close to booking date. Minimum %s days required." % self.min_buffer)
         return errors
