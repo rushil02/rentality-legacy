@@ -44,7 +44,7 @@ class Application(models.Model):
         return Decimal(self.rent) / 7
 
     def get_all_promo_codes(self):
-        return self.promotional_code
+        return self.promotional_code.all()
 
     def get_house_meta_info(self, key):
         """
@@ -109,6 +109,24 @@ class Application(models.Model):
         self.save()
         ApplicationState.objects.update_status(self, new_state, actor)
 
+    def create_account(self, business_model_config, cancellation_policy):
+        AccountDetail.objects.create(
+            application=self,
+            business_config=business_model_config,
+            cancellation_policy=cancellation_policy,
+            tenant={},
+            home_owner={},
+            meta={}
+        )
+
+    def update_account(self, **kwargs):
+        try:
+            AccountDetail.objects.get(application=self)
+        except AccountDetail.DoesNotExist:
+            raise AssertionError
+        else:
+            self.accountdetail.update_account(**kwargs)
+
 
 class ApplicationStateManager(models.Manager):
     def update_status(self, app, state, actor):
@@ -169,3 +187,16 @@ class AccountDetail(models.Model):
     @property
     def home_owner_amount(self):
         return float(self.meta['destination_amount']) / 100
+
+    def get_meta_info(self, key):
+        return self.meta[key]
+
+    def update_account(self, tenant_info=None, home_owner_info=None, meta_info=None):
+        if tenant_info:
+            self.tenant.update(tenant_info)
+        if home_owner_info:
+            self.home_owner.update(home_owner_info)
+        if meta_info:
+            self.meta.update(meta_info)
+        self.save()
+

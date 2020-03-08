@@ -25,7 +25,8 @@ class Booking(object):
     home-owner.
     """
 
-    __ACTOR_REVERSE_MAP = {
+    # region init
+    __ACTOR_REVERSE_MAP_FOR_DB = {
         'tenant': 'T',
         'homeowner': 'H',
         'system': 'S',
@@ -33,7 +34,7 @@ class Booking(object):
         'staff': 'A'
     }
 
-    __STATE_REVERSE_MAP = get_state_reverse_map()
+    __STATE_REVERSE_MAP_FOR_DB = get_state_reverse_map()
 
     def __init__(self, application, actor, state):
         """
@@ -45,9 +46,17 @@ class Booking(object):
         self._actor = actor
         self.state = state
 
+        self._acc_info = {}
+        self._response = {}
+        self._inform_entities = {}
+
     @property
     def business_model(self):
         return self._application.get_business_model()
+
+    @property
+    def cancellation_policy(self):
+        return self._application.get_can_policy()
 
     @classmethod
     def load(cls, application_obj, actor, payment_gateway):
@@ -55,6 +64,7 @@ class Booking(object):
         Creates a new Financial Booking object. This will create all the required
         details for booking object from the frozen details in given application object.
 
+        :param actor: [tenant, home_owner, system, admin]
         :param application_obj: 'application.models.Application` object
         :param payment_gateway: `PaymentGateway` object
         :return: cls object
@@ -71,7 +81,7 @@ class Booking(object):
         :param booking_date:
         :param house_db:
         :param booking_info:
-        :param actor: [tenant, home_owner, sys, admin]
+        :param actor: [tenant, home_owner, system, admin]
         :return: Booking()
         """
 
@@ -81,9 +91,11 @@ class Booking(object):
             date_range=[booking_info['start_date'], booking_info['end_date']],
             guests_num=booking_info['guests'],
             promo_codes=[],  # TODO: Validate and send promo codes
-            booking_date=booking_date,
         )
+        application.set_prospective_booking_date(booking_date)
         return cls(application, actor, '_no_app_')
+
+    # endregion
 
     def validate(self):
         return self._application.validate()
@@ -93,7 +105,7 @@ class Booking(object):
         :param payment_gateway:
         :return:
         """
-        self.payment_gateway = None  # TODO
+        self._payment_gateway = None  # TODO
 
     def get_current_state(self):
         return self.state
@@ -103,26 +115,34 @@ class Booking(object):
 
     def record_to_db(self, application_db):
         """
-
         :param application_db:
         :return:
         """
         # ApplicationState
-        print(self.__STATE_REVERSE_MAP)
-        print(self.get_current_state())
-        print("*********** %s" % self.__STATE_REVERSE_MAP[self.get_current_state()])
-        application_db.update_status(self.__STATE_REVERSE_MAP[self.get_current_state()],
-                                     self.__ACTOR_REVERSE_MAP[self._actor])
-        # application_db.update_accounts()
-
-        # AccountDetail
+        application_db.update_status(self.__STATE_REVERSE_MAP_FOR_DB[self.get_current_state()],
+                                     self.__ACTOR_REVERSE_MAP_FOR_DB[self._actor])
+        try:
+            application_db.update_account(meta_info=self._acc_info)
+        except AssertionError:
+            application_db.create_account(
+                business_model_config=self.business_model.get_db_object(),
+                cancellation_policy=self.business_model.get_can_db_object(),
+            )
+        else:
+            application_db.update_account(meta_info=self._acc_info)
 
         # Rentality records
         # PaymentGatewayTransaction
         # LedgerRecord
 
+    def _load_data(self, result):
+        self.set_new_state(result['state'])
+        self._response = result.get('response', {})
+        self._acc_info = result.get('acc_info', {})
+        self._inform_entities = result.get('mail', {})
+
     def get_response(self):
-        return {}
+        return self._response
 
     def inform_entities(self, application_db):
         pass
@@ -134,22 +154,18 @@ class Booking(object):
         Use to initialize a booking process.
         :return:
         """
-        state = self.business_model.on_event(
+        result = self.business_model.on_event(
             self.get_current_state(), self.business_model.get_start_event(), self._actor
         )
-        self.set_new_state(state)
-
-    def intend(self, actor):
-        """
-        :return: dict
-        """
-        business_model = self.application.get_business_model()
-        business_model.on_event('intend', actor)
-        self.payment_gateway.intend()
+        self._load_data(result)
 
     def execute_intent(self):
-        ...
+        result = self.business_model.on_event(
+            self.get_current_state(), 'execute_intent', self._actor
+        )
+        self._load_data(result)
 
+    # region future #FIXME: URGENT
     def cancel(self):
         pass
 
@@ -173,3 +189,5 @@ class Booking(object):
 
     def check_out(self):
         ...
+
+    # endregion
