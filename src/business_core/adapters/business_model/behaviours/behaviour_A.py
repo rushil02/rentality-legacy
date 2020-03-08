@@ -1,16 +1,51 @@
 from .base import BehaviourBase
+from django.utils import timezone
 
 
-def tenant_intend():
-    return 'Incomplete'
+def tenant_intend(**kwargs):
+    return {
+        'state': 'Incomplete',
+        'acc_info': {},
+        'response': {},
+        'mail': {
+            'tenant': '',
+            'home_owner': ''
+        }
+    }
 
 
-def tenant_update():
-    return
+def tenant_update(**kwargs):
+    return {
+        'state': 'Incomplete',
+        'acc_info': {},
+        'response': {},
+        'mail': {
+            'tenant': '',
+            'home_owner': ''
+        }
+    }
 
 
-def tenant_execute_intent():
-    return
+def tenant_execute_intent(**kwargs):
+    return {
+        'state': 'Pending Locked',
+        'acc_info': {'booking_date': timezone.now()},
+        'response': {},
+        'mail': {
+            'tenant': 'booked',
+            'home_owner': 'booked'
+        }
+    }
+
+
+def system_execute_intent(**kwargs):
+    if kwargs.get('passed'):
+        return {'state': 'Booked'}
+    else:
+        return {
+            'state': 'Error',
+            'meta': {'message': 'Transaction Failed'}
+        }
 
 
 class BehaviourA(BehaviourBase):
@@ -35,10 +70,15 @@ class BehaviourA(BehaviourBase):
             '_no_app_': {
                 'intend': tenant_intend,
             },
-            'incomplete': {
+            'Incomplete': {
                 'update': tenant_update,
                 'execute_intent': tenant_execute_intent,
             },
+        },
+        'system': {
+            'Pending Locked': {
+                'execute_intent': system_execute_intent,
+            }
         }
     }
 

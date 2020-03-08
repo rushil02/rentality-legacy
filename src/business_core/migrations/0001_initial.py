@@ -11,17 +11,16 @@ def create_default_cancellation_policies(apps, schema_editor):
     CancellationPolicy = apps.get_model('business_core', 'CancellationPolicy')
     for i in range(1, 4):
         try:
-            old = OldCancellationPolicy.objects.get(id=i)
-            CancellationPolicy.objects.create(
-                id=i, 
-                verbose=old.verbose, 
-                description=old.description, 
-                properties=old.properties, 
-                behaviour='A',  # FIXME
-                official_policy=old.official_policy
-            )
+            OldCancellationPolicy.objects.get(id=i)
         except OldCancellationPolicy.DoesNotExist:
-            pass
+            CancellationPolicy.objects.create(
+                id=i,
+                verbose="Flexible",
+                description="Some description",
+                properties={"A": 123},
+                behaviour='A',
+                official_policy=None
+            )
 
 
 def create_default_business_config(apps, schema_editor):

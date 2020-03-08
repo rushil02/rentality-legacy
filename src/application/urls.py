@@ -1,7 +1,7 @@
 from django.urls import path
 from application.views import create_react, CreateApplicationView, BookingAmountView, \
     application_completion
-from application.views.api.create import InitiateBookingView
+from application.views.api.tenant import InitiateBookingView, ExecuteIntentBookingView
 
 app_name = 'application'
 
@@ -13,6 +13,8 @@ urlpatterns = [
 
     # APIs
     path('initiate/<uuid:house_uuid>', InitiateBookingView.as_view(), name='initiate_application'),
+    path('exec-intent/<uuid:house_uuid>/<uuid:app_uuid>',
+         ExecuteIntentBookingView.as_view(), name='tenant_execute_intent'),
     path('amount/<uuid:house_uuid>', BookingAmountView.as_view(), name='booking_amount'),
     # path('api/create/<uuid:house_uuid>', name='create'),
 ]

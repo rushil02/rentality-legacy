@@ -6,12 +6,12 @@ module. Once a cancellation behaviour is registered it should not be removed unt
 cleaned; and [Important] House objects or Application objects might hold live objects of this
 cancellation behaviour.
 """
-
+import inspect
 from .cancellation_behaviour_A import BA
 
 # Register all behaviours here
 CANCELLATION_BEHAVIOURS = {
-    'A': {'verbose': 'Cancellation behaviour A', 'cancellation_behaviour_file': BA}
+    'A': {'verbose': 'Cancellation behaviour A', 'cancellation_behaviour_class': BA}
 }
 
 
@@ -26,4 +26,8 @@ def get_cancellation_behaviours():
 
 
 def get_cancellation_behaviour_description(key):
-    return CANCELLATION_BEHAVIOURS[key]['cancellation_behaviour_file'].__doc__
+    return inspect.getdoc(CANCELLATION_BEHAVIOURS[key]['cancellation_behaviour_class'])
+
+
+def get_cancellation_behaviour_class(key):
+    return CANCELLATION_BEHAVIOURS[key]['cancellation_behaviour_class']
