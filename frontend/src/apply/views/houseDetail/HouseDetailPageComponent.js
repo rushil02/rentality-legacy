@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
-
 import {lowerCase, startCase} from 'lodash';
-
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
-
 import BookingInfoPanel from "./BookingInfoPanel";
 import ApplyPanel from "./ApplyPanel";
 import ImageCarousel from "./ImageCarousel";
-
+import { ConfirmBookingModal } from './ConfirmBookingModal';
 import styles from "./HouseDetailPage.css"
 
 
@@ -63,7 +60,7 @@ export default class HouseDetailPageComponent extends Component {
         return (
             <React.Fragment>
 
-                <ImageCarousel images={this.props.images}/>
+                <ImageCarousel images={this.props.images} />
 
                 <div className={styles.pageDetail}>
                     <div className="container">
@@ -279,7 +276,6 @@ export default class HouseDetailPageComponent extends Component {
 }
 
 function getInfoSidePanel(that, address) {
-
     if (window.innerWidth >= 992) {
         return (
             <div className="d-none d-lg-block col-lg-5 col-xl-4">
@@ -301,18 +297,7 @@ function getInfoSidePanel(that, address) {
                     <div className="row" style={{marginBottom: "20px"}}>
                         <div className="col-12 d-flex justify-content-center">
                             {that.state.bookButtonActive ?
-
-                                <APIRequestButton
-                                    cTextOptions={{
-                                        default: 'Book Now',
-                                        loading: 'Making Your Booking',
-                                        done: 'Booked',
-                                        error: 'Error!'
-                                    }}
-                                    callback={that.props.onApply}
-                                    onSuccess={() => {
-                                    }}
-                                />
+                                <ConfirmBookingModal onApply={that.props.onApply} onConfirmBooking={that.props.onConfirmBooking}></ConfirmBookingModal>
                                 :
                                 <a className="imp-button-style" onClick={() => {
                                     that.scrollToRef(that.elementRefs.bookingSection)
