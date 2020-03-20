@@ -182,7 +182,9 @@ class AccountDetail(models.Model):
 
     @property
     def tenant_amount(self):
-        return float(self.meta['source_amount']) / 100
+        # FIXME: static return, fix source amount
+        return 100
+        # return float(self.meta['source_amount']) / 100
 
     @property
     def home_owner_amount(self):

@@ -46,6 +46,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 #FIXME: To be removed
 class UserProfileSerializer(serializers.ModelSerializer):
+    sex = serializers.CharField(source="get_sex_display")
     class Meta:
         model = UserProfile
         fields = ('contact_num', 'sex')

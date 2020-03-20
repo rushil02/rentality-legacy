@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useImperativeHandle } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
 import styles from "./ConfirmBookingModal.css";
+import routes from "routes";
+import { reverse } from "named-urls";
 
-export function ConfirmBookingModal(props) {
+export const ConfirmBookingModal = React.forwardRef((props, ref) => {
     const [show, setShow] = React.useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const successRoute = reverse(routes.react.apply.success, {
+        applicationUUID: props.applicationUUID
+    });
+
+    useImperativeHandle(ref, () => ({
+        closeModal() {
+            handleClose();
+        }
+    }));
 
     return (
         <React.Fragment>
@@ -52,7 +63,9 @@ export function ConfirmBookingModal(props) {
                                 error: "Error!"
                             }}
                             callback={props.onConfirmBooking}
-                            onSuccess={() => {}}
+                            onSuccess={() => {
+                                window.location.href = successRoute;
+                            }}
                         />
                         <Button
                             className={"btn default-button-style float-right"}
@@ -65,4 +78,4 @@ export function ConfirmBookingModal(props) {
             </Modal>
         </React.Fragment>
     );
-}
+});

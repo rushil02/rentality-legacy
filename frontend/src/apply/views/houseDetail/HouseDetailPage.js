@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {confirmBooking,
+import {
+    confirmBooking,
     applyBooking,
     getApplicantData,
     getHomeOwnerDetails,
@@ -18,6 +19,8 @@ import { APIModelListAdapter, PostalLocation } from "core/utils/ModelHelper";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 import { alertUser } from "core/alert/Alert";
 
+export const SecretContext = React.createContext(undefined);
+
 export default class HouseDetailPage extends Component {
     /**
      * Loading is tracked only for house information.
@@ -26,7 +29,6 @@ export default class HouseDetailPage extends Component {
     constructor(props) {
         super(props);
         this.houseUUID = props.routerProps.match.params.houseUUID;
-        this.applicationUUID = undefined;
         this.state = {
             status: "loading",
             house: new House({}, "empty"),
@@ -34,8 +36,12 @@ export default class HouseDetailPage extends Component {
             cancellationPolicy: new CancellationPolicy({}, "empty"),
             location: new PostalLocation({}, "empty"),
             homeOwnerInfo: new HomeOwnerInfo({}, "empty"),
-            application: new Application({}, "empty")
+            application: new Application({}, "empty"),
+            clientSecret: undefined,
+            applicationUUID: undefined
         };
+        this.checkoutFormChild = React.createRef();
+        this.confirmModalChild = React.createRef();
     }
 
     componentDidMount() {
@@ -60,7 +66,10 @@ export default class HouseDetailPage extends Component {
                 }));
             })
             .catch(error => {
-                this.setState(prevState => ({ ...prevState, status: "error" }));
+                this.setState(prevState => ({
+                    ...prevState,
+                    status: "error"
+                }));
             });
 
         getHomeOwnerDetails(this.houseUUID)
@@ -71,7 +80,10 @@ export default class HouseDetailPage extends Component {
                 }));
             })
             .catch(error => {
-                this.setState(prevState => ({ ...prevState, status: "error" }));
+                this.setState(prevState => ({
+                    ...prevState,
+                    status: "error"
+                }));
             });
 
         getApplicantData().then(result => {
@@ -109,7 +121,11 @@ export default class HouseDetailPage extends Component {
     };
 
     setApplicationUUID = value => {
-        this.applicationUUID = value;
+        this.setState({ applicationUUID: value });
+    };
+
+    setclientSecret = value => {
+        this.setState({ clientSecret: value });
     };
 
     submitApplication = () => {
@@ -122,18 +138,29 @@ export default class HouseDetailPage extends Component {
                 })
                 .catch(error => {
                     if (error.badRequest) {
-                        alertUser.init({
-                            message:
-                                "Please fill in all the details to make a booking.",
-                            alertType: "warning",
-                            autoHide: true
-                        });
-                        that.setState(prevState => ({
-                            ...prevState,
-                            application: prevState.application.parseError(
-                                error.error.response.data
-                            )
-                        }));
+                        let errorData = error.error.response.data;
+                        if (errorData.code === "AA") {
+                            alertUser.init({
+                                message:
+                                    "Please fill in all the details to make a booking.",
+                                alertType: "warning",
+                                autoHide: true
+                            });
+                            that.setState(prevState => ({
+                                ...prevState,
+                                application: prevState.application.parseError(
+                                    errorData.errors
+                                )
+                            }));
+                        } else if (errorData.code === "AB") {
+                            errorData.errors.forEach(error => {
+                                alertUser.init({
+                                    message: error,
+                                    alertType: "danger",
+                                    autoHide: false
+                                });
+                            });
+                        }
                     }
                     reject(error);
                 });
@@ -143,9 +170,30 @@ export default class HouseDetailPage extends Component {
     onConfirmBooking = () => {
         let that = this;
         return new Promise(function(resolve, reject) {
-            confirmBooking(that.houseUUID, that.applicationUUID)
+            confirmBooking(that.houseUUID, that.state.applicationUUID)
                 .then(result => {
-                    resolve(result);
+                    that.setclientSecret(result.data["client_secret"]);
+                    console.log(that.state.clientSecret, result);
+                    return that.checkoutFormChild.current.submit();
+                })
+                .then(result => {
+                    console.log(result);
+                    if (result.error) {
+                        that.confirmModalChild.current.closeModal();
+                        alertUser.init({
+                            message: result.error.message,
+                            alertType: "danger",
+                            autoHide: false
+                        });
+                        reject(result.error);
+                        console.log(result.error.message);
+                    } else {
+                        if (result.paymentIntent.status === "succeeded") {
+                            //Redirect to success page
+                            console.log("Hurray");
+                            resolve();
+                        }
+                    }
                 })
                 .catch(error => {
                     reject(error);
@@ -156,18 +204,23 @@ export default class HouseDetailPage extends Component {
     render() {
         return (
             <RequestErrorBoundary status={this.state.status}>
-                <HouseDetailPageComponent
-                    handleDateChange={this.handleDateChange}
-                    application={this.state.application}
-                    handleApplicationChange={this.handleApplicationChange}
-                    house={this.state.house}
-                    images={this.state.images}
-                    cancellationPolicy={this.state.cancellationPolicy}
-                    location={this.state.location}
-                    homeOwnerInfo={this.state.homeOwnerInfo}
-                    onApply={this.submitApplication}
-                    onConfirmBooking={this.onConfirmBooking}
-                />
+                <SecretContext.Provider value={this.state.clientSecret}>
+                    <HouseDetailPageComponent
+                        handleDateChange={this.handleDateChange}
+                        application={this.state.application}
+                        handleApplicationChange={this.handleApplicationChange}
+                        house={this.state.house}
+                        images={this.state.images}
+                        cancellationPolicy={this.state.cancellationPolicy}
+                        location={this.state.location}
+                        homeOwnerInfo={this.state.homeOwnerInfo}
+                        onApply={this.submitApplication}
+                        onConfirmBooking={this.onConfirmBooking}
+                        checkoutFormRef={this.checkoutFormChild}
+                        confirmModalRef={this.confirmModalChild}
+                        applicationUUID={this.state.applicationUUID}
+                    />
+                </SecretContext.Provider>
             </RequestErrorBoundary>
         );
     }
