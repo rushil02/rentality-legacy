@@ -24,11 +24,11 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
     return (
         <React.Fragment>
             <APIRequestButton
-                layoutClasses={"imp-button-style"}
+                layoutClasses={"btn imp-button-style"}
                 cTextOptions={{
                     default: "Book Now",
-                    loading: "Making Your Booking",
-                    done: "Booked",
+                    loading: " ",
+                    done: "Processing",
                     error: "Error!"
                 }}
                 callback={props.onApply}
@@ -58,7 +58,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                             layoutClasses={"btn float-left imp-button-style"}
                             cTextOptions={{
                                 default: "Confirm Booking",
-                                loading: "Making Your Booking",
+                                loading: " ",
                                 done: "Booked",
                                 error: "Error!"
                             }}

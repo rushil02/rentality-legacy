@@ -1,19 +1,6 @@
 import React, { Component } from "react";
-import {
-    confirmBooking,
-    applyBooking,
-    getApplicantData,
-    getHomeOwnerDetails,
-    getHouseData
-} from "apply/services";
-import {
-    House,
-    Image,
-    CancellationPolicy,
-    HomeOwnerInfo,
-    Application,
-    Applicant
-} from "apply/models";
+import { confirmBooking, applyBooking, getApplicantData, getHomeOwnerDetails, getHouseData } from "apply/services";
+import { House, Image, CancellationPolicy, HomeOwnerInfo, Application, Applicant } from "apply/models";
 import HouseDetailPageComponent from "./HouseDetailPageComponent";
 import { APIModelListAdapter, PostalLocation } from "core/utils/ModelHelper";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
@@ -38,7 +25,8 @@ export default class HouseDetailPage extends Component {
             homeOwnerInfo: new HomeOwnerInfo({}, "empty"),
             application: new Application({}, "empty"),
             clientSecret: undefined,
-            applicationUUID: undefined
+            applicationUUID: undefined,
+            disableDisplay: false
         };
         this.checkoutFormChild = React.createRef();
         this.confirmModalChild = React.createRef();
@@ -52,16 +40,8 @@ export default class HouseDetailPage extends Component {
                     ...prevState,
                     status: "done",
                     house: new House(result),
-                    images: new APIModelListAdapter(
-                        result["images"],
-                        Image,
-                        "uuid",
-                        "saved"
-                    ),
-                    cancellationPolicy: new CancellationPolicy(
-                        result["cancellation_policy"],
-                        "saved"
-                    ),
+                    images: new APIModelListAdapter(result["images"], Image, "uuid", "saved"),
+                    cancellationPolicy: new CancellationPolicy(result["cancellation_policy"], "saved"),
                     location: new PostalLocation(result["location"], "saved")
                 }));
             })
@@ -91,9 +71,7 @@ export default class HouseDetailPage extends Component {
                 ...prevState,
                 application: prevState.application.setData(
                     "applicant",
-                    prevState.application
-                        .getData("applicant")
-                        .bulkUpdate(result, "DB")
+                    prevState.application.getData("applicant").bulkUpdate(result, "DB")
                 )
             }));
         });
@@ -141,16 +119,13 @@ export default class HouseDetailPage extends Component {
                         let errorData = error.error.response.data;
                         if (errorData.code === "AA") {
                             alertUser.init({
-                                message:
-                                    "Please fill in all the details to make a booking.",
+                                message: "Please fill in all the details to make a booking.",
                                 alertType: "warning",
                                 autoHide: true
                             });
                             that.setState(prevState => ({
                                 ...prevState,
-                                application: prevState.application.parseError(
-                                    errorData.errors
-                                )
+                                application: prevState.application.parseError(errorData.errors)
                             }));
                         } else if (errorData.code === "AB") {
                             errorData.errors.forEach(error => {
@@ -169,6 +144,7 @@ export default class HouseDetailPage extends Component {
 
     onConfirmBooking = () => {
         let that = this;
+        this.disableDisplay();
         return new Promise(function(resolve, reject) {
             confirmBooking(that.houseUUID, that.state.applicationUUID)
                 .then(result => {
@@ -179,6 +155,7 @@ export default class HouseDetailPage extends Component {
                 .then(result => {
                     console.log(result);
                     if (result.error) {
+                        that.enableDisplay();
                         that.confirmModalChild.current.closeModal();
                         alertUser.init({
                             message: result.error.message,
@@ -201,6 +178,14 @@ export default class HouseDetailPage extends Component {
         });
     };
 
+    disableDisplay = () => {
+        this.setState({ disableDisplay: true });
+    };
+
+    enableDisplay = () => {
+        this.setState({ disableDisplay: false });
+    };
+
     render() {
         return (
             <RequestErrorBoundary status={this.state.status}>
@@ -219,6 +204,7 @@ export default class HouseDetailPage extends Component {
                         checkoutFormRef={this.checkoutFormChild}
                         confirmModalRef={this.confirmModalChild}
                         applicationUUID={this.state.applicationUUID}
+                        disableDisplay={this.state.disableDisplay}
                     />
                 </SecretContext.Provider>
             </RequestErrorBoundary>

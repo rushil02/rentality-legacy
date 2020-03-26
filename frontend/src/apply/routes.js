@@ -10,6 +10,7 @@ export default {
         availableDates: "/property/current-availability/:houseUUID", // URL starts from root
         unavailableDates: "/property/current-unavailability/:houseUUID", // URL starts from root
         applyBooking: "initiate/:houseUUID",
-        confirmBooking: "exec-intent/:houseUUID/:applicationUUID"
+        confirmBooking: "exec-intent/:houseUUID/:applicationUUID",
+        bookingDetails: "application-info-list/:applicationUUID"
     }
 };

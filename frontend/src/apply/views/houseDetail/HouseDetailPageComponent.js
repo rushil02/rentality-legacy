@@ -37,10 +37,7 @@ export default class HouseDetailPageComponent extends Component {
             this.elementRefs.bookingSection.offsetTop +
             this.elementRefs.bookingSection.offsetParent.offsetTop -
             0.3 * window.innerHeight;
-        if (
-            (window.pageYOffset || document.documentElement.scrollTop) >
-            threshold
-        ) {
+        if ((window.pageYOffset || document.documentElement.scrollTop) > threshold) {
             // Reached apt scroll point to activate button
             if (!this.state.bookButtonActive) {
                 this.setState(prevState => ({
@@ -59,16 +56,11 @@ export default class HouseDetailPageComponent extends Component {
     };
 
     render() {
-        let furnished =
-            this.props.house.getData("furnished") === "Y"
-                ? "Furnished"
-                : "Unfurnished";
+        let furnished = this.props.house.getData("furnished") === "Y" ? "Furnished" : "Unfurnished";
         let locationVerbose = this.props.location.getData("properties");
         let address = `${locationVerbose.name}, ${locationVerbose.region}, ${locationVerbose.country} - ${locationVerbose.code}`;
         let homeOwnerName =
-            startCase(
-                lowerCase(this.props.homeOwnerInfo.getData("firstName"))
-            ) +
+            startCase(lowerCase(this.props.homeOwnerInfo.getData("firstName"))) +
             " " +
             startCase(lowerCase(this.props.homeOwnerInfo.getData("lastName")));
 
@@ -76,106 +68,64 @@ export default class HouseDetailPageComponent extends Component {
 
         return (
             <React.Fragment>
+                {this.props.disableDisplay ? <div className={styles.disabledOverlay} /> : null}
                 <ImageCarousel images={this.props.images} />
-
                 <div className={styles.pageDetail}>
                     <div className="container">
                         <div className="row" style={{ paddingBottom: "120px" }}>
                             <div className="col-lg-7 col-xl-8">
                                 <div className="left">
                                     <div className={styles.title}>
-                                        <h1>
-                                            {this.props.house.getData("title")}
-                                        </h1>
-                                        <p className={styles.address}>
-                                            {address}
-                                        </p>
+                                        <h1>{this.props.house.getData("title")}</h1>
+                                        <p className={styles.address}>{address}</p>
                                     </div>
                                     <div className={styles.box}>
                                         <div className="row">
                                             <div className="col-md-9">
-                                                <div
-                                                    className={styles.boxTitle}
-                                                >
-                                                    {furnished}{" "}
-                                                    {this.props.house.getData(
-                                                        "homeType"
-                                                    )}
+                                                <div className={styles.boxTitle}>
+                                                    {furnished} {this.props.house.getData("homeType")}
                                                 </div>
                                             </div>
                                             <div className="col-md-3"></div>
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
-                                                    <div
-                                                        className={
-                                                            styles.iconImage
-                                                        }
-                                                    >
+                                                    <div className={styles.iconImage}>
                                                         <img
                                                             src="/static/image/page-detail/left-box/1.svg"
                                                             alt=""
                                                             title=""
                                                         />
                                                     </div>
-                                                    <p
-                                                        className={
-                                                            styles.boxText
-                                                        }
-                                                    >
-                                                        {this.props.house.getData(
-                                                            "numBedrooms"
-                                                        )}{" "}
-                                                        bedrooms
+                                                    <p className={styles.boxText}>
+                                                        {this.props.house.getData("numBedrooms")} bedrooms
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
-                                                    <div
-                                                        className={
-                                                            styles.iconImage
-                                                        }
-                                                    >
+                                                    <div className={styles.iconImage}>
                                                         <img
                                                             src="/static/image/page-detail/left-box/2.svg"
                                                             alt=""
                                                             title=""
                                                         />
                                                     </div>
-                                                    <p
-                                                        className={
-                                                            styles.boxText
-                                                        }
-                                                    >
-                                                        {this.props.house.getData(
-                                                            "numBathrooms"
-                                                        )}{" "}
-                                                        bathroom
+                                                    <p className={styles.boxText}>
+                                                        {this.props.house.getData("numBathrooms")} bathroom
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
-                                                    <div
-                                                        className={
-                                                            styles.iconImage
-                                                        }
-                                                    >
+                                                    <div className={styles.iconImage}>
                                                         <img
                                                             src="/static/image/page-detail/left-box/3.svg"
                                                             alt=""
                                                             title=""
                                                         />
                                                     </div>
-                                                    <p
-                                                        className={
-                                                            styles.boxText
-                                                        }
-                                                    >
-                                                        {this.props.house.getData(
-                                                            "numParkSpaces"
-                                                        )}{" "}
-                                                        Garage
+                                                    <p className={styles.boxText}>
+                                                        {this.props.house.getData("numParkSpaces")} Garage
                                                     </p>
                                                 </div>
                                             </div>
@@ -183,113 +133,53 @@ export default class HouseDetailPageComponent extends Component {
                                     </div>
 
                                     <div className={styles.about}>
-                                        <h2 className={styles.hl2}>
-                                            About The Property
-                                        </h2>
-                                        <p className={styles.pg}>
-                                            {this.props.house.getData(
-                                                "description"
-                                            )}{" "}
-                                        </p>
-                                        <h3 className={styles.hl3}>
-                                            Tenant Access
-                                        </h3>
-                                        <p className={styles.pg}>
-                                            {this.props.house.getData(
-                                                "accessRestrictions"
-                                            )}
-                                        </p>
-                                        {this.props.house.getData(
-                                            "otherPeopleDescription"
-                                        ) ? (
+                                        <h2 className={styles.hl2}>About The Property</h2>
+                                        <p className={styles.pg}>{this.props.house.getData("description")} </p>
+                                        <h3 className={styles.hl3}>Tenant Access</h3>
+                                        <p className={styles.pg}>{this.props.house.getData("accessRestrictions")}</p>
+                                        {this.props.house.getData("otherPeopleDescription") ? (
                                             <React.Fragment>
-                                                <h3 className={styles.hl3}>
-                                                    About other People in the
-                                                    house
-                                                </h3>
+                                                <h3 className={styles.hl3}>About other People in the house</h3>
                                                 <p className={styles.pg}>
-                                                    {this.props.house.getData(
-                                                        "otherPeopleDescription"
-                                                    )}
+                                                    {this.props.house.getData("otherPeopleDescription")}
                                                 </p>
                                             </React.Fragment>
                                         ) : null}
-                                        <h3 className={styles.hl3}>
-                                            Welcome to
-                                        </h3>
-                                        <ul
-                                            className={
-                                                "list-inline " +
-                                                styles.checkList
-                                            }
-                                        >
-                                            {this.props.house
-                                                .getData("welcomeTags")
-                                                .map((item, index) => (
-                                                    <li
-                                                        key={index}
-                                                        className="list-inline-item"
-                                                    >
-                                                        {item}
-                                                    </li>
-                                                ))}
+                                        <h3 className={styles.hl3}>Welcome to</h3>
+                                        <ul className={"list-inline " + styles.checkList}>
+                                            {this.props.house.getData("welcomeTags").map((item, index) => (
+                                                <li key={index} className="list-inline-item">
+                                                    {item}
+                                                </li>
+                                            ))}
                                         </ul>
                                     </div>
 
                                     <div className={styles.infoSection}>
-                                        <h2 className={styles.hl2}>
-                                            Housing Facilities
-                                        </h2>
-                                        <ul
-                                            className={
-                                                "list-inline " +
-                                                styles.checkList
-                                            }
-                                        >
-                                            {this.props.house
-                                                .getData("facilities")
-                                                .map((item, index) => (
-                                                    <li
-                                                        key={index}
-                                                        className="list-inline-item"
-                                                    >
-                                                        {item}
-                                                    </li>
-                                                ))}
+                                        <h2 className={styles.hl2}>Housing Facilities</h2>
+                                        <ul className={"list-inline " + styles.checkList}>
+                                            {this.props.house.getData("facilities").map((item, index) => (
+                                                <li key={index} className="list-inline-item">
+                                                    {item}
+                                                </li>
+                                            ))}
                                         </ul>
                                     </div>
 
                                     <div className={styles.rule}>
-                                        <h2 className={styles.hl2}>
-                                            House Rules
-                                        </h2>
-                                        <ul
-                                            className={
-                                                "list-group list-group-flush"
-                                            }
-                                        >
-                                            {this.props.house
-                                                .getData("rules")
-                                                .map((item, index) => (
-                                                    <li
-                                                        key={index}
-                                                        className="list-group-item"
+                                        <h2 className={styles.hl2}>House Rules</h2>
+                                        <ul className={"list-group list-group-flush"}>
+                                            {this.props.house.getData("rules").map((item, index) => (
+                                                <li key={index} className="list-group-item">
+                                                    <div
+                                                        className={"d-flex justify-content-between align-items-center"}
                                                     >
-                                                        <div
-                                                            className={
-                                                                "d-flex justify-content-between align-items-center"
-                                                            }
-                                                        >
-                                                            <span>
-                                                                {item.rule}
-                                                            </span>
-                                                            <span>
-                                                                {item.value}
-                                                            </span>
-                                                        </div>
-                                                        <p>{item.comment}</p>
-                                                    </li>
-                                                ))}
+                                                        <span>{item.rule}</span>
+                                                        <span>{item.value}</span>
+                                                    </div>
+                                                    <p>{item.comment}</p>
+                                                </li>
+                                            ))}
                                         </ul>
                                         <p
                                             style={{
@@ -297,63 +187,38 @@ export default class HouseDetailPageComponent extends Component {
                                                 marginBottom: "30px"
                                             }}
                                         >
-                                            {this.props.house.getData(
-                                                "otherRules"
-                                            )}
+                                            {this.props.house.getData("otherRules")}
                                         </p>
 
                                         <div className={styles.pg}>
-                                            Minimum Length of Stay -{" "}
-                                            <b>
-                                                {this.props.house.getData(
-                                                    "minStay"
-                                                )}
-                                            </b>
+                                            Minimum Length of Stay - <b>{this.props.house.getData("minStay")}</b>
                                         </div>
 
                                         <div className={styles.pg}>
                                             Maximum Length of Stay -{" "}
                                             <b>
-                                                {this.props.house.getData(
-                                                    "maxStay"
-                                                ) !== 0
-                                                    ? this.props.house.getData(
-                                                          "maxStay"
-                                                      )
+                                                {this.props.house.getData("maxStay") !== 0
+                                                    ? this.props.house.getData("maxStay")
                                                     : "No Limit"}
                                             </b>
                                         </div>
 
                                         <div className={styles.pg}>
                                             Maximum Number of People Allowed -{" "}
-                                            <b>
-                                                {this.props.house.getData(
-                                                    "maxPeopleAllowed"
-                                                )}
-                                            </b>
+                                            <b>{this.props.house.getData("maxPeopleAllowed")}</b>
                                         </div>
                                     </div>
 
                                     <div className={styles.infoSection}>
-                                        <h2 className={styles.hl2}>
-                                            Cancellation Policy
-                                        </h2>
+                                        <h2 className={styles.hl2}>Cancellation Policy</h2>
                                         <h3 className={styles.hl3}>
-                                            {this.props.cancellationPolicy.getData(
-                                                "verbose"
-                                            )}
+                                            {this.props.cancellationPolicy.getData("verbose")}
                                         </h3>
-                                        <p>
-                                            {this.props.cancellationPolicy.getData(
-                                                "description"
-                                            )}
-                                        </p>
+                                        <p>{this.props.cancellationPolicy.getData("description")}</p>
                                     </div>
 
                                     <div className={styles.infoSection}>
-                                        <h2 className={styles.hl2}>
-                                            About area
-                                        </h2>
+                                        <h2 className={styles.hl2}>About area</h2>
                                         <div className={styles.map}>
                                             <iframe
                                                 width="100%"
@@ -366,43 +231,22 @@ export default class HouseDetailPageComponent extends Component {
                                                 allowFullScreen
                                             ></iframe>
                                         </div>
-                                        <h3 className={styles.hl3}>
-                                            Local Area Facilities
-                                        </h3>
-                                        <ul
-                                            className={
-                                                "list-inline " +
-                                                styles.checkList
-                                            }
-                                        >
-                                            {this.props.house
-                                                .getData(
-                                                    "neighbourhoodFacilities"
-                                                )
-                                                .map((item, index) => (
-                                                    <li
-                                                        key={index}
-                                                        className="list-inline-item"
-                                                    >
-                                                        {item}
-                                                    </li>
-                                                ))}
+                                        <h3 className={styles.hl3}>Local Area Facilities</h3>
+                                        <ul className={"list-inline " + styles.checkList}>
+                                            {this.props.house.getData("neighbourhoodFacilities").map((item, index) => (
+                                                <li key={index} className="list-inline-item">
+                                                    {item}
+                                                </li>
+                                            ))}
                                         </ul>
                                         <p className={styles.pg}>
-                                            {this.props.house.getData(
-                                                "neighbourhoodDescription"
-                                            )}
+                                            {this.props.house.getData("neighbourhoodDescription")}
                                         </p>
                                     </div>
 
                                     <div className={styles.infoSection}>
-                                        <h2 className={styles.hl2}>
-                                            About Home Owner
-                                        </h2>
-                                        <div
-                                            className={"row"}
-                                            style={{ marginBottom: "30px" }}
-                                        >
+                                        <h2 className={styles.hl2}>About Home Owner</h2>
+                                        <div className={"row"} style={{ marginBottom: "30px" }}>
                                             <div className={"col-3"}>
                                                 <div
                                                     style={{
@@ -410,59 +254,25 @@ export default class HouseDetailPageComponent extends Component {
                                                     }}
                                                 >
                                                     <img
-                                                        src={this.props.homeOwnerInfo.getData(
-                                                            "profilePicture"
-                                                        )}
-                                                        className={
-                                                            "rounded-circle " +
-                                                            styles.userImage
-                                                        }
+                                                        src={this.props.homeOwnerInfo.getData("profilePicture")}
+                                                        className={"rounded-circle " + styles.userImage}
                                                         alt=""
                                                         title=""
                                                     />
                                                 </div>
                                             </div>
                                             <div className={"col-9"}>
-                                                <h3 className={styles.hl3}>
-                                                    {homeOwnerName}
-                                                </h3>
+                                                <h3 className={styles.hl3}>{homeOwnerName}</h3>
 
-                                                <div
-                                                    className={
-                                                        "list " + styles.tagList
-                                                    }
-                                                >
-                                                    <ul
-                                                        className={
-                                                            "list-inline " +
-                                                            styles.listInline
-                                                        }
-                                                    >
+                                                <div className={"list " + styles.tagList}>
+                                                    <ul className={"list-inline " + styles.listInline}>
                                                         {this.props.homeOwnerInfo
-                                                            .getData(
-                                                                "personalityTags"
-                                                            )
-                                                            .map(
-                                                                (
-                                                                    item,
-                                                                    index
-                                                                ) => (
-                                                                    <li
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        className={
-                                                                            "list-inline-item"
-                                                                        }
-                                                                    >
-                                                                        <a>
-                                                                            {
-                                                                                item
-                                                                            }
-                                                                        </a>
-                                                                    </li>
-                                                                )
-                                                            )}
+                                                            .getData("personalityTags")
+                                                            .map((item, index) => (
+                                                                <li key={index} className={"list-inline-item"}>
+                                                                    <a>{item}</a>
+                                                                </li>
+                                                            ))}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -483,20 +293,14 @@ export default class HouseDetailPageComponent extends Component {
                                         <ApplyPanel
                                             homeOwnerName={homeOwnerName}
                                             application={this.props.application}
-                                            onFieldChange={
-                                                this.props
-                                                    .handleApplicationChange
-                                            }
+                                            onFieldChange={this.props.handleApplicationChange}
                                             checkoutFormRef={this.props.checkoutFormRef}
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div
-                                className="d-lg-none col-12"
-                                style={{ marginTop: "70px" }}
-                            >
+                            <div className="d-lg-none col-12" style={{ marginTop: "70px" }}>
                                 <APIRequestButton
                                     cTextOptions={{
                                         default: "Book Now",
@@ -526,24 +330,12 @@ function getInfoSidePanel(that, address) {
                     <BookingInfoPanel
                         house={that.props.house}
                         bookingDateRange={{
-                            startDate: that.props.application.getData(
-                                "bookingStartDate",
-                                ["bookingInfo"]
-                            ),
-                            endDate: that.props.application.getData(
-                                "bookingEndDate",
-                                ["bookingInfo"]
-                            )
+                            startDate: that.props.application.getData("bookingStartDate", ["bookingInfo"]),
+                            endDate: that.props.application.getData("bookingEndDate", ["bookingInfo"])
                         }}
-                        numGuests={that.props.application.getData("numGuests", [
-                            "bookingInfo"
-                        ])}
+                        numGuests={that.props.application.getData("numGuests", ["bookingInfo"])}
                         onNumGuestsChange={numGuests =>
-                            that.props.handleApplicationChange(
-                                "numGuests",
-                                numGuests,
-                                ["bookingInfo"]
-                            )
+                            that.props.handleApplicationChange("numGuests", numGuests, ["bookingInfo"])
                         }
                         address={address}
                         cancellationPolicy={that.props.cancellationPolicy}
@@ -555,19 +347,15 @@ function getInfoSidePanel(that, address) {
                             {that.state.bookButtonActive ? (
                                 <ConfirmBookingModal
                                     onApply={that.props.onApply}
-                                    onConfirmBooking={
-                                        that.props.onConfirmBooking
-                                    }
+                                    onConfirmBooking={that.props.onConfirmBooking}
                                     ref={that.props.confirmModalRef}
-                                    applicationUUID = {that.props.applicationUUID}
+                                    applicationUUID={that.props.applicationUUID}
                                 ></ConfirmBookingModal>
                             ) : (
                                 <a
                                     className="imp-button-style"
                                     onClick={() => {
-                                        that.scrollToRef(
-                                            that.elementRefs.bookingSection
-                                        );
+                                        that.scrollToRef(that.elementRefs.bookingSection);
                                     }}
                                 >
                                     Book Now
@@ -590,24 +378,12 @@ function getInfoMobilePanel(that, address) {
                 <BookingInfoPanel
                     house={that.props.house}
                     bookingDateRange={{
-                        startDate: that.props.application.getData(
-                            "bookingStartDate",
-                            ["bookingInfo"]
-                        ),
-                        endDate: that.props.application.getData(
-                            "bookingEndDate",
-                            ["bookingInfo"]
-                        )
+                        startDate: that.props.application.getData("bookingStartDate", ["bookingInfo"]),
+                        endDate: that.props.application.getData("bookingEndDate", ["bookingInfo"])
                     }}
-                    numGuests={that.props.application.getData("numGuests", [
-                        "bookingInfo"
-                    ])}
+                    numGuests={that.props.application.getData("numGuests", ["bookingInfo"])}
                     onNumGuestsChange={numGuests =>
-                        that.props.handleApplicationChange(
-                            "numGuests",
-                            numGuests,
-                            ["bookingInfo"]
-                        )
+                        that.props.handleApplicationChange("numGuests", numGuests, ["bookingInfo"])
                     }
                     address={address}
                     cancellationPolicy={that.props.cancellationPolicy}

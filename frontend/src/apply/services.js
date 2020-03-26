@@ -105,3 +105,20 @@ export function getApplicantData() {
             });
     });
 }
+
+export function getBookingData(applicationUUID) {
+    return new Promise(function(resolve, reject) {
+        axios
+            .get(
+                reverse(routes.apply.bookingDetails, {
+                    applicationUUID: applicationUUID
+                })
+            )
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
