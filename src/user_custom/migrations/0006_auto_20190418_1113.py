@@ -2,22 +2,22 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-from payment_gateway.adapters.stripe import get_all_accounts
+# from payment_gateway.adapters.stripe import get_all_accounts
 
-
+# FIXME: URGENT
 def initialize_country_for_users(apps, schema_editor):
     Account = apps.get_model('user_custom', 'Account')
     Country = apps.get_model('cities', 'Country')
-    accounts = get_all_accounts()
-    for account in accounts.data:
-        try:
-            user_account = Account.objects.get(details__account_id=account.id)
-            user_profile = user_account.user.userprofile
-            country = Country.objects.get(code=account.country)
-            user_profile.billing_country = country
-            user_profile.save()
-        except (Account.DoesNotExist, Country.DoesNotExist) as e:
-            continue
+    # accounts = get_all_accounts()
+    # for account in accounts.data:
+    #     try:
+    #         user_account = Account.objects.get(details__account_id=account.id)
+    #         user_profile = user_account.user.userprofile
+    #         country = Country.objects.get(code=account.country)
+    #         user_profile.billing_country = country
+    #         user_profile.save()
+    #     except (Account.DoesNotExist, Country.DoesNotExist) as e:
+    #         continue
 
 
 class Migration(migrations.Migration):

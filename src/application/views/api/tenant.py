@@ -84,10 +84,6 @@ class InitiateBookingView(APIView):
             else:
                 tenant_user = user
 
-            payment_gateway = ()
-
-            booking.use_payment_gateway(payment_gateway)
-
             application_db = Application(
                 house=house,
                 tenant=tenant_user.tenant,
@@ -100,11 +96,13 @@ class InitiateBookingView(APIView):
             )
             application_db.save()
 
-            booking.initialize()
-
-            booking.record_to_db(application_db)
-            booking.inform_entities(application_db)
-
-            response['booking'] = booking.get_response()
+            try:
+                response['res'] = booking.initialize()
+            except Exception as e:
+                print(e)
+            # booking.execute_payment_gateway()
+            #
+            # booking.record_to_db(application_db)
+            # booking.inform_entities(application_db)
 
         return Response(response, status=HTTP_200_OK)

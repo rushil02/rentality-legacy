@@ -1,3 +1,6 @@
+import pytz
+import math
+
 from .business_model import BusinessModel
 from .promo_code import PromoCode
 
@@ -8,9 +11,9 @@ class House(object):
     constraints. It does not save or synchronize with `house.models.House`.
     """
 
-    def __init__(self, rent, min_stay, max_stay, promo_codes, max_people_allowed):
+    def __init__(self, rent, min_stay, max_stay, promo_codes, max_people_allowed, timezone):
         """
-        :param rent: [Decimal] rent per day
+        :param rent: [Decimal] rent per week
         :param min_stay: Positive Integer
         :param max_stay: Positive Integer
         :param promo_codes: [`PromoCode` object, ...]
@@ -18,8 +21,12 @@ class House(object):
         self.promo_codes = promo_codes
         self.rent = rent
         self.min_stay = min_stay
-        self.max_stay = max_stay
+        if max_stay != 0:
+            self.max_stay = max_stay
+        else:
+            self.max_stay = math.inf
         self.max_people_allowed = max_people_allowed
+        self.timezone = pytz.timezone(timezone)
         self._business_model = None
 
     def get_rent(self):
@@ -59,7 +66,7 @@ class House(object):
     #     WARNING: Ignores frozen BusinessModelConfig information. Consider using
     #     'load(...)' instead.
     #
-    #     Creates a new Financial House object. This will ignore the existing recorded financial
+    #     Creates a new Financial locationHouse object. This will ignore the existing recorded financial
     #     or agreement info of business config, and create from fresh sources.
     #
     #     If the data is being calculated for a known business_config, use `load(...)` method.
@@ -93,7 +100,8 @@ class House(object):
         obj = cls(
             rent=db_obj.get_rent_per_day(), min_stay=db_obj.min_stay, max_stay=db_obj.max_stay,
             max_people_allowed=db_obj.max_people_allowed,
-            promo_codes=_promo_codes
+            promo_codes=_promo_codes,
+            timezone=db_obj.local_timezone
         )
         obj.set_business_model(business_model_db=db_obj.business_config)
         obj.set_can_policy(cancellation_policy_db=db_obj.cancellation_policy)
@@ -102,19 +110,3 @@ class House(object):
     def validate(self, raise_exception=False):
         return self._business_model.validate_house(self, raise_exception)
 
-    def validate_application(self, application):
-        errors = []
-
-        date_range = application.get_date_range()
-        stay_length = (date_range[1] - date_range[0]).days
-
-        if self.min_stay > stay_length:
-            errors.append('Minimum length of stay should be greater than %s days.' % self.min_stay)
-
-        if self.max_stay < stay_length:
-            errors.append('Maximum length of stay should be less than %s days.' % self.max_stay)
-
-        if self.max_people_allowed < application.guests_num:
-            errors.append('Number of guests more than allowed.')
-
-        return errors

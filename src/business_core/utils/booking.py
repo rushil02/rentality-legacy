@@ -1,13 +1,7 @@
+from payment_gateway.utils import PaymentGateway
 from .house import House
 from .application import Application
 from application.utils import STATUS_CHOICES
-
-
-def get_state_reverse_map():
-    res = {'_no_app_': None}
-    for choice_set in STATUS_CHOICES:
-        res[choice_set[1]] = choice_set[0]
-    return res
 
 
 class Booking(object):
@@ -26,29 +20,20 @@ class Booking(object):
     """
 
     # region init
-    __ACTOR_REVERSE_MAP_FOR_DB = {
-        'tenant': 'T',
-        'homeowner': 'H',
-        'system': 'S',
-        'admin': 'A',
-        'staff': 'A'
-    }
-
-    __STATE_REVERSE_MAP_FOR_DB = get_state_reverse_map()
-
     def __init__(self, application, actor, state):
         """
         :param application: 'Application' object
         """
         self._application = application
-        self._payment_gateway = None
-        self._business_model = None
         self._actor = actor
-        self.state = state
+        self.current_state = state
 
-        self._acc_info = {}
-        self._response = {}
-        self._inform_entities = {}
+        # self._acc_info = {}
+        # self._response = {}
+        # self._inform_entities = {}
+
+        self._payment_gateway = None
+        self._payment_gateway_info = {}
 
     @property
     def business_model(self):
@@ -56,7 +41,7 @@ class Booking(object):
 
     @property
     def cancellation_policy(self):
-        return self._application.get_can_policy()
+        return self._application.get_cancellation_policy()
 
     @classmethod
     def load(cls, application_obj, actor, payment_gateway):
@@ -93,71 +78,71 @@ class Booking(object):
             promo_codes=[],  # TODO: Validate and send promo codes
         )
         application.set_prospective_booking_date(booking_date)
-        return cls(application, actor, '_no_app_')
+        obj = cls(application, actor, '_no_app_')
+        obj.use_payment_gateway(PaymentGateway.create(house_db=house_db))
+        return obj
 
     # endregion
 
     def validate(self):
         return self._application.validate()
 
+    def set_new_state(self, new_state):
+        self.current_state = new_state
+
     def use_payment_gateway(self, payment_gateway):
         """
-        :param payment_gateway:
+        :param payment_gateway: 'payment_gateway.utils.PaymentGateway'
         :return:
         """
-        self._payment_gateway = None  # TODO
+        self._payment_gateway = payment_gateway
 
-    def get_current_state(self):
-        return self.state
-
-    def set_new_state(self, new_state):
-        self.state = new_state
-
-    def record_to_db(self, application_db):
-        """
-        :param application_db:
-        :return:
-        """
-        # ApplicationState
-        application_db.update_status(self.__STATE_REVERSE_MAP_FOR_DB[self.get_current_state()],
-                                     self.__ACTOR_REVERSE_MAP_FOR_DB[self._actor])
-        try:
-            application_db.update_account(meta_info=self._acc_info)
-        except AssertionError:
-            application_db.create_account(
-                business_model_config=self.business_model.get_db_object(),
-                cancellation_policy=self.business_model.get_can_db_object(),
-            )
-        else:
-            application_db.update_account(meta_info=self._acc_info)
+    # def record_to_db(self, application_db):
+    #     """
+    #     :param application_db:
+    #     :return:
+    #     """
+    #     # ApplicationState
+    #     application_db.update_status(self.__STATE_REVERSE_MAP_FOR_DB[self.get_current_state()],
+    #                                  self.__ACTOR_REVERSE_MAP_FOR_DB[self._actor])
+    #     try:
+    #         application_db.update_account(meta_info=self._acc_info)
+    #     except AssertionError:
+    #         application_db.create_account(
+    #             business_model_config=self.business_model.get_db_object(),
+    #             cancellation_policy=self.business_model.get_can_db_object(),
+    #         )
+    #     else:
+    #         application_db.update_account(meta_info=self._acc_info)
 
         # Rentality records
         # PaymentGatewayTransaction
         # LedgerRecord
 
-    def _load_data(self, result):
-        self.set_new_state(result['state'])
-        self._response = result.get('response', {})
-        self._acc_info = result.get('acc_info', {})
-        self._inform_entities = result.get('mail', {})
+    # def _load_data(self, result):
+    #     self.set_new_state(result['state'])
+    #     self._response = result.get('response', {})
+    #     self._acc_info = result.get('acc_info', {})
+    #     self._inform_entities = result.get('mail', {})
+    #     self._payment_gateway_info = result.get('payment_gateway', {})
 
-    def get_response(self):
-        return self._response
-
-    def inform_entities(self, application_db):
-        pass
-        # tenant email
-        # homeowner email
+    # def execute_payment_gateway(self):
+    #     resp = self._payment_gateway.execute(self._payment_gateway_info['action'])
+    #     self._response['PG'] = self._payment_gateway_info['response'](resp)
 
     def initialize(self):
         """
         Use to initialize a booking process.
         :return:
         """
-        result = self.business_model.on_event(
+        payment_gateway = ()
+        action = self.business_model.on_event(
             self.get_current_state(), self.business_model.get_start_event(), self._actor
         )
-        self._load_data(result)
+        action.execute_all(None, payment_gateway)
+
+        # self._load_data(result)
+        return action.response
 
     def execute_intent(self):
         result = self.business_model.on_event(

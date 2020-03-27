@@ -134,7 +134,6 @@ export default class AvailabilitySelectorComponent extends Component {
             }
         }
 
-
         return (
             <button
                 className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
@@ -145,8 +144,6 @@ export default class AvailabilitySelectorComponent extends Component {
                 <FontAwesomeIcon icon={buttonConfig.icon}/>
             </button>
         )
-
-
     };
 
     getRemoveButton = () => {
@@ -227,19 +224,25 @@ export default class AvailabilitySelectorComponent extends Component {
 
         return (
             <React.Fragment>
-                <div className="card mb-3">
+                <div className={"card mb-3 " + styles.accordionBorder}>
                     {this.getInfoCard()}
-                    <div className={"collapse " + styles.availabilitySelectorContainer}
-                         id={"collapsibleCalendar-" + this.props.idKey}>
-                        <DateRangePicker
-                            ranges={[selectionRange]}
-                            onChange={this.handleSelect}
-                            months={monthsScreenNum}
-                            minDate={new Date()}
-                            direction={'horizontal'}
-                            staticRanges={staticRanges}
-                            inputRanges={inputRanges}
-                        />
+                    <div className={"collapse " + styles.availabilitySelectorContainer} id={"collapsibleCalendar-" + this.props.idKey}>
+                        <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
+                            <div className={"row"}>
+                                <div className={"col-12 " + styles.availabilitySelectorContainer}
+                                     style={{padding: "20px"}}>
+                                    <DateRangePicker
+                                        ranges={[selectionRange]}
+                                        onChange={this.handleSelect}
+                                        months={monthsScreenNum}
+                                        minDate={new Date()}
+                                        direction={'horizontal'}
+                                        staticRanges={staticRanges}
+                                        inputRanges={inputRanges}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </React.Fragment>

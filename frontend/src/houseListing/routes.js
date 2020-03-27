@@ -35,5 +35,6 @@ export default {
         }),
         neighbourhoodDescriptors: 'neighbourhood-desc/:houseUUID',
         welcomeTags: 'welcome-tags/:houseUUID',
+        checkPayoutDetails: 'check-payout-details/:houseUUID',
     }
 }

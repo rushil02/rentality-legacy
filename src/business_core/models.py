@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Q
 
 from .adapters.business_model.behaviours import get_behaviours
+from .adapters.business_model.financials import get_financial_models
 from .adapters.business_model.validations import get_constraints_models
 from .adapters.cancellation import get_cancellation_behaviours
 from cities.models import City, Region, Country
@@ -76,12 +77,12 @@ class BusinessModelConfigurationManager(models.Manager):
                     'house_location_id__isnull': True,
                 }
             ]
-            for i in range(0, 2):
-                for j in range(0, 2):
+            for hl_kwargs in house_location_kwargs:
+                for bl_kwargs in home_owner_billing_location_kwargs:
                     query_filter = query_filter | Q(
                         default=True,
-                        **house_location_kwargs[i],
-                        **home_owner_billing_location_kwargs[j]
+                        **hl_kwargs,
+                        **bl_kwargs
                     )
         return query_filter
 
@@ -109,9 +110,8 @@ class BusinessModelConfigurationManager(models.Manager):
         ]
         for home_owner_billing_location_not_null, house_location_type in priority:
             for filtered_business_conf in filtered_business_confs:
-                if bool(
-                        filtered_business_conf.home_owner_billing_location) == home_owner_billing_location_not_null and type(
-                    filtered_business_conf.house_location) == house_location_type:
+                if bool(filtered_business_conf.home_owner_billing_location) == home_owner_billing_location_not_null \
+                        and type(filtered_business_conf.house_location) == house_location_type:
                     return filtered_business_conf
 
 
@@ -129,20 +129,29 @@ class BusinessModelConfiguration(models.Model):
 
     meta = JSONField()
 
+    description = models.TextField(help_text="This will be shown to the user.")
+
     CONSTRAINTS_MODELS = get_constraints_models()
     constraints_model = models.CharField(
         max_length=1, choices=CONSTRAINTS_MODELS,
         help_text="Defines constraints unique to business model",
         verbose_name='Validation constraints model'
     )
-    constraints_description = models.TextField(help_text="This will be shown to the user.")
 
     cancellation_policies = models.ManyToManyField('business_core.CancellationPolicy')
 
     BEHAVIOURS = get_behaviours()
-    behaviour = models.CharField(max_length=1, choices=BEHAVIOURS,
-                                 help_text="Defines behaviours unique to business model")
-    behaviour_description = models.TextField(help_text="This will be shown to the user.")
+    behaviour = models.CharField(
+        max_length=1, choices=BEHAVIOURS,
+        help_text="Defines behaviours unique to business model"
+    )
+
+    FINANCIAL_MODELS = get_financial_models()
+    financial_model = models.CharField(
+        max_length=1, choices=FINANCIAL_MODELS,
+        help_text="Defines attributes for financial handling unique to business model",
+        verbose_name='Financial constraints model'
+    )
 
     home_owner_billing_location = models.ForeignKey(
         'cities.Country', on_delete=models.PROTECT, null=True, blank=True,
@@ -162,6 +171,10 @@ class BusinessModelConfiguration(models.Model):
     active = models.BooleanField(default=False)
     default = models.BooleanField(default=False)
 
+    # TODO: Add compatible_payment_gateways field (many to many)
+    # ^ Required while creating business model and checking compatibility with available
+    # models and geographical coverage
+
     created_on = models.DateTimeField(auto_now_add=True)
 
     objects = BusinessModelConfigurationManager()
@@ -170,10 +183,13 @@ class BusinessModelConfiguration(models.Model):
         return "%s" % self.code
 
     def get_description(self):
-        return {'constraints': self.constraints_description, 'behaviour': self.behaviour_description}
+        return self.description
 
     def get_constraints_meta(self):
-        return self.meta['constraints']
+        return self.meta.get('constraints', {})
 
     def get_behaviour_meta(self):
-        return self.meta
+        return self.meta.get('behaviour', {})
+
+    def get_financial_meta(self):
+        return self.meta.get('financial', {})

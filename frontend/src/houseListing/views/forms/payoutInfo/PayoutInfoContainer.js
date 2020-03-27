@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {UserPII} from "userAccount/models";
-import PayoutInfoComponent from "./PayoutInfoComponent";
-import {getUserProfileData} from "userAccount/services";
+import BillingInfoContainer from "./BillingInfoContainer";
+import {checkHousePayoutInfo} from "houseListing/services";
+import {ResponseLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
+import PGInfoContainer from "./PGInfoContainer";
 
 /**
  *     IMPORTANT: Do NOT use Cache here
@@ -13,44 +14,41 @@ export default class PayoutInfoContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: new UserPII({}, 'empty'),
+            verifying: true,
+            statusBI: 'Verifying'
         };
     }
 
     componentDidMount() {
-        this.props.navContext.data.loadForm(this.formID, this.onSave, 'initial', "Rent & Availability");
+        this.props.navContext.data.loadForm(this.formID, this.onSave, 'initial', "Billing and Bank Information");
 
-        if (this.state.data.status === 'empty') {
-            // Fetch house details
-            getUserProfileData()
-                .then(result => {
-                    this.setState(prevState => (
-                        {
-                            ...prevState,
-                            data: result,
-                        })
-                    );
-                    this.props.navContext.data.updateFormState(this.formID, 'saved');
-                    this.props.navContext.sync();
+        checkHousePayoutInfo(this.props.houseUUID)
+            .then(result => {
+                this.setState(prevState => (
+                    {
+                        ...prevState,
+                        verifying: false,
+                        statusBI: 'Complete'
+                    })
+                );
 
-                });
-        } else {
-            this.props.navContext.data.updateFormState(this.formID, this.state.data.status);
-        }
-        this.props.navContext.sync();
+            }).catch(error => {
+            if (error.response.status === 406 && error.response.data.code === "BIM") {
+                this.setState(prevState => (
+                    {
+                        ...prevState,
+                        verifying: false,
+                        statusBI: 'Incomplete'
+                    })
+                );
+            }
+        });
+
+        // this.props.navContext.sync();
     };
 
     componentWillUnmount() {
         this.props.navContext.data.unloadForm();
-    };
-
-    onFieldChange = (field, value) => {
-        this.setState(prevState => ({
-            ...prevState,
-            data: prevState.data.setData(field, value)
-        }));
-        this.props.navContext.data.updateCurrentFormState('hasChanged');
-        this.props.navContext.sync();
     };
 
     onSave = () => {
@@ -62,19 +60,20 @@ export default class PayoutInfoContainer extends Component {
 
     render() {
         return (
-            <PayoutInfoComponent
-                onFieldChange={this.onFieldChange}
-                errors={this.state.data.errors}
-                email={this.state.data.getData('email')}
-                sex={this.state.data.getData('sex')}
-                billingCountry={this.state.data.getData('billingCountry')}
-                lastName={this.state.data.getData('lastName')}
-                DOB={this.state.data.getData('DOB')}
-                billingPostcode={this.state.data.getData('billingPostcode')}
-                accountType={this.state.data.getData('accountType')}
-                contactNum={this.state.data.getData('contactNum')}
-                billingStreetAddress={this.state.data.getData('billingStreetAddress')}
-            />
+            <React.Fragment>
+                {this.state.verifying ?
+                    <ResponseLoadingSpinner height={"20vh"} message={"Verifying your Billing details"}/> : null
+                }
+                <div className="col-md-12" style={{marginTop: "50px"}}>
+                    <BillingInfoContainer
+                        status={this.state.statusBI}
+                    />
+                    <PGInfoContainer
+                        statusBI={this.state.statusBI}
+                    />
+                </div>
+            </React.Fragment>
         )
     }
+
 }

@@ -1,2 +1,5 @@
 .git
 ./__test_emails
+__pycache__/
+*.py[cod]
+*$py.class

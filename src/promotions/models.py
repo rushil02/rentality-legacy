@@ -142,7 +142,7 @@ class PromotionalCode(models.Model):
         if self.meta:
             if self.get_meta_data('override_default_validation', default=False) and self.active:
                 try:
-                    self.get_meta_data('vapromo-resultlidation_list')
+                    self.get_meta_data('validation_list')
                 except KeyError:
                     raise ValidationError({
                         'code': _(

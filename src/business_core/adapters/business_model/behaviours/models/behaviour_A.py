@@ -1,4 +1,5 @@
-from .base import BehaviourBase
+from application.utils import STATE_REVERSE_MAP_FOR_DB, ACTOR_REVERSE_MAP_FOR_DB
+from ..base import BehaviourBase, Action, TenantAction
 from django.utils import timezone
 
 
@@ -34,8 +35,60 @@ def tenant_execute_intent(**kwargs):
         'mail': {
             'tenant': 'booked',
             'home_owner': 'booked'
+        },
+        'payment_gateway': {
+            'action': 'get_intent',
+            'response': lambda resp: resp['client_secret']
         }
     }
+
+
+class TenantIntend(Action):
+    """
+    Possible states -> Error
+    """
+    ACTOR = 'Tenant'
+
+    @property
+    def next_state(self):
+        return 'Booked'
+
+    def execute_payment_gateway(self, payment_gateway):
+        self.response['PG'] = payment_gateway.get_intent(self._application)['client_secret']
+
+    def record_to_db(self, application_db):
+        application_db.update_status(
+            new_state=STATE_REVERSE_MAP_FOR_DB[self._application.current_state],
+            actor=ACTOR_REVERSE_MAP_FOR_DB[self.ACTOR]
+        )
+
+    def inform_entities(self, application_db):
+        pass
+
+
+class TenantExecuteIntent(TenantAction):
+    """
+    Possible states -> Error, Booked
+    """
+    ACTOR = 'Tenant'
+
+    # EMAIL = ''
+
+    @property
+    def next_state(self):
+        return 'Booked'
+
+    def execute_payment_gateway(self, payment_gateway):
+        self.response['PG'] = payment_gateway.get_intent(self._application)['client_secret']
+
+    def record_to_db(self, application_db):
+        application_db.update_status(
+            new_state=STATE_REVERSE_MAP_FOR_DB[self._application.current_state],
+            actor=ACTOR_REVERSE_MAP_FOR_DB[self.ACTOR]
+        )
+
+    def inform_entities(self, application_db):
+        pass
 
 
 def system_execute_intent(**kwargs):
@@ -46,6 +99,13 @@ def system_execute_intent(**kwargs):
             'state': 'Error',
             'meta': {'message': 'Transaction Failed'}
         }
+
+
+class SystemExecuteIntent(Action):
+
+    @property
+    def next_state(self):
+        return 'Booked'
 
 
 class BehaviourA(BehaviourBase):
@@ -68,16 +128,16 @@ class BehaviourA(BehaviourBase):
     STATE_MAP = {
         'tenant': {
             '_no_app_': {
-                'intend': tenant_intend,
+                'intend': tenant_intend(),
             },
             'Incomplete': {
                 'update': tenant_update,
-                'execute_intent': tenant_execute_intent,
+                'execute_intent': TenantExecuteIntent,
             },
         },
         'system': {
             'Pending Locked': {
-                'execute_intent': system_execute_intent,
+                'execute_intent': SystemExecuteIntent,
             }
         }
     }

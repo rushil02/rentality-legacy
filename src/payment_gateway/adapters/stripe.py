@@ -7,15 +7,15 @@ Home Owner -
 Tenant -
 """
 import stripe
-
+#
 from .base import PaymentGatewayBase, AccountBase, PGTransactionError, PGTransaction, AccountDoesNotExist
 from rentality.settings.common import get_env_var
-
-from django.conf import settings
-
-
-#FIXME: Remove After new implementation of wrapper. Added to use in migrations.
-stripe.api_key = settings.STRIPE_SECRET_KEY
+#
+# from django.conf import settings
+#
+#
+# #FIXME: Remove After new implementation of wrapper. Added to use in migrations.
+# stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def execute_request(request, *args, **kwargs):
@@ -149,7 +149,6 @@ class HomeOwnerAccount(AccountBase):
         pass
 
 
-
 class TenantAccount(Account):
     def __init__(self, account_info):
         """
@@ -173,20 +172,22 @@ class TenantAccount(Account):
 class StripePaymentGateway(PaymentGatewayBase):
     STRIPE_PUBLISHABLE_KEY = get_env_var('STRIPE_PUBLISHABLE_KEY')
     STRIPE_SECRET_KEY = get_env_var('STRIPE_SECRET_KEY')
+    STRIPE_VERSION = "2020-03-02"
 
-    USES_VIRTUAL_HOME_OWNER_ACCOUNT = True
+    # USES_VIRTUAL_HOME_OWNER_ACCOUNT = True
+    #
+    # # Maps
+    # TRANSACTION_TYPES = (
+    #     ('DC', 'Destination Charge', "Transaction from Tenant to Home-Owner Virtual Account"),
+    #     ('T', 'Transfer', "Virtual Transfer from Rentality Virtual Account to Home-owner Virtual Account"),
+    #     ('P', 'Payout', "Transaction from Home-owner Virtual Account to Home-owner"),
+    #     ('RT', 'Reverse Transfer', "Virtual Transfer from Home-owner Virtual Account to Rentality Virtual Account"),
+    #     ('R', 'Refund', "Transaction from Rentality Virtual Account to Tenant"),
+    # )
 
-    # Maps
-    TRANSACTION_TYPES = (
-        ('DC', 'Destination Charge', "Transaction from Tenant to Home-Owner Virtual Account"),
-        ('T', 'Transfer', "Virtual Transfer from Rentality Virtual Account to Home-owner Virtual Account"),
-        ('P', 'Payout', "Transaction from Home-owner Virtual Account to Home-owner"),
-        ('RT', 'Reverse Transfer', "Virtual Transfer from Home-owner Virtual Account to Rentality Virtual Account"),
-        ('R', 'Refund', "Transaction from Rentality Virtual Account to Tenant"),
-    )
+    # HomeOwnerAccount = Account
+    # TenantAccount = Account
 
-    HomeOwnerAccount = Account
-    TenantAccount = Account
 
     def execute_request(self, request_api, *args, **kwargs):
         try:

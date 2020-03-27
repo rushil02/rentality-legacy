@@ -1,7 +1,12 @@
 .loadingContainer {
     display: flex;
     flex-wrap: nowrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: inherit;
+}
+
+.message {
+    color: #3fc692;
 }

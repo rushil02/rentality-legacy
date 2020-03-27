@@ -1,3 +1,4 @@
+from business_core.adapters.business_model.financials import get_financial_model_class
 from business_core.adapters.business_model.validations import get_constraints_model_class
 from business_core.adapters.business_model.behaviours import get_behaviour_class
 from business_core.adapters.cancellation import get_cancellation_behaviour_class
@@ -18,11 +19,15 @@ class BusinessModel(object):
         self._can_policy_db = None
 
         self.validator = get_constraints_model_class(business_model_config.constraints_model)(
-            constraints_meta=business_model_config.get_constraints_meta()
+            meta=business_model_config.get_constraints_meta()
         )
         self.behaviour = get_behaviour_class(business_model_config.behaviour)(
             meta=business_model_config.get_behaviour_meta()
         )
+        self.financial_model = get_financial_model_class(business_model_config.financial_model)(
+            meta=business_model_config.get_financial_meta()
+        )
+
         self.can_policy_behaviour = None
 
     def set_cancellation_policy(self, cancellation_policy):
@@ -31,6 +36,16 @@ class BusinessModel(object):
         """
         self._can_policy_db = cancellation_policy
         self.can_policy_behaviour = get_cancellation_behaviour_class(cancellation_policy.behaviour)()
+
+    def set_application(self, application):
+        self.validator.set_application(application=application)
+        self.behaviour.set_application(application=application)
+        self.financial_model.set_application(application=application)
+
+    def set_house(self, house):
+        self.validator.set_house(house=house)
+        self.behaviour.set_house(house=house)
+        self.financial_model.set_house(house=house)
 
     def get_db_object(self):
         return self._db
@@ -77,17 +92,11 @@ class BusinessModel(object):
         :param raise_exception: boolean
         :return:
         """
-        return self.constraints_model.validate_house(raise_exception)
+        return self.validator.validate_house(raise_exception)
 
-    def validate_application(self, application):
+    def validate_application(self):
         """
-        :param raise_exception: boolean
         :return: [errors, ...]
         """
-        return self.validator.validate_application(application=application)
+        return self.validator.validate_application()
 
-    def get_errors(self):
-        return self.constraints_model.get_errors()
-
-    def cancel(self):
-        ...

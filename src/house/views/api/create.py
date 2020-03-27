@@ -16,6 +16,9 @@ from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
 from house.serializers.create import ImageUploadSerializer, NeighbourhoodDescriptorSerializer, \
     WelcomeTagSerializer, HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer, \
     HouseRuleCreateSerializer, FacilitySerializer, RuleReadSerializer
+from payment_gateway.models import PaymentGatewayLocation
+from payment_gateway.utils import PaymentGateway
+from user_custom.models import Account
 from utils.api_thumbnailer import resize_image
 
 
@@ -452,3 +455,38 @@ class WelcomeTagsListView(APIView):
             qs = self.get_tags(house)
             serializer = self.serializer_class(qs, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class CheckPayoutDetailsView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, request, house_uuid):
+        return get_object_or_404(House.objects.all(), uuid=house_uuid, home_owner__user=request.user)
+
+    def get(self, request, house_uuid):
+        user = request.user
+        house = self.get_object(request, house_uuid)
+
+        if not user.has_billing_information():
+            response = {'msg': 'Billing information is missing', 'code': 'BIM'}
+            return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        payment_gateway_location = PaymentGatewayLocation.objects.get_location_default(
+            house_location=house.get_location(),
+            billing_location=house.home_owner.user.get_billing_location()
+        )
+
+        pg = PaymentGateway(payment_gateway_location)
+
+        try:
+            user_account = Account.objects.get(
+                user=user,
+                payment_gateway=payment_gateway_location.payment_gateway
+            )
+        except Account.DoesNotExist:
+            response = pg.create_payout_account()
+            return Response({}, status=status.HTTP_200_OK)
+        else:
+            pg.set_homeowner(user_account)
+            response = pg.verify_payout_account()
+            return Response(response, status=status.HTTP_200_OK)

@@ -10,7 +10,7 @@ from django.conf import settings
 
 from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
 from utils.model_utils import next_ref_code, get_nested_info
-from .utils import STATUS_CHOICES
+from .utils import STATUS_CHOICES, ACTOR_CHOICES
 
 
 class Application(models.Model):
@@ -142,12 +142,6 @@ class ApplicationState(models.Model):
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT)
     old_state = models.OneToOneField('self', on_delete=models.PROTECT, null=True, blank=True)
     new_state = models.CharField(max_length=2, choices=STATUS_CHOICES)
-    ACTOR_CHOICES = (
-        ('T', "Tenant"),
-        ('H', "Home Owner"),
-        ('A', "Admin/Staff"),
-        ('S', "System")
-    )
     actor = models.CharField(max_length=1, choices=ACTOR_CHOICES)
     created_on = models.DateTimeField(auto_now_add=True)
 

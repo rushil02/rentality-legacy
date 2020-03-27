@@ -14,39 +14,31 @@ Basic Expected behaviour    [Updated - 16 March 2019]
     - Tenant Accounts
 """
 
-from abc import ABC, abstractmethod, ABCMeta
+
+# class AccountBase(ABC):
+#     def __init__(self, account_info):
+#         """
+#         Override constructor to add attributes.
+#
+#         :param account_info: dict
+#         """
+#         self._account_info = account_info
+#
+#     @abstractmethod
+#     def get_account_info(self):
+#         raise NotImplementedError
 
 
-class PGTransactionError(Exception):
-
-    def get_details(self):
-        return self.details
-
-
-class AccountDoesNotExist(Exception):
-    pass
-
-
-class AccountBase(ABC):
-    def __init__(self, account_info):
-        """
-        Override constructor to add attributes.
-
-        :param account_info: dict
-        """
-        self._account_info = account_info
-
-    @abstractmethod
-    def get_account_info(self):
-        raise NotImplementedError
 
 
 class PGTransaction(object):
-    def __init__(self, response):
-        self.type = type
+    def __init__(self, response, meta):
+        self._response = response
+        self.user_response = response
+        self.meta_store = meta
 
 
-class PaymentGatewayBase(ABC):
+class PaymentGatewayBase(object):
     """
     List all processes that can be handled via the payment gateway
 
@@ -58,48 +50,66 @@ class PaymentGatewayBase(ABC):
     directly maps with `.PaymentGateway.TRANSACTION_TYPES' using the
     first element is each tuple. It is necessary to match each rele
     """
-    USES_VIRTUAL_HOME_OWNER_ACCOUNT = False
-    USES_VIRTUAL_TENANT_ACCOUNT = False
 
-    TRANSACTION_TYPES = ()
-
-    HomeOwnerAccount = AccountBase
-    TenantAccount = AccountBase
+    # Register all actions here
+    # TODO: BusinessModel behaviour and Payment gateway compatibility can be auto-checked here ??
+    # {event: lambda obj: obj.action_method_name, ...}
+    EVENT_ACTION_MAP = {}
 
     def __init__(self):
-        self.transactions = []
-        self.home_owner_account = None
-        self.tenant_account = None
+        self.application = None
+        self.house = None
+        self.home_owner = None
+        self.tenant = None
 
-    @classmethod
-    def init(cls, home_owner_account, tenant_account):
-        obj = cls()
-        obj.home_owner_account = obj.HomeOwnerAccount(home_owner_account)
-        obj.tenant_account = obj.TenantAccount(tenant_account)
+    def on_event(self, event):
+        try:
+            return self.EVENT_ACTION_MAP[event](self)()
+        except KeyError:
+            raise AssertionError("%s is not allowed" % event)
+
+    # USES_VIRTUAL_HOME_OWNER_ACCOUNT = False
+    # USES_VIRTUAL_TENANT_ACCOUNT = False
+    #
+    # TRANSACTION_TYPES = ()
+    #
+    # HomeOwnerAccount = AccountBase
+    # TenantAccount = AccountBase
+
+    # def __init__(self):
+    #     self.transactions = []
+    #     self.home_owner_account = None
+    #     self.tenant_account = None
+
+    # @classmethod
+    # def init(cls, home_owner_account, tenant_account):
+    #     obj = cls()
+    #     obj.home_owner_account = obj.HomeOwnerAccount(home_owner_account)
+    #     obj.tenant_account = obj.TenantAccount(tenant_account)
 
     # region Methods required to be implemented in each payment gateway wrapper
 
-    @abstractmethod
-    def create_home_owner_account(self, *args, **kwargs):
-        raise NotImplementedError
-
-    @abstractmethod
-    def create_tenant_account(self, *args, **kwargs):
-        raise NotImplementedError
-
-    @abstractmethod
-    def process_pay_in(self, amount):
-        raise NotImplementedError
-
-    @abstractmethod
-    def process_pay_out(self, amount):
-        raise NotImplementedError
-
-    @abstractmethod
-    def process_refund(self, amount):
-        raise NotImplementedError
-
-    # endregion
-
-    def get_transaction_types(self):
-        return self.TRANSACTION_TYPES
+    # @abstractmethod
+    # def create_home_owner_account(self, *args, **kwargs):
+    #     raise NotImplementedError
+    #
+    # @abstractmethod
+    # def create_tenant_account(self, *args, **kwargs):
+    #     raise NotImplementedError
+    #
+    # @abstractmethod
+    # def process_pay_in(self, amount):
+    #     raise NotImplementedError
+    #
+    # @abstractmethod
+    # def process_pay_out(self, amount):
+    #     raise NotImplementedError
+    #
+    # @abstractmethod
+    # def process_refund(self, amount):
+    #     raise NotImplementedError
+    #
+    # # endregion
+    #
+    # def get_transaction_types(self):
+    #     return self.TRANSACTION_TYPES

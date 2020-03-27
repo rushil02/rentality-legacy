@@ -49,6 +49,7 @@ export class ResponseLoadingSpinner extends React.Component {
                         color={'#3fc692'}
                         loading={true}
                     />
+                    {this.props.message ? <div className={styles.message}>{this.props.message}</div> : null}
                 </div>
             </div>
         )

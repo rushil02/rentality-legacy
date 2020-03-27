@@ -1,4 +1,14 @@
 from .adapters import get_adaptor_class
+from .models import PaymentGatewayLocation
+
+
+class User(object):
+    def __init__(self, user):
+        self.email = user.email
+        self.first_name = user.first_name
+        self.last_name = user.last_name
+        self.dob = user.userprofile.dob
+        self.country = user.get_billing_location()
 
 
 class PaymentGateway(object):
@@ -27,8 +37,36 @@ class PaymentGateway(object):
         """
         self._payment_gateway = get_adaptor_class(payment_gateway_location.payment_gateway.code)()
 
+    # @classmethod
+    # def create(cls, house_db):
+    #     """
+    #     # TODO: Enhancement can be made - if rentality's ledgers become single source of truth,
+    #             payment gateway can be chosen on other criteria than on the basis of existing
+    #             home owner account
+    #
+    #     :param house_db:
+    #     :return: cls object
+    #     """
+    #
+    #     obj = PaymentGatewayLocation.objects.get_location_default(
+    #         house_location=house_db.get_location(),
+    #         billing_location=house_db.home_owner.user.get_billing_location()
+    #     )
+    #     return cls(payment_gateway_location=obj)
+
     def get_transaction_record(self):
         return
+
+    def set_user_account(self, user_account):
+        """
+        :param user_account: 'user_custom.models.Account' object
+        :return:
+        """
+
+    def create_payout_account(self):
+        # self._payment_gateway.
+        # return response
+        ...
 
     def parse_PII(self, user):
         return {
@@ -40,6 +78,10 @@ class PaymentGateway(object):
             'street_address': user.userprofile.billing_street_address,
 
         }
+
+
+    def on_event(self, event):
+        return self._payment_gateway.on_event(event)
 
     def perform_pay_in(self, amount):
         self._payment_gateway.process_pay_in(amount)

@@ -143,7 +143,7 @@
                     {% static "image/placeholders/property/home-page-small.png" as default_property_small %}
                     {% for house in house_list|slice:":8" %}
                         <div class="col-md-4 col-lg-3">
-                            <a href="{% url 'house:info' house_uuid=house.uuid %}" class="list">
+                            <a href="/rep/apply/property/info/{{house.uuid }}" class="list">
                                 <div class="image">
                                     <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_small'|default:default_property_small }}"
                                          class="w-100" alt="" title="">

@@ -20,6 +20,7 @@ from django.conf import settings
 
 from house.helpers import check_house_availability, filter_past_dates, filter_small_date_ranges, get_available_dates, \
     filter_dates_wrt_lower
+from house.utils import get_timezone_for_postal_code
 
 
 def get_file_path(instance, filename):
@@ -153,6 +154,7 @@ class House(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    local_timezone = models.CharField(max_length=50)
 
     objects = DeleteManager()
     active_objects = ActiveHouseManager()
@@ -254,7 +256,12 @@ class House(models.Model):
 
     def save(self, *args, **kwargs):
         object_is_new = not self.pk
+
+        if object_is_new and not self.local_timezone:
+            self.local_timezone = get_timezone_for_postal_code(self.location)
+
         super(House, self).save(*args, **kwargs)
+
         if object_is_new:
             HouseProfile.objects.create(house=self)
             rules = []

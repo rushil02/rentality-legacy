@@ -93,6 +93,22 @@ class User(AbstractUser):
     def get_billing_location(self):
         return self.userprofile.get_billing_location()
 
+    def has_billing_information(self):
+        ret = True
+        user_profile = self.userprofile
+
+        if self.first_name and self.last_name and user_profile.contact_num and user_profile.dob \
+                and user_profile.billing_street_address and user_profile.billing_postcode \
+                and user_profile.billing_country:
+            pass
+        else:
+            ret = False
+
+        if user_profile.account_type == 'B' and not user_profile.business_name:
+            ret = False
+
+        return ret
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

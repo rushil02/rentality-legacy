@@ -13,7 +13,7 @@ Example of handled data and behaviour -
     - Home-owner charge
 """
 import inspect
-from .behaviour_A import BehaviourA
+from .models.behaviour_A import BehaviourA
 
 # Register all models here
 BEHAVIOURS = {

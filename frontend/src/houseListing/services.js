@@ -321,7 +321,7 @@ export function getNeighbourhoodDescriptors(houseUUID) {
                 resolve(new APIModelListAdapter(result.data, NeighbourhoodDescriptor, 'id'));
             })
             .catch(error => {
-                handleError(error)
+                reject(handleError(error).error)
             });
     });
 }
@@ -345,7 +345,7 @@ export function getWelcomeTags(houseUUID) {
                 resolve(new APIModelListAdapter(result.data, WelcomeTag, 'id'));
             })
             .catch(error => {
-                handleError(error)
+                reject(handleError(error))
             });
     });
 }
@@ -360,4 +360,17 @@ export function postWelcomeTags(houseUUID, data) {
                 reject(handleError(error).error);
             })
     })
+}
+
+
+export function checkHousePayoutInfo(houseUUID) {
+    return new Promise(function (resolve, reject) {
+        axios.get(reverse(routes.house.checkPayoutDetails, {houseUUID: houseUUID}))
+            .then(result => {
+                resolve(result);
+            })
+            .catch(error => {
+                reject(error)
+            });
+    });
 }

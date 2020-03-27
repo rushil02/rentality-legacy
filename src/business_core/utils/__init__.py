@@ -3,3 +3,4 @@ from .application import Application
 from .business_model import BusinessModel
 from .house import House
 from .promo_code import PromoCode
+from .listing import Listing

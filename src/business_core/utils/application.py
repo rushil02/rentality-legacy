@@ -22,31 +22,26 @@ class Application(object):
         self.promo_codes = promo_codes
 
         self._business_model = self._allocate_business_model()
+        self._business_model.set_application(self)
         self._cancellation_policy = self._allocate_can_policy()
-        self._booking_date = None
 
-        self.total_rent = None
+        self._booking_date_time = None
 
-    @classmethod
-    def build(cls, db_obj):
-        """
-        WARNING: This will load the current object of the linked house and not the frozen info.
+    @property
+    def check_in_date(self):
+        return self.date_range[0]
 
-        Create a new Financial Application object. This will ignore the existing recorded financial
-        or agreement info of business config, and create from fresh sources.
+    @property
+    def check_out_date(self):
+        return self.date_range[1]
 
-        It is assumed that promo codes are already clean and validated.
+    @property
+    def homeowner_account(self):
+        return self.get_business_model().financial_model.homeowner_account
 
-        :param db_obj: 'application.models.Application` object
-        :return: cls object
-        """
-        house = House.load(db_obj.house)
-        obj = cls(
-            house=house, date_range=db_obj.get_stay_date_range(),
-            guests_num=db_obj.get_meta_info('guests'),
-            promo_codes=[PromoCode(obj) for obj in db_obj.get_all_promo_codes()]
-        )
-        return obj
+    @property
+    def tenant_account(self):
+        return self.get_business_model().financial_model.tenant_account
 
     @classmethod
     def load(cls, db_obj):
@@ -62,7 +57,8 @@ class Application(object):
             rent=db_obj.get_house_meta_info('rent'), min_stay=db_obj.get_house_meta_info('min_stay'),
             max_stay=db_obj.get_house_meta_info('max_stay'),
             promo_codes=[PromoCode(obj) for obj in db_obj.get_house_meta_info('promo_codes')],
-            max_people_allowed=db_obj.get_house_meta_info('max_people_allowed')
+            max_people_allowed=db_obj.get_house_meta_info('max_people_allowed'),
+            timezone=db_obj.get_house_meta_info('local_timezone')
         )
         house.set_business_model(db_obj.get_house_meta_info('business_config'))
 
@@ -101,20 +97,24 @@ class Application(object):
     def get_business_model(self):
         return self._business_model
 
-    def set_prospective_booking_date(self, datetime_obj):
-        self._booking_date = datetime_obj
+    def set_cancellation_policy(self, cancellation_policy):
+        """
+        :param cancellation_policy: `CancellationPolicy` object
+        """
+        self._cancellation_policy = cancellation_policy
 
-    def get_booking_buffer_days(self):
-        return (self.date_range[0] - self._booking_date).days
+    def get_cancellation_policy(self):
+        return self._cancellation_policy
+
+    def set_prospective_booking_date(self, datetime_obj):
+        self._booking_date_time = datetime_obj
+
+    def get_booking_date_time(self):
+        if self._booking_date_time:
+            return self._booking_date_time
+        raise ValueError("Booking date is not provided")
 
     def validate(self):
         errors = []
-        errors += self.house.validate_application(self)
-        errors += self.get_business_model().validate_application(self)
+        errors += self.get_business_model().validate_application()
         return errors
-
-    def get_errors(self):
-        return self.get_business_model().get_errors()
-
-    def get_date_range(self):
-        return self.date_range

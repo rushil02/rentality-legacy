@@ -2,7 +2,8 @@ from django.urls import path
 
 from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
     FacilityListView, HouseRuleListView, HouseRuleListCreateView, ImagesListView, ImageView, \
-    ApplicableCancellationPolicyListView, CancellationPolicyView, NeighbourhoodDescriptorListView, WelcomeTagsListView
+    ApplicableCancellationPolicyListView, CancellationPolicyView, NeighbourhoodDescriptorListView, WelcomeTagsListView, \
+    CheckPayoutDetailsView
 from house.views.api.actions import ActivateHouseListing, DeactivateHouseListing
 from house.views.api.read import HouseDetailsPublicView, NetAvailableDatesView, NetUnavailableDatesView
 
@@ -59,6 +60,7 @@ urlpatterns = [
     path('can-pol/update/<uuid:house_uuid>', CancellationPolicyView.as_view(), name='set_cancellation_policy'),
     path('neighbourhood-desc/<uuid:house_uuid>', NeighbourhoodDescriptorListView.as_view(), name='nearby_facility'),
     path('welcome-tags/<uuid:house_uuid>', WelcomeTagsListView.as_view(), name='welcome_tags'),
+    path('check-payout-details/<uuid:house_uuid>', CheckPayoutDetailsView.as_view(), name='check_payout'),
 
     # Actions
     path('activate/<uuid:house_uuid>', ActivateHouseListing.as_view(), name='activate_listing'),
