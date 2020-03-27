@@ -4,12 +4,16 @@ from django.utils import timezone
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
 from application.models import Application, AccountDetail
-from application.serializers import ApplicationCreateSerializer
+from application.serializers import ApplicationCreateSerializer, ApplicationInfoSerializer
 from business_core.utils import Booking
 from house.models import House
 from user_custom.views import create_user_for_anon
+from application.permissions import IsTenantOfApplication
+
 
 
 class ExecuteIntentBookingView(APIView):
@@ -26,17 +30,22 @@ class ExecuteIntentBookingView(APIView):
 
         response = {}
 
-        booking = Booking.load(
-            application_obj=application,
-            actor='tenant',
-            payment_gateway=()
-        )
+        # booking = Booking.load(
+        #     application_obj=application,
+        #     actor='tenant',
+        #     payment_gateway=()
+        # )
 
-        booking.execute_intent()
-        booking.record_to_db(application_db=application)
-        booking.inform_entities(application_db=application)
+        # booking.execute_intent()
+        # booking.record_to_db(application_db=application)
+        # booking.inform_entities(application_db=application)
 
-        response['booking'] = booking.get_response()
+        # payment_gateway = StripePaymentGateway()
+        # intent = payment_gateway.get_intent()
+
+        # response['booking'] = booking.get_response()
+        # response['client_secret'] = "pi_1GNH9ZAQ89qRjn0aB9tXQTPE_secret_W7o1624kqPYoA8N6TuSEvigaC"
+        # response['client_secret'] = intent['client_secret']
 
         return Response(response, status=HTTP_200_OK)
 
@@ -57,7 +66,7 @@ class InitiateBookingView(APIView):
 
         response = {}
 
-        if application.is_valid(raise_exception=True):
+        if application.is_valid(raise_exception=False):
 
             booking = Booking.create(
                 house_db=house,
@@ -65,11 +74,11 @@ class InitiateBookingView(APIView):
                 actor='tenant',
                 booking_date=timezone.localdate()
             )
-            
+
             # Validate Application
             errors = booking.validate()
             if errors:
-                return Response({'data': 'booking validation failed', 'errors': errors}, status=HTTP_400_BAD_REQUEST)
+                return Response({'code': 'AB', 'errors': errors}, status=HTTP_400_BAD_REQUEST)
 
             if not user.is_authenticated:
                 # Check is user with email exists
@@ -83,6 +92,10 @@ class InitiateBookingView(APIView):
                     response['inform'] = ['Email check and Login to dashboard']
             else:
                 tenant_user = user
+
+            payment_gateway = ()
+
+            booking.use_payment_gateway(payment_gateway)
 
             application_db = Application(
                 house=house,
@@ -105,4 +118,23 @@ class InitiateBookingView(APIView):
             # booking.record_to_db(application_db)
             # booking.inform_entities(application_db)
 
+        else:
+            return Response({'code': 'AA', 'errors': application.errors}, status=HTTP_400_BAD_REQUEST)
         return Response(response, status=HTTP_200_OK)
+
+
+
+class GetApplicationDetails(APIView):
+    """
+    Used to get all house listings owned by current user
+    """
+    permission_classes = (IsAuthenticated, IsTenantOfApplication)
+
+    def get_object(self, application_uuid):
+        return get_object_or_404(Application.objects.all(), uuid=application_uuid)
+
+
+    def get(self, request, application_uuid):
+        application = self.get_object(application_uuid)
+        serializer = ApplicationInfoSerializer(application)
+        return Response(serializer.data)

@@ -286,6 +286,7 @@ a.imp-button-style, button.imp-button-style {
     cursor: pointer;
     text-transform: uppercase;
     transition: all .25s ease-in-out;
+    -webkit-appearance: none;
 }
 
 a.imp-button-style:hover, a.imp-button-style:focus,

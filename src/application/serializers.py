@@ -3,10 +3,13 @@ from rest_framework import serializers
 
 from application.models import Application
 from promotions.models import PromotionalCode
+from tenant.serializers import TenantInfoSerializer
+from utils.serializer_fields import DateRangeField
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
+
         model = Application
         fields = '__all__'
         read_only_fields = (
@@ -14,11 +17,29 @@ class ApplicationSerializer(serializers.ModelSerializer):
         )
 
 
+class ApplicationInfoSerializer(serializers.ModelSerializer):
+    booking_amount = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='tenant_amount',
+        source='accountdetail'
+    )
+    tenant = TenantInfoSerializer()
+    booking_dates = DateRangeField(source='date')
+    status = serializers.CharField(source='get_status_display')
+    # FIXME: change house_meta to specific information
+
+    class Meta:
+        model = Application
+        fields = ('uuid', 'house_meta', 'tenant', 'rent',
+                  'status', 'booking_dates', 'booking_amount')
+
+
 class BookingInfoSerializer(serializers.Serializer):
     start_date = serializers.DateField()
     end_date = serializers.DateField()
     guests = serializers.IntegerField()
-    promo_codes = serializers.ListField(child=serializers.CharField(required=False), required=False)
+    promo_codes = serializers.ListField(
+        child=serializers.CharField(required=False), required=False)
 
 
 class BookingAmountDetailsSerializer(serializers.Serializer):

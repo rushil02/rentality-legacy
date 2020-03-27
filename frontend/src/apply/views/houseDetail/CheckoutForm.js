@@ -1,79 +1,59 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 // import {CardElement, injectStripe} from 'react-stripe-elements';
-import {ElementsConsumer, CardElement} from '@stripe/react-stripe-js';
+import { CardElement } from "@stripe/react-stripe-js";
 
 import styles from "./CheckoutForm.css";
-import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 
-class CheckoutForm extends Component {
+export default class CheckoutForm extends Component {
     constructor(props) {
         super(props);
     }
 
-    // handleSubmit = async (event) => {
-    //
-    //     const {stripe, elements} = this.props;
-    //
-    //     if (!stripe || !elements) {
-    //         return;
-    //     }
-    //
-    //     // Get intent details
-    //     // const intent = await
-    //     const result = await stripe.confirmCardPayment('{CLIENT_SECRET}', {
-    //         payment_method: {
-    //             card: elements.getElement(CardElement),
-    //             billing_details: {
-    //                 name: 'Jenny Rosen',
-    //             },
-    //         }
-    //     });
-    //
-    //     if (result.error) {
-    //         // Show error to your customer (e.g., insufficient funds)
-    //         console.log(result.error.message);
-    //     } else {
-    //         // The payment has been processed!
-    //         if (result.paymentIntent.status === 'succeeded') {
-    //             // Show a success message to your customer
-    //             // There's a risk of the customer closing the window before callback
-    //             // execution. Set up a webhook or plugin to listen for the
-    //             // payment_intent.succeeded event that handles any business critical
-    //             // post-payment actions.
-    //         }
-    //     }
-    // };
-
-    submit = (name) => {
-        // TODO: hit URL intent
+    submit = () => {
 
         let data = {
             payment_method: {
-                card: elements.getElement(CardElement),
+                card: this.props.elements.getElement(CardElement),
                 billing_details: {
-                    name: 'Jenny Rosen',
-                },
+                    name: this.props.name
+                }
             }
         };
 
-        this.props.stripe.confirmCardPayment('{CLIENT_SECRET}', data)
-            .then(result => {
-                console.log(result);
-            }).catch(error => {
-                console.log(error)
-            });
+        return this.props.stripe.confirmCardPayment(
+            this.props.clientSecret,
+            data
+        );
 
-        console.log("Purchase Complete!")
+        // this.props.stripe
+        //     .confirmCardPayment(this.props.clientSecret, data)
+        //     .then(result => {
+        //         console.log(result);
+        //         if (result.error) {
+        //             // Show error to your customer (e.g., insufficient funds)
+        //             // close modal
+        //             // use alert
+        //             console.log(result.error.message);
+        //         } else {
+        //             if (result.paymentIntent.status === "succeeded") {
+        //                 //Redirect to success page
+        //                 console.log("Hurray");
+        //             }
+        //         }
+        //         return result;
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     });
     };
 
     componentDidUpdate(prevProps) {
-        if (this.props.requestForToken && this.props.requestForToken !== prevProps.requestForToken) {
-            this.submit(this.props.name);
-        }
+        // if (this.props.requestForToken && this.props.requestForToken !== prevProps.requestForToken) {
+        //     this.submit(this.props.name);
+        // }
     }
 
     render() {
-
         const CARD_ELEMENT_OPTIONS = {
             style: {
                 base: {
@@ -82,42 +62,36 @@ class CheckoutForm extends Component {
                     fontSmoothing: "antialiased",
                     fontSize: "16px",
                     "::placeholder": {
-                        color: "#aab7c4",
-                    },
+                        color: "#aab7c4"
+                    }
                 },
                 invalid: {
                     color: "#fa755a",
-                    iconColor: "#fa755a",
-                },
-            },
+                    iconColor: "#fa755a"
+                }
+            }
         };
 
         return (
             <div className={styles.wrapper}>
-                <CardElement options={CARD_ELEMENT_OPTIONS}/>
+                <CardElement options={CARD_ELEMENT_OPTIONS} />
             </div>
         );
     }
 }
 
-function getLoadStatus(stripe, elements) {
-    if (!stripe || !elements) {
-        return "loading"
-    } else {
-        return "done"
-    }
-}
-
-export default function () {
-    return (
-        <ElementsConsumer>
-            {({stripe, elements}) => {
-                return (
-                    <RequestErrorBoundary status={getLoadStatus(stripe, elements)}>
-                        <CheckoutForm stripe={stripe} elements={elements}/>
-                    </RequestErrorBoundary>
-                )
-            }}
-        </ElementsConsumer>
-    );
-}
+// export default function() {
+//     return (
+//         <ElementsConsumer>
+//             {({ stripe, elements }) => {
+//                 return (
+//                     <RequestErrorBoundary
+//                         status={getLoadStatus(stripe, elements)}
+//                     >
+//                         <CheckoutForm stripe={stripe} elements={elements} />
+//                     </RequestErrorBoundary>
+//                 );
+//             }}
+//         </ElementsConsumer>
+//     );
+// }
