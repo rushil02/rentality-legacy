@@ -5,7 +5,7 @@ import commonStyles from "../FormCommon.css"
 
 
 export function RulesComponent(props) {
-    if (Object.entries(props.data).length === 0) {
+    if (props.data.length === 0) {
         return <ComponentLoadingSpinner/>
     }
     return (
@@ -15,7 +15,7 @@ export function RulesComponent(props) {
                 <div className="col-md-10">
                     <h1 className={commonStyles.pageTitle}>What are your house rules ?</h1>
                     <div className="big-list">
-                        {Object.entries(props.data).map((item) =>
+                        {props.data.map((item) =>
                             <ChoiceRuleDOM data={item[1]} key={item[0]}
                                            onCommentChange={props.onCommentChange}
                                            onOptionChange={props.onOptionChange}
