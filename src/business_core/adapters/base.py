@@ -22,7 +22,7 @@ class Adapter(object):
             try:
                 setattr(self, attr, self._meta['attr'][attr])
             except KeyError:
-                raise Exception("%s - Required value not fund in constraints by DB." % attr)
+                raise Exception("%s - Required value not found in constraints by DB." % attr)
 
         self.application = None
         self.house = None

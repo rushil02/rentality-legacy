@@ -118,13 +118,14 @@ export default class APIModelAdapter {
         const keyList = key.split('.');
 
         if (keyList.length > 1) {
-            for (let i = 0; i < keyList.length; i++) {
+            for (let i = 0; i < keyList.length - 1; i++) {
                 if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
                     modelObj = modelObj.getData(keyList[i]);
                 } else {
                     throw `${keyList[i]} is not a valid key in  ${this.constructor.name} | ${keyList}`
                 }
             }
+            key = keyList[keyList.length - 1]
         } else {
             // TODO: Remove parentList access URGENT!
             if (parentList && Array.isArray(parentList)) {
@@ -222,6 +223,8 @@ export default class APIModelAdapter {
         if (keyList.length > 1) {
             for (let i = 0; i < keyList.length; i++) {
                 if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
+                    modelObj.status = "hasChanged";
+                    modelObj.changedFields.push(keyList[i]);
                     modelObj = modelObj.getData(keyList[i]);
                 } else {
                     throw `${keyList[i]} is not a valid key in  ${this.constructor.name} | ${keyList}`
@@ -233,7 +236,7 @@ export default class APIModelAdapter {
                 for (let i = 0; i < parentList.length; i++) {
                     if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
                         modelObj.status = "hasChanged";
-                        modelObj.changedFields.push(key);
+                        modelObj.changedFields.push(parentList[i]);
                         modelObj = modelObj.getData(parentList[i]);
                     } else {
                         throw `${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`
