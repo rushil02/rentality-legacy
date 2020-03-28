@@ -229,7 +229,7 @@ export default class HouseDetailPageComponent extends Component {
                                                 }}
                                                 src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyClsJFzjgJBxhY3D4HDn4V_EG9Y5FYqdqQ&q=${address}`}
                                                 allowFullScreen
-                                            ></iframe>
+                                            />
                                         </div>
                                         <h3 className={styles.hl3}>Local Area Facilities</h3>
                                         <ul className={"list-inline " + styles.checkList}>
@@ -350,7 +350,7 @@ function getInfoSidePanel(that, address) {
                                     onConfirmBooking={that.props.onConfirmBooking}
                                     ref={that.props.confirmModalRef}
                                     applicationUUID={that.props.applicationUUID}
-                                ></ConfirmBookingModal>
+                                />
                             ) : (
                                 <a
                                     className="imp-button-style"
