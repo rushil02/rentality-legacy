@@ -49,7 +49,7 @@ export default class BookingSuccessPage extends Component {
                                 </div>
                                 <div className="col-md-12 col-lg-12 col-xl-12">
                                     <div className={styles.board}>
-                                        <div className="row">
+                                        <div className="row align-items-center">
                                             <div className="col-md-3">
                                                 <div className="image">
                                                     <img
@@ -70,9 +70,7 @@ export default class BookingSuccessPage extends Component {
                                                                         Move in
                                                                     </div>
                                                                     <div className={styles.dateDisplay + " text-left"}>
-                                                                        {booking.getData("startDate", [
-                                                                            "bookingDateRange"
-                                                                        ])}
+                                                                        {booking.getData("bookingDateRange.startDate")}
                                                                     </div>
                                                                 </div>
                                                                 <div className={"col-2 " + styles.centerArrow} />
@@ -83,9 +81,7 @@ export default class BookingSuccessPage extends Component {
                                                                         Move out
                                                                     </div>
                                                                     <div className={styles.dateDisplay + " text-right"}>
-                                                                        {booking.getData("endDate", [
-                                                                            "bookingDateRange"
-                                                                        ])}
+                                                                        {booking.getData("bookingDateRange.endDate")}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -104,13 +100,20 @@ export default class BookingSuccessPage extends Component {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-md-8">
-                                                        <h1>La Salentina, sea, nature & relax</h1>
-                                                        <h2>Capital Territory, Australia Love Street No 322 </h2>
-                                                        <p>
-                                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                                            sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                            aliqua.
-                                                        </p>
+                                                        <a
+                                                            className={styles.title + " btn-link"}
+                                                            href={reverse(routes.react.apply.houseInfo, {
+                                                                houseUUID: booking.getData("bookedHouse.houseUUID")
+                                                            })}
+                                                        >
+                                                            <h1>{booking.getData("bookedHouse.title")}</h1>
+                                                        </a>
+                                                        <h2>
+                                                            {booking.getData("bookedHouse.houseNum")},{" "}
+                                                            {booking.getData("bookedHouse.streetName")}
+                                                        </h2>
+                                                        <h2>{booking.getData("bookedHouse.location")}</h2>
+                                                        <p>{booking.getData("bookedHouse.homeType")}</p>
                                                         <div className={styles.confirm}>
                                                             <button className={styles.btn + " btn-link"}>
                                                                 {booking.getData("status")}
@@ -118,55 +121,15 @@ export default class BookingSuccessPage extends Component {
                                                         </div>
                                                     </div>
                                                     {/* <div className="col-md-4">
-                                                        <ul
-                                                            className={
-                                                                styles.listUnstyled
-                                                            }
-                                                        >
-                                                            <li>
-                                                                <a href="">
-                                                                    View invoice
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    Message Host
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    View guest's
-                                                                    itinerary
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    Change/Cancel
-                                                                    reservation
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    View house
-                                                                    rule
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                        <div
-                                                            className={
-                                                                styles.detail
-                                                            }
-                                                        >
-                                                            <button
-                                                                className={
-                                                                    styles.btn +
-                                                                    " btn-link"
-                                                                }
-                                                            >
-                                                                Detail
-                                                            </button>
+                                                        <div className={styles.tenantInfo}>
+                                                            <h2>
+                                                                {booking.getData("applicant.firstName")}{" "}
+                                                                {booking.getData("applicant.lastName")}
+                                                            </h2>
+                                                            <h2>{booking.getData("applicant.email")}</h2>
+                                                            <h2>{booking.getData("applicant.contactNum")}</h2>
                                                         </div>
-                                                    </div>*/}
+                                                    </div> */}
                                                 </div>
                                             </div>
                                         </div>

@@ -111,7 +111,6 @@ export default class APIRequestButton extends Component {
                 }
             })
             .catch((error) => {
-                console.log(error);
                 this.setState({status: "error"});
                 if (this.props.onFailure !== undefined) {
                     this.props.onFailure(error);
