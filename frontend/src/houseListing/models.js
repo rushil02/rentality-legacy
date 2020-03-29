@@ -150,7 +150,7 @@ export class Navigator {
 
     addSaveCallback = (key, callback) => {
         this._forms[this.currForm].saveCallbacks[key] = callback;
-    }
+    };
 
     removeSaveCallback = (formNumber, key) => {
         if(this._forms.hasOwnProperty(formNumber)){
@@ -158,7 +158,7 @@ export class Navigator {
                 delete this._forms[formNumber].saveCallbacks[key];
             }
         }
-    }
+    };
 
     getCurrentVerbose = () => {
         return this._forms[this.currForm].verbose

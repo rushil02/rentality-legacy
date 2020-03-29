@@ -6,28 +6,11 @@ export class PostalCodeSearchModel extends APIModelAdapter {
     fieldMap() {
         return {
             id: {key: "_id"},
-            parent_verbose: {
-                key: "_source",
-                parser: this.parentVerboseParser
-            },
+            parent_verbose: {key: "_source.parent_verbose"},
             // geo_point_lat: {key:'geo_point_lat',},
             // geo_point_lon: {key:'geo_point_lon',},
-            verbose: {key: "_source", parser: this.verboseParser}
+            verbose: {key: "_source.verbose"}
         };
-    }
-
-    verboseParser(value) {
-        if (value) {
-            return value["verbose"];
-        }
-        return "";
-    }
-
-    parentVerboseParser(value) {
-        if (value) {
-            return value["parent_verbose"];
-        }
-        return "";
     }
 }
 

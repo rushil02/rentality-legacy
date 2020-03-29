@@ -1,4 +1,4 @@
-import { omit } from "lodash";
+import {omit} from "lodash";
 
 export default class APIModelAdapter {
     /**
@@ -104,43 +104,26 @@ export default class APIModelAdapter {
          */
     }
 
-    getData = (key, parentList) => {
+    getData = (key) => {
         /**
-         * 'parentList' is an array used for nested 'APIModelAdapter' model objects. Array is in
-         * order of hierarchy of nesting. If 'parentList' is provided 'key' represents the attribute
-         * in the innermost nested object.
-         *
          * @param key - attribute key [can use dot nested access]
-         * @param parentList - [optional] array of parents in hierarchy
          */
         let modelObj = this;
         const keyList = key.split(".");
 
-        if (keyList.length > 1) {
-            for (let i = 0; i < keyList.length - 1; i++) {
-                if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
-                    modelObj = modelObj.getData(keyList[i]);
-                } else {
-                    throw `${keyList[i]} is not a valid key in  ${this.constructor.name} | ${keyList}`;
-                }
-            }
-            key = keyList[keyList.length - 1]
-        } else {
-            // TODO: Remove parentList access URGENT!
-            if (parentList && Array.isArray(parentList)) {
-                for (let i = 0; i < parentList.length; i++) {
-                    if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
-                        modelObj = modelObj.getData(parentList[i]);
-                    } else {
-                        throw `${parentList[i]} is not a valid key in ${this.constructor.name} | ${parentList}`;
-                    }
-                }
+        for (let i = 0; i < keyList.length - 1; i++) {
+            if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
+                modelObj = modelObj.getData(keyList[i]);
+            } else {
+                throw `${keyList[i]} is not a valid key in  ${modelObj.constructor.name} | ${keyList}`;
             }
         }
+
+        key = keyList[keyList.length - 1];
         if (modelObj._fieldMap.hasOwnProperty(key)) {
             return modelObj._attrs[key]
         } else {
-            throw `${key} is not a valid key in ${this.constructor.name}`
+            throw `${key} is not a valid key in ${modelObj.constructor.name}`
         }
     };
 
@@ -203,49 +186,29 @@ export default class APIModelAdapter {
         }
     };
 
-    setData = (key, value, parentList) => {
+    setData = (key, value) => {
         /**
-         * Use to change data by user actions.
-         * 'parentList' is an array used for nested 'APIModelAdapter' model objects. Array is in
-         * order of hierarchy of nesting. If 'parentList' is provided 'key' represents the attribute
-         * in the innermost nested object.
-         *
          * #TODO: Add functionality to validate content and raise errors
          * @param key - attribute key [can use dot nested access]
          * @param value - new value
-         * @param parentList - [optional] array of parents in hierarchy
          */
 
-        console.debug(`Changing value for ${key} to ${value} [${parentList}]`);
+        console.debug(`Changing value for ${key} to ${value}`);
 
         let modelObj = this;
         const keyList = key.split('.');
 
-        if (keyList.length > 1) {
-            for (let i = 0; i < keyList.length; i++) {
-                if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
-                    modelObj.status = "hasChanged";
-                    modelObj.changedFields.push(keyList[i]);
-                    modelObj = modelObj.getData(keyList[i]);
-                } else {
-                    throw `${keyList[i]} is not a valid key in  ${this.constructor.name} | ${keyList}`
-                }
-            }
-        } else {
-            // TODO: Remove parentList access URGENT!
-            if (parentList && Array.isArray(parentList)) {
-                for (let i = 0; i < parentList.length; i++) {
-                    if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
-                        modelObj.status = "hasChanged";
-                        modelObj.changedFields.push(parentList[i]);
-                        modelObj = modelObj.getData(parentList[i]);
-                    } else {
-                        throw `${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`;
-                    }
-                }
+        for (let i = 0; i < keyList.length - 1; i++) {
+            if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
+                modelObj.status = "hasChanged";
+                modelObj.changedFields.push(keyList[i]);
+                modelObj = modelObj.getData(keyList[i]);
+            } else {
+                throw `${keyList[i]} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`
             }
         }
 
+        key = keyList[keyList.length - 1];
         if (modelObj._fieldMap.hasOwnProperty(key)) {
             if (modelObj._fieldMap[key].readOnly) {
                 console.warn("You are trying to change readOnly data. The data will not be serialized.");
@@ -255,7 +218,7 @@ export default class APIModelAdapter {
             modelObj._attrs[key] = value;
             return this;
         } else {
-            throw `${key} is not a valid key in ${this.constructor.name}`;
+            throw `${key} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`;
         }
     };
 
@@ -322,21 +285,21 @@ export default class APIModelAdapter {
         return ret;
     }
 
-    getErrorsForField = (field, parentList) => {
+    getErrorsForField = (field) => {
         /**
          * Fetch list of all errors as an array for a field.
          */
 
         let errorMap = this.errors;
+        const fieldNesting = field.split('.');
 
-        if (parentList && Array.isArray(parentList)) {
-            for (let i = 0; i < parentList.length; i++) {
-                if (errorMap.hasOwnProperty(parentList[i])) {
-                    errorMap = errorMap[parentList[i]];
-                }
+        for (let i = 0; i < fieldNesting.length - 1; i++) {
+            if (errorMap.hasOwnProperty(fieldNesting[i])) {
+                errorMap = errorMap[fieldNesting[i]];
             }
         }
 
+        field = fieldNesting[fieldNesting.length - 1];
         if (errorMap.hasOwnProperty(field) && Array.isArray(errorMap[field]) && errorMap[field].length !== 0) {
             return errorMap[field];
         } else {
@@ -344,19 +307,21 @@ export default class APIModelAdapter {
         }
     };
 
-    bulkUpdate(data, source = "int", parentList) {
+    bulkUpdate(data, source = "int", parentField) {
         /**
          * NOTE: Silently suppresses if any extra attribute is provided by the database (source='DB') which
          * is not in fieldMap.
          *
-         * data -> object of field and value pairs, source can be raw db or internal from FE
-         * source -> 'DB' or 'int' (database or internal)
+         * @param data: object of field and value pairs, source can be raw db or internal from FE
+         * @param source: 'DB' or 'int' (database or internal)
+         * @param parentField: [optional] Dot nested parent fields
          * Returns self to work similar to 'setData'
          */
 
         let modelObj = this;
 
-        if (parentList && Array.isArray(parentList)) {
+        if (parentField) {
+            let parentList = parentField.split('.');
             for (let i = 0; i < parentList.length; i++) {
                 if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
                     modelObj.status = "hasChanged";
@@ -379,17 +344,21 @@ export default class APIModelAdapter {
         }
 
         if (source === "DB") {
-            for (let [field, settings] of Object.entries(this._fieldMap)) {
+            for (let [field, settings] of Object.entries(modelObj._fieldMap)) {
                 const keyList = settings.key.split(".");
                 let value = data;
+                let valueFound = true;
                 for (let i = 0; i < keyList.length; i++) {
                     if (value.hasOwnProperty(keyList[i])) {
                         value = value[keyList[i]];
                     } else {
+                        valueFound = false;
                         break;
                     }
                 }
-                settings.adapter ? modelObj.getData(field).bulkUpdate(value, source) : modelObj.setData(field, value);
+                if (valueFound) {
+                    settings.adapter ? modelObj.getData(field).bulkUpdate(value, source) : modelObj.setData(field, value);
+                }
             }
         }
 
@@ -557,8 +526,8 @@ export function mergeModelStates(stateList) {
 export class DateRangeModel extends APIModelAdapter {
     fieldMap() {
         return {
-            startDate: { key: "lower" },
-            endDate: { key: "upper" }
+            startDate: {key: "lower"},
+            endDate: {key: "upper"}
         };
     }
 }
@@ -566,18 +535,11 @@ export class DateRangeModel extends APIModelAdapter {
 export class PostalLocation extends APIModelAdapter {
     fieldMap() {
         return {
-            id: { key: "id" },
-            type: { key: "type" },
-            coords: { key: "geometry", parser: this.parseGeometry },
-            properties: { key: "properties", parser: this.parseProperties }
+            id: {key: "id"},
+            type: {key: "type"},
+            coords: {key: "geometry.coordinates"},
+            properties: {key: "properties", parser: this.parseProperties}
         };
-    }
-
-    parseGeometry(data) {
-        if (data) {
-            return data.coordinates;
-        }
-        return [];
     }
 
     parseProperties(data) {
@@ -589,6 +551,6 @@ export class PostalLocation extends APIModelAdapter {
                 country: data["country"]["name"]
             };
         }
-        return { name: "", region: "", country: "" };
+        return {name: "", region: "", country: "", code: ""};
     }
 }

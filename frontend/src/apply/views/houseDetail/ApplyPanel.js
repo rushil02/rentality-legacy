@@ -67,38 +67,38 @@ export default class ApplyPanel extends Component {
                     <div className="col-md-5">
                         <div className="input no-background top-margin">
                             <input type="text" className="form-control" placeholder={"First name"}
-                                   value={application.getData('firstName', ['applicant'])}
-                                   onChange={(e) => onFieldChange("firstName", e.target.value, ['applicant'])}
+                                   value={application.getData('applicant.firstName')}
+                                   onChange={(e) => onFieldChange("applicant.firstName", e.target.value)}
                             />
-                            {displayErrors(application.getErrorsForField('firstName', ['applicant']))}
+                            {displayErrors(application.getErrorsForField('applicant.firstName'))}
                         </div>
                     </div>
                     <div className="col-md-5">
                         <div className="input no-background">
                             <input type="text" className="form-control" placeholder="Last name"
-                                   value={application.getData('lastName', ['applicant'])}
-                                   onChange={(e) => onFieldChange("lastName", e.target.value, ['applicant'])}
+                                   value={application.getData('applicant.lastName')}
+                                   onChange={(e) => onFieldChange("applicant.lastName", e.target.value)}
                             />
-                            {displayErrors(application.getErrorsForField('lastName', ['applicant']))}
+                            {displayErrors(application.getErrorsForField('applicant.lastName'))}
                         </div>
                     </div>
                     <div className="col-md-1"/>
                     <div className="col-md-5">
                         <div className="input no-background">
                             <input type="text" className="form-control" placeholder="Email Address"
-                                   value={application.getData('email', ['applicant'])}
-                                   onChange={(e) => onFieldChange("email", e.target.value, ['applicant'])}
+                                   value={application.getData('applicant.email')}
+                                   onChange={(e) => onFieldChange("applicant.email", e.target.value)}
                             />
-                            {displayErrors(application.getErrorsForField('email', ['applicant']))}
+                            {displayErrors(application.getErrorsForField('applicant.email'))}
                         </div>
                     </div>
                     <div className="col-md-5">
                         <div className="input no-background">
                             <input type="text" className="form-control" placeholder="Phone number"
-                                   value={application.getData('contactNum', ['applicant'])}
-                                   onChange={(e) => onFieldChange("contactNum", e.target.value, ['applicant'])}
+                                   value={application.getData('applicant.contactNum')}
+                                   onChange={(e) => onFieldChange("applicant.contactNum", e.target.value)}
                             />
-                            {displayErrors(application.getErrorsForField('contactNum', ['applicant']))}
+                            {displayErrors(application.getErrorsForField('applicant.contactNum'))}
                         </div>
                     </div>
                     <div className="col-md-1"/>
@@ -107,16 +107,16 @@ export default class ApplyPanel extends Component {
                             styles={genderSelectStyles}
                             options={genderList}
                             placeholder="Select Gender"
-                            onChange={(e) => onFieldChange("sex", e.value, ['applicant'])}
-                            value={application.getData('sex', ['applicant']) !== "" ?
+                            onChange={(e) => onFieldChange("applicant.sex", e.value)}
+                            value={application.getData('applicant.sex') !== "" ?
                                 {
-                                    value: application.getData('sex', ['applicant']),
-                                    label: genders[application.getData('sex', ['applicant'])]
+                                    value: application.getData('applicant.sex'),
+                                    label: genders[application.getData('applicant.sex')]
                                 }
                                 : null
                             }
                         />
-                        {displayErrors(application.getErrorsForField('sex', ['applicant']))}
+                        {displayErrors(application.getErrorsForField('applicant.sex'))}
                     </div>
                 </div>
                 <h3 className={styles.hl4}>Message for {this.props.homeOwnerName}</h3>
@@ -131,7 +131,7 @@ export default class ApplyPanel extends Component {
 
                 <PaymentPanel
                     updatePaymentID={(value) => onFieldChange("paymentID", value)}
-                    name={`${application.getData('firstName', ['applicant'])} ${application.getData('lastName', ['applicant'])}`}
+                    name={`${application.getData('applicant.firstName')} ${application.getData('applicant.lastName')}`}
                     requestForToken={"gg"}
                 />
 

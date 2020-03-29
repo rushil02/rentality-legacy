@@ -61,24 +61,12 @@ export class HomeOwnerInfo extends APIModelAdapter {
             profilePicture: { key: "profile_pic" },
             businessName: { key: "business_name" },
             personalityTags: { key: "personality_tags", default: [] },
-            firstName: { key: "user", parser: this.parseFirstName },
-            lastName: { key: "user", parser: this.parseLastName }
+            firstName: { key: "user.first_name"},
+            lastName: { key: "user.last_name" }
         };
     }
 
-    parseFirstName(data) {
-        if (data) {
-            return data["first_name"];
-        }
-        return "";
-    }
 
-    parseLastName(data) {
-        if (data) {
-            return data["last_name"];
-        }
-        return "";
-    }
 }
 
 export class Application extends APIModelAdapter {

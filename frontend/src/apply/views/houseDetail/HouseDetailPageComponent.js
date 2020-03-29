@@ -330,12 +330,12 @@ function getInfoSidePanel(that, address) {
                     <BookingInfoPanel
                         house={that.props.house}
                         bookingDateRange={{
-                            startDate: that.props.application.getData("bookingStartDate", ["bookingInfo"]),
-                            endDate: that.props.application.getData("bookingEndDate", ["bookingInfo"])
+                            startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
+                            endDate: that.props.application.getData("bookingInfo.bookingEndDate")
                         }}
-                        numGuests={that.props.application.getData("numGuests", ["bookingInfo"])}
+                        numGuests={that.props.application.getData("bookingInfo.numGuests")}
                         onNumGuestsChange={numGuests =>
-                            that.props.handleApplicationChange("numGuests", numGuests, ["bookingInfo"])
+                            that.props.handleApplicationChange("bookingInfo.numGuests", numGuests)
                         }
                         address={address}
                         cancellationPolicy={that.props.cancellationPolicy}
@@ -378,12 +378,12 @@ function getInfoMobilePanel(that, address) {
                 <BookingInfoPanel
                     house={that.props.house}
                     bookingDateRange={{
-                        startDate: that.props.application.getData("bookingStartDate", ["bookingInfo"]),
-                        endDate: that.props.application.getData("bookingEndDate", ["bookingInfo"])
+                        startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
+                        endDate: that.props.application.getData("bookingInfo.bookingEndDate")
                     }}
-                    numGuests={that.props.application.getData("numGuests", ["bookingInfo"])}
+                    numGuests={that.props.application.getData("bookingInfo.numGuests")}
                     onNumGuestsChange={numGuests =>
-                        that.props.handleApplicationChange("numGuests", numGuests, ["bookingInfo"])
+                        that.props.handleApplicationChange("bookingInfo.numGuests")
                     }
                     address={address}
                     cancellationPolicy={that.props.cancellationPolicy}

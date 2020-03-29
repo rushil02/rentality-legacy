@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { confirmBooking, applyBooking, getApplicantData, getHomeOwnerDetails, getHouseData } from "apply/services";
-import { House, Image, CancellationPolicy, HomeOwnerInfo, Application, Applicant } from "apply/models";
+import React, {Component} from "react";
+import {confirmBooking, applyBooking, getApplicantData, getHomeOwnerDetails, getHouseData} from "apply/services";
+import {House, Image, CancellationPolicy, HomeOwnerInfo, Application, Applicant} from "apply/models";
 import HouseDetailPageComponent from "./HouseDetailPageComponent";
-import { APIModelListAdapter, PostalLocation } from "core/utils/ModelHelper";
+import {APIModelListAdapter, PostalLocation} from "core/utils/ModelHelper";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
-import { alertUser } from "core/alert/Alert";
+import {alertUser} from "core/alert/Alert";
 
 export const SecretContext = React.createContext(undefined);
 
@@ -33,7 +33,7 @@ export default class HouseDetailPage extends Component {
     }
 
     componentDidMount() {
-        this.setState(prevState => ({ status: "loading" }));
+        this.setState(prevState => ({status: "loading"}));
         getHouseData(this.houseUUID)
             .then(result => {
                 this.setState(prevState => ({
@@ -69,10 +69,7 @@ export default class HouseDetailPage extends Component {
         getApplicantData().then(result => {
             this.setState(prevState => ({
                 ...prevState,
-                application: prevState.application.setData(
-                    "applicant",
-                    prevState.application.getData("applicant").bulkUpdate(result, "DB")
-                )
+                application: prevState.application.bulkUpdate(result, "DB", "applicant")
             }));
         });
     }
@@ -86,7 +83,7 @@ export default class HouseDetailPage extends Component {
                     bookingEndDate: endDate
                 },
                 "int",
-                ["bookingInfo"]
+                "bookingInfo"
             )
         }));
     };
@@ -99,16 +96,16 @@ export default class HouseDetailPage extends Component {
     };
 
     setApplicationUUID = value => {
-        this.setState({ applicationUUID: value });
+        this.setState({applicationUUID: value});
     };
 
     setclientSecret = value => {
-        this.setState({ clientSecret: value });
+        this.setState({clientSecret: value});
     };
 
     submitApplication = () => {
         let that = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             applyBooking(that.houseUUID, that.state.application)
                 .then(result => {
                     that.setApplicationUUID(result.data["application_uuid"]);
@@ -145,7 +142,7 @@ export default class HouseDetailPage extends Component {
     onConfirmBooking = () => {
         let that = this;
         this.disableDisplay();
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             confirmBooking(that.houseUUID, that.state.applicationUUID)
                 .then(result => {
                     that.setclientSecret(result.data["client_secret"]);
@@ -179,11 +176,11 @@ export default class HouseDetailPage extends Component {
     };
 
     disableDisplay = () => {
-        this.setState({ disableDisplay: true });
+        this.setState({disableDisplay: true});
     };
 
     enableDisplay = () => {
-        this.setState({ disableDisplay: false });
+        this.setState({disableDisplay: false});
     };
 
     render() {
