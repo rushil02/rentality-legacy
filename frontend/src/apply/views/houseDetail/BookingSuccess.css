@@ -75,6 +75,14 @@
     text-align: right;
 }
 
+.bookingDashboard .board .tenantInfo h2 {
+    font-size: 15px;
+    font-weight: 400;
+    color: #bcbcbc;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
 .bookingDashboard .board h1 {
     padding: 0px;
     font-size: 17px;
@@ -82,6 +90,10 @@
     color: #000000;
     text-align: left;
     margin-bottom: 10px;
+}
+
+.bookingDashboard .board h1:hover {
+    color: #3fc692;
 }
 
 .bookingDashboard .board h2 {
@@ -99,6 +111,10 @@
     text-align: left;
     margin-top: 30px;
     margin-bottom: 5px;
+}
+
+.bookingDashboard .board .title:hover {
+    text-decoration: none;
 }
 
 .bookingDashboard .board p {

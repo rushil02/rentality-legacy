@@ -108,12 +108,26 @@ export class Booking extends APIModelAdapter {
             // numGuests: { key: "guests", default: 1 },
             status: { key: "status" },
             bookingAmount: { key: "booking_amount" },
-            rent: { key: "rent" }
+            rent: { key: "rent" },
+            bookedHouse: { key: "house_meta", adapter: BookedHouse }
         };
     }
 
     dateSerializer(date) {
         return format(date, "YYYY-MM-DD");
+    }
+}
+
+export class BookedHouse extends APIModelAdapter {
+    fieldMap() {
+        return {
+            houseUUID: {key: "uuid"},
+            title: { key: "title" },
+            houseNum: { key: "address_hidden" },
+            streetName: {key: "address"},
+            homeType: { key: "home_type.name" },
+            location: { key: "location.name" }
+        };
     }
 }
 

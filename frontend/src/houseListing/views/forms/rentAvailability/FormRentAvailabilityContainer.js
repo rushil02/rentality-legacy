@@ -69,7 +69,7 @@ export default class FormRentAvailabilityContainer extends Component {
                 .catch(house => {
                     that.props.navContext.data.updateFormState(that.formID, 'error');
                     that.props.navContext.sync();
-                    reject(error)
+                    reject();
                 })
         })
     };
