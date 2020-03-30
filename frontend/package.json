@@ -61,5 +61,11 @@
     "react-select": "^3.0.4",
     "react-slick": "^0.25.2",
     "react-spinners": "^0.6.1"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "tabWidth": 4,
+    "printWidth": 120,
+    "arrowParens": "always"
   }
 }

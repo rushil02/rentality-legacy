@@ -1,13 +1,13 @@
-import React, {Component, Suspense} from 'react';
-import ReactDOM from 'react-dom';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import React, {Component, Suspense} from "react";
+import ReactDOM from "react-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 
-import {loadProgressBar} from 'axios-progress-bar'
-import 'axios-progress-bar/dist/nprogress.css'
+import {loadProgressBar} from "axios-progress-bar";
+import "axios-progress-bar/dist/nprogress.css";
 
 import routes from "./routes";
 
-import './theme.css';
+import "./theme.css";
 import Navbar from "core/navbar/views/Navbar";
 import Alert from "core/alert/Alert";
 
@@ -22,8 +22,7 @@ const HouseListing = React.lazy(() => import("houseListing/Router"));
 const User = React.lazy(() => import("userAccount/Router"));
 const Apply = React.lazy(() => import("apply/Router"));
 const Dashboard = React.lazy(() => import("dashboard/Router"));
-const SearchPage = React.lazy(() => import ("search/Router"));
-
+const SearchPage = React.lazy(() => import("search/Router"));
 
 class App extends Component {
     constructor(props) {
@@ -35,53 +34,54 @@ class App extends Component {
             <React.Fragment>
                 <ComponentErrorBoundary>
                     <UserStore>
-                        <Navbar/>
-                        <Alert/>
+                        <Navbar />
+                        <Alert />
                         <BrowserRouter>
                             <Switch>
                                 <PrivateRoute
                                     path={routes.react.houseListing.base}
-                                    render={(props) =>
-                                        <Suspense fallback={<ComponentLoadingSpinner/>}>
-                                            <HouseListing {...props}/>
-                                        </Suspense>}
+                                    render={(props) => (
+                                        <Suspense fallback={<ComponentLoadingSpinner />}>
+                                            <HouseListing {...props} />
+                                        </Suspense>
+                                    )}
                                 />
                                 <Route
-                                   path={routes.react.searchPage}
-                                   render={
-                                       (props) =>
-                                          <Suspense fallback={<ComponentLoadingSpinner />}>
-                                                <SearchPage {...props} />
-                                            </Suspense> }
+                                    path={routes.react.searchPage}
+                                    render={(props) => (
+                                        <Suspense fallback={<ComponentLoadingSpinner />}>
+                                            <SearchPage {...props} />
+                                        </Suspense>
+                                    )}
                                 />
-                                 <Route
+                                <Route
                                     path={routes.react.apply.base}
-                                    render={
-                                        (props) =>
-                                            <Suspense fallback={<ComponentLoadingSpinner />}>
-                                                <Apply {...props} />
-                                            </Suspense> }
+                                    render={(props) => (
+                                        <Suspense fallback={<ComponentLoadingSpinner />}>
+                                            <Apply {...props} />
+                                        </Suspense>
+                                    )}
                                 />
                                 <PrivateRoute
                                     path={routes.react.user.base}
-                                    render={(props) =>
-                                        <Suspense fallback={<ComponentLoadingSpinner/>}>
-                                            <User {...props}/>
-                                        </Suspense>}
+                                    render={(props) => (
+                                        <Suspense fallback={<ComponentLoadingSpinner />}>
+                                            <User {...props} />
+                                        </Suspense>
+                                    )}
                                 />
                                 <PrivateRoute
                                     path={routes.react.dashboard.base}
-                                    render={(props) =>
-                                        <Suspense fallback={<ComponentLoadingSpinner/>}>
-                                            <Dashboard {...props}/>
-                                        </Suspense>}
+                                    render={(props) => (
+                                        <Suspense fallback={<ComponentLoadingSpinner />}>
+                                            <Dashboard {...props} />
+                                        </Suspense>
+                                    )}
                                 />
-                                <Route
-                                    render={(props) => <Error404/>}
-                                />
+                                <Route render={(props) => <Error404 />} />
                             </Switch>
                         </BrowserRouter>
-                        <Footer/>
+                        <Footer />
                     </UserStore>
                 </ComponentErrorBoundary>
             </React.Fragment>
@@ -91,4 +91,4 @@ class App extends Component {
 
 loadProgressBar({showSpinner: false});
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
