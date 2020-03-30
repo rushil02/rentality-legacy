@@ -1,6 +1,5 @@
 import {Component} from "react";
 
-
 export class StoreHelper extends Component {
     constructor(props) {
         super(props);
@@ -11,30 +10,24 @@ export class StoreHelper extends Component {
             this.state[_store[i]] = {
                 data: undefined,
                 render: () => this.forceUpdate(),
-                updateStoreObject: (key, dataFn) => this.updateStoreObject(key, dataFn)
+                updateStoreObject: (key, dataFn) => this.updateStoreObject(key, dataFn),
             };
-
         }
     }
 
     getStore() {
-        return []
+        return [];
     }
-
 
     // Accepts a key as in 'getStore' and updates an object
     // Second Argument is a function which can accept previous data as input argument
     updateStoreObject = (key, dataFn) => {
-        this.setState(prevState => (
-            {
-                ...prevState,
-                [key]: {
-                    ...prevState[key],
-                    data: dataFn(prevState[key].data)
-                }
-            })
-        );
+        this.setState((prevState) => ({
+            ...prevState,
+            [key]: {
+                ...prevState[key],
+                data: dataFn(prevState[key].data),
+            },
+        }));
     };
-
-
 }

@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import React, {Component} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCalendar} from "@fortawesome/free-solid-svg-icons";
 import format from "date-fns/format";
-import { Calendar } from "react-date-range";
+import {Calendar} from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
@@ -11,7 +11,7 @@ const styleGuide = {
         paddingTop: "0.8rem",
         textOverflow: "ellipsis",
         paddingLeft: "10px !important",
-        height: "calc(2.25rem + 15px)"
+        height: "calc(2.25rem + 15px)",
     },
     calendarContainer: {
         position: "absolute",
@@ -22,11 +22,11 @@ const styleGuide = {
         borderRadius: "8px",
         boxShadow: "0 0 25px rgba(0, 0, 0, 0.5)",
         paddingBottom: "10px",
-        background: "white"
+        background: "white",
     },
     calendarWrapper: {
-        display: "-webkit-inline-box"
-    }
+        display: "-webkit-inline-box",
+    },
 };
 
 export default class DatePickerComponent extends Component {
@@ -34,50 +34,50 @@ export default class DatePickerComponent extends Component {
         super(props);
         this.state = {
             show: false,
-            inUse: false
+            inUse: false,
         };
     }
 
     showCalendar = () => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
             ...prevState,
-            show: true
+            show: true,
         }));
     };
 
     handleBlurs = () => {
         if (!this.state.inUse) {
-            this.setState(prevState => ({
+            this.setState((prevState) => ({
                 ...prevState,
-                show: false
+                show: false,
             }));
         }
     };
 
     setInUse = () => {
         if (!this.state.inUse) {
-            this.setState(prevState => ({
+            this.setState((prevState) => ({
                 ...prevState,
-                inUse: true
+                inUse: true,
             }));
         }
     };
 
     setNotInUse = () => {
         if (this.state.inUse) {
-            this.setState(prevState => ({
+            this.setState((prevState) => ({
                 ...prevState,
-                inUse: false
+                inUse: false,
             }));
         }
     };
 
-    handleSelect = newDate => {
+    handleSelect = (newDate) => {
         this.props.onChange(format(newDate, "YYYY-MM-DD"));
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
             ...prevState,
             show: false,
-            inUse: false
+            inUse: false,
         }));
     };
 
@@ -96,20 +96,20 @@ export default class DatePickerComponent extends Component {
                     tabIndex={"0"}
                     className={this.props.containerClasses || "form-control no-background"}
                     style={styleGuide.container}
-                    onFocus={e => this.showCalendar()}
-                    onBlur={e => this.handleBlurs()}
+                    onFocus={(e) => this.showCalendar()}
+                    onBlur={(e) => this.handleBlurs()}
                 >
-                    <div style={{ float: "left" }}>{this.props.value || this.props.label}</div>
-                    <div style={{ float: "right", marginRight: "10px" }}>
+                    <div style={{float: "left"}}>{this.props.value || this.props.label}</div>
+                    <div style={{float: "right", marginRight: "10px"}}>
                         <FontAwesomeIcon icon={faCalendar} />
                     </div>
                     {this.state.show ? (
                         <div
                             tabIndex={"-1"}
                             style={styleGuide.calendarContainer}
-                            onMouseEnter={e => this.setInUse()}
-                            onMouseLeave={e => this.setNotInUse()}
-                            onBlur={e => this.handleBlurs()}
+                            onMouseEnter={(e) => this.setInUse()}
+                            onMouseLeave={(e) => this.setNotInUse()}
+                            onBlur={(e) => this.handleBlurs()}
                         >
                             <Calendar
                                 onChange={this.handleSelect}

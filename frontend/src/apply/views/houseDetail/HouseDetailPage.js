@@ -26,80 +26,80 @@ export default class HouseDetailPage extends Component {
             application: new Application({}, "empty"),
             clientSecret: undefined,
             applicationUUID: undefined,
-            disableDisplay: false
+            disableDisplay: false,
         };
         this.checkoutFormChild = React.createRef();
         this.confirmModalChild = React.createRef();
     }
 
     componentDidMount() {
-        this.setState(prevState => ({status: "loading"}));
+        this.setState((prevState) => ({status: "loading"}));
         getHouseData(this.houseUUID)
-            .then(result => {
-                this.setState(prevState => ({
+            .then((result) => {
+                this.setState((prevState) => ({
                     ...prevState,
                     status: "done",
                     house: new House(result),
                     images: new APIModelListAdapter(result["images"], Image, "uuid", "saved"),
                     cancellationPolicy: new CancellationPolicy(result["cancellation_policy"], "saved"),
-                    location: new PostalLocation(result["location"], "saved")
+                    location: new PostalLocation(result["location"], "saved"),
                 }));
             })
-            .catch(error => {
-                this.setState(prevState => ({
+            .catch((error) => {
+                this.setState((prevState) => ({
                     ...prevState,
-                    status: "error"
+                    status: "error",
                 }));
             });
 
         getHomeOwnerDetails(this.houseUUID)
-            .then(result => {
-                this.setState(prevState => ({
+            .then((result) => {
+                this.setState((prevState) => ({
                     ...prevState,
-                    homeOwnerInfo: new HomeOwnerInfo(result, "saved")
+                    homeOwnerInfo: new HomeOwnerInfo(result, "saved"),
                 }));
             })
-            .catch(error => {
-                this.setState(prevState => ({
+            .catch((error) => {
+                this.setState((prevState) => ({
                     ...prevState,
-                    status: "error"
+                    status: "error",
                 }));
             });
 
-        getApplicantData().then(result => {
-            this.setState(prevState => ({
+        getApplicantData().then((result) => {
+            this.setState((prevState) => ({
                 ...prevState,
-                application: prevState.application.bulkUpdate(result, "DB", "applicant")
+                application: prevState.application.bulkUpdate(result, "DB", "applicant"),
             }));
         });
     }
 
     handleDateChange = (startDate, endDate) => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
             ...prevState,
             application: prevState.application.bulkUpdate(
                 {
                     bookingStartDate: startDate,
-                    bookingEndDate: endDate
+                    bookingEndDate: endDate,
                 },
                 "int",
                 "bookingInfo"
-            )
+            ),
         }));
     };
 
     handleApplicationChange = (field, value, parent) => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
             ...prevState,
-            application: prevState.application.setData(field, value, parent)
+            application: prevState.application.setData(field, value, parent),
         }));
     };
 
-    setApplicationUUID = value => {
+    setApplicationUUID = (value) => {
         this.setState({applicationUUID: value});
     };
 
-    setclientSecret = value => {
+    setclientSecret = (value) => {
         this.setState({clientSecret: value});
     };
 
@@ -107,29 +107,29 @@ export default class HouseDetailPage extends Component {
         let that = this;
         return new Promise(function (resolve, reject) {
             applyBooking(that.houseUUID, that.state.application)
-                .then(result => {
+                .then((result) => {
                     that.setApplicationUUID(result.data["application_uuid"]);
                     resolve(result);
                 })
-                .catch(error => {
+                .catch((error) => {
                     if (error.badRequest) {
                         let errorData = error.error.response.data;
                         if (errorData.code === "AA") {
                             alertUser.init({
                                 message: "Please fill in all the details to make a booking.",
                                 alertType: "warning",
-                                autoHide: true
+                                autoHide: true,
                             });
-                            that.setState(prevState => ({
+                            that.setState((prevState) => ({
                                 ...prevState,
-                                application: prevState.application.parseError(errorData.errors)
+                                application: prevState.application.parseError(errorData.errors),
                             }));
                         } else if (errorData.code === "AB") {
-                            errorData.errors.forEach(error => {
+                            errorData.errors.forEach((error) => {
                                 alertUser.init({
                                     message: error,
                                     alertType: "danger",
-                                    autoHide: false
+                                    autoHide: false,
                                 });
                             });
                         }
@@ -144,12 +144,12 @@ export default class HouseDetailPage extends Component {
         this.disableDisplay();
         return new Promise(function (resolve, reject) {
             confirmBooking(that.houseUUID, that.state.applicationUUID)
-                .then(result => {
+                .then((result) => {
                     that.setclientSecret(result.data["client_secret"]);
                     console.log(that.state.clientSecret, result);
                     return that.checkoutFormChild.current.submit();
                 })
-                .then(result => {
+                .then((result) => {
                     console.log(result);
                     if (result.error) {
                         that.enableDisplay();
@@ -157,7 +157,7 @@ export default class HouseDetailPage extends Component {
                         alertUser.init({
                             message: result.error.message,
                             alertType: "danger",
-                            autoHide: false
+                            autoHide: false,
                         });
                         reject(result.error);
                         console.log(result.error.message);
@@ -169,7 +169,7 @@ export default class HouseDetailPage extends Component {
                         }
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     reject(error);
                 });
         });

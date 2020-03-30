@@ -58,7 +58,7 @@
 }
 
 #root > .menu .left .logo {
-    background-image: url('/static/image/logo.svg');
+    background-image: url("/static/image/logo.svg");
     background-repeat: no-repeat;
     background-position: top left;
     width: 243px;
@@ -70,11 +70,13 @@
     text-align: center;
 }
 
-#root > .menu .center .list-inline, #root > .menu .right .list-inline {
+#root > .menu .center .list-inline,
+#root > .menu .right .list-inline {
     margin-bottom: 0;
 }
 
-#root > .menu .center .list-inline li a, #root > .menu .right .list-inline li a {
+#root > .menu .center .list-inline li a,
+#root > .menu .right .list-inline li a {
     color: #ffffff;
     font-weight: 700;
     font-size: 15px;
@@ -86,15 +88,20 @@
     position: relative;
 }
 
-#root > .menu .center .list-inline li a:hover, #root > .menu .center .list-inline li a:focus, #root > .menu .right .list-inline li a:hover, #root > .menu .right .list-inline li a:focus {
+#root > .menu .center .list-inline li a:hover,
+#root > .menu .center .list-inline li a:focus,
+#root > .menu .right .list-inline li a:hover,
+#root > .menu .right .list-inline li a:focus {
     text-decoration: none;
 }
 
-#root > .menu .center .list-inline li:not(:last-child), #root > .menu .right .list-inline li:not(:last-child) {
+#root > .menu .center .list-inline li:not(:last-child),
+#root > .menu .right .list-inline li:not(:last-child) {
     margin-right: 0;
 }
 
-#root > .menu .center .list-inline li a:before, #root > .menu .right .list-inline li a:before {
+#root > .menu .center .list-inline li a:before,
+#root > .menu .right .list-inline li a:before {
     content: "";
     position: absolute;
     width: 100%;
@@ -104,10 +111,11 @@
     background-color: #36ffb1;
     visibility: hidden;
     transform: scaleX(0);
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
-#root > .menu .center .list-inline li a:hover:before, #root > .menu .right .list-inline li a:hover:before {
+#root > .menu .center .list-inline li a:hover:before,
+#root > .menu .right .list-inline li a:hover:before {
     visibility: visible;
     transform: scaleX(1);
 }
@@ -134,7 +142,7 @@
 }
 
 #root > .menu.white .left .logo {
-    background-image: url('/static/image/logo-black.svg');
+    background-image: url("/static/image/logo-black.svg");
     background-repeat: no-repeat;
     background-position: top left;
     width: 209px;
@@ -142,12 +150,14 @@
     display: block;
 }
 
-#root > .menu.white .center .list-inline li a, #root > .menu.white .right .list-inline li a {
+#root > .menu.white .center .list-inline li a,
+#root > .menu.white .right .list-inline li a {
     color: #4b4b4b;
 }
 
-#root > .menu.white .right .list-inline li.message > .dropdown > a, #root > .menu.session .right .list-inline li.message > .dropdown > a {
-    background-image: url('/static/image/message.svg');
+#root > .menu.white .right .list-inline li.message > .dropdown > a,
+#root > .menu.session .right .list-inline li.message > .dropdown > a {
+    background-image: url("/static/image/message.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -155,10 +165,11 @@
 }
 
 #root > .menu.session .right .list-inline li.message > .dropdown > a {
-    background-image: url('/static/image/message-white.svg');
+    background-image: url("/static/image/message-white.svg");
 }
 
-#root > .menu.white .right .list-inline li > .dropdown > a > span, #root > .menu.session .right .list-inline li > .dropdown > a > span {
+#root > .menu.white .right .list-inline li > .dropdown > a > span,
+#root > .menu.session .right .list-inline li > .dropdown > a > span {
     background-color: #3fc692;
     position: absolute;
     right: 5px;
@@ -171,28 +182,33 @@
     border-radius: 99px;
 }
 
-#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu, #root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu {
+#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu,
+#root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu {
     min-width: 400px;
 }
 
-#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu a span, #root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu a span {
+#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu a span,
+#root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu a span {
     font-size: 12px;
     line-height: 41px;
     float: right;
     color: #ccc;
 }
 
-#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu a img, #root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu a img {
+#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu a img,
+#root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu a img {
     border-radius: 99px;
     margin-right: 10px;
 }
 
-#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu a.active, #root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu a.active {
+#root > .menu.white .right .list-inline li.message > .dropdown .dropdown-menu a.active,
+#root > .menu.session .right .list-inline li.message > .dropdown .dropdown-menu a.active {
     background-color: #ffffff;
 }
 
-#root > .menu.white .right .list-inline li.notification > .dropdown > a, #root > .menu.session .right .list-inline li.notification > .dropdown > a {
-    background-image: url('/static/image/notification.svg');
+#root > .menu.white .right .list-inline li.notification > .dropdown > a,
+#root > .menu.session .right .list-inline li.notification > .dropdown > a {
+    background-image: url("/static/image/notification.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -200,30 +216,35 @@
 }
 
 #root > .menu.session .right .list-inline li.notification > .dropdown > a {
-    background-image: url('/static/image/notification-white.svg');
+    background-image: url("/static/image/notification-white.svg");
 }
 
-#root > .menu.white .right .list-inline li.notification > .dropdown .dropdown-menu, #root > .menu.session .right .list-inline li.notification > .dropdown .dropdown-menu {
+#root > .menu.white .right .list-inline li.notification > .dropdown .dropdown-menu,
+#root > .menu.session .right .list-inline li.notification > .dropdown .dropdown-menu {
     min-width: 500px;
 }
 
-#root > .menu.white .right .list-inline li.notification > .dropdown .dropdown-menu a span, #root > .menu.session .right .list-inline li.notification > .dropdown .dropdown-menu a span {
+#root > .menu.white .right .list-inline li.notification > .dropdown .dropdown-menu a span,
+#root > .menu.session .right .list-inline li.notification > .dropdown .dropdown-menu a span {
     font-size: 12px;
     line-height: 22px;
     float: right;
     color: #ccc;
 }
 
-#root > .menu.white .right .list-inline li.setting, #root > .menu.session .right .list-inline li.setting {
+#root > .menu.white .right .list-inline li.setting,
+#root > .menu.session .right .list-inline li.setting {
     margin-left: 66px;
 }
 
-#root > .menu.white .right .list-inline li.setting > .dropdown .dropdown-menu, #root > .menu.session .right .list-inline li.setting > .dropdown .dropdown-menu {
+#root > .menu.white .right .list-inline li.setting > .dropdown .dropdown-menu,
+#root > .menu.session .right .list-inline li.setting > .dropdown .dropdown-menu {
     min-width: 200px;
 }
 
-#root > .menu.white .right .list-inline li.setting > .dropdown > a, #root > .menu.session .right .list-inline li.setting > .dropdown > a {
-    background-image: url('/static/image/setting.svg');
+#root > .menu.white .right .list-inline li.setting > .dropdown > a,
+#root > .menu.session .right .list-inline li.setting > .dropdown > a {
+    background-image: url("/static/image/setting.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -231,19 +252,22 @@
 }
 
 #root > .menu.session .right .list-inline li.setting > .dropdown > a {
-    background-image: url('/static/image/setting-white.svg');
+    background-image: url("/static/image/setting-white.svg");
 }
 
-#root > .menu.white .right .list-inline li.person, #root > .menu.session .right .list-inline li.person {
+#root > .menu.white .right .list-inline li.person,
+#root > .menu.session .right .list-inline li.person {
     margin-left: 30px;
     padding-left: 26px;
 }
 
-#root > .menu.white .right .list-inline li.person a, #root > .menu.session .right .list-inline li.person a {
+#root > .menu.white .right .list-inline li.person a,
+#root > .menu.session .right .list-inline li.person a {
     font-weight: 400;
 }
 
-#root > .menu.white .right .list-inline li.person a .image, #root > .menu.session .right .list-inline li.person a .image {
+#root > .menu.white .right .list-inline li.person a .image,
+#root > .menu.session .right .list-inline li.person a .image {
     background-color: #e7edf1;
     float: left;
     border-radius: 99px;
@@ -254,19 +278,22 @@
     top: -3px;
 }
 
-#root > .menu.white .right .list-inline li.person, #root > .menu.session .right .list-inline li.person {
+#root > .menu.white .right .list-inline li.person,
+#root > .menu.session .right .list-inline li.person {
     position: relative;
 }
 
-#root > .menu.white .right .dropdown .dropdown-menu, #root > .menu.session .right .dropdown .dropdown-menu {
+#root > .menu.white .right .dropdown .dropdown-menu,
+#root > .menu.session .right .dropdown .dropdown-menu {
     border: none;
     border-radius: 4px;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     margin-top: 20px;
 }
 
-#root > .menu.white .right .dropdown .dropdown-menu::after, #root > .menu.session .right .dropdown .dropdown-menu::after {
-    content: '';
+#root > .menu.white .right .dropdown .dropdown-menu::after,
+#root > .menu.session .right .dropdown .dropdown-menu::after {
+    content: "";
     display: block;
     position: absolute;
     top: -10px;
@@ -278,14 +305,17 @@
     border-color: transparent transparent #ffffff transparent;
 }
 
-#root > .menu.white .right .dropdown .dropdown-menu a, #root > .menu.session .right .dropdown .dropdown-menu a {
+#root > .menu.white .right .dropdown .dropdown-menu a,
+#root > .menu.session .right .dropdown .dropdown-menu a {
     font-size: 15px;
     font-weight: 400;
     color: #4b4b4b;
 }
 
-#root > .menu.white .right .dropdown .dropdown-menu a:hover, #root > .menu.white .right .dropdown .dropdown-menu a:focus,
-#root > .menu.session .right .dropdown .dropdown-menu a:hover, #root > .menu.session .right .dropdown .dropdown-menu a:focus {
+#root > .menu.white .right .dropdown .dropdown-menu a:hover,
+#root > .menu.white .right .dropdown .dropdown-menu a:focus,
+#root > .menu.session .right .dropdown .dropdown-menu a:hover,
+#root > .menu.session .right .dropdown .dropdown-menu a:focus {
     background-color: #ffffff;
 }
 
@@ -309,22 +339,22 @@
     z-index: 99999;
     width: 36px;
     height: 27px;
-    background-image: url('/static/image/mobile-menu-open.svg');
+    background-image: url("/static/image/mobile-menu-open.svg");
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 #root > .mobile-menu.white {
     top: 26px;
-    background-image: url('/static/image/mobile-menu-white-open.svg');
+    background-image: url("/static/image/mobile-menu-white-open.svg");
 }
 
 #root > .mobile-menu.open {
-    background-image: url('/static/image/mobile-menu-close.svg');
+    background-image: url("/static/image/mobile-menu-close.svg");
 }
 
 #root > .mobile-menu.white.open {
-    background-image: url('/static/image/mobile-menu-white-close.svg');
+    background-image: url("/static/image/mobile-menu-white-close.svg");
 }
 
 #root > .mobile-menu-content {
@@ -336,7 +366,7 @@
     bottom: 0;
     background-color: #2a2b32;
     z-index: 9999;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     opacity: 0;
     padding: 36px;
     padding-right: 36px;
@@ -416,7 +446,8 @@
     color: #4b4b4b;
 }
 
-#root > .mobile-menu-content ul li a:hover, #root > .mobile-menu-content ul li a:focus {
+#root > .mobile-menu-content ul li a:hover,
+#root > .mobile-menu-content ul li a:focus {
     text-decoration: none;
 }
 
@@ -429,7 +460,7 @@
 }
 
 #root > .mobile-menu-content ul li.message .dropdown > a {
-    background-image: url('/static/image/message.svg');
+    background-image: url("/static/image/message.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -468,12 +499,13 @@
     margin-right: 10px;
 }
 
-#root > .mobile-menu-content ul li.message > .dropdown .dropdown-menu a:hover, #root > .mobile-menu-content ul li.message > .dropdown .dropdown-menu a.active {
+#root > .mobile-menu-content ul li.message > .dropdown .dropdown-menu a:hover,
+#root > .mobile-menu-content ul li.message > .dropdown .dropdown-menu a.active {
     background-color: #ffffff;
 }
 
 #root > .mobile-menu-content ul li.notification > .dropdown > a {
-    background-image: url('/static/image/notification.svg');
+    background-image: url("/static/image/notification.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -489,12 +521,13 @@
     color: #ccc;
 }
 
-#root > .mobile-menu-content ul li.notification > .dropdown .dropdown-menu a:hover, #root > .mobile-menu-content ul li.notification > .dropdown .dropdown-menu a.active {
+#root > .mobile-menu-content ul li.notification > .dropdown .dropdown-menu a:hover,
+#root > .mobile-menu-content ul li.notification > .dropdown .dropdown-menu a.active {
     background-color: #ffffff;
 }
 
 #root > .mobile-menu-content ul li.setting > .dropdown > a {
-    background-image: url('/static/image/setting.svg');
+    background-image: url("/static/image/setting.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -503,7 +536,8 @@
     margin-right: auto;
 }
 
-#root > .mobile-menu-content ul li.setting > .dropdown .dropdown-menu a:hover, #root > .mobile-menu-content ul li.setting > .dropdown .dropdown-menu a.active {
+#root > .mobile-menu-content ul li.setting > .dropdown .dropdown-menu a:hover,
+#root > .mobile-menu-content ul li.setting > .dropdown .dropdown-menu a.active {
     background-color: #ffffff;
 }
 
@@ -540,7 +574,6 @@
 /***** menu end *****/
 /********************/
 
-
 /************************/
 /***** mobile start *****/
 /************************/
@@ -562,7 +595,8 @@
         height: 50px;
     }
 
-    #root > .menu .center, #root > .menu .right {
+    #root > .menu .center,
+    #root > .menu .right {
         display: none;
     }
 }

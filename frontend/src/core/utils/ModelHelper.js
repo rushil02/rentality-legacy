@@ -121,9 +121,9 @@ export default class APIModelAdapter {
 
         key = keyList[keyList.length - 1];
         if (modelObj._fieldMap.hasOwnProperty(key)) {
-            return modelObj._attrs[key]
+            return modelObj._attrs[key];
         } else {
-            throw `${key} is not a valid key in ${modelObj.constructor.name}`
+            throw `${key} is not a valid key in ${modelObj.constructor.name}`;
         }
     };
 
@@ -163,7 +163,7 @@ export default class APIModelAdapter {
         return this;
     }
 
-    updateError = errorMap => {
+    updateError = (errorMap) => {
         /**
          * Updates the error mapping with the provided keys and
          * removes an error if the corresponding key is empty.
@@ -196,7 +196,7 @@ export default class APIModelAdapter {
         console.debug(`Changing value for ${key} to ${value}`);
 
         let modelObj = this;
-        const keyList = key.split('.');
+        const keyList = key.split(".");
 
         for (let i = 0; i < keyList.length - 1; i++) {
             if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
@@ -204,7 +204,7 @@ export default class APIModelAdapter {
                 modelObj.changedFields.push(keyList[i]);
                 modelObj = modelObj.getData(keyList[i]);
             } else {
-                throw `${keyList[i]} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`
+                throw `${keyList[i]} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`;
             }
         }
 
@@ -291,7 +291,7 @@ export default class APIModelAdapter {
          */
 
         let errorMap = this.errors;
-        const fieldNesting = field.split('.');
+        const fieldNesting = field.split(".");
 
         for (let i = 0; i < fieldNesting.length - 1; i++) {
             if (errorMap.hasOwnProperty(fieldNesting[i])) {
@@ -321,7 +321,7 @@ export default class APIModelAdapter {
         let modelObj = this;
 
         if (parentField) {
-            let parentList = parentField.split('.');
+            let parentList = parentField.split(".");
             for (let i = 0; i < parentList.length; i++) {
                 if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
                     modelObj.status = "hasChanged";
@@ -357,7 +357,9 @@ export default class APIModelAdapter {
                     }
                 }
                 if (valueFound) {
-                    settings.adapter ? modelObj.getData(field).bulkUpdate(value, source) : modelObj.setData(field, value);
+                    settings.adapter
+                        ? modelObj.getData(field).bulkUpdate(value, source)
+                        : modelObj.setData(field, value);
                 }
             }
         }
@@ -415,7 +417,7 @@ export class APIModelListAdapter {
         data.map((dbObj, index) => {
             let key = this._key ? dbObj[this._key] : index + indexOffset;
             if (removeParents) {
-                removeParents.forEach(parent => {
+                removeParents.forEach((parent) => {
                     dbObj = dbObj[parent];
                 });
             }
@@ -459,7 +461,7 @@ export class APIModelListAdapter {
         if (!this._key) {
             console.error("Multi update cannot work without list level key");
         }
-        modelObjs.map(item => {
+        modelObjs.map((item) => {
             this.update(item);
         });
     }
@@ -467,13 +469,13 @@ export class APIModelListAdapter {
     serialize(listPartialUpdate, objPartialUpdate) {
         let respData = [];
         if (listPartialUpdate) {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).map((item) => {
                 if (item.status === "hasChanged") {
                     respData.push(item.serialize(objPartialUpdate));
                 }
             });
         } else {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).map((item) => {
                 respData.push(item.serialize(objPartialUpdate));
             });
         }
@@ -483,14 +485,14 @@ export class APIModelListAdapter {
     parseErrors(errorList, listPartialUpdate) {
         let counter = 0;
         if (listPartialUpdate) {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).map((item) => {
                 if (item.status === "hasChanged") {
                     item.parseError(errorList[counter]);
                     counter++;
                 }
             });
         } else {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).map((item) => {
                 item.parseError(errorList[counter]);
                 counter++;
             });
@@ -498,7 +500,7 @@ export class APIModelListAdapter {
         return this;
     }
 
-    updateStatus = newStatus => {
+    updateStatus = (newStatus) => {
         this.status = newStatus;
         return this;
     };
@@ -527,7 +529,7 @@ export class DateRangeModel extends APIModelAdapter {
     fieldMap() {
         return {
             startDate: {key: "lower"},
-            endDate: {key: "upper"}
+            endDate: {key: "upper"},
         };
     }
 }
@@ -538,7 +540,7 @@ export class PostalLocation extends APIModelAdapter {
             id: {key: "id"},
             type: {key: "type"},
             coords: {key: "geometry.coordinates"},
-            properties: {key: "properties", parser: this.parseProperties}
+            properties: {key: "properties", parser: this.parseProperties},
         };
     }
 
@@ -548,7 +550,7 @@ export class PostalLocation extends APIModelAdapter {
                 code: data["code"],
                 name: data["name"],
                 region: data["region_name"],
-                country: data["country"]["name"]
+                country: data["country"]["name"],
             };
         }
         return {name: "", region: "", country: "", code: ""};

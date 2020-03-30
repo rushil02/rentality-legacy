@@ -6,11 +6,12 @@ a.btn {
     background-color: #2a2b32 !important;
     padding: 11px 59px;
     text-transform: uppercase;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     -webkit-appearance: none;
 }
 
-a.btn:hover, a.btn:focus {
+a.btn:hover,
+a.btn:focus {
     text-decoration: none;
     color: #2a2b32 !important;
     background-color: #36ffb1 !important;
@@ -27,7 +28,6 @@ a.btn.loadingBtn {
 }
 
 a.btn.doneBtn {
-
 }
 
 .text {
@@ -42,5 +42,5 @@ a.btn.doneBtn {
     float: left;
     position: relative;
     width: 40%;
-    padding-right: 10px
+    padding-right: 10px;
 }

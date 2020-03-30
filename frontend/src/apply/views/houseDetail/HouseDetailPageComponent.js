@@ -1,31 +1,31 @@
-import React, { Component } from "react";
-import { lowerCase, startCase } from "lodash";
+import React, {Component} from "react";
+import {lowerCase, startCase} from "lodash";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
 import BookingInfoPanel from "./BookingInfoPanel";
 import ApplyPanel from "./ApplyPanel";
 import ImageCarousel from "./ImageCarousel";
-import { ConfirmBookingModal } from "./ConfirmBookingModal";
+import {ConfirmBookingModal} from "./ConfirmBookingModal";
 import styles from "./HouseDetailPage.css";
 
 export default class HouseDetailPageComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bookButtonActive: false
+            bookButtonActive: false,
         };
         this.elementRefs = {};
     }
 
-    scrollToRef = ref => {
+    scrollToRef = (ref) => {
         window.scrollTo(0, ref.offsetTop + ref.offsetParent.offsetTop - 30);
     };
 
-    scrollToTop = ref => {
+    scrollToTop = (ref) => {
         window.scrollTo(0, ref.offsetTop);
     };
 
     componentDidMount() {
-        window.addEventListener("scroll", this.handleScroll, { passive: true });
+        window.addEventListener("scroll", this.handleScroll, {passive: true});
     }
 
     componentWillUnmount() {
@@ -40,16 +40,16 @@ export default class HouseDetailPageComponent extends Component {
         if ((window.pageYOffset || document.documentElement.scrollTop) > threshold) {
             // Reached apt scroll point to activate button
             if (!this.state.bookButtonActive) {
-                this.setState(prevState => ({
+                this.setState((prevState) => ({
                     ...prevState,
-                    bookButtonActive: true
+                    bookButtonActive: true,
                 }));
             }
         } else {
             if (this.state.bookButtonActive) {
-                this.setState(prevState => ({
+                this.setState((prevState) => ({
                     ...prevState,
-                    bookButtonActive: false
+                    bookButtonActive: false,
                 }));
             }
         }
@@ -72,7 +72,7 @@ export default class HouseDetailPageComponent extends Component {
                 <ImageCarousel images={this.props.images} />
                 <div className={styles.pageDetail}>
                     <div className="container">
-                        <div className="row" style={{ paddingBottom: "120px" }}>
+                        <div className="row" style={{paddingBottom: "120px"}}>
                             <div className="col-lg-7 col-xl-8">
                                 <div className="left">
                                     <div className={styles.title}>
@@ -184,7 +184,7 @@ export default class HouseDetailPageComponent extends Component {
                                         <p
                                             style={{
                                                 marginTop: "20px",
-                                                marginBottom: "30px"
+                                                marginBottom: "30px",
                                             }}
                                         >
                                             {this.props.house.getData("otherRules")}
@@ -225,7 +225,7 @@ export default class HouseDetailPageComponent extends Component {
                                                 height="100%"
                                                 style={{
                                                     border: "0",
-                                                    borderRadius: "5px"
+                                                    borderRadius: "5px",
                                                 }}
                                                 src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyClsJFzjgJBxhY3D4HDn4V_EG9Y5FYqdqQ&q=${address}`}
                                                 allowFullScreen
@@ -246,11 +246,11 @@ export default class HouseDetailPageComponent extends Component {
 
                                     <div className={styles.infoSection}>
                                         <h2 className={styles.hl2}>About Home Owner</h2>
-                                        <div className={"row"} style={{ marginBottom: "30px" }}>
+                                        <div className={"row"} style={{marginBottom: "30px"}}>
                                             <div className={"col-3"}>
                                                 <div
                                                     style={{
-                                                        textAlign: "center"
+                                                        textAlign: "center",
                                                     }}
                                                 >
                                                     <img
@@ -282,7 +282,7 @@ export default class HouseDetailPageComponent extends Component {
                                     <div>
                                         <h2
                                             className={styles.hl2}
-                                            ref={el => {
+                                            ref={(el) => {
                                                 elementRefs.bookingSection = el;
                                             }}
                                         >
@@ -300,13 +300,13 @@ export default class HouseDetailPageComponent extends Component {
                                 </div>
                             </div>
 
-                            <div className="d-lg-none col-12" style={{ marginTop: "70px" }}>
+                            <div className="d-lg-none col-12" style={{marginTop: "70px"}}>
                                 <APIRequestButton
                                     cTextOptions={{
                                         default: "Book Now",
                                         loading: "Making Your Booking",
                                         done: "Booked",
-                                        error: "Error!"
+                                        error: "Error!",
                                     }}
                                     callback={this.props.onApply}
                                     onSuccess={() => {}}
@@ -331,10 +331,10 @@ function getInfoSidePanel(that, address) {
                         house={that.props.house}
                         bookingDateRange={{
                             startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
-                            endDate: that.props.application.getData("bookingInfo.bookingEndDate")
+                            endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
                         }}
                         numGuests={that.props.application.getData("bookingInfo.numGuests")}
-                        onNumGuestsChange={numGuests =>
+                        onNumGuestsChange={(numGuests) =>
                             that.props.handleApplicationChange("bookingInfo.numGuests", numGuests)
                         }
                         address={address}
@@ -342,7 +342,7 @@ function getInfoSidePanel(that, address) {
                         handleDateChange={that.props.handleDateChange}
                     />
 
-                    <div className="row" style={{ marginBottom: "20px" }}>
+                    <div className="row" style={{marginBottom: "20px"}}>
                         <div className="col-12 d-flex justify-content-center">
                             {that.state.bookButtonActive ? (
                                 <ConfirmBookingModal
@@ -379,12 +379,10 @@ function getInfoMobilePanel(that, address) {
                     house={that.props.house}
                     bookingDateRange={{
                         startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
-                        endDate: that.props.application.getData("bookingInfo.bookingEndDate")
+                        endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
                     }}
                     numGuests={that.props.application.getData("bookingInfo.numGuests")}
-                    onNumGuestsChange={numGuests =>
-                        that.props.handleApplicationChange("bookingInfo.numGuests")
-                    }
+                    onNumGuestsChange={(numGuests) => that.props.handleApplicationChange("bookingInfo.numGuests")}
                     address={address}
                     cancellationPolicy={that.props.cancellationPolicy}
                     handleDateChange={that.props.handleDateChange}

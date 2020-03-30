@@ -1,23 +1,19 @@
-import React from 'react';
-import ScriptLoader from 'react-script-loader-hoc';
-import {StripeProvider, Elements, CardElement, injectStripe} from 'react-stripe-elements';
+import React from "react";
+import ScriptLoader from "react-script-loader-hoc";
+import {StripeProvider, Elements, CardElement, injectStripe} from "react-stripe-elements";
 import {ComponentLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
 
-
 const StripePayment = ({scriptsLoadedSuccessfully}) => {
-    if (!scriptsLoadedSuccessfully) return <ComponentLoadingSpinner/>;
+    if (!scriptsLoadedSuccessfully) return <ComponentLoadingSpinner />;
 
     return (
         <StripeProvider apiKey="pk_test_12345">
-            <Elements>
-                {() => injectStripe(CheckoutForm)()}
-            </Elements>
+            <Elements>{() => injectStripe(CheckoutForm)()}</Elements>
         </StripeProvider>
     );
 };
 
-export default ScriptLoader('https://js.stripe.com/v3/')(StripePayment);
-
+export default ScriptLoader("https://js.stripe.com/v3/")(StripePayment);
 
 class CheckoutForm extends Component {
     constructor(props) {
@@ -37,12 +33,12 @@ class CheckoutForm extends Component {
 
         const elementStyle = {
             base: {
-                fontSize: "16px"
-            }
+                fontSize: "16px",
+            },
         };
         return (
             <div style={wrapperStyle}>
-                <CardElement style={elementStyle}/>
+                <CardElement style={elementStyle} />
             </div>
         );
     }

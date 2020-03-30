@@ -1,30 +1,26 @@
-import React, {Component} from 'react';
-import Select from 'react-select'
-
+import React, {Component} from "react";
+import Select from "react-select";
 
 function substituteVerbose(key, verbose) {
     const subs = {
-        'Y': 'Furnished',
-        'N': 'Unfurnished'
+        Y: "Furnished",
+        N: "Unfurnished",
     };
 
     if (subs.hasOwnProperty(key)) {
-        return subs[key]
+        return subs[key];
     } else {
-        return verbose
+        return verbose;
     }
-
 }
 
-
 export default class GuestsSelectorComponent extends Component {
-
     getValue = (key) => {
-        let value = '';
+        let value = "";
         if (Object.keys(this.props.formOptions).length > 0) {
             value = {
                 value: key,
-                label: substituteVerbose(key, this.props.formOptions[key])
+                label: substituteVerbose(key, this.props.formOptions[key]),
             };
         }
         return value;
@@ -33,15 +29,14 @@ export default class GuestsSelectorComponent extends Component {
     getList = () => {
         let options = [];
         if (Object.keys(this.props.formOptions).length > 0) {
-            options = Object.entries(this.props.formOptions).map(item => {
-                return {value: item[0], label: substituteVerbose(item[0], item[1])}
+            options = Object.entries(this.props.formOptions).map((item) => {
+                return {value: item[0], label: substituteVerbose(item[0], item[1])};
             });
         }
         return options;
     };
 
     render() {
-
         const customStyles = {
             option: (provided, state) => ({
                 ...provided,
@@ -49,7 +44,7 @@ export default class GuestsSelectorComponent extends Component {
 
             singleValue: (provided, state) => {
                 const opacity = state.isDisabled ? 0.5 : 1;
-                const transition = 'opacity 300ms';
+                const transition = "opacity 300ms";
 
                 return {...provided, opacity, transition};
             },
@@ -64,9 +59,9 @@ export default class GuestsSelectorComponent extends Component {
 
             container: (provided, state) => ({
                 "background-image": "url(/static/image/form-1/kitchen.svg)",
-                "position": "relative",
+                position: "relative",
                 "font-size": "15px",
-                "color": "#676767",
+                color: "#676767",
                 "font-weight": "400",
                 "border-bottom": state.isFocused ? "1px solid #3fc692" : "1px solid #c7cdd9",
                 "background-repeat": "no-repeat",
@@ -74,9 +69,8 @@ export default class GuestsSelectorComponent extends Component {
                 "padding-left": "40px",
                 "margin-top": "5px",
                 "box-shadow": state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial",
-            })
+            }),
         };
-
 
         return (
             <React.Fragment>
@@ -88,6 +82,6 @@ export default class GuestsSelectorComponent extends Component {
                     value={this.getValue(this.props.value)}
                 />
             </React.Fragment>
-        )
+        );
     }
 }

@@ -6,9 +6,7 @@ import Error404 from "core/errorHelpers/Error404";
 import HouseDetailPage from "./views/houseDetail/HouseDetailPage";
 import BookingSuccessPage from "./views/houseDetail/BookingSuccessPage";
 
-
 export default class Router extends Component {
-
     render() {
         return (
             <React.Fragment>
@@ -18,18 +16,14 @@ export default class Router extends Component {
                             <Route
                                 exact
                                 path={routes.react.apply.houseInfo}
-                                render={props => (
-                                    <HouseDetailPage routerProps={props} />
-                                )}
+                                render={(props) => <HouseDetailPage routerProps={props} />}
                             />
                             <Route
                                 exact
                                 path={routes.react.apply.success}
-                                render={props => (
-                                    <BookingSuccessPage routerProps={props} />
-                                )}
+                                render={(props) => <BookingSuccessPage routerProps={props} />}
                             />
-                            <Route render={props => <Error404 />} />
+                            <Route render={(props) => <Error404 />} />
                         </Switch>
                     </BrowserRouter>
                 </ComponentErrorBoundary>

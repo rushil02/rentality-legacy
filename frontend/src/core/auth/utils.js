@@ -1,24 +1,23 @@
 import React from "react";
 import routes from "routes";
-import {Route} from 'react-router-dom';
+import {Route} from "react-router-dom";
 import {UserContext} from "./userContext";
 import {ComponentLoadingSpinner} from "../loadingSpinners/LoadingSpinner";
 import {reverse} from "named-urls";
 
-
 // From: https://tylermcginnis.com/react-router-protected-routes-authentication/
 export const PrivateRoute = (routerArgs) => (
     <UserContext.Consumer>
-        {user => {
+        {(user) => {
             if (user.isSynced) {
                 if (user.isAuthenticated) {
-                    return <Route {...routerArgs}/>
+                    return <Route {...routerArgs} />;
                 } else {
                     window.location.href = reverse(routes.auth.login) + "?next=" + routerArgs.location.pathname;
-                    return null
+                    return null;
                 }
             } else {
-                return <ComponentLoadingSpinner/>
+                return <ComponentLoadingSpinner />;
             }
         }}
     </UserContext.Consumer>

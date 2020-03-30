@@ -1,10 +1,10 @@
-import React, { useImperativeHandle } from "react";
+import React, {useImperativeHandle} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
 import styles from "./ConfirmBookingModal.css";
 import routes from "routes";
-import { reverse } from "named-urls";
+import {reverse} from "named-urls";
 
 export const ConfirmBookingModal = React.forwardRef((props, ref) => {
     const [show, setShow] = React.useState(false);
@@ -12,13 +12,13 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const successRoute = reverse(routes.react.apply.success, {
-        applicationUUID: props.applicationUUID
+        applicationUUID: props.applicationUUID,
     });
 
     useImperativeHandle(ref, () => ({
         closeModal() {
             handleClose();
-        }
+        },
     }));
 
     return (
@@ -29,7 +29,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                     default: "Book Now",
                     loading: " ",
                     done: "Processing",
-                    error: "Error!"
+                    error: "Error!",
                 }}
                 callback={props.onApply}
                 onSuccess={() => {
@@ -48,10 +48,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                 <div className={"text-center " + styles.modalContent}>
                     <h1>Are you sure you want to book the house?</h1>
                     <div className="text-left">
-                        <p>
-                            Please ensure that all the provided details are
-                            correct before booking.
-                        </p>
+                        <p>Please ensure that all the provided details are correct before booking.</p>
                     </div>
                     <div className={styles.buttonGroup}>
                         <APIRequestButton
@@ -60,17 +57,14 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                                 default: "Confirm Booking",
                                 loading: " ",
                                 done: "Booked",
-                                error: "Error!"
+                                error: "Error!",
                             }}
                             callback={props.onConfirmBooking}
                             onSuccess={() => {
                                 window.location.href = successRoute;
                             }}
                         />
-                        <Button
-                            className={"btn default-button-style float-right"}
-                            onClick={handleClose}
-                        >
+                        <Button className={"btn default-button-style float-right"} onClick={handleClose}>
                             Cancel
                         </Button>
                     </div>

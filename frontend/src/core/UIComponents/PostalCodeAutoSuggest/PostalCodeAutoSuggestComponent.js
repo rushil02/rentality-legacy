@@ -1,16 +1,13 @@
-import React, {Component} from 'react';
-import Autosuggest from 'react-autosuggest';
-import theme from './PostalCodeAutoSuggest.css';
-
+import React, {Component} from "react";
+import Autosuggest from "react-autosuggest";
+import theme from "./PostalCodeAutoSuggest.css";
 
 function getSuggestionValue(suggestion) {
     return suggestion.code;
 }
 
-const renderSuggestion = suggestion => (
-    <div>
-        {suggestion.code + '\u00A0\u00A0\u00A0\u00A0\u00A0' + suggestion.name_full}
-    </div>
+const renderSuggestion = (suggestion) => (
+    <div>{suggestion.code + "\u00A0\u00A0\u00A0\u00A0\u00A0" + suggestion.name_full}</div>
 );
 
 export default class PostalCodeAutoSuggestComponent extends Component {
@@ -23,15 +20,18 @@ export default class PostalCodeAutoSuggestComponent extends Component {
             placeholder: "Postal Code",
             value: this.props.value,
             onChange: this.props.onChange,
-            type: 'text',
-            autoComplete: 'off',
+            type: "text",
+            autoComplete: "off",
         };
 
         let errorDisp = [];
         for (let i = 0; i < this.props.errors.length; i++) {
-            errorDisp.push(<div key={i} className="invalid-feedback">{this.props.errors[i]}</div>)
+            errorDisp.push(
+                <div key={i} className="invalid-feedback">
+                    {this.props.errors[i]}
+                </div>
+            );
         }
-
 
         return (
             <React.Fragment>
@@ -58,11 +58,10 @@ export default class PostalCodeAutoSuggestComponent extends Component {
                     </div>
                 </div>
                 <div className="col-12">
-                    <small className="form-text text-muted">
-                    </small>
+                    <small className="form-text text-muted"></small>
                     {errorDisp}
                 </div>
             </React.Fragment>
-        )
+        );
     }
 }
