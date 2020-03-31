@@ -6,10 +6,10 @@ import {PulseLoader} from "react-spinners";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronUp, faPen, faPlus} from "@fortawesome/free-solid-svg-icons";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
-import {createPaymentInfo, updatePaymentInfo} from "houseListing/services";
+import {postPaymentInfo} from "houseListing/services";
 import styles from "./PayoutInfoContainer.css";
 
-export default class PGInfoContainer extends Component {
+export default class BankDetailsContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +26,7 @@ export default class PGInfoContainer extends Component {
         } else if (this.props.statusPI === "Incomplete" || this.props.statusII === "Incomplete") {
             return (
                 <span className="badge badge-danger" style={{marginLeft: "20px"}}>
-                    Required
+                    Please Complete Payment Information
                 </span>
             );
         } else {
@@ -72,7 +72,11 @@ export default class PGInfoContainer extends Component {
             };
         }
 
-        if (this.props.statusBI === "Incomplete") {
+        if (
+            this.props.statusBI === "Incomplete" ||
+            this.props.statusPI === "Incomplete" ||
+            this.props.statusII === "Incomplete"
+        ) {
             return (
                 <button
                     className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
@@ -100,49 +104,25 @@ export default class PGInfoContainer extends Component {
         }
     };
 
-    redirectToStripe = (data) => {
-        window.location.href = data.url;
-    };
-
     onSave = () => {
         const that = this;
         let data = {success_url: window.location.pathname.slice(1), failure_url: window.location.pathname.slice(1)};
-        if (this.props.statusPI === "Incomplete") {
-            return new Promise(function(resolve, reject) {
-                createPaymentInfo(that.props.houseUUID, data)
-                    .then((result) => {
-                        that.redirectToStripe(result.pg.data);
-                        resolve(result);
-                    })
-                    .catch((error) => {
-                        let errorData = error.response.data.details;
-                        alertUser.init({
-                            message: errorData,
-                            alertType: "danger",
-                            autoHide: false
-                        });
-                        reject(error);
+        return new Promise(function(resolve, reject) {
+            postPaymentInfo(that.props.houseUUID, data)
+                .then((result) => {
+                    that.redirectToStripe(result.pg.data);
+                    resolve(result);
+                })
+                .catch((error) => {
+                    let errorData = error.response.data.details;
+                    alertUser.init({
+                        message: errorData,
+                        alertType: "danger",
+                        autoHide: false
                     });
-            });
-        } else if (this.props.statusII === "Incomplete") {
-            return new Promise(function(resolve, reject) {
-                //'stripe' is dynamic, change it
-                updatePaymentInfo("stripe", data)
-                    .then((result) => {
-                        that.redirectToStripe(result.pg.data);
-                        resolve(result);
-                    })
-                    .catch((error) => {
-                        let errorData = error.response.data.details;
-                        alertUser.init({
-                            message: errorData,
-                            alertType: "danger",
-                            autoHide: false
-                        });
-                        reject(error);
-                    });
-            });
-        }
+                    reject(error);
+                });
+        });
     };
 
     render() {
@@ -157,7 +137,7 @@ export default class PGInfoContainer extends Component {
                     <div className={"card-body " + styles.cardBody}>
                         <div className={styles.cardTextContent}>
                             <span>
-                                <b>Step 2: Payment Information</b>
+                                <b>Step 3: Bank Details</b>
                             </span>
                             {this.getBadge()}
                         </div>
