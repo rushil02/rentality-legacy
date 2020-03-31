@@ -26,6 +26,7 @@ elasticsearch = "~=6.3"
 stripe = "~=2.42"
 django-sendgrid-v5 = "~=0.8.1"
 sentry-sdk = "~=0.14.1"
+django-ipware = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
 

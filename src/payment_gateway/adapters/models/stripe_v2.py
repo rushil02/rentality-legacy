@@ -6,6 +6,9 @@ Home Owner -
 
 Tenant -
 """
+from django.contrib.sites.shortcuts import get_current_site
+from ipware import get_client_ip
+from django.utils import timezone
 
 from ..base import PaymentGatewayBase, PGTransaction, PGTransactionError
 from rentality.settings.common import get_env_var
@@ -26,12 +29,17 @@ class StripePaymentGateway(PaymentGatewayBase):
         'execute': lambda obj: obj.execute_payment_intent
     }
 
+    @staticmethod
+    def get_payout_account_id(details):
+        return details['account_id']
+
     def _execute_request(self, request, *args, **kwargs):
         try:
             return request(
+                *args,
+                **kwargs,
                 api_key=self.STRIPE_SECRET_KEY,
                 stripe_version=self.STRIPE_VERSION,
-                *args, **kwargs
             )
         except error.IdempotencyError:
             raise PGTransactionError("Invalid Request", {})
@@ -57,17 +65,20 @@ class StripePaymentGateway(PaymentGatewayBase):
         response = self._execute_idempotent_request(stripe.PaymentIntent.create, **kwargs)
         return PGTransaction(response=response, meta=response)
 
-    def _get_account_link(self, account_id):
+    # region Payout Accounts
+    def _get_account_link(self, request, account_id, success_url, failure_url):
+        domain = get_current_site(request)
         return self._execute_request(
             stripe.AccountLink.create,
             account=account_id,
-            failure_url="https://rentality.com.au/rep/acc/failure",
-            success_url="https://rentality.com.au/rep/acc/success",
+            failure_url="https://{}/{}".format(domain, failure_url),
+            success_url="https://{}/{}".format(domain, success_url),
             type="custom_account_verification",
             collect="currently_due"
         )
 
     def create_payout_account(self, homeowner):
+        client_ip, routable = get_client_ip(homeowner.user_request)
         if homeowner.account_type == 'I':
             acc_type_info = {
                 'business_type': 'individual',
@@ -107,9 +118,39 @@ class StripePaymentGateway(PaymentGatewayBase):
             'type': 'custom',
             'requested_capabilities': ['card_payments', 'transfers'],
             'email': homeowner.email,
+            'tos_acceptance': {
+                'date': timezone.now().timestamp(),
+                'ip': client_ip,
+                'user_agent': homeowner.user_request.META['HTTP_USER_AGENT'],
+            }
         }
 
         response = self._execute_idempotent_request(stripe.Account.create, **kwargs, **acc_type_info)
 
         user_response = {'type': 'redirect', 'data': self._get_account_link(response["id"])}
         return PGTransaction(response=response, user_response=user_response, meta={"account_id": response["id"]})
+
+    def verify_payout_account_status(self, homeowner):
+        acc_id = self.get_payout_account_id(homeowner.account_details)
+        response = self._execute_request(stripe.Account.retrieve, acc_id)
+        requirements = response["requirements"]["currently_due"]
+        try:
+            requirements.remove('external_account')
+        except ValueError:
+            ext_acc = True
+        else:
+            ext_acc = False
+
+        user_response = {
+            'verified': not bool(requirements),
+            'external_account': ext_acc
+        }
+        return PGTransaction(response=response, user_response=user_response)
+
+    def update_payout_account(self, homeowner):
+        acc_id = self.get_payout_account_id(homeowner.account_details)
+        response = self._get_account_link(acc_id)
+        user_response = {'type': 'redirect', 'data': response}
+        return PGTransaction(response=response, user_response=user_response)
+
+    # endregion

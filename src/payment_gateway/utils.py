@@ -48,6 +48,20 @@ class User(object):
         else:
             raise ValueError("Cannot update account - None provided")
 
+    @property
+    def account_details(self):
+        if self._pg_account_db:
+            return self._pg_account_db.details
+        else:
+            raise ValueError("No account is set")
+
+    @property
+    def user_request(self):
+        if self.http_request:
+            return self.http_request
+        else:
+            raise ValueError("Request object is not loaded")
+
 
 class PaymentGateway(object):
     """
@@ -116,22 +130,33 @@ class PaymentGateway(object):
         if request:
             self.homeowner.http_request = request
 
-    def set_tenant_user(self, user):
+    def set_tenant_user(self, user, user_response=None, request=None):
         """
         :param user: 'user_custom.models.User' object
+        :param request: [optional] 'django.http.request' object
+        :param user_response: [optional] serialized response dictionary from user
         :return:
         """
         self.tenant = User(user)
+        if user_response:
+            self.homeowner.user_response = user_response
+        if request:
+            self.homeowner.http_request = request
 
     def create_payout_account(self):
         pg_transaction = self._payment_gateway.create_payout_account(self.homeowner)
-        self.homeowner.update_account(pg_transaction.meta_store)
+        if pg_transaction.meta_store:
+            self.homeowner.update_account(pg_transaction.meta_store)
+        return pg_transaction
+
+    def update_payout_account(self):
+        pg_transaction = self._payment_gateway.update_payout_account(self.homeowner)
+        if pg_transaction.meta_store:
+            self.homeowner.update_account(pg_transaction.meta_store)
         return pg_transaction
 
     def verify_payout_account(self):
-        # FIXME:
-        ...
-
+        return self._payment_gateway.verify_payout_account_status(self.homeowner)
 
     def on_event(self, event):
         return self._payment_gateway.on_event(event)
@@ -144,12 +169,6 @@ class PaymentGateway(object):
 
     def perform_refund(self, amount):
         self._payment_gateway.process_refund(amount)
-
-    def create_pay_out_account(self, user, **kwargs):
-        self._payment_gateway.create_home_owner_account()
-
-    def update_pay_out_account(self, user, **kwargs):
-        self._payment_gateway.create_home_owner_account()
 
     def create_pay_in_account(self, user, **kwargs):
         self._payment_gateway.create_home_owner_account()

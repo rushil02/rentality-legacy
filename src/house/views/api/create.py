@@ -16,6 +16,7 @@ from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
 from house.serializers.create import ImageUploadSerializer, NeighbourhoodDescriptorSerializer, \
     WelcomeTagSerializer, HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer, \
     HouseRuleCreateSerializer, FacilitySerializer, RuleReadSerializer
+from payment_gateway.adapters import PGTransactionError
 from payment_gateway.models import PaymentGatewayLocation
 from payment_gateway.utils import PaymentGateway
 from user_custom.models import Account
@@ -492,5 +493,24 @@ class CheckPayoutDetailsView(APIView):
             return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
         else:
             pg.set_homeowner_user(user)
-            response = pg.verify_payout_account()
-            return Response(response, status=status.HTTP_200_OK)
+            try:
+                pgt = pg.verify_payout_account()
+            except PGTransactionError as e:
+                return Response({'details': e.user_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                if not pgt.user_response['verified']:
+                    response = {
+                        'msg': 'Identity information is missing',
+                        'code': 'IIM',
+                        'payment_gateway': payment_gateway_location.payment_gateway.code
+                    }
+                    return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
+                if not pgt.user_response['external_account']:
+                    response = {
+                        'msg': 'External Account is missing',
+                        'code': 'EAM',
+                        'payment_gateway': payment_gateway_location.payment_gateway.code
+                    }
+                    return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+                return Response(status=status.HTTP_200_OK)

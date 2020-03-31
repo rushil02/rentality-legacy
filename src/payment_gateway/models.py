@@ -208,6 +208,9 @@ class PaymentGatewayLocation(models.Model):
 
     objects = PaymentGatewayLocationManager()
 
+    class Meta:
+        unique_together = [['payment_gateway', 'home_owner_billing_location']]
+
     def __str__(self):
         return "%s" % self.payment_gateway
 

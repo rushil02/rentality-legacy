@@ -200,6 +200,14 @@ Django = ">=1.11"
 
 [[package]]
 category = "main"
+description = "A Django utility application that returns client's real IP address"
+name = "django-ipware"
+optional = false
+python-versions = "*"
+version = "2.1.0"
+
+[[package]]
+category = "main"
 description = "Django model mixins and utilities"
 name = "django-model-utils"
 optional = false
@@ -617,7 +625,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "unittest2", "jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "1cff5f81a6ed24da1dde5a0bd3b87c2d51be3e42db3a58f953c3493913777f5d"
+content-hash = "9f9f61a4ff8587821f1fd26e25dd861c28cb8f0636d23e7abcc404a7c723ada6"
 python-versions = ">=3.6,<3.7"
 
 [metadata.files]
@@ -674,6 +682,9 @@ django-debug-toolbar = [
 django-formtools = [
     {file = "django-formtools-2.2.tar.gz", hash = "sha256:c5272c03c1cd51b2375abf7397a199a3148a9fbbf2f100e186467a84025d13b2"},
     {file = "django_formtools-2.2-py2.py3-none-any.whl", hash = "sha256:304fa777b8ef9e0693ce7833f885cb89ba46b0e46fc23b01176900a93f46742f"},
+]
+django-ipware = [
+    {file = "django-ipware-2.1.0.tar.gz", hash = "sha256:a7c7a8fd019dbdc9c357e6e582f65034e897572fc79a7e467674efa8aef9d00b"},
 ]
 django-model-utils = [
     {file = "django-model-utils-4.0.0.tar.gz", hash = "sha256:adf09e5be15122a7f4e372cb5a6dd512bbf8d78a23a90770ad0983ee9d909061"},
