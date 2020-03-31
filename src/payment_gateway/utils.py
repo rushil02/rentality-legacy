@@ -31,7 +31,7 @@ class User(object):
         self.billing_postcode = user.userprofile.billing_postcode
         self.contact_num = user.userprofile.contact_num
 
-        self.response = None
+        self.user_data = None
         self.http_request = None
 
     def get_user_db_object(self):
@@ -59,6 +59,13 @@ class User(object):
     def user_request(self):
         if self.http_request:
             return self.http_request
+        else:
+            raise ValueError("Request object is not loaded")
+
+    @property
+    def request_data(self):
+        if self.user_data:
+            return self.user_data
         else:
             raise ValueError("Request object is not loaded")
 
@@ -126,7 +133,7 @@ class PaymentGateway(object):
             raise AttributeError("Required Home Owner account is not found.")
 
         if user_response:
-            self.homeowner.user_response = user_response
+            self.homeowner.user_data = user_response
         if request:
             self.homeowner.http_request = request
 
@@ -139,7 +146,7 @@ class PaymentGateway(object):
         """
         self.tenant = User(user)
         if user_response:
-            self.homeowner.user_response = user_response
+            self.homeowner.user_data = user_response
         if request:
             self.homeowner.http_request = request
 

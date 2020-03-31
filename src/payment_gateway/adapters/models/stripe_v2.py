@@ -127,7 +127,15 @@ class StripePaymentGateway(PaymentGatewayBase):
 
         response = self._execute_idempotent_request(stripe.Account.create, **kwargs, **acc_type_info)
 
-        user_response = {'type': 'redirect', 'data': self._get_account_link(response["id"])}
+        user_response = {
+            'type': 'redirect',
+            'data': self._get_account_link(
+                request=homeowner,
+                account_id=response["id"],
+                success_url=homeowner.request_data['success_url'],
+                failure_url=homeowner.request_data['failure_url']
+            )
+        }
         return PGTransaction(response=response, user_response=user_response, meta={"account_id": response["id"]})
 
     def verify_payout_account_status(self, homeowner):
