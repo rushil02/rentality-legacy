@@ -65,7 +65,8 @@ export default class BillingInfoContainer extends Component {
             modeEditing: false,
             userInfo: new UserPII({}, "empty"),
             showSelectCountry: false,
-            billingCountryName: undefined
+            billingCountryName: undefined,
+            addBussinessNameField: false
         };
     }
 
@@ -87,6 +88,7 @@ export default class BillingInfoContainer extends Component {
                         inSyncMode: false
                     }));
                     resolve(result);
+                    that.props.verifyPayoutInfo();
                 })
                 .catch(error => {
                     that.forceUpdate();
@@ -99,7 +101,9 @@ export default class BillingInfoContainer extends Component {
         if (this.state.userInfo.status === "empty") {
             // Fetch house details
             getUserProfileData().then(result => {
+                console.log(result);
                 let billingCountryID = result.getData("billingCountryID");
+                let accountType = result.getData("accountType");
                 if (billingCountryID === "" || billingCountryID === null || billingCountryID === undefined) {
                     this.setState(prevState => ({
                         ...prevState,
@@ -107,11 +111,19 @@ export default class BillingInfoContainer extends Component {
                         userInfo: result
                     }));
                 } else {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        userInfo: result
-                    }));
-                    this.getCountryName(billingCountryID);
+                    if (accountType === "Business") {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            addBussinessNameField: true,
+                            userInfo: result
+                        }));
+                    } else {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            userInfo: result
+                        }));
+                        this.getCountryName(billingCountryID);
+                    }
                 }
                 console.log(result);
                 // this.props.navContext.data.updateFormState(this.formID, 'saved');
@@ -282,6 +294,27 @@ export default class BillingInfoContainer extends Component {
                                             </div>
                                         </React.Fragment>
                                     )}
+                                    {this.state.addBussinessNameField ? (
+                                        <React.Fragment>
+                                            <div className="col-12">
+                                                <div className="input no-background">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control no-background"
+                                                        placeholder="Business Name"
+                                                        style={{ paddingLeft: "10px" }}
+                                                        value={this.state.userInfo.getData("businessName")}
+                                                        onChange={e =>
+                                                            this.onFieldChange("businessName", e.target.value)
+                                                        }
+                                                    />
+                                                    {displayErrors(
+                                                        this.state.userInfo.getErrorsForField("businessName")
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </React.Fragment>
+                                    ) : null}
                                     <div className="col-md-12 col-lg-6">
                                         <div className="input no-background">
                                             <input
