@@ -119,7 +119,7 @@ class StripePaymentGateway(PaymentGatewayBase):
             'requested_capabilities': ['card_payments', 'transfers'],
             'email': homeowner.email,
             'tos_acceptance': {
-                'date': timezone.now().timestamp(),
+                'date': int(timezone.now().timestamp()),
                 'ip': client_ip,
                 'user_agent': homeowner.user_request.META['HTTP_USER_AGENT'],
             }
