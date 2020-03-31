@@ -51,7 +51,7 @@ class StripePaymentGateway(PaymentGatewayBase):
         except error.RateLimitError:
             raise PGTransactionError("Network Error - Please try again later.", {})
 
-    def _execute_idempotent_request(self, request, *args, **kwargs):
+    def _execute_idempotent_request(self, request, **kwargs):
         idempotency_key = str(uuid.uuid4())
         return self._execute_request(request, idempotency_key=idempotency_key, **kwargs)
 
@@ -157,7 +157,12 @@ class StripePaymentGateway(PaymentGatewayBase):
 
     def update_payout_account(self, homeowner):
         acc_id = self.get_payout_account_id(homeowner.account_details)
-        response = self._get_account_link(acc_id)
+        response = self._get_account_link(
+                request=homeowner,
+                account_id=acc_id,
+                success_url=homeowner.request_data['success_url'],
+                failure_url=homeowner.request_data['failure_url']
+            )
         user_response = {'type': 'redirect', 'data': response}
         return PGTransaction(response=response, user_response=user_response)
 

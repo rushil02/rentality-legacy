@@ -10,7 +10,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = (
             'contact_num', 'sex', 'dob', 'billing_street_address', 'billing_postcode', 'billing_country',
-            'account_type', 'profile_pic'
+            'account_type', 'profile_pic', 'business_name'
         )
 
     def get_account_type(self, obj):
@@ -23,10 +23,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.billing_street_address = self.validated_data.get('billing_street_address',
                                                                   instance.billing_street_address)
         instance.billing_postcode = self.validated_data.get('billing_postcode', instance.billing_postcode)
-        instance.account_type = self.validated_data.get('account_type', instance.account_type)
-        instance.billing_country = self.validated_data.get('billing_country', instance.billing_country)
+
+        instance.business_name = self.validated_data.get('business_name', instance.business_name)
         instance.save()
-        return instance
+        if not instance.billing_country:
+            try:
+                billing_country = validated_data.pop('billing_country')
+            except KeyError:
+                pass
+            else:
+                instance.billing_country = billing_country
+
+        return super(UserProfileSerializer, self).update(instance, validated_data)
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
