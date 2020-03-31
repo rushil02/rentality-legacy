@@ -1,3 +1,4 @@
+import re
 from rest_framework import serializers
 
 """
@@ -126,3 +127,42 @@ class UpdateListSerializer(serializers.ListSerializer):
 
     def create(self, validated_data):
         self.fail('invalid_parameter')
+
+
+FIELD_CODE_MAP = {
+    'string': serializers.CharField,
+    'num': serializers.IntegerField,
+    'dec': serializers.DecimalField,
+    'bool': serializers.BooleanField,
+    'date': serializers.DateField,
+    'datetime': serializers.DateTimeField,
+    'ip': serializers.CharField,
+    'user_agent': serializers.CharField
+}
+
+
+class RegexValidator(object):
+    def __init__(self, regex):
+        self.regex = regex
+
+    def __call__(self, value):
+        if not bool(re.match(self.regex, value)):
+            raise serializers.ValidationError("Unacceptable format")
+
+
+class DynamicFieldsSerializer(serializers.Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
+    def __init__(self, fields, *args, **kwargs):
+        super(DynamicFieldsSerializer, self).__init__(*args, **kwargs)
+
+        for field_name in fields:
+            if 'regex' in fields[field_name]:
+                self.fields[field_name] = FIELD_CODE_MAP[fields[field_name]['type']](validators=[RegexValidator])
+            else:
+                self.fields[field_name] = FIELD_CODE_MAP[fields[field_name]['type']]()
+

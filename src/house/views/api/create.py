@@ -472,21 +472,25 @@ class CheckPayoutDetailsView(APIView):
             return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         payment_gateway_location = PaymentGatewayLocation.objects.get_location_default(
-            house_location=house.get_location(),
+            house_location=house.location,
             billing_location=house.home_owner.user.get_billing_location()
         )
 
         pg = PaymentGateway(payment_gateway_location)
 
         try:
-            user_account = Account.objects.get(
+            Account.objects.get(
                 user=user,
                 payment_gateway=payment_gateway_location.payment_gateway
             )
         except Account.DoesNotExist:
-            response = pg.create_payout_account()
-            return Response({}, status=status.HTTP_200_OK)
+            response = {
+                'msg': 'Payment Gateway information is missing',
+                'code': 'PGM',
+                'payment_gateway': payment_gateway_location.payment_gateway.code
+            }
+            return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
         else:
-            pg.set_homeowner(user_account)
+            pg.set_homeowner_user(user)
             response = pg.verify_payout_account()
             return Response(response, status=status.HTTP_200_OK)
