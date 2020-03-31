@@ -480,11 +480,12 @@ class CheckPayoutDetailsView(APIView):
         pg = PaymentGateway(payment_gateway_location)
 
         try:
-            Account.objects.get(
+            account_obj = Account.objects.get(
                 user=user,
                 payment_gateway=payment_gateway_location.payment_gateway
             )
-        except Account.DoesNotExist:
+            account_obj.get_details('account_id')
+        except (Account.DoesNotExist, KeyError):
             response = {
                 'msg': 'Payment Gateway information is missing',
                 'code': 'PGM',
