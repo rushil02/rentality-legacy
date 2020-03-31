@@ -3,15 +3,14 @@
 }
 
 .rt-date-picker .react-calendar__tile--hasActive {
-    background-color: #2A2B32;
+    background-color: #2a2b32;
     color: #ededed;
 }
 
-.rt-date-picker .react-calendar button:enabled:hover ,
-.rt-date-picker .react-calendar button:enabled:focus
- {
+.rt-date-picker .react-calendar button:enabled:hover,
+.rt-date-picker .react-calendar button:enabled:focus {
     background-color: #32d8a0;
-    color:black;
+    color: black;
 }
 
 .rt-date-picker .react-calendar__tile:enabled:focus {
@@ -19,6 +18,6 @@
 }
 
 .rt-date-picker .react-calendar__tile--active {
-    background-color: #2A2B32;
+    background-color: #2a2b32;
     color: #ededed;
 }

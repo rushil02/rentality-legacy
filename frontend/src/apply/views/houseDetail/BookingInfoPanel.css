@@ -75,13 +75,11 @@
     color: #3fc692;
 }
 
-
 .discountContainer {
     border: 1px solid #d3d3d3;
     border-radius: 4px;
     padding: 4px;
     transition: 100ms ease-in-out;
-
 }
 
 .discountContainer:focus-within {
@@ -96,7 +94,7 @@
     border: none;
     border-bottom: 1px solid #c7cdd9;
     border-radius: 0;
-    -webkit-transition: all 0.30s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
     height: unset !important;
     padding: 1px 1px 0 10px;
     background: none;

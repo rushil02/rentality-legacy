@@ -1,58 +1,61 @@
-import React, {Component} from 'react';
-import AlertListComponent from './components/AlertList';
+import React, {Component} from "react";
+import AlertListComponent from "./components/AlertList";
 
 export let alertUser = {};
 
-const availableAlertTypes = ['primary', 'secondary', 'success', 'danger', 'info', 'warning', 'dark', 'light'];
+const availableAlertTypes = ["primary", "secondary", "success", "danger", "info", "warning", "dark", "light"];
 
 const stockAlertList = {
-    'connectionError': {
+    connectionError: {
         message: "Oops! Looks like we are having connection problems. Please check your Internet Connection",
         alertType: "danger",
-        autoHide: true
+        autoHide: true,
     },
-    'unknownError': {
+    unknownError: {
         message: "Something went wrong. Please contact us for support.",
         alertType: "danger",
-        autoHide: true
+        autoHide: true,
     },
-    'generic': {
+    generic: {
         message: "Oops! Looks like we ran into some problem. Please refresh the page and try again, or contact us.",
         alertType: "danger",
-        autoHide: false
+        autoHide: false,
     },
-    'save-success': {
+    "save-success": {
         message: "Information saved!",
         alertType: "success",
-        autoHide: true
-    }
+        autoHide: true,
+    },
 };
 
 export default class Alert extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            alertList: []
-        }
+            alertList: [],
+        };
     }
 
     componentDidMount() {
         alertUser.init = ({stockAlertType, message, alertType, autoHide}) => {
             if (stockAlertType) {
-                this.setState(prevState => ({
-                    alertList: [...prevState.alertList, stockAlertList[stockAlertType]]
-                }))
+                this.setState((prevState) => ({
+                    alertList: [...prevState.alertList, stockAlertList[stockAlertType]],
+                }));
             } else {
                 if (availableAlertTypes.indexOf(alertType) === -1) {
-                    console.error("Invalid alertType : " + alertType)
+                    console.error("Invalid alertType : " + alertType);
                 } else {
-                    this.setState(prevState => ({
-                        alertList: [...prevState.alertList, {
-                            message: message,
-                            alertType: alertType,
-                            autoHide: autoHide
-                        }]
-                    }))
+                    this.setState((prevState) => ({
+                        alertList: [
+                            ...prevState.alertList,
+                            {
+                                message: message,
+                                alertType: alertType,
+                                autoHide: autoHide,
+                            },
+                        ],
+                    }));
                 }
             }
         };
@@ -61,7 +64,7 @@ export default class Alert extends Component {
     render() {
         return (
             <React.Fragment>
-                <AlertListComponent alertList={this.state.alertList}/>
+                <AlertListComponent alertList={this.state.alertList} />
             </React.Fragment>
         );
     }

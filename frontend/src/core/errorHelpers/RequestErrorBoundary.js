@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import {Component} from "react";
 import React from "react";
 import styles from "./style.css";
 import {ComponentLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
@@ -10,11 +10,11 @@ export default class RequestErrorBoundary extends Component {
      */
 
     render() {
-        if (this.props.status === 'loading') {
-            return <ComponentLoadingSpinner/>
-        } else if (this.props.status === 'error') {
-            return <Error404/>
-        } else if (this.props.status === 'done') {
+        if (this.props.status === "loading") {
+            return <ComponentLoadingSpinner />;
+        } else if (this.props.status === "error") {
+            return <Error404 />;
+        } else if (this.props.status === "done") {
             // Normally, just render children
             return this.props.children;
         }

@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import CheckoutForm from "./CheckoutForm";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, ElementsConsumer } from "@stripe/react-stripe-js";
+import {loadStripe} from "@stripe/stripe-js";
+import {Elements, ElementsConsumer} from "@stripe/react-stripe-js";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
-import { SecretContext } from "./HouseDetailPage";
+import {SecretContext} from "./HouseDetailPage";
 
 const stripePromise = loadStripe("pk_test_fnHvlWbNICwFvTYFBiYnFyZ8");
 
@@ -29,13 +29,11 @@ export default class PaymentPanel extends Component {
         return (
             <Elements stripe={stripePromise}>
                 <ElementsConsumer>
-                    {({ stripe, elements }) => {
+                    {({stripe, elements}) => {
                         return (
-                            <RequestErrorBoundary
-                                status={getLoadStatus(stripe, elements)}
-                            >
+                            <RequestErrorBoundary status={getLoadStatus(stripe, elements)}>
                                 <SecretContext.Consumer>
-                                    {clientSecret => (
+                                    {(clientSecret) => (
                                         <CheckoutForm
                                             stripe={stripe}
                                             elements={elements}

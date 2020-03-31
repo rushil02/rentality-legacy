@@ -171,7 +171,6 @@ class PersonalityTag(models.Model):
         return "%s" % self.verbose
 
 
-# FIXME: Migrate all payment process in reference to this model
 class Account(models.Model):
     """
     Stores all the Payment Gateway accounts that exist for a user.

@@ -1,31 +1,25 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {debounce} from "lodash";
 import {getCountryData, getCountrySuggestions} from "./services";
 import {alertUser} from "core/alert/Alert";
 import Autosuggest from "react-autosuggest";
 import theme from "./CountryAutoSuggest.css";
 
-
 function getSuggestionValue(suggestion) {
     return suggestion.name;
 }
 
-const renderSuggestion = suggestion => (
-    <div>
-        {suggestion.name}
-    </div>
-);
-
+const renderSuggestion = (suggestion) => <div>{suggestion.name}</div>;
 
 export default class CountryAutoSuggestContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            value: '',
+            value: "",
             suggestions: [],
             errors: [],
-            objID: '',
+            objID: "",
         };
 
         this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 350, {trailing: true});
@@ -47,62 +41,58 @@ export default class CountryAutoSuggestContainer extends Component {
 
     updateDisplay = () => {
         getCountryData(this.props.objID)
-            .then(result => {
+            .then((result) => {
                 this.setState({
                     value: result.name,
                     objID: result.id,
                 });
-                if (this.props.hasOwnProperty('updateInfo')) {
-                    this.props.updateInfo(result)
+                if (this.props.hasOwnProperty("updateInfo")) {
+                    this.props.updateInfo(result);
                 }
             })
-            .catch(
-                error => alertUser.init({stockAlertType: "connectionError"})
-            )
+            .catch((error) => alertUser.init({stockAlertType: "connectionError"}));
     };
 
     onChange = (event, {newValue}) => {
         this.setState({
             value: newValue,
         });
-        this.props.onFieldChange('');
+        this.props.onFieldChange("");
     };
 
     onSuggestionsFetchRequested = ({value}) => {
         getCountrySuggestions(value)
-            .then(result => {
+            .then((result) => {
                 if (result.length === 0) {
                     this.setState({
-                        errors: ["Invalid Postal Code"]
+                        errors: ["Invalid Postal Code"],
                     });
                 } else {
                     this.setState({
-                        errors: []
+                        errors: [],
                     });
                 }
                 this.setState({
                     suggestions: result,
                 });
             })
-            .catch(
-                error => alertUser.init({stockAlertType: "connectionError"})
-            )
+            .catch((error) => alertUser.init({stockAlertType: "connectionError"}));
     };
 
     onSuggestionsClearRequested = () => {
         this.setState({
-            suggestions: []
+            suggestions: [],
         });
     };
 
     onSuggestionSelected = (event, {suggestion}) => {
         this.setState({
             value: suggestion.name,
-            objID: suggestion.id
+            objID: suggestion.id,
         });
         this.props.onFieldChange(suggestion.id);
-        if (this.props.hasOwnProperty('updateInfo')) {
-            this.props.updateInfo(suggestion)
+        if (this.props.hasOwnProperty("updateInfo")) {
+            this.props.updateInfo(suggestion);
         }
     };
 
@@ -111,13 +101,17 @@ export default class CountryAutoSuggestContainer extends Component {
             placeholder: "Country",
             value: this.state.value,
             onChange: this.onChange,
-            type: 'text',
-            autoComplete: 'Mlep(clay)nos',
+            type: "text",
+            autoComplete: "Mlep(clay)nos",
         };
 
         let errorDisp = [];
         for (let i = 0; i < this.props.errors.length; i++) {
-            errorDisp.push(<div key={i} className="invalid-feedback">{this.state.errors[i]}</div>)
+            errorDisp.push(
+                <div key={i} className="invalid-feedback">
+                    {this.state.errors[i]}
+                </div>
+            );
         }
 
         return (
@@ -136,8 +130,7 @@ export default class CountryAutoSuggestContainer extends Component {
                         renderSuggestion={renderSuggestion}
                         inputProps={inputProps}
                     />
-                    <small className="form-text text-muted">
-                    </small>
+                    <small className="form-text text-muted"></small>
                     {errorDisp}
                 </div>
             </React.Fragment>

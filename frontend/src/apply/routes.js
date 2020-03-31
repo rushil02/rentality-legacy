@@ -2,7 +2,7 @@ export default {
     interface: {
         base: "",
         houseInfo: "property/info/:houseUUID",
-        success: "app/success/:applicationUUID"
+        success: "app/success/:applicationUUID",
     },
     APIs: {
         houseDetails: "/property/detail/:houseUUID", // URL starts from root
@@ -11,6 +11,6 @@ export default {
         unavailableDates: "/property/current-unavailability/:houseUUID", // URL starts from root
         applyBooking: "initiate/:houseUUID",
         confirmBooking: "exec-intent/:houseUUID/:applicationUUID",
-        bookingDetails: "application-info-list/:applicationUUID"
-    }
+        bookingDetails: "application-info-list/:applicationUUID",
+    },
 };

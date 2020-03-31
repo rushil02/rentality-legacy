@@ -1,14 +1,52 @@
+from django.core.exceptions import ObjectDoesNotExist
+
 from .adapters import get_adaptor_class
 from .models import PaymentGatewayLocation
 
 
 class User(object):
+    """
+    Provides interface to limited relevant django models to store all event actions.
+    """
+
+    @staticmethod
+    def check_existence(attr):
+        if attr:
+            return attr
+        else:
+            raise ValueError("Value required to initialize payment_gateway.utils.User")
+
     def __init__(self, user):
-        self.email = user.email
-        self.first_name = user.first_name
-        self.last_name = user.last_name
+        self._user_db = user
+        self._pg_account_db = None
+
+        self.email = self.check_existence(user.email)
+        self.first_name = self.check_existence(user.first_name)
+        self.last_name = self.check_existence(user.last_name)
+
         self.dob = user.userprofile.dob
         self.country = user.get_billing_location()
+        self.account_type = user.userprofile.account_type
+        self.business_name = user.userprofile.business_name
+        self.billing_postcode = user.userprofile.billing_postcode
+        self.contact_num = user.userprofile.contact_num
+
+        self.response = None
+        self.http_request = None
+
+    def get_user_db_object(self):
+        return self._user_db
+
+    def set_pg_account(self, account):
+        self._pg_account_db = account
+
+    def update_account(self, value):
+        # FIXME: Update by merge not replacement !!!!URGENT!!!
+        if self._pg_account_db:
+            self._pg_account_db.details = value
+            self._pg_account_db.save()
+        else:
+            raise ValueError("Cannot update account - None provided")
 
 
 class PaymentGateway(object):
@@ -36,6 +74,9 @@ class PaymentGateway(object):
         :param payment_gateway_location: `payment_gateway.models.PaymentGatewayLocation` object
         """
         self._payment_gateway = get_adaptor_class(payment_gateway_location.payment_gateway.code)()
+        self._pg_location_db = payment_gateway_location
+        self.homeowner = None
+        self.tenant = None
 
     # @classmethod
     # def create(cls, house_db):
@@ -57,27 +98,39 @@ class PaymentGateway(object):
     def get_transaction_record(self):
         return
 
-    def set_user_account(self, user_account):
+    def set_homeowner_user(self, user, user_response=None, request=None):
         """
-        :param user_account: 'user_custom.models.Account' object
+        :param user: 'user_custom.models.User' object
+        :param request: [optional] 'django.http.request' object
+        :param user_response: [optional] serialized response dictionary from user
         :return:
         """
+        self.homeowner = User(user)
+        try:
+            self.homeowner.set_pg_account(user.account_set.get(payment_gateway=self._pg_location_db.payment_gateway))
+        except ObjectDoesNotExist:
+            raise AttributeError("Required Home Owner account is not found.")
+
+        if user_response:
+            self.homeowner.user_response = user_response
+        if request:
+            self.homeowner.http_request = request
+
+    def set_tenant_user(self, user):
+        """
+        :param user: 'user_custom.models.User' object
+        :return:
+        """
+        self.tenant = User(user)
 
     def create_payout_account(self):
-        # self._payment_gateway.
-        # return response
+        pg_transaction = self._payment_gateway.create_payout_account(self.homeowner)
+        self.homeowner.update_account(pg_transaction.meta_store)
+        return pg_transaction
+
+    def verify_payout_account(self):
+        # FIXME:
         ...
-
-    def parse_PII(self, user):
-        return {
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'dob': user.userprofile.dob,
-            'country': user.get_billing_location(),  # FIXME: PArse
-            'street_address': user.userprofile.billing_street_address,
-
-        }
 
 
     def on_event(self, event):

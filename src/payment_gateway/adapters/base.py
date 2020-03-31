@@ -15,26 +15,16 @@ Basic Expected behaviour    [Updated - 16 March 2019]
 """
 
 
-# class AccountBase(ABC):
-#     def __init__(self, account_info):
-#         """
-#         Override constructor to add attributes.
-#
-#         :param account_info: dict
-#         """
-#         self._account_info = account_info
-#
-#     @abstractmethod
-#     def get_account_info(self):
-#         raise NotImplementedError
-
-
+class PGTransactionError(Exception):
+    def __init__(self, user_message=None, meta_store=None):
+        self.user_message = user_message
+        self.meta_store = meta_store
 
 
 class PGTransaction(object):
-    def __init__(self, response, meta):
+    def __init__(self, response, user_response=None, meta=None):
         self._response = response
-        self.user_response = response
+        self.user_response = user_response
         self.meta_store = meta
 
 

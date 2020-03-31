@@ -41,7 +41,9 @@ class CancellationPolicy(models.Model):
 
 
 class BusinessModelConfigurationManager(models.Manager):
-    location_priority = ['city', 'region', 'country']
+    # FIXME: city level is nesting is never tested, and region data is not consistent for each postal code
+    # location_priority = ['city', 'region', 'country']
+    location_priority = ['country']
 
     def __get_postal_code_attrs(self, postal_code):
         postal_code_attrs = []
@@ -80,6 +82,7 @@ class BusinessModelConfigurationManager(models.Manager):
             for hl_kwargs in house_location_kwargs:
                 for bl_kwargs in home_owner_billing_location_kwargs:
                     query_filter = query_filter | Q(
+                        active=True,
                         default=True,
                         **hl_kwargs,
                         **bl_kwargs
@@ -97,6 +100,11 @@ class BusinessModelConfigurationManager(models.Manager):
         return self.filter(query_filter)
 
     def get_location_default(self, billing_location, house_location):
+        """
+        :param billing_location: 'cities.models.Country'
+        :param house_location: 'cities.models.PostalCode'
+        :return:
+        """
         filtered_business_confs = self.get_valid_business_configs(billing_location, house_location)
         priority = [
             (True, City),

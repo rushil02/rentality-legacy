@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { reverse } from "named-urls";
+import React, {Component} from "react";
+import {reverse} from "named-urls";
 import routes from "routes";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
-import { Booking } from "apply/models";
-import { getBookingData } from "apply/services";
+import {Booking} from "apply/models";
+import {getBookingData} from "apply/services";
 import styles from "./BookingSuccess.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle as faSuccessIcon } from "@fortawesome/free-regular-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheckCircle as faSuccessIcon} from "@fortawesome/free-regular-svg-icons";
 
 export default class BookingSuccessPage extends Component {
     constructor(props) {
@@ -14,18 +14,18 @@ export default class BookingSuccessPage extends Component {
         this.applicationUUID = this.props.routerProps.match.params.applicationUUID;
         this.state = {
             status: "loading",
-            booking: new Booking({}, "empty")
+            booking: new Booking({}, "empty"),
             // booking:
         };
     }
 
     componentDidMount() {
-        this.setState(prevState => ({ status: "loading" }));
-        getBookingData(this.applicationUUID).then(result => {
-            this.setState(prevState => ({
+        this.setState((prevState) => ({status: "loading"}));
+        getBookingData(this.applicationUUID).then((result) => {
+            this.setState((prevState) => ({
                 ...prevState,
                 status: "done",
-                booking: new Booking(result, "saved")
+                booking: new Booking(result, "saved"),
             }));
         });
     }
@@ -103,7 +103,7 @@ export default class BookingSuccessPage extends Component {
                                                         <a
                                                             className={styles.title + " btn-link"}
                                                             href={reverse(routes.react.apply.houseInfo, {
-                                                                houseUUID: booking.getData("bookedHouse.houseUUID")
+                                                                houseUUID: booking.getData("bookedHouse.houseUUID"),
                                                             })}
                                                         >
                                                             <h1>{booking.getData("bookedHouse.title")}</h1>

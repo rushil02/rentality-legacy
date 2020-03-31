@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import './Alert.css';
+import React, {Component} from "react";
+import "./Alert.css";
 
 function adjustHeight(height) {
-    var aTop = $('.menu').outerHeight() + 10;
+    var aTop = $(".menu").outerHeight() + 10;
     if (height >= aTop) {
-        $('.alerts-holder').css({'position': 'fixed', 'top': "10px"})
+        $(".alerts-holder").css({position: "fixed", top: "10px"});
     } else {
-        $('.alerts-holder').css({'position': 'absolute', 'top': aTop + "px"})
+        $(".alerts-holder").css({position: "absolute", top: aTop + "px"});
     }
 }
 
@@ -19,16 +19,16 @@ export default class AlertComponent extends Component {
         let klassString = "alert alert-" + this.props.details.alertType;
 
         if (this.props.details.autoHide) {
-            klassString += " alert-auto-hide"
+            klassString += " alert-auto-hide";
         }
-        return klassString
+        return klassString;
     }
 
     componentDidMount() {
-        $('.alert-auto-hide:not(".no-auto-hide")').delay(4000).slideUp('slow');
+        $('.alert-auto-hide:not(".no-auto-hide")').delay(4000).slideUp("slow");
         adjustHeight($(window).scrollTop());
         $(window).scroll(function () {
-            adjustHeight($(this).scrollTop())
+            adjustHeight($(this).scrollTop());
         });
     }
 

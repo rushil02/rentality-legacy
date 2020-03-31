@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 // import {CardElement, injectStripe} from 'react-stripe-elements';
-import { CardElement } from "@stripe/react-stripe-js";
+import {CardElement} from "@stripe/react-stripe-js";
 
 import styles from "./CheckoutForm.css";
 
@@ -10,20 +10,16 @@ export default class CheckoutForm extends Component {
     }
 
     submit = () => {
-
         let data = {
             payment_method: {
                 card: this.props.elements.getElement(CardElement),
                 billing_details: {
-                    name: this.props.name
-                }
-            }
+                    name: this.props.name,
+                },
+            },
         };
 
-        return this.props.stripe.confirmCardPayment(
-            this.props.clientSecret,
-            data
-        );
+        return this.props.stripe.confirmCardPayment(this.props.clientSecret, data);
 
         // this.props.stripe
         //     .confirmCardPayment(this.props.clientSecret, data)
@@ -62,14 +58,14 @@ export default class CheckoutForm extends Component {
                     fontSmoothing: "antialiased",
                     fontSize: "16px",
                     "::placeholder": {
-                        color: "#aab7c4"
-                    }
+                        color: "#aab7c4",
+                    },
                 },
                 invalid: {
                     color: "#fa755a",
-                    iconColor: "#fa755a"
-                }
-            }
+                    iconColor: "#fa755a",
+                },
+            },
         };
 
         return (

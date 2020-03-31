@@ -78,7 +78,9 @@ class PaymentGateway(models.Model):
 
 
 class PaymentGatewayLocationManager(models.Manager):
-    location_priority = ['city', 'region', 'country']
+    # FIXME: city level is nesting is never tested, and region data is not consistent for each postal code
+    # location_priority = ['city', 'region', 'country']
+    location_priority = ['country']
 
     def __get_postal_code_attrs(self, postal_code):
         postal_code_attrs = []
@@ -117,6 +119,7 @@ class PaymentGatewayLocationManager(models.Manager):
             for hl_kwargs in house_location_kwargs:
                 for bl_kwargs in home_owner_billing_location_kwargs:
                     query_filter = query_filter | models.Q(
+                        active=True,
                         default=True,
                         **hl_kwargs,
                         **bl_kwargs
@@ -136,8 +139,8 @@ class PaymentGatewayLocationManager(models.Manager):
     def get_location_default(self, billing_location, house_location):
         """
         `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
-        :param billing_location:
-        :param house_location:
+        :param billing_location: 'cities.models.Country'
+        :param house_location: 'cities.models.PostalCode'
         :return:
         """
         filtered_configs = self.get_valid_configs(billing_location, house_location)
@@ -209,4 +212,7 @@ class PaymentGatewayLocation(models.Model):
         return "%s" % self.payment_gateway
 
     def get_required_home_owner_fields(self):
-        return self.meta['home_owner']['required_fields']
+        try:
+            return self.meta['home_owner']['required_fields']
+        except KeyError:
+            return {}

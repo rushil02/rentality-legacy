@@ -1,4 +1,3 @@
-
 #root > .footer {
     padding-top: 56px;
     padding-bottom: 116px;
@@ -9,10 +8,11 @@
     font-size: 14px;
     color: #ffffff;
     font-weight: 400;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
-#root > .footer .list ul li a:hover, #root > .footer .list ul li a:focus {
+#root > .footer .list ul li a:hover,
+#root > .footer .list ul li a:focus {
     text-decoration: none;
 }
 
@@ -32,7 +32,7 @@
     display: block;
     background-repeat: no-repeat;
     background-position: left top;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     border-radius: 99px;
 }
 
@@ -41,7 +41,7 @@
 }
 
 #root > .footer .social-media ul li.facebook a {
-    background-image: url('/static/image/footer/facebook.svg');
+    background-image: url("/static/image/footer/facebook.svg");
 }
 
 #root > .footer .social-media ul li.facebook a:hover {
@@ -49,7 +49,7 @@
 }
 
 #root > .footer .social-media ul li.instagram a {
-    background-image: url('/static/image/footer/instagram.svg');
+    background-image: url("/static/image/footer/instagram.svg");
 }
 
 #root > .footer .social-media ul li.instagram a:hover {
@@ -57,7 +57,7 @@
 }
 
 #root > .footer .social-media ul li.twitter a {
-    background-image: url('/static/image/footer/twitter.svg');
+    background-image: url("/static/image/footer/twitter.svg");
 }
 
 #root > .footer .social-media ul li.twitter a:hover {
@@ -65,11 +65,11 @@
 }
 
 #root > .footer .social-media ul li.linkedin a {
-    background-image: url('/static/image/footer/linkedin.svg');
+    background-image: url("/static/image/footer/linkedin.svg");
 }
 
 #root > .footer .social-media ul li.linkedin a:hover {
-    background-color: #0077B5;
+    background-color: #0077b5;
 }
 
 #root > .footer .social-media ul li:not(:last-child) {
@@ -101,7 +101,8 @@
     padding-left: 23px;
 }
 
-#root > .footer .e-mail .detail .form-control:hover, #root > .footer .e-mail .detail .form-control:focus {
+#root > .footer .e-mail .detail .form-control:hover,
+#root > .footer .e-mail .detail .form-control:focus {
     box-shadow: none;
 }
 
@@ -119,10 +120,11 @@
     border: none;
     padding-top: 20px;
     padding-bottom: 20px;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
-#root > .footer .e-mail .detail .btn:hover, #root > .footer .e-mail .detail .btn:focus {
+#root > .footer .e-mail .detail .btn:hover,
+#root > .footer .e-mail .detail .btn:focus {
     text-decoration: none;
 }
 

@@ -9,7 +9,6 @@
     margin-bottom: 10px;
 }
 
-
 .title p.address {
     font-size: 16px;
     font-weight: 400;
@@ -53,7 +52,6 @@
     margin-bottom: 0;
 }
 
-
 .about {
     border-bottom: 1px solid #d2d7e1;
     padding-bottom: 10px;
@@ -90,19 +88,17 @@
     text-align: justify;
 }
 
-
 .infoSection {
     border-bottom: 1px solid #d2d7e1;
     margin-bottom: 30px;
 }
-
 
 .checkList {
     margin-bottom: 0;
 }
 
 .checkList li {
-    background-image: url('/static/image/check.svg');
+    background-image: url("/static/image/check.svg");
     background-repeat: no-repeat;
     background-position: left center;
     padding-left: 27px;
@@ -115,7 +111,6 @@
 .checkList li:not(:last-child) {
     margin-right: 30px;
 }
-
 
 .rule {
     border-bottom: 1px solid #d2d7e1;
@@ -158,7 +153,7 @@
 }
 
 .imageDisplayBackdrop {
-    opacity: .85 !important;
+    opacity: 0.85 !important;
 }
 
 .map {
@@ -166,7 +161,6 @@
     height: 300px;
     margin-bottom: 25px;
 }
-
 
 .right {
     padding: 15px 20px;
@@ -181,7 +175,6 @@
 .right::-webkit-scrollbar {
     display: none;
 }
-
 
 .right .user {
     text-align: center;
@@ -217,7 +210,7 @@
     border: 1px solid #dce0e8;
     padding: 3px 12px;
     border-radius: 99px;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
 .tagList .listInline li a:hover {
@@ -240,19 +233,19 @@
     height: 125px;
 }
 
-
 .rightScrollNavBtn {
     padding: 7px 14px;
-    background-color: #e6e6e7;;
+    background-color: #e6e6e7;
     box-shadow: rgba(50, 50, 93, 0.15) 0 1px 3px 0, rgba(112, 157, 199, 0.15) 0 4px 6px 0;
     border-radius: 50% !important;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     font-weight: 400;
     color: #535353 !important;
     cursor: pointer;
 }
 
-.rightScrollNavBtn:hover, .rightScrollNavBtn:focus {
+.rightScrollNavBtn:hover,
+.rightScrollNavBtn:focus {
     text-decoration: none;
     background-color: #d4d4d5;
     color: #ffffff !important;
@@ -289,7 +282,7 @@
     background-color: #2a2b32 !important;
     padding: 11px 59px;
     text-transform: uppercase;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
 .disabledOverlay {
