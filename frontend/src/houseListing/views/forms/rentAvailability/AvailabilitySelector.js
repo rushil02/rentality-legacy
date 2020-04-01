@@ -70,6 +70,12 @@ const inputRanges = [
 export default class AvailabilitySelectorComponent extends Component {
     constructor(props) {
         super(props);
+
+        if (window.innerWidth <= 1400) {
+            this.monthsScreenNum = 1
+        } else {
+            this.monthsScreenNum = 2
+        }
     }
 
     getInfoText = () => {
@@ -209,13 +215,6 @@ export default class AvailabilitySelectorComponent extends Component {
             color: '#3fc692'
         };
 
-        let monthsScreenNum, show;
-        if (window.innerWidth <= 1400) {
-            monthsScreenNum = 1
-        } else {
-            monthsScreenNum = 2
-        }
-
         if (this.props.modeEditing) {
             $("#collapsibleCalendar-" + this.props.idKey).collapse('show');
         } else {
@@ -234,7 +233,7 @@ export default class AvailabilitySelectorComponent extends Component {
                                     <DateRangePicker
                                         ranges={[selectionRange]}
                                         onChange={this.handleSelect}
-                                        months={monthsScreenNum}
+                                        months={this.monthsScreenNum}
                                         minDate={new Date()}
                                         direction={'horizontal'}
                                         staticRanges={staticRanges}

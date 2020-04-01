@@ -32,7 +32,6 @@ export default class BookingSuccessPage extends Component {
 
     render() {
         let booking = this.state.booking;
-        console.log(booking);
         return (
             <RequestErrorBoundary status={this.state.status}>
                 <React.Fragment>

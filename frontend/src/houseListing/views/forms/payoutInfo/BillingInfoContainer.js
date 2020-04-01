@@ -17,7 +17,7 @@ import {handleError} from "core/utils/serviceHelper";
 
 const genderSelectStyles = {
     option: (provided, state) => ({
-        ...provided
+        ...provided,
     }),
 
     singleValue: (provided, state) => {
@@ -32,7 +32,7 @@ const genderSelectStyles = {
         display: "flex",
         "flex-wrap": "wrap",
         "padding-top": "6px",
-        "padding-bottom": "6px"
+        "padding-bottom": "6px",
     }),
 
     container: (provided, state) => ({
@@ -47,14 +47,14 @@ const genderSelectStyles = {
         "-moz-transition": "all 0.30s ease-in-out",
         "-ms-transition": "all 0.30s ease-in-out",
         "-o-transition": "all 0.30s ease-in-out",
-        "box-shadow": state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial"
-    })
+        "box-shadow": state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial",
+    }),
 };
 
 const genders = {
     M: "Male",
     F: "Female",
-    O: "Other"
+    O: "Other",
 };
 
 export default class BillingInfoContainer extends Component {
@@ -65,35 +65,36 @@ export default class BillingInfoContainer extends Component {
             userInfo: new UserPII({}, "empty"),
             showSelectCountry: false,
             billingCountryName: undefined,
-            addBussinessNameField: false
+            addBussinessNameField: false,
         };
 
         this.maxDate = new Date();
         this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
 
         this.genderList = [];
-        Object.entries(genders).map(item => {
-            this.genderList.push({ value: item[0], label: item[1] });
+        Object.entries(genders).map((item) => {
+            this.genderList.push({value: item[0], label: item[1]});
         });
 
+        this.containerRef = React.createRef();
     }
 
     onFieldChange = (field, value) => {
         this.setState((prevState) => ({
             ...prevState,
-            userInfo: prevState.userInfo.setData(field, value)
+            userInfo: prevState.userInfo.setData(field, value),
         }));
     };
 
     onSave = () => {
         const that = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             patchUserProfileData(that.state.userInfo)
                 .then((result) => {
                     that.setState((prevState) => ({
                         ...prevState,
                         userInfo: result,
-                        inSyncMode: false
+                        inSyncMode: false,
                     }));
                     that.props.verifyPayoutInfo();
                     resolve(result);
@@ -115,19 +116,19 @@ export default class BillingInfoContainer extends Component {
                     this.setState((prevState) => ({
                         ...prevState,
                         showSelectCountry: true,
-                        userInfo: result
+                        userInfo: result,
                     }));
                 } else {
                     if (accountType === "Business") {
                         this.setState((prevState) => ({
                             ...prevState,
                             addBussinessNameField: true,
-                            userInfo: result
+                            userInfo: result,
                         }));
                     } else {
                         this.setState((prevState) => ({
                             ...prevState,
-                            userInfo: result
+                            userInfo: result,
                         }));
                         this.getCountryName(billingCountryID);
                     }
@@ -141,7 +142,7 @@ export default class BillingInfoContainer extends Component {
             .then((result) => {
                 this.setState((prevState) => ({
                     ...prevState,
-                    billingCountryName: result.name
+                    billingCountryName: result.name,
                 }));
             })
             .catch((error) => alertUser.init({stockAlertType: "connectionError"}));
@@ -163,7 +164,7 @@ export default class BillingInfoContainer extends Component {
                 action: (e) => {
                     e.stopPropagation();
                 },
-                icon: faPlus
+                icon: faPlus,
             };
         } else if (this.state.modeEditing) {
             buttonConfig = {
@@ -173,7 +174,7 @@ export default class BillingInfoContainer extends Component {
                     this.onSave();
                     this.toggleEditState(false);
                 },
-                icon: faChevronUp
+                icon: faChevronUp,
             };
         } else {
             buttonConfig = {
@@ -182,7 +183,7 @@ export default class BillingInfoContainer extends Component {
                     e.stopPropagation();
                     this.toggleEditState(true);
                 },
-                icon: faPen
+                icon: faPen,
             };
         }
 
@@ -253,7 +254,7 @@ export default class BillingInfoContainer extends Component {
                                                             message:
                                                                 "This field cannot be changed. Please contact us for further support.",
                                                             alertType: "danger",
-                                                            autoHide: true
+                                                            autoHide: true,
                                                         })
                                                     }
                                                 >
@@ -284,7 +285,7 @@ export default class BillingInfoContainer extends Component {
                                                                     message:
                                                                         "This field cannot be changed. Please contact us for further support.",
                                                                     alertType: "danger",
-                                                                    autoHide: true
+                                                                    autoHide: true,
                                                                 })
                                                             }
                                                         >
@@ -349,8 +350,8 @@ export default class BillingInfoContainer extends Component {
                                             <DatePickerComponent
                                                 label="Date of Birth"
                                                 value={this.state.userInfo.getData("DOB")}
-                                                onChange={date => this.onFieldChange("DOB", date)}
-                                                extraProps={{ maxDate: this.maxDate }}
+                                                onChange={(date) => this.onFieldChange("DOB", date)}
+                                                extraProps={{maxDate: this.maxDate}}
                                             />
 
                                             {displayErrors(this.state.userInfo.getErrorsForField("DOB"))}
@@ -365,7 +366,7 @@ export default class BillingInfoContainer extends Component {
                                             onChange={(e) => this.onFieldChange("sex", e.value)}
                                             value={{
                                                 value: this.state.userInfo.getData("sex"),
-                                                label: genders[this.state.userInfo.getData("sex")]
+                                                label: genders[this.state.userInfo.getData("sex")],
                                             }}
                                         />
 
@@ -397,7 +398,7 @@ export default class BillingInfoContainer extends Component {
                                                             message:
                                                                 "This field cannot be changed. Please contact us for further support.",
                                                             alertType: "danger",
-                                                            autoHide: true
+                                                            autoHide: true,
                                                         })
                                                     }
                                                 >
@@ -427,7 +428,7 @@ export default class BillingInfoContainer extends Component {
 
                                     <PostalCodeAutoSuggest
                                         errors={this.state.userInfo.getErrorsForField("billingPostcodeID") || []}
-                                        objID={this.state.userInfo.getData('billingPostcodeID')}
+                                        objID={this.state.userInfo.getData("billingPostcodeID")}
                                         onFieldChange={this.onFieldChange}
                                         identifier={"billingPostcodeID"}
                                         theme={autoSuggestTheme}
@@ -464,7 +465,7 @@ export default class BillingInfoContainer extends Component {
                                                 default: "Save",
                                                 loading: "Saving",
                                                 done: "Saved",
-                                                error: "Error!"
+                                                error: "Error!",
                                             }}
                                             callback={this.onSave}
                                             // onSuccess={}

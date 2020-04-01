@@ -49,13 +49,13 @@ const genders = {
 export default class ApplyPanel extends Component {
     constructor(props) {
         super(props);
+        this.genderList = [];
+        Object.entries(genders).map((item) => {
+            this.genderList.push({value: item[0], label: item[1]});
+        });
     }
 
     render() {
-        let genderList = [];
-        Object.entries(genders).map((item) => {
-            genderList.push({value: item[0], label: item[1]});
-        });
 
         let application = this.props.application;
         let onFieldChange = this.props.onFieldChange;
@@ -119,7 +119,7 @@ export default class ApplyPanel extends Component {
                     <div className="col-md-5 col-lg-5">
                         <Select
                             styles={genderSelectStyles}
-                            options={genderList}
+                            options={this.genderList}
                             placeholder="Select Gender"
                             onChange={(e) => onFieldChange("applicant.sex", e.value)}
                             value={

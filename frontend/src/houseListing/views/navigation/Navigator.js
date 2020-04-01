@@ -84,7 +84,10 @@ class Navigator extends Component {
                     .then(() => {
                         resolve();
                     })
-                    .catch(() => alertUser.init({ stockAlertType: "generic" }));
+                    .catch(() => {
+                        alertUser.init({ stockAlertType: "generic" });
+                        reject()
+                    });
             });
         }
     };
@@ -212,14 +215,14 @@ function NavigatorComponent(props) {
                                                         onActivate={
                                                             props.onActivate
                                                         }
-                                                    ></ActivateModal>
+                                                    />
                                                     <hr />
                                                     <DeleteModal
                                                         onDelete={
                                                             props.onDelete
                                                         }
                                                         onSuccess={props.onExit}
-                                                    ></DeleteModal>
+                                                    />
                                                 </div>
                                             </div>
                                         </div>

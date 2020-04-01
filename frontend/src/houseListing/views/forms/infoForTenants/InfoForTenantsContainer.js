@@ -3,6 +3,7 @@ import {House} from "../../../models";
 import {getHouseData, patchHouseData} from "../../../services";
 
 import commonStyles from "../FormCommon.css"
+import {displayErrors} from "core/UIComponents/helpers";
 
 
 export default class InfoForTenantsContainer extends Component {
@@ -81,19 +82,6 @@ export default class InfoForTenantsContainer extends Component {
     };
 
     render() {
-        const getError = (inputKey) => {
-            if (this.state.data.errors.hasOwnProperty(inputKey)) {
-                let errorList = this.state.data.errors[inputKey];
-                let disp = [];
-                for (let i = 0; i < errorList.length; i++) {
-                    disp.push(<div key={i} className="invalid-feedback">{this.state.data.errors[inputKey]}</div>)
-                }
-                return <React.Fragment>{disp}</React.Fragment>
-            } else {
-                return null
-            }
-        };
-
         return (
             <React.Fragment>
                 <div id="form-7" className="form-series">
@@ -111,7 +99,7 @@ export default class InfoForTenantsContainer extends Component {
                                                       value={this.state.data.getData('description')}
                                                       onChange={(e) => this.onFieldChange('description', e.target.value)}
                                             />
-                                            {getError('description')}
+                                            {displayErrors(this.state.data.getErrorsForField('description'))}
                                         </div>
                                     </div>
                                 </div>
@@ -130,7 +118,7 @@ export default class InfoForTenantsContainer extends Component {
                                                       value={this.state.data.getData('otherPeopleDescription')}
                                                       onChange={(e) => this.onFieldChange('otherPeopleDescription', e.target.value)}
                                             />
-                                            {getError('otherPeopleDescription')}
+                                            {displayErrors(this.state.data.getErrorsForField('otherPeopleDescription'))}
                                         </div>
                                     </div>
                                 </div>
@@ -143,11 +131,11 @@ export default class InfoForTenantsContainer extends Component {
                                         <div className="textarea">
                                             <textarea name="main-form-access_restrictions" rows="9" cols="40"
                                                       className="form-control" id="id_main-form-access_restrictions"
-                                                      placeholder="Examples -&#10;No access upstairs.&#10;No access to the garden outside.&#10;No access to the granny flat.&#10;Only assigned bathroom will be accessible.&#10;No access to farm animal without permission."
+                                                      placeholder="Examples -&#10;No acgetErrorcess upstairs.&#10;No access to the garden outside.&#10;No access to the granny flat.&#10;Only assigned bathroom will be accessible.&#10;No access to farm animal without permission."
                                                       value={this.state.data.getData('accessRestrictions')}
                                                       onChange={(e) => this.onFieldChange('accessRestrictions', e.target.value)}
                                             />
-                                            {getError('accessRestrictions')}
+                                            {displayErrors(this.state.data.getErrorsForField('accessRestrictions'))}
                                         </div>
                                     </div>
                                 </div>
