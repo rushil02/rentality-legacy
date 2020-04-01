@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCalendar} from "@fortawesome/free-solid-svg-icons";
-import format from "date-fns/format";
 import {Calendar} from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -73,7 +72,7 @@ export default class DatePickerComponent extends Component {
     };
 
     handleSelect = (newDate) => {
-        this.props.onChange(format(newDate, "YYYY-MM-DD"));
+        this.props.onChange(newDate);
         this.setState((prevState) => ({
             ...prevState,
             show: false,
@@ -86,10 +85,6 @@ export default class DatePickerComponent extends Component {
          * extraProps are sent as a parameter. Add Date picker properties in extraProps.
          * Eg. extraProps={{maxDate: new Date()}}
          */
-        let dateObj;
-        if (this.props.value) {
-            dateObj = new Date(this.props.value);
-        }
         return (
             <React.Fragment>
                 <div
@@ -99,7 +94,7 @@ export default class DatePickerComponent extends Component {
                     onFocus={(e) => this.showCalendar()}
                     onBlur={(e) => this.handleBlurs()}
                 >
-                    <div style={{float: "left"}}>{this.props.value || this.props.label}</div>
+                    <div style={{float: "left"}}>{this.props.value ? this.props.value.toDateString() : this.props.label}</div>
                     <div style={{float: "right", marginRight: "10px"}}>
                         <FontAwesomeIcon icon={faCalendar} />
                     </div>
@@ -114,7 +109,7 @@ export default class DatePickerComponent extends Component {
                             <Calendar
                                 onChange={this.handleSelect}
                                 color={"#3fc692"}
-                                date={dateObj ? dateObj : this.props.extraProps.maxDate}
+                                date={this.props.value || this.props.extraProps.maxDate}
                                 {...this.props.extraProps}
                             />
                         </div>

@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
 import { alertUser } from "core/alert/Alert";
 import DatePickerComponent from "core/UIComponents/DatePicker/DatePicker";
 import Select from "react-select";
@@ -68,6 +66,15 @@ export default class BillingInfoContainer extends Component {
             billingCountryName: undefined,
             addBussinessNameField: false
         };
+
+        this.maxDate = new Date();
+        this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
+
+        this.genderList = [];
+        Object.entries(genders).map(item => {
+            this.genderList.push({ value: item[0], label: item[1] });
+        });
+
     }
 
     onFieldChange = (field, value) => {
@@ -101,7 +108,6 @@ export default class BillingInfoContainer extends Component {
         if (this.state.userInfo.status === "empty") {
             // Fetch house details
             getUserProfileData().then(result => {
-                console.log(result);
                 let billingCountryID = result.getData("billingCountryID");
                 let accountType = result.getData("accountType");
                 if (billingCountryID === "" || billingCountryID === null || billingCountryID === undefined) {
@@ -125,12 +131,7 @@ export default class BillingInfoContainer extends Component {
                         this.getCountryName(billingCountryID);
                     }
                 }
-                console.log(result);
-                // this.props.navContext.data.updateFormState(this.formID, 'saved');
-                // this.props.navContext.sync();
             });
-        } else {
-            // this.props.navContext.data.updateFormState(this.formID, this.state.data.status);
         }
     }
 
@@ -215,11 +216,6 @@ export default class BillingInfoContainer extends Component {
         } else {
             $("#collapsibleBillingInfo").collapse("hide");
         }
-
-        let genderList = [];
-        Object.entries(genders).map(item => {
-            genderList.push({ value: item[0], label: item[1] });
-        });
 
         return (
             <React.Fragment>
@@ -349,7 +345,7 @@ export default class BillingInfoContainer extends Component {
                                                 label="Date of Birth"
                                                 value={this.state.userInfo.getData("DOB")}
                                                 onChange={date => this.onFieldChange("DOB", date)}
-                                                extraProps={{ maxDate: new Date() }}
+                                                extraProps={{ maxDate: this.maxDate }}
                                             />
 
                                             {displayErrors(this.state.userInfo.getErrorsForField("DOB"))}
@@ -359,7 +355,7 @@ export default class BillingInfoContainer extends Component {
                                     <div className="col-md-12 col-lg-6">
                                         <Select
                                             styles={genderSelectStyles}
-                                            options={genderList}
+                                            options={this.genderList}
                                             placeholder="Select Gender"
                                             onChange={e => this.onFieldChange("sex", e.value)}
                                             value={{
