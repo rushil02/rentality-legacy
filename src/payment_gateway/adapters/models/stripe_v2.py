@@ -226,6 +226,6 @@ class StripePaymentGateway(PaymentGatewayBase):
                 user_response={"last4": response[0]["last4"], "routing_number": response[0]["routing_number"]}
             )
         else:
-            return PGTransaction(response=response)
+            return PGTransaction(response=response, user_response={"error": "No bank account details found."})
 
     # endregion
