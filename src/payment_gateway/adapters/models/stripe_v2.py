@@ -211,4 +211,21 @@ class StripePaymentGateway(PaymentGatewayBase):
                 ba_id
             )
             return PGTransaction(response=response, user_response={"message": "Account Deleted"})
+
+    def get_bank_account(self, homeowner):
+        acc_id = self.get_payout_account_id(homeowner.account_details)
+        response = self._execute_request(
+            stripe.Account.list_external_accounts,
+            acc_id,
+            object="bank_account",
+            limit=1
+        )['data']
+        if response:
+            return PGTransaction(
+                response=response,
+                user_response={"last4": response[0]["last4"], "routing_number": response[0]["routing_number"]}
+            )
+        else:
+            return PGTransaction(response=response)
+
     # endregion

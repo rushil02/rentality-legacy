@@ -172,6 +172,9 @@ class PaymentGateway(object):
     def add_update_bank_account(self):
         return self._payment_gateway.add_update_bank_account(self.homeowner)
 
+    def get_bank_account(self):
+        return self._payment_gateway.get_bank_account(self.homeowner)
+
     # endregion
 
     def on_event(self, event):

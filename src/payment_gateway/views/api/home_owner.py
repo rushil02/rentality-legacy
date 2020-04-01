@@ -115,9 +115,32 @@ class GetPGDetails(APIView):
 
 class AddUpdateBankAccountView(APIView):
     """
-    API to attach external bank account to payment gateway
+    API to view and attach external bank account to payment gateway
     """
     permission_classes = (IsAuthenticated, )
+
+    def get(self, request, pg_code):
+        try:
+            account = Account.objects.get(user=request.user, payment_gateway__code=pg_code)
+        except Account.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            payment_gateway_location = PaymentGatewayLocation.objects.get(
+                payment_gateway=account.payment_gateway,
+                home_owner_billing_location=request.user.get_billing_location(),
+                active=True
+            )
+            pg = PaymentGateway(payment_gateway_location)
+            pg.set_homeowner_user(
+                user=request.user,
+                request=request
+            )
+            try:
+                pgt = pg.get_bank_account()
+            except PGTransactionError as e:
+                return Response({'details': e.user_message}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'pg': pgt.user_response}, status=status.HTTP_200_OK)
 
     def post(self, request, pg_code):
         try:
