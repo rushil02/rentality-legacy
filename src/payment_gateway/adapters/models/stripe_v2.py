@@ -51,9 +51,9 @@ class StripePaymentGateway(PaymentGatewayBase):
         except error.RateLimitError:
             raise PGTransactionError("Network Error - Please try again later.", {})
 
-    def _execute_idempotent_request(self, request, **kwargs):
+    def _execute_idempotent_request(self, request, *args, **kwargs):
         idempotency_key = str(uuid.uuid4())
-        return self._execute_request(request, idempotency_key=idempotency_key, **kwargs)
+        return self._execute_request(request, idempotency_key=idempotency_key, *args, **kwargs)
 
     def create_payment_intent(self):
         account_details = self.application.tenant_account
@@ -141,7 +141,7 @@ class StripePaymentGateway(PaymentGatewayBase):
     def verify_payout_account_status(self, homeowner):
         acc_id = self.get_payout_account_id(homeowner.account_details)
         response = self._execute_request(stripe.Account.retrieve, acc_id)
-        requirements = response["requirements"]["currently_due"]
+        requirements = response["requirements"]["currently_due"].copy()
         try:
             requirements.remove('external_account')
         except ValueError:
@@ -158,12 +158,57 @@ class StripePaymentGateway(PaymentGatewayBase):
     def update_payout_account(self, homeowner):
         acc_id = self.get_payout_account_id(homeowner.account_details)
         response = self._get_account_link(
-                request=homeowner,
-                account_id=acc_id,
-                success_url=homeowner.request_data['success_url'],
-                failure_url=homeowner.request_data['failure_url']
-            )
+            request=homeowner,
+            account_id=acc_id,
+            success_url=homeowner.request_data['success_url'],
+            failure_url=homeowner.request_data['failure_url']
+        )
         user_response = {'type': 'redirect', 'data': response}
         return PGTransaction(response=response, user_response=user_response)
 
+    def add_update_bank_account(self, homeowner):
+        acc_id = self.get_payout_account_id(homeowner.account_details)
+        try:
+            ba_id = self._execute_request(
+                stripe.Account.list_external_accounts,
+                acc_id,
+                object="bank_account",
+                limit=1
+            )['data'][0]['id']
+        except IndexError:
+            pass
+        else:
+            self._execute_request(
+                stripe.Account.delete_external_account,
+                acc_id,
+                ba_id
+            )
+
+        response = self._execute_idempotent_request(
+            stripe.Account.create_external_account,
+            acc_id,
+            default_for_currency=True,
+            external_account=homeowner.request_data['token']
+        )
+        user_response = {'routing_number': response["routing_number"], 'last4': response["last4"]}
+        return PGTransaction(response=response, user_response=user_response)
+
+    def remove_bank_account(self, homeowner):
+        acc_id = self.get_payout_account_id(homeowner.account_details)
+        try:
+            ba_id = self._execute_request(
+                stripe.Account.list_external_accounts,
+                acc_id,
+                object="bank_account",
+                limit=1
+            )['data'][0]['id']
+        except IndexError:
+            raise PGTransactionError("Invalid Request", {})
+        else:
+            response = self._execute_request(
+                stripe.Account.delete_external_account,
+                acc_id,
+                ba_id
+            )
+            return PGTransaction(response=response, user_response={"message": "Account Deleted"})
     # endregion

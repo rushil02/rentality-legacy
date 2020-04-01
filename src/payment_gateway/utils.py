@@ -90,6 +90,7 @@ class PaymentGateway(object):
         ('RTT', 'Reverse Tenant Transfer', "Virtual Transfer from Rentality to Tenant Virtual Account"),
     )
 
+    # region init
     def __init__(self, payment_gateway_location):
         """
         :param payment_gateway_location: `payment_gateway.models.PaymentGatewayLocation` object
@@ -116,8 +117,8 @@ class PaymentGateway(object):
     #     )
     #     return cls(payment_gateway_location=obj)
 
-    def get_transaction_record(self):
-        return
+    # def get_transaction_record(self):
+    #     return
 
     def set_homeowner_user(self, user, user_response=None, request=None):
         """
@@ -150,6 +151,9 @@ class PaymentGateway(object):
         if request:
             self.homeowner.http_request = request
 
+    # endregion
+
+    # region Payout
     def create_payout_account(self):
         pg_transaction = self._payment_gateway.create_payout_account(self.homeowner)
         if pg_transaction.meta_store:
@@ -164,6 +168,11 @@ class PaymentGateway(object):
 
     def verify_payout_account(self):
         return self._payment_gateway.verify_payout_account_status(self.homeowner)
+
+    def add_update_bank_account(self):
+        return self._payment_gateway.add_update_bank_account(self.homeowner)
+
+    # endregion
 
     def on_event(self, event):
         return self._payment_gateway.on_event(event)
@@ -183,6 +192,3 @@ class PaymentGateway(object):
     def update_pay_in_account(self, user, **kwargs):
         self._payment_gateway.create_home_owner_account()
 
-
-def get_field_for_serializer(field):
-    return

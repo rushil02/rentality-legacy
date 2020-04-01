@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields.jsonb import JSONField
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from cities.models import City, Region, Country
@@ -191,6 +192,17 @@ class PaymentGatewayLocation(models.Model):
         help_text="Select country for this Payment Gateway used in "
                   "reference to the Home Owner's Billing account location."
     )
+
+    REQ_META_STRUCTURE = {
+        'home_owner': {
+            'bank_account': {
+                'support': [],
+                'required_fields': {}
+            },
+            'required_fields': {}
+        }
+    }
+
     meta = JSONField(help_text="Holds information required by the payment gateway to work in the selected country.")
 
     LOCATION_TYPE_LIMIT = models.Q(
@@ -219,3 +231,35 @@ class PaymentGatewayLocation(models.Model):
             return self.meta['home_owner']['required_fields']
         except KeyError:
             return {}
+
+    def get_bank_account_creation_fields(self):
+        return self.meta['home_owner']['bank_account']['required_fields']
+
+    def get_supported_bank_account_list(self):
+        """
+        :return: [{'currency': 'AUD', 'country': 'AU'}, ... ]
+        """
+        try:
+            return self.meta['home_owner']['bank_account']['support']
+        except KeyError:
+            return []
+
+    def clean_fields(self, exclude=None):
+
+        super().clean_fields(exclude=exclude)
+
+        def check_nesting(_key, source, req):
+            if _key in source:
+                for __key in req[_key]:
+                    try:
+                        check_nesting(__key, source[_key], req[_key])
+                    except ValueError as e:
+                        raise ValueError('{}.{}'.format(_key, str(e)))
+            else:
+                raise ValueError(_key)
+
+        for key in self.REQ_META_STRUCTURE:
+            try:
+                check_nesting(key, self.meta, self.REQ_META_STRUCTURE)
+            except ValueError as e:
+                raise ValidationError("Malformed `meta` : {} is missing".format(str(e)))

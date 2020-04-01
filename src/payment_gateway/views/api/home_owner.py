@@ -113,6 +113,42 @@ class GetPGDetails(APIView):
         return Response(payment_gateway_location.get_required_home_owner_fields(), status=status.HTTP_200_OK)
 
 
+class AddUpdateBankAccountView(APIView):
+    """
+    API to attach external bank account to payment gateway
+    """
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request, pg_code):
+        try:
+            account = Account.objects.get(user=request.user, payment_gateway__code=pg_code)
+        except Account.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            payment_gateway_location = PaymentGatewayLocation.objects.get(
+                payment_gateway=account.payment_gateway,
+                home_owner_billing_location=request.user.get_billing_location(),
+                active=True
+            )
+
+            serializer = DynamicFieldsSerializer(
+                data=request.data, fields=payment_gateway_location.get_bank_account_creation_fields()
+            )
+            if serializer.is_valid(raise_exception=True):
+                pg = PaymentGateway(payment_gateway_location)
+                pg.set_homeowner_user(
+                    user=request.user,
+                    user_response=serializer.validated_data,
+                    request=request
+                )
+                try:
+                    pgt = pg.add_update_bank_account()
+                except PGTransactionError as e:
+                    return Response({'details': e.user_message}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({'pg': pgt.user_response}, status=status.HTTP_200_OK)
+
+
 class GetBankAccountDetailsFieldsForCountry(APIView):  # FIXME: Test
     """
     API to fetch fields needed to display to a user to fill bank account details.

@@ -12,7 +12,7 @@ from house.views.old import search_house_page, search_house_api
 from utils.api_utils import location_list, LocationAutocomplete
 
 from house.views import info, create, edit, \
-    home_owner_account_details, apply_temp, remove_from_public, delete, \
+    home_owner_account_details, apply_temp, \
     ImagesPublicView, ThumbnailPublicView
 
 # from house.views.api import NetAvailableDatesView
@@ -31,8 +31,6 @@ urlpatterns = [
     path('search', search_house_page, name='search_house'),
     path('search-api', search_house_api, name='search_house_api'),
     path('postal-location', LocationAutocomplete.as_view(), name='postal_code_api'),
-    path('del/<uuid:house_uuid>', delete, name='delete_object'),
-    path('rem/<uuid:house_uuid>', remove_from_public, name='remove_public'),
 
     # APIs
     path('detail/<uuid:house_uuid>', HouseDetailsPublicView.as_view(), name='detail_api'),
