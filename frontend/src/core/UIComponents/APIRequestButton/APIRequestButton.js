@@ -21,6 +21,8 @@ import styles from "./APIRequestButton.css";
  *          textErrorClasses -
  *          textLoadingClasses -
  *
+ *      isDisabled - [optional] boolean
+ *
  *      initialState - initial State of button
  *
  *      containerID - [optional] ID of Form container to track all child inputs to reset state on change to default
@@ -46,40 +48,40 @@ const textOptions = {
         default: "Save",
         loading: "Saving",
         done: "Saved",
-        error: "Error!",
+        error: "Error!"
     },
     saveNext: {
         default: "Save & Next",
         loading: "Saving",
         done: "Next",
-        error: "Error!",
+        error: "Error!"
     },
     saveExit: {
         default: "Save & Exit",
         loading: "Saving",
         done: "Saved",
-        error: "Error!",
+        error: "Error!"
     },
     cDelete: {
         default: "Delete",
         loading: "Deleting",
         done: "Deleted",
-        error: "Error!",
-    },
+        error: "Error!"
+    }
 };
 
 const _formStateMap = {
     saved: "done",
     initial: "default",
     hasChanged: "default",
-    error: "error",
+    error: "error"
 };
 
 export default class APIRequestButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            status: props.initialState || "default",
+            status: props.initialState || "default"
         };
         this.container = null;
     }
@@ -131,6 +133,14 @@ export default class APIRequestButton extends Component {
         }
 
         let layoutClasses = this.props.layoutClasses || "btn float-right " + styles.btn;
+
+        if (this.props.isDisabled) {
+            return (
+                <a type="button" className={layoutClasses + " disabled"} aria-disabled="true" tabIndex={"-1"}>
+                    <div className={this.props.textDefaultClasses || styles.text}>{_textOptions.default}</div>
+                </a>
+            );
+        }
 
         if (this.state.status === "default") {
             return (

@@ -1,18 +1,19 @@
-import React, { Component } from "react";
-import { alertUser } from "core/alert/Alert";
+import React, {Component} from "react";
+import {alertUser} from "core/alert/Alert";
 import DatePickerComponent from "core/UIComponents/DatePicker/DatePicker";
 import Select from "react-select";
 import styles from "./PayoutInfoContainer.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faPen, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { UserPII } from "userAccount/models";
-import { patchUserProfileData, getUserProfileData } from "userAccount/services";
-import { displayErrors } from "core/UIComponents/helpers";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronUp, faPen, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {UserPII} from "userAccount/models";
+import {patchUserProfileData, getUserProfileData} from "userAccount/services";
+import {displayErrors} from "core/UIComponents/helpers";
 import PostalCodeAutoSuggest from "core/UIComponents/PostalCodeAutoSuggest/PostalCodeAutoSuggestContainer";
 import CountryAutoSuggestContainer from "core/UIComponents/CountryAutoSuggest/CountryAutoSuggestContainer";
 import autoSuggestTheme from "./AutoSuggestTheme.css";
-import { getCountryData } from "core/UIComponents/CountryAutoSuggest/services";
+import {getCountryData} from "core/UIComponents/CountryAutoSuggest/services";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
+import {handleError} from "core/utils/serviceHelper";
 
 const genderSelectStyles = {
     option: (provided, state) => ({
@@ -23,7 +24,7 @@ const genderSelectStyles = {
         const opacity = state.isDisabled ? 0.5 : 1;
         const transition = "opacity 300ms";
 
-        return { ...provided, opacity, transition };
+        return {...provided, opacity, transition};
     },
     control: (provided, state) => ({
         border: "none",
@@ -78,7 +79,7 @@ export default class BillingInfoContainer extends Component {
     }
 
     onFieldChange = (field, value) => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
             ...prevState,
             userInfo: prevState.userInfo.setData(field, value)
         }));
@@ -88,16 +89,16 @@ export default class BillingInfoContainer extends Component {
         const that = this;
         return new Promise(function(resolve, reject) {
             patchUserProfileData(that.state.userInfo)
-                .then(result => {
-                    that.setState(prevState => ({
+                .then((result) => {
+                    that.setState((prevState) => ({
                         ...prevState,
                         userInfo: result,
                         inSyncMode: false
                     }));
-                    resolve(result);
                     that.props.verifyPayoutInfo();
+                    resolve(result);
                 })
-                .catch(error => {
+                .catch((error) => {
                     that.forceUpdate();
                     reject(error);
                 });
@@ -107,24 +108,24 @@ export default class BillingInfoContainer extends Component {
     componentDidMount() {
         if (this.state.userInfo.status === "empty") {
             // Fetch house details
-            getUserProfileData().then(result => {
+            getUserProfileData().then((result) => {
                 let billingCountryID = result.getData("billingCountryID");
                 let accountType = result.getData("accountType");
                 if (billingCountryID === "" || billingCountryID === null || billingCountryID === undefined) {
-                    this.setState(prevState => ({
+                    this.setState((prevState) => ({
                         ...prevState,
                         showSelectCountry: true,
                         userInfo: result
                     }));
                 } else {
                     if (accountType === "Business") {
-                        this.setState(prevState => ({
+                        this.setState((prevState) => ({
                             ...prevState,
                             addBussinessNameField: true,
                             userInfo: result
                         }));
                     } else {
-                        this.setState(prevState => ({
+                        this.setState((prevState) => ({
                             ...prevState,
                             userInfo: result
                         }));
@@ -135,22 +136,22 @@ export default class BillingInfoContainer extends Component {
         }
     }
 
-    getCountryName = billingCountryID => {
+    getCountryName = (billingCountryID) => {
         getCountryData(billingCountryID)
-            .then(result => {
-                this.setState(prevState => ({
+            .then((result) => {
+                this.setState((prevState) => ({
                     ...prevState,
                     billingCountryName: result.name
                 }));
             })
-            .catch(error => alertUser.init({ stockAlertType: "connectionError" }));
+            .catch((error) => alertUser.init({stockAlertType: "connectionError"}));
     };
 
-    toggleEditState = val => {
+    toggleEditState = (val) => {
         if (val === null || val === undefined) {
-            this.setState(prevState => ({ modeEditing: !prevState.modeEditing }));
+            this.setState((prevState) => ({modeEditing: !prevState.modeEditing}));
         } else {
-            this.setState({ modeEditing: val });
+            this.setState({modeEditing: val});
         }
     };
 
@@ -159,7 +160,7 @@ export default class BillingInfoContainer extends Component {
         if (this.props.verifying) {
             buttonConfig = {
                 title: "Please Wait",
-                action: e => {
+                action: (e) => {
                     e.stopPropagation();
                 },
                 icon: faPlus
@@ -167,7 +168,7 @@ export default class BillingInfoContainer extends Component {
         } else if (this.state.modeEditing) {
             buttonConfig = {
                 title: "Save",
-                action: e => {
+                action: (e) => {
                     e.stopPropagation();
                     this.onSave();
                     this.toggleEditState(false);
@@ -177,7 +178,7 @@ export default class BillingInfoContainer extends Component {
         } else {
             buttonConfig = {
                 title: "Edit",
-                action: e => {
+                action: (e) => {
                     e.stopPropagation();
                     this.toggleEditState(true);
                 },
@@ -201,12 +202,16 @@ export default class BillingInfoContainer extends Component {
     getBadge = () => {
         if (this.props.status === "Incomplete") {
             return (
-                <span className="badge badge-danger" style={{ marginLeft: "20px" }}>
+                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
                     Required
                 </span>
             );
         } else {
-            return null;
+            return (
+                <span className="badge badge-success" style={{marginLeft: "20px"}}>
+                    Complete
+                </span>
+            );
         }
     };
 
@@ -223,7 +228,7 @@ export default class BillingInfoContainer extends Component {
                     <div className={"card-body " + styles.cardBody}>
                         <div className={styles.cardTextContent}>
                             <span>
-                                <b>Billing Information</b>
+                                <b>Step 1: Billing Information</b>
                             </span>
                             {this.getBadge()}
                         </div>
@@ -233,16 +238,16 @@ export default class BillingInfoContainer extends Component {
                     <div className={"collapse " + styles.cardContainer} id={"collapsibleBillingInfo"}>
                         <div
                             className={"col-11 " + styles.cardContainer}
-                            style={{ borderTop: "1px solid #e9ebf0", padding: "40px" }}
+                            style={{borderTop: "1px solid #e9ebf0", padding: "40px"}}
                         >
                             <div className={"col-10"}>
                                 <div className={"row"}>
                                     <div className="col-12">
                                         <div className="input">
                                             <div className="form-control no-background readonly-custom-input">
-                                                <div style={{ float: "left" }}>Account Type</div>
+                                                <div style={{float: "left"}}>Account Type</div>
                                                 <div
-                                                    style={{ float: "right" }}
+                                                    style={{float: "right"}}
                                                     onClick={() =>
                                                         alertUser.init({
                                                             message:
@@ -262,7 +267,7 @@ export default class BillingInfoContainer extends Component {
                                             <CountryAutoSuggestContainer
                                                 errors={this.state.userInfo.getErrorsForField("billingCountryID") || []}
                                                 objID={this.state.userInfo.billingCountryID}
-                                                onFieldChange={value => this.onFieldChange("billingCountryID", value)}
+                                                onFieldChange={(value) => this.onFieldChange("billingCountryID", value)}
                                                 theme={autoSuggestTheme}
                                             />
                                         </React.Fragment>
@@ -271,9 +276,9 @@ export default class BillingInfoContainer extends Component {
                                             <div className="col-12">
                                                 <div className="input">
                                                     <div className="form-control no-background readonly-custom-input">
-                                                        <div style={{ float: "left" }}>Country</div>
+                                                        <div style={{float: "left"}}>Country</div>
                                                         <div
-                                                            style={{ float: "right" }}
+                                                            style={{float: "right"}}
                                                             onClick={() =>
                                                                 alertUser.init({
                                                                     message:
@@ -298,9 +303,9 @@ export default class BillingInfoContainer extends Component {
                                                         type="text"
                                                         className="form-control no-background"
                                                         placeholder="Business Name"
-                                                        style={{ paddingLeft: "10px" }}
+                                                        style={{paddingLeft: "10px"}}
                                                         value={this.state.userInfo.getData("businessName")}
-                                                        onChange={e =>
+                                                        onChange={(e) =>
                                                             this.onFieldChange("businessName", e.target.value)
                                                         }
                                                     />
@@ -317,9 +322,9 @@ export default class BillingInfoContainer extends Component {
                                                 type="text"
                                                 className="form-control no-background"
                                                 placeholder="First Name"
-                                                style={{ paddingLeft: "10px" }}
+                                                style={{paddingLeft: "10px"}}
                                                 value={this.state.userInfo.getData("firstName")}
-                                                onChange={e => this.onFieldChange("firstName", e.target.value)}
+                                                onChange={(e) => this.onFieldChange("firstName", e.target.value)}
                                             />
                                             {displayErrors(this.state.userInfo.getErrorsForField("firstName"))}
                                         </div>
@@ -331,9 +336,9 @@ export default class BillingInfoContainer extends Component {
                                                 type="text"
                                                 className="form-control no-background"
                                                 placeholder="Last Name"
-                                                style={{ paddingLeft: "10px" }}
+                                                style={{paddingLeft: "10px"}}
                                                 value={this.state.userInfo.getData("lastName")}
-                                                onChange={e => this.onFieldChange("lastName", e.target.value)}
+                                                onChange={(e) => this.onFieldChange("lastName", e.target.value)}
                                             />
                                             {displayErrors(this.state.userInfo.getErrorsForField("lastName"))}
                                         </div>
@@ -357,7 +362,7 @@ export default class BillingInfoContainer extends Component {
                                             styles={genderSelectStyles}
                                             options={this.genderList}
                                             placeholder="Select Gender"
-                                            onChange={e => this.onFieldChange("sex", e.value)}
+                                            onChange={(e) => this.onFieldChange("sex", e.value)}
                                             value={{
                                                 value: this.state.userInfo.getData("sex"),
                                                 label: genders[this.state.userInfo.getData("sex")]
@@ -373,9 +378,9 @@ export default class BillingInfoContainer extends Component {
                                                 type="text"
                                                 className="form-control no-background"
                                                 placeholder="Contact Number"
-                                                style={{ paddingLeft: "10px" }}
+                                                style={{paddingLeft: "10px"}}
                                                 value={this.state.userInfo.getData("contactNum")}
-                                                onChange={e => this.onFieldChange("contactNum", e.target.value)}
+                                                onChange={(e) => this.onFieldChange("contactNum", e.target.value)}
                                             />
                                             {displayErrors(this.state.userInfo.getErrorsForField("contactNum"))}
                                         </div>
@@ -384,9 +389,9 @@ export default class BillingInfoContainer extends Component {
                                     <div className="col-12">
                                         <div className="input">
                                             <div className="form-control no-background readonly-custom-input">
-                                                <div style={{ float: "left" }}>Email</div>
+                                                <div style={{float: "left"}}>Email</div>
                                                 <div
-                                                    style={{ float: "right" }}
+                                                    style={{float: "right"}}
                                                     onClick={() =>
                                                         alertUser.init({
                                                             message:
@@ -408,9 +413,9 @@ export default class BillingInfoContainer extends Component {
                                                 type="text"
                                                 className="form-control no-background"
                                                 placeholder="Street Address"
-                                                style={{ paddingLeft: "10px" }}
+                                                style={{paddingLeft: "10px"}}
                                                 value={this.state.userInfo.getData("billingStreetAddress")}
-                                                onChange={e =>
+                                                onChange={(e) =>
                                                     this.onFieldChange("billingStreetAddress", e.target.value)
                                                 }
                                             />
@@ -422,7 +427,7 @@ export default class BillingInfoContainer extends Component {
 
                                     <PostalCodeAutoSuggest
                                         errors={this.state.userInfo.getErrorsForField("billingPostcodeID") || []}
-                                        objID={this.state.userInfo.billingPostcodeID}
+                                        objID={this.state.userInfo.getData('billingPostcodeID')}
                                         onFieldChange={this.onFieldChange}
                                         identifier={"billingPostcodeID"}
                                         theme={autoSuggestTheme}
@@ -452,7 +457,7 @@ export default class BillingInfoContainer extends Component {
                                     {/*</div>*/}
                                     {/*</div>*/}
                                     {/*</div>*/}
-                                    <div className={"col-12"} style={{ marginTop: "35px", marginBottom: "30px" }}>
+                                    <div className={"col-12"} style={{marginTop: "35px", marginBottom: "30px"}}>
                                         <APIRequestButton
                                             layoutClasses={"btn float-right imp-button-style"}
                                             cTextOptions={{
