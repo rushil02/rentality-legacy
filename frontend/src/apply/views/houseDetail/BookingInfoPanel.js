@@ -61,18 +61,27 @@ export default class BookingInfoPanel extends Component {
         getUnavailableDates(this.props.house.getData("UUID")).then((result) => {
             let maxDate, minDate;
             let midUnavailableDates = [];
-            result.forEach(function (range) {
-                if (range.start_date == null) {
-                    minDate = new Date(range.end_date);
-                } else if (range.end_date == null) {
-                    maxDate = new Date(range.start_date);
-                } else {
-                    midUnavailableDates.push({
-                        startDate: new Date(range.start_date),
-                        endDate: new Date(range.end_date),
-                    });
-                }
-            });
+            if (result.length !== 1) {
+                result.forEach(function (range) {
+                    if (range.start_date == null) {
+                        minDate = new Date(range.end_date);
+                        minDate.setDate(minDate.getDate() + 1)
+                    } else if (range.end_date == null) {
+                        maxDate = new Date(range.start_date);
+                        maxDate.setDate(maxDate.getDate() - 1)
+                    } else {
+                        midUnavailableDates.push({
+                            startDate: new Date(range.start_date),
+                            endDate: new Date(range.end_date),
+                        });
+                    }
+                });
+            } else {
+                const today = new Date();
+                maxDate = today;
+                minDate = today;
+                midUnavailableDates = [today];
+            }
             this.setState((prevState) => ({
                 ...prevState,
                 unavailableDates: midUnavailableDates,
@@ -155,7 +164,7 @@ export default class BookingInfoPanel extends Component {
                                             minDate={this.state.minDate}
                                             disabledDates={this.state.unavailableDates}
                                             months={1}
-                                            minRangeLength={28}
+                                            minRangeLength={27}
                                             showDateDisplay={false}
                                             minRange={1}
                                         />

@@ -1,4 +1,5 @@
 import copy
+from datetime import timedelta
 
 from django.utils import timezone
 from psycopg2.extras import DateRange
@@ -269,7 +270,7 @@ def get_available_dates(house, from_year=None, till_year=None):
     return available_dates
 
 
-def get_unavailable_dates(house, from_date=None, till_date=None, inc_last=True):
+def get_unavailable_dates(house):
     """
     Important: The availability records of a house should not have duplicate, overlapping or colliding date_ranges.
 
@@ -306,9 +307,9 @@ def get_unavailable_dates(house, from_date=None, till_date=None, inc_last=True):
     unavailable_dates = []
     lower_date = None
     for date_range in available_dates:
-        upper_date = date_range.lower
+        upper_date = date_range.lower - timedelta(days=1)
         unavailable_dates.append(DateRange(lower=lower_date, upper=upper_date))
-        lower_date = date_range.upper
+        lower_date = date_range.upper + timedelta(days=1)
     unavailable_dates.append(DateRange(lower=lower_date, upper=None))
 
     return unavailable_dates

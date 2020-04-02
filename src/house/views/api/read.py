@@ -25,8 +25,6 @@ class NetUnavailableDatesView(APIView):
 
     def get(self, request, house_uuid):
         house = get_object_or_404(House.objects.all(), uuid=house_uuid)
-        # from_year = request.query_params.get('from_year', default=None)
-        # till_year = request.query_params.get('till_year', default=None)
         result = get_unavailable_dates(house)
         serializer = self.serializer_class(result, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
