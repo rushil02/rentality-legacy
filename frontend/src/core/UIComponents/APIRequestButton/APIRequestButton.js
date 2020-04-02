@@ -22,6 +22,7 @@ import styles from "./APIRequestButton.css";
  *          textLoadingClasses -
  *
  *      isDisabled - [optional] boolean
+ *      doneDisabled - [optional] boolean
  *
  *      initialState - initial State of button
  *
@@ -150,9 +151,15 @@ export default class APIRequestButton extends Component {
             );
         } else if (this.state.status === "error") {
             this.attachListener();
-            layoutClasses += this.props.errorClass ? " " + this.props.errorClass : " " + styles.errorBtn;
+            layoutClasses += this.props.errorClass ? " " + this.props.errorClass : " disabled " + styles.errorBtn;
             return (
-                <a type="button" className={layoutClasses} onClick={this.onActionClick}>
+                <a
+                    type="button"
+                    className={layoutClasses}
+                    onClick={this.onActionClick}
+                    aria-disabled="true"
+                    tabIndex={"-1"}
+                >
                     <div className={this.props.textErrorClasses || styles.text}>{_textOptions.error}</div>
                 </a>
             );
@@ -175,12 +182,27 @@ export default class APIRequestButton extends Component {
             );
         } else if (this.state.status === "done") {
             this.attachListener();
-            layoutClasses += this.props.doneClass ? " " + this.props.doneClass : " " + styles.doneBtn;
-            return (
-                <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
-                    <div className={this.props.textDoneClasses || styles.text}>{_textOptions.done}</div>
-                </a>
-            );
+            if (this.props.doneDisabled) {
+                layoutClasses += this.props.doneClass ? " " + this.props.doneClass : " disabled " + styles.doneBtn;
+                return (
+                    <a
+                        type="button"
+                        className={layoutClasses}
+                        onClick={this.onActionClick}
+                        aria-disabled="true"
+                        tabIndex={"-1"}
+                    >
+                        <div className={this.props.textDoneClasses || styles.text}>{_textOptions.done}</div>
+                    </a>
+                );
+            } else {
+                layoutClasses += this.props.doneClass ? " " + this.props.doneClass : " " + styles.doneBtn;
+                return (
+                    <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
+                        <div className={this.props.textDoneClasses || styles.text}>{_textOptions.done}</div>
+                    </a>
+                );
+            }
         }
     }
 }

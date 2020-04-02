@@ -47,7 +47,8 @@
     box-shadow: 0 0 0 0.2rem rgba(57, 255, 175, 0.5);
 }
 
-.btnCircle.disabled, .btnCircle:disabled{
+.btnCircle.disabled,
+.btnCircle:disabled {
     color: grey;
     background-color: #fff;
     border-color: transparent;
@@ -130,8 +131,9 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    background: #f8bf25;
-    color: white;
+    color: #30322a;
+    background: #fff;
+    border: solid 2px #f8bf25;
     margin: 35px 0 5px 0;
     padding: 11px 59px;
     cursor: pointer;
@@ -141,7 +143,8 @@
 }
 
 .stripeSaveBtn:hover {
-    color: #654f14;
+    color: #30322a;
+    background: #f8bf25;
 }
 
 .fadedBlue {
