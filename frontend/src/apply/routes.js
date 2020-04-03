@@ -12,5 +12,6 @@ export default {
         applyBooking: "initiate/:houseUUID",
         confirmBooking: "exec-intent/:houseUUID/:applicationUUID",
         bookingDetails: "application-info-list/:applicationUUID",
+        amountDetails: "amount/:houseUUID"
     },
 };

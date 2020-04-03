@@ -1,6 +1,13 @@
 import React, {Component} from "react";
-import {confirmBooking, applyBooking, getApplicantData, getHomeOwnerDetails, getHouseData} from "apply/services";
-import {House, Image, CancellationPolicy, HomeOwnerInfo, Application, Applicant} from "apply/models";
+import {
+    confirmBooking,
+    applyBooking,
+    getApplicantData,
+    getHomeOwnerDetails,
+    getHouseData,
+    getFinancialData,
+} from "apply/services";
+import {House, Image, CancellationPolicy, HomeOwnerInfo, Application, FinancialInfo} from "apply/models";
 import HouseDetailPageComponent from "./HouseDetailPageComponent";
 import {APIModelListAdapter, PostalLocation} from "core/utils/ModelHelper";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
@@ -24,9 +31,11 @@ export default class HouseDetailPage extends Component {
             location: new PostalLocation({}, "empty"),
             homeOwnerInfo: new HomeOwnerInfo({}, "empty"),
             application: new Application({}, "empty"),
+            finInfo: new FinancialInfo({}, "empty"),
             clientSecret: undefined,
             applicationUUID: undefined,
             disableDisplay: false,
+            inSyncFinInfo: false,
         };
         this.checkoutFormChild = React.createRef();
         this.confirmModalChild = React.createRef();
@@ -74,24 +83,67 @@ export default class HouseDetailPage extends Component {
         });
     }
 
-    handleDateChange = (startDate, endDate) => {
-        this.setState((prevState) => ({
-            ...prevState,
-            application: prevState.application.bulkUpdate(
-                {
-                    bookingStartDate: startDate,
-                    bookingEndDate: endDate,
-                },
-                "int",
-                "bookingInfo"
-            ),
-        }));
+    updateFinInfo = () => {
+        if (
+            this.state.application.getData("bookingInfo.bookingStartDate") &&
+            this.state.application.getData("bookingInfo.bookingEndDate") &&
+            this.state.application.getData("bookingInfo.numGuests")
+        ) {
+            this.setState({inSyncFinInfo: true});
+            getFinancialData(this.houseUUID, this.state.application.getData("bookingInfo"))
+                .then((result) => {
+                    this.setState((prevState) => ({
+                        ...prevState,
+                        inSyncFinInfo: false,
+                        finInfo: new FinancialInfo(result, "saved"),
+                    }));
+                })
+                .catch((error) => {
+                    if (error.badRequest) {
+                        let errorData = error.error.response.data;
+                        errorData.errors.forEach((error) => {
+                            alertUser.init({
+                                message: error,
+                                alertType: "danger",
+                                autoHide: false,
+                            });
+                        });
+                    }
+                });
+        }
     };
 
-    handleApplicationChange = (field, value, parent) => {
+    handleDateChange = (startDate, endDate) => {
+        this.setState(
+            (prevState) => ({
+                ...prevState,
+                application: prevState.application.bulkUpdate(
+                    {
+                        bookingStartDate: startDate,
+                        bookingEndDate: endDate,
+                    },
+                    "int",
+                    "bookingInfo"
+                ),
+            }),
+            this.updateFinInfo
+        );
+    };
+
+    handleGuestsNumChange = (value) => {
+        this.setState(
+            (prevState) => ({
+                ...prevState,
+                application: prevState.application.setData("bookingInfo.numGuests", value),
+            }),
+            this.updateFinInfo
+        );
+    };
+
+    handleApplicationChange = (field, value) => {
         this.setState((prevState) => ({
             ...prevState,
-            application: prevState.application.setData(field, value, parent),
+            application: prevState.application.setData(field, value),
         }));
     };
 
@@ -99,7 +151,7 @@ export default class HouseDetailPage extends Component {
         this.setState({applicationUUID: value});
     };
 
-    setclientSecret = (value) => {
+    setClientSecret = (value) => {
         this.setState({clientSecret: value});
     };
 
@@ -145,7 +197,7 @@ export default class HouseDetailPage extends Component {
         return new Promise(function (resolve, reject) {
             confirmBooking(that.houseUUID, that.state.applicationUUID)
                 .then((result) => {
-                    that.setclientSecret(result.data["client_secret"]);
+                    that.setClientSecret(result.data["client_secret"]);
                     console.log(that.state.clientSecret, result);
                     return that.checkoutFormChild.current.submit();
                 })
@@ -191,6 +243,7 @@ export default class HouseDetailPage extends Component {
                         handleDateChange={this.handleDateChange}
                         application={this.state.application}
                         handleApplicationChange={this.handleApplicationChange}
+                        handleGuestsNumChange={this.handleGuestsNumChange}
                         house={this.state.house}
                         images={this.state.images}
                         cancellationPolicy={this.state.cancellationPolicy}
@@ -202,6 +255,8 @@ export default class HouseDetailPage extends Component {
                         confirmModalRef={this.confirmModalChild}
                         applicationUUID={this.state.applicationUUID}
                         disableDisplay={this.state.disableDisplay}
+                        finInfo={this.state.finInfo}
+                        inSyncFinInfo={this.state.inSyncFinInfo}
                     />
                 </SecretContext.Provider>
             </RequestErrorBoundary>

@@ -15,7 +15,6 @@ from user_custom.views import create_user_for_anon
 from application.permissions import IsTenantOfApplication
 
 
-
 class ExecuteIntentBookingView(APIView):
     """
     Execute Intent by Tenant
@@ -123,16 +122,14 @@ class InitiateBookingView(APIView):
         return Response(response, status=HTTP_200_OK)
 
 
-
 class GetApplicationDetails(APIView):
     """
-    Used to get all house listings owned by current user
+    Used to get all information about an application if the tenant owns it
     """
     permission_classes = (IsAuthenticated, IsTenantOfApplication)
 
     def get_object(self, application_uuid):
         return get_object_or_404(Application.objects.all(), uuid=application_uuid)
-
 
     def get(self, request, application_uuid):
         application = self.get_object(application_uuid)

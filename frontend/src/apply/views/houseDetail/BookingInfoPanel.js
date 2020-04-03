@@ -9,6 +9,7 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import "./DateRangeCalendar.css";
 import {getUnavailableDates} from "apply/services";
+import {ResponseLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
 
 const guestNumSelectStyles = {
     option: (provided, state) => ({
@@ -49,7 +50,10 @@ export default class BookingInfoPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bookingDates: {},
+            bookingDates: {
+                startDate: this.props.bookingDateRange.startDate ? this.props.bookingDateRange.startDate : new Date(),
+                endDate: this.props.bookingDateRange.endDate ? this.props.bookingDateRange.endDate : new Date(),
+            },
             unavailableDates: [],
             maxDate: addDays(new Date(), 1),
             minDate: new Date(),
@@ -65,10 +69,10 @@ export default class BookingInfoPanel extends Component {
                 result.forEach(function (range) {
                     if (range.start_date == null) {
                         minDate = new Date(range.end_date);
-                        minDate.setDate(minDate.getDate() + 1)
+                        minDate.setDate(minDate.getDate() + 1);
                     } else if (range.end_date == null) {
                         maxDate = new Date(range.start_date);
-                        maxDate.setDate(maxDate.getDate() - 1)
+                        maxDate.setDate(maxDate.getDate() - 1);
                     } else {
                         midUnavailableDates.push({
                             startDate: new Date(range.start_date),
@@ -96,10 +100,17 @@ export default class BookingInfoPanel extends Component {
     };
 
     handleDateSelect = (ranges) => {
+        this.setState((prevState) => ({
+            ...prevState,
+            bookingDates: {
+                startDate: ranges.selection.startDate,
+                endDate: ranges.selection.endDate,
+            },
+        }));
         if (ranges.selection.startDate.getTime() !== ranges.selection.endDate.getTime()) {
+            this.props.handleDateChange(ranges.selection.startDate, ranges.selection.endDate);
             this.closeDateSelectionAccordion();
         }
-        this.props.handleDateChange(ranges.selection.startDate, ranges.selection.endDate);
     };
 
     render() {
@@ -113,11 +124,13 @@ export default class BookingInfoPanel extends Component {
         let furnished = this.props.house.getData("furnished") === "Y" ? "Furnished" : "Unfurnished";
 
         let selectionRange = {
-            startDate: this.props.bookingDateRange.startDate,
-            endDate: this.props.bookingDateRange.endDate,
+            startDate: this.state.bookingDates.startDate,
+            endDate: this.state.bookingDates.endDate,
             key: "selection",
             color: "#3fc692",
         };
+
+        console.log(this.props.finInfo);
 
         return (
             <React.Fragment>
@@ -141,14 +154,18 @@ export default class BookingInfoPanel extends Component {
                                             <div className="col-5">
                                                 <div className={styles.dateSubtitle + " text-left"}>Move in</div>
                                                 <div className={styles.dateDisplay + " text-left"}>
-                                                    {format(this.props.bookingDateRange.startDate, "MMM DD YYYY")}
+                                                    {this.props.bookingDateRange.startDate
+                                                        ? format(this.props.bookingDateRange.startDate, "MMM DD YYYY")
+                                                        : "Select Date"}
                                                 </div>
                                             </div>
                                             <div className={"col-2 " + styles.centerArrow} />
                                             <div className="col-5">
                                                 <div className={styles.dateSubtitle + " text-right"}>Move out</div>
                                                 <div className={styles.dateDisplay + " text-right"}>
-                                                    {format(this.props.bookingDateRange.endDate, "MMM DD YYYY")}
+                                                    {this.props.bookingDateRange.endDate
+                                                        ? format(this.props.bookingDateRange.endDate, "MMM DD YYYY")
+                                                        : "Select Date"}
                                                 </div>
                                             </div>
                                         </div>
@@ -205,42 +222,68 @@ export default class BookingInfoPanel extends Component {
                     </div>
                     <div className={styles.infoSection}>
                         <div className="left-padding">
-                            <div className="row">
-                                <div className={"col-8 " + styles.leftInfo}>Weekly Rent</div>
-                                <div className={"col-4 text-right " + styles.rightInfo}>
-                                    ${this.props.house.getData("rent")} AUD
-                                </div>
-                            </div>
-                            <div className="row" style={{marginBottom: "10px"}}>
-                                <div className={"col-8 " + styles.leftInfo}>Length of Stay</div>
-                                <div className={"col-4 text-right " + styles.rightInfo}>$800 AUD</div>
-                            </div>
-                            <div className="row" style={{marginBottom: "10px"}}>
-                                <div className={"col-8 " + styles.leftInfo}>Service fee</div>
-                                <div className={"col-4 text-right " + styles.rightInfo}>$48 AUD</div>
-                            </div>
-                            {/*<div className="row">*/}
-                            {/*    <div className={"col-12"}>*/}
-                            {/*        <div className={"row no-gutters " + styles.discountContainer}>*/}
-                            {/*            <div className="col-8">*/}
-                            {/*                <input type="text" className={"form-control " + styles.discountInput}*/}
-                            {/*                       placeholder="Promo Code"/>*/}
-                            {/*            </div>*/}
-                            {/*            <div className="col-4 d-flex justify-content-center">*/}
-                            {/*                <button type="button"*/}
-                            {/*                        className={"btn btn-link btn-block " + styles.discountApplyBtn}>Apply*/}
-                            {/*                    code*/}
-                            {/*                </button>*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                            <hr />
-                            <div className="row">
-                                <div className={"col-8 " + styles.totalLeftInfo}>Booking Deposit</div>
-                                <div className={"col-4 text-right " + styles.totalRightInfo}>$800 AUD</div>
-                                <div className={"col-12 " + styles.grayInfo}>Rent for 4 weeks + Service Fee</div>
-                            </div>
+                            {!this.props.inSyncFinInfo ? (
+                                <React.Fragment>
+                                    <div className="row">
+                                        <div className={"col-8 " + styles.leftInfo}>Weekly Rent</div>
+                                        <div className={"col-4 text-right " + styles.rightInfo}>
+                                            ${this.props.house.getData("rent")} AUD
+                                        </div>
+                                    </div>
+
+                                    {this.props.finInfo.getData("stayDuration") ? (
+                                        <div className="row" style={{marginBottom: "10px"}}>
+                                            <div className={"col-8 " + styles.leftInfo}>Length of Stay</div>
+                                            <div className={"col-4 text-right " + styles.rightInfo}>
+                                                {this.props.finInfo.getData("stayDuration")} Weeks
+                                            </div>
+                                        </div>
+                                    ) : null}
+
+                                    {this.props.finInfo.getData("serviceFee") ? (
+                                        <div className="row" style={{marginBottom: "10px"}}>
+                                            <div className={"col-8 " + styles.leftInfo}>Service Fee</div>
+                                            <div className={"col-4 text-right " + styles.rightInfo}>
+                                                ${this.props.finInfo.getData("serviceFee")} AUD
+                                            </div>
+                                        </div>
+                                    ) : null}
+
+                                    {/*<div className="row">*/}
+                                    {/*    <div className={"col-12"}>*/}
+                                    {/*        <div className={"row no-gutters " + styles.discountContainer}>*/}
+                                    {/*            <div className="col-8">*/}
+                                    {/*                <input type="text" className={"form-control " + styles.discountInput}*/}
+                                    {/*                       placeholder="Promo Code"/>*/}
+                                    {/*            </div>*/}
+                                    {/*            <div className="col-4 d-flex justify-content-center">*/}
+                                    {/*                <button type="button"*/}
+                                    {/*                        className={"btn btn-link btn-block " + styles.discountApplyBtn}>Apply*/}
+                                    {/*                    code*/}
+                                    {/*                </button>*/}
+                                    {/*            </div>*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*</div>*/}
+
+                                    {this.props.finInfo.getData("payableAmount") ? (
+                                        <React.Fragment>
+                                            <hr />
+                                            <div className="row">
+                                                <div className={"col-8 " + styles.totalLeftInfo}>Booking Deposit</div>
+                                                <div className={"col-4 text-right " + styles.totalRightInfo}>
+                                                    ${this.props.finInfo.getData("payableAmount")} AUD
+                                                </div>
+                                                <div className={"col-12 " + styles.grayInfo}>
+                                                    Rent for 4 weeks + Service Fee
+                                                </div>
+                                            </div>
+                                        </React.Fragment>
+                                    ) : null}
+                                </React.Fragment>
+                            ) : (
+                                <ResponseLoadingSpinner height={"175px"} />
+                            )}
                         </div>
                     </div>
                 </div>

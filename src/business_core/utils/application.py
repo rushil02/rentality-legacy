@@ -44,6 +44,24 @@ class Application(object):
         return self.get_business_model().financial_model.tenant_account
 
     @classmethod
+    def create(cls, house_db, booking_info):
+        """
+        Create an Application object from house database object, booking_info from user.
+        Warning: Doesn't provide any performable actions.
+
+        :param house_db:
+        :param booking_info:
+        :return: Application()
+        """
+        house = House.load(house_db)
+        return cls(
+            house=house,
+            date_range=[booking_info['start_date'], booking_info['end_date']],
+            guests_num=booking_info['guests'],
+            promo_codes=[],  # TODO: Validate and send promo codes
+        )
+
+    @classmethod
     def load(cls, db_obj):
         """
         Create a new Financial Application object.

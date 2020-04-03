@@ -68,8 +68,8 @@ export default class HouseDetailPageComponent extends Component {
 
         return (
             <React.Fragment>
-                {this.props.disableDisplay ? <div className={styles.disabledOverlay} /> : null}
-                <ImageCarousel images={this.props.images} />
+                {this.props.disableDisplay ? <div className={styles.disabledOverlay}/> : null}
+                <ImageCarousel images={this.props.images}/>
                 <div className={styles.pageDetail}>
                     <div className="container">
                         <div className="row" style={{paddingBottom: "120px"}}>
@@ -86,7 +86,7 @@ export default class HouseDetailPageComponent extends Component {
                                                     {furnished} {this.props.house.getData("homeType")}
                                                 </div>
                                             </div>
-                                            <div className="col-md-3"></div>
+                                            <div className="col-md-3"/>
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
@@ -309,7 +309,8 @@ export default class HouseDetailPageComponent extends Component {
                                         error: "Error!",
                                     }}
                                     callback={this.props.onApply}
-                                    onSuccess={() => {}}
+                                    onSuccess={() => {
+                                    }}
                                 />
                             </div>
 
@@ -334,15 +335,15 @@ function getInfoSidePanel(that, address) {
                             endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
                         }}
                         numGuests={that.props.application.getData("bookingInfo.numGuests")}
-                        onNumGuestsChange={(numGuests) =>
-                            that.props.handleApplicationChange("bookingInfo.numGuests", numGuests)
-                        }
+                        onNumGuestsChange={that.props.handleGuestsNumChange}
                         address={address}
                         cancellationPolicy={that.props.cancellationPolicy}
                         handleDateChange={that.props.handleDateChange}
+                        finInfo={that.props.finInfo}
+                        inSyncFinInfo={that.props.inSyncFinInfo}
                     />
 
-                    <div className="row" style={{marginBottom: "20px"}}>
+                    <div className="row" style={{margin: "20px 0"}}>
                         <div className="col-12 d-flex justify-content-center">
                             {that.state.bookButtonActive ? (
                                 <ConfirmBookingModal
@@ -367,7 +368,7 @@ function getInfoSidePanel(that, address) {
             </div>
         );
     } else {
-        return <div className="d-none d-lg-block col-lg-5 col-xl-4" />;
+        return <div className="d-none d-lg-block col-lg-5 col-xl-4"/>;
     }
 }
 
@@ -382,14 +383,16 @@ function getInfoMobilePanel(that, address) {
                         endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
                     }}
                     numGuests={that.props.application.getData("bookingInfo.numGuests")}
-                    onNumGuestsChange={(numGuests) => that.props.handleApplicationChange("bookingInfo.numGuests")}
+                    onNumGuestsChange={that.props.handleGuestsNumChange}
                     address={address}
                     cancellationPolicy={that.props.cancellationPolicy}
                     handleDateChange={that.props.handleDateChange}
+                    finInfo={that.props.finInfo}
+                    inSyncFinInfo={that.props.inSyncFinInfo}
                 />
             </div>
         );
     } else {
-        return <div className={"d-lg-none"} />;
+        return <div className={"d-lg-none"}/>;
     }
 }

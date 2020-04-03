@@ -70,13 +70,7 @@ class Booking(object):
         :return: Booking()
         """
 
-        house = House.load(house_db)
-        application = Application(
-            house=house,
-            date_range=[booking_info['start_date'], booking_info['end_date']],
-            guests_num=booking_info['guests'],
-            promo_codes=[],  # TODO: Validate and send promo codes
-        )
+        application = Application.create(house_db, booking_info)
         application.set_prospective_booking_date(booking_date)
         obj = cls(application, actor, '_no_app_')
         obj.use_payment_gateway(PaymentGateway.create(house_db=house_db))
@@ -115,9 +109,9 @@ class Booking(object):
     #     else:
     #         application_db.update_account(meta_info=self._acc_info)
 
-        # Rentality records
-        # PaymentGatewayTransaction
-        # LedgerRecord
+    # Rentality records
+    # PaymentGatewayTransaction
+    # LedgerRecord
 
     # def _load_data(self, result):
     #     self.set_new_state(result['state'])
