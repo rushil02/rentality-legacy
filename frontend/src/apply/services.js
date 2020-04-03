@@ -102,16 +102,26 @@ export function getApplicantData() {
 export function getBookingData(applicationUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(
-                reverse(routes.apply.bookingDetails, {
-                    applicationUUID: applicationUUID,
-                })
-            )
+            .get(reverse(routes.apply.bookingDetails, {applicationUUID: applicationUUID}))
             .then((response) => {
                 resolve(response.data);
             })
             .catch((error) => {
                 reject(error);
+            });
+    });
+}
+
+export function getFinancialData(houseUUID, bookingInfo) {
+    return new Promise(function (resolve, reject) {
+        axios
+            .get(reverse(routes.apply.amountDetails, {houseUUID: houseUUID}), {params: bookingInfo.serialize()})
+            .then((result) => {
+                console.log(result);
+                resolve(result.data);
+            })
+            .catch((error) => {
+                reject(handleError(error));
             });
     });
 }

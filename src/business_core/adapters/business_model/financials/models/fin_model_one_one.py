@@ -16,6 +16,11 @@ from ..base import (
 
 class TenantAccount(TenantAccountBase):
 
+    def _response_attrs(self):
+        li = super(TenantAccount, self)._response_attrs()
+        li.append('service_fee')
+        return li
+
     @property
     def payable_rent(self):
         return Decimal(self.weekly_rent * min(4, self.stay_duration))
@@ -27,7 +32,7 @@ class TenantAccount(TenantAccountBase):
     @property
     def payable_amount(self):
         """ Final amount paid by the tenant """
-        return self.payable_rent + self.service_fee
+        return self.payable_rent + self.service_fee.value
 
 
 class HomeOwnerAccount(HomeOwnerAccountBase):

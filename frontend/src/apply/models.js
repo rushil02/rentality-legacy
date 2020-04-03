@@ -134,12 +134,12 @@ export class BookingInfo extends APIModelAdapter {
         return {
             bookingStartDate: {
                 key: "start_date",
-                default: new Date(),
+                default: null,
                 serializer: this.dateSerializer,
             },
             bookingEndDate: {
                 key: "end_date",
-                default: new Date(),
+                default: null,
                 serializer: this.dateSerializer,
             },
             numGuests: {key: "guests", default: 1},
@@ -149,5 +149,17 @@ export class BookingInfo extends APIModelAdapter {
 
     dateSerializer(date) {
         return format(date, "YYYY-MM-DD");
+    }
+}
+
+export class FinancialInfo extends APIModelAdapter {
+    fieldMap() {
+        return {
+            weeklyRent: {key: "weekly_rent"},
+            payableRent: {key: "payable_rent", parser: parseFloat},
+            payableAmount: {key: "payable_amount", parser: parseFloat},
+            serviceFee: {key: "service_fee.value", parser: parseFloat},
+            stayDuration: {key: "stay_duration", parser: parseFloat},
+        };
     }
 }

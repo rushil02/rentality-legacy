@@ -10,13 +10,12 @@ from business_core.adapters.base import Adapter
 
 def convert_to_json(obj):
     json_di = dict()
-    for key, value in vars(obj).items():
-        # Protected attributes are not recorded
-        if not key.startswith('_'):
-            if isinstance(value, Decimal):
-                json_di[key] = str(value)
-            elif isinstance(value, Charge):
-                json_di[key] = convert_to_json(obj)
+    for key in obj._response_attrs():
+        value = getattr(obj, key)
+        if isinstance(value, Decimal):
+            json_di[key] = str(round(value, 2))
+        elif isinstance(value, Charge):
+            json_di[key] = convert_to_json(value)
     return json_di
 
 
@@ -33,9 +32,20 @@ class Charge(object):
         """
         if bool(charge) is bool(value):
             raise ValueError("Need only one argument - charge or value")
-        self._charge = Decimal(charge)
-        self._value = Decimal(value)
+        if charge:
+            self._charge = Decimal(charge)
+        else:
+            self._charge = None
+        if value:
+            self._value = Decimal(value)
+        else:
+            self._value = None
         self.principal = principal
+
+    @staticmethod
+    def _response_attrs():
+        """ Override to register more data to be sent to the user system. """
+        return ['value', 'charge', 'principal']
 
     @property
     def value(self):
@@ -69,6 +79,11 @@ class TenantAccountBase(object):
         self.weekly_rent = weekly_rent
         self._fin_model = fin_model
 
+    @staticmethod
+    def _response_attrs():
+        """ Override to register more data to be sent to the user system. """
+        return ['weekly_rent', 'stay_duration', 'payable_rent', 'payable_amount']
+
     @property
     def total_rent(self):
         return Decimal(self.stay_duration * self.weekly_rent)
@@ -97,6 +112,11 @@ class HomeOwnerAccountBase(object):
         self.stay_duration = stay_duration
         self.weekly_rent = weekly_rent
         self._fin_model = fin_model
+
+    @staticmethod
+    def _response_attrs():
+        """ Override to register more data to be sent to the user system. """
+        return ['weekly_rent', 'stay_duration', 'payable_rent', 'payable_amount']
 
     @property
     def total_rent(self):
