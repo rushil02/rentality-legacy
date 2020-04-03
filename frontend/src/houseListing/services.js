@@ -308,7 +308,6 @@ export function getCancellationPolicies(houseUUID) {
 }
 
 export function postCancellationPolicy(houseUUID, data) {
-    console.log(data);
     return new Promise(function(resolve, reject) {
         axios
             .post(reverse(routes.house.canPol.update, {houseUUID: houseUUID}), data.serialize(["objID"]))

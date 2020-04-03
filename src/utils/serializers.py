@@ -137,7 +137,8 @@ FIELD_CODE_MAP = {
     'date': serializers.DateField,
     'datetime': serializers.DateTimeField,
     'ip': serializers.CharField,
-    'user_agent': serializers.CharField
+    'user_agent': serializers.CharField,
+    'dict': serializers.DictField
 }
 
 

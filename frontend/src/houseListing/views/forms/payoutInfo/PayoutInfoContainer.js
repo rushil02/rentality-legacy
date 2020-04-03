@@ -16,7 +16,7 @@ import {handleError} from "core/utils/serviceHelper";
  *     IMPORTANT: Do NOT use Cache here
  */
 
-const stripePromise = loadStripe("pk_test_fnHvlWbNICwFvTYFBiYnFyZ8");
+const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
 
 function getLoadStatus(stripe) {
     if (!stripe) {
@@ -46,6 +46,7 @@ export default class PayoutInfoContainer extends Component {
 
     componentDidMount() {
         this.props.navContext.data.loadForm(this.formID, this.onSave, "initial", "Billing and Bank Information");
+        this.props.navContext.sync();
         this.verifyPayoutInfo();
     }
 
@@ -124,8 +125,13 @@ export default class PayoutInfoContainer extends Component {
                 this.setState((prevState) => ({
                     ...prevState,
                     verifying: false,
-                    statusBI: "Complete"
+                    statusBI: "Complete",
+                    statusPI: "Complete",
+                    statusII: "Complete",
+                    statusEA: "Complete"
                 }));
+                this.props.navContext.data.updateFormState(this.formID, "hasChanged");
+                this.props.navContext.sync();
             })
             .catch((error) => {
                 if (error.response.status === 406 && error.response.data.code === "BIM") {
@@ -160,8 +166,6 @@ export default class PayoutInfoContainer extends Component {
                     }));
                 }
             });
-
-        // this.props.navContext.sync();
     };
 
     onSave = () => {
@@ -193,6 +197,7 @@ export default class PayoutInfoContainer extends Component {
                         statusPI={this.state.statusPI}
                         statusII={this.state.statusII}
                         houseUUID={this.props.houseUUID}
+                        verifyPayoutInfo={this.verifyPayoutInfo}
                     />
                     <Elements stripe={stripePromise}>
                         <ElementsConsumer>
@@ -206,6 +211,7 @@ export default class PayoutInfoContainer extends Component {
                                             statusEA={this.state.statusEA}
                                             stripe={stripe}
                                             userInfo={this.state.userInfo}
+                                            verifyPayoutInfo={this.verifyPayoutInfo}
                                         />
                                     </RequestErrorBoundary>
                                 );

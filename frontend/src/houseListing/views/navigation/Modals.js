@@ -9,14 +9,37 @@ export function ActivateModal(props) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const getButton = () => {
+        if (props.isAPIRequestButton === true && props.isDisabled === true) {
+            return (
+                <a
+                    type="button"
+                    className="btn float-right imp-button-style disabled"
+                    aria-disabled="true"
+                    tabIndex={"-1"}
+                >
+                    Activate
+                </a>
+            );
+        } else if (props.isAPIRequestButton === true && props.isDisabled === false) {
+            return (
+                <a type="button" className="btn float-right imp-button-style" onClick={handleShow} tabIndex={"0"}>
+                    Activate
+                </a>
+            );
+        } else {
+            return (
+                <Button className={"dropdown-item " + styles.dropdownItem} onClick={handleShow}>
+                    Activate Listing
+                </Button>
+            );
+        }
+    };
+
     return (
         <div>
-            <Button
-                className={"dropdown-item " + styles.dropdownItem}
-                onClick={handleShow}
-            >
-                Activate Listing
-            </Button>
+            {getButton()}
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -29,31 +52,23 @@ export function ActivateModal(props) {
                 <div className={"text-center " + styles.modalContent}>
                     <h1>Are you sure you want to list the house?</h1>
                     <div className="text-left">
-                        <p>
-                            Please ensure that all the provided details are
-                            correct before listing.
-                        </p>
+                        <p>Please ensure that all the provided details are correct before listing.</p>
                     </div>
                     <div className={styles.buttonGroup}>
                         <APIRequestButton
-                            layoutClasses={
-                                "btn float-left " + styles.activateAPIBtn
-                            }
+                            layoutClasses={"btn float-left imp-button-style"}
                             cTextOptions={{
                                 default: "Activate Listing",
-                                loading: "Processing",
+                                loading: " ",
                                 done: "Deactivate Listing",
                                 error: "Error!"
                             }}
-                            textDoneClasses={styles.deactivateListingText}
-                            textDefaultClasses={styles.activateListingText}
+                            // textDoneClasses={styles.deactivateListingText}
+                            // textDefaultClasses={styles.activateListingText}
                             loaderSize={6}
                             callback={props.onActivate}
                         />
-                        <Button
-                            className={"btn default-button-style float-right"}
-                            onClick={handleClose}
-                        >
+                        <Button className={"btn default-button-style float-right"} onClick={handleClose}>
                             Cancel
                         </Button>
                     </div>
@@ -70,15 +85,7 @@ export function DeleteModal(props) {
     const handleShow = () => setShow(true);
     return (
         <div>
-            <Button
-                className={
-                    "dropdown-item " +
-                    styles.dropdownItem +
-                    " " +
-                    styles.deleteText
-                }
-                onClick={handleShow}
-            >
+            <Button className={"dropdown-item " + styles.dropdownItem + " " + styles.deleteText} onClick={handleShow}>
                 Delete
             </Button>
             <Modal
@@ -92,28 +99,19 @@ export function DeleteModal(props) {
             >
                 <div className={"text-center " + styles.modalContent}>
                     <h1>
-                        Are you sure you want to list{" "}
-                        <span style={{ color: "red" }}>Delete</span>?
+                        Are you sure you want to list <span style={{color: "red"}}>Delete</span>?
                     </h1>
                     <div className="text-left">
-                        <p>
-                            Please Note - Deleting will not affect any bookings
-                            that have already been made.
-                        </p>
+                        <p>Please Note - Deleting will not affect any bookings that have already been made.</p>
                     </div>
                     <div className={styles.buttonGroup}>
                         <APIRequestButton
-                            layoutClasses={
-                                "btn float-left " + styles.deleteAPIBtn
-                            }
+                            layoutClasses={"btn float-left " + styles.deleteAPIBtn}
                             textOption={"cDelete"}
                             callback={props.onDelete}
                             onSuccess={props.onSuccess}
                         />
-                        <Button
-                            className={"btn default-button-style float-right"}
-                            onClick={handleClose}
-                        >
+                        <Button className={"btn default-button-style float-right"} onClick={handleClose}>
                             Cancel
                         </Button>
                     </div>

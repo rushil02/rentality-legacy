@@ -134,19 +134,10 @@ function NavigatorComponent(props) {
 
     if (props.navContext.data.currForm === 12) {
         saveNextBtn = (
-            <APIRequestButton
-                cTextOptions={{
-                    default: "Activate",
-                    loading: "Activating",
-                    done: "Activated",
-                    error: "Error!"
-                }}
-                callback={currFormCallback}
-                onSuccess={props.onNext}
-                onFailure={() => {}}
-                containerID={"main-input-page"}
-                formState={currFormState}
-                isDisabled={currFormState === "saved" ? false : true}
+            <ActivateModal
+                onActivate={props.onActivate}
+                isAPIRequestButton={true}
+                isDisabled={currFormState === "hasChanged" ? false : true}
             />
         );
     } else {

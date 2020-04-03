@@ -17,17 +17,14 @@ a.btn:focus {
     background-color: #36ffb1 !important;
 }
 
-a.btn.errorBtn {
+a.errorBtn {
     color: red !important;
     background-color: #e6e6e6 !important;
     pointer-events: none !important;
 }
 
-a.btn.loadingBtn {
+a.loadingBtn {
     pointer-events: none !important;
-}
-
-a.btn.doneBtn {
 }
 
 .text {

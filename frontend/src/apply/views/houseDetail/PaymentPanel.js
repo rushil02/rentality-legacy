@@ -5,7 +5,7 @@ import {Elements, ElementsConsumer} from "@stripe/react-stripe-js";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 import {SecretContext} from "./HouseDetailPage";
 
-const stripePromise = loadStripe("pk_test_fnHvlWbNICwFvTYFBiYnFyZ8");
+const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
 
 function getLoadStatus(stripe, elements) {
     if (!stripe || !elements) {

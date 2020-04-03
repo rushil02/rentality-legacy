@@ -15,8 +15,8 @@ export default class BankDetailsContainer extends Component {
         this.state = {
             modeEditing: false,
             showEditButton: false,
-            routingNumber: undefined,
-            accountNumber: undefined
+            routingNumber: "",
+            accountNumber: ""
         };
     }
 
@@ -24,12 +24,12 @@ export default class BankDetailsContainer extends Component {
         //hit addUpdatebankaccount, if yes show edit button, if no show save button
         getAddUpdateBankAccount("stripe")
             .then((result) => {
-                if (result.pg.error) {
-                    console.log(result);
-                } else if (result.pg.data) {
+                if (!result.pg.error) {
                     this.setState((prevState) => ({
                         ...prevState,
-                        showEditButton: true
+                        showEditButton: true,
+                        routingNumber: result.pg.routing_number,
+                        accountNumber: "XXXXX" + result.pg.last4
                     }));
                 }
             })
@@ -43,12 +43,14 @@ export default class BankDetailsContainer extends Component {
             });
     }
 
+    onEdit = () => {
+        this.setState({showEditButton: false, routingNumber: "", accountNumber: ""});
+    };
+
     onFieldChange = (field, value) => {
-        //Not working
-        this.setState((prevState) => ({
-            ...prevState,
-            field: value
-        }));
+        this.setState({
+            [field]: value
+        });
     };
 
     getBadge = () => {
@@ -158,7 +160,6 @@ export default class BankDetailsContainer extends Component {
             this.props.userInfo.getData("firstName") + " " + this.props.userInfo.getData("lastName");
         let routingNumber = this.state.routingNumber;
         let accountNumber = this.state.accountNumber;
-        console.log(routingNumber, accountNumber);
 
         let that = this;
         return new Promise(function(resolve, reject) {
@@ -172,7 +173,6 @@ export default class BankDetailsContainer extends Component {
                     account_holder_type: accountType
                 })
                 .then((result) => {
-                    console.log(result);
                     if (result.error) {
                         alertUser.init({
                             message: result.error.message,
@@ -181,13 +181,11 @@ export default class BankDetailsContainer extends Component {
                         });
                         reject(result.error);
                     } else if (result.token) {
-                        console.log("Hurray", result.token);
-                        submitToken(result.token.id);
+                        that.submitToken(result.token.id);
                         resolve();
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
                     reject(error);
                 });
         });
@@ -195,15 +193,21 @@ export default class BankDetailsContainer extends Component {
 
     submitToken = (tokenID) => {
         // FIXME
-        postAddUpdateBankAccount("stripe", tokenID)
+        postAddUpdateBankAccount("stripe", {token: tokenID})
             .then((result) => {
                 if (result.pg.error) {
-                    console.log(result);
-                } else if (result.pg.data) {
+                    alertUser.init({
+                        message: result.pg.error,
+                        alertType: "danger",
+                        autoHide: false
+                    });
+                } else {
                     this.setState((prevState) => ({
                         ...prevState,
-                        showEditButton: true
+                        showEditButton: true,
+                        accountNumber: "XXXXX" + result.pg.last4
                     }));
+                    this.props.verifyPayoutInfo();
                 }
             })
             .catch((error) => {
@@ -253,41 +257,76 @@ export default class BankDetailsContainer extends Component {
                                 <div className={"row"}>
                                     <div className="col-12">
                                         <div className="input no-background">
-                                            <input
-                                                type="text"
-                                                className="inp-routing-number form-control"
-                                                name="routing_number"
-                                                placeholder="BSB"
-                                                onChange={(e) => this.onFieldChange("routingNumber", e.target.value)}
-                                            />
+                                            {this.state.showEditButton ? (
+                                                <input
+                                                    type="text"
+                                                    className={
+                                                        "inp-routing-number form-control " + styles.disabledInput
+                                                    }
+                                                    name="routing_number"
+                                                    placeholder="BSB"
+                                                    onChange={(e) =>
+                                                        this.onFieldChange("routingNumber", e.target.value)
+                                                    }
+                                                    value={this.state.routingNumber}
+                                                    disabled
+                                                />
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    className="inp-routing-number form-control"
+                                                    name="routing_number"
+                                                    placeholder="BSB"
+                                                    onChange={(e) =>
+                                                        this.onFieldChange("routingNumber", e.target.value)
+                                                    }
+                                                    value={this.state.routingNumber}
+                                                />
+                                            )}
                                         </div>
                                         <div id="bank-error-message" className="invalid-feedback" />
                                     </div>
                                     <div className="col-12">
                                         <div className="input no-background">
-                                            <input
-                                                type="text"
-                                                className="inp-account-number form-control"
-                                                name="account_number"
-                                                placeholder="Account Number"
-                                                onChange={(e) => this.onFieldChange("accountNumber", e.target.value)}
-                                            />
+                                            {this.state.showEditButton ? (
+                                                <input
+                                                    type="text"
+                                                    className={
+                                                        "inp-account-number form-control " + styles.disabledInput
+                                                    }
+                                                    name="account_number"
+                                                    placeholder="Account Number"
+                                                    onChange={(e) =>
+                                                        this.onFieldChange("accountNumber", e.target.value)
+                                                    }
+                                                    value={this.state.accountNumber}
+                                                    disabled
+                                                />
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    className="inp-account-number form-control"
+                                                    name="account_number"
+                                                    placeholder="Account Number"
+                                                    onChange={(e) =>
+                                                        this.onFieldChange("accountNumber", e.target.value)
+                                                    }
+                                                    value={this.state.accountNumber}
+                                                />
+                                            )}
                                         </div>
                                         <div id="bank-warning-message" className="invalid-feedback" />
                                     </div>
                                     <div className={"col-12"} style={{marginTop: "35px", marginBottom: "30px"}}>
                                         {this.state.showEditButton ? (
-                                            <APIRequestButton
-                                                layoutClasses={"btn float-right imp-button-style"}
-                                                cTextOptions={{
-                                                    default: "Edit",
-                                                    loading: " ",
-                                                    done: "Saved",
-                                                    error: "Error!"
-                                                }}
-                                                callback={this.onSave}
-                                                containerID={"collapsibleBankDetails"}
-                                            />
+                                            <a
+                                                type="button"
+                                                className="btn float-right imp-button-style"
+                                                onClick={this.onEdit}
+                                                tabIndex={"0"}
+                                            >
+                                                Edit
+                                            </a>
                                         ) : (
                                             <APIRequestButton
                                                 layoutClasses={"btn float-right imp-button-style"}

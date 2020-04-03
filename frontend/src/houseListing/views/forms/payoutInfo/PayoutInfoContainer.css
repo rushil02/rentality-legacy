@@ -150,3 +150,7 @@
 .fadedBlue {
     color: #007bffb8 !important;
 }
+
+.disabledInput {
+    background: #d8d8d824 !important;
+}
