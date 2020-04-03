@@ -1,18 +1,18 @@
-import React, { Component, Suspense } from "react";
-import { Redirect } from "react-router-dom";
+import React, {Component, Suspense} from "react";
+import {Redirect} from "react-router-dom";
 import styles from "./Navigator.css";
 import FormSubNav from "./FormSubNav";
 import FormNav from "./FormNav";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCog, faTimes} from "@fortawesome/free-solid-svg-icons";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
-import { withRouter } from "react-router-dom";
-import { activateHouse, deleteHouse } from "houseListing/services";
-import { alertUser } from "core/alert/Alert";
-import { FormOptionsCache } from "houseListing/dataContext";
-import { reverse } from "named-urls";
+import {withRouter} from "react-router-dom";
+import {activateHouse, deleteHouse} from "houseListing/services";
+import {alertUser} from "core/alert/Alert";
+import {FormOptionsCache} from "houseListing/dataContext";
+import {reverse} from "named-urls";
 import routes from "routes";
-import { DeleteModal, ActivateModal } from "./Modals";
+import {DeleteModal, ActivateModal} from "./Modals";
 
 const exitRoute = reverse(routes.react.dashboard.base);
 
@@ -22,20 +22,16 @@ class Navigator extends Component {
         this.state = {};
     }
 
-    onNext = data => {
+    onNext = (data) => {
         if (this.props.mode === "create") {
             this.props.navContext.data.nextToEditMode(data.getData("UUID"));
         } else {
-            this.props.history.push(
-                "/" + (this.props.navContext.data.currForm + 1)
-            );
+            this.props.history.push("/" + (this.props.navContext.data.currForm + 1));
         }
     };
 
     onBack = () => {
-        this.props.history.push(
-            "/" + (this.props.navContext.data.currForm - 1)
-        );
+        this.props.history.push("/" + (this.props.navContext.data.currForm - 1));
     };
 
     onExit = () => {
@@ -50,7 +46,7 @@ class Navigator extends Component {
                     .then(() => {
                         resolve();
                     })
-                    .catch(() => alertUser.init({ stockAlertType: "generic" }));
+                    .catch(() => alertUser.init({stockAlertType: "generic"}));
             });
         }
     };
@@ -85,8 +81,8 @@ class Navigator extends Component {
                         resolve();
                     })
                     .catch(() => {
-                        alertUser.init({ stockAlertType: "generic" });
-                        reject()
+                        alertUser.init({stockAlertType: "generic"});
+                        reject();
                     });
             });
         }
@@ -112,6 +108,7 @@ export default withRouter(Navigator);
 
 function NavigatorComponent(props) {
     let backBtn;
+    let saveNextBtn;
     let currFormState;
     let currFormCallback;
     try {
@@ -129,100 +126,89 @@ function NavigatorComponent(props) {
         backBtn = "";
     } else {
         backBtn = (
-            <a
-                type="button"
-                className={"btn float-left " + styles.btn}
-                id="prev-step"
-                onClick={props.onBack}
-            >
+            <a type="button" className={"btn float-left " + styles.btn} id="prev-step" onClick={props.onBack}>
                 Back
             </a>
+        );
+    }
+
+    if (props.navContext.data.currForm === 12) {
+        saveNextBtn = (
+            <APIRequestButton
+                cTextOptions={{
+                    default: "Activate",
+                    loading: "Activating",
+                    done: "Activated",
+                    error: "Error!"
+                }}
+                callback={currFormCallback}
+                onSuccess={props.onNext}
+                onFailure={() => {}}
+                containerID={"main-input-page"}
+                formState={currFormState}
+                isDisabled={currFormState === "saved" ? false : true}
+            />
+        );
+    } else {
+        saveNextBtn = (
+            <APIRequestButton
+                textOption={"saveNext"}
+                callback={currFormCallback}
+                onSuccess={props.onNext}
+                onFailure={() => {}}
+                containerID={"main-input-page"}
+                formState={currFormState}
+            />
         );
     }
 
     return (
         <React.Fragment>
             <div className={styles.pageForm} id="main-input-page">
-                <FormNav
-                    mode={props.mode}
-                    currForm={props.navContext.data.currForm}
-                />
+                <FormNav mode={props.mode} currForm={props.navContext.data.currForm} />
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-xl-1" />
                         <div className="col-xl-10">
                             <div className="right">
-                                <FormSubNav
-                                    mode={props.mode}
-                                    currForm={props.navContext.data.currForm}
-                                />
+                                <FormSubNav mode={props.mode} currForm={props.navContext.data.currForm} />
                                 {props.mode === "edit" ? (
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="dropdown float-right">
                                                 <div
-                                                    className={
-                                                        "dropdown-toggle " +
-                                                        styles.formSettings
-                                                    }
+                                                    className={"dropdown-toggle " + styles.formSettings}
                                                     data-toggle="dropdown"
                                                     aria-haspopup="true"
                                                     aria-expanded="false"
                                                 >
-                                                    <FontAwesomeIcon
-                                                        icon={faCog}
-                                                        size="lg"
-                                                    />
+                                                    <FontAwesomeIcon icon={faCog} size="lg" />
                                                 </div>
                                                 <div
                                                     className={
-                                                        "dropdown-menu dropdown-menu-right " +
-                                                        styles.dropdownList
+                                                        "dropdown-menu dropdown-menu-right " + styles.dropdownList
                                                     }
                                                     id="dropdown-list"
                                                 >
                                                     <APIRequestButton
-                                                        layoutClasses={
-                                                            "dropdown-item " +
-                                                            styles.dropdownItem
-                                                        }
+                                                        layoutClasses={"dropdown-item " + styles.dropdownItem}
                                                         textOption={"save"}
                                                         loaderSize={6}
-                                                        callback={
-                                                            currFormCallback
-                                                        }
-                                                        containerID={
-                                                            "main-input-page"
-                                                        }
+                                                        callback={currFormCallback}
+                                                        containerID={"main-input-page"}
                                                     />
                                                     <APIRequestButton
-                                                        layoutClasses={
-                                                            "dropdown-item " +
-                                                            styles.dropdownItem
-                                                        }
+                                                        layoutClasses={"dropdown-item " + styles.dropdownItem}
                                                         textOption={"saveExit"}
                                                         loaderSize={6}
-                                                        callback={
-                                                            currFormCallback
-                                                        }
+                                                        callback={currFormCallback}
                                                         onSuccess={props.onExit}
-                                                        containerID={
-                                                            "main-input-page"
-                                                        }
+                                                        containerID={"main-input-page"}
                                                     />
                                                     <hr />
-                                                    <ActivateModal
-                                                        onActivate={
-                                                            props.onActivate
-                                                        }
-                                                    />
+                                                    <ActivateModal onActivate={props.onActivate} />
                                                     <hr />
-                                                    <DeleteModal
-                                                        onDelete={
-                                                            props.onDelete
-                                                        }
-                                                        onSuccess={props.onExit}
-                                                    />
+                                                    <DeleteModal onDelete={props.onDelete} onSuccess={props.onExit} />
                                                 </div>
                                             </div>
                                         </div>
@@ -233,14 +219,15 @@ function NavigatorComponent(props) {
                                     <div className="col-md-12">
                                         <div className={styles.button}>
                                             {backBtn}
-                                            <APIRequestButton
+                                            {saveNextBtn}
+                                            {/* <APIRequestButton
                                                 textOption={"saveNext"}
                                                 callback={currFormCallback}
                                                 onSuccess={props.onNext}
                                                 onFailure={() => {}}
                                                 containerID={"main-input-page"}
                                                 formState={currFormState}
-                                            />
+                                            /> */}
                                         </div>
                                     </div>
                                 </div>

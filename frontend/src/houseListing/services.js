@@ -411,3 +411,29 @@ export function updatePaymentInfo(pg_code, data) {
             });
     });
 }
+
+export function getAddUpdateBankAccount(pg_code) {
+    return new Promise(function(resolve, reject) {
+        axios
+            .get(reverse(routes.house.addUpdateBankAccount, {pg_code: pg_code}))
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((error) => {
+                reject(handleError(error).error);
+            });
+    });
+}
+
+export function postAddUpdateBankAccount(pg_code, data) {
+    return new Promise(function(resolve, reject) {
+        axios
+            .post(reverse(routes.house.addUpdateBankAccount, {pg_code: pg_code}), data)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((error) => {
+                reject(handleError(error).error);
+            });
+    });
+}

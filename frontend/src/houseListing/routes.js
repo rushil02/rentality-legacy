@@ -37,6 +37,7 @@ export default {
         welcomeTags: "welcome-tags/:houseUUID",
         checkPayoutDetails: "check-payout-details/:houseUUID",
         createPaymentInfo: "/pg/add-ho-acc/stripe/:houseUUID",
-        updatePaymentInfo: "/pg/update-ho-acc/:pg_code"
+        updatePaymentInfo: "/pg/update-ho-acc/:pg_code",
+        addUpdateBankAccount: "/pg/update-ho-ba/:pg_code"
     }
 };

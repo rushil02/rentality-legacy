@@ -29,6 +29,12 @@ export default class PGInfoContainer extends Component {
                     Required
                 </span>
             );
+        } else if (this.props.statusPI === "Complete" && this.props.statusII === "Complete") {
+            return (
+                <span className="badge badge-success" style={{marginLeft: "20px"}}>
+                    Complete
+                </span>
+            );
         } else {
             return null;
         }
@@ -195,11 +201,13 @@ export default class PGInfoContainer extends Component {
                                             layoutClasses={"btn float-right " + styles.stripeSaveBtn}
                                             cTextOptions={{
                                                 default: "Add Details",
-                                                loading: "Processing",
+                                                loading: " ",
                                                 done: "Redirecting...",
                                                 error: "Error!"
                                             }}
                                             callback={this.onSave}
+                                            containerID={"collapsiblePaymentInfo"}
+                                            loaderColor={"#f8bf25"}
                                         />
                                     </div>
                                     <div className="col-12">

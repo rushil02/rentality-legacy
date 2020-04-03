@@ -6,16 +6,51 @@ import {PulseLoader} from "react-spinners";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronUp, faPen, faPlus} from "@fortawesome/free-solid-svg-icons";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
-import {postPaymentInfo} from "houseListing/services";
+import {getAddUpdateBankAccount, postAddUpdateBankAccount} from "houseListing/services";
 import styles from "./PayoutInfoContainer.css";
 
 export default class BankDetailsContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modeEditing: false
+            modeEditing: false,
+            showEditButton: false,
+            routingNumber: undefined,
+            accountNumber: undefined
         };
     }
+
+    componentDidMount() {
+        //hit addUpdatebankaccount, if yes show edit button, if no show save button
+        getAddUpdateBankAccount("stripe")
+            .then((result) => {
+                if (result.pg.error) {
+                    console.log(result);
+                } else if (result.pg.data) {
+                    this.setState((prevState) => ({
+                        ...prevState,
+                        showEditButton: true
+                    }));
+                }
+            })
+            .catch((error) => {
+                let errorData = error.response.data.details;
+                alertUser.init({
+                    message: errorData,
+                    alertType: "danger",
+                    autoHide: false
+                });
+            });
+    }
+
+    onFieldChange = (field, value) => {
+        //Not working
+        this.setState((prevState) => ({
+            ...prevState,
+            field: value
+        }));
+    };
+
     getBadge = () => {
         if (this.props.statusBI === "Incomplete") {
             return (
@@ -27,6 +62,18 @@ export default class BankDetailsContainer extends Component {
             return (
                 <span className="badge badge-danger" style={{marginLeft: "20px"}}>
                     Please Complete Payment Information
+                </span>
+            );
+        } else if (this.props.statusEA === "Incomplete") {
+            return (
+                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
+                    Required
+                </span>
+            );
+        } else if (this.props.statusEA === "Complete") {
+            return (
+                <span className="badge badge-success" style={{marginLeft: "20px"}}>
+                    Complete
                 </span>
             );
         } else {
@@ -105,31 +152,75 @@ export default class BankDetailsContainer extends Component {
     };
 
     onSave = () => {
-        const that = this;
-        let data = {success_url: window.location.pathname.slice(1), failure_url: window.location.pathname.slice(1)};
+        // FIXME: move to dynamic fields APIModel
+        let accountType = this.props.userInfo.getData("accountType");
+        let accountHolderName =
+            this.props.userInfo.getData("firstName") + " " + this.props.userInfo.getData("lastName");
+        let routingNumber = this.state.routingNumber;
+        let accountNumber = this.state.accountNumber;
+        console.log(routingNumber, accountNumber);
+
+        let that = this;
         return new Promise(function(resolve, reject) {
-            postPaymentInfo(that.props.houseUUID, data)
+            that.props.stripe
+                .createToken("bank_account", {
+                    country: "AU",
+                    currency: "aud",
+                    routing_number: routingNumber,
+                    account_number: accountNumber,
+                    account_holder_name: accountHolderName,
+                    account_holder_type: accountType
+                })
                 .then((result) => {
-                    that.redirectToStripe(result.pg.data);
-                    resolve(result);
+                    console.log(result);
+                    if (result.error) {
+                        alertUser.init({
+                            message: result.error.message,
+                            alertType: "danger",
+                            autoHide: false
+                        });
+                        reject(result.error);
+                    } else if (result.token) {
+                        console.log("Hurray", result.token);
+                        submitToken(result.token.id);
+                        resolve();
+                    }
                 })
                 .catch((error) => {
-                    let errorData = error.response.data.details;
-                    alertUser.init({
-                        message: errorData,
-                        alertType: "danger",
-                        autoHide: false
-                    });
+                    console.log(error);
                     reject(error);
                 });
         });
     };
 
+    submitToken = (tokenID) => {
+        // FIXME
+        postAddUpdateBankAccount("stripe", tokenID)
+            .then((result) => {
+                if (result.pg.error) {
+                    console.log(result);
+                } else if (result.pg.data) {
+                    this.setState((prevState) => ({
+                        ...prevState,
+                        showEditButton: true
+                    }));
+                }
+            })
+            .catch((error) => {
+                let errorData = error.response.data.details;
+                alertUser.init({
+                    message: errorData,
+                    alertType: "danger",
+                    autoHide: false
+                });
+            });
+    };
+
     render() {
         if (this.state.modeEditing) {
-            $("#collapsiblePaymentInfo").collapse("show");
+            $("#collapsibleBankDetails").collapse("show");
         } else {
-            $("#collapsiblePaymentInfo").collapse("hide");
+            $("#collapsibleBankDetails").collapse("hide");
         }
         return (
             <React.Fragment>
@@ -153,7 +244,7 @@ export default class BankDetailsContainer extends Component {
 
                         <div className={styles.cardButtonGroup}>{this.getEditButton()}</div>
                     </div>
-                    <div className={"collapse " + styles.cardContainer} id={"collapsiblePaymentInfo"}>
+                    <div className={"collapse " + styles.cardContainer} id={"collapsibleBankDetails"}>
                         <div
                             className={"col-11 " + styles.cardContainer}
                             style={{borderTop: "1px solid #e9ebf0", padding: "40px"}}
@@ -161,42 +252,55 @@ export default class BankDetailsContainer extends Component {
                             <div className={"col-10"}>
                                 <div className={"row"}>
                                     <div className="col-12">
-                                        <div className={styles.stripeInformation}>
-                                            <p className={styles.stripeDetail}>
-                                                We use Stripe to make sure you get paid on time and to keep your
-                                                personal bank and details secure. Click <strong>Add Details</strong> to
-                                                set up your payments on Stripe.
-                                            </p>
+                                        <div className="input no-background">
+                                            <input
+                                                type="text"
+                                                className="inp-routing-number form-control"
+                                                name="routing_number"
+                                                placeholder="BSB"
+                                                onChange={(e) => this.onFieldChange("routingNumber", e.target.value)}
+                                            />
                                         </div>
-                                    </div>
-                                    <div className="col-7"></div>
-                                    <div className="col-5">
-                                        <APIRequestButton
-                                            layoutClasses={"btn float-right " + styles.stripeSaveBtn}
-                                            cTextOptions={{
-                                                default: "Add Details",
-                                                loading: "Processing",
-                                                done: "Redirecting...",
-                                                error: "Error!"
-                                            }}
-                                            callback={this.onSave}
-                                        />
+                                        <div id="bank-error-message" className="invalid-feedback" />
                                     </div>
                                     <div className="col-12">
-                                        <p className={styles.stripeDetail + " " + styles.alignRight}>
-                                            By clicking, you agree to{" "}
-                                            <a className={styles.fadedBlue} href="/pages/tos/">
-                                                our terms{" "}
-                                            </a>
-                                            and the{" "}
-                                            <a
-                                                className={styles.fadedBlue}
-                                                href="https://stripe.com/au/connect-account/legal"
-                                            >
-                                                Stripe Connected Account Agreement
-                                            </a>
-                                            .
-                                        </p>
+                                        <div className="input no-background">
+                                            <input
+                                                type="text"
+                                                className="inp-account-number form-control"
+                                                name="account_number"
+                                                placeholder="Account Number"
+                                                onChange={(e) => this.onFieldChange("accountNumber", e.target.value)}
+                                            />
+                                        </div>
+                                        <div id="bank-warning-message" className="invalid-feedback" />
+                                    </div>
+                                    <div className={"col-12"} style={{marginTop: "35px", marginBottom: "30px"}}>
+                                        {this.state.showEditButton ? (
+                                            <APIRequestButton
+                                                layoutClasses={"btn float-right imp-button-style"}
+                                                cTextOptions={{
+                                                    default: "Edit",
+                                                    loading: " ",
+                                                    done: "Saved",
+                                                    error: "Error!"
+                                                }}
+                                                callback={this.onSave}
+                                                containerID={"collapsibleBankDetails"}
+                                            />
+                                        ) : (
+                                            <APIRequestButton
+                                                layoutClasses={"btn float-right imp-button-style"}
+                                                cTextOptions={{
+                                                    default: "Save",
+                                                    loading: "Saving",
+                                                    done: "Saved",
+                                                    error: "Error!"
+                                                }}
+                                                callback={this.onSave}
+                                                containerID={"collapsibleBankDetails"}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>
