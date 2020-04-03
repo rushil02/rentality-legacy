@@ -168,6 +168,7 @@ class StripePaymentGateway(PaymentGatewayBase):
 
     def add_update_bank_account(self, homeowner):
         acc_id = self.get_payout_account_id(homeowner.account_details)
+
         try:
             ba_id = self._execute_request(
                 stripe.Account.list_external_accounts,
@@ -176,13 +177,7 @@ class StripePaymentGateway(PaymentGatewayBase):
                 limit=1
             )['data'][0]['id']
         except IndexError:
-            pass
-        else:
-            self._execute_request(
-                stripe.Account.delete_external_account,
-                acc_id,
-                ba_id
-            )
+            ba_id = None
 
         response = self._execute_idempotent_request(
             stripe.Account.create_external_account,
@@ -190,27 +185,16 @@ class StripePaymentGateway(PaymentGatewayBase):
             default_for_currency=True,
             external_account=homeowner.request_data['token']
         )
-        user_response = {'routing_number': response["routing_number"], 'last4': response["last4"]}
-        return PGTransaction(response=response, user_response=user_response)
 
-    def remove_bank_account(self, homeowner):
-        acc_id = self.get_payout_account_id(homeowner.account_details)
-        try:
-            ba_id = self._execute_request(
-                stripe.Account.list_external_accounts,
-                acc_id,
-                object="bank_account",
-                limit=1
-            )['data'][0]['id']
-        except IndexError:
-            raise PGTransactionError("Invalid Request", {})
-        else:
-            response = self._execute_request(
+        if ba_id:
+            self._execute_request(
                 stripe.Account.delete_external_account,
                 acc_id,
                 ba_id
             )
-            return PGTransaction(response=response, user_response={"message": "Account Deleted"})
+
+        user_response = {'routing_number': response["routing_number"], 'last4': response["last4"]}
+        return PGTransaction(response=response, user_response=user_response)
 
     def get_bank_account(self, homeowner):
         acc_id = self.get_payout_account_id(homeowner.account_details)
