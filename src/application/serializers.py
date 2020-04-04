@@ -9,7 +9,6 @@ from utils.serializer_fields import DateRangeField
 
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
-
         model = Application
         fields = '__all__'
         read_only_fields = (
@@ -26,12 +25,12 @@ class ApplicationInfoSerializer(serializers.ModelSerializer):
     tenant = TenantInfoSerializer()
     booking_dates = DateRangeField(source='date')
     status = serializers.CharField(source='get_status_display')
+
     # FIXME: change house_meta to specific information
 
     class Meta:
         model = Application
-        fields = ('uuid', 'house_meta', 'tenant', 'rent',
-                  'status', 'booking_dates', 'booking_amount')
+        fields = ('uuid', 'house_meta', 'tenant', 'rent', 'status', 'booking_dates', 'booking_amount')
 
 
 class BookingInfoSerializer(serializers.Serializer):

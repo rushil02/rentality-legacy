@@ -113,6 +113,8 @@ class House(models.Model):
     promo_codes = models.ManyToManyField('promotions.PromotionalCode', blank=True)
 
     business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT, null=True,
+                                        blank=True)
 
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),
@@ -133,7 +135,8 @@ class House(models.Model):
     other_rules = models.TextField(blank=True, null=True)
 
     # FIXME: [URGENT] validate related cancellation_policy exists in the related business model configuration.
-    cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
+    cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT, null=True,
+                                            blank=True)
 
     other_people_description = models.TextField(blank=True, null=True)
 
@@ -180,7 +183,7 @@ class House(models.Model):
         return "%s" % self.home_type.name
 
     def get_rent_per_day(self):
-        return Decimal(self.rent)/7
+        return Decimal(self.rent) / 7
 
     # FIXME: needs to be removed
     def get_thumbnail_2(self):

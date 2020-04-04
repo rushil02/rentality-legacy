@@ -92,10 +92,6 @@ class InitiateBookingView(APIView):
             else:
                 tenant_user = user
 
-            payment_gateway = ()
-
-            booking.use_payment_gateway(payment_gateway)
-
             application_db = Application(
                 house=house,
                 tenant=tenant_user.tenant,

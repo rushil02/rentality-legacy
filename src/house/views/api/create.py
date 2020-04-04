@@ -17,7 +17,6 @@ from house.serializers.create import ImageUploadSerializer, NeighbourhoodDescrip
     WelcomeTagSerializer, HouseAuthSerializer, AvailabilityAuthSerializer, ImageSerializer, \
     HouseRuleCreateSerializer, FacilitySerializer, RuleReadSerializer
 from payment_gateway.adapters import PGTransactionError
-from payment_gateway.models import PaymentGatewayLocation
 from payment_gateway.utils import PaymentGateway
 from user_custom.models import Account
 from utils.api_thumbnailer import resize_image
@@ -116,52 +115,13 @@ class AvailabilityView(APIView):
         if obj_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         availability = Availability.objects.get(pk=obj_id, house__uuid=house_uuid)
-        self.check_object_permissions(request, availability)
         serializer = self.serializer_class(availability, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class GetHouseListingConstraintsView(APIView):
-    """
-    Requires Home owner's location and House's location
-    """
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, house_uuid):
-        """
-        Returns constraints on some attributes in reference to a house
-        :param request:
-        :return:
-        """
-        house = get_object_or_404(House.objects.all(), uuid=house_uuid)
-        # data = BusinessModel(house.business_config).to_dict()
-        data = {
-
-        }
-        return Response(data, status=status.HTTP_200_OK)
-
-
-class GetHouseBusinessBehaviourDescriptionView(APIView):
-    """
-    Requires a house with BusinessModelConfiguration
-    """
-
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, house_uuid):
-        """
-        Returns fee and transaction model
-        :param request:
-        :return:
-        """
-        house = get_object_or_404(House.objects.all(), uuid=house_uuid)
-        data = house.business_config.get_description()
-        return Response(data, status=status.HTTP_200_OK)
-
-
-class PromoCodeView(APIView):
+class PromoCodeView(APIView):  # TODO
     """
     Removes/Adds promo-code in reference to a house.
     Edit Business-config and Re-validate house (if required)
@@ -180,14 +140,12 @@ class FormOptionsView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        # FIXME add cancellation policy
         data = {
             'field_options': {
                 'furnished': {item[0]: item[1] for item in House.FURNISHED_OPTIONS},
                 'home_type': {home_type.id: home_type.name for home_type in HomeType.objects.all()},
             },
             'required_fields': House.REQUIRED_FIELDS,
-            'status': 'j',
         }
         return Response(data, status=status.HTTP_200_OK)
 
@@ -373,7 +331,7 @@ class ApplicableCancellationPolicyListView(APIView):
 
 
 class CancellationPolicyView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
     serializer_class = CancellationPolicySerializer
 
     def get_object(self, request, house_uuid):
@@ -381,11 +339,13 @@ class CancellationPolicyView(APIView):
 
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
+        self.check_object_permissions(request, house)
         serializer = self.serializer_class(house.cancellation_policy)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
+        self.check_object_permissions(request, house)
         try:
             policy = CancellationPolicy.objects.get(id=request.data['id'], businessmodelconfiguration__house=house)
         except CancellationPolicy.DoesNotExist:
@@ -397,7 +357,7 @@ class CancellationPolicyView(APIView):
 
 
 class NeighbourhoodDescriptorListView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
     serializer_class = NeighbourhoodDescriptorSerializer
 
     def get_object(self, request, house_uuid):
@@ -411,12 +371,14 @@ class NeighbourhoodDescriptorListView(APIView):
 
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
+        self.check_object_permissions(request, house)
         qs = self.get_descriptors(house)
         serializer = self.serializer_class(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
+        self.check_object_permissions(request, house)
         serializer = self.serializer_class(data=request.data, many=True)
         if serializer.is_valid(raise_exception=True):
             objs_set = serializer.save()
@@ -428,7 +390,7 @@ class NeighbourhoodDescriptorListView(APIView):
 
 
 class WelcomeTagsListView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
     serializer_class = WelcomeTagSerializer
 
     def get_object(self, request, house_uuid):
@@ -442,12 +404,14 @@ class WelcomeTagsListView(APIView):
 
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
+        self.check_object_permissions(request, house)
         qs = self.get_tags(house)
         serializer = self.serializer_class(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
+        self.check_object_permissions(request, house)
         serializer = self.serializer_class(data=request.data, many=True)
         if serializer.is_valid(raise_exception=True):
             objs_set = serializer.save()
@@ -472,30 +436,28 @@ class CheckPayoutDetailsView(APIView):
             response = {'msg': 'Billing information is missing', 'code': 'BIM'}
             return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-        payment_gateway_location = PaymentGatewayLocation.objects.get_location_default(
+        payment_gateway = PaymentGateway.load_location_default(
+            billing_location=user.get_billing_location(),
             house_location=house.location,
-            billing_location=house.home_owner.user.get_billing_location()
         )
-
-        pg = PaymentGateway(payment_gateway_location)
 
         try:
             account_obj = Account.objects.get(
                 user=user,
-                payment_gateway=payment_gateway_location.payment_gateway
+                payment_gateway=payment_gateway.db
             )
             account_obj.get_details('account_id')
         except (Account.DoesNotExist, KeyError):
             response = {
                 'msg': 'Payment Gateway information is missing',
                 'code': 'PGM',
-                'payment_gateway': payment_gateway_location.payment_gateway.code
+                'payment_gateway': payment_gateway.db.code
             }
             return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
         else:
-            pg.set_homeowner_user(user)
+            payment_gateway.set_homeowner_user(user)
             try:
-                pgt = pg.verify_payout_account()
+                pgt = payment_gateway.verify_payout_account()
             except PGTransactionError as e:
                 return Response({'details': e.user_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
@@ -503,14 +465,14 @@ class CheckPayoutDetailsView(APIView):
                     response = {
                         'msg': 'Identity information is missing',
                         'code': 'IIM',
-                        'payment_gateway': payment_gateway_location.payment_gateway.code
+                        'payment_gateway': payment_gateway.db.code
                     }
                     return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
                 if not pgt.user_response['external_account']:
                     response = {
                         'msg': 'External Account is missing',
                         'code': 'EAM',
-                        'payment_gateway': payment_gateway_location.payment_gateway.code
+                        'payment_gateway': payment_gateway.db.code
                     }
                     return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
 

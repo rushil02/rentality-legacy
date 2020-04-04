@@ -171,6 +171,11 @@ class PersonalityTag(models.Model):
         return "%s" % self.verbose
 
 
+class ActiveAccountsManager(models.Manager):
+    def get_queryset(self):
+        return super(ActiveAccountsManager, self).get_queryset().filter(status='A')
+
+
 class Account(models.Model):
     """
     Stores all the Payment Gateway accounts that exist for a user.
@@ -183,7 +188,15 @@ class Account(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     details = JSONField(default=dict)
     payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
+    STATE_LIST = (
+        ('A', 'Active'),
+        ('I', 'Inactive')
+    )
+    status = models.CharField(max_length=1, choices=STATE_LIST, default='A')
     create_time = models.DateTimeField(auto_now_add=True)
+
+    objects = ActiveAccountsManager()
+    all_objects = models.Manager()
 
     def __str__(self):
         return "%s" % self.user

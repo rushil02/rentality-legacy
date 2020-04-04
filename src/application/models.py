@@ -166,6 +166,7 @@ class AccountDetail(models.Model):
 
     business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
     cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT)
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
 
     tenant = JSONField()
     home_owner = JSONField()

@@ -16,7 +16,7 @@ export default class BankDetailsContainer extends Component {
             modeEditing: false,
             showEditButton: false,
             routingNumber: "",
-            accountNumber: ""
+            accountNumber: "",
         };
     }
 
@@ -29,7 +29,7 @@ export default class BankDetailsContainer extends Component {
                         ...prevState,
                         showEditButton: true,
                         routingNumber: result.pg.routing_number,
-                        accountNumber: "XXXXX" + result.pg.last4
+                        accountNumber: "XXXXX" + result.pg.last4,
                     }));
                 }
             })
@@ -38,7 +38,7 @@ export default class BankDetailsContainer extends Component {
                 alertUser.init({
                     message: errorData,
                     alertType: "danger",
-                    autoHide: false
+                    autoHide: false,
                 });
             });
     }
@@ -49,7 +49,7 @@ export default class BankDetailsContainer extends Component {
 
     onFieldChange = (field, value) => {
         this.setState({
-            [field]: value
+            [field]: value,
         });
     };
 
@@ -99,7 +99,7 @@ export default class BankDetailsContainer extends Component {
                 action: (e) => {
                     e.stopPropagation();
                 },
-                icon: faPlus
+                icon: faPlus,
             };
         } else if (this.state.modeEditing) {
             buttonConfig = {
@@ -108,7 +108,7 @@ export default class BankDetailsContainer extends Component {
                     e.stopPropagation();
                     this.toggleEditState(false);
                 },
-                icon: faChevronUp
+                icon: faChevronUp,
             };
         } else {
             buttonConfig = {
@@ -117,7 +117,7 @@ export default class BankDetailsContainer extends Component {
                     e.stopPropagation();
                     this.toggleEditState(true);
                 },
-                icon: faPen
+                icon: faPen,
             };
         }
 
@@ -155,14 +155,17 @@ export default class BankDetailsContainer extends Component {
 
     onSave = () => {
         // FIXME: move to dynamic fields APIModel
-        let accountType = this.props.userInfo.getData("accountType");
+        let accountType =
+            this.props.userInfo.getData("accountType") === "Business"
+                ? "company"
+                : this.props.userInfo.getData("accountType");
         let accountHolderName =
             this.props.userInfo.getData("firstName") + " " + this.props.userInfo.getData("lastName");
         let routingNumber = this.state.routingNumber;
         let accountNumber = this.state.accountNumber;
 
         let that = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             that.props.stripe
                 .createToken("bank_account", {
                     country: "AU",
@@ -170,14 +173,14 @@ export default class BankDetailsContainer extends Component {
                     routing_number: routingNumber,
                     account_number: accountNumber,
                     account_holder_name: accountHolderName,
-                    account_holder_type: accountType
+                    account_holder_type: accountType,
                 })
                 .then((result) => {
                     if (result.error) {
                         alertUser.init({
                             message: result.error.message,
                             alertType: "danger",
-                            autoHide: false
+                            autoHide: false,
                         });
                         reject(result.error);
                     } else if (result.token) {
@@ -199,13 +202,13 @@ export default class BankDetailsContainer extends Component {
                     alertUser.init({
                         message: result.pg.error,
                         alertType: "danger",
-                        autoHide: false
+                        autoHide: false,
                     });
                 } else {
                     this.setState((prevState) => ({
                         ...prevState,
                         showEditButton: true,
-                        accountNumber: "XXXXX" + result.pg.last4
+                        accountNumber: "XXXXX" + result.pg.last4,
                     }));
                     this.props.verifyPayoutInfo();
                 }
@@ -215,7 +218,7 @@ export default class BankDetailsContainer extends Component {
                 alertUser.init({
                     message: errorData,
                     alertType: "danger",
-                    autoHide: false
+                    autoHide: false,
                 });
             });
     };
@@ -334,7 +337,7 @@ export default class BankDetailsContainer extends Component {
                                                     default: "Save",
                                                     loading: "Saving",
                                                     done: "Saved",
-                                                    error: "Error!"
+                                                    error: "Error!",
                                                 }}
                                                 callback={this.onSave}
                                                 containerID={"collapsibleBankDetails"}

@@ -1,7 +1,8 @@
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
 from .adapters import get_adaptor_class
-from .models import PaymentGatewayLocation
+from .models import LocationRestriction, Profile
 
 
 class User(object):
@@ -91,34 +92,68 @@ class PaymentGateway(object):
     )
 
     # region init
-    def __init__(self, payment_gateway_location):
+    def __init__(self, pg_profile):
         """
-        :param payment_gateway_location: `payment_gateway.models.PaymentGatewayLocation` object
+        :param pg_profile: `payment_gateway.models.Profile` object
         """
-        self._payment_gateway = get_adaptor_class(payment_gateway_location.payment_gateway.code)()
-        self._pg_location_db = payment_gateway_location
+        self._pg_profile = pg_profile
+        self._pg_db = pg_profile.payment_gateway
+        self._payment_gateway = get_adaptor_class(self._pg_db.code)()
         self.homeowner = None
         self.tenant = None
 
-    # @classmethod
-    # def create(cls, house_db):
-    #     """
-    #     # TODO: Enhancement can be made - if rentality's ledgers become single source of truth,
-    #             payment gateway can be chosen on other criteria than on the basis of existing
-    #             home owner account
-    #
-    #     :param house_db:
-    #     :return: cls object
-    #     """
-    #
-    #     obj = PaymentGatewayLocation.objects.get_location_default(
-    #         house_location=house_db.get_location(),
-    #         billing_location=house_db.home_owner.user.get_billing_location()
-    #     )
-    #     return cls(payment_gateway_location=obj)
+    @property
+    def db(self):
+        return self._pg_db
 
-    # def get_transaction_record(self):
-    #     return
+    @property
+    def profile(self):
+        return self._pg_profile
+
+    @classmethod
+    def load_location_default(cls, billing_location, house_location):
+        """
+        `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
+        :param billing_location: 'cities.models.Country'
+        :param house_location: 'cities.models.PostalCode'
+        :return:
+        """
+        location_restrictions = LocationRestriction.objects.filter(
+            payment_gateway_profile__country=billing_location
+        )
+
+        # FIXME: city and region filter not available as there are null link between
+        #   postal code and city and region
+        selection_priority = (house_location.country,)
+
+        for location_attr in selection_priority:
+            try:
+                loc_object = location_restrictions.get(
+                    house_location_id=location_attr.id,
+                    house_location_type=ContentType.objects.get_for_model(location_attr),
+                    active=True,
+                    default=True
+                )
+            except LocationRestriction.DoesNotExist:
+                continue
+            except LocationRestriction.MultipleObjectsReturned:
+                raise ValueError("Malformed Payment gateway restrictions.")
+            else:
+                return cls(loc_object)
+
+        # if couldn't find any location specific object
+        loc_object = location_restrictions.get(
+            house_location_id=None,
+            house_location_type=None,
+            active=True,
+            default=True
+        )
+        return cls(loc_object.payment_gateway_profile)
+
+    @classmethod
+    def create_from_homeowner(cls, user, pg_code):
+        profile = Profile.objects.get(payment_gateway__code=pg_code, country=user.get_billing_location())
+        return cls(profile)
 
     def set_homeowner_user(self, user, user_response=None, request=None):
         """
@@ -129,7 +164,7 @@ class PaymentGateway(object):
         """
         self.homeowner = User(user)
         try:
-            self.homeowner.set_pg_account(user.account_set.get(payment_gateway=self._pg_location_db.payment_gateway))
+            self.homeowner.set_pg_account(user.account_set.get(payment_gateway=self._pg_db))
         except ObjectDoesNotExist:
             raise AttributeError("Required Home Owner account is not found.")
 
@@ -194,4 +229,3 @@ class PaymentGateway(object):
 
     def update_pay_in_account(self, user, **kwargs):
         self._payment_gateway.create_home_owner_account()
-

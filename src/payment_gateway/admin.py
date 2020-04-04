@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-from payment_gateway.models import PaymentGateway, PaymentGatewayLocation
+from payment_gateway.models import PaymentGateway, Profile, LocationRestriction
 
 
-class PaymentGatewayLocationAdmin(admin.ModelAdmin):
-    list_display = ('payment_gateway', 'home_owner_billing_location', 'house_location', 'active', 'default')
-    autocomplete_fields = ('home_owner_billing_location', )
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('payment_gateway', 'country')
+    autocomplete_fields = ('country', )
 
 
 admin.site.register(PaymentGateway)
-admin.site.register(PaymentGatewayLocation, PaymentGatewayLocationAdmin)
+admin.site.register(Profile, ProfileAdmin)
+admin.site.register(LocationRestriction)
