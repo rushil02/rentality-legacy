@@ -115,6 +115,7 @@ class AvailabilityView(APIView):
         if obj_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         availability = Availability.objects.get(pk=obj_id, house__uuid=house_uuid)
+        self.check_object_permissions(request, availability)
         serializer = self.serializer_class(availability, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -331,7 +332,7 @@ class ApplicableCancellationPolicyListView(APIView):
 
 
 class CancellationPolicyView(APIView):
-    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
+    permission_classes = (IsAuthenticated, )
     serializer_class = CancellationPolicySerializer
 
     def get_object(self, request, house_uuid):
@@ -339,13 +340,11 @@ class CancellationPolicyView(APIView):
 
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        self.check_object_permissions(request, house)
         serializer = self.serializer_class(house.cancellation_policy)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        self.check_object_permissions(request, house)
         try:
             policy = CancellationPolicy.objects.get(id=request.data['id'], businessmodelconfiguration__house=house)
         except CancellationPolicy.DoesNotExist:
@@ -357,7 +356,7 @@ class CancellationPolicyView(APIView):
 
 
 class NeighbourhoodDescriptorListView(APIView):
-    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
+    permission_classes = (IsAuthenticated, )
     serializer_class = NeighbourhoodDescriptorSerializer
 
     def get_object(self, request, house_uuid):
@@ -371,14 +370,12 @@ class NeighbourhoodDescriptorListView(APIView):
 
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        self.check_object_permissions(request, house)
         qs = self.get_descriptors(house)
         serializer = self.serializer_class(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        self.check_object_permissions(request, house)
         serializer = self.serializer_class(data=request.data, many=True)
         if serializer.is_valid(raise_exception=True):
             objs_set = serializer.save()
@@ -390,7 +387,7 @@ class NeighbourhoodDescriptorListView(APIView):
 
 
 class WelcomeTagsListView(APIView):
-    permission_classes = (IsAuthenticated, IsOwnerOfRelatedHouse)
+    permission_classes = (IsAuthenticated, )
     serializer_class = WelcomeTagSerializer
 
     def get_object(self, request, house_uuid):
@@ -404,14 +401,12 @@ class WelcomeTagsListView(APIView):
 
     def get(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        self.check_object_permissions(request, house)
         qs = self.get_tags(house)
         serializer = self.serializer_class(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, house_uuid):
         house = self.get_object(request, house_uuid)
-        self.check_object_permissions(request, house)
         serializer = self.serializer_class(data=request.data, many=True)
         if serializer.is_valid(raise_exception=True):
             objs_set = serializer.save()
