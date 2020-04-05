@@ -35,6 +35,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                 onSuccess={() => {
                     handleShow();
                 }}
+                containerID={["applyPanelID", "bookingInfoPanelID"]}
             />
             <Modal
                 show={show}
