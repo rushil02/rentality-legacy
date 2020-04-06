@@ -32,7 +32,7 @@ class User(object):
         self.billing_postcode = user.userprofile.billing_postcode
         self.contact_num = user.userprofile.contact_num
 
-        self.user_data = None
+        self.user_data = None  # Contains serialized request details
         self.http_request = None
 
     def get_user_db_object(self):
@@ -151,15 +151,19 @@ class PaymentGateway(object):
         return cls(loc_object.payment_gateway_profile)
 
     @classmethod
-    def create_from_homeowner(cls, user, pg_code):
+    def init_for_homeowner(cls, user, pg_code):
         profile = Profile.objects.get(payment_gateway__code=pg_code, country=user.get_billing_location())
         return cls(profile)
 
-    def set_homeowner_user(self, user, user_response=None, request=None):
+    @classmethod
+    def init_for_house(cls, house_db):
+        return cls.init_for_homeowner(house_db.homeowner.user, house_db.payment_gateway.code)
+
+    def set_homeowner_user(self, user, user_request=None, request=None):
         """
         :param user: 'user_custom.models.User' object
         :param request: [optional] 'django.http.request' object
-        :param user_response: [optional] serialized response dictionary from user
+        :param user_request: [optional] serialized response dictionary from user
         :return:
         """
         self.homeowner = User(user)
@@ -168,21 +172,21 @@ class PaymentGateway(object):
         except ObjectDoesNotExist:
             raise AttributeError("Required Home Owner account is not found.")
 
-        if user_response:
-            self.homeowner.user_data = user_response
+        if user_request:
+            self.homeowner.user_data = user_request
         if request:
             self.homeowner.http_request = request
 
-    def set_tenant_user(self, user, user_response=None, request=None):
+    def set_tenant_user(self, user, user_request=None, request=None):
         """
         :param user: 'user_custom.models.User' object
         :param request: [optional] 'django.http.request' object
-        :param user_response: [optional] serialized response dictionary from user
+        :param user_request: [optional] serialized response dictionary from user
         :return:
         """
         self.tenant = User(user)
-        if user_response:
-            self.homeowner.user_data = user_response
+        if user_request:
+            self.homeowner.user_data = user_request
         if request:
             self.homeowner.http_request = request
 

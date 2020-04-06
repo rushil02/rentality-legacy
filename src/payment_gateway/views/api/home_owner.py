@@ -45,7 +45,7 @@ class AddHomeOwnerView(APIView):
                 )
             payment_gateway.set_homeowner_user(
                 user=request.user,
-                user_response=serializer.validated_data,
+                user_request=serializer.validated_data,
                 request=request
             )
             try:
@@ -72,7 +72,7 @@ class UpdateHomeOwnerView(APIView):
         except Account.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
-            payment_gateway = PaymentGateway.create_from_homeowner(user=request.user, pg_code=pg_code)
+            payment_gateway = PaymentGateway.init_for_homeowner(user=request.user, pg_code=pg_code)
 
         serializer = DynamicFieldsSerializer(
             data=request.data, fields=payment_gateway.profile.get_required_home_owner_fields()
@@ -80,7 +80,7 @@ class UpdateHomeOwnerView(APIView):
         if serializer.is_valid(raise_exception=True):
             payment_gateway.set_homeowner_user(
                 user=request.user,
-                user_response=serializer.validated_data,
+                user_request=serializer.validated_data,
                 request=request
             )
             try:
@@ -103,7 +103,7 @@ class GetPGDetails(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, pg_code):
-        payment_gateway = PaymentGateway.create_from_homeowner(user=request.user, pg_code=pg_code)
+        payment_gateway = PaymentGateway.init_for_homeowner(user=request.user, pg_code=pg_code)
         return Response(payment_gateway.profile.get_required_home_owner_fields(), status=status.HTTP_200_OK)
 
 
@@ -119,7 +119,7 @@ class AddUpdateBankAccountView(APIView):
         except Account.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
-            pg = PaymentGateway.create_from_homeowner(request.user, pg_code)
+            pg = PaymentGateway.init_for_homeowner(request.user, pg_code)
             pg.set_homeowner_user(
                 user=request.user,
                 request=request
@@ -142,7 +142,7 @@ class AddUpdateBankAccountView(APIView):
         except Account.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
-            pg = PaymentGateway.create_from_homeowner(request.user, pg_code)
+            pg = PaymentGateway.init_for_homeowner(request.user, pg_code)
 
             serializer = DynamicFieldsSerializer(
                 data=request.data, fields=pg.profile.get_bank_account_creation_fields()
@@ -150,7 +150,7 @@ class AddUpdateBankAccountView(APIView):
             if serializer.is_valid(raise_exception=True):
                 pg.set_homeowner_user(
                     user=request.user,
-                    user_response=serializer.validated_data,
+                    user_request=serializer.validated_data,
                     request=request
                 )
                 try:
