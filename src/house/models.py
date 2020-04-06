@@ -260,12 +260,12 @@ class House(models.Model):
         return False
 
     def save(self, *args, **kwargs):
-        self.full_clean()
         object_is_new = not self.pk
 
         if object_is_new and not self.local_timezone:
             self.local_timezone = get_timezone_for_postal_code(self.location)
 
+        self.full_clean()
         super(House, self).save(*args, **kwargs)
 
         if object_is_new:
