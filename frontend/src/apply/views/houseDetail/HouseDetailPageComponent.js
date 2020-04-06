@@ -68,8 +68,8 @@ export default class HouseDetailPageComponent extends Component {
 
         return (
             <React.Fragment>
-                {this.props.disableDisplay ? <div className={styles.disabledOverlay}/> : null}
-                <ImageCarousel images={this.props.images}/>
+                {this.props.disableDisplay ? <div className={styles.disabledOverlay} /> : null}
+                <ImageCarousel images={this.props.images} />
                 <div className={styles.pageDetail}>
                     <div className="container">
                         <div className="row" style={{paddingBottom: "120px"}}>
@@ -86,7 +86,7 @@ export default class HouseDetailPageComponent extends Component {
                                                     {furnished} {this.props.house.getData("homeType")}
                                                 </div>
                                             </div>
-                                            <div className="col-md-3"/>
+                                            <div className="col-md-3" />
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
@@ -279,7 +279,7 @@ export default class HouseDetailPageComponent extends Component {
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div id="applyPanelID">
                                         <h2
                                             className={styles.hl2}
                                             ref={(el) => {
@@ -301,16 +301,11 @@ export default class HouseDetailPageComponent extends Component {
                             </div>
 
                             <div className="d-lg-none col-12" style={{marginTop: "70px"}}>
-                                <APIRequestButton
-                                    cTextOptions={{
-                                        default: "Book Now",
-                                        loading: "Making Your Booking",
-                                        done: "Booked",
-                                        error: "Error!",
-                                    }}
-                                    callback={this.props.onApply}
-                                    onSuccess={() => {
-                                    }}
+                                <ConfirmBookingModal
+                                    onApply={this.props.onApply}
+                                    onConfirmBooking={this.props.onConfirmBooking}
+                                    ref={this.props.confirmModalRef}
+                                    applicationUUID={this.props.applicationUUID}
                                 />
                             </div>
 
@@ -368,7 +363,7 @@ function getInfoSidePanel(that, address) {
             </div>
         );
     } else {
-        return <div className="d-none d-lg-block col-lg-5 col-xl-4"/>;
+        return <div className="d-none d-lg-block col-lg-5 col-xl-4" />;
     }
 }
 
@@ -393,6 +388,6 @@ function getInfoMobilePanel(that, address) {
             </div>
         );
     } else {
-        return <div className={"d-lg-none"}/>;
+        return <div className={"d-lg-none"} />;
     }
 }

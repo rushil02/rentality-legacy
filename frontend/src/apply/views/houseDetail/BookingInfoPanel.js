@@ -139,7 +139,7 @@ export default class BookingInfoPanel extends Component {
                         <h1>{this.props.house.getData("title")}</h1>
                         <p>{this.props.address}</p>
                     </div>
-                    <div className={styles.infoSection}>
+                    <div className={styles.infoSection} id="bookingInfoPanelID">
                         <Accordion>
                             <Card className={styles.dateDisplayCard}>
                                 <Card.Header className={styles.dateDisplayCardHeader}>

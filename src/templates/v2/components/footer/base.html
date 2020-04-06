@@ -20,7 +20,7 @@
                         <li><a href="{% url 'essentials:get_policy' policy_type="CP" %}">Cookies</a></li>
                         <li><a href="{% url 'blog:home' %}">Blog</a></li>
                         <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="about-us/" %}">About Us</a></li>
-                        <li><a href="">Help</a></li>
+                        <li><a href="{% url 'django.contrib.flatpages.views.flatpage' url="contact-us/" %}">Help</a></li>
                     </ul>
                 </div>
             </div>
@@ -34,7 +34,7 @@
 {#                                <li class="list-inline-item instagram"><a href=""><span>Instagram</span></a>#}
 {#                                </li>#}
 {#                                <li class="list-inline-item twitter"><a href=""><span>Twitter</span></a></li>#}
-                                <li class="list-inline-item linkedin"><a href="https://www.linkedin.com/company/rentality/)"><span>Linkedin</span></a></li>
+                                <li class="list-inline-item linkedin"><a href="https://www.linkedin.com/company/rentality/"><span>Linkedin</span></a></li>
                             </ul>
                         </div>
                         {% block newsletter_sub %}

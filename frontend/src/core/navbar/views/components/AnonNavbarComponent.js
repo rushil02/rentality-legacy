@@ -67,7 +67,7 @@ export default class AnonNavbarComponent extends Component {
                                         <a href={reverse(routes.home)}>Home</a>
                                     </li>
                                     <li className="list-inline-item">
-                                        <a href={reverse(routes.blogs)}>Blog</a>
+                                        <a href={reverse(routes.faq)}>FAQ</a>
                                     </li>
                                     <li className="list-inline-item">
                                         <a href={reverse(routes.howItWorks)}>How It Works</a>

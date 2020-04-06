@@ -49,54 +49,70 @@ const textOptions = {
         default: "Save",
         loading: "Saving",
         done: "Saved",
-        error: "Error!"
+        error: "Error!",
     },
     saveNext: {
         default: "Save & Next",
         loading: "Saving",
         done: "Next",
-        error: "Error!"
+        error: "Error!",
     },
     saveExit: {
         default: "Save & Exit",
         loading: "Saving",
         done: "Saved",
-        error: "Error!"
+        error: "Error!",
     },
     cDelete: {
         default: "Delete",
         loading: "Deleting",
         done: "Deleted",
-        error: "Error!"
-    }
+        error: "Error!",
+    },
 };
 
 const _formStateMap = {
     saved: "done",
     initial: "default",
     hasChanged: "default",
-    error: "error"
+    error: "error",
 };
 
 export default class APIRequestButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            status: props.initialState || "default"
+            status: props.initialState || "default",
         };
-        this.container = null;
+        this.containerList = [];
+    }
+
+    componentDidMount() {
+        if (this.props.containerID) {
+            if (Array.isArray(this.props.containerID)) {
+                this.props.containerID.forEach((containerID) => {
+                    this.containerList.push(document.getElementById(containerID));
+                });
+            } else {
+                this.containerList.push(document.getElementById(this.props.containerID));
+            }
+        }
     }
 
     attachListener = () => {
-        if (this.container) {
-            this.container.addEventListener("input", this.resetButtonOnInput);
+        if (this.containerList.length != 0) {
+            this.containerList.forEach((container) => {
+                container.addEventListener("input", this.resetButtonOnInput);
+            });
         }
     };
 
     resetButtonOnInput = (event) => {
-        if (this.container) {
+        if (this.containerList.length != 0) {
+            this.containerList.forEach((container) => {
+                container.removeEventListener("input", this.resetButtonOnInput);
+            });
             this.setState({status: "default"});
-            this.container.removeEventListener("input", this.resetButtonOnInput);
         }
     };
 
@@ -129,9 +145,6 @@ export default class APIRequestButton extends Component {
 
     render() {
         let _textOptions = this.props.textOption ? textOptions[this.props.textOption] : this.props.cTextOptions;
-        if (this.props.containerID) {
-            this.container = document.getElementById(this.props.containerID);
-        }
 
         let layoutClasses = this.props.layoutClasses || "btn float-right " + styles.btn;
 

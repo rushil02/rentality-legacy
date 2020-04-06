@@ -35,7 +35,7 @@ export default class Footer extends Component {
                                         <a href={reverse(routes.home)}>Privacy Policy</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.home)}>FAQs</a>
+                                        <a href={reverse(routes.faq)}>FAQs</a>
                                     </li>
                                     <li>
                                         <a href={reverse(routes.home)}>Cookies</a>

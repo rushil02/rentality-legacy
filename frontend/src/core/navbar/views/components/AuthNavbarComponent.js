@@ -75,7 +75,7 @@ export default class AuthNavbarComponent extends Component {
                                         <a href={reverse(routes.home)}>Home</a>
                                     </li>
                                     <li className="list-inline-item">
-                                        <a href={reverse(routes.blogs)}>Blog</a>
+                                        <a href={reverse(routes.faq)}>FAQ</a>
                                     </li>
                                     <li className="list-inline-item">
                                         <a href={reverse(routes.howItWorks)}>How It Works</a>
@@ -129,10 +129,16 @@ export default class AuthNavbarComponent extends Component {
                                                 Setting
                                             </a>
                                             <div className="dropdown-menu dropdown-menu-right">
-                                                <a href="" className="dropdown-item">
+                                                <a
+                                                    href={reverse(routes.react.user.userProfile)}
+                                                    className="dropdown-item"
+                                                >
                                                     My Profile
                                                 </a>
-                                                <a href="" className="dropdown-item">
+                                                <a
+                                                    href={reverse(routes.auth.logout)}
+                                                    className="dropdown-item"
+                                                >
                                                     Logout
                                                 </a>
                                             </div>

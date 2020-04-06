@@ -27,7 +27,7 @@
     </div>
 </li>
 <li class="list-inline-item person">
-    <a href="{% url 'user:dashboard' %}">
+    <a href="/rep/dashboard/">
         {% static 'image/placeholders/profile.png' as default_navbar_profile_pic %}
 
         <div class="image"><img src="{{ request.user.userprofile.profile_pic|thumbnail_url:'profile_navbar'|default:default_navbar_profile_pic }}" class="w-100"></div>
