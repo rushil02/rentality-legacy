@@ -15,7 +15,7 @@ class User(object):
         if attr:
             return attr
         else:
-            raise ValueError("Value required to initialize payment_gateway.utils.User")
+            raise AssertionError("Value required to initialize payment_gateway.utils.User")
 
     def __init__(self, user):
         self._user_db = user
@@ -47,28 +47,28 @@ class User(object):
             self._pg_account_db.details = value
             self._pg_account_db.save()
         else:
-            raise ValueError("Cannot update account - None provided")
+            raise AssertionError("Cannot update account - None provided")
 
     @property
     def account_details(self):
         if self._pg_account_db:
             return self._pg_account_db.details
         else:
-            raise ValueError("No account is set")
+            raise AssertionError("No account is set")
 
     @property
     def user_request(self):
         if self.http_request:
             return self.http_request
         else:
-            raise ValueError("Request object is not loaded")
+            raise AssertionError("Request object is not loaded")
 
     @property
     def request_data(self):
         if self.user_data:
             return self.user_data
         else:
-            raise ValueError("Request object is not loaded")
+            raise AssertionError("Request object is not loaded")
 
 
 class PaymentGateway(object):

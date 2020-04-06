@@ -51,7 +51,10 @@ class BusinessModel(object):
         return self._db
 
     def get_can_db_object(self):
-        return self._can_policy_db
+        if self._can_policy_db:
+            return self._can_policy_db
+        else:
+            raise AssertionError("Cancellation Policy is not set yet")
 
     def on_event(self, curr_state, event, actor):
         return self.behaviour.on_event(curr_state, event, actor)
@@ -87,12 +90,11 @@ class BusinessModel(object):
             )
         )
 
-    def validate_house(self, raise_exception=False):
+    def validate_house(self):
         """
-        :param raise_exception: boolean
-        :return:
+        :return: [errors, ...]
         """
-        return self.validator.validate_house(raise_exception)
+        return self.validator.validate_house()
 
     def validate_application(self):
         """

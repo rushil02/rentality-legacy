@@ -9,6 +9,7 @@ class Application(object):
     with `application.models.Application`.
     """
 
+    # region init
     def __init__(self, house, date_range, guests_num, promo_codes):
         """
         :param house: 'House` object
@@ -111,6 +112,7 @@ class Application(object):
         :param business_model: `BusinessModel` object
         """
         self._business_model = business_model
+        self._business_model.set_application(self)
 
     def get_business_model(self):
         return self._business_model
@@ -131,6 +133,8 @@ class Application(object):
         if self._booking_date_time:
             return self._booking_date_time
         raise ValueError("Booking date is not provided")
+
+    # endregion init
 
     def validate(self):
         errors = []

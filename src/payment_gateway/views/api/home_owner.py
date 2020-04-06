@@ -14,7 +14,7 @@ from payment_gateway.utils import PaymentGateway
 
 class AddHomeOwnerView(APIView):
     """
-    API to create PG account link and add identity details of a user.
+    API to create new PG account link and add identity details of a user.
     """
     permission_classes = (IsAuthenticated,)
 
@@ -52,6 +52,10 @@ class AddHomeOwnerView(APIView):
                 pgt = payment_gateway.create_payout_account()
             except PGTransactionError as e:
                 return Response({'details': e.user_message}, status=status.HTTP_400_BAD_REQUEST)
+            except AssertionError as e:
+                # Shouldn't happen
+                # FIXME: Log in db
+                return Response({'details': "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'pg': pgt.user_response}, status=status.HTTP_200_OK)
 
@@ -83,6 +87,10 @@ class UpdateHomeOwnerView(APIView):
                 pgt = payment_gateway.update_payout_account()
             except PGTransactionError as e:
                 return Response({'details': e.user_message}, status=status.HTTP_400_BAD_REQUEST)
+            except AssertionError as e:
+                # Shouldn't happen
+                # FIXME: Log in db
+                return Response({'details': "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'pg': pgt.user_response}, status=status.HTTP_200_OK)
 
@@ -121,6 +129,10 @@ class AddUpdateBankAccountView(APIView):
                 pgt = pg.get_bank_account()
             except PGTransactionError as e:
                 return Response({'details': e.user_message}, status=status.HTTP_400_BAD_REQUEST)
+            except AssertionError as e:
+                # Shouldn't happen
+                # FIXME: Log in db
+                return Response({'details': "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'pg': pgt.user_response}, status=status.HTTP_200_OK)
 
@@ -145,6 +157,10 @@ class AddUpdateBankAccountView(APIView):
                     pgt = pg.add_update_bank_account()
                 except PGTransactionError as e:
                     return Response({'details': e.user_message}, status=status.HTTP_400_BAD_REQUEST)
+                except AssertionError as e:
+                    # Shouldn't happen
+                    # FIXME: Log in db
+                    return Response({'details': "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({'pg': pgt.user_response}, status=status.HTTP_200_OK)
 

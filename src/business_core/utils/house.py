@@ -11,6 +11,7 @@ class House(object):
     constraints. It does not save or synchronize with `house.models.House`.
     """
 
+    # region init
     def __init__(self, rent, min_stay, max_stay, promo_codes, max_people_allowed, timezone):
         """
         :param rent: [Decimal] rent per week
@@ -47,6 +48,7 @@ class House(object):
         :param business_model_db: `business_core.models.BusinessModelConfiguration` object
         """
         self._business_model = BusinessModel(business_model_db)
+        self._business_model.set_house(self)
 
     def set_can_policy(self, cancellation_policy_db):
         """
@@ -104,9 +106,12 @@ class House(object):
             timezone=db_obj.local_timezone
         )
         obj.set_business_model(business_model_db=db_obj.business_config)
-        obj.set_can_policy(cancellation_policy_db=db_obj.cancellation_policy)
+        if db_obj.cancellation_policy:
+            obj.set_can_policy(cancellation_policy_db=db_obj.cancellation_policy)
         return obj
 
-    def validate(self, raise_exception=False):
-        return self._business_model.validate_house(self, raise_exception)
+    # endregion init
+
+    def validate(self):
+        return self._business_model.validate_house()
 

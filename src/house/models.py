@@ -67,7 +67,8 @@ class House(models.Model):
     STATUS = (
         ('I', 'Inactive'),      Not Visible to Public, 1st state of any listing
         ('P', 'Published'),     Visible to Public
-        ('D', 'Deleted')        Deleted from user's account visibility, still in Database
+        ('D', 'Deleted'),       Deleted from user's account visibility, still in Database
+        ('B', 'Blocked')        Blocked from any user action
     )
     """
 
@@ -150,7 +151,8 @@ class House(models.Model):
     STATUS = (
         ('I', 'Inactive'),
         ('P', 'Published'),
-        ('D', 'Deleted')
+        ('D', 'Deleted'),
+        ('B', 'Blocked')
     )
     status = models.CharField(max_length=1, choices=STATUS, default='I')
 
@@ -287,10 +289,9 @@ class House(models.Model):
         else:
             return False
 
-    def set_status(self, status):
-        if status == 'P':
-            self.verify_data_for_publishing()
+    def update_status(self, status):
         self.status = status
+        self.save()
 
     # FIXME: Write tests for this
     def verify_data_for_publishing(self):
@@ -309,7 +310,8 @@ class House(models.Model):
                 if field.related_model.objects.filter(house=self).count() == 0:
                     errors[field_name] = ValidationError('This field is required', code='required')
             else:
-                if not getattr(self, field_name):
+                value = getattr(self, field_name)
+                if (not value) and value != 0:  # Explicit check to pass if provided value is '0'
                     errors[field_name] = ValidationError('This field is required', code='required')
 
         if bool(errors):

@@ -31,7 +31,10 @@ class StripePaymentGateway(PaymentGatewayBase):
 
     @staticmethod
     def get_payout_account_id(details):
-        return details['account_id']
+        try:
+            return details['account_id']
+        except KeyError:
+            raise AssertionError("PG Payout account is not found")
 
     def _execute_request(self, request, *args, **kwargs):
         try:
@@ -78,6 +81,12 @@ class StripePaymentGateway(PaymentGatewayBase):
         )
 
     def create_payout_account(self, homeowner):
+        try:
+            self.get_payout_account_id(homeowner.account_details)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError("PG Account already exists")
         client_ip, routable = get_client_ip(homeowner.user_request)
         if homeowner.account_type == 'I':
             acc_type_info = {

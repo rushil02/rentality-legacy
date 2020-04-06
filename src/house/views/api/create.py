@@ -441,8 +441,7 @@ class CheckPayoutDetailsView(APIView):
                 user=user,
                 payment_gateway=payment_gateway.db
             )
-            account_obj.get_details('account_id')
-        except (Account.DoesNotExist, KeyError):
+        except Account.DoesNotExist:
             response = {
                 'msg': 'Payment Gateway information is missing',
                 'code': 'PGM',
@@ -455,6 +454,13 @@ class CheckPayoutDetailsView(APIView):
                 pgt = payment_gateway.verify_payout_account()
             except PGTransactionError as e:
                 return Response({'details': e.user_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except AssertionError:
+                response = {
+                    'msg': 'Payment Gateway information is missing',
+                    'code': 'PGM',
+                    'payment_gateway': payment_gateway.db.code
+                }
+                return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
             else:
                 if not pgt.user_response['verified']:
                     response = {

@@ -23,6 +23,7 @@ EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), '__test_emails')
 
 
 # Email settings (using Sendgrid via API) Should be always disabled in development
+# Uncomment the following 3 lines to create and test live emails
 # SENDGRID_API_KEY = get_env_var("SENDGRID_API_KEY")
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 # SENDGRID_SANDBOX_MODE_IN_DEBUG = False
