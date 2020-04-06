@@ -15,7 +15,7 @@ export default class App extends Component {
             loading: true,
             loadingMore: false,
             searchForm: new SearchFormModel(
-                queryString.parse(this.props.routerProps.location.search)
+                JSON.parse(JSON.stringify(queryString.parse(this.props.routerProps.location.search)))
             ),
             houses: new APIModelListAdapter([], ESHouse, undefined, "empty", [
                 "_source"
