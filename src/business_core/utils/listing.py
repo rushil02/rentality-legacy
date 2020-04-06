@@ -52,10 +52,10 @@ class Listing(object):
         return self._house.validate()
 
     def activate(self):
-        self._house.update_status('P')
+        self.db.update_status('P')
 
     def deactivate(self):
-        self._house.update_status('I')
+        self.db.update_status('I')
 
     def has_publishable_account(self):
         user = self.db.home_owner.user

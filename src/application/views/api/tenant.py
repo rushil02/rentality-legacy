@@ -107,7 +107,7 @@ class InitiateBookingView(APIView):
             try:
                 response['res'] = booking.initialize()
             except Exception as e:
-                print(e)
+                 raise e
             # booking.execute_payment_gateway()
             #
             # booking.record_to_db(application_db)

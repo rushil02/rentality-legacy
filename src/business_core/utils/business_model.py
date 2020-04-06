@@ -56,8 +56,8 @@ class BusinessModel(object):
         else:
             raise AssertionError("Cancellation Policy is not set yet")
 
-    def on_event(self, curr_state, event, actor):
-        return self.behaviour.on_event(curr_state, event, actor)
+    def on_event(self, event, actor):
+        return self.behaviour.on_event(event, actor)
 
     def get_start_event(self):
         return self.behaviour.STATE_START

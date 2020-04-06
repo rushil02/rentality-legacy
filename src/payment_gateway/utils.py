@@ -157,7 +157,7 @@ class PaymentGateway(object):
 
     @classmethod
     def init_for_house(cls, house_db):
-        return cls.init_for_homeowner(house_db.homeowner.user, house_db.payment_gateway.code)
+        return cls.init_for_homeowner(house_db.home_owner.user, house_db.payment_gateway.code)
 
     def set_homeowner_user(self, user, user_request=None, request=None):
         """

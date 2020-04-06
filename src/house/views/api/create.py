@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.http import Http404
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
@@ -51,7 +52,10 @@ class HouseView(APIView):
         if serializer.is_valid(raise_exception=True):
             business_config = self.get_business_model_conf(request.user.get_billing_location(),
                                                            serializer.validated_data.get('location'))
-            serializer.save(home_owner=request.user.home_owner, business_config=business_config)
+            try:
+                serializer.save(home_owner=request.user.home_owner, business_config=business_config)
+            except ValidationError as e:
+                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, house_uuid):
@@ -62,10 +66,13 @@ class HouseView(APIView):
             house_location = serializer.validated_data.get('location', house.location)
             business_config = self.get_business_model_conf(request.user.get_billing_location(), house_location)
 
-            if house.business_config != business_config:
-                serializer.save(business_config=business_config)
-            else:
-                serializer.save()
+            try:
+                if house.business_config != business_config:
+                    serializer.save(business_config=business_config)
+                else:
+                    serializer.save()
+            except ValidationError as e:
+                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, house_uuid):

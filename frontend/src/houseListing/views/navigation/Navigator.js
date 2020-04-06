@@ -1,5 +1,4 @@
 import React, {Component, Suspense} from "react";
-import {Redirect} from "react-router-dom";
 import styles from "./Navigator.css";
 import FormSubNav from "./FormSubNav";
 import FormNav from "./FormNav";
@@ -9,7 +8,6 @@ import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButto
 import {withRouter} from "react-router-dom";
 import {activateHouse, deleteHouse} from "houseListing/services";
 import {alertUser} from "core/alert/Alert";
-import {FormOptionsCache} from "houseListing/dataContext";
 import {reverse} from "named-urls";
 import routes from "routes";
 import {DeleteModal, ActivateModal} from "./Modals";
@@ -137,7 +135,7 @@ function NavigatorComponent(props) {
             <ActivateModal
                 onActivate={props.onActivate}
                 isAPIRequestButton={true}
-                isDisabled={currFormState === "hasChanged" ? false : true}
+                isDisabled={currFormState !== "hasChanged"}
             />
         );
     } else {
@@ -211,14 +209,6 @@ function NavigatorComponent(props) {
                                         <div className={styles.button}>
                                             {backBtn}
                                             {saveNextBtn}
-                                            {/* <APIRequestButton
-                                                textOption={"saveNext"}
-                                                callback={currFormCallback}
-                                                onSuccess={props.onNext}
-                                                onFailure={() => {}}
-                                                containerID={"main-input-page"}
-                                                formState={currFormState}
-                                            /> */}
                                         </div>
                                     </div>
                                 </div>

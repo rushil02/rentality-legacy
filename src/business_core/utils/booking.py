@@ -73,7 +73,7 @@ class Booking(object):
         application = Application.create(house_db, booking_info)
         application.set_prospective_booking_date(booking_date)
         obj = cls(application, actor, '_no_app_')
-        obj.use_payment_gateway(PaymentGateway.create(house_db=house_db))
+        obj.use_payment_gateway(PaymentGateway.init_for_house(house_db))
         return obj
 
     # endregion
@@ -129,20 +129,19 @@ class Booking(object):
         Use to initialize a booking process.
         :return:
         """
-        payment_gateway = ()
         action = self.business_model.on_event(
-            self.get_current_state(), self.business_model.get_start_event(), self._actor
+            self.business_model.get_start_event(), self._actor
         )
-        action.execute_all(None, payment_gateway)
+        action.execute_all(None, self._payment_gateway)
 
         # self._load_data(result)
         return action.response
 
     def execute_intent(self):
         result = self.business_model.on_event(
-            self.get_current_state(), 'execute_intent', self._actor
+           'execute_intent', self._actor
         )
-        self._load_data(result)
+        # self._load_data(result)
 
     # region future #FIXME: URGENT
     def cancel(self):

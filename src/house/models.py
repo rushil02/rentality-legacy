@@ -260,6 +260,7 @@ class House(models.Model):
         return False
 
     def save(self, *args, **kwargs):
+        self.full_clean()
         object_is_new = not self.pk
 
         if object_is_new and not self.local_timezone:
@@ -321,8 +322,10 @@ class House(models.Model):
         super(House, self).clean()
         if self.max_stay and self.min_stay:
             if self.max_stay < self.min_stay:
-                raise ValidationError("Maximum length of stay cannot be less than Minimum length of stay",
-                                      code='invalid')
+                raise ValidationError(
+                    {'max_stay': "Maximum length of stay cannot be less than Minimum length of stay"},
+                    code='invalid'
+                )
 
     def check_availability(self, lower, upper):
         """
