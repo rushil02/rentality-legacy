@@ -23,9 +23,64 @@ class PGTransactionError(Exception):
 
 class PGTransaction(object):
     def __init__(self, response, user_response=None, meta=None):
+        """
+        `_db` stores object of `financials.models.PaymentGatewayTransaction` if available
+
+        :param response: Raw response from PG
+        :param user_response: information used to create server response
+        :param meta: information to be saved in the DB
+        """
         self._response = response
         self.user_response = user_response
         self.meta_store = meta
+        self._db = None
+        self.record_transaction = False
+
+        # dict containing details for PG transaction record - {'id': ..., 'user_type': `tenant or homeowner`}
+        self.tr_details = None
+
+    @property
+    def db(self):
+        if self._db:
+            return self._db
+        raise AttributeError("PGT db object is not set")
+
+    @property
+    def transaction_type(self):
+        if self.tr_details:
+            return self.tr_details['tr_type']
+        raise AttributeError("Transaction details are not set")
+
+    @property
+    def user_type(self):
+        if self.tr_details:
+            return self.tr_details['user_type']
+        raise AttributeError("Transaction details are not set")
+
+    @property
+    def transaction_id(self):
+        if self.tr_details:
+            return self.tr_details['id']
+        raise AttributeError("Transaction details are not set")
+
+    @property
+    def amount(self):
+        """ Amount should be returned from the PG as confirmation"""
+        if self.tr_details:
+            return self.tr_details['amount']
+        raise AttributeError("Transaction details are not set")
+
+    def set_db(self, pgt_obj):
+        self._db = pgt_obj
+
+    def record(self, user_type, tr_type, tr_id, amount):
+        self.tr_details = dict(
+            user_type=user_type,
+            tr_type=tr_type,
+            id=tr_id,
+            amount=amount
+        )
+        self.record_transaction = True
 
 
 class PaymentGatewayBase(object):
@@ -38,68 +93,34 @@ class PaymentGatewayBase(object):
     TRANSACTION_TYPES is a tuple of tuple detailing about transactions
     that are allowed/handled by the specific payment gateway, which
     directly maps with `.PaymentGateway.TRANSACTION_TYPES' using the
-    first element is each tuple. It is necessary to match each rele
+    first element is each tuple.
     """
-
-    # Register all actions here
-    # TODO: BusinessModel behaviour and Payment gateway compatibility can be auto-checked here ??
-    # {event: lambda obj: obj.action_method_name, ...}
-    EVENT_ACTION_MAP = {}
-
-    def __init__(self):
-        self.application = None
-        self.house = None
-        self.home_owner = None
-        self.tenant = None
-
-    def on_event(self, event):
-        try:
-            return self.EVENT_ACTION_MAP[event](self)()
-        except KeyError:
-            raise AssertionError("%s is not allowed" % event)
 
     # USES_VIRTUAL_HOME_OWNER_ACCOUNT = False
     # USES_VIRTUAL_TENANT_ACCOUNT = False
-    #
-    # TRANSACTION_TYPES = ()
-    #
-    # HomeOwnerAccount = AccountBase
-    # TenantAccount = AccountBase
 
-    # def __init__(self):
-    #     self.transactions = []
-    #     self.home_owner_account = None
-    #     self.tenant_account = None
+    TRANSACTION_TYPES = ()
 
-    # @classmethod
-    # def init(cls, home_owner_account, tenant_account):
-    #     obj = cls()
-    #     obj.home_owner_account = obj.HomeOwnerAccount(home_owner_account)
-    #     obj.tenant_account = obj.TenantAccount(tenant_account)
+    # region Payout Account Methods required to be implemented in each payment gateway wrapper
 
-    # region Methods required to be implemented in each payment gateway wrapper
+    def create_payout_account(self, homeowner):
+        raise NotImplementedError
 
-    # @abstractmethod
-    # def create_home_owner_account(self, *args, **kwargs):
-    #     raise NotImplementedError
-    #
-    # @abstractmethod
-    # def create_tenant_account(self, *args, **kwargs):
-    #     raise NotImplementedError
-    #
-    # @abstractmethod
-    # def process_pay_in(self, amount):
-    #     raise NotImplementedError
-    #
-    # @abstractmethod
-    # def process_pay_out(self, amount):
-    #     raise NotImplementedError
-    #
-    # @abstractmethod
-    # def process_refund(self, amount):
-    #     raise NotImplementedError
-    #
-    # # endregion
-    #
-    # def get_transaction_types(self):
-    #     return self.TRANSACTION_TYPES
+    def verify_payout_account_status(self, homeowner):
+        raise NotImplementedError
+
+    def update_payout_account(self, homeowner):
+        raise NotImplementedError
+
+    def add_update_bank_account(self, homeowner):
+        raise NotImplementedError
+
+    def get_bank_account(self, homeowner):
+        raise NotImplementedError
+
+    # endregion
+
+    # region
+    def create_intent(self, homeowner, tenant, application):
+        raise NotImplementedError
+    # endregion

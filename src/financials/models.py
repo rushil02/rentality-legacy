@@ -16,7 +16,6 @@ class PaymentGatewayTransaction(models.Model):
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT, null=True, blank=True)
     TYPE = (  # FIXME: get from payment gateway module (not model)
     )
-    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
     transaction_type = models.CharField(max_length=2, choices=TYPE)
     transaction_id = models.TextField()
     user_account = models.ForeignKey('user_custom.Account', on_delete=models.PROTECT)
@@ -28,7 +27,7 @@ class PaymentGatewayTransaction(models.Model):
 
     def _create_ref_code(self):
         try:
-            obj = PaymentGatewayTransaction.objects.latest('created_on')
+            obj = PaymentGatewayTransaction.objects.latest('create_time')
         except PaymentGatewayTransaction.DoesNotExist:
             ref_code = 'AA0001'
         else:

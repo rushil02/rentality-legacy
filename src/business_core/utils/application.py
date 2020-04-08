@@ -28,6 +28,18 @@ class Application(object):
 
         self._booking_date_time = None
 
+        self._state = None
+
+    @property
+    def state(self):
+        if self._state:
+            return self._state
+        else:
+            raise ValueError("State is not set")
+
+    def set_state(self, state):
+        self._state = state
+
     @property
     def check_in_date(self):
         return self.date_range[0]
@@ -43,6 +55,10 @@ class Application(object):
     @property
     def tenant_account(self):
         return self.get_business_model().financial_model.tenant_account
+
+    @property
+    def financial_model(self):
+        return self.get_business_model().financial_model
 
     @classmethod
     def create(cls, house_db, booking_info):

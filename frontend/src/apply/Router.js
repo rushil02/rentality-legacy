@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import ComponentErrorBoundary from "core/errorHelpers/ComponentErrorBoundary";
 import Error404 from "core/errorHelpers/Error404";
 import HouseDetailPage from "./views/houseDetail/HouseDetailPage";
-import BookingSuccessPage from "./views/houseDetail/BookingSuccessPage";
+import BookingSuccessPage from "./views/successPage/BookingSuccessPage";
 
 export default class Router extends Component {
     render() {

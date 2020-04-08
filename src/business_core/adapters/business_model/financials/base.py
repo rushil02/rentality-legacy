@@ -167,7 +167,7 @@ class FinancialModelBase(Adapter):
 
     def to_json_dict(self):
         return {
-            'destination_account': self.homeowner_account.to_json_dict(),
-            'source_account': self.tenant_account.to_json_dict(),
-            'stay_duration': str(self.stay_duration),
+            'destination_account': str(round(self.homeowner_account.payable_amount, 2)),
+            'source_account': str(round(self.tenant_account.payable_amount, 2)),
+            'stay_duration': str(round(self.stay_duration)),
         }
