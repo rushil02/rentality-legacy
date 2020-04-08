@@ -76,7 +76,8 @@ class House(models.Model):
     REQUIRED_FIELDS = (
         'home_owner', 'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms',
         'bathrooms', 'parking', 'rent', 'min_stay', 'facilities', 'rules', 'cancellation_policy', 'max_people_allowed',
-        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image', 'description'
+        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image', 'description',
+        'payment_gateway'
     )
 
     # region Fields

@@ -34,7 +34,7 @@ APP_BINDING_STATES = ['L', 'A', 'B', 'O', 'Z', 'F']
 # All Actors possible on an application
 ACTOR_CHOICES = (
     ('T', "Tenant"),
-    ('H', "Home Owner"),
+    ('H', "Homeowner"),
     ('A', "Staff"),
     ('S', "System")
 )
@@ -42,8 +42,9 @@ ACTOR_CHOICES = (
 
 def get_actor_reverse_map():
     res = {}
-    for choice_set in STATUS_CHOICES:
+    for choice_set in ACTOR_CHOICES:
         res[choice_set[1]] = choice_set[0]
+        res[choice_set[1].lower()] = choice_set[0]
     return res
 
 

@@ -1,6 +1,7 @@
 from .house import House
 from .promo_code import PromoCode
 from .business_model import BusinessModel
+from ..models import CancellationPolicy
 
 
 class Application(object):
@@ -95,17 +96,20 @@ class Application(object):
             max_people_allowed=db_obj.get_house_meta_info('max_people_allowed'),
             timezone=db_obj.get_house_meta_info('local_timezone')
         )
-        house.set_business_model(db_obj.get_house_meta_info('business_config'))
+        house.set_business_model(BusinessModel.init_from_code(db_obj.get_house_meta_info('business_config__code')))
+        house.set_can_policy(CancellationPolicy.objects.get(
+            code=db_obj.get_house_meta_info('cancellation_policy__code'))
+        )
 
         obj = cls(
             house=house, date_range=db_obj.get_stay_date_range(),
             guests_num=db_obj.get_meta_info('guests'),
             promo_codes=[PromoCode(obj) for obj in db_obj.get_all_promo_codes()],
         )
-        obj.set_business_model(BusinessModel(db_obj.business_model_config))
+        obj.set_business_model(BusinessModel(db_obj.get_business_model_config()))
 
         try:
-            booking_date = db_obj.account_detail.get_meta_info('booking_date')
+            booking_date = db_obj.accountdetail.get_meta_info('booking_date')
         except KeyError:
             pass
         else:

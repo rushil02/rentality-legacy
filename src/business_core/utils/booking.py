@@ -1,7 +1,6 @@
 from payment_gateway.utils import PaymentGateway
-from .house import House
 from .application import Application
-from application.utils import STATUS_CHOICES
+from application.utils import STATE_REVERSE_MAP_FOR_DB, ACTOR_REVERSE_MAP_FOR_DB
 
 
 class Booking(object):
@@ -25,15 +24,27 @@ class Booking(object):
         :param application: 'Application' object
         """
         self._application = application
+        self._application.set_state(state)
         self._actor = actor
-        self.current_state = state
 
-        # self._acc_info = {}
-        # self._response = {}
-        # self._inform_entities = {}
+        self._db = None
 
         self._payment_gateway = None
         self._payment_gateway_info = {}
+
+    @property
+    def db(self):
+        if self._db:
+            return self._db
+        else:
+            raise ValueError("DB object is not set for application")
+
+    def set_application_db(self, application_obj):
+        self._db = application_obj
+
+    @property
+    def current_state(self):
+        return self._application.state
 
     @property
     def business_model(self):
@@ -44,19 +55,19 @@ class Booking(object):
         return self._application.get_cancellation_policy()
 
     @classmethod
-    def load(cls, application_obj, actor, payment_gateway):
+    def load(cls, application_obj, actor):
         """
         Creates a new Financial Booking object. This will create all the required
         details for booking object from the frozen details in given application object.
 
         :param actor: [tenant, home_owner, system, admin]
         :param application_obj: 'application.models.Application` object
-        :param payment_gateway: `PaymentGateway` object
         :return: cls object
         """
         application = Application.load(application_obj)
-        obj = cls(application, actor=actor, state=application.status)
-        obj.use_payment_gateway(payment_gateway)
+        obj = cls(application, actor=actor, state=application_obj.status)
+        obj.set_application_db(application_obj)
+        obj.use_payment_gateway(PaymentGateway.init_for_application(application_obj))
         return obj
 
     @classmethod
@@ -64,7 +75,7 @@ class Booking(object):
         """
         Create a booking from house database object, booking_info from user.
         :param booking_date:
-        :param house_db:
+        :param house_db:rep/apply/property/info/37185854-e4fe-440a-a167-cde50cc8d3b6
         :param booking_info:
         :param actor: [tenant, home_owner, system, admin]
         :return: Booking()
@@ -72,8 +83,7 @@ class Booking(object):
 
         application = Application.create(house_db, booking_info)
         application.set_prospective_booking_date(booking_date)
-        obj = cls(application, actor, '_no_app_')
-        obj.use_payment_gateway(PaymentGateway.init_for_house(house_db))
+        obj = cls(application, actor=actor, state='_no_app_')
         return obj
 
     # endregion
@@ -81,48 +91,15 @@ class Booking(object):
     def validate(self):
         return self._application.validate()
 
-    def set_new_state(self, new_state):
-        self.current_state = new_state
-
     def use_payment_gateway(self, payment_gateway):
         """
         :param payment_gateway: 'payment_gateway.utils.PaymentGateway'
         :return:
         """
         self._payment_gateway = payment_gateway
-
-    # def record_to_db(self, application_db):
-    #     """
-    #     :param application_db:
-    #     :return:
-    #     """
-    #     # ApplicationState
-    #     application_db.update_status(self.__STATE_REVERSE_MAP_FOR_DB[self.get_current_state()],
-    #                                  self.__ACTOR_REVERSE_MAP_FOR_DB[self._actor])
-    #     try:
-    #         application_db.update_account(meta_info=self._acc_info)
-    #     except AssertionError:
-    #         application_db.create_account(
-    #             business_model_config=self.business_model.get_db_object(),
-    #             cancellation_policy=self.business_model.get_can_db_object(),
-    #         )
-    #     else:
-    #         application_db.update_account(meta_info=self._acc_info)
-
-    # Rentality records
-    # PaymentGatewayTransaction
-    # LedgerRecord
-
-    # def _load_data(self, result):
-    #     self.set_new_state(result['state'])
-    #     self._response = result.get('response', {})
-    #     self._acc_info = result.get('acc_info', {})
-    #     self._inform_entities = result.get('mail', {})
-    #     self._payment_gateway_info = result.get('payment_gateway', {})
-
-    # def execute_payment_gateway(self):
-    #     resp = self._payment_gateway.execute(self._payment_gateway_info['action'])
-    #     self._response['PG'] = self._payment_gateway_info['response'](resp)
+        self._payment_gateway.set_application(self.db)
+        self._payment_gateway.set_homeowner_user(self.db.house.home_owner.user)
+        self._payment_gateway.set_tenant_user(self.db.tenant.user)
 
     def initialize(self):
         """
@@ -132,18 +109,37 @@ class Booking(object):
         action = self.business_model.on_event(
             self.business_model.get_start_event(), self._actor
         )
-        action.execute_all(None, self._payment_gateway)
+        action.execute_all(self.db, self._payment_gateway)
 
-        # self._load_data(result)
-        return action.response
+        if action.status_is_updated:
+            self.db.update_status(STATE_REVERSE_MAP_FOR_DB[action.next_state],
+                                  ACTOR_REVERSE_MAP_FOR_DB[self._actor])
+        self.db.create_account(
+            business_model_config=self.business_model.get_db_object(),
+            cancellation_policy=self.business_model.get_can_db_object(),
+            payment_gateway=self._payment_gateway.db,
+            tenant_info=self._application.tenant_account.to_json_dict(),
+            homeowner_info=self._application.homeowner_account.to_json_dict(),
+            meta_info=action.get_meta_update_info()
+        )
+        return action
 
     def execute_intent(self):
-        result = self.business_model.on_event(
-           'execute_intent', self._actor
+        action = self.business_model.on_event(
+            'execute_intent', self._actor
         )
-        # self._load_data(result)
+        action.execute_all(self.db, self._payment_gateway)
 
-    # region future #FIXME: URGENT
+        if action.status_is_updated:
+            self.db.update_status(STATE_REVERSE_MAP_FOR_DB[action.next_state],
+                                  ACTOR_REVERSE_MAP_FOR_DB[self._actor])
+        self.db.update_account(
+            meta_info=action.get_meta_update_info()
+        )
+
+        return action
+
+    # region future # FIXME: URGENT
     def cancel(self):
         pass
 

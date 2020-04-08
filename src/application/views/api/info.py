@@ -1,13 +1,12 @@
 from django.utils import timezone
 from rest_framework.views import APIView
 
-from business_core.utils import Booking, Application
+from business_core.utils import Application
 from house.models import House
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
-from application.serializers import BookingAmountDetailsSerializer, BookingInfoSerializer, \
-    ApplicationCreateSerializer
+from application.serializers import BookingInfoSerializer
 
 
 class BookingAmountView(APIView):

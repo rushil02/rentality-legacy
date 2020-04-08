@@ -11,6 +11,9 @@ from application.models import Application, AccountDetail
 from application.serializers import ApplicationCreateSerializer, ApplicationInfoSerializer
 from business_core.utils import Booking
 from house.models import House
+from payment_gateway.adapters import PGTransactionError
+from payment_gateway.utils import PaymentGateway
+from user_custom.models import Account
 from user_custom.views import create_user_for_anon
 from application.permissions import IsTenantOfApplication
 
@@ -29,24 +32,20 @@ class ExecuteIntentBookingView(APIView):
 
         response = {}
 
-        # booking = Booking.load(
-        #     application_obj=application,
-        #     actor='tenant',
-        #     payment_gateway=()
-        # )
-
-        # booking.execute_intent()
-        # booking.record_to_db(application_db=application)
-        # booking.inform_entities(application_db=application)
-
-        # payment_gateway = StripePaymentGateway()
-        # intent = payment_gateway.get_intent()
-
-        # response['booking'] = booking.get_response()
-        # response['client_secret'] = "pi_1GNH9ZAQ89qRjn0aB9tXQTPE_secret_W7o1624kqPYoA8N6TuSEvigaC"
-        # response['client_secret'] = intent['client_secret']
-
-        return Response(response, status=HTTP_200_OK)
+        booking = Booking.load(
+            application_obj=application,
+            actor='tenant',
+        )
+        try:
+            action = booking.execute_intent()
+        except PGTransactionError as e:
+            return Response({'details': e.user_message}, status=HTTP_400_BAD_REQUEST)
+        except AssertionError as e:
+            return Response({'details': str(e)}, status=HTTP_400_BAD_REQUEST)
+        else:
+            if action.pgt:
+                response['PG'] = action.pgt.user_response
+            return Response(response, status=HTTP_200_OK)
 
 
 class InitiateBookingView(APIView):
@@ -100,22 +99,38 @@ class InitiateBookingView(APIView):
                     application.validated_data['booking_info']['start_date'],
                     application.validated_data['booking_info']['end_date']
                 ),
-                tenant_meta={}
+                tenant_meta=application.validated_data['tenant_details'],
+                meta=dict(
+                    guests=application.validated_data['booking_info']['guests'],
+                    tenant_message=application.validated_data['tenant_message']
+                )
             )
             application_db.save()
 
-            try:
-                response['res'] = booking.initialize()
-            except Exception as e:
-                 raise e
-            # booking.execute_payment_gateway()
-            #
-            # booking.record_to_db(application_db)
-            # booking.inform_entities(application_db)
+            payment_gateway = PaymentGateway.init_for_house(house)
 
+            if not tenant_user.account_set.filter(payment_gateway=payment_gateway.db).exists():
+                Account.objects.create(
+                    user=request.user,
+                    payment_gateway=payment_gateway.db,
+                )
+
+            booking.set_application_db(application_db)
+            booking.use_payment_gateway(payment_gateway)
+
+            try:
+                action = booking.initialize()
+            except PGTransactionError as e:
+                return Response({'details': e.user_message}, status=HTTP_400_BAD_REQUEST)
+            except AssertionError as e:
+                return Response({'details': str(e)}, status=HTTP_400_BAD_REQUEST)
+            else:
+                if action.pgt:
+                    response['PG'] = action.pgt.user_response
+                response['uuid'] = application_db.uuid
+                return Response(response, status=HTTP_200_OK)
         else:
             return Response({'code': 'AA', 'errors': application.errors}, status=HTTP_400_BAD_REQUEST)
-        return Response(response, status=HTTP_200_OK)
 
 
 class GetApplicationDetails(APIView):

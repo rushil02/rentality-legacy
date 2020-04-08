@@ -68,3 +68,18 @@ class ApplicationCreateSerializer(serializers.Serializer):
     agree_to_tnc = serializers.BooleanField()
     agree_to_pay = serializers.BooleanField()
     agree_to_house_rules = serializers.BooleanField()
+
+    def validate_agree_to_tnc(self, value):
+        if value is False:
+            raise serializers.ValidationError("Please agree to proceed.")
+        return value
+
+    def validate_agree_to_pay(self, value):
+        if value is False:
+            raise serializers.ValidationError("Please agree to proceed.")
+        return value
+
+    def validate_agree_to_house_rules(self, value):
+        if value is False:
+            raise serializers.ValidationError("Please agree to proceed.")
+        return value

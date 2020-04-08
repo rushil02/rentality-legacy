@@ -50,10 +50,21 @@ class HouseView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            business_config = self.get_business_model_conf(request.user.get_billing_location(),
-                                                           serializer.validated_data.get('location'))
+            business_config = self.get_business_model_conf(
+                request.user.get_billing_location(),
+                serializer.validated_data.get('location')
+            )
+            payment_gateway = PaymentGateway.load_location_default(
+                request.user.get_billing_location(),
+                serializer.validated_data.get('location')
+            ).db
+
             try:
-                serializer.save(home_owner=request.user.home_owner, business_config=business_config)
+                serializer.save(
+                    home_owner=request.user.home_owner,
+                    business_config=business_config,
+                    payment_gateway=payment_gateway
+                )
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -63,14 +74,8 @@ class HouseView(APIView):
         self.check_object_permissions(request, house)
         serializer = self.serializer_class(house, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
-            house_location = serializer.validated_data.get('location', house.location)
-            business_config = self.get_business_model_conf(request.user.get_billing_location(), house_location)
-
             try:
-                if house.business_config != business_config:
-                    serializer.save(business_config=business_config)
-                else:
-                    serializer.save()
+                serializer.save()
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -339,7 +344,7 @@ class ApplicableCancellationPolicyListView(APIView):
 
 
 class CancellationPolicyView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = CancellationPolicySerializer
 
     def get_object(self, request, house_uuid):
@@ -363,7 +368,7 @@ class CancellationPolicyView(APIView):
 
 
 class NeighbourhoodDescriptorListView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = NeighbourhoodDescriptorSerializer
 
     def get_object(self, request, house_uuid):
@@ -394,7 +399,7 @@ class NeighbourhoodDescriptorListView(APIView):
 
 
 class WelcomeTagsListView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = WelcomeTagSerializer
 
     def get_object(self, request, house_uuid):

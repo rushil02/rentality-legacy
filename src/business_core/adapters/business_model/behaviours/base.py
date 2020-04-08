@@ -5,6 +5,7 @@ and methods that will be explicitly called by rest of the system.
 from abc import ABC
 
 from business_core.adapters.base import Adapter
+from utils.helpers import merge_dicts
 
 
 class Action(object):
@@ -13,21 +14,55 @@ class Action(object):
     ACTOR = None
 
     def __init__(self, application):
-        self._application = application
+        self.application = application
 
-        self.response = {}
-        self.acc_info = {}
+        self._next_state = None
+
+        # `payment_gateway.utils.PaymentGatewayTransaction` object
+        self.pgt = None
+        # `financials.models.LedgerRecord` object
+        self.ledger_record = None
+
+        self.user_response = dict()
+        self.acc_info = dict()
 
     @property
     def next_state(self):
+        if self._next_state:
+            return self._next_state
+        else:
+            raise AttributeError("Next state is not set yet")
+
+    @property
+    def status_is_updated(self):
+        return bool(self._next_state)
+
+    def preprocess(self, application_db):
+        """
+        Override to perform desired operations before any payment gateway
+        actions, ledger creation and email.
+        """
+        pass
+
+    def postprocess(self, application_db):
+        """
+        Override to perform desired operations after payment gateway
+        actions and ledger creation but not email.
+        """
+        pass
+
+    def execute_payment_gateway(self, payment_gateway, application_db):
+        """
+        Explicitly override to pass if no function is to be performed.
+        Set self.pgt here (None if no PG action)
+        """
         raise NotImplementedError
 
-    def execute_payment_gateway(self, payment_gateway):
-        """ Explicitly override to pass if no function is to be performed. """
-        raise NotImplementedError
-
-    def record_to_db(self, application_db):
-        """ Explicitly override to pass if no function is to be performed. """
+    def create_ledger_record(self, application_db):
+        """
+        Explicitly override to pass if no function is to be performed.
+        Set self.ledger_record here (None if no PG action)
+        """
         raise NotImplementedError
 
     def inform_entities(self, application_db):
@@ -35,9 +70,17 @@ class Action(object):
         raise NotImplementedError
 
     def execute_all(self, application_db, payment_gateway):
-        self.execute_payment_gateway(payment_gateway)
-        self.record_to_db(application_db)
+        self.preprocess(application_db)
+        self.execute_payment_gateway(payment_gateway, application_db)
+        self.create_ledger_record(application_db)
+        self.postprocess(application_db)
         self.inform_entities(application_db)
+
+    def get_meta_update_info(self):
+        if self.pgt and self.pgt.meta_info:
+            return merge_dicts(self.acc_info, self.pgt.meta_info)
+        else:
+            return self.acc_info
 
 
 class TenantAction(Action, ABC):
@@ -71,6 +114,6 @@ class BehaviourBase(Adapter):
 
     def on_event(self, event, actor):
         try:
-            return self.STATE_MAP[actor][self.application.get_curr_state()][event](self.application)
+            return self.STATE_MAP[actor][self.application.state][event](self.application)
         except KeyError:
             raise AssertionError("%s is not allowed" % event)

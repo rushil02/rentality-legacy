@@ -24,10 +24,10 @@ class StripePaymentGateway(PaymentGatewayBase):
     STRIPE_SECRET_KEY = get_env_var('STRIPE_SECRET_KEY')
     STRIPE_VERSION = "2020-03-02"
 
-    EVENT_ACTION_MAP = {
-        'intend': lambda obj: obj.create_payment_intent,
-        'execute': lambda obj: obj.execute_payment_intent
-    }
+    TRANSACTION_TYPES = (
+        ('IN', 'Intend'),
+        ('EX', 'Execute Intent (Payment Completed)')
+    )
 
     @staticmethod
     def get_payout_account_id(details):
@@ -58,15 +58,26 @@ class StripePaymentGateway(PaymentGatewayBase):
         idempotency_key = str(uuid.uuid4())
         return self._execute_request(request, idempotency_key=idempotency_key, *args, **kwargs)
 
-    def create_payment_intent(self):
-        account_details = self.application.tenant_account
+    # region Pay-in Methods
+    def create_intent(self, homeowner, tenant, application):
+        # Convert to nearest integer in smallest currency unit
+        amount = int(application.tenant_account.payable_amount * 100)
+
         kwargs = {
-            'amount': 2000,
+            'amount': amount,
             'currency': "aud",
             'payment_method_types': ["card"]
         }
+
         response = self._execute_idempotent_request(stripe.PaymentIntent.create, **kwargs)
-        return PGTransaction(response=response, meta=response)
+        pgt = PGTransaction(
+            response=response,
+            user_response={'client_secret': response['client_secret']},
+            meta={'stripe': {'payment_intent_id': response['id']}}
+        )
+        return pgt
+
+    # endregion
 
     # region Payout Accounts
     def _get_account_link(self, request, account_id, success_url, failure_url):

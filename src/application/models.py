@@ -6,9 +6,9 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 
 from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
+from utils.helpers import merge_dicts
 from utils.model_utils import next_ref_code, get_nested_info
 from .utils import STATUS_CHOICES, ACTOR_CHOICES
 
@@ -54,6 +54,14 @@ class Application(models.Model):
         """
         return get_nested_info(self.house_meta, key)
 
+    def get_tenant_meta_info(self, key):
+        """
+        Gets value from house meta. `__` [double-underscore] can be used for nested keys.
+        :param key: str
+        :return: value
+        """
+        return get_nested_info(self.tenant_meta, key)
+
     def get_meta_info(self, key):
         """
         Gets value from house meta. `__` [double-underscore] can be used for nested keys.
@@ -61,28 +69,6 @@ class Application(models.Model):
         :return: value
         """
         return get_nested_info(self.meta, key)
-
-    # @property # FIXME: Move somewhere else
-    # def house_native_obj(self):
-    #   from cities_custom.serializers import PostalCodeAllDetailSerializer
-    #   from house.models import House, HomeType
-    #     # FIXME: Make Complete Wrapper
-    #     if self._house_native_obj is None:
-    #         house_serializer = HouseAllDetailsSerializer(data=self.house_meta)
-    #         house_serializer.is_valid()
-    #         _house_native_obj = House(**house_serializer.validated_data)
-    #
-    #         del self.house_meta['location']['alt_names']
-    #         location_serializer = PostalCodeAllDetailSerializer(data=self.house_meta['location'])
-    #         location_serializer.is_valid(raise_exception=True)
-    #         _house_native_obj.location = PostalCode(**location_serializer.validated_data)
-    #
-    #         home_type_serializer = HomeTypeSerializer(data=self.house_meta['home_type'])
-    #         home_type_serializer.is_valid()
-    #         _house_native_obj.home_type = HomeType(**home_type_serializer.validated_data)
-    #
-    #         self._house_native_obj = _house_native_obj
-    #     return self._house_native_obj
 
     def get_business_model_config(self):
         return self.accountdetail.business_config
@@ -109,14 +95,15 @@ class Application(models.Model):
         self.save()
         ApplicationState.objects.update_status(self, new_state, actor)
 
-    def create_account(self, business_model_config, cancellation_policy):
+    def create_account(self, business_model_config, cancellation_policy, payment_gateway, tenant_info, homeowner_info, meta_info):
         AccountDetail.objects.create(
             application=self,
             business_config=business_model_config,
+            payment_gateway=payment_gateway,
             cancellation_policy=cancellation_policy,
-            tenant={},
-            home_owner={},
-            meta={}
+            tenant=tenant_info,
+            home_owner=homeowner_info,
+            meta=meta_info
         )
 
     def update_account(self, **kwargs):
@@ -156,8 +143,6 @@ class AccountDetail(models.Model):
     Stores information required to process the behaviour of an application and stores
     consequent financial information.
 
-    Note: Relation of Payment Gateway and Application is through Payment Gateway Transaction.
-
     `tenant` - Freeze tenant information for an application
 
     `home_owner` - Freeze home_owner information for an application
@@ -166,34 +151,37 @@ class AccountDetail(models.Model):
 
     business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
     cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT)
+
+    # payment_gateway can mutate over the life of an Application, though unlikely,
+    # special protocols need to be followed in such scenario, to check information
+    # stored in meta
     payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
 
-    tenant = JSONField()
-    home_owner = JSONField()
-    meta = JSONField()
+    tenant = JSONField(default=dict)
+    home_owner = JSONField(default=dict)
+
+    meta = JSONField(default=dict)
 
     def __str__(self):
         return "%s" % self.application
 
     @property
     def tenant_amount(self):
-        # FIXME: static return, fix source amount
-        return 100
-        # return float(self.meta['source_amount']) / 100
+        return float(self.meta['source_amount'])
 
     @property
     def home_owner_amount(self):
-        return float(self.meta['destination_amount']) / 100
+        return float(self.meta['destination_amount'])
+
+    def update_account(self, tenant_info=None, homeowner_info=None, meta_info=None):
+        if tenant_info:
+            self.tenant = merge_dicts(self.tenant, tenant_info)
+        if homeowner_info:
+            self.home_owner = merge_dicts(self.home_owner, homeowner_info)
+        if meta_info:
+            self.meta = merge_dicts(self.meta, meta_info)
+        self.save()
 
     def get_meta_info(self, key):
-        return self.meta[key]
-
-    def update_account(self, tenant_info=None, home_owner_info=None, meta_info=None):
-        if tenant_info:
-            self.tenant.update(tenant_info)
-        if home_owner_info:
-            self.home_owner.update(home_owner_info)
-        if meta_info:
-            self.meta.update(meta_info)
-        self.save()
+        return get_nested_info(self.meta, key)
 

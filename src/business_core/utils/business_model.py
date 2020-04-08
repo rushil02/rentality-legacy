@@ -90,6 +90,10 @@ class BusinessModel(object):
             )
         )
 
+    @classmethod
+    def init_from_code(cls, code):
+        return cls(business_model_config=BusinessModelConfigurationDB.objects.get(code=code))
+
     def validate_house(self):
         """
         :return: [errors, ...]
@@ -101,4 +105,3 @@ class BusinessModel(object):
         :return: [errors, ...]
         """
         return self.validator.validate_application()
-

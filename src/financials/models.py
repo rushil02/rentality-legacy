@@ -12,11 +12,24 @@ class PaymentGatewayTransaction(models.Model):
     `payment_gateway` - Stores for which payment gateway this transaction is going through.
 
     """
+    CORE_TRANSACTION_TYPES = [
+        ('P', 'Payout - Transaction from Rentality to Home Owner'),
+        ('C', 'Pay-in - Transaction from Tenant to Rentality'),
+        ('R', 'Refund - Transaction from Rentality to Tenant'),
+    ]
+
+    VIRTUAL_TRANSACTIONS = [
+        # if PG uses Virtual Homeowner accounts
+        ('HT', "Virtual Transfer from Rentality to Home-owner Virtual Account"),
+        ('RHT', "Virtual Transfer from Home-owner Virtual Account to Rentality"),
+        # if PG uses Virtual Tenant accounts
+        ('TT', "Virtual Transfer from Tenant Virtual Account to Rentality"),
+        ('RTT', "Virtual Transfer from Rentality to Tenant Virtual Account"),
+    ]
+
     ref_code = models.CharField(unique=True, max_length=20, blank=True)
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT, null=True, blank=True)
-    TYPE = (  # FIXME: get from payment gateway module (not model)
-    )
-    transaction_type = models.CharField(max_length=2, choices=TYPE)
+    transaction_type = models.CharField(max_length=3, choices=(CORE_TRANSACTION_TYPES + VIRTUAL_TRANSACTIONS))
     transaction_id = models.TextField()
     user_account = models.ForeignKey('user_custom.Account', on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=15, decimal_places=2)

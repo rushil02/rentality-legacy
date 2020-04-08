@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
+from financials.models import PaymentGatewayTransaction
 from .adapters import get_adaptor_class
 from .models import LocationRestriction, Profile
 
@@ -41,6 +42,13 @@ class User(object):
     def set_pg_account(self, account):
         self._pg_account_db = account
 
+    @property
+    def pg_account(self):
+        if self._pg_account_db:
+            return self._pg_account_db
+        else:
+            raise AttributeError("User's PG account is not set")
+
     def update_account(self, value):
         # FIXME: Update by merge not replacement !!!!URGENT!!!
         if self._pg_account_db:
@@ -76,21 +84,6 @@ class PaymentGateway(object):
     Models all the payment gateway processes used by the system.
     """
 
-    CORE_TRANSACTION_TYPES = {
-        'P': ('Payout', "Transaction from Rentality to Home Owner"),
-        'C': ('Pay-in', "Transaction from Tenant to Rentality"),
-        'R': ('Refund', "Transaction from Rentality to Tenant"),
-    }
-
-    VIRTUAL_TRANSACTIONS = (
-        # if USES_VIRTUAL_HOME_OWNER_ACCOUNT = True
-        ('HT', 'Home-owner Transfer', "Virtual Transfer from Rentality to Home-owner Virtual Account"),
-        ('RHT', 'Reverse Home-owner Transfer', "Virtual Transfer from Home-owner Virtual Account to Rentality"),
-        # if USES_VIRTUAL_TENANT_ACCOUNT = True
-        ('TT', 'Tenant Transfer', "Virtual Transfer from Tenant Virtual Account to Rentality"),
-        ('RTT', 'Reverse Tenant Transfer', "Virtual Transfer from Rentality to Tenant Virtual Account"),
-    )
-
     # region init
     def __init__(self, pg_profile):
         """
@@ -99,8 +92,9 @@ class PaymentGateway(object):
         self._pg_profile = pg_profile
         self._pg_db = pg_profile.payment_gateway
         self._payment_gateway = get_adaptor_class(self._pg_db.code)()
-        self.homeowner = None
-        self.tenant = None
+        self._homeowner = None
+        self._tenant = None
+        self._application_db = None
 
     @property
     def db(self):
@@ -109,6 +103,27 @@ class PaymentGateway(object):
     @property
     def profile(self):
         return self._pg_profile
+
+    @property
+    def application(self):
+        if self._application_db:
+            return self._application_db
+        else:
+            raise AttributeError("Application is not set in utils.PaymentGateway")
+
+    @property
+    def tenant(self):
+        if self._tenant:
+            return self._tenant
+        else:
+            raise AttributeError("Tenant is not set in utils.PaymentGateway")
+
+    @property
+    def homeowner(self):
+        if self._homeowner:
+            return self._homeowner
+        else:
+            raise AttributeError("Homeowner is not set in utils.PaymentGateway")
 
     @classmethod
     def load_location_default(cls, billing_location, house_location):
@@ -151,13 +166,27 @@ class PaymentGateway(object):
         return cls(loc_object.payment_gateway_profile)
 
     @classmethod
-    def init_for_homeowner(cls, user, pg_code):
+    def init_for_homeowner(cls, user, pg_code, **kwargs):
         profile = Profile.objects.get(payment_gateway__code=pg_code, country=user.get_billing_location())
-        return cls(profile)
+        obj = cls(profile)
+        obj.set_homeowner_user(
+            user,
+            user_request=kwargs.get('user_request', None),
+            request=kwargs.get('request', None)
+        )
+        return obj
 
     @classmethod
     def init_for_house(cls, house_db):
         return cls.init_for_homeowner(house_db.home_owner.user, house_db.payment_gateway.code)
+
+    @classmethod
+    def init_for_application(cls, application_db):
+        profile = Profile.objects.get(
+            payment_gateway=application_db.accountdetail.payment_gateway,
+            country=application_db.house.home_owner.user.get_billing_location()
+        )
+        return cls(profile)
 
     def set_homeowner_user(self, user, user_request=None, request=None):
         """
@@ -166,7 +195,7 @@ class PaymentGateway(object):
         :param user_request: [optional] serialized response dictionary from user
         :return:
         """
-        self.homeowner = User(user)
+        self._homeowner = User(user)
         try:
             self.homeowner.set_pg_account(user.account_set.get(payment_gateway=self._pg_db))
         except ObjectDoesNotExist:
@@ -184,13 +213,20 @@ class PaymentGateway(object):
         :param user_request: [optional] serialized response dictionary from user
         :return:
         """
-        self.tenant = User(user)
+        self._tenant = User(user)
+        try:
+            self.tenant.set_pg_account(user.account_set.get(payment_gateway=self._pg_db))
+        except ObjectDoesNotExist:
+            raise AttributeError("Required Home Owner account is not found.")
         if user_request:
-            self.homeowner.user_data = user_request
+            self.tenant.user_data = user_request
         if request:
-            self.homeowner.http_request = request
+            self.tenant.http_request = request
 
-    # endregion
+    def set_application(self, application_db):
+        self._application_db = application_db
+
+    # endregion init
 
     # region Payout
     def create_payout_account(self):
@@ -216,8 +252,40 @@ class PaymentGateway(object):
 
     # endregion
 
-    def on_event(self, event):
-        return self._payment_gateway.on_event(event)
+    def record_monetary_transaction(self, pgt, no_app=False):
+        if pgt.record_transaction:
+            if no_app:
+                application = None
+            else:
+                application = self.application
+
+            if pgt.user_type == 'tenant':
+                user_account = self.tenant.pg_account
+            elif pgt.user_type == 'homeowner':
+                user_account = self.homeowner.pg_account
+            else:
+                raise ValueError("%s is not valid user_type" % pgt.user_type)
+
+            pgt_obj = PaymentGatewayTransaction.objects.create(
+                application=application,
+                transaction_type=pgt.transaction_type,
+                transaction_id=pgt.transaction_id,
+                amount=pgt.amount,
+                user_account=user_account
+            )
+            pgt.set_db(pgt_obj)
+            return pgt
+        else:
+            return pgt
+
+    def create_intent(self, application):
+        """
+        :param application:
+        :return:
+        """
+        return self.record_monetary_transaction(
+            self._payment_gateway.create_intent(self.homeowner, self.tenant, application)
+        )
 
     def perform_pay_in(self, amount):
         self._payment_gateway.process_pay_in(amount)

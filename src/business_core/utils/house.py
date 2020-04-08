@@ -43,11 +43,11 @@ class House(object):
                 self.set_business_model(BusinessModel(promo_code.get_business_model_config()))
         return BusinessModel(default_db)
 
-    def set_business_model(self, business_model_db):
+    def set_business_model(self, business_model):
         """
-        :param business_model_db: `business_core.models.BusinessModelConfiguration` object
+        :param business_model: `BusinessModel` object
         """
-        self._business_model = BusinessModel(business_model_db)
+        self._business_model = business_model
         self._business_model.set_house(self)
 
     def set_can_policy(self, cancellation_policy_db):
@@ -105,7 +105,7 @@ class House(object):
             promo_codes=_promo_codes,
             timezone=db_obj.local_timezone
         )
-        obj.set_business_model(business_model_db=db_obj.business_config)
+        obj.set_business_model(business_model=BusinessModel(db_obj.business_config))
         if db_obj.cancellation_policy:
             obj.set_can_policy(cancellation_policy_db=db_obj.cancellation_policy)
         return obj
