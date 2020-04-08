@@ -6,6 +6,9 @@ FROM node:11-alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
+# To handle 'not get uid/gid'
+RUN npm config set unsafe-perm true
+
 RUN npm install -g npm@latest
 
 WORKDIR /app
