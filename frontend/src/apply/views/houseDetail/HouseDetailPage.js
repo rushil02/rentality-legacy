@@ -160,7 +160,7 @@ export default class HouseDetailPage extends Component {
         return new Promise(function (resolve, reject) {
             applyBooking(that.houseUUID, that.state.application)
                 .then((result) => {
-                    that.setApplicationUUID(result.data["application_uuid"]);
+                    that.setApplicationUUID(result.data["uuid"]);
                     resolve(result);
                 })
                 .catch((error) => {

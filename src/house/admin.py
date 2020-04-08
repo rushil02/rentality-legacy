@@ -7,6 +7,7 @@ class HouseAdmin(admin.ModelAdmin):
     autocomplete_fields = ['location']
     list_display = ('home_owner', 'title', 'address', 'location', 'home_type', 'status')
     list_filter = ('status', 'home_type')
+    search_fields = ('address', 'location')
 
     def get_queryset(self, request):
         if request.user.is_superuser:
