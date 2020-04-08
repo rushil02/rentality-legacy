@@ -68,7 +68,7 @@ class LedgerRecord(models.Model):
     payment_type = models.CharField(max_length=2, choices=PAYMENT_TYPE)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     pg_transaction = models.OneToOneField(
-        'financials.PaymentGatewayTransaction', on_delete=models.PROTECT, null=True, blank=True,
+        'financials.PaymentGatewayTransaction', on_delete=models.PROTECT,
         verbose_name="Payment Gateway Transaction"
     )
     create_time = models.DateTimeField(auto_now_add=True)

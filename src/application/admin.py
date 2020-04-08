@@ -7,9 +7,13 @@ from application.models import Application, AccountDetail, ApplicationState
 class ApplicationAdmin(admin.ModelAdmin):
     autocomplete_fields = ['tenant', 'house']
     list_display = ('ref_code', 'tenant', 'house', 'uuid', 'rent', 'status')
-    list_filter = ('status', )
+    list_filter = ('status',)
 
-    search_fields = ('ref_code', )
+    search_fields = ('ref_code',)
+
+
+class ApplicationStateAdmin(admin.ModelAdmin):
+    list_display = ('application', 'new_state', 'old_state', 'actor', 'created_on')
 
 
 class AccountDetailAdmin(admin.ModelAdmin):
@@ -20,4 +24,4 @@ class AccountDetailAdmin(admin.ModelAdmin):
 
 admin.site.register(Application, ApplicationAdmin)
 admin.site.register(AccountDetail, AccountDetailAdmin)
-admin.site.register(ApplicationState)
+admin.site.register(ApplicationState, ApplicationStateAdmin)

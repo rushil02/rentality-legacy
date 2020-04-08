@@ -4,7 +4,7 @@ from django.utils import timezone
 
 class TenantIntend(TenantAction):
     """
-    Possible states -> Error
+    Possible states -> Incomplete
     """
 
     def execute_payment_gateway(self, payment_gateway, application_db):
@@ -15,6 +15,9 @@ class TenantIntend(TenantAction):
 
     def inform_entities(self, application_db):
         pass
+
+    def postprocess(self, application_db):
+        self._next_state = 'Incomplete'
 
 
 class TenantExecuteIntent(TenantAction):
@@ -33,6 +36,9 @@ class TenantExecuteIntent(TenantAction):
 
     def inform_entities(self, application_db):
         pass
+
+    def postprocess(self, application_db):
+        self._next_state = 'Pending'
 
 
 class SystemExecuteIntent(SystemAction):

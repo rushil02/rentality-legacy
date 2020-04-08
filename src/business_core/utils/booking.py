@@ -65,7 +65,7 @@ class Booking(object):
         :return: cls object
         """
         application = Application.load(application_obj)
-        obj = cls(application, actor=actor, state=application_obj.status)
+        obj = cls(application, actor=actor, state=application_obj.get_status_display())
         obj.set_application_db(application_obj)
         obj.use_payment_gateway(PaymentGateway.init_for_application(application_obj))
         return obj

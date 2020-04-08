@@ -77,8 +77,8 @@ class Action(object):
         self.inform_entities(application_db)
 
     def get_meta_update_info(self):
-        if self.pgt and self.pgt.meta_info:
-            return merge_dicts(self.acc_info, self.pgt.meta_info)
+        if self.pgt and self.pgt.meta_store:
+            return merge_dicts(self.acc_info, self.pgt.meta_store)
         else:
             return self.acc_info
 
