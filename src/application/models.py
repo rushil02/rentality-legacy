@@ -167,11 +167,11 @@ class AccountDetail(models.Model):
 
     @property
     def tenant_amount(self):
-        return float(self.meta['source_amount'])
+        return float(self.tenant['payable_amount'])
 
     @property
     def home_owner_amount(self):
-        return float(self.meta['destination_amount'])
+        return float(self.home_owner['payable_amount'])
 
     def update_account(self, tenant_info=None, homeowner_info=None, meta_info=None):
         if tenant_info:
