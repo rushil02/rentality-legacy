@@ -15,8 +15,14 @@ import {
 } from "./models";
 import {APIModelListAdapter} from "../core/utils/ModelHelper";
 
+export function verifyUserCanStartListing() {
+    return new Promise(function (resolve, reject) {
+        resolve({verified: false})
+    })
+}
+
 export function getHouseData(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.detail, {houseUUID: houseUUID}), {})
             .then((result) => {
@@ -29,7 +35,7 @@ export function getHouseData(houseUUID) {
 }
 
 export function postHouseData(data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.create), data.serialize())
             .then((result) => {
@@ -44,7 +50,7 @@ export function postHouseData(data) {
 }
 
 export function patchHouseData(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .patch(reverse(routes.house.edit, {houseUUID: houseUUID}), data.serialize("__partial__"))
             .then((result) => {
@@ -57,7 +63,7 @@ export function patchHouseData(houseUUID, data) {
 }
 
 export function deleteHouse(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .delete(reverse(routes.house.edit, {houseUUID: houseUUID}))
             .then((res) => {
@@ -70,7 +76,7 @@ export function deleteHouse(houseUUID) {
 }
 
 export function activateHouse(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.activate, {houseUUID: houseUUID}))
             .then((res) => {
@@ -83,7 +89,7 @@ export function activateHouse(houseUUID) {
 }
 
 export function deactivateHouse(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.deactivate, {houseUUID: houseUUID}))
             .then((res) => {
@@ -96,7 +102,7 @@ export function deactivateHouse(houseUUID) {
 }
 
 export function getFormOptions() {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.formOptions), {})
             .then((result) => {
@@ -109,7 +115,7 @@ export function getFormOptions() {
 }
 
 export function getFacilityData(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.facilities, {houseUUID: houseUUID}))
             .then((result) => {
@@ -122,7 +128,7 @@ export function getFacilityData(houseUUID) {
 }
 
 export function postFacilityData(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.facilities, {houseUUID: houseUUID}), data.serialize(true))
             .then((result) => {
@@ -135,7 +141,7 @@ export function postFacilityData(houseUUID, data) {
 }
 
 export function getAvailabilityData(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.availability.list, {houseUUID: houseUUID}))
             .then((result) => {
@@ -153,7 +159,7 @@ export function getAvailabilityData(houseUUID) {
 
 // FIXME: Migrate Availability code to new services/model paradigm for Lists
 export function postAvailabilityData(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.availability.create, {houseUUID: houseUUID}), data)
             .then((result) => {
@@ -166,7 +172,7 @@ export function postAvailabilityData(houseUUID, data) {
 }
 
 export function putAvailabilityData(houseUUID, objID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .put(reverse(routes.house.availability.update, {houseUUID: houseUUID, objID: objID}), data)
             .then((result) => {
@@ -179,7 +185,7 @@ export function putAvailabilityData(houseUUID, objID, data) {
 }
 
 export function deleteAvailabilityData(houseUUID, objID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .delete(reverse(routes.house.availability.remove, {houseUUID: houseUUID, objID: objID}))
             .then((result) => {
@@ -192,7 +198,7 @@ export function deleteAvailabilityData(houseUUID, objID) {
 }
 
 export function getRulesData(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.rules.list, {houseUUID: houseUUID}))
             .then((result) => {
@@ -205,7 +211,7 @@ export function getRulesData(houseUUID) {
 }
 
 export function postRulesData(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.rules.update, {houseUUID: houseUUID}), data.serialize(true))
             .then((result) => {
@@ -220,7 +226,7 @@ export function postRulesData(houseUUID, data) {
 }
 
 export function getImagesData(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.image.list, {houseUUID: houseUUID}))
             .then((result) => {
@@ -238,7 +244,7 @@ export function postImagesFiles(houseUUID, data, progressTracker) {
             "Content-Type": "multipart/form-data"
         }
     };
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let formData = new FormData();
         formData.append("image", data);
         axios
@@ -255,7 +261,7 @@ export function postImagesFiles(houseUUID, data, progressTracker) {
 }
 
 export function updateImageData(houseUUID, imageUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .patch(
                 reverse(routes.house.image.update, {
@@ -276,7 +282,7 @@ export function updateImageData(houseUUID, imageUUID, data) {
 }
 
 export function deleteImage(houseUUID, imageUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .delete(reverse(routes.house.image.update, {houseUUID: houseUUID, imageUUID: imageUUID}))
             .then((result) => {
@@ -295,7 +301,7 @@ export function deleteImage(houseUUID, imageUUID) {
 }
 
 export function getCancellationPolicies(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.canPol.list, {houseUUID: houseUUID}))
             .then((result) => {
@@ -308,7 +314,7 @@ export function getCancellationPolicies(houseUUID) {
 }
 
 export function postCancellationPolicy(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.canPol.update, {houseUUID: houseUUID}), data.serialize(["objID"]))
             .then((result) => {
@@ -321,7 +327,7 @@ export function postCancellationPolicy(houseUUID, data) {
 }
 
 export function getNeighbourhoodDescriptors(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.neighbourhoodDescriptors, {houseUUID: houseUUID}))
             .then((result) => {
@@ -334,7 +340,7 @@ export function getNeighbourhoodDescriptors(houseUUID) {
 }
 
 export function postNeighbourhoodDescriptors(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.neighbourhoodDescriptors, {houseUUID: houseUUID}), data.serialize(true))
             .then((result) => {
@@ -347,7 +353,7 @@ export function postNeighbourhoodDescriptors(houseUUID, data) {
 }
 
 export function getWelcomeTags(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.welcomeTags, {houseUUID: houseUUID}))
             .then((result) => {
@@ -360,7 +366,7 @@ export function getWelcomeTags(houseUUID) {
 }
 
 export function postWelcomeTags(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.welcomeTags, {houseUUID: houseUUID}), data.serialize(true))
             .then((result) => {
@@ -373,7 +379,7 @@ export function postWelcomeTags(houseUUID, data) {
 }
 
 export function checkHousePayoutInfo(houseUUID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.checkPayoutDetails, {houseUUID: houseUUID}))
             .then((result) => {
@@ -386,7 +392,7 @@ export function checkHousePayoutInfo(houseUUID) {
 }
 
 export function createPaymentInfo(houseUUID, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.createPaymentInfo, {houseUUID: houseUUID}), data)
             .then((result) => {
@@ -399,7 +405,7 @@ export function createPaymentInfo(houseUUID, data) {
 }
 
 export function updatePaymentInfo(pg_code, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.updatePaymentInfo, {pg_code: pg_code}), data)
             .then((result) => {
@@ -412,7 +418,7 @@ export function updatePaymentInfo(pg_code, data) {
 }
 
 export function getAddUpdateBankAccount(pg_code) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .get(reverse(routes.house.addUpdateBankAccount, {pg_code: pg_code}))
             .then((result) => {
@@ -425,7 +431,7 @@ export function getAddUpdateBankAccount(pg_code) {
 }
 
 export function postAddUpdateBankAccount(pg_code, data) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         axios
             .post(reverse(routes.house.addUpdateBankAccount, {pg_code: pg_code}), data)
             .then((result) => {
