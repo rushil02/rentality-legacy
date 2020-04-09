@@ -60,25 +60,28 @@ class HouseView(APIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            business_config = self.get_business_model_conf(
-                request.user.get_billing_location(),
-                serializer.validated_data.get('location')
-            )
-            payment_gateway = PaymentGateway.load_location_default(
-                request.user.get_billing_location(),
-                serializer.validated_data.get('location')
-            ).db
-
-            try:
-                serializer.save(
-                    home_owner=request.user.home_owner,
-                    business_config=business_config,
-                    payment_gateway=payment_gateway
+        if request.user.has_billing_information():
+            if serializer.is_valid(raise_exception=True):
+                business_config = self.get_business_model_conf(
+                    request.user.get_billing_location(),
+                    serializer.validated_data.get('location')
                 )
-            except ValidationError as e:
-                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+                payment_gateway = PaymentGateway.load_location_default(
+                    request.user.get_billing_location(),
+                    serializer.validated_data.get('location')
+                ).db
+
+                try:
+                    serializer.save(
+                        home_owner=request.user.home_owner,
+                        business_config=business_config,
+                        payment_gateway=payment_gateway
+                    )
+                except ValidationError as e:
+                    return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Not Authorised'}, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, house_uuid):
         house = self.get_object(house_uuid)
