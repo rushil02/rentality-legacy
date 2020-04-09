@@ -23,6 +23,17 @@ from user_custom.models import Account
 from utils.api_thumbnailer import resize_image
 
 
+class VerifyUserCanStartListing(APIView):
+    """
+    Verify if user has necessary profile details to start Listing
+    Particularly the country
+    """
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        return Response({'verified': request.user.has_billing_information()}, status=status.HTTP_200_OK)
+
+
 class HouseView(APIView):
     """
     CRUD House
