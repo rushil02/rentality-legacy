@@ -40,7 +40,7 @@ export default class PayoutInfoContainer extends Component {
             statusBI: "Verifying",
             statusPI: "Verifying",
             statusII: "Verifying",
-            statusEA: "Verifying"
+            statusEA: "Verifying",
         };
     }
 
@@ -57,7 +57,7 @@ export default class PayoutInfoContainer extends Component {
     onFieldChange = (field, value) => {
         this.setState((prevState) => ({
             ...prevState,
-            userInfo: prevState.userInfo.setData(field, value)
+            userInfo: prevState.userInfo.setData(field, value),
         }));
     };
 
@@ -65,26 +65,27 @@ export default class PayoutInfoContainer extends Component {
         getUserProfileData().then((result) => {
             let billingCountryID = result.getData("billingCountryID");
             let accountType = result.getData("accountType");
+            console.log(billingCountryID);
             if (billingCountryID === "" || billingCountryID === null || billingCountryID === undefined) {
                 this.setState((prevState) => ({
                     ...prevState,
                     showSelectCountry: true,
-                    userInfo: result
+                    userInfo: result,
                 }));
             } else {
                 if (accountType === "Business") {
                     this.setState((prevState) => ({
                         ...prevState,
                         addBussinessNameField: true,
-                        userInfo: result
+                        userInfo: result,
                     }));
                 } else {
                     this.setState((prevState) => ({
                         ...prevState,
-                        userInfo: result
+                        userInfo: result,
                     }));
-                    this.getCountryName(billingCountryID);
                 }
+                this.getCountryName(billingCountryID);
             }
         });
     };
@@ -94,7 +95,7 @@ export default class PayoutInfoContainer extends Component {
             .then((result) => {
                 this.setState((prevState) => ({
                     ...prevState,
-                    billingCountryName: result.name
+                    billingCountryName: result.name,
                 }));
             })
             .catch((error) => alertUser.init({stockAlertType: "connectionError"}));
@@ -102,12 +103,12 @@ export default class PayoutInfoContainer extends Component {
 
     onBillingInfoSave = () => {
         const that = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             patchUserProfileData(that.state.userInfo)
                 .then((result) => {
                     that.setState((prevState) => ({
                         ...prevState,
-                        userInfo: result
+                        userInfo: result,
                     }));
                     that.verifyPayoutInfo();
                     resolve(result);
@@ -128,7 +129,7 @@ export default class PayoutInfoContainer extends Component {
                     statusBI: "Complete",
                     statusPI: "Complete",
                     statusII: "Complete",
-                    statusEA: "Complete"
+                    statusEA: "Complete",
                 }));
                 this.props.navContext.data.updateFormState(this.formID, "hasChanged");
                 this.props.navContext.sync();
@@ -138,14 +139,14 @@ export default class PayoutInfoContainer extends Component {
                     this.setState((prevState) => ({
                         ...prevState,
                         verifying: false,
-                        statusBI: "Incomplete"
+                        statusBI: "Incomplete",
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "PGM") {
                     this.setState((prevState) => ({
                         ...prevState,
                         verifying: false,
                         statusBI: "Complete",
-                        statusPI: "Incomplete"
+                        statusPI: "Incomplete",
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "IIM") {
                     this.setState((prevState) => ({
@@ -153,7 +154,7 @@ export default class PayoutInfoContainer extends Component {
                         verifying: false,
                         statusBI: "Complete",
                         statusPI: "Complete",
-                        statusII: "Incomplete"
+                        statusII: "Incomplete",
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "EAM") {
                     this.setState((prevState) => ({
@@ -162,14 +163,14 @@ export default class PayoutInfoContainer extends Component {
                         statusBI: "Complete",
                         statusPI: "Complete",
                         statusII: "Complete",
-                        statusEA: "Incomplete"
+                        statusEA: "Incomplete",
                     }));
                 }
             });
     };
 
     onSave = () => {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             resolve();
         });
     };

@@ -99,16 +99,28 @@ export default class APIRequestButton extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.removeListener();
+    }
+
     attachListener = () => {
-        if (this.containerList.length != 0) {
+        if (this.containerList.length !== 0) {
             this.containerList.forEach((container) => {
                 container.addEventListener("input", this.resetButtonOnInput);
             });
         }
     };
 
+    removeListener = () => {
+        if (this.containerList.length !== 0) {
+            this.containerList.forEach((container) => {
+                container.removeEventListener("input", this.resetButtonOnInput);
+            });
+        }
+    };
+
     resetButtonOnInput = (event) => {
-        if (this.containerList.length != 0) {
+        if (this.containerList.length !== 0) {
             this.containerList.forEach((container) => {
                 container.removeEventListener("input", this.resetButtonOnInput);
             });

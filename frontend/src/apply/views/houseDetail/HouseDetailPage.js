@@ -197,12 +197,11 @@ export default class HouseDetailPage extends Component {
         return new Promise(function (resolve, reject) {
             confirmBooking(that.houseUUID, that.state.applicationUUID)
                 .then((result) => {
-                    that.setClientSecret(result.data["client_secret"]);
-                    console.log(that.state.clientSecret, result);
+                    that.setClientSecret(result.data.PG.client_secret);
+                    console.log(that.state.clientSecret, result, that.checkoutFormChild);
                     return that.checkoutFormChild.current.submit();
                 })
                 .then((result) => {
-                    console.log(result);
                     if (result.error) {
                         that.enableDisplay();
                         that.confirmModalChild.current.closeModal();
@@ -212,7 +211,6 @@ export default class HouseDetailPage extends Component {
                             autoHide: false,
                         });
                         reject(result.error);
-                        console.log(result.error.message);
                     } else {
                         if (result.paymentIntent.status === "succeeded") {
                             //Redirect to success page
@@ -222,6 +220,8 @@ export default class HouseDetailPage extends Component {
                     }
                 })
                 .catch((error) => {
+                    that.enableDisplay();
+                    console.log(error);
                     reject(error);
                 });
         });

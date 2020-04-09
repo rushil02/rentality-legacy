@@ -11,14 +11,21 @@ import {
     Image,
     CancellationPolicy,
     NeighbourhoodDescriptor,
-    WelcomeTag
+    WelcomeTag,
 } from "./models";
 import {APIModelListAdapter} from "../core/utils/ModelHelper";
 
 export function verifyUserCanStartListing() {
     return new Promise(function (resolve, reject) {
-        resolve({verified: false})
-    })
+        axios
+            .get(reverse(routes.house.userCanList))
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((error) => {
+                reject(handleError(error).error);
+            });
+    });
 }
 
 export function getHouseData(houseUUID) {
@@ -241,8 +248,8 @@ export function getImagesData(houseUUID) {
 export function postImagesFiles(houseUUID, data, progressTracker) {
     let config = {
         headers: {
-            "Content-Type": "multipart/form-data"
-        }
+            "Content-Type": "multipart/form-data",
+        },
     };
     return new Promise(function (resolve, reject) {
         let formData = new FormData();
@@ -266,7 +273,7 @@ export function updateImageData(houseUUID, imageUUID, data) {
             .patch(
                 reverse(routes.house.image.update, {
                     houseUUID: houseUUID,
-                    imageUUID: imageUUID
+                    imageUUID: imageUUID,
                 }),
                 data.serialize(["isThumbnail"])
             )

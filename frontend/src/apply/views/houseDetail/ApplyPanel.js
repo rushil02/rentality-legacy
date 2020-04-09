@@ -152,6 +152,7 @@ export default class ApplyPanel extends Component {
                     updatePaymentID={(value) => onFieldChange("paymentID", value)}
                     name={`${application.getData("applicant.firstName")} ${application.getData("applicant.lastName")}`}
                     requestForToken={"gg"}
+                    checkoutFormRef={this.props.checkoutFormRef}
                 />
 
                 <div className="checkbox auto-width" style={{marginTop: "60px"}}>

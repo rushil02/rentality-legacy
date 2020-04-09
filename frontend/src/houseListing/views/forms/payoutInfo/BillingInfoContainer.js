@@ -13,7 +13,7 @@ import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButto
 
 const genderSelectStyles = {
     option: (provided, state) => ({
-        ...provided
+        ...provided,
     }),
 
     singleValue: (provided, state) => {
@@ -28,7 +28,7 @@ const genderSelectStyles = {
         display: "flex",
         "flex-wrap": "wrap",
         "padding-top": "6px",
-        "padding-bottom": "6px"
+        "padding-bottom": "6px",
     }),
 
     container: (provided, state) => ({
@@ -43,21 +43,21 @@ const genderSelectStyles = {
         "-moz-transition": "all 0.30s ease-in-out",
         "-ms-transition": "all 0.30s ease-in-out",
         "-o-transition": "all 0.30s ease-in-out",
-        "box-shadow": state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial"
-    })
+        "box-shadow": state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial",
+    }),
 };
 
 const genders = {
     M: "Male",
     F: "Female",
-    O: "Other"
+    O: "Other",
 };
 
 export default class BillingInfoContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modeEditing: false
+            modeEditing: false,
         };
 
         this.maxDate = new Date();
@@ -98,7 +98,7 @@ export default class BillingInfoContainer extends Component {
                 action: (e) => {
                     e.stopPropagation();
                 },
-                icon: faPlus
+                icon: faPlus,
             };
         } else if (this.state.modeEditing) {
             buttonConfig = {
@@ -107,7 +107,7 @@ export default class BillingInfoContainer extends Component {
                     e.stopPropagation();
                     this.toggleEditState(false);
                 },
-                icon: faChevronUp
+                icon: faChevronUp,
             };
         } else {
             buttonConfig = {
@@ -116,7 +116,7 @@ export default class BillingInfoContainer extends Component {
                     e.stopPropagation();
                     this.toggleEditState(true);
                 },
-                icon: faPen
+                icon: faPen,
             };
         }
 
@@ -189,7 +189,7 @@ export default class BillingInfoContainer extends Component {
                                                             message:
                                                                 "This field cannot be changed. Please contact us for further support.",
                                                             alertType: "danger",
-                                                            autoHide: true
+                                                            autoHide: true,
                                                         })
                                                     }
                                                 >
@@ -222,7 +222,7 @@ export default class BillingInfoContainer extends Component {
                                                                     message:
                                                                         "This field cannot be changed. Please contact us for further support.",
                                                                     alertType: "danger",
-                                                                    autoHide: true
+                                                                    autoHide: true,
                                                                 })
                                                             }
                                                         >
@@ -303,7 +303,7 @@ export default class BillingInfoContainer extends Component {
                                             onChange={(e) => this.props.onFieldChange("sex", e.value)}
                                             value={{
                                                 value: this.props.userInfo.getData("sex"),
-                                                label: genders[this.props.userInfo.getData("sex")]
+                                                label: genders[this.props.userInfo.getData("sex")],
                                             }}
                                         />
 
@@ -335,7 +335,7 @@ export default class BillingInfoContainer extends Component {
                                                             message:
                                                                 "This field cannot be changed. Please contact us for further support.",
                                                             alertType: "danger",
-                                                            autoHide: true
+                                                            autoHide: true,
                                                         })
                                                     }
                                                 >
@@ -377,7 +377,7 @@ export default class BillingInfoContainer extends Component {
                                                 default: "Save",
                                                 loading: "Saving",
                                                 done: "Saved",
-                                                error: "Error!"
+                                                error: "Error!",
                                             }}
                                             callback={this.props.onSave}
                                             containerID={"collapsibleBillingInfo"}

@@ -4,7 +4,7 @@ export default {
     interface: {
         base: "",
         create: "create",
-        edit: "edit/:houseUUID"
+        edit: "edit/:houseUUID",
     },
     APIs: {
         formOptions: "form-options",
@@ -17,27 +17,28 @@ export default {
             list: "list/:houseUUID",
             create: ":houseUUID",
             update: ":houseUUID/:objID",
-            remove: ":houseUUID/:objID"
+            remove: ":houseUUID/:objID",
         }),
         facilities: "facilities/:houseUUID",
         rules: include("rules", {
             list: "list/:houseUUID",
-            update: "update/:houseUUID"
+            update: "update/:houseUUID",
         }),
         image: include("image", {
             list: "list/:houseUUID",
             upload: "upload/:houseUUID",
-            update: ":houseUUID/:imageUUID"
+            update: ":houseUUID/:imageUUID",
         }),
         canPol: include("can-pol", {
             list: "list/:houseUUID",
-            update: "update/:houseUUID"
+            update: "update/:houseUUID",
         }),
         neighbourhoodDescriptors: "neighbourhood-desc/:houseUUID",
         welcomeTags: "welcome-tags/:houseUUID",
         checkPayoutDetails: "check-payout-details/:houseUUID",
         createPaymentInfo: "/pg/add-ho-acc/stripe/:houseUUID",
         updatePaymentInfo: "/pg/update-ho-acc/:pg_code",
-        addUpdateBankAccount: "/pg/update-ho-ba/:pg_code"
-    }
+        addUpdateBankAccount: "/pg/update-ho-ba/:pg_code",
+        userCanList: "verify-user",
+    },
 };

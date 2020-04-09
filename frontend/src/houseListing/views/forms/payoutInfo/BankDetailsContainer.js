@@ -22,25 +22,27 @@ export default class BankDetailsContainer extends Component {
 
     componentDidMount() {
         //hit addUpdatebankaccount, if yes show edit button, if no show save button
-        getAddUpdateBankAccount("stripe")
-            .then((result) => {
-                if (!result.pg.error) {
-                    this.setState((prevState) => ({
-                        ...prevState,
-                        showEditButton: true,
-                        routingNumber: result.pg.routing_number,
-                        accountNumber: "XXXXX" + result.pg.last4,
-                    }));
-                }
-            })
-            .catch((error) => {
-                let errorData = error.response.data.details;
-                alertUser.init({
-                    message: errorData,
-                    alertType: "danger",
-                    autoHide: false,
+        if (this.props.statusEA === "Incomplete") {
+            getAddUpdateBankAccount("stripe")
+                .then((result) => {
+                    if (!result.pg.error) {
+                        this.setState((prevState) => ({
+                            ...prevState,
+                            showEditButton: true,
+                            routingNumber: result.pg.routing_number,
+                            accountNumber: "XXXXX" + result.pg.last4,
+                        }));
+                    }
+                })
+                .catch((error) => {
+                    let errorData = error.response.data.details;
+                    alertUser.init({
+                        message: errorData,
+                        alertType: "danger",
+                        autoHide: false,
+                    });
                 });
-            });
+        }
     }
 
     onEdit = () => {

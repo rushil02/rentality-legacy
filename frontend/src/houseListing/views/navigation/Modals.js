@@ -3,12 +3,15 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
 import styles from "./Navigator.css";
+import routes from "routes";
+import {reverse} from "named-urls";
 
 export function ActivateModal(props) {
     const [show, setShow] = React.useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const successRoute = reverse(routes.react.dashboard.base);
 
     const getButton = () => {
         if (props.isAPIRequestButton === true && props.isDisabled === true) {
@@ -61,12 +64,15 @@ export function ActivateModal(props) {
                                 default: "Activate Listing",
                                 loading: " ",
                                 done: "Deactivate Listing",
-                                error: "Error!"
+                                error: "Error!",
                             }}
                             // textDoneClasses={styles.deactivateListingText}
                             // textDefaultClasses={styles.activateListingText}
                             loaderSize={6}
                             callback={props.onActivate}
+                            onSuccess={() => {
+                                window.location.href = successRoute;
+                            }}
                         />
                         <Button className={"btn default-button-style float-right"} onClick={handleClose}>
                             Cancel
