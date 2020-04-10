@@ -30,9 +30,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
             try:
                 billing_country = validated_data.pop('billing_country')
             except KeyError:
-                pass
+                raise serializers.ValidationError({'billing_country': ["This field is required."]})
             else:
-                instance.billing_country = billing_country
+                if billing_country:
+                    instance.billing_country = billing_country
+                else:
+                    raise serializers.ValidationError({'billing_country': ["This field is required."]})
 
         return super(UserProfileSerializer, self).update(instance, validated_data)
 

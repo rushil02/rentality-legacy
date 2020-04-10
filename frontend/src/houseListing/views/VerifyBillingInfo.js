@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {verifyUserCanStartListing} from "../services";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 import UserProfileContainer from "./tellUsMore/UserProfileContainer";
+import {alertUser} from "core/alert/Alert";
 
 export default class VerifyBillingInfo extends Component {
     constructor(props) {
@@ -9,6 +10,8 @@ export default class VerifyBillingInfo extends Component {
         this.state = {
             apiStatus: "loading",
             verified: false,
+            notAvailable: false,
+            NAMessage: ""
         };
     }
 
@@ -22,7 +25,16 @@ export default class VerifyBillingInfo extends Component {
                 this.setState({apiStatus: "done", verified: result.verified});
             })
             .catch((error) => {
-                this.setState({apiStatus: "error"});
+                if (error.response.status === 406) {
+                    this.setState({
+                        apiStatus: "done",
+                        verified: false,
+                        notAvailable: true,
+                        NAMessage: error.response.data.message
+                    })
+                } else {
+                    this.setState({apiStatus: "error"});
+                }
             });
     };
 
@@ -30,7 +42,13 @@ export default class VerifyBillingInfo extends Component {
         if (this.state.verified) {
             return this.props.children;
         } else {
-            return <UserProfileContainer verifyUser={this.verifyUser} />;
+            if (this.state.notAvailable) {
+                return <React.Fragment>
+                    {this.state.NAMessage}
+                </React.Fragment>
+            } else {
+                return <UserProfileContainer verifyUser={this.verifyUser}/>;
+            }
         }
     }
 

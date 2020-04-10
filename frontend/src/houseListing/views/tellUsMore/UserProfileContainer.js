@@ -154,14 +154,14 @@ export default class UserProfileContainer extends Component {
                 <div className="row">
                     <div className={"offset-1 col-10 " + styles.mt70}>
                         <div className="row">
-                            <div className="col-md-auto col-lg-1 col-xl-3"></div>
+                            <div className="col-md-auto col-lg-1 col-xl-3"/>
                             <div className="col-md-12 col-lg-10 col-xl-6">
                                 <div className={styles.title}>
                                     <h1>Please tell us more before you start listing</h1>
                                 </div>
                                 <div className="col-12">
-                                    <div className={"row"}>
-                                        <div className="col-12" id={"collapsibleUserInfo"}>
+                                    <div className={"row"} id={"formContainer"}>
+                                        <div className="col-12">
                                             <div className="input">
                                                 <div className="form-control no-background readonly-custom-input">
                                                     <div style={{float: "left"}}>Account Type</div>
@@ -198,7 +198,8 @@ export default class UserProfileContainer extends Component {
                                             <React.Fragment>
                                                 <div className="col-12">
                                                     <div className="input">
-                                                        <div className="form-control no-background readonly-custom-input">
+                                                        <div
+                                                            className="form-control no-background readonly-custom-input">
                                                             <div style={{float: "left"}}>Country</div>
                                                             <div
                                                                 style={{float: "right"}}
@@ -365,7 +366,7 @@ export default class UserProfileContainer extends Component {
                                                     error: "Error!",
                                                 }}
                                                 callback={this.onSave}
-                                                containerID={"collapsibleUserInfo"}
+                                                containerID={"formContainer"}
                                                 doneDisabled={true}
                                                 onSuccess={this.props.verifyUser}
                                             />
@@ -373,7 +374,7 @@ export default class UserProfileContainer extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-auto col-lg-1 col-xl-3"></div>
+                            <div className="col-md-auto col-lg-1 col-xl-3"/>
                         </div>
                     </div>
                 </div>

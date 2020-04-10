@@ -64,8 +64,9 @@ export default class CountryAutoSuggestContainer extends Component {
         getCountrySuggestions(value)
             .then((result) => {
                 if (result.length === 0) {
+                    console.log("HERER");
                     this.setState({
-                        errors: ["Invalid Postal Code"],
+                        errors: ["Invalid Country"],
                     });
                 } else {
                     this.setState({
@@ -109,6 +110,13 @@ export default class CountryAutoSuggestContainer extends Component {
         for (let i = 0; i < this.props.errors.length; i++) {
             errorDisp.push(
                 <div key={i} className="invalid-feedback">
+                    {this.props.errors[i]}
+                </div>
+            );
+        }
+        for (let i = 0; i < this.state.errors.length; i++) {
+            errorDisp.push(
+                <div key={i} className="invalid-feedback">
                     {this.state.errors[i]}
                 </div>
             );
@@ -130,7 +138,7 @@ export default class CountryAutoSuggestContainer extends Component {
                         renderSuggestion={renderSuggestion}
                         inputProps={inputProps}
                     />
-                    <small className="form-text text-muted"></small>
+                    <small className="form-text text-muted"/>
                     {errorDisp}
                 </div>
             </React.Fragment>

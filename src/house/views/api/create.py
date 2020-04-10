@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.http import Http404
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
@@ -21,6 +21,7 @@ from payment_gateway.adapters import PGTransactionError
 from payment_gateway.utils import PaymentGateway
 from user_custom.models import Account
 from utils.api_thumbnailer import resize_image
+from payment_gateway.models import Profile as PaymentGatewayProfile
 
 
 class VerifyUserCanStartListing(APIView):
@@ -28,10 +29,24 @@ class VerifyUserCanStartListing(APIView):
     Verify if user has necessary profile details to start Listing
     Particularly the country
     """
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        return Response({'verified': request.user.has_billing_information()}, status=status.HTTP_200_OK)
+        if bool(request.user.get_billing_location()):
+            country = request.user.get_billing_location()
+
+            if BusinessModelConfiguration.objects.filter(
+                    Q(home_owner_billing_location=country) |
+                    Q(home_owner_billing_location__isnull=True)
+            ).exists() and PaymentGatewayProfile.objects.filter(country=country).exists():
+                return Response({'verified': True}, status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {'message': "Sorry we are not currently available in %s" % country.name},
+                    status=status.HTTP_406_NOT_ACCEPTABLE
+                )
+        else:
+            return Response({'verified': False}, status=status.HTTP_200_OK)
 
 
 class HouseView(APIView):
@@ -60,7 +75,15 @@ class HouseView(APIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if request.user.has_billing_information():
+        country = request.user.get_billing_location()
+        if bool(country):
+            if BusinessModelConfiguration.objects.filter(
+                    Q(home_owner_billing_location=country) | Q(home_owner_billing_location__isnull=True)
+            ).exists() and \
+                    PaymentGatewayProfile.objects.filter(country=country).exists():
+                pass
+            else:
+                return Response({'error': 'Not Authorised'}, status=status.HTTP_400_BAD_REQUEST)
             if serializer.is_valid(raise_exception=True):
                 business_config = self.get_business_model_conf(
                     request.user.get_billing_location(),
