@@ -161,24 +161,6 @@ class BusinessModelConfiguration(models.Model):
         verbose_name='Financial constraints model'
     )
 
-    home_owner_billing_location = models.ForeignKey(
-        'cities.Country', on_delete=models.PROTECT, null=True, blank=True,
-        help_text="Select country to constraint this configuration to the Home Owner's Bank account location."
-    )
-
-    LOCATION_TYPE_LIMIT = models.Q(
-        app_label='cities', model='country') | models.Q(
-        app_label='cities', model='region') | models.Q(
-        app_label='cities', model='city')
-    house_location_type = models.ForeignKey(
-        ContentType, on_delete=models.PROTECT, limit_choices_to=LOCATION_TYPE_LIMIT, null=True, blank=True
-    )
-    house_location_id = models.PositiveIntegerField(null=True, blank=True)
-    house_location = GenericForeignKey('house_location_type', 'house_location_id')
-
-    active = models.BooleanField(default=False)
-    default = models.BooleanField(default=False)
-
     # TODO: Add compatible_payment_gateways field (many to many)
     # ^ Required while creating business model and checking compatibility with available
     # models and geographical coverage
@@ -201,3 +183,42 @@ class BusinessModelConfiguration(models.Model):
 
     def get_financial_meta(self):
         return self.meta.get('financial', {})
+
+
+class ConfigProfile(models.Model):
+    config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
+    meta = JSONField()
+    country = models.ForeignKey(
+        'cities.Country', on_delete=models.PROTECT, null=True, blank=True,
+        help_text="Select country to constraint this configuration to the Home Owner's Bank account location."
+    )
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+
+class LocationRestriction(models.Model):
+    """
+    Maps available Configs for each country ('business_core.ConfigProfile') to locations it is active
+    in or default to.
+
+    """
+    config_profile = models.ForeignKey('business_core.ConfigProfile', on_delete=models.PROTECT)
+
+    LOCATION_TYPE_LIMIT = models.Q(
+        app_label='cities', model='country') | models.Q(
+        app_label='cities', model='region') | models.Q(
+        app_label='cities', model='city')
+    house_location_type = models.ForeignKey(
+        ContentType, on_delete=models.PROTECT, limit_choices_to=LOCATION_TYPE_LIMIT, null=True, blank=True
+    )
+    house_location_id = models.PositiveIntegerField(null=True, blank=True)
+    house_location = GenericForeignKey('house_location_type', 'house_location_id')
+
+    active = models.BooleanField(default=False)
+    default = models.BooleanField(default=False)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s" % self.config_profile

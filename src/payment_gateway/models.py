@@ -122,6 +122,9 @@ class Profile(models.Model):
 
     meta = JSONField(help_text="Holds information required by the payment gateway to work in the selected country.")
 
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
     class Meta:
         unique_together = [['payment_gateway', 'country']]
 
@@ -184,6 +187,9 @@ class LocationRestriction(models.Model):
 
     active = models.BooleanField(default=False)
     default = models.BooleanField(default=False)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "%s" % self.payment_gateway_profile

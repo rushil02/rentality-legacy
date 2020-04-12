@@ -59,7 +59,9 @@ cd-frontend: ## Start STANDALONE container from frontend image which will be rea
 	@sh ./bin/isolated-FE-container.sh
 
 
-# Frontend
+# Reset DB to test custom migrations
+reset-db-mig: ## Reset database to the provided dump file (in ./bin/db_reload and run migrate
+	@cd ./bin/db_reload/  && sh ./reset-savepoint.sh
 
 # Docker release - build, tag and push the container
 # release: build publish ## Make a release by building and publishing the `{version}` ans `latest` tagged containers to ECR
