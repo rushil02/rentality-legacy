@@ -2,17 +2,48 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
 from application.models import Application
+from house.models import House
 from promotions.models import PromotionalCode
 from tenant.serializers import TenantInfoSerializer
 from utils.serializer_fields import DateRangeField
+from cities_custom.serializers import PostalCodeVerboseOnlySerializer
+from house.serializers.read import HomeTypeDeserializer, CancellationPolicyPublicSerializer
+from user_custom.serializers.common import UserContactInfoSerializer
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
+    date = DateRangeField()
+    cancellation_policy = CancellationPolicyPublicSerializer(
+        read_only=True,
+        source='accountdetail.cancellation_policy'
+    )
+    booking_amount = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='tenant_amount',
+        source='accountdetail'
+    )
+    home_owner = UserContactInfoSerializer(source='house.home_owner.user.userprofile')
+
     class Meta:
         model = Application
-        fields = '__all__'
+        fields = (
+            'house_meta', 'home_owner', 'cancellation_policy', 'rent', 'booking_amount', 'meta', 'status', 'date',
+            'ref_code'
+        )
         read_only_fields = (
-            'house', 'house_meta', 'tenant_meta', 'rent', 'fee', 'meta', 'status', 'tenant', 'date', 'ref_code'
+            'house_meta', 'home_owner', 'cancellation_policy', 'rent', 'booking_amount', 'meta', 'status', 'date',
+            'ref_code'
+        )
+
+
+class HouseMetaDeserializer(serializers.ModelSerializer):
+    location = PostalCodeVerboseOnlySerializer()
+    home_type = HomeTypeDeserializer()
+
+    class Meta:
+        model = House
+        fields = (
+            'uuid', 'title', 'address_hidden', 'address', 'location', 'home_type',
         )
 
 

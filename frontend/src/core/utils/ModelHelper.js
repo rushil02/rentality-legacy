@@ -66,11 +66,20 @@ export default class APIModelAdapter {
             for (let i = 0; i < keyList.length; i++) {
                 if (value.hasOwnProperty(keyList[i])) {
                     value = value[keyList[i]];
+                    if (value === null && i !== keyList.length - 1) {
+                        if (this.status !== "empty") {
+                            // Checks and warns if a dbOBj doesn't contain specified fields
+                            // dbObj and empty objects are differentiated using status 'saved' and 'empty' respectively.
+                            console.debug(`${keyList[i]} Not Found in Response. May cause unexpected behaviour.`);
+                        }
+                        value = undefined;
+                        break;
+                    }
                 } else {
                     if (this.status !== "empty") {
                         // Checks and warns if a dbOBj doesn't contain specified fields
                         // dbObj and empty objects are differentiated using status 'saved' and 'empty' respectively.
-                        console.warn(`${keyList[i]} Not Found in Response. May cause unexpected behaviour.`);
+                        console.debug(`${keyList[i]} Not Found in Response. May cause unexpected behaviour.`);
                     }
                     value = undefined;
                     break;

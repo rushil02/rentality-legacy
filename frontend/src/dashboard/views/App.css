@@ -19,12 +19,12 @@
 }
 
 .pageDashboard .board {
-    border-bottom: 1px solid #dce0e8; 
+    border-bottom: 1px solid #dce0e8;
     padding: 15px 5px 30px 5px;
     margin-bottom: 60px;
 }
 
-.pageDashboard .board .info{
+.pageDashboard .board .info {
     margin-bottom: 20px;
 }
 
@@ -48,7 +48,7 @@
 .pageDashboard .board .amount {
     font-size: 18px;
     font-weight: 700;
-    color: #ff4a4a;
+    color: #3fc692;
     text-align: right;
     padding-right: 20px;
     margin: 10px 0px;
@@ -60,7 +60,40 @@
     color: #999999;
     margin-top: 10px;
     margin-bottom: 0;
+}
+
+.pageDashboard .board .bookingAmount {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3fc692;
     text-align: right;
+    padding-right: 20px;
+    border-bottom: 1px solid #e9ebf0;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.pageDashboard .board .bookingAmount p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #999999;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.pageDashboard .board .homeOwnerInfo {
+    font-size: 12px;
+    font-weight: 400;
+    color: #a2a2a2;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.pageDashboard .board .homeOwnerInfo p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+    margin: 0;
 }
 
 .pageDashboard .board h1 {
@@ -88,7 +121,7 @@
     margin-bottom: 5px;
 }
 
-.pageDashboard .board p {
+.homeTypeText {
     font-size: 16px;
     font-weight: 400;
     color: #6d6d6d;
@@ -100,10 +133,21 @@
     font-size: 16px;
     font-weight: 700;
     color: #2a2b32;
-    border: 2px solid #36ffb1;
     text-transform: uppercase;
     padding: 10px 100px;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+.successBorder {
+    border: 2px solid #36ffb1;
+}
+
+.pendingBorder {
+    border: 2px solid #ff4a4a;
+}
+
+.incompleteBorder {
+    border: 2px solid #ffc107;
 }
 
 .pageDashboard .board .confirm .btn:hover,
@@ -124,7 +168,7 @@
     font-weight: 500;
     color: #2a2b32;
     text-decoration: underline;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
 .pageDashboard .board .listUnstyled li a:hover {
@@ -136,8 +180,7 @@
     text-decoration: none;
 }
 
-
-.pageDashboard .board .detail{
+.pageDashboard .board .detail {
     text-align: right;
 }
 
@@ -147,7 +190,7 @@
     color: #2a2b32;
     border: 1px solid #2a2b32;
     padding: 10px 50px;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     border-radius: 99px;
 }
 

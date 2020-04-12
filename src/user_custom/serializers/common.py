@@ -37,16 +37,25 @@ class PersonalityTagSerializer(serializers.Serializer):
         return obj, validated_data["checked"]
 
 
-#FIXME: To be removed
+# FIXME: To be removed
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('first_name', 'last_name', 'email')
 
 
-#FIXME: To be removed
+# FIXME: To be removed
 class UserProfileSerializer(serializers.ModelSerializer):
     sex = serializers.CharField(source="get_sex_display")
+
     class Meta:
         model = UserProfile
         fields = ('contact_num', 'sex')
+
+
+class UserContactInfoSerializer(serializers.ModelSerializer):
+    user = UserInfoSerializer()
+
+    class Meta:
+        model = UserProfile
+        fields = ('user', 'contact_num')

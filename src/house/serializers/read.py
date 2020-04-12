@@ -3,7 +3,7 @@ from rest_framework import serializers
 from business_core.models import CancellationPolicy
 from cities_custom.serializers import PostalCodeSerializer
 from essentials.serializers import PolicyPublicSerializer
-from house.models import HouseRule, House, Image
+from house.models import HouseRule, House, Image, HomeType
 
 
 class HouseRulesPublicSerializer(serializers.ModelSerializer):
@@ -82,3 +82,9 @@ class HouseShortInfoSerializer(serializers.ModelSerializer):
             'uuid', 'title', 'address_hidden', 'address', 'location', 'home_type',
             'rent', 'cancellation_policy', 'status',
         )
+
+
+class HomeTypeDeserializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeType
+        fields = ('name',)

@@ -32,6 +32,15 @@ export default class BookingSuccessPage extends Component {
 
     render() {
         let booking = this.state.booking;
+        let displayStatusClassName = styles.btn + " btn-link";
+        let bookingStatus = booking.getData("status");
+        if (bookingStatus === "Pending" || bookingStatus === "Pending-Locked") {
+            displayStatusClassName += " " + styles.pendingBorder;
+        } else if (bookingStatus === "Incomplete") {
+            displayStatusClassName += " " + styles.incompleteBorder;
+        } else if (bookingStatus === "Booked") {
+            displayStatusClassName += " " + styles.successBorder;
+        }
         return (
             <RequestErrorBoundary status={this.state.status}>
                 <React.Fragment>
@@ -114,8 +123,8 @@ export default class BookingSuccessPage extends Component {
                                                         <h2>{booking.getData("bookedHouse.location")}</h2>
                                                         <p>{booking.getData("bookedHouse.homeType")}</p>
                                                         <div className={styles.confirm}>
-                                                            <button className={styles.btn + " btn-link"}>
-                                                                {booking.getData("status")}
+                                                            <button className={displayStatusClassName}>
+                                                                {bookingStatus}
                                                             </button>
                                                         </div>
                                                     </div>
