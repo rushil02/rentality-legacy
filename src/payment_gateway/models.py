@@ -180,7 +180,10 @@ class LocationRestriction(models.Model):
         app_label='cities', model='region') | models.Q(
         app_label='cities', model='city')
     house_location_type = models.ForeignKey(
-        ContentType, on_delete=models.PROTECT, limit_choices_to=LOCATION_TYPE_LIMIT, null=True, blank=True
+        ContentType, on_delete=models.PROTECT,
+        limit_choices_to=LOCATION_TYPE_LIMIT,
+        null=True, blank=True,
+        related_name='pg_location_restrictions'
     )
     house_location_id = models.PositiveIntegerField(null=True, blank=True)
     house_location = GenericForeignKey('house_location_type', 'house_location_id')
