@@ -34,13 +34,14 @@ export default class PayoutInfoContainer extends Component {
         this.state = {
             userInfo: new UserPII({}, "empty"),
             showSelectCountry: false,
-            addBussinessNameField: false,
+            addBusinessNameField: false,
             billingCountryName: undefined,
             verifying: true,
             statusBI: "Verifying",
             statusPI: "Verifying",
             statusII: "Verifying",
             statusEA: "Verifying",
+            PG: null,
         };
     }
 
@@ -76,7 +77,7 @@ export default class PayoutInfoContainer extends Component {
                 if (accountType === "Business") {
                     this.setState((prevState) => ({
                         ...prevState,
-                        addBussinessNameField: true,
+                        addBusinessNameField: true,
                         userInfo: result,
                     }));
                 } else {
@@ -152,6 +153,7 @@ export default class PayoutInfoContainer extends Component {
                         statusPI: "Incomplete",
                         statusII: "Incomplete",
                         statusEA: "Incomplete",
+                        PG: error.response.data["payment_gateway"]
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "IIM") {
                     this.setState((prevState) => ({
@@ -161,6 +163,7 @@ export default class PayoutInfoContainer extends Component {
                         statusPI: "Complete",
                         statusII: "Incomplete",
                         statusEA: "Incomplete",
+                        PG: error.response.data["payment_gateway"]
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "EAM") {
                     this.setState((prevState) => ({
@@ -170,6 +173,7 @@ export default class PayoutInfoContainer extends Component {
                         statusPI: "Complete",
                         statusII: "Complete",
                         statusEA: "Incomplete",
+                        PG: error.response.data["payment_gateway"]
                     }));
                 }
             });
@@ -185,14 +189,14 @@ export default class PayoutInfoContainer extends Component {
         return (
             <React.Fragment>
                 {this.state.verifying ? (
-                    <ResponseLoadingSpinner height={"20vh"} message={"Verifying your Billing details"} />
+                    <ResponseLoadingSpinner height={"20vh"} message={"Verifying your Billing details"}/>
                 ) : null}
                 <div className="col-md-12" style={{marginTop: "50px"}}>
                     <BillingInfoContainer
                         status={this.state.statusBI}
                         userInfo={this.state.userInfo}
                         showSelectCountry={this.state.showSelectCountry}
-                        addBussinessNameField={this.state.addBussinessNameField}
+                        addBusinessNameField={this.state.addBusinessNameField}
                         billingCountryName={this.state.billingCountryName}
                         verifyPayoutInfo={this.verifyPayoutInfo}
                         getUserProfile={this.getUserProfile}
@@ -207,6 +211,7 @@ export default class PayoutInfoContainer extends Component {
                         houseUUID={this.props.houseUUID}
                         verifyPayoutInfo={this.verifyPayoutInfo}
                         verifying={this.state.verifying}
+                        PG={this.state.PG}
                     />
                     <Elements stripe={stripePromise}>
                         <ElementsConsumer>
@@ -222,6 +227,7 @@ export default class PayoutInfoContainer extends Component {
                                             userInfo={this.state.userInfo}
                                             verifyPayoutInfo={this.verifyPayoutInfo}
                                             verifying={this.state.verifying}
+                                            PG={this.state.PG}
                                         />
                                     </RequestErrorBoundary>
                                 );

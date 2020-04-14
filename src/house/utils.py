@@ -2,6 +2,7 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.db.models.functions import Distance
 
 from django.utils import timezone
+from easy_thumbnails.exceptions import InvalidImageFormatError
 from easy_thumbnails.files import get_thumbnailer
 
 from cities_custom.models import CityCustom
@@ -11,15 +12,21 @@ from elastic_search.models import House
 def index_to_es(obj):
     image = obj.get_owner().userprofile.get_profile_pic()
     if image:
-        image = get_thumbnailer(image)['profile_search_page'].url
+        try:
+            image = get_thumbnailer(image)['profile_search_page'].url
+        except InvalidImageFormatError:
+            image = '/static/image/placeholders/user/search-page.png'
     else:
         image = '/static/image/placeholders/user/search-page.png'
 
     thumbnail = obj.get_thumbnail()
     if thumbnail:
-        thumbnail = get_thumbnailer(thumbnail)['house_search_page'].url
+        try:
+            thumbnail = get_thumbnailer(thumbnail)['house_search_page'].url
+        except InvalidImageFormatError:
+            thumbnail = '/static/image/placeholders/property/search-page.png'
     else:
-        # FIXME: set defaults at a generic location with generic get method to avoid static path cahnge problems
+        # FIXME: set defaults at a generic location with generic get method to avoid static path change problems
         thumbnail = '/static/image/placeholders/property/search-page.png'
 
     es_obj = House(

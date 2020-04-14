@@ -36,9 +36,9 @@ export default {
         neighbourhoodDescriptors: "neighbourhood-desc/:houseUUID",
         welcomeTags: "welcome-tags/:houseUUID",
         checkPayoutDetails: "check-payout-details/:houseUUID",
-        createPaymentInfo: "/pg/add-ho-acc/stripe/:houseUUID",
-        updatePaymentInfo: "/pg/update-ho-acc/:pg_code",
-        addUpdateBankAccount: "/pg/update-ho-ba/:pg_code",
+        createPaymentInfo: "/pg/add-ho-acc/:pgCode/:houseUUID",
+        updatePaymentInfo: "/pg/update-ho-acc/:pgCode",
+        addUpdateBankAccount: "/pg/update-ho-ba/:pgCode",
         userCanList: "verify-user",
     },
 };

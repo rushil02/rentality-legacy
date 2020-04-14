@@ -16,6 +16,7 @@ export default class PGInfoContainer extends Component {
             modeEditing: false,
         };
     }
+
     getBadge = () => {
         if (this.props.statusBI === "Incomplete") {
             return (
@@ -88,7 +89,7 @@ export default class PGInfoContainer extends Component {
                     aria-controls={"collapsibleCalendar-"}
                     disabled
                 >
-                    <FontAwesomeIcon icon={buttonConfig.icon} />
+                    <FontAwesomeIcon icon={buttonConfig.icon}/>
                 </button>
             );
         } else {
@@ -100,7 +101,7 @@ export default class PGInfoContainer extends Component {
                     onClick={buttonConfig.action}
                     aria-controls={"collapsibleCalendar-"}
                 >
-                    <FontAwesomeIcon icon={buttonConfig.icon} />
+                    <FontAwesomeIcon icon={buttonConfig.icon}/>
                 </button>
             );
         }
@@ -115,7 +116,7 @@ export default class PGInfoContainer extends Component {
         let data = {success_url: window.location.pathname.slice(1), failure_url: window.location.pathname.slice(1)};
         if (this.props.statusPI === "Incomplete") {
             return new Promise(function (resolve, reject) {
-                createPaymentInfo(that.props.houseUUID, data)
+                createPaymentInfo(that.props.PG, that.props.houseUUID, data)
                     .then((result) => {
                         that.redirectToStripe(result.pg.data);
                         resolve(result);
@@ -131,42 +132,40 @@ export default class PGInfoContainer extends Component {
                     });
             });
         } else if (this.props.statusII === "Incomplete" || this.props.statusII === "Complete") {
-                   return new Promise(function (resolve, reject) {
-                       //'stripe' is dynamic, change it
-                       updatePaymentInfo("stripe", data)
-                           .then((result) => {
-                               that.redirectToStripe(result.pg.data);
-                               resolve(result);
-                           })
-                           .catch((error) => {
-                               let errorData = error.response.data.details;
-                               alertUser.init({
-                                   message: errorData,
-                                   alertType: "danger",
-                                   autoHide: false,
-                               });
-                               reject(error);
-                           });
-                   });
-               } else {
-                   return new Promise(function (resolve, reject) {
-                       //'stripe' is dynamic, change it
-                       updatePaymentInfo("stripe", data)
-                           .then((result) => {
-                               that.redirectToStripe(result.pg.data);
-                               resolve(result);
-                           })
-                           .catch((error) => {
-                               let errorData = error.response.data.details;
-                               alertUser.init({
-                                   message: errorData,
-                                   alertType: "danger",
-                                   autoHide: false,
-                               });
-                               reject(error);
-                           });
-                   });
-               }
+            return new Promise(function (resolve, reject) {
+                updatePaymentInfo(that.props.PG, data)
+                    .then((result) => {
+                        that.redirectToStripe(result.pg.data);
+                        resolve(result);
+                    })
+                    .catch((error) => {
+                        let errorData = error.response.data.details;
+                        alertUser.init({
+                            message: errorData,
+                            alertType: "danger",
+                            autoHide: false,
+                        });
+                        reject(error);
+                    });
+            });
+        } else {
+            return new Promise(function (resolve, reject) {
+                updatePaymentInfo(that.props.PG, data)
+                    .then((result) => {
+                        that.redirectToStripe(result.pg.data);
+                        resolve(result);
+                    })
+                    .catch((error) => {
+                        let errorData = error.response.data.details;
+                        alertUser.init({
+                            message: errorData,
+                            alertType: "danger",
+                            autoHide: false,
+                        });
+                        reject(error);
+                    });
+            });
+        }
     };
 
     render() {

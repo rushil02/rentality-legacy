@@ -23,7 +23,7 @@ export default class BankDetailsContainer extends Component {
     componentDidMount() {
         //hit addUpdatebankaccount, if yes show edit button, if no show save button
         if (this.props.statusEA === "Incomplete") {
-            getAddUpdateBankAccount("stripe")
+            getAddUpdateBankAccount(this.props.PG)
                 .then((result) => {
                     if (!result.pg.error) {
                         this.setState((prevState) => ({
@@ -198,7 +198,7 @@ export default class BankDetailsContainer extends Component {
 
     submitToken = (tokenID) => {
         // FIXME
-        postAddUpdateBankAccount("stripe", {token: tokenID})
+        postAddUpdateBankAccount(this.props.PG, {token: tokenID})
             .then((result) => {
                 if (result.pg.error) {
                     alertUser.init({

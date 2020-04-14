@@ -1,3 +1,4 @@
+from easy_thumbnails.exceptions import InvalidImageFormatError
 from rest_framework.views import APIView, Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -58,9 +59,12 @@ class ProfilePicUploadView(APIView):
     def get(self, request):
         image = request.user.userprofile.profile_pic
         if image:
-            response = {
-                'profile_pic': resize_image(image, 'th_col_3'),
-            }
+            try:
+                response = {
+                    'profile_pic': resize_image(image, 'th_col_3'),
+                }
+            except InvalidImageFormatError:
+                response = {'profile_pic': None}
         else:
             response = {'profile_pic': None}
 

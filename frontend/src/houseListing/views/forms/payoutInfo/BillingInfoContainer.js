@@ -233,7 +233,7 @@ export default class BillingInfoContainer extends Component {
                                             </div>
                                         </React.Fragment>
                                     )}
-                                    {this.props.addBussinessNameField ? (
+                                    {this.props.addBusinessNameField ? (
                                         <React.Fragment>
                                             <div className="col-12">
                                                 <div className="input no-background">

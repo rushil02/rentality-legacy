@@ -398,10 +398,10 @@ export function checkHousePayoutInfo(houseUUID) {
     });
 }
 
-export function createPaymentInfo(houseUUID, data) {
+export function createPaymentInfo(pgCode, houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.createPaymentInfo, {houseUUID: houseUUID}), data)
+            .post(reverse(routes.house.createPaymentInfo, {pgCode: pgCode, houseUUID: houseUUID}), data)
             .then((result) => {
                 resolve(result.data);
             })
@@ -411,10 +411,10 @@ export function createPaymentInfo(houseUUID, data) {
     });
 }
 
-export function updatePaymentInfo(pg_code, data) {
+export function updatePaymentInfo(pgCode, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.updatePaymentInfo, {pg_code: pg_code}), data)
+            .post(reverse(routes.house.updatePaymentInfo, {pgCode: pgCode}), data)
             .then((result) => {
                 resolve(result.data);
             })
@@ -424,10 +424,10 @@ export function updatePaymentInfo(pg_code, data) {
     });
 }
 
-export function getAddUpdateBankAccount(pg_code) {
+export function getAddUpdateBankAccount(pgCode) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.addUpdateBankAccount, {pg_code: pg_code}))
+            .get(reverse(routes.house.addUpdateBankAccount, {pgCode: pgCode}))
             .then((result) => {
                 resolve(result.data);
             })
@@ -437,10 +437,10 @@ export function getAddUpdateBankAccount(pg_code) {
     });
 }
 
-export function postAddUpdateBankAccount(pg_code, data) {
+export function postAddUpdateBankAccount(pgCode, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.addUpdateBankAccount, {pg_code: pg_code}), data)
+            .post(reverse(routes.house.addUpdateBankAccount, {pgCode: pgCode}), data)
             .then((result) => {
                 resolve(result.data);
             })
