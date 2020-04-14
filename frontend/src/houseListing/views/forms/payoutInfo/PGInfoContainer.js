@@ -13,7 +13,7 @@ export default class PGInfoContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modeEditing: false
+            modeEditing: false,
         };
     }
     getBadge = () => {
@@ -56,7 +56,7 @@ export default class PGInfoContainer extends Component {
                 action: (e) => {
                     e.stopPropagation();
                 },
-                icon: faPlus
+                icon: faPlus,
             };
         } else if (this.state.modeEditing) {
             buttonConfig = {
@@ -65,7 +65,7 @@ export default class PGInfoContainer extends Component {
                     e.stopPropagation();
                     this.toggleEditState(false);
                 },
-                icon: faChevronUp
+                icon: faChevronUp,
             };
         } else {
             buttonConfig = {
@@ -74,7 +74,7 @@ export default class PGInfoContainer extends Component {
                     e.stopPropagation();
                     this.toggleEditState(true);
                 },
-                icon: faPen
+                icon: faPen,
             };
         }
 
@@ -114,7 +114,7 @@ export default class PGInfoContainer extends Component {
         const that = this;
         let data = {success_url: window.location.pathname.slice(1), failure_url: window.location.pathname.slice(1)};
         if (this.props.statusPI === "Incomplete") {
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 createPaymentInfo(that.props.houseUUID, data)
                     .then((result) => {
                         that.redirectToStripe(result.pg.data);
@@ -125,30 +125,48 @@ export default class PGInfoContainer extends Component {
                         alertUser.init({
                             message: errorData,
                             alertType: "danger",
-                            autoHide: false
+                            autoHide: false,
                         });
                         reject(error);
                     });
             });
-        } else if (this.props.statusII === "Incomplete") {
-            return new Promise(function(resolve, reject) {
-                //'stripe' is dynamic, change it
-                updatePaymentInfo("stripe", data)
-                    .then((result) => {
-                        that.redirectToStripe(result.pg.data);
-                        resolve(result);
-                    })
-                    .catch((error) => {
-                        let errorData = error.response.data.details;
-                        alertUser.init({
-                            message: errorData,
-                            alertType: "danger",
-                            autoHide: false
-                        });
-                        reject(error);
-                    });
-            });
-        }
+        } else if (this.props.statusII === "Incomplete" || this.props.statusII === "Complete") {
+                   return new Promise(function (resolve, reject) {
+                       //'stripe' is dynamic, change it
+                       updatePaymentInfo("stripe", data)
+                           .then((result) => {
+                               that.redirectToStripe(result.pg.data);
+                               resolve(result);
+                           })
+                           .catch((error) => {
+                               let errorData = error.response.data.details;
+                               alertUser.init({
+                                   message: errorData,
+                                   alertType: "danger",
+                                   autoHide: false,
+                               });
+                               reject(error);
+                           });
+                   });
+               } else {
+                   return new Promise(function (resolve, reject) {
+                       //'stripe' is dynamic, change it
+                       updatePaymentInfo("stripe", data)
+                           .then((result) => {
+                               that.redirectToStripe(result.pg.data);
+                               resolve(result);
+                           })
+                           .catch((error) => {
+                               let errorData = error.response.data.details;
+                               alertUser.init({
+                                   message: errorData,
+                                   alertType: "danger",
+                                   autoHide: false,
+                               });
+                               reject(error);
+                           });
+                   });
+               }
     };
 
     render() {
@@ -203,7 +221,7 @@ export default class PGInfoContainer extends Component {
                                                 default: "Add Details",
                                                 loading: " ",
                                                 done: "Redirecting...",
-                                                error: "Error!"
+                                                error: "Error!",
                                             }}
                                             callback={this.onSave}
                                             containerID={"collapsiblePaymentInfo"}

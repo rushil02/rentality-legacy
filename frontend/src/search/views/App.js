@@ -17,76 +17,65 @@ export default class App extends Component {
             searchForm: new SearchFormModel(
                 JSON.parse(JSON.stringify(queryString.parse(this.props.routerProps.location.search)))
             ),
-            houses: new APIModelListAdapter([], ESHouse, undefined, "empty", [
-                "_source"
-            ]),
+            houses: new APIModelListAdapter([], ESHouse, undefined, "empty", ["_source"]),
             hasMoreItems: true,
-            pageNum: 1
+            pageNum: 1,
         };
     }
 
     componentDidMount() {
-        getFilteredHouses(this.state.searchForm.serialize()).then(data => {
+        getFilteredHouses(this.state.searchForm.serialize()).then((data) => {
             this.setState({
                 loading: false,
-                houses: new APIModelListAdapter(
-                    data,
-                    ESHouse,
-                    undefined,
-                    "saved",
-                    ["_source"]
-                )
+                houses: new APIModelListAdapter(data, ESHouse, undefined, "saved", ["_source"]),
             });
         });
     }
 
-
     handleScroll = (e) => {
         e.preventDefault();
-        if (!this.state.loadingMore &&
+        if (
+            !this.state.loadingMore &&
             this.state.hasMoreItems &&
-            (window.scrollY + 1.5 * window.innerHeight > document.documentElement.scrollHeight)) {
+            window.scrollY + 1.5 * window.innerHeight > document.documentElement.scrollHeight
+        ) {
             console.log(this.state.loadingMore, this.state.hasMoreItems);
-            this.loadMore()
+            this.loadMore();
         }
     };
 
     onSearchValueChange = (field, value) => {
         console.log(field, value);
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
             ...prevState,
-            searchForm: prevState.searchForm.setData(field, value)
+            searchForm: prevState.searchForm.setData(field, value),
         }));
     };
 
     onDateRangeChange = (startDate, endDate) => {
+        console.log(startDate, endDate);
         this.state.searchForm.setData("startDate", startDate);
         this.state.searchForm.setData("endDate", endDate);
         this.forceUpdate();
     };
 
     onSearchClicked = () => {
+        console.log(this.state.searchForm.startDate, "\n", this.state.searchForm.endDate);
         this.setState({loading: true, hasMoreItems: true});
-        this.state.searchForm.setData('paginationStart', 0);
-        this.state.searchForm.setData('paginationEnd', OFFSET);
+        this.state.searchForm.setData("paginationStart", 0);
+        this.state.searchForm.setData("paginationEnd", OFFSET);
 
         const that = this;
         return new Promise(function (resolve, reject) {
             getFilteredHouses(that.state.searchForm.serialize())
-                .then(data => {
+                .then((data) => {
                     that.setState({
                         loading: false,
-                        houses: new APIModelListAdapter(
-                            data,
-                            ESHouse,
-                            undefined,
-                            "saved",
-                            ["_source"]
-                        )
+                        houses: new APIModelListAdapter(data, ESHouse, undefined, "saved", ["_source"]),
                     });
                     resolve();
                 })
-                .catch(error => {
+                .catch((error) => {
                     reject(error);
                 });
         });
@@ -97,16 +86,16 @@ export default class App extends Component {
         this.setState({loadingMore: true});
 
         getFilteredHouses(this.state.searchForm.serialize())
-            .then(data => {
+            .then((data) => {
                 if (data.length < OFFSET) {
-                    this.setState({hasMoreItems: false, loadingMore: false})
+                    this.setState({hasMoreItems: false, loadingMore: false});
                 }
                 this.setState({
                     houses: this.state.houses.appendPagination(data, ["_source"]),
                 });
             })
-            .catch(error => {
-                this.setState({hasMoreItems: false, loadingMore: false})
+            .catch((error) => {
+                this.setState({hasMoreItems: false, loadingMore: false});
             });
     };
 
@@ -126,7 +115,6 @@ export default class App extends Component {
                     loadingMore={this.state.loadingMore}
                     handleScroll={this.handleScroll}
                 />
-
             </React.Fragment>
         );
     }

@@ -6,7 +6,7 @@ export default class HouseType extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="col-md-2">
+                <div className="col-md-3">
                     <select
                         name="home_type"
                         placeholder="Home Type"

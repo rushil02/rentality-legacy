@@ -1,4 +1,5 @@
 import APIModelAdapter, {DateRangeModel} from "core/utils/ModelHelper";
+import {format} from "date-fns";
 
 export class PostalCodeSearchModel extends APIModelAdapter {
     //Declare all defaults here
@@ -9,7 +10,7 @@ export class PostalCodeSearchModel extends APIModelAdapter {
             parent_verbose: {key: "_source.parent_verbose"},
             // geo_point_lat: {key:'geo_point_lat',},
             // geo_point_lon: {key:'geo_point_lon',},
-            verbose: {key: "_source.verbose"}
+            verbose: {key: "_source.verbose"},
         };
     }
 }
@@ -31,7 +32,7 @@ export class ESHouse extends APIModelAdapter {
             thumbnail: {key: "thumbnail"},
             title: {key: "title"},
             userImage: {key: "user_image"},
-            uuid: {key: "uuid"}
+            uuid: {key: "uuid"},
         };
     }
 }
@@ -45,16 +46,18 @@ export class SearchFormModel extends APIModelAdapter {
             startDate: {
                 key: "start_date",
                 default: this.getDate(4),
-                parser: this.dateParser
+                parser: this.dateParser,
+                serializer: this.dateSerializer,
             },
             endDate: {
                 key: "end_date",
                 default: this.getDate(34),
-                parser: this.dateParser
+                parser: this.dateParser,
+                serializer: this.dateSerializer,
             },
             rent: {key: "rent"},
             paginationStart: {key: "pagination-start", default: 0},
-            paginationEnd: {key: "pagination-end", default: 12}
+            paginationEnd: {key: "pagination-end", default: 12},
         };
     }
 
@@ -71,8 +74,12 @@ export class SearchFormModel extends APIModelAdapter {
         return new Date(b);
     }
 
-    nextPagination = (offset) => {
-        this.setData('paginationStart', this.getData('paginationStart') + offset);
-        this.setData('paginationEnd', this.getData('paginationEnd') + offset);
+    dateSerializer(date) {
+        return format(date, "YYYY-MM-DD");
     }
+
+    nextPagination = (offset) => {
+        this.setData("paginationStart", this.getData("paginationStart") + offset);
+        this.setData("paginationEnd", this.getData("paginationEnd") + offset);
+    };
 }

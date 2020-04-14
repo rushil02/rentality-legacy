@@ -140,6 +140,9 @@ export default class PayoutInfoContainer extends Component {
                         ...prevState,
                         verifying: false,
                         statusBI: "Incomplete",
+                        statusPI: "Incomplete",
+                        statusII: "Incomplete",
+                        statusEA: "Incomplete",
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "PGM") {
                     this.setState((prevState) => ({
@@ -147,6 +150,8 @@ export default class PayoutInfoContainer extends Component {
                         verifying: false,
                         statusBI: "Complete",
                         statusPI: "Incomplete",
+                        statusII: "Incomplete",
+                        statusEA: "Incomplete",
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "IIM") {
                     this.setState((prevState) => ({
@@ -155,6 +160,7 @@ export default class PayoutInfoContainer extends Component {
                         statusBI: "Complete",
                         statusPI: "Complete",
                         statusII: "Incomplete",
+                        statusEA: "Incomplete",
                     }));
                 } else if (error.response.status === 406 && error.response.data.code === "EAM") {
                     this.setState((prevState) => ({
@@ -192,6 +198,7 @@ export default class PayoutInfoContainer extends Component {
                         getUserProfile={this.getUserProfile}
                         onFieldChange={this.onFieldChange}
                         onSave={this.onBillingInfoSave}
+                        verifying={this.state.verifying}
                     />
                     <PGInfoContainer
                         statusBI={this.state.statusBI}
@@ -199,6 +206,7 @@ export default class PayoutInfoContainer extends Component {
                         statusII={this.state.statusII}
                         houseUUID={this.props.houseUUID}
                         verifyPayoutInfo={this.verifyPayoutInfo}
+                        verifying={this.state.verifying}
                     />
                     <Elements stripe={stripePromise}>
                         <ElementsConsumer>
@@ -213,6 +221,7 @@ export default class PayoutInfoContainer extends Component {
                                             stripe={stripe}
                                             userInfo={this.state.userInfo}
                                             verifyPayoutInfo={this.verifyPayoutInfo}
+                                            verifying={this.state.verifying}
                                         />
                                     </RequestErrorBoundary>
                                 );
