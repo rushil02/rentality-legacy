@@ -24,7 +24,7 @@ class House(object):
         self.promo_codes = promo_codes
         self.rent = rent
         self.min_stay = min_stay
-        if max_stay != 0:
+        if max_stay != 0 and max_stay is not None:
             self.max_stay = max_stay
         else:
             self.max_stay = math.inf

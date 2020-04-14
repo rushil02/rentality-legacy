@@ -9,7 +9,7 @@ class HouseAdmin(admin.ModelAdmin):
     autocomplete_fields = ['location', 'facilities', 'neighbourhood_facilities', 'welcome_tags', 'home_owner']
     list_display = ('home_owner', 'title', 'address', 'location', 'home_type', 'status')
     list_filter = ('status', 'home_type')
-    search_fields = ('address', 'location')
+    search_fields = ('address', 'uuid')
 
     def get_queryset(self, request):
         if request.user.is_superuser:
@@ -40,6 +40,7 @@ class FacilityAdmin(admin.ModelAdmin):
 
 class AvailabilityAdmin(admin.ModelAdmin):
     list_display = ('house', 'dates', 'periodic')
+    search_fields = ('house__address', 'house__uuid')
 
 
 admin.site.register(Image, ImageAdmin)
