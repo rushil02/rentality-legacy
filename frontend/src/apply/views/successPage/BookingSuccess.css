@@ -129,10 +129,21 @@
     font-size: 16px;
     font-weight: 700;
     color: #2a2b32;
-    border: 2px solid #36ffb1;
     text-transform: uppercase;
     padding: 10px 100px;
     transition: all 0.25s ease-in-out;
+}
+
+.successBorder {
+    border: 2px solid #36ffb1;
+}
+
+.pendingBorder {
+    border: 2px solid #ff4a4a;
+}
+
+.incompleteBorder {
+    border: 2px solid #ffc107;
 }
 
 .bookingDashboard .board .confirm .btn:hover,

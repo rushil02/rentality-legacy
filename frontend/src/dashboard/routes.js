@@ -1,8 +1,9 @@
 export default {
     interface: {
-        base: '',
+        base: "",
     },
     APIs: {
-        houseMinimalDetails: '/dashboard-house-list', //URL starts from root
-    }
-}
+        publishedHouses: "/dashboard-house-list", //URL starts from root
+        bookingsData: "/dashboard-booking-list",
+    },
+};
