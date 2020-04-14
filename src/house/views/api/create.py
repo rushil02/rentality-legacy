@@ -1,5 +1,4 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.http import Http404
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -9,8 +8,9 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from django.db.models import Q, Exists, OuterRef, Prefetch
 
-from business_core.models import BusinessModelConfiguration, CancellationPolicy
+from business_core.models import CancellationPolicy
 from business_core.serializers import CancellationPolicySerializer
+from business_core.utils import BusinessModel
 from house.models import Availability, House, HomeType, Facility, NeighbourhoodDescriptor, WelcomeTag, HouseRule, Rule, \
     Image
 from house.permissions import IsOwnerOfHouse, IsOwnerOfRelatedHouse
@@ -21,7 +21,6 @@ from payment_gateway.adapters import PGTransactionError
 from payment_gateway.utils import PaymentGateway
 from user_custom.models import Account
 from utils.api_thumbnailer import resize_image
-from payment_gateway.models import Profile as PaymentGatewayProfile
 
 
 class VerifyUserCanStartListing(APIView):
@@ -35,10 +34,7 @@ class VerifyUserCanStartListing(APIView):
         if bool(request.user.get_billing_location()):
             country = request.user.get_billing_location()
 
-            if BusinessModelConfiguration.objects.filter(
-                    Q(home_owner_billing_location=country) |
-                    Q(home_owner_billing_location__isnull=True)
-            ).exists() and PaymentGatewayProfile.objects.filter(country=country).exists():
+            if BusinessModel.is_available(country) and PaymentGateway.is_available(country):
                 return Response({'verified': True}, status=status.HTTP_200_OK)
             else:
                 return Response(
@@ -62,37 +58,34 @@ class HouseView(APIView):
     def get_object(self, house_uuid):
         return get_object_or_404(House.objects.all(), uuid=house_uuid)
 
-    def get(self, request, house_uuid):
+    def get(self, request, house_uuid=None):
+        if not house_uuid:
+            return Response({"detail": "Not found."}, status=status.HTTP_400_BAD_REQUEST)
         house = self.get_object(house_uuid)
         self.check_object_permissions(request, house)
         serializer = self.serializer_class(house)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_business_model_conf(self, home_owner_billing_location, house_location):
-        return BusinessModelConfiguration.objects.get_location_default(
-            home_owner_billing_location, house_location
-        )
-
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         country = request.user.get_billing_location()
         if bool(country):
-            if BusinessModelConfiguration.objects.filter(
-                    Q(home_owner_billing_location=country) | Q(home_owner_billing_location__isnull=True)
-            ).exists() and \
-                    PaymentGatewayProfile.objects.filter(country=country).exists():
+            if BusinessModel.is_available(country) and PaymentGateway.is_available(country):
                 pass
             else:
                 return Response({'error': 'Not Authorised'}, status=status.HTTP_400_BAD_REQUEST)
             if serializer.is_valid(raise_exception=True):
-                business_config = self.get_business_model_conf(
+                business_config = BusinessModel.init_default(
                     request.user.get_billing_location(),
                     serializer.validated_data.get('location')
-                )
+                ).get_db_object()
                 payment_gateway = PaymentGateway.load_location_default(
                     request.user.get_billing_location(),
                     serializer.validated_data.get('location')
                 ).db
+
+                if not business_config or not payment_gateway:
+                    return Response({'error': 'Sorry we are not available in your location.'}, status=status.HTTP_400_BAD_REQUEST)
 
                 try:
                     serializer.save(

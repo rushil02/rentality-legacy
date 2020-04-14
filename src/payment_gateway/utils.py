@@ -126,6 +126,12 @@ class PaymentGateway(object):
             raise AttributeError("Homeowner is not set in utils.PaymentGateway")
 
     @classmethod
+    def is_available(cls, billing_location):
+        return LocationRestriction.objects.filter(
+            payment_gateway_profile__country=billing_location, active=True, default=True
+        ).exists()
+
+    @classmethod
     def load_location_default(cls, billing_location, house_location):
         """
         `house_location` requires nested evaluation (geo_point is useless since, we don't have polygon information)
@@ -134,7 +140,7 @@ class PaymentGateway(object):
         :return:
         """
         location_restrictions = LocationRestriction.objects.filter(
-            payment_gateway_profile__country=billing_location
+            payment_gateway_profile__country=billing_location, active=True, default=True
         )
 
         # FIXME: city and region filter not available as there are null link between

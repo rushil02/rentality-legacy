@@ -122,6 +122,9 @@ class Profile(models.Model):
 
     meta = JSONField(help_text="Holds information required by the payment gateway to work in the selected country.")
 
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
     class Meta:
         unique_together = [['payment_gateway', 'country']]
 
@@ -177,13 +180,19 @@ class LocationRestriction(models.Model):
         app_label='cities', model='region') | models.Q(
         app_label='cities', model='city')
     house_location_type = models.ForeignKey(
-        ContentType, on_delete=models.PROTECT, limit_choices_to=LOCATION_TYPE_LIMIT, null=True, blank=True
+        ContentType, on_delete=models.PROTECT,
+        limit_choices_to=LOCATION_TYPE_LIMIT,
+        null=True, blank=True,
+        related_name='pg_location_restrictions'
     )
     house_location_id = models.PositiveIntegerField(null=True, blank=True)
     house_location = GenericForeignKey('house_location_type', 'house_location_id')
 
     active = models.BooleanField(default=False)
     default = models.BooleanField(default=False)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "%s" % self.payment_gateway_profile

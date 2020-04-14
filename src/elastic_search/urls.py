@@ -1,11 +1,6 @@
 from django.urls import path
-from rest_framework import routers
 
 from elastic_search.views import suggestions, search_house, HouseSearchView
-
-# TODO: need routers?
-# router = routers.DefaultRouter()
-# router.register(r'location_sg', suggestions)
 
 app_name = 'es'
 

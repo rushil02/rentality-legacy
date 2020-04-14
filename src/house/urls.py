@@ -9,25 +9,14 @@ from house.views.api.read import HouseDetailsPublicView, NetAvailableDatesView, 
 
 from house.views.old import search_house_page, search_house_api
 
-from utils.api_utils import location_list, LocationAutocomplete
+from utils.api_utils import LocationAutocomplete
 
-from house.views import info, create, edit, \
-    home_owner_account_details, apply_temp, \
-    ImagesPublicView, ThumbnailPublicView
-
-# from house.views.api import NetAvailableDatesView
+from house.views import ImagesPublicView, ThumbnailPublicView
 
 
 app_name = 'house'
 
 urlpatterns = [
-    path('info/<uuid:house_uuid>', info, name='info'),
-    # path('add/', create, name='create'),
-    # path('add/<uuid:house_uuid>/', edit, name='create_edit'),
-    # path('payment_details/<uuid:house_uuid>/', home_owner_account_details, name='payment'),
-
-    # path('edit/<int:form_num>/<uuid:uuid>', add_edit_house, name='edit'),
-
     path('search', search_house_page, name='search_house'),
     path('search-api', search_house_api, name='search_house_api'),
     path('postal-location', LocationAutocomplete.as_view(), name='postal_code_api'),

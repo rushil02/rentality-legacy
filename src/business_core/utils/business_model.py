@@ -1,9 +1,13 @@
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
+
 from business_core.adapters.business_model.financials import get_financial_model_class
 from business_core.adapters.business_model.validations import get_constraints_model_class
 from business_core.adapters.business_model.behaviours import get_behaviour_class
 from business_core.adapters.cancellation import get_cancellation_behaviour_class
 
-from business_core.models import BusinessModelConfiguration as BusinessModelConfigurationDB
+from business_core.models import BusinessModelConfiguration as BusinessModelConfigurationDB, LocationRestriction
 
 
 class BusinessModel(object):
@@ -82,12 +86,66 @@ class BusinessModel(object):
         return ...
 
     @classmethod
+    def is_available(cls, billing_location):
+        return LocationRestriction.objects.filter(
+            Q(config_profile__country=billing_location) | Q(config_profile__country__isnull=True)
+        ).filter(active=True, default=True).exists()
+
+    @classmethod
     def init_default(cls, billing_location, house_location):
-        return cls(
-            business_model_config=BusinessModelConfigurationDB.objects.get_location_default(
-                billing_location,
-                house_location
+
+        def _filter_selection(_loc_res):
+            selection_priority = (house_location.country,)
+
+            for location_attr in selection_priority:
+                try:
+                    _loc_object = _loc_res.get(
+                        house_location_id=location_attr.id,
+                        house_location_type=ContentType.objects.get_for_model(location_attr),
+                        active=True,
+                        default=True
+                    )
+                except LocationRestriction.DoesNotExist:
+                    continue
+                except LocationRestriction.MultipleObjectsReturned:
+                    raise ValueError("Malformed Payment gateway restrictions.")
+                else:
+                    return _loc_object
+
+            # if couldn't find any location specific object
+            try:
+                _loc_object = _loc_res.get(
+                    house_location_id=None,
+                    house_location_type=None,
+                    active=True,
+                    default=True
+                )
+            except LocationRestriction.DoesNotExist:
+                return None
+            except LocationRestriction.MultipleObjectsReturned:
+                raise ValueError("Malformed Payment gateway restrictions.")
+            else:
+                return _loc_object
+
+        try:
+            location_restrictions = LocationRestriction.objects.filter(
+                config_profile__country=billing_location,
+                active=True,
+                default=True
             )
+            loc_object = _filter_selection(location_restrictions)
+            if not loc_object:
+                raise AssertionError
+        except (LocationRestriction.DoesNotExist, AssertionError):
+            location_restrictions = LocationRestriction.objects.filter(
+                config_profile__country__isnull=True,
+                active=True,
+                default=True
+            )
+            loc_object = _filter_selection(location_restrictions)
+
+        return cls(
+            business_model_config=loc_object.config_profile.config
         )
 
     @classmethod

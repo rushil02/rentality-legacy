@@ -160,7 +160,7 @@ class House(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    local_timezone = models.CharField(max_length=50)
+    local_timezone = models.CharField(max_length=50, help_text="Pytz compliant value")
 
     objects = DeleteManager()
     active_objects = ActiveHouseManager()

@@ -3,6 +3,8 @@ from business_core.models import BusinessModelConfiguration
 from cities.models import Continent, PostalCode, Country
 # Create your tests here.
 
+# FIXME: Stale tests !! Update required - model structures do not match
+
 class DatabaseCheckTestCase(TestCase):
     """
     Test Case for migrations

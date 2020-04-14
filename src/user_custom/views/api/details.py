@@ -1,3 +1,4 @@
+from easy_thumbnails.exceptions import InvalidImageFormatError
 from rest_framework import status
 from rest_framework.views import APIView, Response
 from rest_framework.permissions import IsAuthenticated
@@ -15,7 +16,10 @@ class UserDetailsView(APIView):
         user_profile = user.userprofile
         image = user_profile.get_profile_pic()
         if image:
-            image_url = get_thumbnailer(user_profile.get_profile_pic())['profile_navbar'].url
+            try:
+                image_url = get_thumbnailer(user_profile.get_profile_pic())['profile_navbar'].url
+            except InvalidImageFormatError:
+                image_url = None
         else:
             image_url = None
 

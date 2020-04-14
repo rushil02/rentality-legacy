@@ -1,10 +1,12 @@
 from django.contrib import admin
 
-from house.models import House, Image, HomeType, HouseProfile, Availability, Facility, HouseRule, Rule
+from house.models import (
+    House, Image, HomeType, HouseProfile, Availability, Facility, HouseRule, Rule, NeighbourhoodDescriptor, WelcomeTag
+)
 
 
 class HouseAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['location']
+    autocomplete_fields = ['location', 'facilities', 'neighbourhood_facilities', 'welcome_tags', 'home_owner']
     list_display = ('home_owner', 'title', 'address', 'location', 'home_type', 'status')
     list_filter = ('status', 'home_type')
     search_fields = ('address', 'location')
@@ -24,6 +26,17 @@ class ImageAdmin(admin.ModelAdmin):
     pass
 
 
+class NeighbourhoodDescriptorAdmin(admin.ModelAdmin):
+    search_fields = ('verbose', )
+
+
+class WelcomeTagAdmin(admin.ModelAdmin):
+    search_fields = ('verbose', )
+
+
+class FacilityAdmin(admin.ModelAdmin):
+    search_fields = ('verbose', )
+
 
 class AvailabilityAdmin(admin.ModelAdmin):
     list_display = ('house', 'dates', 'periodic')
@@ -32,8 +45,10 @@ class AvailabilityAdmin(admin.ModelAdmin):
 admin.site.register(Image, ImageAdmin)
 admin.site.register(House, HouseAdmin)
 admin.site.register(HomeType)
-admin.site.register(Facility)
+admin.site.register(Facility, FacilityAdmin)
 admin.site.register(Availability, AvailabilityAdmin)
 admin.site.register(HouseProfile)
 admin.site.register(HouseRule)
 admin.site.register(Rule)
+admin.site.register(NeighbourhoodDescriptor, NeighbourhoodDescriptorAdmin)
+admin.site.register(WelcomeTag, WelcomeTagAdmin)

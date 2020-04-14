@@ -4,7 +4,7 @@ from .models.stripe_v2 import StripePaymentGateway
 
 # Register all adaptors here
 PAYMENT_GATEWAYS = {
-    'stripe': {'verbose': 'Stripe V2', 'adaptor_class': StripePaymentGateway}
+    'stripe_v2': {'verbose': 'Stripe V2', 'adaptor_class': StripePaymentGateway}
 }
 
 

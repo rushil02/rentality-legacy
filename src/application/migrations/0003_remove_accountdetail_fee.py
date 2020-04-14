@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tenant', '0002_auto_20181122_1946'),
+        ('application', '0002_auto_20190131_0059'),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='tenantprofile',
-            name='customer_id',
+            model_name='accountdetail',
+            name='fee',
         ),
     ]
