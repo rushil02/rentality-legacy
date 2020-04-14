@@ -30,13 +30,15 @@ class Charge(object):
         :param principal: amount
         :param value: amount
         """
-        if bool(charge) is bool(value):
+        if charge is not None and value is not None:
             raise ValueError("Need only one argument - charge or value")
-        if charge:
+        if charge is None and value is None:
+            raise ValueError("Need one of either argument - charge or value")
+        if charge is not None:
             self._charge = Decimal(charge)
         else:
             self._charge = None
-        if value:
+        if value is not None:
             self._value = Decimal(value)
         else:
             self._value = None

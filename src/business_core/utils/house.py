@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytz
 import math
 
@@ -100,7 +102,7 @@ class House(object):
         for promo_code in db_obj.promo_codes.all():
             _promo_codes.append(PromoCode(obj=promo_code))
         obj = cls(
-            rent=db_obj.get_rent_per_day(), min_stay=db_obj.min_stay, max_stay=db_obj.max_stay,
+            rent=Decimal(db_obj.rent), min_stay=db_obj.min_stay, max_stay=db_obj.max_stay,
             max_people_allowed=db_obj.max_people_allowed,
             promo_codes=_promo_codes,
             timezone=db_obj.local_timezone

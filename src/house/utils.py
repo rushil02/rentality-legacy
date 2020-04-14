@@ -62,3 +62,11 @@ def get_timezone_for_postal_code(postal_code_obj):
             km_dist = 2 * km_dist
         else:
             return city_obj.timezone
+
+
+def check_user_can_change_house(house):
+    """
+    :param house: 'house.models.House' object
+    :return: ...
+    """
+    ...
