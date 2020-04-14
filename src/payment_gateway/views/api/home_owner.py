@@ -57,6 +57,9 @@ class AddHomeOwnerView(APIView):
                 # FIXME: Log in db
                 return Response({'details': "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
             else:
+                if house.payment_gateway != payment_gateway.db:
+                    house.payment_gateway = payment_gateway.db
+                    house.save()
                 return Response({'pg': pgt.user_response}, status=status.HTTP_200_OK)
 
 
