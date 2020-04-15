@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from user_custom.serializers.common import UserTimezoneSerializer
 from django.conf import settings
 
+from utils.mailer import send_template_mail
+
 
 @api_view(['POST'])
 @permission_classes((AllowAny,))
@@ -69,9 +71,14 @@ def create_user_for_anon(first_name, email, send_mail=True, **kwargs):
     user_profile.contact_num = kwargs.get('contact_num', None)
     user_profile.save()
 
-    # send password via mail
-    print(password)
-
     if send_mail:
-        ...  # TODO: send email
+        send_template_mail(
+            subject="Account Created",
+            template_name='emails/tenant/onboarding/anon_auto_account.html',
+            context={'password': password},
+            from_email='support@rentality.com.au',
+            recipient_list=[user.email],
+            text_message=" An account was registered on Rentality using this email ID. Please use \
+            the following password to login to your account - {password}"
+        )
     return user

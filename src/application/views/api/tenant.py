@@ -111,7 +111,7 @@ class InitiateBookingView(APIView):
 
             if not tenant_user.account_set.filter(payment_gateway=payment_gateway.db).exists():
                 Account.objects.create(
-                    user=request.user,
+                    user=tenant_user,
                     payment_gateway=payment_gateway.db,
                 )
 

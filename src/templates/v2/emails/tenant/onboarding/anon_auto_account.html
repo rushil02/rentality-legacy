@@ -1,0 +1,166 @@
+{% load static %}
+{% load thumbnail %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Rentality</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .mail {
+            width: 652px;
+            padding: 30px 50px;
+            display: inline-block;
+            max-width: 550px;
+            text-align: left;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mail p {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2a2b32;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .mail img.w-100 {
+            width: 100%;
+            display: block;
+        }
+
+        .mail h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #000000;
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+
+        .mail h3 {
+            font-size: 15px;
+            font-weight: 400;
+            color: #bcbcbc;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .mail .column {
+            border-top: 1px solid #e9ebf0;
+            border-bottom: 1px solid #e9ebf0;
+            font-size: 15px;
+            font-weight: 500;
+            color: #2a2b32;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-image: url('http://{{ current_site }}{% static 'image/page-detail/right-date/arrow.svg' %}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            padding-right: 50px;
+        }
+
+        .mail .column-after {
+            content: '.';
+            display: block;
+            clear: both;
+            visibility: hidden;
+            line-height: 0;
+            height: 0;
+        }
+
+        .mail .column.no-background {
+            border-top: none;
+            background: none;
+            font-size: 13px;
+            font-weight: 400;
+            color: #2a2b32;
+        }
+
+        .mail .column span {
+            font-size: 10px;
+            font-weight: 500;
+            color: #aeaeae;
+        }
+
+        .mail .column .left {
+            float: left;
+        }
+
+        .mail .column .right {
+            text-align: right;
+            float: right;
+        }
+
+        .mail .column.no-background .left {
+            line-height: 26px;
+        }
+
+        .mail .column.no-background .left p {
+            font-size: 15px;
+            font-weight: 400;
+            color: #bcbcbc;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .mail .column.no-background .right {
+            border-top: none;
+            background: none;
+            font-size: 17px;
+            font-weight: 500;
+            color: #393939;
+        }
+
+        .mail .column.no-background.no-border {
+            border-bottom: none;
+        }
+
+        .mail .column.no-background.no-border .left {
+            line-height: 30px;
+        }
+
+        .mail .column.no-background.no-border .right {
+            font-size: 20px;
+            font-weight: 500;
+            color: #ff3030;
+        }
+
+        .mail .button {
+            text-align: center;
+        }
+
+        .mail .button a {
+            margin-top: 60px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #36ffb1;
+            background-color: #2a2b32;
+            padding: 15px 75px;
+            border-radius: 99px;
+            display: inline-block;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="mail">
+        <img src="http://{{ current_site }}{% static 'image/mail/1_1.png' %}" class="logo">
+        <p>
+            This is an auto-generated mail. An account was registered on Rentality using this email ID. Please use
+            the following password to login to your account - {{ password }}
+        </p>
+
+    </div>
+</div>
+</body>
+</html>
