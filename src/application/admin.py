@@ -6,10 +6,19 @@ from application.models import Application, AccountDetail, ApplicationState
 
 class ApplicationAdmin(admin.ModelAdmin):
     autocomplete_fields = ['tenant', 'house']
-    list_display = ('ref_code', 'tenant', 'house', 'uuid', 'rent', 'status')
-    list_filter = ('status',)
+    list_display = ('ref_code', 'tenant', 'house', 'uuid', 'rent', 'status', 'business_config', 'payment_gateway')
+    list_filter = ('status', 'accountdetail__business_config', 'accountdetail__payment_gateway')
+    list_select_related = (
+        'accountdetail', 'accountdetail__business_config', 'accountdetail__payment_gateway', 'tenant__user',
+        'tenant', 'house'
+    )
+    search_fields = ('ref_code', 'house__uuid', 'uuid')
 
-    search_fields = ('ref_code',)
+    def business_config(self, obj):
+        return obj.accountdetail.business_config
+
+    def payment_gateway(self, obj):
+        return obj.accountdetail.payment_gateway
 
 
 class ApplicationStateAdmin(admin.ModelAdmin):

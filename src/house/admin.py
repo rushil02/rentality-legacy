@@ -7,9 +7,13 @@ from house.models import (
 
 class HouseAdmin(admin.ModelAdmin):
     autocomplete_fields = ['location', 'facilities', 'neighbourhood_facilities', 'welcome_tags', 'home_owner']
-    list_display = ('home_owner', 'title', 'address', 'location', 'home_type', 'status')
-    list_filter = ('status', 'home_type')
-    search_fields = ('address', 'uuid')
+    list_display = (
+        'title', 'home_owner', 'uuid', 'status', 'business_config', 'payment_gateway'
+    )
+    list_filter = ('status', 'home_type', 'business_config', 'payment_gateway')
+    search_fields = (
+        'address', 'uuid', 'home_owner__user__email', 'home_owner__user__first_name', 'home_owner__user__last_name'
+    )
 
     def get_queryset(self, request):
         if request.user.is_superuser:
@@ -27,15 +31,15 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 class NeighbourhoodDescriptorAdmin(admin.ModelAdmin):
-    search_fields = ('verbose', )
+    search_fields = ('verbose',)
 
 
 class WelcomeTagAdmin(admin.ModelAdmin):
-    search_fields = ('verbose', )
+    search_fields = ('verbose',)
 
 
 class FacilityAdmin(admin.ModelAdmin):
-    search_fields = ('verbose', )
+    search_fields = ('verbose',)
 
 
 class AvailabilityAdmin(admin.ModelAdmin):
