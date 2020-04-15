@@ -135,7 +135,7 @@
                     <h2 class="sub-title"></h2>
                 </div>
                 <div class="col-md-4 text-right align-self-end">
-                    <a href="{% url 'user:search' %}" class="load-more">Load More</a>
+{#                    <a href="{% url 'user:search' %}" class="load-more">Load More</a>#}
                 </div>
             </div>
             <div class="lists">
@@ -190,7 +190,7 @@
             <div class="big-lists">
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="{% url 'user:search' %}?location=Melbourne" class="big-list">
+                        <a href="/rep/search/?location=Melbourne" class="big-list">
                             <div class="image">
                                 <img src="{% static 'image/cities/melbourne-home-page.jpg' %}" class="w-100" alt=""
                                      title="">
@@ -209,7 +209,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="big-lists-right">
-                            <a href="{% url 'user:search' %}?location=Perth" class="big-list">
+                            <a href="/rep/search/?location=Perth" class="big-list">
                                 <div class="image">
                                     <img src="{% static 'image/cities/perth-home-page.jpg' %}" class="w-100" alt=""
                                          title="">
@@ -225,7 +225,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="{% url 'user:search' %}?location=Sydney" class="big-list">
+                            <a href="/rep/search/?location=Sydney" class="big-list">
                                 <div class="image">
                                     <img src="{% static 'image/cities/sydney-home-page.jpg' %}" class="w-100" alt=""
                                          title="">
@@ -249,7 +249,7 @@
                 <div class="col-md-8">
                 </div>
                 <div class="col-md-4 text-right">
-                    <a href="{% url 'user:search' %}" class="load-more">Load More</a>
+                    <a href="/rep/search/" class="load-more">Load More</a>
                 </div>
             </div>
             <div class="lists">
@@ -327,7 +327,7 @@
                     </div>
                     <div class="col-md-2"></div>
                     <div class="col-md-4">
-                        <a href="{% url 'user:search' %}" class="list right">
+                        <a href="/rep/search/" class="list right">
                             <div class="image">
                                 <img src="{% static 'image/start-now/2.png' %}" class="w-100" alt="" title="">
                             </div>
@@ -549,7 +549,7 @@
     <!-- Fast Search labels start -->
     <script>
         $('label.btn-link').click(function () {
-            window.location.href = '{% url 'user:search' %}?location=' + this.innerText.trim();
+            window.location.href = '/rep/search/?location=' + this.innerText.trim();
         })
     </script>
     <!-- Fast Search labels end -->

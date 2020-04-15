@@ -275,7 +275,7 @@ export default class BookingInfoPanel extends Component {
                                                     ${this.props.finInfo.getData("payableAmount")} AUD
                                                 </div>
                                                 <div className={"col-12 " + styles.grayInfo}>
-                                                    Rent for 4 weeks + Service Fee
+                                                    Rent for 4 weeks {/*+ Service Fee*/}
                                                 </div>
                                             </div>
                                         </React.Fragment>

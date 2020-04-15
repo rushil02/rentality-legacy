@@ -26,7 +26,7 @@
     <!-- page map filter start -->
     <div class="page-map-filter position-sticky sticky-top">
         <div class="container">
-            <form action="{% url 'user:search' %}" method="GET" id="search_form" autocomplete="off">
+            <form action="/rep/search/" method="GET" id="search_form" autocomplete="off">
                 {{ search_form.start_date }}
                 {{ search_form.end_date }}
                 <div class="row">
