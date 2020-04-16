@@ -90,6 +90,25 @@ class User(AbstractUser):
         if object_is_new:
             UserProfile.objects.create(user=self)
 
+    def get_billing_location(self):
+        return self.userprofile.get_billing_location()
+
+    def has_billing_information(self):
+        ret = True
+        user_profile = self.userprofile
+
+        if self.first_name and self.last_name and user_profile.contact_num and user_profile.dob \
+                and user_profile.billing_street_address and user_profile.billing_postcode \
+                and user_profile.billing_country:
+            pass
+        else:
+            ret = False
+
+        if user_profile.account_type == 'B' and not user_profile.business_name:
+            ret = False
+
+        return ret
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -106,10 +125,21 @@ class UserProfile(models.Model):
     )
     sex = models.CharField(_('sex'), blank=True, max_length=1, choices=SEX_TYPE, default='O')
     dob = models.DateField(_('Date of Birth'), blank=True, null=True)
+
+    billing_street_address = models.TextField(null=True, blank=True)
+    billing_postcode = models.ForeignKey('cities.PostalCode', on_delete=models.PROTECT, null=True, blank=True)
+    billing_country = models.ForeignKey('cities.Country', on_delete=models.PROTECT, null=True, blank=True)
+
+    ACC_TYPE = (
+        ('B', 'Business'),
+        ('I', 'Individual')
+    )
+    account_type = models.CharField(max_length=1, choices=ACC_TYPE)
+    business_name = models.CharField(max_length=150, null=True, blank=True)
+
     receive_newsletter = models.BooleanField(default=True)
     profile_pic = models.ImageField(verbose_name=_('profile picture'), null=True, blank=True, upload_to=get_file_path)
     personality_tags = models.ManyToManyField('user_custom.PersonalityTag', blank=True)
-
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -123,6 +153,9 @@ class UserProfile(models.Model):
 
     def get_personality_tags(self):
         return self.personality_tags.all()
+
+    def get_billing_location(self):
+        return self.billing_country
 
 
 class PersonalityTag(models.Model):
@@ -138,15 +171,32 @@ class PersonalityTag(models.Model):
         return "%s" % self.verbose
 
 
-# FIXME: Migrate all payment process in reference to this model
+class ActiveAccountsManager(models.Manager):
+    def get_queryset(self):
+        return super(ActiveAccountsManager, self).get_queryset().filter(status='A')
+
+
 class Account(models.Model):
+    """
+    Stores all the Payment Gateway accounts that exist for a user.
+
+    details ->  holds the information of a user in particular to a gateway. It is JSONField
+                since this detail is used by the custom modules which describe the functioning,
+                and may or may not require any additional details other than only customer
+                related account(s).
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    details = JSONField(default={})
-    PAYMENT_GATEWAY_CHOICES = (
-        ('S', 'Stripe'),
-        ('A', 'Assembly')
+    details = JSONField(default=dict)
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
+    STATE_LIST = (
+        ('A', 'Active'),
+        ('I', 'Inactive')
     )
-    payment_gateway = models.CharField(max_length=2, choices=PAYMENT_GATEWAY_CHOICES)
+    status = models.CharField(max_length=1, choices=STATE_LIST, default='A')
+    create_time = models.DateTimeField(auto_now_add=True)
+
+    objects = ActiveAccountsManager()
+    all_objects = models.Manager()
 
     def __str__(self):
         return "%s" % self.user

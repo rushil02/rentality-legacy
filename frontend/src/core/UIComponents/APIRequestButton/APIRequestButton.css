@@ -1,0 +1,43 @@
+a.btn {
+    font-size: 16px;
+    border-radius: 99px;
+    font-weight: 700;
+    color: #36ffb1 !important;
+    background-color: #2a2b32 !important;
+    padding: 11px 59px;
+    text-transform: uppercase;
+    transition: all 0.25s ease-in-out;
+    -webkit-appearance: none;
+}
+
+a.btn:hover,
+a.btn:focus {
+    text-decoration: none;
+    color: #2a2b32 !important;
+    background-color: #36ffb1 !important;
+}
+
+a.errorBtn {
+    color: red !important;
+    background-color: #e6e6e6 !important;
+    pointer-events: none !important;
+}
+
+a.loadingBtn {
+    pointer-events: none !important;
+}
+
+.text {
+    text-align: center;
+    float: right;
+    position: relative;
+    width: auto;
+}
+
+.loadingContainer {
+    text-align: center;
+    float: left;
+    position: relative;
+    width: 40%;
+    padding-right: 10px;
+}

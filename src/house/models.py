@@ -2,6 +2,7 @@ import os
 import time
 import uuid
 from datetime import date, timedelta
+from decimal import Decimal
 from itertools import chain
 
 from django.utils import timezone
@@ -19,6 +20,7 @@ from django.conf import settings
 
 from house.helpers import check_house_availability, filter_past_dates, filter_small_date_ranges, get_available_dates, \
     filter_dates_wrt_lower
+from house.utils import get_timezone_for_postal_code
 
 
 def get_file_path(instance, filename):
@@ -57,13 +59,16 @@ class ActiveHouseManager(HouseManager):
 
 class House(models.Model):
     """
+    Minimum home_owner, title, location are required to create a house object.
+
     tags -> contain many-to-many relation with model 'Tags' containing 'who-is-welcomed [rules]' or facility
 
     status description ->
     STATUS = (
         ('I', 'Inactive'),      Not Visible to Public, 1st state of any listing
         ('P', 'Published'),     Visible to Public
-        ('D', 'Deleted')        Deleted from user's account visibility, still in Database
+        ('D', 'Deleted'),       Deleted from user's account visibility, still in Database
+        ('B', 'Blocked')        Blocked from any user action
     )
     """
 
@@ -71,8 +76,11 @@ class House(models.Model):
     REQUIRED_FIELDS = (
         'home_owner', 'title', 'furnished', 'address_hidden', 'address', 'location', 'home_type', 'bedrooms',
         'bathrooms', 'parking', 'rent', 'min_stay', 'facilities', 'rules', 'cancellation_policy', 'max_people_allowed',
-        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image', 'description'
+        'neighbourhood_facilities', 'neighbourhood_description', 'welcome_tags', 'availability', 'image', 'description',
+        'payment_gateway'
     )
+
+    # region Fields
 
     home_owner = models.ForeignKey(
         'home_owner.HomeOwnerProfile',
@@ -96,7 +104,6 @@ class House(models.Model):
         'cities.PostalCode',
         on_delete=models.PROTECT,
         verbose_name=_('location'),
-        null=True, blank=True
     )
 
     home_type = models.ForeignKey('house.HomeType', on_delete=models.PROTECT, null=True, verbose_name="Home Type")
@@ -106,6 +113,10 @@ class House(models.Model):
 
     rent = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Per Week in AUD")
     promo_codes = models.ManyToManyField('promotions.PromotionalCode', blank=True)
+
+    business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT, null=True,
+                                        blank=True)
 
     min_stay = models.PositiveSmallIntegerField(
         verbose_name=_('Minimum length of stay'),
@@ -123,15 +134,17 @@ class House(models.Model):
 
     facilities = models.ManyToManyField('house.Facility', blank=True)
     rules = models.ManyToManyField('house.Rule', through='house.HouseRule', blank=True)
-    other_rules = models.TextField(blank=True)
+    other_rules = models.TextField(blank=True, null=True)
 
-    cancellation_policy = models.ForeignKey('house.CancellationPolicy', on_delete=models.PROTECT, null=True, blank=True)
+    # FIXME: [URGENT] validate related cancellation_policy exists in the related business model configuration.
+    cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT, null=True,
+                                            blank=True)
 
-    other_people_description = models.TextField(blank=True)
+    other_people_description = models.TextField(blank=True, null=True)
 
-    access_restrictions = models.TextField(blank=True)
+    access_restrictions = models.TextField(blank=True, null=True)
 
-    neighbourhood_description = models.TextField(blank=True)
+    neighbourhood_description = models.TextField(blank=True, null=True)
     neighbourhood_facilities = models.ManyToManyField('house.NeighbourhoodDescriptor', blank=True)
 
     welcome_tags = models.ManyToManyField('house.WelcomeTag', blank=True)
@@ -139,18 +152,26 @@ class House(models.Model):
     STATUS = (
         ('I', 'Inactive'),
         ('P', 'Published'),
-        ('D', 'Deleted')
+        ('D', 'Deleted'),
+        ('B', 'Blocked')
     )
     status = models.CharField(max_length=1, choices=STATUS, default='I')
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    local_timezone = models.CharField(max_length=50, help_text="Pytz compliant value")
 
     objects = DeleteManager()
     active_objects = ActiveHouseManager()
     all_objects = HouseManager()
 
+    # endregion
+
+    def __str__(self):
+        return "%s [%s]" % (self.title, self.address)
+
+    # region Attribute getters
     # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
     def get_thumbnail(self):
@@ -164,6 +185,9 @@ class House(models.Model):
     def get_home_type_display(self):
         return "%s" % self.home_type.name
 
+    def get_rent_per_day(self):
+        return Decimal(self.rent) / 7
+
     # FIXME: needs to be removed
     def get_thumbnail_2(self):
         if self.is_thumbnail_available():
@@ -171,22 +195,6 @@ class House(models.Model):
             url = thumbnailer.get_thumbnail({'crop': 'smart', 'size': (540, 360)})
             return '/media/' + str(url)
         return self.get_thumbnail()
-
-    def is_thumbnail_available(self):
-        try:
-            Image.objects.get(house=self, is_thumbnail=True)
-        except Image.DoesNotExist:
-            return False
-        else:
-            return True
-
-    def is_public(self):
-        if self.status == 'P':
-            return True
-        return False
-
-    def __str__(self):
-        return "%s [%s]" % (self.title, self.address)
 
     def get_images(self):
         return self.image_set.all()
@@ -216,16 +224,6 @@ class House(models.Model):
         # TODO: Expand rent information on the basis of time, number of guests, etc.
         return self.rent
 
-    def save(self, *args, **kwargs):
-        object_is_new = not self.pk
-        super(House, self).save(*args, **kwargs)
-        if object_is_new:
-            HouseProfile.objects.create(house=self)
-            rules = []
-            for rule in Rule.objects.all():
-                rules.append(HouseRule(house=self, rule=rule, value=rule.options[0]))
-            HouseRule.objects.bulk_create(rules)
-
     def get_facilities(self):
         return self.facilities.all()
 
@@ -240,6 +238,43 @@ class House(models.Model):
 
     def get_availability(self, from_year=None, till_year=None):
         return get_available_dates(self, from_year, till_year)
+
+    def get_complete_address(self):
+        if self.address_hidden:
+            return "%s, %s, %s" % (self.address_hidden, self.address, self.get_location() or "")
+        else:
+            return ""
+
+    # endregion
+
+    def is_thumbnail_available(self):
+        try:
+            Image.objects.get(house=self, is_thumbnail=True)
+        except Image.DoesNotExist:
+            return False
+        else:
+            return True
+
+    def is_public(self):
+        if self.status == 'P':
+            return True
+        return False
+
+    def save(self, *args, **kwargs):
+        object_is_new = not self.pk
+
+        if object_is_new and not self.local_timezone:
+            self.local_timezone = get_timezone_for_postal_code(self.location)
+
+        self.full_clean()
+        super(House, self).save(*args, **kwargs)
+
+        if object_is_new:
+            HouseProfile.objects.create(house=self)
+            rules = []
+            for rule in Rule.objects.all():
+                rules.append(HouseRule(house=self, rule=rule, value=rule.options[0]))
+            HouseRule.objects.bulk_create(rules)
 
     def is_marked_leased(self):
         # FIXME: Connect to dynamic business model
@@ -256,17 +291,11 @@ class House(models.Model):
         else:
             return False
 
-    def set_status(self, status):
-        if status == 'P':
-            self.verify_data_for_publishing()
+    def update_status(self, status):
         self.status = status
+        self.save()
 
-    def get_complete_address(self):
-        if self.address_hidden:
-            return "%s, %s, %s" % (self.address_hidden, self.address, self.get_location() or "")
-        else:
-            return ""
-
+    # FIXME: Write tests for this
     def verify_data_for_publishing(self):
         """
         Tests if all required fields are present in the object
@@ -283,7 +312,8 @@ class House(models.Model):
                 if field.related_model.objects.filter(house=self).count() == 0:
                     errors[field_name] = ValidationError('This field is required', code='required')
             else:
-                if getattr(self, field_name) in (None, '', ' '):
+                value = getattr(self, field_name)
+                if (not value) and value != 0:  # Explicit check to pass if provided value is '0'
                     errors[field_name] = ValidationError('This field is required', code='required')
 
         if bool(errors):
@@ -293,8 +323,10 @@ class House(models.Model):
         super(House, self).clean()
         if self.max_stay and self.min_stay:
             if self.max_stay < self.min_stay:
-                raise ValidationError("Maximum length of stay cannot be less than Minimum length of stay",
-                                      code='invalid')
+                raise ValidationError(
+                    {'max_stay': "Maximum length of stay cannot be less than Minimum length of stay"},
+                    code='invalid'
+                )
 
     def check_availability(self, lower, upper):
         """
@@ -460,7 +492,7 @@ class Image(models.Model):
             try:
                 obj = Image.objects.filter(house=self.house, is_thumbnail=False)[0]
             except IndexError:
-                pass
+                return data
             else:
                 obj.is_thumbnail = True
                 obj.save()
@@ -537,18 +569,6 @@ class Rule(models.Model):
     """
     verbose = models.CharField(max_length=50)
     options = ArrayField(models.CharField(max_length=50))
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "%s" % self.verbose
-
-
-class CancellationPolicy(models.Model):
-    verbose = models.TextField(verbose_name='Policy Name')
-    description = models.TextField()
-    properties = JSONField()
-    official_policy = models.ForeignKey('essentials.Policy', on_delete=models.PROTECT, null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 

@@ -1,7 +1,27 @@
+FROM registry.gitlab.com/rushil0195/rentality/shared:latest as shared
+
 FROM node:11-alpine
-WORKDIR /src/static/v2/frontend
+
+# Required if accessing packages on git via npm
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
+# To handle 'not get uid/gid'
+RUN npm config set unsafe-perm true
+
+RUN npm install -g npm@latest
+
 WORKDIR /app
-COPY package.json .
-RUN npm install
-COPY . .
-RUN npm run build
+
+COPY ext_lib ./ext_lib
+COPY ./package*.json ./
+
+RUN npm ci
+
+COPY webpack.config.js .
+
+COPY src ./src
+
+COPY --from=shared /shared/PUBLIC_KEYS /run/secrets/PUBLIC_KEYS
+
+RUN ["npm", "run", "build"]

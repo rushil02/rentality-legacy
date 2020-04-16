@@ -14,6 +14,7 @@ from allauth.account.forms import ResetPasswordForm as AllAuthResetPasswordForm
 from allauth.account.forms import ResetPasswordKeyForm as AllAuthResetPasswordKeyForm
 
 from utils.form_thumbnailer import ImageClearableFileInput
+from cities.models import Country, PostalCode
 
 
 class ProfileForm1(forms.ModelForm):
@@ -47,9 +48,39 @@ class UserChangeForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        userprofile = kwargs.get('instance')
+        if userprofile.billing_country:
+            self.fields['billing_country'] = forms.ModelChoiceField(
+                queryset=Country.objects.all(),
+                empty_label='Country',
+                required=False,
+                widget=forms.Select(attrs={
+                    'class': 'form-control',
+                    'readonly': 'true'
+                })
+            )
+        else:
+            self.fields['billing_country'] = forms.ModelChoiceField(
+                queryset=Country.objects.all(),
+                empty_label='Country',
+                required=True,
+                widget=forms.Select(attrs={
+                    'class': 'form-control',
+                })
+            )
+        if userprofile.billing_postcode:
+            print(userprofile.billing_postcode.code)
+            self.fields['billing_postcode'] = forms.CharField(required=False, max_length=20,
+                                                              initial=userprofile.billing_postcode.code)
+        else:
+            self.fields['billing_postcode'] = forms.CharField(required=False, max_length=20)
+
     class Meta:
         model = UserProfile
-        exclude = ['user', 'updated_on', ]
+        exclude = ['user', 'updated_on', 'account_type']
         widgets = {
             'contact_num': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Contact number'}),
             'dob': forms.DateInput(
@@ -61,7 +92,24 @@ class EditProfileForm(forms.ModelForm):
                 attrs={'required': False, 'style': "visibility: hidden"},
                 template='%(template)s <a id="thumbnail-anchor" href="%(source_url)s" target="_blank">%(thumb)s</a>'
             ),
+            'billing_street_address': forms.Textarea(attrs={
+                'class': 'form-control', 'placeholder': 'Billing Street Address'
+            }),
+            'billing_postcode': forms.TextInput(attrs={
+                'class': 'form-control', 'placeholder': 'Billing Postal Code'
+            })
         }
+
+    def clean_billing_postcode(self):
+        billing_postcode_number = self.cleaned_data['billing_postcode']
+        if billing_postcode_number:
+            try:
+                postal_code = PostalCode.objects.filter(code=billing_postcode_number)[0]
+                return postal_code
+            except IndexError:
+                raise forms.ValidationError("Postal Code does not exist.")
+        else:
+            return None
 
 
 class ProfilePictureForm(forms.ModelForm):
@@ -90,34 +138,35 @@ class CustomLoginForm(AllAuthLoginForm):
 class CustomSignupForm(AllAuthSignupForm):
     # FIXME: Add Gmail Checker
 
-    first_name = forms.CharField(max_length=30,
-                                 widget=forms.TextInput(
-                                     attrs={
-                                         'class': 'form-control', 'id': 'first_name',
-                                         'placeholder': 'First Name', 'required': 'required'
-                                     }
-                                 )
-                                 )
+    first_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'first_name',
+                'placeholder': 'First Name', 'required': 'required'
+            }
+        )
+    )
 
-    last_name = forms.CharField(max_length=150,
-                                widget=forms.TextInput(
-                                    attrs={
-                                        'class': 'form-control', 'id': 'last_name',
-                                        'placeholder': 'Last Name'
-                                    }
-                                )
-                                )
+    last_name = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'last_name',
+                'placeholder': 'Last Name'
+            }
+        )
+    )
 
-    # receive_newsletter = forms.BooleanField(initial=True, required=False)  # FIXME: store in db
-    # policy_agreement = forms.BooleanField()
-    contact_num = forms.CharField(max_length=15, required=False,
-                                  widget=forms.TextInput(
-                                      attrs={
-                                          'class': 'form-control', 'id': 'contact_num',
-                                          'placeholder': 'Phone Number (optional)'
-                                      }
-                                  )
-                                  )
+    contact_num = forms.CharField(
+        max_length=15, required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'contact_num',
+                'placeholder': 'Phone Number (optional)'
+            }
+        )
+    )
     SEX_TYPE = (
         ('M', 'Male'),
         ('F', 'Female'),
@@ -134,18 +183,45 @@ class CustomSignupForm(AllAuthSignupForm):
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Password (again)'
 
-    # def clean_policy_agreement(self):
-    #     agreement = self.cleaned_data['policy_agreement']
-    #     if not agreement:
-    #         raise forms.ValidationError(
-    #             _("Please accept the terms and conditions to signup and use our services."),
-    #             code='Policy agreement not accepted'
-    #         )
+    def custom_signup(self, request, user):
+        UserProfile.objects.update_or_create(
+            user=user, defaults=dict(
+                contact_num=self.cleaned_data['contact_num'],
+                sex=self.cleaned_data['gender'],
+                account_type='I',
+            )
+        )
+
+
+class BusinessSignUpForm(CustomSignupForm):
+    business_name = forms.CharField(
+        max_length=150, required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'business_name',
+                'placeholder': 'Business Name', 'required': 'required'
+            }
+        )
+    )
+
+    contact_num = forms.CharField(
+        max_length=15, required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'id': 'contact_num',
+                'placeholder': 'Contact Number', 'required': 'required'
+            }
+        )
+    )
 
     def custom_signup(self, request, user):
         UserProfile.objects.update_or_create(
-            user=user, defaults=dict(contact_num=self.cleaned_data['contact_num'],
-                                     sex=self.cleaned_data['gender'])
+            user=user, defaults=dict(
+                contact_num=self.cleaned_data['contact_num'],
+                sex=self.cleaned_data['gender'],
+                business_name=self.cleaned_data['business_name'],
+                account_type='B',
+            )
         )
 
 
@@ -168,7 +244,6 @@ class CustomResetPasswordKeyForm(AllAuthResetPasswordKeyForm):
         super().__init__(*args, **kwargs)
         self.fields['password1'].widget.attrs['class'] = "form-control"
         self.fields['password2'].widget.attrs['class'] = "form-control"
-
 
 
 # FIXME: This is in the wrong package
@@ -208,6 +283,5 @@ class HomePageSearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['home_type'].choices = [(None, "Select Home Type"),] + \
-                list(self.fields["home_type"].choices)[1:]
-
+        self.fields['home_type'].choices = [(None, "Select Home Type"), ] + \
+                                           list(self.fields["home_type"].choices)[1:]

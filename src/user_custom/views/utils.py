@@ -1,10 +1,13 @@
+from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from user_custom.serializers import UserTimezoneSerializer
+from user_custom.serializers.common import UserTimezoneSerializer
 from django.conf import settings
+
+from utils.mailer import send_template_mail
 
 
 @api_view(['POST'])
@@ -52,3 +55,30 @@ def set_timezone(request):
 @permission_classes((IsAuthenticated,))
 def get_stripe_publishable_key(request):
     return Response({'publishable_key': settings.STRIPE_PUBLISHABLE_KEY}, status=status.HTTP_200_OK)
+
+
+def create_user_for_anon(first_name, email, send_mail=True, **kwargs):
+    user_class = get_user_model()
+    password = user_class.objects.make_random_password()
+
+    user = user_class.objects.create_user(
+        email=email, password=password,
+        first_name=first_name, last_name=kwargs.get('last_name', None)
+    )
+
+    user_profile = user.userprofile
+    user_profile.sex = kwargs.get('sex', 'O')
+    user_profile.contact_num = kwargs.get('contact_num', None)
+    user_profile.save()
+
+    if send_mail:
+        send_template_mail(
+            subject="Account Created",
+            template_name='emails/tenant/onboarding/anon_auto_account.html',
+            context={'password': password},
+            from_email='support@rentality.com.au',
+            recipient_list=[user.email],
+            text_message=" An account was registered on Rentality using this email ID. Please use \
+            the following password to login to your account - {password}"
+        )
+    return user

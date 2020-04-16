@@ -7,5 +7,9 @@ class HousePreferenceAdmin(admin.ModelAdmin):
     autocomplete_fields = ['locations']
 
 
-admin.site.register(TenantProfile)
+class TenantProfileAdmin(admin.ModelAdmin):
+    search_fields = ('user', )
+
+
+admin.site.register(TenantProfile, TenantProfileAdmin)
 admin.site.register(HousePreference, HousePreferenceAdmin)

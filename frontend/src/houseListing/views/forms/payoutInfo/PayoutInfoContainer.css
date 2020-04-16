@@ -1,0 +1,156 @@
+.btnCircle.btnXl {
+    width: 40px;
+    height: 40px;
+    padding: 6px 0px;
+    border-radius: 35px;
+    font-size: 18px;
+    line-height: 1.33;
+}
+
+.btnCircle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+    background-color: transparent;
+    color: #39ffaf;
+    border-color: transparent;
+    margin-left: 20px;
+}
+
+.btnCircle.active {
+    box-shadow: 0 0 0 0.2rem rgba(57, 255, 175, 0.5);
+}
+
+.btnCircle:hover {
+    background-color: #39ffaf;
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.btnCircle:not(:disabled):not(.disabled).active,
+.btnCircle:not(:disabled):not(.disabled):active {
+    background-color: #39ffaf;
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.btnCircle:not(:disabled):not(.disabled).active:focus,
+.btnCircle:not(:disabled):not(.disabled):active:focus {
+    box-shadow: 0 0 0 0.2rem rgba(57, 255, 175, 0.5);
+}
+
+.btnCircle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(57, 255, 175, 0.5);
+}
+
+.btnCircle.disabled,
+.btnCircle:disabled {
+    color: grey;
+    background-color: #fff;
+    border-color: transparent;
+}
+
+.btnCircle.cancelCustom {
+    color: #dc3545;
+    font-size: 20px;
+}
+
+.btnCircle.cancelCustom:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.btnCircle.cancelCustom:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
+}
+
+.cardButtonGroup {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.cardTextContent {
+    flex-grow: 1;
+    align-items: center;
+    flex-basis: 40%;
+}
+
+.cardBody {
+    display: flex;
+    align-items: center;
+}
+
+.cardContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.invalidFeedback {
+    flex-grow: 1;
+    align-items: center;
+    flex-basis: 20%;
+}
+
+.accordionBorder {
+    border: none;
+    box-shadow: 0 0 10px #c4c4c4;
+}
+
+.stripeInformation {
+    border: 2px solid #e6ebf1;
+    border-radius: 5px;
+    padding: 20px 135px 20px 25px;
+    background: url(https://rocketdeliveries.io/images/stripe-grey.svg) right 25px center no-repeat;
+    background-size: 80px auto;
+}
+
+.stripeDetail {
+    color: #65625b;
+    font-size: 14px;
+    text-align: left;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.alignRight {
+    text-align: right;
+}
+
+.stripeSaveBtn {
+    border-style: none;
+    border-radius: 99px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #30322a;
+    background: #fff;
+    border: solid 2px #f8bf25;
+    margin: 35px 0 5px 0;
+    padding: 11px 59px;
+    cursor: pointer;
+    outline: none;
+    -webkit-appearance: none;
+    transition: all 0.25s ease-in-out;
+}
+
+.stripeSaveBtn:hover {
+    color: #30322a;
+    background: #f8bf25;
+}
+
+.fadedBlue {
+    color: #007bffb8 !important;
+}
+
+.disabledInput {
+    background: #d8d8d824 !important;
+}

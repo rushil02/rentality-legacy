@@ -10,7 +10,7 @@ from house.models import House
 from tenant.models import HousePreference
 from user_custom.forms import ProfileForm1, ProfileForm2, EditProfileForm, UserChangeForm
 from user_custom.models import PersonalityTag
-from user_custom.serializers import PersonalityTagSerializer, UserInfoSerializer, UserProfileSerializer
+from user_custom.serializers.common import PersonalityTagSerializer, UserInfoSerializer, UserProfileSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -36,7 +36,7 @@ def edit_profile(request):
         if form1.is_valid() and form2.is_valid():
             form1.save()
             form2.save()
-            return redirect(reverse('user:user_details'))
+            return redirect('/rep/user/profile')
 
     return render(request, 'user/profile/edit_details.html', context)
 
@@ -69,10 +69,3 @@ class PersonalityTagView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserInfoView(APIView):
-    permission_classes = (IsAuthenticated, )
-
-    def get(self, request, *args, **kwargs):
-        user_info_serializer = UserInfoSerializer(request.user)
-        user_profile_serializer = UserProfileSerializer(request.user.userprofile)
-        return Response(dict(**user_info_serializer.data, **user_profile_serializer.data))

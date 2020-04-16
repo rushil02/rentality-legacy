@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from promotions.code_validations import VALIDATORS as AVAILABLE_VALIDATORS
+from promotions.utils.promo_code_behaviour import get_behaviours
 
 
 class MetaValueDoesNotExit(Exception):
@@ -62,35 +63,47 @@ class PromotionalCodeManager(models.Manager):
 
 class PromotionalCode(models.Model):
     """
-    meta -> can be used to store any additional details, like - referrer, custom_validation_function
-        - time_limit, use_limit
+    Promotional Code object can either belong to (`applied_by`) Home-owner or Tenant; and can
+    only be applied on (`applicable_on`) either House or Application. Only following 2
+    combinations can exist -
+        1. Home-owner & House
+        2. Tenant & Application
+
+    Home-owner promo-codes are allowed to have a TransactionConfiguration, while a tenant promo-code
+    is strictly not allowed to associate with a TransactionConfiguration. Any Tenant promo-code can
+    only impact the values associated with Tenant's charge which are payable to Rentality.
+
+    For exclusive cases (example - to create an application with 0 account transactions).
+    Application will be generated using staff tools with relevant TransactionConfiguration.
+    Promotional Codes for Tenant are strictly prohibited from altering the TransactionConfiguration.
+
+    Strict Validations ensure pre-save checks to warn for any mismatch in selected entities,
+    constraints and behaviour. (Including entities and behaviour in the transaction model.)  # TODO
+
+    To apply the promo-code, the validations are defined by the selected `VALIDATORS` stored
+    in meta. These are the user (staff member who created promo-code) selected validations,
+    example - Expiry date, Maximum number of use, etc.
+
+    Promotional Codes which are attached to a TransactionConfiguration are limited to the location
+    specified by the later.
+    
+    Since the behaviour of a promo code is unknown and dynamic, the attrs and relationships involved 
+    are unknown. `meta` is used to store all attributes relevant for the functioning of promocode.
+    Known parent attrs of meta ->  # FIXME: Expand on this list
         - validation_list : methods to run for validation of promo-code
         - override_default_validation : [Boolean] will not run default validation checks
-        - referrer : '{user: user_id, }'  # FIXME: Needs use case and documentation
-        - additional_methods : [List of methods in order of call] Methods to be run at successful validation of code
-    VALIDATORS -> Mapping of string values stored in DB to actual methods used for validating the current object
+        - id of attached TransactionConfiguration object
+
+    VALIDATORS ->   Mapping of string values stored in DB to actual methods used for validating
+                    the current object
     """
     code = models.CharField(max_length=20, verbose_name='Coupon/Voucher Code')
     verbose = models.TextField(verbose_name='Title', help_text='Example: 50% off for New users')
     description = models.TextField(blank=True)
     tnc = models.TextField(blank=True, verbose_name='Terms & Conditions')
 
-    VALUE_TYPE = (
-        ('F', 'Flat'),
-        ('P', 'Percentage'),
-    )
-    value_type = models.CharField(max_length=1, choices=VALUE_TYPE)
-    invert_discount = models.BooleanField(
-        default=False,
-        help_text="Default behaviour is Discount. Selecting it will change the behaviour to extra charge."
-    )
-    PRINCIPAL_CHOICES = (
-        ('R', 'Payable Rent'),
-        ('S', 'Service Fee'),
-        ('N', 'Total Amount')
-    )
-    principal = models.CharField(max_length=1, choices=PRINCIPAL_CHOICES)
-    value = models.DecimalField(max_digits=12, decimal_places=5)
+    BEHAVIOURS = get_behaviours()
+    behaviour = models.CharField(max_length=1, choices=BEHAVIOURS)
 
     active = models.BooleanField(default=False)
 
@@ -105,9 +118,10 @@ class PromotionalCode(models.Model):
         app_label='house', model='house')
     applicable_on = models.ForeignKey(ContentType, on_delete=models.PROTECT, limit_choices_to=APPLICABLE_ON_LIMIT)
 
-    allowed_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
-                                           help_text="Users which are allowed to use this Promotional Code. "
-                                                     "Selecting None will make it applicable to all.")
+    allowed_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True,
+        help_text="Users who are allowed to use this Promotional Code. Selecting None will make it applicable to all."
+    )
 
     meta = JSONField(null=True, blank=True)
 
@@ -128,7 +142,7 @@ class PromotionalCode(models.Model):
         if self.meta:
             if self.get_meta_data('override_default_validation', default=False) and self.active:
                 try:
-                    self.get_meta_data('vapromo-resultlidation_list')
+                    self.get_meta_data('validation_list')
                 except KeyError:
                     raise ValidationError({
                         'code': _(
@@ -206,7 +220,7 @@ class PromotionalCode(models.Model):
 
     def user_has_permission(self, user):
         if user is None:
-            raise ValueError("User cannot be None")
+            raise ValueError("   User cannot be None")
         else:
             matches = self.allowed_users_set.filter(id=user.id).count()
             if matches == 1:
@@ -303,3 +317,4 @@ class Referee(models.Model):
 class PromotionalCodeReferee(models.Model):
     promo = models.ForeignKey('promotions.PromotionalCode', on_delete=models.PROTECT)
     referee = models.ForeignKey('promotions.Referee', on_delete=models.PROTECT)
+

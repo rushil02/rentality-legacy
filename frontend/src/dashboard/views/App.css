@@ -1,0 +1,226 @@
+.pageDashboard {
+    padding-top: 35px;
+    padding-bottom: 80px;
+}
+
+.pageDashboard h1 {
+    font-size: 25px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.pageDashboard h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+.pageDashboard .board {
+    border-bottom: 1px solid #dce0e8;
+    padding: 15px 5px 30px 5px;
+    margin-bottom: 60px;
+}
+
+.pageDashboard .board .info {
+    margin-bottom: 20px;
+}
+
+.pageDashboard .board .date {
+    font-size: 15px;
+    font-weight: 500;
+    color: #2a2b32;
+    border-bottom: 1px solid #e9ebf0;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.pageDashboard .board .date span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #aeaeae;
+    display: block;
+}
+
+.pageDashboard .board .amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #3fc692;
+    text-align: right;
+    padding-right: 20px;
+    margin: 10px 0px;
+}
+
+.pageDashboard .board .amount p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #999999;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.pageDashboard .board .bookingAmount {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3fc692;
+    text-align: right;
+    padding-right: 20px;
+    border-bottom: 1px solid #e9ebf0;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.pageDashboard .board .bookingAmount p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #999999;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.pageDashboard .board .homeOwnerInfo {
+    font-size: 12px;
+    font-weight: 400;
+    color: #a2a2a2;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.pageDashboard .board .homeOwnerInfo p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+    margin: 0;
+}
+
+.pageDashboard .board h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000000;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.pageDashboard .board h2 {
+    font-size: 15px;
+    font-weight: 400;
+    color: #bcbcbc;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.pageDashboard .board h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #6d6d6d;
+    text-align: left;
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+.homeTypeText {
+    font-size: 16px;
+    font-weight: 400;
+    color: #6d6d6d;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.pageDashboard .board .confirm .btn {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2a2b32;
+    text-transform: uppercase;
+    padding: 10px 100px;
+    transition: all 0.25s ease-in-out;
+}
+
+.successBorder {
+    border: 2px solid #36ffb1;
+}
+
+.pendingBorder {
+    border: 2px solid #ff4a4a;
+}
+
+.incompleteBorder {
+    border: 2px solid #ffc107;
+}
+
+.pageDashboard .board .confirm .btn:hover,
+.pageDashboard .board .confirm .btn:focus {
+    text-decoration: none;
+}
+
+.pageDashboard .board .listUnstyled {
+    margin-bottom: 30px;
+}
+
+.pageDashboard .board .listUnstyled.top-margin {
+    margin-top: 60px;
+}
+
+.pageDashboard .board .listUnstyled li a {
+    font-size: 13px;
+    font-weight: 500;
+    color: #2a2b32;
+    text-decoration: underline;
+    transition: all 0.25s ease-in-out;
+}
+
+.pageDashboard .board .listUnstyled li a:hover {
+    text-decoration: none;
+    color: #36ffb1;
+}
+
+.pageDashboard .board .listUnstyled li a:focus {
+    text-decoration: none;
+}
+
+.pageDashboard .board .detail {
+    text-align: right;
+}
+
+.pageDashboard .board .detail .btn {
+    font-size: 16px;
+    font-weight: 400;
+    color: #2a2b32;
+    border: 1px solid #2a2b32;
+    padding: 10px 50px;
+    transition: all 0.25s ease-in-out;
+    border-radius: 99px;
+}
+
+.pageDashboard .board .detail .btn:hover {
+    background-color: #2a2b32;
+    color: #ffffff;
+}
+
+.pageDashboard .board .detail .btn:hover,
+.pageDashboard .board .detail .btn:focus {
+    text-decoration: none;
+}
+
+.centerArrow {
+    background-image: url(/static/image/page-detail/right-date/arrow.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.dateSubtitle {
+    font-size: 10px;
+    font-weight: 500;
+    color: #a2a2a2;
+}
+
+.dateDisplay {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2a2b32;
+}

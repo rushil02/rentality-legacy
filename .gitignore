@@ -6,6 +6,7 @@ __pycache__/
 
 # Environments
 .venv
+.env
 env/
 venv/
 ENV/
@@ -19,10 +20,15 @@ docker-compose.override.yml
 static_dev/
 
 frontend/node_modules
-frontend/package-lock.json
+frontend/dist/
 
-src/static/v2/frontend/index.js
+src/static/v2/frontend/
 
 .idea
 
-bin/sync_with_prod
+services/
+rentality/
+bin/old/
+nginx/production/
+
+src/__test_emails

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_scripts %}
+    <!-- css start -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'style/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <!-- css end -->
+
+    <!-- script start -->
+    <script src="{% static 'script/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'script/popper.min.js' %}"></script>
+    <script src="{% static 'script/bootstrap.min.js' %}"></script>
+
+    <!-- script end -->
+
+{% endblock %}
+
+{% block body %}
+    <noscript>This application requires javascript to function.</noscript>
+
+    <div id="root">
+
+    </div>
+    {% block entry_point %}
+        <script src="{% static "frontend/index.bundle.js" %}"></script>
+    {% endblock entry_point %}
+
+
+{% endblock %}

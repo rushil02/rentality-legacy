@@ -12,7 +12,7 @@ from formtools.wizard.views import SessionWizardView
 
 from house.models import House
 from tenant.models import HousePreference
-from user_custom.forms import ProfileForm1, ProfileForm2, HomePageSearchForm
+from user_custom.forms import ProfileForm1, ProfileForm2, HomePageSearchForm, BusinessSignUpForm, CustomSignupForm
 from user_custom.models import UserProfile
 from allauth.account.views import SignupView as AllAuthSignupView
 
@@ -74,3 +74,10 @@ class SignUpInfoWizard(SessionWizardView):
 class CustomSignupView(AllAuthSignupView):
     # FIXME: Reverse URL not working for reverse('user:account_creation')
     success_url = '/'
+    form_class = CustomSignupForm
+
+
+class BusinessSignupView(AllAuthSignupView):
+    success_url = '/'
+    form_class = BusinessSignUpForm
+    template_name = 'account/business_signup.html'

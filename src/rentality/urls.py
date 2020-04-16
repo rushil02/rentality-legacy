@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 
 from user_custom.views import not_found
 from rentality.sitemap import sitemaps
@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('es/', include('elastic_search.urls')),
     path('te/', include('tenant.urls')),
-    path('la/', include('home_owner.urls')),
+    path('ho/', include('home_owner.urls')),
     path('st/', include('staff.urls')),
     path('admin/', include('admin_custom.urls')),
     path('', include('user_custom.urls')),
@@ -40,10 +40,14 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('property/', include('house.urls')),
     path('blogs/', include('blog.urls')),
-    path('apply/', include('application.urls')),
+    path('app/', include('application.urls')),
     path('promo/', include('promotions.urls')),
+    path('pg/', include('payment_gateway.urls')),
 
     path('ess/', include('essentials.urls')),
+    path('cities/', include('cities_custom.urls')),
+
+    re_path(r'^rep/', TemplateView.as_view(template_name='react/base.html')),
 
     # TODO: no individual messaging urls needed ?
     path('messaging/', include('messaging.urls')),

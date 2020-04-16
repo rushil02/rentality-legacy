@@ -1,0 +1,320 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.invalid-feedback, .valid-feedback {
+    display: block;
+}
+
+
+/************************************/
+/***** Axios Progress Bar start *****/
+/************************************/
+
+#nprogress .bar {
+    background: #36ffb1 !important;
+    height: 3px;
+    box-shadow: 0 0 20px #36ffb1 !important;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 20px #36ffb1, 0 0 20px #36ffb1 !important;
+}
+
+#nprogress .spinner-icon {
+    border-top-color: #36ffb1 !important;
+    border-left-color: #36ffb1 !important;
+}
+
+/************************************/
+/***** Axios Progress Bar End *****/
+/************************************/
+
+
+/************************************/
+/***** Theme v2 start ***************/
+/************************************/
+
+/*** Unset Auto Browser Fill Styling ***/
+@-webkit-keyframes autofill {
+    to {
+        color: #495057; /* Default color from Bootstrap */
+        background: transparent;
+    }
+}
+
+input:-webkit-autofill {
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+}
+
+
+/******** Text Input ***********/
+
+.input .form-control {
+    font-size: 15px;
+    font-weight: 400;
+    padding-left: 50px;
+    padding-right: 0;
+    border: none;
+    border-bottom: 1px solid #c7cdd9;
+    border-radius: 0;
+    height: calc(2.25rem + 15px);
+    background-repeat: no-repeat;
+    background-position: 5px center;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+}
+
+.input .form-control::placeholder {
+    opacity: 1;
+    color: #676767;
+}
+
+.input .form-control:focus {
+    box-shadow: 0 6px 12px -7px #3fc692 !important;
+    border-bottom: 1px solid #3fc692;
+}
+
+
+.input.big .form-control {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+/******** Read Only False Input ***********/
+
+.input > .readonly-custom-input {
+    padding-top: 0.8rem;
+    text-overflow: ellipsis;
+    padding-left: 10px !important;
+    background: transparent !important;
+}
+
+
+/******** Number Input ***********/
+
+.input.number-disp {
+    position: relative;
+    font-size: 15px;
+    color: #495057;
+    font-weight: 400;
+    border-bottom: 1px solid #c7cdd9;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 50px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+}
+
+.input.number-disp:focus-within {
+    box-shadow: 0 6px 12px -7px #3fc692 !important;
+    border-bottom: 1px solid #3fc692;
+    outline: none;
+}
+
+.input.number-disp label {
+    display: flex;
+}
+
+.input.number-disp input {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    width: 20%;
+    padding-right: 10px;
+    border: none;
+    color: #2a2b32;
+    height: auto;
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    display: flex;
+    flex-wrap: nowrap;
+    position: relative;
+    text-align: right;
+    outline: none;
+    background-color: inherit;
+}
+
+.input.number-disp input::-webkit-outer-spin-button,
+.input.number-disp input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin-left: 0;
+}
+
+
+/******** Text and Number Input without Icon ***********/
+.input.no-background .form-control, .input.no-background.number-disp {
+    padding-left: 10px;
+    background: none;
+}
+
+/******** Checkbox (Multiple Select) Input ***********/
+
+.checkbox .list-inline li {
+    width: 215px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #676767;
+    margin-bottom: 25px;
+}
+
+.checkbox .list-inline li .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: url('/static/image/form-1/check.svg');
+    background-size: unset;
+    opacity: 1;
+}
+
+.checkbox .list-inline li .custom-checkbox .custom-control-input ~ .custom-control-label::after {
+    transition: all 100ms ease-in-out;
+    opacity: 0;
+}
+
+.checkbox .list-inline li:not(:last-child) {
+    margin-right: 0;
+    padding-right: 10px;
+}
+
+.checkbox .list-inline li .custom-control-label {
+    line-height: 25px;
+    padding-left: 15px;
+}
+
+.checkbox .list-inline li .custom-control-label::before {
+    width: 25px;
+    height: 25px;
+    margin-top: -4px;
+    border: 1px solid #cacaca !important;
+    background-color: #ffffff !important;
+    box-shadow: none;
+    bottom: .15rem;
+    top: unset;
+}
+
+.checkbox .list-inline li .custom-control-label::after {
+    width: 25px;
+    height: 25px;
+    margin-top: -4px;
+    bottom: .15rem;
+    top: unset;
+}
+
+.checkbox.auto-width .list-inline li {
+    width: 100%;
+}
+
+/******** Checkbox (Multiple Select) Input - Tag/Button Styling ***********/
+
+.selection .btn-group .btn {
+    font-size: 15px;
+    font-weight: 400;
+    color: #676767;
+    border: 1px solid #000000;
+    border-radius: 99px !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-width: 200px;
+    transition: all .25s ease-in-out;
+    margin-bottom: 8px;
+    margin-right: 10px;
+}
+
+.selection .btn-group .btn:hover, .selection .btn-group .btn:focus, .selection .btn-group .btn.focus {
+    text-decoration: none;
+}
+
+.selection .btn-group .btn:hover {
+    background-color: rgba(68, 235, 178, 0.32);
+}
+
+
+.selection .btn-group .btn.active {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-weight: 700;
+    color: #000000;
+    background-color: rgba(63, 198, 146, 0.5);
+}
+
+.selection .btn-group {
+    display: block !important;
+}
+
+
+/************** Button *************/
+a.default-button-style, button.default-button-style {
+    font-size: 16px;
+    border-radius: 99px;
+    transition: all .25s ease-in-out;
+    font-weight: 400;
+    color: #2a2b32;
+    background-color: transparent;
+    padding: 12px 50px;
+    cursor: pointer;
+    border: 1px solid #2a2b32;
+}
+
+a.default-button-style:hover, a.default-button-style:focus,
+button.default-button-style:hover, button.default-button-style:focus {
+    text-decoration: none;
+    background-color: #2a2b32;
+    color: #ffffff !important;
+}
+
+
+a.imp-button-style, button.imp-button-style {
+    font-size: 16px;
+    border-radius: 99px;
+    font-weight: 700;
+    color: #36ffb1 !important;
+    background-color: #2a2b32 !important;
+    padding: 11px 59px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all .25s ease-in-out;
+    -webkit-appearance: none;
+}
+
+a.imp-button-style:hover, a.imp-button-style:focus,
+button.imp-button-style:hover, button.imp-button-style:focus {
+    text-decoration: none;
+    color: #2a2b32 !important;
+    background-color: #36ffb1 !important;
+}
+
+
+/************** TextArea *************/
+textarea.form-control {
+    border: 1px solid #56ffbd !important;
+    resize: none;
+    background-color: transparent !important;
+    position: relative;
+    font-size: 15px;
+    font-weight: 400;
+    outline: 0 !important;
+    color: #2a2b32 !important;
+    padding: 20px;
+}
+
+textarea.form-control:focus {
+    box-shadow: 0 0 7px -1px #3fc692 !important;
+}
+
+
+/************************************/
+/***** Theme v2 End *****************/
+/************************************/

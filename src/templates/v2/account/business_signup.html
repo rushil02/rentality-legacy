@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+    {% include 'components/navbar/anon.html' %}
+{% endblock navbar %}
+
+{% block content %}
+    <!-- page signup login start -->
+    <div class="page-signup-login">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h1>Business Sign Up</h1>
+                    <div class="form">
+                        <form action="{% url 'user:business_account_signup' %}" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        <div class="col-md-12 invalid-feedback"
+                                             style="display: block; text-align: center;">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="col-md-12">
+                                    {{ form.business_name }}
+                                    {% if form.business_name.errors %}
+                                        {% for error in form.business_name.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.first_name }}
+                                    {% if form.first_name.errors %}
+                                        {% for error in form.first_name.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.last_name }}
+                                    {% if form.last_name.errors %}
+                                        {% for error in form.last_name.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        {% for error in form.email.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.password1 }}
+                                    {% if form.password1.errors %}
+                                        {% for error in form.password1.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.password2 }}
+                                    {% if form.password2.errors %}
+                                        {% for error in form.password2.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.country }}
+                                    {% if form.country.errors %}
+                                        {% for error in form.country.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.contact_num }}
+                                    {% if form.contact_num.errors %}
+                                        {% for error in form.contact_num.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-3">
+                                    <div class="select">
+                                        <div class="bold">Gender</div>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="top-margin">
+                                        <div class="select">
+                                            <div class="row">
+                                                <div class="col-lg-2">
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="radio" name="gender" id="login-male"
+                                                               class="custom-control-input" value="M" checked>
+                                                        <label class="custom-control-label" for="login-male">
+                                                            Male
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="radio" name="gender" id="login-famale"
+                                                               class="custom-control-input" value="F">
+                                                        <label class="custom-control-label" for="login-famale">
+                                                            Female
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="radio" name="gender" id="login-other"
+                                                               class="custom-control-input" value="O">
+                                                        <label class="custom-control-label" for="login-other">
+                                                            Other
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if redirect_field_value %}
+                                    <input type="hidden" name="{{ redirect_field_name }}"
+                                           value="{{ redirect_field_value }}"/>
+                                {% endif %}
+
+
+
+                                <div class="col-md-12">
+                                    <div class="warning">Creating an account means that you accept our<br>
+                                        <a href="{% url 'essentials:get_policy' policy_type="ToS" %}">Terms
+                                            of service</a> and <a
+                                                href="{% url 'essentials:get_policy' policy_type="PP" %}">Privacy
+                                            Policy</a></div>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-link btn-block">Sign up!</button>
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-12 text-right">
+                                    <div class="top-margin">
+                                        <a href="{% url 'account_login' %}"
+                                           class="btn btn-link">Already have an account? Log in</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+    <!-- page signup login end -->
+{% endblock content %}

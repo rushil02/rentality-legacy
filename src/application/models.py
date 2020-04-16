@@ -1,155 +1,187 @@
-import random
 import uuid
-import string
+from decimal import Decimal
 
 from cities.models import PostalCode
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 
-from cities_custom.serializers import PostalCodeSerializer, PostalCodeAllDetailSerializer
-from house.models import House, HomeType
 from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
-
-STATUS_CHOICES = (
-    ('P', 'Pending'),
-    ('A', 'Accepted'),
-    ('D', 'Declined'),
-    ('T', 'Timeout'),
-    ('E', 'Transaction Error')
-)
+from utils.helpers import merge_dicts
+from utils.model_utils import next_ref_code, get_nested_info
+from .utils import STATUS_CHOICES, ACTOR_CHOICES
 
 
 class Application(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     house = models.ForeignKey('house.House', on_delete=models.PROTECT)
     ref_code = models.CharField(unique=True, max_length=20, blank=True)
-    house_meta = JSONField(null=True, blank=True)
+    house_meta = JSONField(null=True, blank=True, help_text="Frozen information of house")
     tenant = models.ForeignKey('tenant.TenantProfile', on_delete=models.PROTECT)
-    tenant_meta = JSONField(null=True, blank=True)
+    tenant_meta = JSONField(null=True, blank=True, help_text="Additional details provided by the tenant")
     rent = models.PositiveIntegerField()
-    meta = JSONField(null=True, blank=True)
+    meta = JSONField(null=True, blank=True, help_text="Additional details provided in regards to the application")
 
     # FIXME: need to change this variable to date_range or stay_date_range
     date = DateRangeField(verbose_name=_('stay dates'))
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     promotional_code = models.ManyToManyField('promotions.PromotionalCode', blank=True)  # FIXME: Needs to be plural
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-    REF_CODE_LENGTH = 6
-
     def __str__(self):
-        return "'%s' applied for %s" % (self.tenant, self.house)
+        return "%s: '%s' applied for %s" % (self.ref_code, self.tenant, self.house)
 
     def __init__(self, *args, **kwargs):
         super(Application, self).__init__(*args, **kwargs)
         self._house_native_obj = None
 
-    @property
-    def house_native_obj(self):
-        # FIXME: Make Complete Wrapper
-        if self._house_native_obj is None:
-            house_serializer = HouseAllDetailsSerializer(data=self.house_meta)
-            house_serializer.is_valid()
-            _house_native_obj = House(**house_serializer.validated_data)
+    def get_stay_date_range(self):
+        return [self.date.lower, self.date.upper]
 
-            del self.house_meta['location']['alt_names']
-            location_serializer = PostalCodeAllDetailSerializer(data=self.house_meta['location'])
-            location_serializer.is_valid(raise_exception=True)
-            _house_native_obj.location = PostalCode(**location_serializer.validated_data)
+    def get_rent_per_day(self):
+        return Decimal(self.rent) / 7
 
-            home_type_serializer = HomeTypeSerializer(data=self.house_meta['home_type'])
-            home_type_serializer.is_valid()
-            _house_native_obj.home_type = HomeType(**home_type_serializer.validated_data)
+    def get_all_promo_codes(self):
+        return self.promotional_code.all()
 
-            self._house_native_obj = _house_native_obj
-        return self._house_native_obj
+    def get_house_meta_info(self, key):
+        """
+        Gets value from house meta. `__` [double-underscore] can be used for nested keys.
+        :param key: str
+        :return: value
+        """
+        return get_nested_info(self.house_meta, key)
 
-    def _create_ref_code(self):
+    def get_tenant_meta_info(self, key):
+        """
+        Gets value from house meta. `__` [double-underscore] can be used for nested keys.
+        :param key: str
+        :return: value
+        """
+        return get_nested_info(self.tenant_meta, key)
+
+    def get_meta_info(self, key):
+        """
+        Gets value from house meta. `__` [double-underscore] can be used for nested keys.
+        :param key: str
+        :return: value
+        """
+        return get_nested_info(self.meta, key)
+
+    def get_business_model_config(self):
+        return self.accountdetail.business_config
+
+    @staticmethod
+    def _create_ref_code():
         try:
             obj = Application.objects.latest('created_on')
         except Application.DoesNotExist:
             return 'AA0001'
-        new_code = ""
-        prev_code = obj.ref_code[::-1]
-        i = 0
-        while (i < self.REF_CODE_LENGTH):
-            subcode = prev_code[i]
-            try:
-                int(subcode)
-            except ValueError:
-                try:
-                    new_char = string.ascii_uppercase[string.ascii_uppercase.index(subcode) + 1]
-                except IndexError:
-                    new_code += string.ascii_uppercase[0]
-                    i += 1
-                    continue
-                else:
-                    new_code += new_char
-                    i += 1
-                    break
-            else:
-                try:
-                    new_char = string.digits[string.digits.index(subcode) + 1]
-                except IndexError:
-                    new_code += string.digits[0]
-                    i += 1
-                    continue
-                else:
-                    new_code += new_char
-                    i += 1
-                    break
-
-        if i == self.REF_CODE_LENGTH:
-            initial = [string.digits[0], string.ascii_uppercase[0]]
-            new_code = random.choice(initial) + new_code[::1]
-
         else:
-            new_code = new_code + prev_code[i:]
-
-        return new_code[::-1]
+            return next_ref_code(obj.ref_code)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if self.pk is None:
             self.ref_code = self._create_ref_code()
-        if self.house_meta is None:
             self.house_meta = HouseAllDetailsSerializer(self.house).data
         super(Application, self).save(force_insert=False, force_update=False, using=None,
                                       update_fields=None)
 
+    def update_status(self, new_state, actor):
+        self.status = new_state
+        self.save()
+        ApplicationState.objects.update_status(self, new_state, actor)
+
+    def create_account(self, business_model_config, cancellation_policy, payment_gateway, tenant_info, homeowner_info, meta_info):
+        AccountDetail.objects.create(
+            application=self,
+            business_config=business_model_config,
+            payment_gateway=payment_gateway,
+            cancellation_policy=cancellation_policy,
+            tenant=tenant_info,
+            home_owner=homeowner_info,
+            meta=meta_info
+        )
+
+    def update_account(self, **kwargs):
+        try:
+            AccountDetail.objects.get(application=self)
+        except AccountDetail.DoesNotExist:
+            raise AssertionError
+        else:
+            self.accountdetail.update_account(**kwargs)
+
+
+class ApplicationStateManager(models.Manager):
+    def update_status(self, app, state, actor):
+        try:
+            old_state = self.get_queryset().filter(application=app).latest('created_on')
+        except self.model.DoesNotExist:
+            old_state = None
+        new_state = self.model(application=app, old_state=old_state, new_state=state, actor=actor)
+        new_state.save()
+
 
 class ApplicationState(models.Model):
     application = models.ForeignKey('application.Application', on_delete=models.PROTECT)
-    old_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    new_state = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    actor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-    )
+    old_state = models.OneToOneField('self', on_delete=models.PROTECT, null=True, blank=True)
+    new_state = models.CharField(max_length=2, choices=STATUS_CHOICES)
+    actor = models.CharField(max_length=1, choices=ACTOR_CHOICES)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    objects = ApplicationStateManager()
 
     def __str__(self):
         return "%s" % self.application
 
 
 class AccountDetail(models.Model):
+    """
+    Stores information required to process the behaviour of an application and stores
+    consequent financial information.
+
+    `tenant` - Freeze tenant information for an application
+
+    `home_owner` - Freeze home_owner information for an application
+    """
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
-    fee = models.ForeignKey('billing.Fee', on_delete=models.PROTECT)
-    tenant = JSONField()
-    home_owner = JSONField()
-    meta = JSONField()
+
+    business_config = models.ForeignKey('business_core.BusinessModelConfiguration', on_delete=models.PROTECT)
+    cancellation_policy = models.ForeignKey('business_core.CancellationPolicy', on_delete=models.PROTECT)
+
+    # payment_gateway can mutate over the life of an Application, though unlikely,
+    # special protocols need to be followed in such scenario, to check information
+    # stored in meta
+    payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
+
+    tenant = JSONField(default=dict)
+    home_owner = JSONField(default=dict)
+
+    meta = JSONField(default=dict)
 
     def __str__(self):
         return "%s" % self.application
 
     @property
     def tenant_amount(self):
-        return float(self.meta['source_amount'])/100
+        return float(self.tenant['payable_amount'])
 
     @property
     def home_owner_amount(self):
-        return float(self.meta['destination_amount'])/100
+        return float(self.home_owner['payable_amount'])
+
+    def update_account(self, tenant_info=None, homeowner_info=None, meta_info=None):
+        if tenant_info:
+            self.tenant = merge_dicts(self.tenant, tenant_info)
+        if homeowner_info:
+            self.home_owner = merge_dicts(self.home_owner, homeowner_info)
+        if meta_info:
+            self.meta = merge_dicts(self.meta, meta_info)
+        self.save()
+
+    def get_meta_info(self, key):
+        return get_nested_info(self.meta, key)
+

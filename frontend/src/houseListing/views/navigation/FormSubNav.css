@@ -1,0 +1,18 @@
+.header {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #bbb8b7;
+}
+
+
+.header .title {
+    color: #2a2b32;
+    font-size: 17px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.header .active .title {
+    color: #3fc692;
+    font-size: 17px;
+    font-weight: 700;
+}

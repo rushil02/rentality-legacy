@@ -1,7 +1,8 @@
-from cities.models import City, PostalCode
+from cities.models import City, PostalCode, Country
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
+from .models import PostalCodeCustom
 
 
 class LocationCitySerializer(serializers.ModelSerializer):
@@ -12,9 +13,16 @@ class LocationCitySerializer(serializers.ModelSerializer):
 
 class PostalCodeSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = PostalCode
+        model = PostalCodeCustom
+        depth = 1
         geo_field = "location"
         exclude = ['slug', ]
+
+
+class PostalCodeVerboseOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostalCodeCustom
+        fields = ['id', 'code', 'name_full']
 
 
 class PostalCodeAllDetailSerializer(serializers.ModelSerializer):
@@ -29,3 +37,9 @@ class PostalCodeAllDetailSerializer(serializers.ModelSerializer):
                 self.fields[field].allow_blank = True
             elif isinstance(self.fields[field], serializers.ManyRelatedField):
                 self.fields[field].allow_empty = True
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ['name', 'id', 'postal_code_regex', 'phone']

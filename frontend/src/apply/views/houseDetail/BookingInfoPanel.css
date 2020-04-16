@@ -1,0 +1,170 @@
+.infoSection {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e9ebf0;
+}
+
+.title h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+.title p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #a2a2a2;
+    margin-bottom: 0;
+}
+
+.subTitle {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+}
+
+.pr {
+    font-size: 15px;
+    font-weight: 400;
+    color: #a2a2a2;
+    border-bottom: 1px solid #e9ebf0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.moreInfo {
+    float: right;
+    font-size: 15px;
+    font-weight: 400;
+    color: #a2a2a2;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 100ms ease-in-out;
+}
+
+.moreInfo:hover {
+    color: #535353;
+}
+
+.leftInfo {
+    font-size: 15px;
+    font-weight: 400;
+    color: #2a2b32;
+    padding-right: 0;
+}
+
+.rightInfo {
+    padding-left: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2a2b32;
+}
+
+.totalLeftInfo {
+    font-size: 15px;
+    font-weight: 500;
+    color: #3fc692;
+    padding-right: 0;
+}
+
+.totalRightInfo {
+    padding-left: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #3fc692;
+}
+
+.discountContainer {
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    padding: 4px;
+    transition: 100ms ease-in-out;
+}
+
+.discountContainer:focus-within {
+    box-shadow: 0 0 4px -1px #3fc692 !important;
+    border: 1px solid #3fc692;
+}
+
+.discountInput {
+    font-size: 14px;
+    font-weight: 400;
+    color: #2a2b32;
+    border: none;
+    border-bottom: 1px solid #c7cdd9;
+    border-radius: 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    height: unset !important;
+    padding: 1px 1px 0 10px;
+    background: none;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.discountInput:focus {
+    outline: 0;
+}
+
+.discountApplyBtn {
+    font-size: 11px;
+    font-weight: 500;
+    color: #bcbcbc;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: 100ms ease-in-out;
+    width: auto;
+}
+
+.discountApplyBtn:hover {
+    color: #3fc692;
+}
+
+.grayInfo {
+    font-size: 15px;
+    font-weight: 400;
+    color: #a2a2a2;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.centerArrow {
+    background-image: url(/static/image/page-detail/right-date/arrow.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.dateSubtitle {
+    font-size: 10px;
+    font-weight: 500;
+    color: #a2a2a2;
+}
+
+.dateDisplay {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2a2b32;
+}
+
+.dateDisplayCard {
+    border: none;
+}
+
+.dateDisplayCardHeader {
+    padding: 0;
+    margin-bottom: 0;
+    background-color: initial;
+    border-bottom: none;
+}
+
+.dateDisplayChangeButton {
+    padding: 0;
+    width: 100%;
+}
+
+.dateDisplayCardBody {
+    padding: 0;
+}

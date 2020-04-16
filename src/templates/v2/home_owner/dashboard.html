@@ -139,7 +139,7 @@
                                     <div class="tool">
                                         <ul class="list-inline">
                                             <li class="list-inline-item edit"><a
-                                                    href="{% url 'house:create_edit' house_uuid=house.uuid %}">Edit</a>
+                                                    href="/rep/house/list/edit/{{ house.uuid }}">Edit</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -177,11 +177,11 @@
                                                 <div class="button property-actions">
                                                     {% if not house.is_public %}
                                                         <button type="button"
-                                                                onclick="location.href='{% url 'house:create_edit' house.uuid %}';"
+                                                                onclick="location.href='/rep/house/list/edit/{{ house.uuid }}'"
                                                                 class="btn btn-link">List
                                                         </button>
                                                         <button type="button"
-                                                                onclick="location.href='{% url 'house:create_edit' house.uuid %}';"
+                                                                onclick="location.href='/rep/house/list/edit/{{ house.uuid }}'"
                                                                 class="btn btn-link">Edit
                                                         </button>
                                                         <button type="button"
@@ -190,7 +190,7 @@
                                                         </button>
                                                     {% else %}
                                                         <button type="button"
-                                                                onclick="location.href='{% url 'house:create_edit' house.uuid %}';"
+                                                                onclick="location.href='/rep/house/list/edit/{{ house.uuid }}'"
                                                                 class="btn btn-link">Edit
                                                         </button>
                                                         <button type="button"

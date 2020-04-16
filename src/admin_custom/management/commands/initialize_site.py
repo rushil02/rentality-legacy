@@ -7,9 +7,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sites.models import Site
 from django.db.utils import IntegrityError
 
-from billing.models import Fee
 from elastic_search.core.utils import create_mappings
-from house.models import HomeType, Facility, Rule, CancellationPolicy, NeighbourhoodDescriptor, WelcomeTag
+from house.models import HomeType, Facility, Rule, NeighbourhoodDescriptor, WelcomeTag
 from django.conf import settings
 
 from user_custom.models import PersonalityTag
@@ -70,7 +69,7 @@ def create_personality_tags():
 
 def create_welcome_tags():
     TAGS = [
-        'Pet Owners ', 'Students', 'Smokers', '40+', 'Retiree', 'Parents with children', 'Backpackers',
+        'Pet Owners', 'Students', 'Smokers', '40+', 'Retiree', 'Parents with children', 'Backpackers',
         'LGBTQ+ Friendly',
         'Female Only', 'Everyone'
     ]
@@ -101,32 +100,6 @@ def create_home_types():
     HomeType.objects.update_or_create(name="Student Accommodation", defaults={'space_style': 'S'})
     HomeType.objects.update_or_create(name="Home Stay", defaults={'space_style': 'S'})
     HomeType.objects.update_or_create(name="Granny Flat", defaults={'space_style': 'S'})
-
-
-# FIXME: Confirm Policiies
-def create_cancellation_policy():
-    """ Creates Cancellation Policy Selected by HomeOwner for each house and applicable on tenants """
-    CancellationPolicy.objects.update_or_create(
-        verbose="Flexible Policy",
-        defaults={
-            'description': "Full refund of the deposit (excluding our Service Fee) for cancellation received at least two days prior to the check-in date. After this time, the Tenant will only be entitled to a 50% refund (excluding our Service Fee).",
-            'properties': "{}"
-        }
-    )
-    CancellationPolicy.objects.update_or_create(
-        verbose="Moderate Policy",
-        defaults={
-            'description': "Full refund of the deposit (excluding our Service Fee) for cancellation received at least one week prior to the check-in date. After this time, the Tenant will only be entitled to a 50% refund (excluding our Service Fee).",
-            'properties': "{}"
-        }
-    )
-    CancellationPolicy.objects.update_or_create(
-        verbose="Strict Policy",
-        defaults={
-            'description': "The tenant is not allowed to cancel the booking 24 hours after the booking is approved by the homeowner. After this time, the Tenant will only be entitled to a 50% refund (excluding our Service Fee).",
-            'properties': "{}"
-        }
-    )
 
 
 def register_flat_pages(site_obj):
@@ -163,11 +136,6 @@ def initialize_es():
     create_mappings()
 
 
-def create_fee():
-    """ Register initial fee model"""
-    Fee.objects.update_or_create(tenant_charge=8, home_owner_charge=4, billing_model='A', GST=0, active=True)
-
-
 class Command(BaseCommand):
     """ Initialize website db with data """
 
@@ -180,11 +148,9 @@ class Command(BaseCommand):
         'Add flat pages': (register_flat_pages, True),
         'Create Property Type (home_type) choices': (create_home_types, False),
         'Initialize ElasticSearch Mappings': (initialize_es, False),
-        'Register Cancellation Policy': (create_cancellation_policy, False),
         'Register Nearby Facilities (neighbourhood Descriptors)': (create_nearby_facilities, False),
         'Create Personality tags (used as Fun tags)': (create_personality_tags, False),
-        'Register Welcome Tags': (create_welcome_tags, False),
-        'Register Fee Model': (create_fee, False)
+        'Register Welcome TagsDynamic Business Models': (create_welcome_tags, False),
     }
 
     def ask_user_input(self, verbose):

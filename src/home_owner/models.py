@@ -11,7 +11,6 @@ class HomeOwnerProfile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='home_owner')
     shortlist = models.ManyToManyField('tenant.HousePreference', blank=True)
-    account_id = models.CharField(max_length=64, blank=True, null=True)
 
     def __str__(self):
         return "%s" % self.user

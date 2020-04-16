@@ -2,10 +2,9 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields.jsonb import JSONField
-from django.db import models
+from django.db import models, transaction
 
 
-# Create your models here.
 class ActivityLogManager(models.Manager):
     """
     Manager for Activity Log. 'actor' is none in the case of Anonymous user.
@@ -79,6 +78,16 @@ class ActivityLog(models.Model):
         ('W', 'WARNING'),
     )
     level = models.CharField(max_length=1, choices=CHOICES)
+
+    OPERATION_TYPE = (
+        ('C', 'Create'),
+        ('R', 'Read'),
+        ('U', 'Update'),
+        ('D', 'Delete'),
+    )
+    operation_type = models.CharField(max_length=1, choices=OPERATION_TYPE)
+
+    action = models.CharField(max_length=128)
 
     meta_info = JSONField(null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True)

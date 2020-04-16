@@ -9,13 +9,29 @@ from elastic_search.models import House as HouseElastic, Location as LocationEla
 from house.models import House, Availability
 from house.utils import index_to_es as index_house_to_es
 from cities_custom.utils import index_to_es as index_location_to_es
+from admin_custom.models import ActivityLog
 
 
 def synchronise_es_house():
     HouseElastic._index.delete()
     HouseElastic.init()
-    for obj in House.active_objects.all():
+    print("Loading Active Houses ...", flush=True)
+    qs = House.active_objects.all()
+    total = len(qs)
+    for i, obj in enumerate(qs):
         index_house_to_es(obj)
+
+        if i % 10 == 0:
+            print(
+                'Loading: %s%s %d%% [%d]    ' % (
+                    "#" * int((i / total) * 100),
+                    " " * int(((total - i) / total) * 100),
+                    int((i / total) * 100),
+                    i
+                ),
+                end='\r', flush=True
+            )
+    print("\nSynchronisation ... Complete [%d objects]" % total, flush=True)
 
 
 def clean_house_availability_dates():
@@ -28,11 +44,23 @@ def clean_house_availability_dates():
         try:
             Availability.objects.add_date_ranges(house=house, date_list=availabilities)
         except ValidationError as e:
-            # FIXME: Log errors somewhere
-            print(house.title)
-            print(availabilities)
-            print(e)
-            print("*" * 100)
+            availabilities = map(lambda availability: {
+                    'start_date': availability['dates'].lower,
+                    'end_date': availability['dates'].upper,
+                    'periodic': availability['periodic']
+                },
+                availabilities
+            )
+            ActivityLog.objects.create_log(
+                request=None, 
+                actor=None, 
+                entity=house, 
+                level='C',
+                view='clean_house_availability_dates',
+                message='Validation Failed for Availability for house = {}'.format(house.uuid),
+                traceback=traceback.format_exc(),
+                availabilities=availabilities
+            )
             continue
 
 
@@ -54,9 +82,10 @@ def synchronise_es_location():
 
     def _load_data(_model, related_models, verbose):
         print("Loading %s ..." % verbose, flush=True)
-        total = _model.objects.all().count()
+        qs = _model.objects.all().select_related(*related_models)
+        total = len(qs)
         buffer = []
-        for i, location in enumerate(_model.objects.all().select_related(*related_models)):
+        for i, location in enumerate(qs):
             obj = index_location_to_es(
                 verbose=location.get_verbose(), parent_verbose=location.get_parents(), geo_point=location.get_geo_loc_point(),
                 identifier=location.get_identifier(), keywords=location.get_all_keywords(), commit=False

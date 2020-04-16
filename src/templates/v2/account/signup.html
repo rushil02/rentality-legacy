@@ -13,7 +13,7 @@
                 <div class="col-md-6">
                     <h1>Sign Up</h1>
                     <div class="form">
-                        <form action="{% url 'account_signup' %}" method="post" onsubmit="return gtag_report_conversion()">
+                        <form action="{% url 'user:account_signup' %}" method="post">
                             {% csrf_token %}
                             <div class="row">
                                 {% if form.non_field_errors %}
@@ -60,6 +60,14 @@
                                     {{ form.password2 }}
                                     {% if form.password2.errors %}
                                         {% for error in form.password2.errors %}
+                                            <div class="invalid-feedback" style="display: block;">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.country }}
+                                    {% if form.country.errors %}
+                                        {% for error in form.country.errors %}
                                             <div class="invalid-feedback" style="display: block;">{{ error }}</div>
                                         {% endfor %}
                                     {% endif %}
@@ -140,6 +148,12 @@
                                            class="btn btn-link">Already have an account? Log in</a>
                                     </div>
                                 </div>
+                                <div class="col-md-12 text-right">
+                                    <div class="top-margin">
+                                        <a href="{% url 'user:business_account_signup' %}"
+                                           class="btn btn-link">Want to become our Business Partner?</a>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -150,23 +164,3 @@
     </div>
     <!-- page signup login end -->
 {% endblock content %}
-
-{% block page_scripts %}
-    <!-- Event snippet for User Sign Up conversion page
-In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
-    <script>
-        function gtag_report_conversion(url) {
-            var callback = function () {
-                if (typeof (url) != 'undefined') {
-                    window.location = url;
-                }
-            };
-            gtag('event', 'conversion', {
-                'send_to': 'AW-734507876/qLNcCL7o36QBEOTmnt4C',
-                'event_callback': callback
-            });
-            return true;
-        }
-    </script>
-
-{% endblock page_scripts %}
