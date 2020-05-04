@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Warning: Setup only tested for Ubuntu 18 and is for development only"
+echo "Warning: Setup only tested for Ubuntu 18.04 and is for development only"
 echo "*Starting setup*"
 
 sudo apt-get update

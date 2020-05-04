@@ -4,7 +4,7 @@
 # Load single dump file "*dump*.sql" in parent folder of this script, be sure there is only one such file.
 # Be sure to comment out / disable migration service in docker-compose
 
-# TODO: use schema files isntead
+# TODO: use schema files instead
 
 docker-compose down; docker volume prune -f; docker-compose up -d --build postgres
 dump_file="$(find . -type f -iname "*dump*.sql"  |  head -n 1)"

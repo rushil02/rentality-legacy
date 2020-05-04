@@ -3,7 +3,7 @@ FROM registry.gitlab.com/rushil0195/rentality/frontend:latest as frontend-builde
 FROM registry.gitlab.com/rushil0195/rentality/base:latest
 
 ARG dev_mode=false
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1, PIP_DEFAULT_TIMEOUT=120
 
 WORKDIR /rentality/src
 

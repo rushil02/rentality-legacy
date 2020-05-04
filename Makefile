@@ -15,11 +15,16 @@ req-install: ## Install and setup requisites: docker-ce and docker-compose
 	@echo "All configurations are set. System restart maybe required."
 	@echo "Login to Gitlab for docker container registry (Use your conventional Gitlab credentials)"
 	@echo "Command - docker login registry.gitlab.com"
-	@echo "After registry login, use 'make run' command to start development. Development server will run on 0.0.0.0:8001"
+	@echo "After registry login, use 'make initialize' command to start development server for first time after this setup."
+	@echo "Thereafter use, 'make run' command every time to start development server."
+	@echo "Development server will run on 0.0.0.0:8001"
 	newgrp docker
 
 # First time data setup
-initialize: ## Sync with DB and Populate with default data
+initialize: ## Initialize the project first time from empty database
+	@sudo sysctl vm.max_map_count=262144
+	@cd ./bin/db_init/  && sh ./load-db.sh
+	@docker-compose up -d --build
 	@sh ./bin/post-installation.sh
 
 # Build and run the container
@@ -62,6 +67,12 @@ cd-frontend: ## Start STANDALONE container from frontend image which will be rea
 # Reset DB to test custom migrations
 reset-db-mig: ## Reset database to the provided dump file (in ./bin/db_reload and run migrate
 	@cd ./bin/db_reload/  && sh ./reset-savepoint.sh
+
+# Clean all persistent data and containers
+clean: ## Clean all persistent data and Remove all containers
+	@docker-compose down
+	@docker system prune -f
+	@docker volume prune -f
 
 # Docker release - build, tag and push the container
 # release: build publish ## Make a release by building and publishing the `{version}` ans `latest` tagged containers to ECR
