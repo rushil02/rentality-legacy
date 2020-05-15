@@ -1,6 +1,7 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -62,25 +63,25 @@
         }
     </style>
 </head>
+
 <body>
-<div>
-    <div class="mail">
-        <img src="http://{{ current_site }}{% static "image/mail/1_4.png" %}" class="logo">
-        <h3>Hi {{ user.get_short_name }}</h3>
-        <p>
-            Please verify your email address by clicking on this button.
-        </p>
-        <div class="button">
-            <a href="{{ activate_url }}">Verify Email</a>
-        </div>
-        <div class="footer">
-            <a>
-                Thank You
-                <br>
-                The Rentality Team
-            </a>
+    <div>
+        <div class="mail">
+            <img src="http://{{ current_site }}{% static "image/mail/1_1.png" %}" class="logo">
+            <h3>Hi {{ user.get_short_name }}</h3>
+            <p>
+                You have successfully updated your inbound payment information on Rentality.
+            </p>
+            <p>If this was not done by you, please contact us at admin@rentality.com.au</p>
+            <div class="footer">
+                <a>
+                    Kind Regards,
+                    <br>
+                    Admin Team at Rentality
+                </a>
+            </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>
