@@ -63,6 +63,8 @@ cd-backend: ## Start STANDALONE container from web image which will be ready for
 cd-frontend: ## Start STANDALONE container from frontend image which will be ready for development and package installations
 	@sh ./bin/isolated-FE-container.sh
 
+sync-pkg-list: ## Sync package.json and package-lock.json from running container. Useful after testing new 3rd party packages.
+	@sh ./bin/sync-FE-kg-list.sh
 
 # Reset DB to test custom migrations
 reset-db-mig: ## Reset database to the provided dump file (in ./bin/db_reload and run migrate

@@ -1,0 +1,602 @@
+@media screen and (min-width: 768px) and (max-width: 1426.98px) {
+    .menu.white .right .listInline li.setting {
+        margin-left: 0;
+    }
+
+    .menu.session .right .listInline li.setting {
+        margin-left: 0;
+    }
+}
+
+@media screen and (min-width: 1365px) and (max-width: 1519.98px) {
+    .menu.white .center .listInline li a {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1365.98px) {
+    .menu {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .menu .center .listInline li a {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    .menu .right ul li:not(:last-child) {
+        margin-right: 8px;
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1329.98px) {
+    .menu .center .listInline li a {
+        padding-left: 2.5px !important;
+        padding-right: 2.5px !important;
+    }
+
+    .menu .right ul li:not(:last-child) {
+        margin-right: 8px;
+    }
+}
+
+.menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    padding-top: 28px;
+    padding-left: 15px;
+    padding-right: 50px;
+    z-index: 2;
+}
+
+.menu .left {
+    text-align: left;
+}
+
+.menu .left .logo {
+    background-image: url("/static/image/logo.svg");
+    background-repeat: no-repeat;
+    background-position: top left;
+    width: 243px;
+    height: 67px;
+    display: block;
+}
+
+.menu .center {
+    text-align: center;
+}
+
+.menu .center .listInline,
+.menu .right .listInline {
+    margin-bottom: 0;
+}
+
+.menu .center .listInline li a,
+.menu .right .listInline li a {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    padding: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: block;
+    position: relative;
+}
+
+.menu .center .listInline li a:hover,
+.menu .center .listInline li a:focus,
+.menu .right .listInline li a:hover,
+.menu .right .listInline li a:focus {
+    text-decoration: none;
+}
+
+.menu .center .listInline li:not(:last-child),
+.menu .right .listInline li:not(:last-child) {
+    margin-right: 0;
+}
+
+.menu .center .listInline li a:before,
+.menu .right .listInline li a:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0px;
+    left: 0;
+    background-color: #36ffb1;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.25s ease-in-out;
+}
+
+.menu .center .listInline li a:hover:before,
+.menu .right .listInline li a:hover:before {
+    visibility: visible;
+    transform: scaleX(1);
+}
+
+.menu .right {
+    text-align: right;
+}
+
+.menu .right .listInline li a {
+    text-transform: none;
+}
+
+.menu .right .listInline li.green a {
+    color: #36ffb1;
+}
+
+.menu.white {
+    background-color: #ffffff;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.menu.white .left .logo {
+    background-image: url("/static/image/logo-black.svg");
+    background-repeat: no-repeat;
+    background-position: top left;
+    width: 209px;
+    height: 58px;
+    display: block;
+}
+
+.menu.white .center .listInline li a,
+.menu.white .right .listInline li a {
+    color: #4b4b4b;
+}
+
+.menu.white .right .listInline li.message > .dropdown > a,
+.menu.session .right .listInline li.message > .dropdown > a {
+    background-image: url("/static/image/message.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: transparent;
+    width: 50px;
+}
+
+.menu.session .right .listInline li.message > .dropdown > a {
+    background-image: url("/static/image/message-white.svg");
+}
+
+.menu.white .right .listInline li > .dropdown > a > span,
+.menu.session .right .listInline li > .dropdown > a > span {
+    background-color: #3fc692;
+    position: absolute;
+    right: 5px;
+    top: 0;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    width: 18px;
+    text-align: center;
+    border-radius: 99px;
+}
+
+.menu.white .right .listInline li.message > .dropdown .dropdown-menu,
+.menu.session .right .listInline li.message > .dropdown .dropdown-menu {
+    min-width: 400px;
+}
+
+.menu.white .right .listInline li.message > .dropdown .dropdown-menu a span,
+.menu.session .right .listInline li.message > .dropdown .dropdown-menu a span {
+    font-size: 12px;
+    line-height: 41px;
+    float: right;
+    color: #ccc;
+}
+
+.menu.white .right .listInline li.message > .dropdown .dropdown-menu a img,
+.menu.session .right .listInline li.message > .dropdown .dropdown-menu a img {
+    border-radius: 99px;
+    margin-right: 10px;
+}
+
+.menu.white .right .listInline li.message > .dropdown .dropdown-menu a.active,
+.menu.session .right .listInline li.message > .dropdown .dropdown-menu a.active {
+    background-color: #ffffff;
+}
+
+.menu.white .right .listInline li.notification > .dropdown > a,
+.menu.session .right .listInline li.notification > .dropdown > a {
+    background-image: url("/static/image/notification.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: transparent;
+    width: 50px;
+}
+
+.menu.session .right .listInline li.notification > .dropdown > a {
+    background-image: url("/static/image/notification-white.svg");
+}
+
+.menu.white .right .listInline li.notification > .dropdown .dropdown-menu,
+.menu.session .right .listInline li.notification > .dropdown .dropdown-menu {
+    min-width: 500px;
+}
+
+.menu.white .right .listInline li.notification > .dropdown .dropdown-menu a span,
+.menu.session .right .listInline li.notification > .dropdown .dropdown-menu a span {
+    font-size: 12px;
+    line-height: 22px;
+    float: right;
+    color: #ccc;
+}
+
+.menu.white .right .listInline li.setting,
+.menu.session .right .listInline li.setting {
+    margin-left: 66px;
+}
+
+.menu.white .right .listInline li.setting > .dropdown .dropdown-menu,
+.menu.session .right .listInline li.setting > .dropdown .dropdown-menu {
+    min-width: 200px;
+}
+
+.menu.white .right .listInline li.setting > .dropdown > a,
+.menu.session .right .listInline li.setting > .dropdown > a {
+    background-image: url("/static/image/setting.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: transparent;
+    width: 50px;
+}
+
+.menu.session .right .listInline li.setting > .dropdown > a {
+    background-image: url("/static/image/setting-white.svg");
+}
+
+.menu.white .right .listInline li.person,
+.menu.session .right .listInline li.person {
+    margin-left: 30px;
+    padding-left: 26px;
+}
+
+.menu.white .right .listInline li.person a,
+.menu.session .right .listInline li.person a {
+    font-weight: 400;
+}
+
+.menu.white .right .listInline li.person a .image,
+.menu.session .right .listInline li.person a .image {
+    background-color: #e7edf1;
+    float: left;
+    border-radius: 99px;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #ffffff;
+    left: -48px;
+    top: -3px;
+}
+
+.menu.white .right .listInline li.person,
+.menu.session .right .listInline li.person {
+    position: relative;
+}
+
+.menu.white .right .dropdown .dropdown-menu,
+.menu.session .right .dropdown .dropdown-menu {
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+}
+
+.menu.white .right .dropdown .dropdown-menu::after,
+.menu.session .right .dropdown .dropdown-menu::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -10px;
+    right: 15px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #ffffff transparent;
+}
+
+.menu.white .right .dropdown .dropdown-menu a,
+.menu.session .right .dropdown .dropdown-menu a {
+    font-size: 15px;
+    font-weight: 400;
+    color: #4b4b4b;
+}
+
+.menu.white .right .dropdown .dropdown-menu a:hover,
+.menu.white .right .dropdown .dropdown-menu a:focus,
+.menu.session .right .dropdown .dropdown-menu a:hover,
+.menu.session .right .dropdown .dropdown-menu a:focus {
+    background-color: #ffffff;
+}
+
+.menu.white .gray {
+    background-color: #eef1f5;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 100%;
+    z-index: -1;
+}
+
+.mobileMenu {
+    display: none;
+    color: #ffffff;
+    font-size: 32px;
+    position: absolute;
+    top: 40px;
+    right: 30px;
+    z-index: 99999;
+    width: 36px;
+    height: 27px;
+    background-image: url("/static/image/mobile-menu-open.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.mobileMenu.white {
+    top: 26px;
+    background-image: url("/static/image/mobile-menu-white-open.svg");
+}
+
+.mobileMenu.open {
+    background-image: url("/static/image/mobile-menu-close.svg");
+}
+
+.mobileMenu.white.open {
+    background-image: url("/static/image/mobile-menu-white-close.svg");
+}
+
+.mobileMenuContent {
+    overflow-y: scroll;
+    position: fixed;
+    left: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #2a2b32;
+    z-index: 9999;
+    transition: all 0.25s ease-in-out;
+    opacity: 0;
+    padding: 36px;
+    padding-right: 36px;
+}
+
+.mobile-menu-content.white {
+    background-color: #ffffff;
+}
+
+.mobile-menu-content {
+    text-align: center;
+}
+
+.mobile-menu-content:not(.white) .top {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #ffffff;
+}
+
+.mobile-menu-content.white .bottom {
+    border-top: 1px solid #4b4b4b;
+    margin-top: 14px;
+    padding-top: 14px;
+}
+
+.mobile-menu-content ul {
+    margin-bottom: 0;
+}
+
+.mobile-menu-content ul li {
+    display: block;
+}
+
+.mobile-menu-content .top ul li {
+    display: inline-block;
+    margin-top: 120px;
+}
+
+.mobile-menu-content .top ul li.person {
+    position: absolute;
+    margin-top: 0;
+    top: 85px;
+    display: block;
+    margin-left: 0;
+    padding-left: 0;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mobile-menu-content .top ul li.person .image {
+    display: block;
+    float: unset;
+    position: unset;
+    left: unset;
+    top: unset;
+    margin-bottom: 10px;
+}
+
+.mobile-menu-content ul li:not(:last-child) {
+    margin-right: 0;
+    margin-bottom: 14px;
+}
+
+.mobile-menu-content ul li a {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    padding: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: block;
+}
+
+.mobile-menu-content.white ul li a {
+    color: #4b4b4b;
+}
+
+.mobile-menu-content ul li a:hover,
+.mobile-menu-content ul li a:focus {
+    text-decoration: none;
+}
+
+.mobile-menu-content .top ul li a {
+    text-transform: none;
+}
+
+.mobile-menu-content ul li.green a {
+    color: #36ffb1;
+}
+
+.mobile-menu-content ul li.message .dropdown > a {
+    background-image: url("/static/image/message.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: transparent;
+    width: 50px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mobile-menu-content ul li.message .dropdown {
+    min-width: 100%;
+}
+
+.mobile-menu-content ul li.message > .dropdown > a > span {
+    background-color: #3fc692;
+    position: absolute;
+    right: 5px;
+    top: 0;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    width: 18px;
+    text-align: center;
+    border-radius: 99px;
+}
+
+.mobile-menu-content ul li.message > .dropdown .dropdown-menu a span {
+    font-size: 12px;
+    line-height: 41px;
+    float: right;
+    color: #ccc;
+}
+
+.mobile-menu-content ul li.message > .dropdown .dropdown-menu a img {
+    border-radius: 99px;
+    margin-right: 10px;
+}
+
+.mobile-menu-content ul li.message > .dropdown .dropdown-menu a:hover,
+.mobile-menu-content ul li.message > .dropdown .dropdown-menu a.active {
+    background-color: #ffffff;
+}
+
+.mobile-menu-content ul li.notification > .dropdown > a {
+    background-image: url("/static/image/notification.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: transparent;
+    width: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mobile-menu-content ul li.notification > .dropdown .dropdown-menu a span {
+    font-size: 12px;
+    line-height: 22px;
+    float: right;
+    color: #ccc;
+}
+
+.mobile-menu-content ul li.notification > .dropdown .dropdown-menu a:hover,
+.mobile-menu-content ul li.notification > .dropdown .dropdown-menu a.active {
+    background-color: #ffffff;
+}
+
+.mobile-menu-content ul li.setting > .dropdown > a {
+    background-image: url("/static/image/setting.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: transparent;
+    width: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mobile-menu-content ul li.setting > .dropdown .dropdown-menu a:hover,
+.mobile-menu-content ul li.setting > .dropdown .dropdown-menu a.active {
+    background-color: #ffffff;
+}
+
+.mobile-menu-content ul li.person {
+    margin-left: 30px;
+    padding-left: 26px;
+}
+
+.mobile-menu-content ul li.person a {
+    font-weight: 400;
+}
+
+.mobile-menu-content ul li.person a .image {
+    background-color: #e7edf1;
+    float: left;
+    border-radius: 99px;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #ffffff;
+    left: 0;
+    top: -3px;
+}
+
+.mobile-menu-content ul li.person {
+    position: relative;
+}
+
+.mobile-menu-content.open {
+    left: 0;
+    opacity: 1;
+}
+
+/********************/
+/***** menu end *****/
+/********************/
+
+/************************/
+/***** mobile start *****/
+/************************/
+
+@media (max-width: 767.98px) {
+    .mobile-menu {
+        display: block;
+    }
+
+    .menu .left .logo {
+        background-size: cover;
+        width: 181px;
+        height: 50px;
+    }
+
+    .menu.white .left .logo {
+        background-size: cover;
+        width: 181px;
+        height: 50px;
+    }
+
+    .menu .center,
+    .menu .right {
+        display: none;
+    }
+}

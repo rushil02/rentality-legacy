@@ -5,11 +5,13 @@ services:
     image: 'registry.gitlab.com/rushil0195/rentality/nginx:latest'
     ports:
       - '8000:80'
+      - '8001:8001'
+      - '8002:8002'
     volumes:
-      - './nginx/config/common.conf:/etc/nginx/conf.d/common.conf'
       - './nginx/config/localhost.conf:/etc/nginx/conf.d/default.conf'
       - './static_dev/static_root:/static'
       - './static_dev/media_root:/media'
+      - 'frontenddata:/var/www/rentality.com.au'
     depends_on:
       - web
   postgres:
@@ -42,15 +44,19 @@ services:
     build: ./secrets
     image: 'registry.gitlab.com/rushil0195/rentality/shared:latest'
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        dev_mode: "true"
     image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
+    ports:
+      - '3000:8000'
+      - '3001:9000'
     entrypoint:
-      - npm
-      - run
-      - dev
+      - './start_dev.sh'
     volumes:
-      - './frontend/src:/app/src'
-      - './src/static/v2/frontend:/app/dist'
+      - './frontend/app/src:/app/src'
+      - 'frontenddata:/app/public'
   web:
     build:
       context: ./src
@@ -68,7 +74,7 @@ services:
       - migration
       - elasticsearch
     ports:
-      - '8001:8000'
+      - '3002:8000'
     entrypoint:
       - ./entrypoint.dev.sh
   celery-worker:
@@ -110,3 +116,4 @@ volumes:
   pgdata: null
   esdata: null
   tsdbdata: null
+  frontenddata: null

@@ -1,6 +1,9 @@
 FROM registry.gitlab.com/rushil0195/rentality/shared:latest as shared
 
-FROM node:11-alpine
+FROM node:14-alpine
+
+ARG dev_mode=false
+ENV GATSBY_TELEMETRY_DISABLED=1
 
 # Required if accessing packages on git via npm
 RUN apk update && apk upgrade && \
@@ -11,17 +14,20 @@ RUN npm config set unsafe-perm true
 
 RUN npm install -g npm@latest
 
+RUN npm install -g gatsby-cli
+
 WORKDIR /app
 
 COPY ext_lib ./ext_lib
-COPY ./package*.json ./
+COPY ./app/package*.json ./
 
 RUN npm ci
 
-COPY webpack.config.js .
-
-COPY src ./src
+COPY ./app/gatsby-*.js ./
+COPY ./app/.prettier* ./
+COPY ./start_dev.sh ./
+COPY ./app/src ./src
 
 COPY --from=shared /shared/PUBLIC_KEYS /run/secrets/PUBLIC_KEYS
 
-RUN ["npm", "run", "build"]
+CMD ["gatsby", "build"]

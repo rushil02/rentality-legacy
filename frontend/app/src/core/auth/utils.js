@@ -1,0 +1,26 @@
+import React from "react"
+import routes from "components/routes"
+import {UserContext} from "./userContext"
+import {ComponentLoadingSpinner} from "../loadingSpinners/LoadingSpinner"
+import {reverse} from "named-urls"
+
+
+export const PrivateRoute = ({component: Component, location, ...componentProps}) => {
+    return (
+        <UserContext.Consumer>
+            {user => {
+                if (user.isSynced) {
+                    if (user.isAuthenticated) {
+                        return <Component {...componentProps} />
+                    } else {
+                        window.location.href = reverse(routes.auth.login) + "?next=" + location.pathname;
+                        return null
+                    }
+                } else {
+                    return <ComponentLoadingSpinner/>
+                }
+            }}
+        </UserContext.Consumer>
+    )
+}
+export default PrivateRoute

@@ -7,4 +7,4 @@ if [ "$opt" = "y" ]; then
 fi
 
 echo "Starting new Container..."
-docker run -it --entrypoint=sh --volume="$PWD"/frontend:/app registry.gitlab.com/rushil0195/rentality/frontend
+docker run -it --entrypoint=sh --volume="$PWD"/frontend/app/src:/app/src registry.gitlab.com/rushil0195/rentality/frontend

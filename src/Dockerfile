@@ -1,5 +1,3 @@
-FROM registry.gitlab.com/rushil0195/rentality/frontend:latest as frontend-builder
-
 FROM registry.gitlab.com/rushil0195/rentality/base:latest
 
 ARG dev_mode=false
@@ -24,6 +22,6 @@ RUN . $HOME/.poetry/env && poetry install --no-dev --no-root
 
 COPY . .
 
-COPY --from=frontend-builder /app/dist/ ./static/v2/frontend/
+RUN ["chmod", "+x", "./sync.sh", "./entrypoint.sh", "./entrypoint.dev.sh"]
 
 ENTRYPOINT [ "./entrypoint.sh" ]
