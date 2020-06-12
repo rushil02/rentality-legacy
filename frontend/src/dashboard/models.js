@@ -1,4 +1,4 @@
-import APIModelAdapter, {DateRangeModel} from "core/utils/ModelHelper";
+import APIModelAdapter from "core/utils/ModelHelper";
 
 export class House extends APIModelAdapter {
     //Declare all defaults here

@@ -1,20 +1,18 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import Autosuggest from "react-autosuggest";
-import { getPostalCodeSuggestions } from "search/services";
-import theme from "./PostalCodeSearchField.css";
-import { debounce } from "lodash";
-import { PostalCodeSearchModel } from "search/models";
-import { APIModelListAdapter } from "core/utils/ModelHelper";
+import {getLocationSuggestions} from "./services";
+import {debounce} from "lodash";
+import {LocationSearchModel} from "./models";
+import {APIModelListAdapter} from "core/utils/ModelHelper";
 
 function getSuggestionValue(suggestion) {
     return suggestion.getData("verbose");
 }
 
-const renderSuggestion = suggestion => {
+const renderSuggestion = (suggestion) => {
     return (
         <div>
-            <strong>{getSuggestionValue(suggestion)}</strong>{" "}
-            {suggestion.getData("parent_verbose")}
+            <strong>{getSuggestionValue(suggestion)}</strong> {suggestion.getData("parent_verbose")}
         </div>
     );
 };
@@ -23,56 +21,37 @@ export default class PostalCodeSearchField extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            suggestions: new APIModelListAdapter(
-                [],
-                PostalCodeSearchModel,
-                "_id",
-                "empty"
-            )
+            suggestions: new APIModelListAdapter([], LocationSearchModel, "_id", "empty"),
         };
-        this.debouncedFetchSuggestions = debounce(
-            this.onSuggestionsFetchRequested,
-            350,
-            { trailing: true }
-        );
+        this.debouncedFetchSuggestions = debounce(this.onSuggestionsFetchRequested, 350, {trailing: true});
     }
 
     // Autosuggest will call this function every time you need to clear suggestions.
     onSuggestionsClearRequested = () => {
         this.setState({
-            suggestions: new APIModelListAdapter(
-                [],
-                PostalCodeSearchModel,
-                "_id",
-                "empty"
-            )
+            suggestions: new APIModelListAdapter([], LocationSearchModel, "_id", "empty"),
         });
     };
 
     // Autosuggest will call this function every time you need to update suggestions.
     // You already implemented this logic above, so just use it.
-    onSuggestionsFetchRequested = ({ value }) => {
+    onSuggestionsFetchRequested = ({value}) => {
         // this.setState({
         //     suggestions: getSuggestions(value)
         // });
-        getPostalCodeSuggestions(value)
-            .then(data => {
+        getLocationSuggestions(value)
+            .then((data) => {
                 this.setState({
-                    suggestions: new APIModelListAdapter(
-                        data,
-                        PostalCodeSearchModel,
-                        "_id",
-                        "saved"
-                    )
+                    suggestions: new APIModelListAdapter(data, LocationSearchModel, "_id", "saved"),
                 });
             })
 
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     };
 
-    onSuggestionSelected = (e, { suggestion }) => {
+    onSuggestionSelected = (e, {suggestion}) => {
         e.preventDefault();
         this.props.onChange("locationSuggestion", suggestion.getData("id"));
         this.props.onChange("location", suggestion.getData("verbose"));
@@ -83,31 +62,27 @@ export default class PostalCodeSearchField extends Component {
         const inputProps = {
             placeholder: "City, State, Postal Code",
             value: this.props.value,
-            onChange: e => {
+            onChange: (e) => {
                 e.preventDefault();
                 this.props.onChange("location", e.target.value);
             },
-            type: "text"
+            type: "text",
         };
         console.log("In render", this.props.value);
 
         return (
             <React.Fragment>
-                <div className="col-md-2">
+                <div className={this.props.divClass || ""}>
                     <Autosuggest
                         // id="location"
                         suggestions={suggestionObjects}
-                        onSuggestionsFetchRequested={
-                            this.debouncedFetchSuggestions
-                        }
-                        onSuggestionsClearRequested={
-                            this.onSuggestionsClearRequested
-                        }
+                        onSuggestionsFetchRequested={this.debouncedFetchSuggestions}
+                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                         onSuggestionSelected={this.onSuggestionSelected}
                         getSuggestionValue={getSuggestionValue}
                         renderSuggestion={renderSuggestion}
                         inputProps={inputProps}
-                        theme={theme}
+                        theme={this.props.theme || ""}
                     />
                 </div>
             </React.Fragment>

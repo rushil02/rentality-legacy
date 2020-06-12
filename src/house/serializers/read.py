@@ -75,12 +75,20 @@ class HouseShortInfoSerializer(serializers.ModelSerializer):
         slug_field='verbose'
     )
     status = serializers.CharField(source='get_status_display')
+    thumbnail = serializers.SerializerMethodField()
+
+    def get_thumbnail(self, obj):
+        thumbnail = obj.get_thumbnail()
+        if thumbnail:
+            return thumbnail.url
+        else:
+            return None
 
     class Meta:
         model = House
         fields = (
             'uuid', 'title', 'address_hidden', 'address', 'location', 'home_type',
-            'rent', 'cancellation_policy', 'status',
+            'rent', 'min_stay', 'cancellation_policy', 'status', 'thumbnail'
         )
 
 

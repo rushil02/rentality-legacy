@@ -12,7 +12,7 @@ import Navbar from "core/navbar/views/Navbar";
 import Alert from "core/alert/Alert";
 
 import Error404 from "core/errorHelpers/Error404";
-import Footer from "core/footer/Footer";
+import Footer from "core/footer/views/Footer";
 import ComponentErrorBoundary from "./core/errorHelpers/ComponentErrorBoundary";
 import {ComponentLoadingSpinner} from "./core/loadingSpinners/LoadingSpinner";
 import {UserStore} from "core/auth/userContext";
@@ -23,6 +23,7 @@ const User = React.lazy(() => import("userAccount/Router"));
 const Apply = React.lazy(() => import("apply/Router"));
 const Dashboard = React.lazy(() => import("dashboard/Router"));
 const SearchPage = React.lazy(() => import("search/Router"));
+const Welcome = React.lazy(() => import("welcome/Router"));
 
 class App extends Component {
     constructor(props) {
@@ -76,6 +77,16 @@ class App extends Component {
                                         <Suspense fallback={<ComponentLoadingSpinner />}>
                                             <Dashboard {...props} />
                                         </Suspense>
+                                    )}
+                                />
+                                <Route
+                                    path={routes.react.welcome.base}
+                                    render={(props) => (
+                                        <React.Fragment>
+                                            <Suspense fallback={<ComponentLoadingSpinner />}>
+                                                <Welcome {...props} />
+                                            </Suspense>
+                                        </React.Fragment>
                                     )}
                                 />
                                 <Route render={(props) => <Error404 />} />

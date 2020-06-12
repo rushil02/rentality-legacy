@@ -1,8 +1,9 @@
-import {include} from 'named-urls';
-import houseListingRoutes from 'houseListing/routes';
-import userRoutes from 'userAccount/routes';
-import applyRoutes from 'apply/routes';
-import dashboardRoutes from 'dashboard/routes';
+import {include} from "named-urls";
+import houseListingRoutes from "houseListing/routes";
+import userRoutes from "userAccount/routes";
+import applyRoutes from "apply/routes";
+import dashboardRoutes from "dashboard/routes";
+import welcomeRoutes from "welcome/routes";
 
 export default {
     static_route: "/static/",
@@ -32,6 +33,7 @@ export default {
         searchPage: "search",
         apply: include("apply", applyRoutes.interface),
         dashboard: include("dashboard", dashboardRoutes.interface),
+        welcome: include("welcome", welcomeRoutes.interface),
     }),
 
     /********************************* APIs *********************************/
@@ -62,9 +64,11 @@ export default {
     }),
     search: include("/es", {
         house: "house/search",
+    }),
+    autoSuggest: include("/es", {
         location: "location_sugg",
     }),
+    sys: include("/", {messages: "sys-messages"}),
     dashboard: include("/dashboard", dashboardRoutes.APIs),
+    welcome: include("/welcome", welcomeRoutes.APIs),
 };
-
-

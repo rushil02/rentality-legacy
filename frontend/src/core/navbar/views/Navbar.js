@@ -2,23 +2,163 @@ import React, {Component} from "react";
 import {UserContext} from "../../auth/userContext";
 import AuthNavbarComponent from "./components/AuthNavbarComponent";
 import AnonNavbarComponent from "./components/AnonNavbarComponent";
+import {reverse} from "named-urls";
+import styles from "./components/Navbar.module.css";
+import routes from "routes";
 
 class Navbar extends Component {
+    constructor(props) {
+        super(props);
+        this.menuRef = React.createRef();
+        this.grayDivRef = React.createRef();
+        this.rootEle = document.getElementById("root");
+        this.state = {mobileMenuOpen: false};
+    }
+
+    handleResize = () => {
+        if (window.location.pathname !== "/rep/welcome") {
+            this.rootEle.style.marginTop = this.menuRef.current.clientHeight + "px";
+        }
+    };
+
+    handleGrayDiv = (value) => {
+        if (this.grayDivRef && this.grayDivRef.current.children[0]) {
+            this.grayDivRef.current.children[0].style.left = value + "px";
+        }
+    };
+
+    handleMobileOpen = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            mobileMenuOpen: !prevState.mobileMenuOpen,
+        }));
+    };
+
+    componentDidMount() {
+        window.addEventListener("resize", this.handleResize);
+        this.handleResize();
+    }
+
+    componentDiDUpdate(prevProps, prevState) {
+        if (this.prevState.mobileMenuOpen !== this.state.mobileMenuOpen) {
+            if (this.mobileMenuOpen) {
+                this.rootEle.style.overflow = "hidden";
+            } else {
+                this.rootEle.style.overflow = "auto";
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.handleResize);
+    }
+
+    getCssClasses() {
+        if (window.location.pathname === "/rep/welcome") {
+            return {cssMobile: "", cssClass: " " + styles.session, isHome: true};
+        } else {
+            return {cssMobile: " " + styles.white, cssClass: " " + styles.white, isHome: false};
+        }
+    }
+
     render() {
+        const routeSpecs = this.getCssClasses();
+        const isOpen = this.state.mobileMenuOpen ? " " + styles.open : "";
+
         return (
-            <React.Fragment>
-                <UserContext.Consumer>
-                    {(userContext) => {
-                        if (userContext.isAuthenticated) {
-                            return <AuthNavbarComponent user={userContext.data} />;
-                        } else {
-                            return <AnonNavbarComponent />;
-                        }
-                    }}
-                </UserContext.Consumer>
-            </React.Fragment>
+            <UserContext.Consumer>
+                {(userContext) => (
+                    <React.Fragment>
+                        <div
+                            className={styles.mobileMenu + routeSpecs.cssMobile + isOpen}
+                            onClick={this.handleMobileOpen}
+                        />
+                        <div className={styles.mobileMenuContent + routeSpecs.cssMobile + isOpen}>
+                            {this.state.mobileMenuOpen ? <MobileMenu userContext={userContext} /> : ""}
+                        </div>
+                        <div ref={this.menuRef} className={styles.menu + routeSpecs.cssClass}>
+                            <div className="container-fluid">
+                                <div className="row">
+                                    <div className={"col-9 col-md-4 col-lg-4 col-xl-4 " + styles.left}>
+                                        <a href="/" className={styles.logo} />
+                                    </div>
+                                    <div
+                                        className={
+                                            "col-3 col-md-8 col-lg-8 col-xl-4 " + styles.center + " align-self-center"
+                                        }
+                                    >
+                                        <ul className={styles.listInline}>
+                                            <li className="list-inline-item">
+                                                <a href={reverse(routes.home)}>Home</a>
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <a href={reverse(routes.faq)}>FAQ</a>
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <a href={reverse(routes.howItWorks)}>How It Works</a>
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <a href={reverse(routes.react.houseListing.create)}>List Your Home</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        className={
+                                            "col-md-12 col-lg-12 col-xl-4 " + styles.right + " align-self-center"
+                                        }
+                                    >
+                                        {userContext.isAuthenticated ? (
+                                            <AuthNavbarComponent
+                                                user={userContext.data}
+                                                handleGrayDiv={this.handleGrayDiv}
+                                            />
+                                        ) : (
+                                            <AnonNavbarComponent />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            <div ref={this.grayDivRef}>
+                                {userContext.isAuthenticated && !routeSpecs.isHome ? (
+                                    <div className={styles.gray} />
+                                ) : null}
+                            </div>
+                        </div>
+                    </React.Fragment>
+                )}
+            </UserContext.Consumer>
         );
     }
+}
+
+function MobileMenu(props) {
+    return (
+        <React.Fragment>
+            <div className={styles.top}>
+                {props.userContext.isAuthenticated ? (
+                    <AuthNavbarComponent user={props.userContext.data} handleGrayDiv={() => {}} />
+                ) : (
+                    <AnonNavbarComponent />
+                )}
+            </div>
+            <div className={styles.bottom}>
+                <ul className={styles.listInline}>
+                    <li className="list-inline-item">
+                        <a href={reverse(routes.home)}>Home</a>
+                    </li>
+                    <li className="list-inline-item">
+                        <a href={reverse(routes.faq)}>FAQ</a>
+                    </li>
+                    <li className="list-inline-item">
+                        <a href={reverse(routes.howItWorks)}>How It Works</a>
+                    </li>
+                    <li className="list-inline-item">
+                        <a href={reverse(routes.react.houseListing.create)}>List Your Home</a>
+                    </li>
+                </ul>
+            </div>
+        </React.Fragment>
+    );
 }
 
 export default Navbar;

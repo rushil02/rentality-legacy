@@ -1,34 +1,33 @@
-import APIModelAdapter, {DateRangeModel} from "core/utils/ModelHelper";
+import APIModelAdapter from "core/utils/ModelHelper";
 import {format} from "date-fns";
 
-export class ESHouse extends APIModelAdapter {
+export class House extends APIModelAdapter {
     //Declare all defaults here
 
     fieldMap() {
         return {
-            address: {key: "address"},
-            // create_time: {key: 'create_time'},
-            // geo_point_lat: {key:'geo_point_lat',},
-            // geo_point_lon: {key:'geo_point_lon',},
-            homeType: {key: "home_type"},
-            leased: {key: "leased"},
-            location: {key: "location"},
-            minStay: {key: "min_stay"},
-            rent: {key: "rent"},
-            thumbnail: {key: "thumbnail"},
-            title: {key: "title"},
-            userImage: {key: "user_image"},
             uuid: {key: "uuid"},
+            title: {key: "title"},
+            location: {key: "location"},
+            homeType: {key: "home_type"},
+            rent: {key: "rent"},
+            minStay: {key: "min_stay", parser: this.getWeeks},
+            thumbnail: {key: "thumbnail"},
+            status: {key: "status"},
         };
+    }
+
+    getWeeks(days) {
+        const weeks = Math.ceil(days / 7);
+        return weeks > 1 ? weeks + " weeks" : weeks + " week";
     }
 }
 
-export class SearchFormModel extends APIModelAdapter {
+export class SearchForm extends APIModelAdapter {
     fieldMap() {
         return {
             location: {key: "location"},
             locationSuggestion: {key: "loc_sugg"},
-            homeType: {key: "home_type"},
             startDate: {
                 key: "start_date",
                 default: this.getDate(4),
@@ -41,9 +40,6 @@ export class SearchFormModel extends APIModelAdapter {
                 parser: this.dateParser,
                 serializer: this.dateSerializer,
             },
-            rent: {key: "rent"},
-            paginationStart: {key: "pagination-start", default: 0},
-            paginationEnd: {key: "pagination-end", default: 12},
         };
     }
 
@@ -61,9 +57,4 @@ export class SearchFormModel extends APIModelAdapter {
     dateSerializer(date) {
         return format(date, "YYYY-MM-DD");
     }
-
-    nextPagination = (offset) => {
-        this.setData("paginationStart", this.getData("paginationStart") + offset);
-        this.setData("paginationEnd", this.getData("paginationEnd") + offset);
-    };
 }

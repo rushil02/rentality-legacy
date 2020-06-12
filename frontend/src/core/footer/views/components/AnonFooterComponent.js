@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {reverse} from "named-urls";
-import routes from "../../routes";
+import routes from "routes";
 
 import "./Footer.css";
 
-export default class Footer extends Component {
+export default class AnonFooterComponent extends Component {
     render() {
         return (
             <div className="footer">
@@ -70,6 +70,26 @@ export default class Footer extends Component {
                                                 </a>
                                             </li>
                                         </ul>
+                                    </div>
+                                    <div className="e-mail">
+                                        <h2 className="title">Get news from innovations </h2>
+                                        <div className="detail">
+                                            <div className="row">
+                                                <div className="col-md-7 col-lg-8">
+                                                    <input
+                                                        type="text"
+                                                        name=""
+                                                        className="form-control"
+                                                        placeholder="Your Mail address"
+                                                    />
+                                                </div>
+                                                <div className="col-md-5 col-lg-4">
+                                                    <button type="button" className="btn btn-link btn-block">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

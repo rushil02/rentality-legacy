@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import styles from "./DateInput.css";
-import searchStyles from "search/views/forms/SearchForm.css";
 import {DateRange} from "react-date-range";
 import {format} from "date-fns";
 import "react-date-range/dist/styles.css"; // main style file
@@ -114,14 +113,16 @@ export default class DateRangePickerComponent extends Component {
         };
         return (
             <React.Fragment>
-                <div className="col-md-3">
+                <div className={this.props.divClass || ""}>
                     <input
                         type="text"
                         readOnly
-                        className={searchStyles.formControl + " " + searchStyles.date}
+                        className={this.props.inputClass || ""}
+                        placeholder="Select Dates"
                         value={formatDateDisplay(selection.startDate, selection.endDate)}
                         onFocus={(e) => this.showDateRangePicker()}
                         onBlur={(e) => this.handleBlurs()}
+                        required
                     />
                 </div>
                 {this.state.show ? (
@@ -139,6 +140,7 @@ export default class DateRangePickerComponent extends Component {
                             months={2}
                             minDate={new Date()}
                             direction={"horizontal"}
+                            showDateDisplay={false}
                         />
                     </div>
                 ) : null}

@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import AlertListComponent from "./components/AlertList";
+import {getSystemMessages} from "./services";
 
 export let alertUser = {};
 
-const availableAlertTypes = ["primary", "secondary", "success", "danger", "info", "warning", "dark", "light"];
+const availableAlertTypes = ["primary", "secondary", "success", "danger", "info", "warning", "dark", "light", "debug"];
 
 const stockAlertList = {
     connectionError: {
@@ -59,6 +60,23 @@ export default class Alert extends Component {
                 }
             }
         };
+        getSystemMessages().then((data) => {
+            let sysAlerts = [];
+
+            data.map((item, index) => {
+                let alertType = item.level_tag.replace(/^(alert-)/, "");
+                console.log(alertType);
+                if (availableAlertTypes.indexOf(alertType) === -1) {
+                    console.error("Invalid alertType : " + alertType);
+                } else {
+                    sysAlerts.push({message: item.message, alertType: alertType, autoHide: true});
+                }
+            });
+            
+            this.setState((prevState) => ({
+                alertList: [...prevState.alertList, ...sysAlerts],
+            }));
+        });
     }
 
     render() {

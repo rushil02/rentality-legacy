@@ -45,7 +45,6 @@ export default class App extends Component {
     };
 
     onSearchValueChange = (field, value) => {
-        console.log(field, value);
         this.setState((prevState) => ({
             ...prevState,
             searchForm: prevState.searchForm.setData(field, value),
@@ -53,14 +52,12 @@ export default class App extends Component {
     };
 
     onDateRangeChange = (startDate, endDate) => {
-        console.log(startDate, endDate);
         this.state.searchForm.setData("startDate", startDate);
         this.state.searchForm.setData("endDate", endDate);
         this.forceUpdate();
     };
 
     onSearchClicked = () => {
-        console.log(this.state.searchForm.startDate, "\n", this.state.searchForm.endDate);
         this.setState({loading: true, hasMoreItems: true});
         this.state.searchForm.setData("paginationStart", 0);
         this.state.searchForm.setData("paginationEnd", OFFSET);
