@@ -1,0 +1,895 @@
+.image > .leasedImgTag {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #39ffaf !important;
+    border-radius: 45px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #39ffaf;
+    padding-top: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+    transition: all 0.25s ease-in-out;
+}
+
+/************************/
+/***** header start *****/
+/************************/
+
+.header {
+    width: 100%;
+    height: 789px;
+    background-image: url("/static/image/header/background.png");
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
+    position: relative;
+}
+
+.header .title {
+    text-align: center;
+    font-size: 50px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+.header .title span {
+    color: #36ffb1;
+}
+
+.header .title span span {
+    font-weight: 300;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.header .subTitle {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 300;
+    color: #ffffff;
+}
+
+.header .search {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.header .search .searchContainer {
+    margin-bottom: 25px;
+}
+
+.header .search .detail {
+    background-color: #2a2b32;
+    padding: 8px;
+    border-radius: 99px;
+}
+
+.header .search .detail .formControl {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 99px;
+    padding: 0.375rem 0.75rem;
+    font-size: 20px;
+    font-weight: 500;
+    height: calc(2.25rem + 18px);
+    line-height: 1.5;
+    background-color: transparent;
+    background-clip: padding-box;
+    color: #ffffff;
+    padding-left: 50px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.header .search .detail .formControl:hover,
+.header .search .detail .formControl:focus {
+    box-shadow: none;
+}
+.header .search .detail .formControl:focus {
+    outline: 0;
+}
+
+.header .search .detail .formControl::placeholder {
+    opacity: 1;
+    color: #ffffff;
+}
+
+.header .search .detail .formControl.date {
+    font-size: 14px;
+    font-weight: 300;
+    padding-left: 36px;
+    border-radius: 0;
+}
+
+.header .search .detail .btn {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2b32;
+    background-color: #36ffb1;
+    border-radius: 99px;
+    border: none;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    transition: all 0.25s ease-in-out;
+}
+
+.header .search .detail .btn:hover,
+.header .search .detail .btn:focus {
+    text-decoration: none;
+}
+
+.header .search .detail .btn:hover {
+    background-color: #ffffff;
+}
+
+.header .search .detail .date {
+    background-image: url("/static/image/header/date.svg");
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
+.header .search .cityTags {
+    margin-top: 30px;
+    margin-bottom: 44px;
+    text-align: center;
+}
+
+.header .search .cityTags .btn {
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    font-size: 17px;
+    font-weight: 400;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 25px;
+    padding: 2px 16px;
+    user-select: none;
+    line-height: 1.5;
+    transition: all 0.25s ease-in-out;
+}
+
+.header .search .cityTags #city a {
+    padding-right: 35px;
+    position: relative;
+}
+
+.header .search .cityTags #city a::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 11px;
+    height: 7px;
+    top: 8px;
+    right: 10px;
+    background-color: #ffffff;
+    -webkit-mask: url("/static/image/header/other-city.svg");
+    mask: url("/static/image/header/other-city.svg") no-repeat;
+}
+
+.header .search .cityTags #city a:hover::after,
+.header .search .cityTags #city a.active::after {
+    background-color: #2a2b32;
+    -webkit-mask: url("/static/image/header/other-city.svg");
+    mask: url("/static/image/header/other-city.svg") no-repeat;
+}
+
+.header .search .cityTags .btn:hover,
+.header .search .cityTags .btn:focus,
+.header .search .cityTags .btn.focus {
+    text-decoration: none;
+}
+
+.header .search .cityTags .btn:hover,
+.header .search .cityTags .btn.active {
+    background-color: #ffffff;
+    color: #2a2b32;
+}
+
+.header .search .cityTags .btn:not(:last-child) {
+    margin-right: 4px;
+}
+
+.header .search #otherCity {
+    padding-top: 4px;
+}
+
+.header .dropdown .dropdown-menu {
+    border: none;
+    border-radius: 0;
+    margin-top: 30px;
+    min-width: 624px;
+    padding: 0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    left: -10px !important;
+}
+
+.header .dropdown .dropdown-menu::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #ffffff transparent;
+}
+
+.header .dropdown .dropdown-menu .calendar {
+    margin-left: 0;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+.header .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance {
+    box-shadow: none !important;
+}
+
+.header .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance:not(:first-child) {
+    margin-left: 0 !important;
+}
+
+.header .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance:nth-child(2) .pmu-month {
+    background-color: #ffffff !important;
+}
+
+.header .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance .pmu-prev {
+    position: absolute !important;
+    top: 24px !important;
+    left: 30px !important;
+    color: transparent !important;
+    background-image: url(/static/image/chevron-left.png) !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    width: 20px !important;
+    height: 20px !important;
+    z-index: 9999 !important;
+}
+
+.header .dropdown .dropdown-menu .calendar .pickmeup .pmu-instance .pmu-next {
+    position: absolute !important;
+    top: 24px !important;
+    left: 585px !important;
+    color: transparent !important;
+    background-image: url(/static/image/chevron-right.png) !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    width: 20px !important;
+    height: 20px !important;
+    z-index: 9999 !important;
+    transform: none !important;
+}
+
+/**********************/
+/***** header end *****/
+/**********************/
+
+/***********************/
+/***** bests start *****/
+/***********************/
+
+.bests {
+    padding-top: 42px;
+    padding-bottom: 84px;
+    border-bottom: 1px solid #c4cbd9;
+}
+
+.bests .title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.bests .subTitle {
+    font-size: 16px;
+    color: #979797;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.bests .loadMore {
+    font-size: 16px;
+    color: #979797;
+    font-weight: 400;
+    transition: all 0.25s ease-in-out;
+}
+
+.bests .loadMore:hover,
+.bests .loadMore:focus {
+    text-decoration: none;
+}
+
+.bests .loadMore:hover {
+    color: #36ffb1;
+}
+
+.bests .list {
+    display: block;
+    margin-top: 30px;
+}
+
+.bests .list:hover,
+.bests .list:focus {
+    text-decoration: none;
+}
+
+.bests .list .image {
+    position: relative;
+    overflow: hidden;
+}
+
+.bests .list .image img {
+    transition: all 0.25s ease-in-out;
+    transform: scale(1, 1) rotate(0deg);
+}
+
+.bests .list:hover .image img {
+    transform: scale(1.15, 1.15) rotate(-5deg);
+}
+
+.bests .list h1 {
+    color: #4d4d4d;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 0;
+    transition: all 0.25s ease-in-out;
+}
+
+.bests .list:hover h1 {
+    color: #36ffb1;
+}
+
+.bests .list h2 {
+    color: #bcbcbc;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.bests .list div {
+    color: #9d9d9d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.bests .list div span {
+    color: #4d4d4d;
+    font-weight: 700;
+    margin-left: 8px;
+}
+
+.bests .list div + div {
+    margin-top: 6px;
+}
+
+/*********************/
+/***** bests end *****/
+/*********************/
+
+/*********************/
+/**video demo starts**/
+/*********************/
+
+.videoDemo {
+    padding-top: 88px;
+    padding-bottom: 90px;
+    border-bottom: 1px solid #c4cbd9;
+}
+
+.videoDemo h1.title {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.videoDemo h2.subTitle {
+    color: #4d4d4d;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.videoDemo .videoContainer {
+    margin-top: 25px;
+    margin-bottom: 0;
+    text-align: center;
+    padding-top: 56.25%;
+    position: relative;
+}
+
+/*********************/
+/***video demo ends***/
+/*********************/
+
+/************************/
+/***** cities start *****/
+/************************/
+
+.cities {
+    padding-top: 88px;
+    padding-bottom: 10px;
+}
+
+.cities .title {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.cities .subTitle {
+    font-size: 20px;
+    color: #000000;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.cities .loadMore {
+    font-size: 16px;
+    color: #979797;
+    font-weight: 400;
+    transition: all 0.25s ease-in-out;
+}
+
+.cities .loadMore:hover,
+.cities .loadMore:focus {
+    text-decoration: none;
+}
+
+.cities .loadMore:hover {
+    color: #36ffb1;
+}
+
+.cities .list {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.cities .list:hover,
+.cities .list:focus {
+    text-decoration: none;
+}
+
+.cities .list .image {
+    position: relative;
+    overflow: hidden;
+}
+
+.cities .list .image img {
+    transition: all 0.25s ease-in-out;
+    transform: scale(1, 1) rotate(0deg);
+}
+
+.cities .list:hover .image img {
+    transform: scale(1.15, 1.15) rotate(-5deg);
+}
+
+.cities .list h1 {
+    color: #4d4d4d;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 0;
+    transition: all 0.25s ease-in-out;
+}
+
+.cities .list:hover h1 {
+    color: #36ffb1;
+}
+
+.cities .list h2 {
+    color: #bcbcbc;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.cities .list div {
+    color: #9d9d9d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.cities .list div span {
+    color: #4d4d4d;
+    font-weight: 700;
+    margin-left: 8px;
+}
+
+.cities .list div + div {
+    margin-top: 6px;
+}
+
+.cities .bigList {
+    display: block;
+    margin-bottom: 36px;
+}
+
+.cities .bigList:hover {
+    text-decoration: none;
+}
+
+.cities .bigList .image {
+    position: relative;
+    overflow: hidden;
+}
+
+.cities .bigList .image img {
+    transition: all 0.25s ease-in-out;
+    transform: scale(1, 1) rotate(0deg);
+}
+
+.cities .bigList:hover .image img {
+    transform: scale(1.15, 1.15) rotate(-5deg);
+}
+
+.cities .bigList .image .bottom {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    font-size: 35px;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.cities .bigListsRight .bigList:hover .image img {
+    transform: scale(1.15, 1.15) rotate(-2.5deg);
+}
+
+.cities .bigListsRight .bigList .image .bottom {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    font-size: 24px;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.cities .bigListsRight .bigList:not(:last-child) {
+    margin-bottom: 12px;
+}
+
+.cities .bigList .image .bottom h1 {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/**********************/
+/***** cities end *****/
+/**********************/
+
+/**********************/
+/***** logo start *****/
+/**********************/
+
+.logo {
+    background-color: #ffffff;
+    width: 100%;
+    height: 190px;
+    box-shadow: 0 0 75px rgba(0, 0, 0, 0.1);
+    margin-bottom: 90px;
+}
+
+.logo .item {
+    height: 190px;
+}
+
+.logo .item .list {
+    height: 190px;
+    line-height: 190px;
+    text-align: center;
+}
+
+.logo .item .list img {
+    display: unset;
+    width: auto;
+    max-width: 180px;
+    max-height: 150px;
+}
+
+/********************/
+/***** logo end *****/
+/********************/
+
+/***************************/
+/***** start now start *****/
+/***************************/
+
+.startNow {
+    padding-bottom: 76px;
+}
+
+.startNow .lists .list:hover {
+    text-decoration: none;
+}
+
+.startNow .lists .list .image {
+    position: relative;
+}
+
+.startNow .lists .list.left .image::after {
+    content: "";
+    position: absolute;
+    left: -50px;
+    top: -20px;
+    right: 12px;
+    bottom: -20px;
+    border: 1px solid #b7b7b7;
+    transition: all 0.25s ease-in-out;
+}
+
+.startNow .lists .list.left:hover .image::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid #ffffff;
+}
+
+.startNow .lists .list.right .image::after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -10px;
+    right: -60px;
+    bottom: -30px;
+    border: 1px solid #b7b7b7;
+    transition: all 0.25s ease-in-out;
+}
+
+.startNow .lists .list.right:hover .image::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid #ffffff;
+}
+
+.startNow .lists .list h1 {
+    color: #3b3b3b;
+    font-size: 25px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 70px;
+    margin-bottom: 0;
+}
+
+.startNow .lists .list p {
+    color: #8b8b8b;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 0;
+    min-height: 108px;
+}
+
+.startNow .lists .list .btn {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    background-color: #2a2b32;
+    padding: 8px 32px;
+    border-radius: 99px;
+    margin-top: 20px;
+    transition: all 0.25s ease-in-out;
+}
+
+.startNow .lists .list .btn:hover,
+.startNow .lists .list .btn:focus {
+    text-decoration: none;
+}
+
+.startNow .lists .list:hover .btn {
+    color: #2a2b32;
+    background-color: #36ffb1;
+}
+
+/*************************/
+/***** start now end *****/
+/*************************/
+
+/************************************/
+/***** special resolution start *****/
+/************************************/
+
+@media screen and (min-width: 1800px) and (max-width: 1999.98px) {
+    .search {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+@media screen and (min-width: 1440px) and (max-width: 1799.98px) {
+    .search {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+/**********************************/
+/***** special resolution end *****/
+/**********************************/
+
+/************************/
+/***** mobile start *****/
+/************************/
+
+@media (max-width: 767.98px) {
+    .header {
+        width: 100%;
+        height: 789px;
+    }
+
+    .header .title {
+        font-size: 32px;
+        margin-bottom: 24px;
+    }
+
+    .header .subTitle {
+        font-size: 22px;
+        margin-bottom: 100px;
+    }
+
+    .header .search .detail {
+        background-color: transparent;
+        border-radius: 0;
+    }
+
+    .header .search .detail .formControl {
+        border: none;
+        border-radius: 99px !important;
+        font-size: 14px;
+        font-weight: 300;
+        height: calc(2.25rem + 18px);
+        background-color: #2a2b32 !important;
+        color: #ffffff;
+        padding-left: 60px !important;
+    }
+
+    .header .search .detail .btn {
+        margin-top: 6px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .header .search .detail .formControl.date {
+        margin-top: 6px;
+    }
+
+    .header .search .detail .formControl.date {
+        font-size: 14px;
+        font-weight: 300;
+        border-radius: 0;
+    }
+
+    .header .search .detail .date {
+        background-position: 16px center;
+    }
+
+    .header .search .cityTags {
+        margin-top: 0;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    .header .search .cityTags #mobileCity {
+        display: block;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    .header .search .cityTags #mobileCity .formControl {
+        border-radius: 99px !important;
+        font-size: 14px;
+        font-weight: 300;
+    }
+
+    .header .search .cityTags .city,
+    .header .search .cityTags #otherCity {
+        display: none;
+    }
+
+    .bests {
+        padding-top: 42px;
+        padding-bottom: 42px;
+    }
+
+    .bests .loadMore {
+        margin-top: 30px;
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .bests .title {
+        text-align: center;
+    }
+
+    .bests .subTitle {
+        text-align: center;
+    }
+
+    .cities {
+        padding-top: 42px;
+        padding-bottom: 42px;
+    }
+
+    .cities .loadMore {
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .startNow {
+        padding-bottom: 42px;
+    }
+
+    .startNow .title {
+        margin-bottom: 0px;
+    }
+
+    .startNow .lists .list .image {
+        margin-top: 42px;
+    }
+
+    .startNow .lists .list.left .image::after {
+        display: none;
+    }
+
+    .startNow .lists .list.right .image::after {
+        display: none;
+    }
+
+    .startNow .lists .list h1 {
+        margin-top: 42px;
+    }
+
+    .startNow .lists .list p {
+        margin-top: 24px;
+        min-height: auto;
+    }
+
+    .videoDemo {
+        padding-top: 42px;
+        padding-bottom: 42px;
+    }
+}
+
+/************************/
+/***** mobile end *****/
+/************************/

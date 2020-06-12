@@ -10,8 +10,8 @@ import Footer from "components/footer/Footer";
 const IndexPage = () => (
     <Layout>
         <SEO title="Home" />
-        <Navbar/>
-        <Footer/>
+        {/*<Navbar/>*/}
+        {/*<Footer/>*/}
     </Layout>
 )
 

@@ -9,6 +9,7 @@ from user_custom.views.api.details import UserDetailsView
 from user_custom.views.api.profile import GetEditUserProfileView, ProfilePicUploadView, PersonalityTagView
 from user_custom.views.api import edit_profile_react
 from user_custom.views.api.dashboard import GetAllHouseListings, GetAllBookings
+from user_custom.views.api.public import HouseRecommendationListView, SystemMessagesView
 
 
 app_name = 'user'
@@ -49,4 +50,6 @@ urlpatterns = [
     path('upload-profile-pic', ProfilePicUploadView.as_view(), name='upload-profile-pic'),
     path('dashboard-house-list', GetAllHouseListings.as_view(), name='dashboard-house-list'),
     path('dashboard-booking-list', GetAllBookings.as_view(), name='dashboard-booking-list'),
+    path('recommended-house-list', HouseRecommendationListView.as_view(), name='recommended-house-list'),
+    path('sys-messages', SystemMessagesView.as_view(), name='sys-messages'),
 ]

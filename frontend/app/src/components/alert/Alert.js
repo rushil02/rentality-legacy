@@ -1,9 +1,10 @@
-import React, { Component } from "react"
-import AlertListComponent from "./components/AlertList"
+import React, {Component} from "react";
+import AlertListComponent from "./components/AlertList";
+import {getSystemMessages} from "./services";
 
-export let alertUser = {}
+export let alertUser = {};
 
-const availableAlertTypes = ["primary", "secondary", "success", "danger", "info", "warning", "dark", "light"]
+const availableAlertTypes = ["primary", "secondary", "success", "danger", "info", "warning", "dark", "light"];
 
 const stockAlertList = {
     connectionError: {
@@ -26,27 +27,27 @@ const stockAlertList = {
         alertType: "success",
         autoHide: true,
     },
-}
+};
 
 export default class Alert extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             alertList: [],
-        }
+        };
     }
 
     componentDidMount() {
-        alertUser.init = ({ stockAlertType, message, alertType, autoHide }) => {
+        alertUser.init = ({stockAlertType, message, alertType, autoHide}) => {
             if (stockAlertType) {
-                this.setState(prevState => ({
+                this.setState((prevState) => ({
                     alertList: [...prevState.alertList, stockAlertList[stockAlertType]],
-                }))
+                }));
             } else {
                 if (availableAlertTypes.indexOf(alertType) === -1) {
-                    console.error("Invalid alertType : " + alertType)
+                    console.error("Invalid alertType : " + alertType);
                 } else {
-                    this.setState(prevState => ({
+                    this.setState((prevState) => ({
                         alertList: [
                             ...prevState.alertList,
                             {
@@ -55,10 +56,25 @@ export default class Alert extends Component {
                                 autoHide: autoHide,
                             },
                         ],
-                    }))
+                    }));
                 }
             }
-        }
+        };
+        getSystemMessages().then((data) => {
+            let sysAlerts = [];
+            data.map((item, index) => {
+                let alertType = item.level_tag.replace(/^(alert-)/, "");
+                if (availableAlertTypes.indexOf(alertType) === -1) {
+                    console.error("Invalid alertType : " + alertType);
+                } else {
+                    sysAlerts.push({message: item.message, alertType: alertType, autoHide: true});
+                }
+            });
+
+            this.setState((prevState) => ({
+                alertList: [...prevState.alertList, ...sysAlerts],
+            }));
+        });
     }
 
     render() {
@@ -66,6 +82,6 @@ export default class Alert extends Component {
             <React.Fragment>
                 <AlertListComponent alertList={this.state.alertList} />
             </React.Fragment>
-        )
+        );
     }
 }

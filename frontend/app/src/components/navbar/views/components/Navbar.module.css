@@ -1,47 +1,3 @@
-@media screen and (min-width: 768px) and (max-width: 1426.98px) {
-    .menu.white .right .listInline li.setting {
-        margin-left: 0;
-    }
-
-    .menu.session .right .listInline li.setting {
-        margin-left: 0;
-    }
-}
-
-@media screen and (min-width: 1365px) and (max-width: 1519.98px) {
-    .menu.white .center .listInline li a {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-    }
-}
-
-@media screen and (min-width: 768px) and (max-width: 1365.98px) {
-    .menu {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .menu .center .listInline li a {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-    }
-
-    .menu .right ul li:not(:last-child) {
-        margin-right: 8px;
-    }
-}
-
-@media screen and (min-width: 1200px) and (max-width: 1329.98px) {
-    .menu .center .listInline li a {
-        padding-left: 2.5px !important;
-        padding-right: 2.5px !important;
-    }
-
-    .menu .right ul li:not(:last-child) {
-        margin-right: 8px;
-    }
-}
-
 .menu {
     position: absolute;
     left: 0;
@@ -70,9 +26,10 @@
     text-align: center;
 }
 
-.menu .center .listInline,
-.menu .right .listInline {
+.listInline {
     margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
 }
 
 .menu .center .listInline li a,
@@ -155,6 +112,14 @@
     color: #4b4b4b;
 }
 
+.dropdown {
+    position: relative;
+}
+
+.dropdownToggle::after {
+    display: none;
+}
+
 .menu.white .right .listInline li.message > .dropdown > a,
 .menu.session .right .listInline li.message > .dropdown > a {
     background-image: url("/static/image/message.svg");
@@ -182,27 +147,27 @@
     border-radius: 99px;
 }
 
-.menu.white .right .listInline li.message > .dropdown .dropdown-menu,
-.menu.session .right .listInline li.message > .dropdown .dropdown-menu {
+.menu.white .right .listInline li.message > .dropdown .dropdownMenu,
+.menu.session .right .listInline li.message > .dropdown .dropdownMenu {
     min-width: 400px;
 }
 
-.menu.white .right .listInline li.message > .dropdown .dropdown-menu a span,
-.menu.session .right .listInline li.message > .dropdown .dropdown-menu a span {
+.menu.white .right .listInline li.message > .dropdown .dropdownMenu a span,
+.menu.session .right .listInline li.message > .dropdown .dropdownMenu a span {
     font-size: 12px;
     line-height: 41px;
     float: right;
     color: #ccc;
 }
 
-.menu.white .right .listInline li.message > .dropdown .dropdown-menu a img,
-.menu.session .right .listInline li.message > .dropdown .dropdown-menu a img {
+.menu.white .right .listInline li.message > .dropdown .dropdownMenu a img,
+.menu.session .right .listInline li.message > .dropdown .dropdownMenu a img {
     border-radius: 99px;
     margin-right: 10px;
 }
 
-.menu.white .right .listInline li.message > .dropdown .dropdown-menu a.active,
-.menu.session .right .listInline li.message > .dropdown .dropdown-menu a.active {
+.menu.white .right .listInline li.message > .dropdown .dropdownMenu a.active,
+.menu.session .right .listInline li.message > .dropdown .dropdownMenu a.active {
     background-color: #ffffff;
 }
 
@@ -219,13 +184,13 @@
     background-image: url("/static/image/notification-white.svg");
 }
 
-.menu.white .right .listInline li.notification > .dropdown .dropdown-menu,
-.menu.session .right .listInline li.notification > .dropdown .dropdown-menu {
+.menu.white .right .listInline li.notification > .dropdown .dropdownMenu,
+.menu.session .right .listInline li.notification > .dropdown .dropdownMenu {
     min-width: 500px;
 }
 
-.menu.white .right .listInline li.notification > .dropdown .dropdown-menu a span,
-.menu.session .right .listInline li.notification > .dropdown .dropdown-menu a span {
+.menu.white .right .listInline li.notification > .dropdown .dropdownMenu a span,
+.menu.session .right .listInline li.notification > .dropdown .dropdownMenu a span {
     font-size: 12px;
     line-height: 22px;
     float: right;
@@ -237,8 +202,8 @@
     margin-left: 66px;
 }
 
-.menu.white .right .listInline li.setting > .dropdown .dropdown-menu,
-.menu.session .right .listInline li.setting > .dropdown .dropdown-menu {
+.menu.white .right .listInline li.setting > .dropdown .dropdownMenu,
+.menu.session .right .listInline li.setting > .dropdown .dropdownMenu {
     min-width: 200px;
 }
 
@@ -283,16 +248,16 @@
     position: relative;
 }
 
-.menu.white .right .dropdown .dropdown-menu,
-.menu.session .right .dropdown .dropdown-menu {
+.menu.white .right .dropdown .dropdownMenu,
+.menu.session .right .dropdown .dropdownMenu {
     border: none;
     border-radius: 4px;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     margin-top: 20px;
 }
 
-.menu.white .right .dropdown .dropdown-menu::after,
-.menu.session .right .dropdown .dropdown-menu::after {
+.menu.white .right .dropdown .dropdownMenu::after,
+.menu.session .right .dropdown .dropdownMenu::after {
     content: "";
     display: block;
     position: absolute;
@@ -305,17 +270,17 @@
     border-color: transparent transparent #ffffff transparent;
 }
 
-.menu.white .right .dropdown .dropdown-menu a,
-.menu.session .right .dropdown .dropdown-menu a {
+.menu.white .right .dropdown .dropdownMenu a,
+.menu.session .right .dropdown .dropdownMenu a {
     font-size: 15px;
     font-weight: 400;
     color: #4b4b4b;
 }
 
-.menu.white .right .dropdown .dropdown-menu a:hover,
-.menu.white .right .dropdown .dropdown-menu a:focus,
-.menu.session .right .dropdown .dropdown-menu a:hover,
-.menu.session .right .dropdown .dropdown-menu a:focus {
+.menu.white .right .dropdown .dropdownMenu a:hover,
+.menu.white .right .dropdown .dropdownMenu a:focus,
+.menu.session .right .dropdown .dropdownMenu a:hover,
+.menu.session .right .dropdown .dropdownMenu a:focus {
     background-color: #ffffff;
 }
 
@@ -372,40 +337,40 @@
     padding-right: 36px;
 }
 
-.mobile-menu-content.white {
+.mobileMenuContent.white {
     background-color: #ffffff;
 }
 
-.mobile-menu-content {
+.mobileMenuContent {
     text-align: center;
 }
 
-.mobile-menu-content:not(.white) .top {
+.mobileMenuContent:not(.white) .top {
     margin-bottom: 14px;
     padding-bottom: 14px;
     border-bottom: 1px solid #ffffff;
 }
 
-.mobile-menu-content.white .bottom {
+.mobileMenuContent.white .bottom {
     border-top: 1px solid #4b4b4b;
     margin-top: 14px;
     padding-top: 14px;
 }
 
-.mobile-menu-content ul {
+.mobileMenuContent ul {
     margin-bottom: 0;
 }
 
-.mobile-menu-content ul li {
+.mobileMenuContent ul li {
     display: block;
 }
 
-.mobile-menu-content .top ul li {
+.mobileMenuContent .top ul li {
     display: inline-block;
     margin-top: 120px;
 }
 
-.mobile-menu-content .top ul li.person {
+.mobileMenuContent .top ul li.person {
     position: absolute;
     margin-top: 0;
     top: 85px;
@@ -417,7 +382,7 @@
     transform: translate(-50%, -50%);
 }
 
-.mobile-menu-content .top ul li.person .image {
+.mobileMenuContent .top ul li.person .image {
     display: block;
     float: unset;
     position: unset;
@@ -426,12 +391,12 @@
     margin-bottom: 10px;
 }
 
-.mobile-menu-content ul li:not(:last-child) {
+.mobileMenuContent ul li:not(:last-child) {
     margin-right: 0;
     margin-bottom: 14px;
 }
 
-.mobile-menu-content ul li a {
+.mobileMenuContent ul li a {
     color: #ffffff;
     font-weight: 700;
     font-size: 15px;
@@ -442,24 +407,29 @@
     display: block;
 }
 
-.mobile-menu-content.white ul li a {
+.mobileMenuContent.white ul li a {
     color: #4b4b4b;
 }
 
-.mobile-menu-content ul li a:hover,
-.mobile-menu-content ul li a:focus {
+.darkText {
+    color: #4b4b4b !important;
+}
+
+.mobileMenuContent ul li a:hover,
+.mobileMenuContent ul li a:focus {
     text-decoration: none;
 }
 
-.mobile-menu-content .top ul li a {
+.mobileMenuContent .top ul li a {
     text-transform: none;
 }
 
-.mobile-menu-content ul li.green a {
+.mobileMenuContent ul li.green a {
     color: #36ffb1;
 }
 
-.mobile-menu-content ul li.message .dropdown > a {
+.mobileMenuContent ul li.message .dropdown > a,
+.mobileMenuContent.white ul li.message .dropdown > a {
     background-image: url("/static/image/message.svg");
     background-repeat: no-repeat;
     background-position: center center;
@@ -470,11 +440,15 @@
     margin-right: auto;
 }
 
-.mobile-menu-content ul li.message .dropdown {
+.mobileMenuContent ul li.message .dropdown > a {
+    background-image: url("/static/image/message-white.svg");
+}
+
+.mobileMenuContent ul li.message .dropdown {
     min-width: 100%;
 }
 
-.mobile-menu-content ul li.message > .dropdown > a > span {
+.mobileMenuContent ul li > .dropdown > a > span {
     background-color: #3fc692;
     position: absolute;
     right: 5px;
@@ -487,24 +461,25 @@
     border-radius: 99px;
 }
 
-.mobile-menu-content ul li.message > .dropdown .dropdown-menu a span {
+.mobileMenuContent ul li.message > .dropdown .dropdownMenu a span {
     font-size: 12px;
     line-height: 41px;
     float: right;
     color: #ccc;
 }
 
-.mobile-menu-content ul li.message > .dropdown .dropdown-menu a img {
+.mobileMenuContent ul li.message > .dropdown .dropdownMenu a img {
     border-radius: 99px;
     margin-right: 10px;
 }
 
-.mobile-menu-content ul li.message > .dropdown .dropdown-menu a:hover,
-.mobile-menu-content ul li.message > .dropdown .dropdown-menu a.active {
+.mobileMenuContent ul li.message > .dropdown .dropdownMenu a:hover,
+.mobileMenuContent ul li.message > .dropdown .dropdownMenu a.active {
     background-color: #ffffff;
 }
 
-.mobile-menu-content ul li.notification > .dropdown > a {
+.mobileMenuContent ul li.notification > .dropdown > a,
+.mobileMenuContent.white ul li.notification > .dropdown > a {
     background-image: url("/static/image/notification.svg");
     background-repeat: no-repeat;
     background-position: center center;
@@ -514,19 +489,24 @@
     margin-right: auto;
 }
 
-.mobile-menu-content ul li.notification > .dropdown .dropdown-menu a span {
+.mobileMenuContent ul li.notification > .dropdown > a {
+    background-image: url("/static/image/notification-white.svg");
+}
+
+.mobileMenuContent ul li.notification > .dropdown .dropdownMenu a span {
     font-size: 12px;
     line-height: 22px;
     float: right;
     color: #ccc;
 }
 
-.mobile-menu-content ul li.notification > .dropdown .dropdown-menu a:hover,
-.mobile-menu-content ul li.notification > .dropdown .dropdown-menu a.active {
+.mobileMenuContent ul li.notification > .dropdown .dropdownMenu a:hover,
+.mobileMenuContent ul li.notification > .dropdown .dropdownMenu a.active {
     background-color: #ffffff;
 }
 
-.mobile-menu-content ul li.setting > .dropdown > a {
+.mobileMenuContent ul li.setting > .dropdown > a,
+.mobileMenuContent.white ul li.setting > .dropdown > a {
     background-image: url("/static/image/setting.svg");
     background-repeat: no-repeat;
     background-position: center center;
@@ -536,21 +516,25 @@
     margin-right: auto;
 }
 
-.mobile-menu-content ul li.setting > .dropdown .dropdown-menu a:hover,
-.mobile-menu-content ul li.setting > .dropdown .dropdown-menu a.active {
+.mobileMenuContent ul li.setting > .dropdown > a {
+    background-image: url("/static/image/setting-white.svg");
+}
+
+.mobileMenuContent ul li.setting > .dropdown .dropdownMenu a:hover,
+.mobileMenuContent ul li.setting > .dropdown .dropdownMenu a.active {
     background-color: #ffffff;
 }
 
-.mobile-menu-content ul li.person {
+.mobileMenuContent ul li.person {
     margin-left: 30px;
     padding-left: 26px;
 }
 
-.mobile-menu-content ul li.person a {
+.mobileMenuContent ul li.person a {
     font-weight: 400;
 }
 
-.mobile-menu-content ul li.person a .image {
+.mobileMenuContent ul li.person a .image {
     background-color: #e7edf1;
     float: left;
     border-radius: 99px;
@@ -561,11 +545,11 @@
     top: -3px;
 }
 
-.mobile-menu-content ul li.person {
+.mobileMenuContent ul li.person {
     position: relative;
 }
 
-.mobile-menu-content.open {
+.mobileMenuContent.open {
     left: 0;
     opacity: 1;
 }
@@ -574,12 +558,104 @@
 /***** menu end *****/
 /********************/
 
+/************************************/
+/***** special resolution start *****/
+/************************************/
+
+@media screen and (min-width: 1800px) and (max-width: 1999.98px) {
+    .search {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+@media screen and (min-width: 1440px) and (max-width: 1799.98px) {
+    .search {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1426.98px) {
+    .menu.white .right .listInline li.setting {
+        margin-left: 0;
+    }
+
+    .menu.session .right .listInline li.setting {
+        margin-left: 0;
+    }
+}
+
+@media screen and (min-width: 1365px) and (max-width: 1519.98px) {
+    .menu.white .center .listInline li a {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1365.98px) {
+    .menu {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .menu .center .listInline li a {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    .menu .right ul li:not(:last-child) {
+        margin-right: 8px;
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1329.98px) {
+    .menu .center .listInline li a {
+        padding-left: 2.5px !important;
+        padding-right: 2.5px !important;
+    }
+
+    .menu .right ul li:not(:last-child) {
+        margin-right: 8px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1199.98px) {
+    .menu.white .center {
+        text-align: right;
+    }
+}
+
+@media screen and (min-width: 0) and (max-width: 1199.98px) {
+    .menu.white .right .listInline li.setting {
+        margin-left: 0;
+    }
+
+    .menu.session .right .listInline li.setting {
+        margin-left: 0;
+    }
+
+    .menu.white .gray {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991.98px) {
+    .menu .center {
+        text-align: right;
+    }
+}
+
+/**********************************/
+/***** special resolution end *****/
+/**********************************/
+
 /************************/
 /***** mobile start *****/
 /************************/
 
 @media (max-width: 767.98px) {
-    .mobile-menu {
+    .mobileMenu {
         display: block;
     }
 
@@ -600,3 +676,7 @@
         display: none;
     }
 }
+
+/************************/
+/***** mobile end *****/
+/************************/

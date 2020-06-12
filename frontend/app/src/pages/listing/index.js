@@ -13,7 +13,7 @@ const SecondPage = () => (
         <SEO title="Page two" />
         {/*<Navbar/>*/}
         <LoadableApp/>
-        <Footer/>
+        {/*<Footer/>*/}
     </Layout>
 )
 

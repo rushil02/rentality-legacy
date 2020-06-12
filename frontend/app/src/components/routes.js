@@ -2,17 +2,18 @@ import {include} from "named-urls"
 import houseListingRoutes from "./houseListing/routes"
 import userRoutes from "./userAccount/routes"
 import applyRoutes from "./apply/routes"
-// import dashboardRoutes from 'dashboard/routes';
+import welcomeRoutes from "./welcome/routes";
+import dashboardRoutes from './dashboard/routes';
 
 export default {
     static_route: "/static/",
 
     // Used as links only [Currently]
     // Probably this will move and group appropriately to [new] source
-    // home: "/",
+    home: "/",
     blogs: "/blogs/",
     howItWorks: "/pages/how-it-works/",
-    // propertyInfo: "/property/info/:houseUUID",
+    propertyInfo: "/property/info/:houseUUID",
     // dashboard: '/',
     contactUs: "/pages/contact-us/",
     faq: "/pages/faq/",
@@ -34,11 +35,11 @@ export default {
             create: 'create',
             edit: 'edit/:houseUUID'
         }),
-        dashboard: include("dashboard", {
-            home: '/'
-        }),
         user: include("user", userRoutes.interface),
+        searchPage: "search",
         apply: include("apply", applyRoutes.interface),
+        dashboard: include("dashboard", dashboardRoutes.interface),
+        welcome: include("welcome", welcomeRoutes.interface),
     },
 
     /********************************* APIs *********************************/
@@ -69,6 +70,16 @@ export default {
     // house: include("/api/property", houseListingRoutes.APIs),
     //
     //
+
+    search: include("/api/es", {
+        house: "house/search",
+    }),
+    autoSuggest: include("/api/es", {
+        location: "location_sugg",
+    }),
+    sys: include("/api", {messages: "sys-messages"}),
+    dashboard: include("/api/dashboard", dashboardRoutes.APIs),
+    welcome: include("/api/welcome", welcomeRoutes.APIs),
 
     // search: include("/es", {
     //     house: "house/search",

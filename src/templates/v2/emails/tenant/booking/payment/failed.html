@@ -1,0 +1,95 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Rentality</title>
+    <style>
+        @import "https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext";
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .mail {
+            height: inherit;
+            width: 652px;
+            padding: 30px 50px;
+            color: #2a2b32;
+            display: inline-block;
+            max-width: 550px;
+            text-align: left;
+            display: block;
+            margin: 0 auto;
+            overflow: auto;
+        }
+
+        .mail .footer {
+            font-size: 18px;
+            font-weight: 500;
+            display: inline-block;
+            margin: 10px 0 0 0;
+        }
+
+        .mail p {
+            font-size: 16px;
+            font-weight: 400;
+            margin: 10px 0;
+        }
+
+        .mail h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 30px 0 20px 0;
+        }
+
+        .mail .button {
+            text-align: center;
+        }
+
+        .mail .button a {
+            margin: 30px 0px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #36ffb1;
+            background-color: #2a2b32;
+            padding: 15px 75px;
+            border-radius: 99px;
+            display: inline-block;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="mail">
+            <img src="http://{{ current_site }}{% static "image/mail/1_4.png" %}" class="logo">
+            <h3>Hi {{ user.get_short_name }}</h3>
+            <p>
+                Your booking payment for {{property_title}} at Rentality has been unsuccessful.
+            </p>
+            <p>Your payment may have failed for these reasons:</p>
+            <ul>
+                <li>You have entered your card payment details incorrectly</li>
+                <li>Payment exceeds available funds or purchase limit</li>
+                <li>Your card has been expired</li>
+                <li>Your card has been reported as lost or stolen</li>
+            </ul>
+            <p>You can try booking again at: {{property_url}}</p>
+            <p>If this was not done by you, please contact us at admin@rentality.com.au</p>
+            <div class="footer">
+                <a>
+                    Kind Regards,
+                    <br>
+                    Admin Team at Rentality
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
