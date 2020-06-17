@@ -1,14 +1,13 @@
-import axios, { handleError } from "core/utils/serviceHelper"
-import { reverse } from "named-urls"
-// import routes from "routes";
+import axios  from "core/utils/serviceHelper"
+import routes from "components/routes";
 
 import { User } from "./models"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 
 export function getUserNavDetails(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get("/api/user-nav-info", {})
+            .get(routes.userNavInfo, {})
             .then(result => {
                 resolve(new User(result.data))
             })

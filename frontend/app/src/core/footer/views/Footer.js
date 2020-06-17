@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {UserContext} from "../../auth/userContext";
+import {UserContext} from "core/auth/userContext";
 import AuthFooterComponent from "./components/AuthFooterComponent";
 import AnonFooterComponent from "./components/AnonFooterComponent";
 

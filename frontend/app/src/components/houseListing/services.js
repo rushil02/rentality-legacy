@@ -1,7 +1,7 @@
 import axios, { handleError } from "core/utils/serviceHelper"
 import { reverse } from "named-urls"
 import routes from "components/routes"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import {
     Availability,
     House,
@@ -153,7 +153,7 @@ export function getAvailabilityData(houseUUID) {
             .get(reverse(routes.house.availability.list, { houseUUID: houseUUID }))
             .then(result => {
                 let ret = {}
-                result.data.map(dbObj => {
+                result.data.forEach(dbObj => {
                     ret[dbObj.id] = new Availability(dbObj)
                 })
                 resolve(ret)

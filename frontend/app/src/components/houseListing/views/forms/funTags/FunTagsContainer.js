@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import { getPersonalityTags, postPersonalityTags } from "components/userAccount/services"
 import { PersonalityTag } from "components/userAccount/models"
 

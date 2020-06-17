@@ -2,7 +2,7 @@ import axios, { handleError } from "core/utils/serviceHelper"
 import { reverse } from "named-urls"
 import { PersonalityTag, UserPII } from "./models"
 import routes from "components/routes"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
 
 export function getUserProfileData() {

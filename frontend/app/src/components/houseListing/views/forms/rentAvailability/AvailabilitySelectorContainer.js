@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import AvailabilitySelectorComponent from "./AvailabilitySelector"
 import { differenceInDays } from "date-fns"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import { omit } from "lodash"
 import format from "date-fns/format"
 import {

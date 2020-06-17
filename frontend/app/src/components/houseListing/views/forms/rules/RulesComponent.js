@@ -1,5 +1,5 @@
 import React from "react"
-import { ComponentLoadingSpinner } from "core/loadingSpinners/LoadingSpinner"
+import { ComponentLoadingSpinner } from "core/UIComponents/loadingSpinners/LoadingSpinner"
 import styles from "./Rules.module.css"
 import commonStyles from "../FormCommon.module.css"
 

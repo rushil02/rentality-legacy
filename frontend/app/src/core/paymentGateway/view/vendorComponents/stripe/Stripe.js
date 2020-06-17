@@ -1,7 +1,7 @@
 import React from "react"
 import ScriptLoader from "react-script-loader-hoc"
 import { StripeProvider, Elements, CardElement, injectStripe } from "react-stripe-elements"
-import { ComponentLoadingSpinner } from "core/loadingSpinners/LoadingSpinner"
+import { ComponentLoadingSpinner } from "core/UIComponents/loadingSpinners/LoadingSpinner"
 
 const StripePayment = ({ scriptsLoadedSuccessfully }) => {
     if (!scriptsLoadedSuccessfully) return <ComponentLoadingSpinner />

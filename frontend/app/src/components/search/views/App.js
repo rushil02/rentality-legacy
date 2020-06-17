@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import queryString from "query-string";
 import SearchForm from "./forms/SearchForm";
 import SearchPageContent from "./SearchPageContent";
-import {getFilteredHouses} from "search/services";
-import {ESHouse, SearchFormModel} from "search/models";
+import {getFilteredHouses} from "../services";
+import {ESHouse, SearchFormModel} from "../models";
 import {APIModelListAdapter} from "core/utils/ModelHelper";
 
 const OFFSET = 12;
@@ -14,9 +14,7 @@ export default class App extends Component {
         this.state = {
             loading: true,
             loadingMore: false,
-            searchForm: new SearchFormModel(
-                JSON.parse(JSON.stringify(queryString.parse(this.props.routerProps.location.search)))
-            ),
+            searchForm: new SearchFormModel(queryString.parse(this.props.routerProps.location.search)),
             houses: new APIModelListAdapter([], ESHouse, undefined, "empty", ["_source"]),
             hasMoreItems: true,
             pageNum: 1,

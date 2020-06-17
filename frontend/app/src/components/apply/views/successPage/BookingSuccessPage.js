@@ -110,7 +110,7 @@ export default class BookingSuccessPage extends Component {
                                                     <div className="col-md-8">
                                                         <a
                                                             className={styles.title + " btn-link"}
-                                                            href={reverse(routes.react.apply.houseInfo, {
+                                                            href={reverse(routes.pages.apply.houseInfo, {
                                                                 houseUUID: booking.getData("bookedHouse.houseUUID"),
                                                             })}
                                                         >

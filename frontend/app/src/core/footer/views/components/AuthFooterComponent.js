@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {reverse} from "named-urls";
-import routes from "routes";
+import routes from "components/routes";
 
 import "./Footer.css";
 
@@ -47,7 +47,7 @@ export default class AuthFooterComponent extends Component {
                                         <a href={reverse(routes.home)}>About Us</a>
                                     </li>
                                     <li>
-                                        <a href="">Help</a>
+                                        <a href={reverse(routes.faq)}>Help</a>
                                     </li>
                                 </ul>
                             </div>

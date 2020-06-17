@@ -5,7 +5,7 @@ import {getRecommendedHouses} from "../services";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 import {APIModelListAdapter} from "core/utils/ModelHelper";
 import {reverse} from "named-urls";
-import routes from "routes";
+import routes from "components/routes";
 import queryString from "query-string";
 
 export default class App extends Component {
@@ -14,8 +14,8 @@ export default class App extends Component {
         this.state = {
             status: "loading",
             houses: new APIModelListAdapter([], House, "uuid", "empty"),
-            searchForm: new SearchForm(
-                JSON.parse(JSON.stringify(queryString.parse(this.props.routerProps.location.search)))
+            searchForm: new SearchForm({}, "empty"
+                // JSON.parse(JSON.stringify(queryString.parse(this.props.routerProps.location.search)))
             ),
         };
     }
@@ -44,12 +44,12 @@ export default class App extends Component {
     };
 
     handleCityLabel = (e) => {
-        window.location.href = reverse(routes.react.searchPage) + "?location=" + e.target.innerText.trim();
+        window.location.href = reverse(routes.pages.searchPage) + "?location=" + e.target.innerText.trim();
     };
 
     handleSearch = () => {
         window.location.href =
-            reverse(routes.react.searchPage) + "?" + queryString.stringify(this.state.searchForm.serialize());
+            reverse(routes.pages.searchPage) + "?" + queryString.stringify(this.state.searchForm.serialize());
     };
 
     render() {

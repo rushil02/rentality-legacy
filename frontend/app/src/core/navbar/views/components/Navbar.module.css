@@ -107,6 +107,14 @@
     display: block;
 }
 
+.logo span {
+    height: 1px;
+    width: 1px;
+    position: absolute;
+    overflow: hidden;
+    top: -10px;
+}
+
 .menu.white .center .listInline li a,
 .menu.white .right .listInline li a {
     color: #4b4b4b;

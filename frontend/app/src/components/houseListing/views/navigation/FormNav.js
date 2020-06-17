@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styles from './FormNav.module.css'
 import {NavLink} from "react-router-dom";
-import {alertUser} from "components/alert/Alert";
+import {alertUser} from "core/alert/Alert";
 
 
 export default function FormNav(props) {

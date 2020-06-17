@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { debounce } from "lodash"
 import { getCountryData, getCountrySuggestions } from "./services"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import Autosuggest from "react-autosuggest"
 import theme from "./CountryAutoSuggest.module.css"
 

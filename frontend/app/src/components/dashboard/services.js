@@ -1,6 +1,6 @@
 import axios, {handleError} from "core/utils/serviceHelper";
 import {reverse} from "named-urls";
-import routes from "routes";
+import routes from "components/routes";
 
 export function getPublishedHouses() {
     return new Promise(function (resolve, reject) {

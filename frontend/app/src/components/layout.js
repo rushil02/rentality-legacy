@@ -8,12 +8,15 @@
 import React from "react"
 import PropTypes from "prop-types"
 import {useStaticQuery, graphql} from "gatsby"
+import {LocationProvider} from "@reach/router"
 
 import Header from "./header"
-import Alert from "components/alert/Alert";
+import Alert from "core/alert/Alert";
 import {UserStore} from "core/auth/userContext";
+import Navbar from "core/navbar/views/Navbar";
+import Footer from "core/footer/views/Footer";
+
 // import ComponentErrorBoundary from "../../../old/src/core/errorHelpers/ComponentErrorBoundary";
-// import {UserStore} from "../core/auth/userContext";
 
 const Layout = ({children}) => {
     const data = useStaticQuery(graphql`
@@ -28,10 +31,14 @@ const Layout = ({children}) => {
 
     return (
         <div>
-            <Header siteTitle={data.site.siteMetadata.title}/>
-            <Alert/>
+            {/*<Header siteTitle={data.site.siteMetadata.title}/>*/}
             <UserStore>
+                <Alert/>
+                <LocationProvider>
+                    {context => <Navbar locContext={context}/>}
+                </LocationProvider>
                 <main>{children}</main>
+                <Footer/>
             </UserStore>
         </div>
     )

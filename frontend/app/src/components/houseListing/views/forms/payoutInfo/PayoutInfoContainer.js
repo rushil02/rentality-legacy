@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import BillingInfoContainer from "./BillingInfoContainer"
 import { checkHousePayoutInfo } from "components/houseListing/services"
-import { ResponseLoadingSpinner } from "core/loadingSpinners/LoadingSpinner"
+import { ResponseLoadingSpinner } from "core/UIComponents/loadingSpinners/LoadingSpinner"
 import PGInfoContainer from "./PGInfoContainer"
 import BankDetailsContainer from "./BankDetailsContainer"
 import { loadStripe } from "@stripe/stripe-js"
@@ -10,7 +10,7 @@ import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary"
 import { UserPII } from "components/userAccount/models"
 import { patchUserProfileData, getUserProfileData } from "components/userAccount/services"
 import { getCountryData } from "core/UIComponents/CountryAutoSuggest/services"
-import {alertUser} from "components/alert/Alert";
+import {alertUser} from "core/alert/Alert";
 
 /**
  *     IMPORTANT: Do NOT use Cache here

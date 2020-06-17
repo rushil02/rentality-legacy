@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Slider from "react-slick";
 import {UserContext} from "core/auth/userContext";
 import {reverse} from "named-urls";
-import routes from "routes";
+import routes from "components/routes";
 import styles from "./App.module.css";
 import "./ImageCarousel.module.css";
 import theme from "./SearchInput.module.css";
@@ -17,7 +17,7 @@ function GetRecommendedHouse(props) {
 
     return (
         <div className={mainDivClass}>
-            <a href={reverse(routes.react.apply.houseInfo, {houseUUID: house.getData("uuid")})} className={styles.list}>
+            <a href={reverse(routes.pages.apply.houseInfo, {houseUUID: house.getData("uuid")})} className={styles.list}>
                 <div className={styles.image}>
                     <img src={house.getData("thumbnail")} className="w-100" alt="" title="" />
                     <div className="{% if house.is_marked_leased %} leased-img-tag {% else %} d-none {% endif %}">

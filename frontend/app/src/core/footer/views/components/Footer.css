@@ -1,32 +1,32 @@
-#root > .footer {
+.footer {
     padding-top: 56px;
     padding-bottom: 116px;
     background-color: #2a2b32;
 }
 
-#root > .footer .list ul li a {
+.footer .list ul li a {
     font-size: 14px;
     color: #ffffff;
     font-weight: 400;
     transition: all 0.25s ease-in-out;
 }
 
-#root > .footer .list ul li a:hover,
-#root > .footer .list ul li a:focus {
+.footer .list ul li a:hover,
+.footer .list ul li a:focus {
     text-decoration: none;
 }
 
-#root > .footer .list ul li a:hover {
+.footer .list ul li a:hover {
     color: #36ffb1;
 }
 
-#root > .footer .social-media {
+.footer .social-media {
     margin-top: 22px;
     margin-bottom: 80px;
     text-align: right;
 }
 
-#root > .footer .social-media ul li a {
+.footer .social-media ul li a {
     width: 35px;
     height: 34px;
     display: block;
@@ -36,47 +36,47 @@
     border-radius: 99px;
 }
 
-#root > .footer .social-media ul li a span {
+.footer .social-media ul li a span {
     display: none;
 }
 
-#root > .footer .social-media ul li.facebook a {
+.footer .social-media ul li.facebook a {
     background-image: url("/static/image/footer/facebook.svg");
 }
 
-#root > .footer .social-media ul li.facebook a:hover {
+.footer .social-media ul li.facebook a:hover {
     background-color: #3b5998;
 }
 
-#root > .footer .social-media ul li.instagram a {
+.footer .social-media ul li.instagram a {
     background-image: url("/static/image/footer/instagram.svg");
 }
 
-#root > .footer .social-media ul li.instagram a:hover {
+.footer .social-media ul li.instagram a:hover {
     background-color: #cd486b;
 }
 
-#root > .footer .social-media ul li.twitter a {
+.footer .social-media ul li.twitter a {
     background-image: url("/static/image/footer/twitter.svg");
 }
 
-#root > .footer .social-media ul li.twitter a:hover {
+.footer .social-media ul li.twitter a:hover {
     background-color: #1dcaff;
 }
 
-#root > .footer .social-media ul li.linkedin a {
+.footer .social-media ul li.linkedin a {
     background-image: url("/static/image/footer/linkedin.svg");
 }
 
-#root > .footer .social-media ul li.linkedin a:hover {
+.footer .social-media ul li.linkedin a:hover {
     background-color: #0077b5;
 }
 
-#root > .footer .social-media ul li:not(:last-child) {
+.footer .social-media ul li:not(:last-child) {
     margin-right: 10px;
 }
 
-#root > .footer .e-mail .title {
+.footer .e-mail .title {
     color: #ffffff;
     font-size: 20px;
     font-weight: 400;
@@ -84,13 +84,13 @@
     margin-bottom: 20px;
 }
 
-#root > .footer .e-mail .detail {
+.footer .e-mail .detail {
     border: 1px solid #ffffff;
     padding: 6px;
     border-radius: 99px;
 }
 
-#root > .footer .e-mail .detail .form-control {
+.footer .e-mail .detail .form-control {
     border: none;
     border-radius: 99px;
     font-size: 18px;
@@ -101,17 +101,17 @@
     padding-left: 23px;
 }
 
-#root > .footer .e-mail .detail .form-control:hover,
-#root > .footer .e-mail .detail .form-control:focus {
+.footer .e-mail .detail .form-control:hover,
+.footer .e-mail .detail .form-control:focus {
     box-shadow: none;
 }
 
-#root > .footer .e-mail .detail .form-control::placeholder {
+.footer .e-mail .detail .form-control::placeholder {
     opacity: 1;
     color: #ffffff;
 }
 
-#root > .footer .e-mail .detail .btn {
+.footer .e-mail .detail .btn {
     font-size: 15px;
     font-weight: 700;
     color: #2a2b32;
@@ -123,11 +123,11 @@
     transition: all 0.25s ease-in-out;
 }
 
-#root > .footer .e-mail .detail .btn:hover,
-#root > .footer .e-mail .detail .btn:focus {
+.footer .e-mail .detail .btn:hover,
+.footer .e-mail .detail .btn:focus {
     text-decoration: none;
 }
 
-#root > .footer .e-mail .detail .btn:hover {
+.footer .e-mail .detail .btn:hover {
     background-color: #ffffff;
 }

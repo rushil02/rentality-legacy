@@ -17,10 +17,10 @@ export default class Router extends Component {
                         <Switch>
                             <Route
                                 exact
-                                path={routes.react.user.userProfile}
+                                path={routes.pages.user.userProfile}
                                 render={props => <UserProfileContainer />}
                             />
-                            <Route path={routes.react.user.paymentInfo} render={props => <PayoutInfoContainer />} />
+                            <Route path={routes.pages.user.paymentInfo} render={props => <PayoutInfoContainer />} />
                             <Route render={props => <Error404 />} />
                         </Switch>
                     </BrowserRouter>

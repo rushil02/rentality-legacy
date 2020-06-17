@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import { getFacilityData, postFacilityData } from "components/houseListing/services"
 import { Facility } from "components/houseListing/models"
 import { APIModelListAdapter } from "core/utils/ModelHelper"

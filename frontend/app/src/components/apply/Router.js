@@ -1,4 +1,4 @@
-import routes from "routes"
+import routes from "components/routes"
 import React, { Component } from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 import ComponentErrorBoundary from "core/errorHelpers/ComponentErrorBoundary"
@@ -15,12 +15,12 @@ export default class Router extends Component {
                         <Switch>
                             <Route
                                 exact
-                                path={routes.react.apply.houseInfo}
+                                path={routes.pages.apply.houseInfo}
                                 render={props => <HouseDetailPage routerProps={props} />}
                             />
                             <Route
                                 exact
-                                path={routes.react.apply.success}
+                                path={routes.pages.apply.success}
                                 render={props => <BookingSuccessPage routerProps={props} />}
                             />
                             <Route render={props => <Error404 />} />

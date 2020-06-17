@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import DatePickerComponent from "core/UIComponents/DatePicker/DatePicker"
 import Select from "react-select"
 import styles from "./UserProfileContainer.module.css"

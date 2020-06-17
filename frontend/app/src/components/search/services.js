@@ -1,5 +1,5 @@
 import axios, {handleError} from "core/utils/serviceHelper";
-import routes from "routes";
+import routes from "components/routes";
 import {reverse} from "named-urls";
 
 export function getFilteredHouses(params) {

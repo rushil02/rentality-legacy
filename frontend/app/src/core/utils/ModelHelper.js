@@ -1,4 +1,11 @@
-import { omit } from "lodash"
+import {omit} from "lodash"
+
+class APIModelAdapterError extends Error {
+    // Expand error functionality
+    // constructor(message) {
+    //     super(message);
+    // }
+}
 
 export default class APIModelAdapter {
     /**
@@ -64,7 +71,8 @@ export default class APIModelAdapter {
             const keyList = settings.key.split(".")
             value = source
             for (let i = 0; i < keyList.length; i++) {
-                if (value.hasOwnProperty(keyList[i])) {
+                console.log(value, keyList[i], "HOH")
+                if (Object.prototype.hasOwnProperty.call(value, keyList[i])) {
                     value = value[keyList[i]]
                     if (value === null && i !== keyList.length - 1) {
                         if (this.status !== "empty") {
@@ -124,7 +132,7 @@ export default class APIModelAdapter {
             if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
                 modelObj = modelObj.getData(keyList[i])
             } else {
-                throw `${keyList[i]} is not a valid key in  ${modelObj.constructor.name} | ${keyList}`
+                throw new APIModelAdapterError(`${keyList[i]} is not a valid key in  ${modelObj.constructor.name} | ${keyList}`)
             }
         }
 
@@ -132,7 +140,7 @@ export default class APIModelAdapter {
         if (modelObj._fieldMap.hasOwnProperty(key)) {
             return modelObj._attrs[key]
         } else {
-            throw `${key} is not a valid key in ${modelObj.constructor.name}`
+            throw new APIModelAdapterError(`${key} is not a valid key in ${modelObj.constructor.name}`)
         }
     }
 
@@ -213,7 +221,7 @@ export default class APIModelAdapter {
                 modelObj.changedFields.push(keyList[i])
                 modelObj = modelObj.getData(keyList[i])
             } else {
-                throw `${keyList[i]} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`
+                throw new APIModelAdapterError(`${keyList[i]} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`)
             }
         }
 
@@ -227,7 +235,7 @@ export default class APIModelAdapter {
             modelObj._attrs[key] = value
             return this
         } else {
-            throw `${key} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`
+            throw new APIModelAdapterError(`${key} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`)
         }
     }
 
@@ -337,7 +345,7 @@ export default class APIModelAdapter {
                     modelObj.changedFields.push(parentList[i])
                     modelObj = modelObj.getData(parentList[i])
                 } else {
-                    throw `${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`
+                    throw  new APIModelAdapterError(`${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`)
                 }
             }
         }
@@ -347,7 +355,7 @@ export default class APIModelAdapter {
                 if (modelObj._fieldMap.hasOwnProperty(field)) {
                     modelObj.setData(field, value)
                 } else {
-                    throw `${field} not found while bulk updating in ${this.constructor.name}`
+                    throw  new APIModelAdapterError(`${field} not found while bulk updating in ${this.constructor.name}`)
                 }
             }
         }
@@ -422,8 +430,11 @@ export class APIModelListAdapter {
     }
 
     _constructObjModel = (data, removeParents) => {
+        if (!Array.isArray(data)) {
+            throw new APIModelAdapterError("Data is not an Array")
+        }
         let indexOffset = Object.entries(this._data).length
-        data.map((dbObj, index) => {
+        data.forEach((dbObj, index) => {
             let key = this._key ? dbObj[this._key] : index + indexOffset
             if (removeParents) {
                 removeParents.forEach(parent => {
@@ -470,7 +481,7 @@ export class APIModelListAdapter {
         if (!this._key) {
             console.error("Multi update cannot work without list level key")
         }
-        modelObjs.map(item => {
+        modelObjs.forEach(item => {
             this.update(item)
         })
     }
@@ -478,13 +489,13 @@ export class APIModelListAdapter {
     serialize(listPartialUpdate, objPartialUpdate) {
         let respData = []
         if (listPartialUpdate) {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).forEach(item => {
                 if (item.status === "hasChanged") {
                     respData.push(item.serialize(objPartialUpdate))
                 }
             })
         } else {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).forEach(item => {
                 respData.push(item.serialize(objPartialUpdate))
             })
         }
@@ -494,14 +505,14 @@ export class APIModelListAdapter {
     parseErrors(errorList, listPartialUpdate) {
         let counter = 0
         if (listPartialUpdate) {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).forEach(item => {
                 if (item.status === "hasChanged") {
                     item.parseError(errorList[counter])
                     counter++
                 }
             })
         } else {
-            Object.values(this._data).map(item => {
+            Object.values(this._data).forEach(item => {
                 item.parseError(errorList[counter])
                 counter++
             })
@@ -537,8 +548,8 @@ export function mergeModelStates(stateList) {
 export class DateRangeModel extends APIModelAdapter {
     fieldMap() {
         return {
-            startDate: { key: "lower" },
-            endDate: { key: "upper" },
+            startDate: {key: "lower"},
+            endDate: {key: "upper"},
         }
     }
 }
@@ -546,10 +557,10 @@ export class DateRangeModel extends APIModelAdapter {
 export class PostalLocation extends APIModelAdapter {
     fieldMap() {
         return {
-            id: { key: "id" },
-            type: { key: "type" },
-            coords: { key: "geometry.coordinates" },
-            properties: { key: "properties", parser: this.parseProperties },
+            id: {key: "id"},
+            type: {key: "type"},
+            coords: {key: "geometry.coordinates"},
+            properties: {key: "properties", parser: this.parseProperties},
         }
     }
 
@@ -562,6 +573,6 @@ export class PostalLocation extends APIModelAdapter {
                 country: data["country"]["name"],
             }
         }
-        return { name: "", region: "", country: "", code: "" }
+        return {name: "", region: "", country: "", code: ""}
     }
 }

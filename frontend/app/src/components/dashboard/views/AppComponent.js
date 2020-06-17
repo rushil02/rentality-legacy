@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import styles from "./App.module.css";
 import {reverse} from "named-urls";
-import routes from "routes";
+import routes from "components/routes";
 
 function formatDate(date) {
     if (date) {
@@ -52,7 +52,7 @@ function GetHouseListing(props) {
                             <div className={styles.detail}>
                                 <a
                                     className={styles.btn + " btn-link"}
-                                    href={reverse(routes.react.houseListing.edit, {houseUUID: house.getData("uuid")})}
+                                    href={reverse(routes.pages.houseListing.edit, {houseUUID: house.getData("uuid")})}
                                 >
                                     Manage
                                 </a>
@@ -166,7 +166,7 @@ function GetBookingListing(props) {
                             {/* <div className={styles.detail}>
                                 <a
                                     className={styles.btn + " btn-link"}
-                                    href={reverse(routes.react.houseListing.edit, {houseUUID: booking.getData("uuid")})}
+                                    href={reverse(routes.pages.houseListing.edit, {houseUUID: booking.getData("uuid")})}
                                 >
                                     Manage
                                 </a>

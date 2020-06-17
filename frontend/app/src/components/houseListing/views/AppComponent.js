@@ -1,6 +1,6 @@
 import React, {Suspense} from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
-import {ComponentLoadingSpinner} from "core/loadingSpinners/LoadingSpinner";
+import {ComponentLoadingSpinner} from "core/UIComponents/loadingSpinners/LoadingSpinner";
 import {
     MainDataCache,
     NavigationContext,

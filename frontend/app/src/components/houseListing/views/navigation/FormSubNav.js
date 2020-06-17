@@ -4,7 +4,7 @@ import {NavLink} from "react-router-dom";
 import styles from './FormSubNav.module.css'
 import parentStyles from './FormNav.module.css'
 
-import {alertUser} from "components/alert/Alert";
+import {alertUser} from "core/alert/Alert";
 
 import routes from "components/routes";
 import {reverse} from "named-urls";

@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { debounce } from "lodash"
 import PostalCodeAutoSuggestComponent from "./PostalCodeAutoSuggestComponent"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import { getPostalCodeData, getPostalCodeSuggestions } from "./services"
 
 const defaultVerboseDisplay = "Enter Postal code to select Suburb, City, State"

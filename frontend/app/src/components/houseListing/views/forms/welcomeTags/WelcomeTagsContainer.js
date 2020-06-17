@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import { getWelcomeTags, postWelcomeTags } from "components/houseListing/services"
 import { WelcomeTag } from "components/houseListing/models"
 

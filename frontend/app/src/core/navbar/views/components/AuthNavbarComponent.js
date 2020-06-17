@@ -46,7 +46,7 @@ export default class AuthNavbarComponent extends Component {
                         </Dropdown>
                     </li>
                     <li ref={this.liPersonRef} className={"list-inline-item " + styles.person}>
-                        <a href={reverse(routes.react.dashboard.base)} style={{textTransform: "capitalize"}}>
+                        <a href={reverse(routes.pages.dashboard.base)} style={{textTransform: "capitalize"}}>
                             <div className={styles.image}>
                                 <img
                                     src={
@@ -69,7 +69,7 @@ export default class AuthNavbarComponent extends Component {
                             <Dropdown.Menu alignRight>
                                 <Dropdown.Item
                                     bsPrefix={"dropdown-item " + styles.darkText}
-                                    href={reverse(routes.react.user.userProfile)}
+                                    href={reverse(routes.pages.user.userProfile)}
                                 >
                                     My Profile
                                 </Dropdown.Item>

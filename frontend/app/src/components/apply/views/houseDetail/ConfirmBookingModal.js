@@ -11,7 +11,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
-    const successRoute = reverse(routes.react.apply.success, {
+    const successRoute = reverse(routes.pages.apply.success, {
         applicationUUID: props.applicationUUID,
     })
 

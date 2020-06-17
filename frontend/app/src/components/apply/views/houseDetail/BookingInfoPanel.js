@@ -10,7 +10,7 @@ import { addDays, format } from "date-fns"
 // import "./DateRangeCalendar.css";
 
 import { getUnavailableDates } from "components/apply/services"
-import { ResponseLoadingSpinner } from "core/loadingSpinners/LoadingSpinner"
+import { ResponseLoadingSpinner } from "core/UIComponents/loadingSpinners/LoadingSpinner"
 
 const guestNumSelectStyles = {
     option: (provided, state) => ({

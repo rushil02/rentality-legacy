@@ -1,5 +1,5 @@
 import axios from "axios"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 
 axios.defaults.xsrfCookieName = "csrftoken"
 axios.defaults.xsrfHeaderName = "X-CSRFToken"

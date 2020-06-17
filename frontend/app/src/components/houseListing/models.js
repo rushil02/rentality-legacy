@@ -1,4 +1,4 @@
-import APIModelAdapter, { DateRangeModel } from "core/utils/ModelHelper"
+import APIModelAdapter, {DateRangeModel} from "core/utils/ModelHelper"
 
 export class House extends APIModelAdapter {
     // Declare all Defaults here
@@ -6,36 +6,36 @@ export class House extends APIModelAdapter {
     fieldMap() {
         return {
             // Form Primary
-            title: { key: "title" },
-            houseNum: { key: "address_hidden" },
-            streetName: { key: "address" },
-            postalCodeID: { key: "location" },
-            homeType: { key: "home_type" },
-            furnished: { key: "furnished", default: "Y" },
-            numBedrooms: { key: "bedrooms", default: 1 },
-            numBathrooms: { key: "bathrooms", default: 1 },
-            numParkSpaces: { key: "parking", default: 0 },
+            title: {key: "title"},
+            houseNum: {key: "address_hidden"},
+            streetName: {key: "address"},
+            postalCodeID: {key: "location"},
+            homeType: {key: "home_type"},
+            furnished: {key: "furnished", default: "Y"},
+            numBedrooms: {key: "bedrooms", default: 1},
+            numBathrooms: {key: "bathrooms", default: 1},
+            numParkSpaces: {key: "parking", default: 0},
 
             // Form Rent & availability
-            rent: { key: "rent" },
-            minStay: { key: "min_stay", default: 28 },
-            maxStay: { key: "max_stay", default: 0 },
-            maxPeopleAllowed: { key: "max_people_allowed", default: 2 },
+            rent: {key: "rent"},
+            minStay: {key: "min_stay", default: 28},
+            maxStay: {key: "max_stay", default: 0},
+            maxPeopleAllowed: {key: "max_people_allowed", default: 2},
 
             // Form Rules
-            otherRules: { key: "other_rules" },
+            otherRules: {key: "other_rules"},
 
             // Info for Guests
-            description: { key: "description" },
-            accessRestrictions: { key: "access_restrictions" },
-            otherPeopleDescription: { key: "other_people_description" },
+            description: {key: "description"},
+            accessRestrictions: {key: "access_restrictions"},
+            otherPeopleDescription: {key: "other_people_description"},
 
             // Neighbourhood
-            neighbourhoodDescription: { key: "neighbourhood_description" },
+            neighbourhoodDescription: {key: "neighbourhood_description"},
 
             // Others
-            UUID: { key: "uuid" },
-            cancellationPolicyID: { key: "cancellation_policy", default: null },
+            UUID: {key: "uuid"},
+            cancellationPolicyID: {key: "cancellation_policy", default: null},
         }
     }
 }
@@ -43,8 +43,8 @@ export class House extends APIModelAdapter {
 export class Availability extends APIModelAdapter {
     fieldMap() {
         return {
-            objID: { key: "id" },
-            dateRange: { key: "date_range", adapter: DateRangeModel },
+            objID: {key: "id"},
+            dateRange: {key: "date_range", adapter: DateRangeModel},
         }
     }
 }
@@ -52,9 +52,9 @@ export class Availability extends APIModelAdapter {
 export class Facility extends APIModelAdapter {
     fieldMap() {
         return {
-            objID: { key: "id", default: null },
-            verbose: { key: "verbose" },
-            checked: { key: "checked" },
+            objID: {key: "id", default: null},
+            verbose: {key: "verbose"},
+            checked: {key: "checked"},
         }
     }
 }
@@ -88,9 +88,9 @@ export class Navigator {
     loadForm = (formID, callback, formState, formName) => {
         this.currForm = formID
         if (!this._forms.hasOwnProperty(formID)) {
-            this._forms[formID] = { state: formState, saveCallbacks: { default: callback }, verbose: formName }
+            this._forms[formID] = {state: formState, saveCallbacks: {default: callback}, verbose: formName}
         } else {
-            this._forms[formID] = { ...this._forms[formID], saveCallbacks: { default: callback } }
+            this._forms[formID] = {...this._forms[formID], saveCallbacks: {default: callback}}
         }
     }
 
@@ -212,11 +212,11 @@ export class Navigator {
 export class Rule extends APIModelAdapter {
     fieldMap() {
         return {
-            ruleID: { key: "id" },
-            verbose: { key: "verbose" },
-            options: { key: "options" },
-            selected: { key: "house_rule", parser: this.parseSelected },
-            comment: { key: "house_rule", parser: this.parseComment },
+            ruleID: {key: "id"},
+            verbose: {key: "verbose"},
+            options: {key: "options"},
+            selected: {key: "house_rule", parser: this.parseSelected},
+            comment: {key: "house_rule", parser: this.parseComment},
         }
     }
 
@@ -259,9 +259,9 @@ export class Rule extends APIModelAdapter {
 export class Image extends APIModelAdapter {
     fieldMap() {
         return {
-            imagePath: { key: "image" },
-            isThumbnail: { key: "is_thumbnail", default: false },
-            uuid: { key: "uuid" },
+            imagePath: {key: "image"},
+            isThumbnail: {key: "is_thumbnail", default: false},
+            uuid: {key: "uuid"},
         }
     }
 }
@@ -269,10 +269,10 @@ export class Image extends APIModelAdapter {
 export class CancellationPolicy extends APIModelAdapter {
     fieldMap() {
         return {
-            objID: { key: "id" },
-            verbose: { key: "verbose" },
-            description: { key: "description" },
-            officialPolicy: { key: "official_policy", default: null },
+            objID: {key: "id"},
+            verbose: {key: "verbose"},
+            description: {key: "description"},
+            officialPolicy: {key: "official_policy", default: null},
         }
     }
 }
@@ -280,9 +280,9 @@ export class CancellationPolicy extends APIModelAdapter {
 export class NeighbourhoodDescriptor extends APIModelAdapter {
     fieldMap() {
         return {
-            objID: { key: "id", default: null },
-            verbose: { key: "verbose" },
-            checked: { key: "checked" },
+            objID: {key: "id", default: null},
+            verbose: {key: "verbose"},
+            checked: {key: "checked"},
         }
     }
 }
@@ -290,9 +290,9 @@ export class NeighbourhoodDescriptor extends APIModelAdapter {
 export class WelcomeTag extends APIModelAdapter {
     fieldMap() {
         return {
-            objID: { key: "id", default: null },
-            verbose: { key: "verbose" },
-            checked: { key: "checked" },
+            objID: {key: "id", default: null},
+            verbose: {key: "verbose"},
+            checked: {key: "checked"},
         }
     }
 }

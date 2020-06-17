@@ -10,7 +10,7 @@ import { House, Image, CancellationPolicy, HomeOwnerInfo, Application, Financial
 import HouseDetailPageComponent from "./HouseDetailPageComponent"
 import { APIModelListAdapter, PostalLocation } from "core/utils/ModelHelper"
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 
 export const SecretContext = React.createContext(undefined)
 

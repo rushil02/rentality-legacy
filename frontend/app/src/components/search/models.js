@@ -59,7 +59,7 @@ export class SearchFormModel extends APIModelAdapter {
     }
 
     dateSerializer(date) {
-        return format(date, "YYYY-MM-DD");
+        return format(date, "yyyy-MM-dd");
     }
 
     nextPagination = (offset) => {

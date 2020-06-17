@@ -9,9 +9,6 @@ import styles from "./LoadingSpinner.module.css"
 // `;
 
 export class ComponentLoadingSpinner extends React.Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         return (
@@ -31,9 +28,6 @@ export class ComponentLoadingSpinner extends React.Component {
 }
 
 export class ResponseLoadingSpinner extends React.Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         return (
@@ -54,9 +48,6 @@ export class ResponseLoadingSpinner extends React.Component {
 }
 
 export class ComponentRefreshLoadingSpinner extends React.Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         return (

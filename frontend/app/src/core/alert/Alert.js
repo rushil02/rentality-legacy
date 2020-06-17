@@ -62,7 +62,7 @@ export default class Alert extends Component {
         };
         getSystemMessages().then((data) => {
             let sysAlerts = [];
-            data.map((item, index) => {
+            data.forEach((item, index) => {
                 let alertType = item.level_tag.replace(/^(alert-)/, "");
                 if (availableAlertTypes.indexOf(alertType) === -1) {
                     console.error("Invalid alertType : " + alertType);

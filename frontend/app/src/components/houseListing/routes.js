@@ -2,7 +2,6 @@ import { include } from "named-urls"
 
 export default {
     interface: {
-        base: "",
         create: "create",
         edit: "edit/:houseUUID",
     },

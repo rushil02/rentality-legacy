@@ -1,7 +1,6 @@
 import { Component } from "react"
 import React from "react"
-import styles from "./style.module.css"
-import { ComponentLoadingSpinner } from "core/loadingSpinners/LoadingSpinner"
+import { ComponentLoadingSpinner } from "core/UIComponents/loadingSpinners/LoadingSpinner"
 import Error404 from "./Error404"
 
 export default class RequestErrorBoundary extends Component {

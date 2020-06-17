@@ -3,6 +3,6 @@ export default {
         base: "",
     },
     APIs: {
-        recommendedHouses: "/recommended-house-list", //URL starts from root
+        recommendedHouses: "recommended-house-list",
     },
 };

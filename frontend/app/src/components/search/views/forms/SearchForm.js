@@ -1,10 +1,9 @@
 import React, {Component} from "react";
-import searchStyles from "search/views/forms/SearchForm.css";
 import SearchField from "./fields/LocationSearch/LocationSearchField";
 import DateRangePickerComponent from "core/UIComponents/DateRangePicker/DateRangePicker";
 import HouseType from "./fields/HouseType/HouseType";
 import Rent from "./fields/Rent";
-import styles from "./SearchForm.css";
+import styles from "./SearchForm.module.css";
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton";
 
 export default class SearchForm extends Component {
@@ -23,9 +22,9 @@ export default class SearchForm extends Component {
                                 startDate={this.props.searchForm.getData("startDate")}
                                 endDate={this.props.searchForm.getData("endDate")}
                                 onChange={this.props.onDateRangeChange}
-                                inputClass={searchStyles.formControl + " " + searchStyles.date}
+                                inputClass={styles.formControl + " " + styles.date}
                                 divClass={"col-md-3"}
-                            ></DateRangePickerComponent>
+                            />
                             <HouseType
                                 value={this.props.searchForm.getData("homeType")}
                                 onChange={this.props.onValueChange}

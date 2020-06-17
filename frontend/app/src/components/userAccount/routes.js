@@ -1,5 +1,3 @@
-import { include } from "named-urls"
-
 export default {
     interface: {
         base: "",

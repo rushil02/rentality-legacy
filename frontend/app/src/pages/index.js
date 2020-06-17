@@ -1,18 +1,14 @@
 import React from "react"
-import { Link } from "gatsby"
-
 import Layout from "components/layout"
-import Image from "components/image"
 import SEO from "components/seo"
-import Navbar from "components/navbar/views/Navbar"
-import Footer from "components/footer/Footer";
+import WelcomeRouter from "components/welcome/Router";
 
-const IndexPage = () => (
+
+const HomePage = () => (
     <Layout>
         <SEO title="Home" />
-        {/*<Navbar/>*/}
-        {/*<Footer/>*/}
+        <WelcomeRouter/>
     </Layout>
 )
 
-export default IndexPage
+export default HomePage

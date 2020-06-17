@@ -30,7 +30,7 @@ const styleGuide = {
 
 function formatDate(date, defaultText) {
     if (!date) return defaultText;
-    return format(date, "DD-MM-YYYY");
+    return format(date, "dd-MM-yyyy");
 }
 
 function formatDateDisplay(startDate, endDate, defaultText) {

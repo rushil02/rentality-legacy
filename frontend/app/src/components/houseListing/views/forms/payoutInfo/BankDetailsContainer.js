@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { alertUser } from "components/alert/Alert"
+import { alertUser } from "core/alert/Alert"
 import { PulseLoader } from "react-spinners"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronUp, faPen, faPlus } from "@fortawesome/free-solid-svg-icons"

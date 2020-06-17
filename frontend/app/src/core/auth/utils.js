@@ -1,7 +1,7 @@
 import React from "react"
 import routes from "components/routes"
 import {UserContext} from "./userContext"
-import {ComponentLoadingSpinner} from "../loadingSpinners/LoadingSpinner"
+import {ComponentLoadingSpinner} from "core/UIComponents/loadingSpinners/LoadingSpinner"
 import {reverse} from "named-urls"
 
 

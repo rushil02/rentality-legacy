@@ -97,7 +97,7 @@ export default function UserProfileComponent(props) {
                                         >
                                             <li className="list-inline-item">
                                                 <NavLink
-                                                    to={reverse(routes.react.user.userProfile)}
+                                                    to={reverse(routes.pages.user.userProfile)}
                                                     className={styles.btn + " btn btn-link"}
                                                     activeClassName={styles.active}
                                                 >
@@ -106,7 +106,7 @@ export default function UserProfileComponent(props) {
                                             </li>
                                             <li className="list-inline-item">
                                                 <a
-                                                    href={reverse(routes.react.user.paymentInfo)}
+                                                    href={reverse(routes.pages.user.paymentInfo)}
                                                     className={styles.btn + " btn btn-link"}
                                                 >
                                                     Payment Information
