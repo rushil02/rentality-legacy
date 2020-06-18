@@ -30,7 +30,7 @@ module.exports = {
         `gatsby-alias-imports`,
         {
             resolve: `gatsby-plugin-create-client-paths`,
-            options: {prefixes: [`/listing/*`]},
+            options: { prefixes: [`/listing/*`, `/blog/*`] },
         },
         // this (optional) plugin enables Progressive Web App + Offline functionality
         // To learn more, visit: https://gatsby.dev/offline
