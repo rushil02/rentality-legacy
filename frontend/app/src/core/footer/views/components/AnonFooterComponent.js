@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {reverse} from "named-urls";
-import routes from "components/routes";
+import {PageRoutes} from "components/routes";
 
 import "./Footer.css";
 
@@ -14,13 +14,13 @@ export default class AnonFooterComponent extends Component {
                             <div className="list">
                                 <ul className="list-unstyled">
                                     <li>
-                                        <a href={reverse(routes.home)}>Contact Us</a>
+                                        <a href={reverse(PageRoutes.contactUs)}>Contact Us</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.home)}>Rent a Home</a>
+                                        <a href={reverse(PageRoutes.home)}>Rent a Home</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.home)}>List Home</a>
+                                        <a href={reverse(PageRoutes.listing.create)}>List Home</a>
                                     </li>
                                 </ul>
                             </div>
@@ -29,25 +29,25 @@ export default class AnonFooterComponent extends Component {
                             <div className="list">
                                 <ul className="list-unstyled">
                                     <li>
-                                        <a href={reverse(routes.pages.home)}>Terms of Service</a>
+                                        <a href={reverse(PageRoutes.home)}>Terms of Service</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.pages.home)}>Privacy Policy</a>
+                                        <a href={reverse(PageRoutes.home)}>Privacy Policy</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.pages.faq)}>FAQs</a>
+                                        <a href={reverse(PageRoutes.faq)}>FAQs</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.pages.home)}>Cookies</a>
+                                        <a href={reverse(PageRoutes.home)}>Cookies</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.pages.blogs)}>Blog</a>
+                                        <a href={reverse(PageRoutes.blogs)}>Blog</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.pages.home)}>About Us</a>
+                                        <a href={reverse(PageRoutes.home)}>About Us</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.pages.contactUs)}>Help</a>
+                                        <a href={reverse(PageRoutes.contactUs)}>Help</a>
                                     </li>
                                 </ul>
                             </div>

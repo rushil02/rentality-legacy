@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import { reverse } from 'named-urls';
-import routes from "components/routes";
+import {PageRoutes} from "components/routes";
 import styles from './HouseComponent.css';
 
 export default class HouseComponent extends Component{
     render(){
         let house = this.props.house;
-        const url = reverse(routes.react.apply.houseInfo, { houseUUID: house.getData('uuid') });
+        const url = reverse(PageRoutes.apply.houseInfo, { houseUUID: house.getData('uuid') });
         return (
             <React.Fragment>
                 <div className="col-md-4 col-lg-3">        

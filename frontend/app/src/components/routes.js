@@ -8,53 +8,54 @@ import dashboardRoutes from './dashboard/routes';
 export default {
     static_route: "/static/",
     media_route: "/media",
+}
 
+export const PageRoutes = {
+    home: "/",
+    searchPage: "search",
+    listing: include("/listing", houseListingRoutes.interface),
+    user: include("user", userRoutes.interface),
+    apply: include("apply", applyRoutes.interface),
+    dashboard: include("dashboard", dashboardRoutes.interface),
+    welcome: include("welcome", welcomeRoutes.interface),
+    faq: "/pages/faq/",
+    howItWorks: "/pages/how-it-works/",
+    contactUs: "/pages/contact-us/",
     auth: include("/accounts", {
         login: "login/",
         signup: "signup/",
         logout: "logout/",
     }),
+}
 
-    // Source [Entry-points] URLs
-    pages: {
-        home: "/",
-        searchPage: "search",
-        listing: include("/listing", houseListingRoutes.interface),
-        user: include("user", userRoutes.interface),
-        apply: include("apply", applyRoutes.interface),
-        dashboard: include("dashboard", dashboardRoutes.interface),
-        welcome: include("welcome", welcomeRoutes.interface),
-        faq: "/pages/faq/",
-        howItWorks: "/pages/how-it-works/",
-        contactUs: "/pages/contact-us/",
-    },
+export const APIRoutes = include("/api", {
+    apply: include("app", applyRoutes.APIs),
+    user: userRoutes.APIs,
+    welcome: welcomeRoutes.APIs,
+    sys: {messages: "sys-messages"},
+    house: include("property", {
+        ...houseListingRoutes.APIs,
+        filterOptions: "filter-options"
+    }),
+    dashboard: include("dashboard", dashboardRoutes.APIs),
 
-    /********************************* APIs *********************************/
-    apply: include("/api/app", applyRoutes.APIs),
-    user: include("/api/", userRoutes.APIs),
-    house: include("/api/property", houseListingRoutes.APIs),
-    dashboard: include("/api/dashboard", dashboardRoutes.APIs),
-    welcome: include("/api", welcomeRoutes.APIs),
-
-    userNavInfo: "/api/user-nav-info",
-    cities: include("/api/cities", {
+    search: include("es", {
+        house: "house/search",
+    }),
+    paymentGateway: include("pg", {
+        createPaymentInfo: "add-ho-acc/:pgCode/:houseUUID",
+        updatePaymentInfo: "update-ho-acc/:pgCode",
+    }),
+    cities: include("cities", {
         postalCodeSuggestions: "postal-code-sugg",
         postalCodeDetails: "postal-code-details/:objID",
         countrySuggestions: "country-sugg",
         countryDetails: "country-details/:objID",
     }),
-
-    search: include("/api/es", {
-        house: "house/search",
-    }),
-    autoSuggest: include("/api/es", {
+    autoSuggest: include("es", {
         location: "location_sugg",
     }),
-    sys: include("/api", {messages: "sys-messages"}),
+    userNavInfo: "user-nav-info",
 
-    // promo: include('/promo', {
-    //     verifyApplicationDiscount: 'verify-promo-use/application/tenant',
-    //     verifyHouseDiscount: 'verify-promo-use/house/home_owner'
-    // }),
 
-}
+})

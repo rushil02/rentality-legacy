@@ -117,7 +117,7 @@ export class Navigator {
                     let allResults = {}
                     let allErrors = {}
                     for (let [key, callback] of Object.entries(that._forms[that.currForm].saveCallbacks)) {
-                        if (Promise.resolve(callback) == callback) {
+                        if (callback instanceof Promise) {
                             callback(e)
                                 .then(result => {
                                     allResults[key] = result

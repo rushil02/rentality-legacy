@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import { reverse } from "named-urls"
-import routes from "components/routes"
+import {PageRoutes} from "components/routes"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
-import { CancellationPolicy, House, Rule } from "components/houseListing/models"
+import { CancellationPolicy, House } from "components/houseListing/models"
 import { getCancellationPolicies, getHouseData, postCancellationPolicy } from "components/houseListing/services"
 
 import styles from "./CancellationPolicy.module.css"
@@ -158,10 +158,11 @@ function CancellationPolicyComponent(props) {
                 <a
                     className={styles.moreInfoLink}
                     target="_blank"
+                    rel="noopener noreferrer"
                     href={
                         props.data.getData("officialPolicy")
                             ? props.data.getData("officialPolicy")
-                            : reverse(routes.howItWorks)
+                            : reverse(PageRoutes.howItWorks)
                     }
                 >
                     More Information

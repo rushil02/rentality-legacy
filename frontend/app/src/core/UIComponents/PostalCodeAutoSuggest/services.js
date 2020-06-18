@@ -1,11 +1,11 @@
 import axios, { handleError } from "core/utils/serviceHelper"
 import { reverse } from "named-urls"
-import routes from "components/routes"
+import {APIRoutes} from "components/routes"
 
 export function getPostalCodeData(value) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.cities.postalCodeDetails, { objID: value }))
+            .get(reverse(APIRoutes.cities.postalCodeDetails, { objID: value }))
             .then(result => {
                 resolve(result.data)
             })
@@ -18,7 +18,7 @@ export function getPostalCodeData(value) {
 export function getPostalCodeSuggestions(value) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.cities.postalCodeSuggestions), { params: { query: value } })
+            .get(reverse(APIRoutes.cities.postalCodeSuggestions), { params: { query: value } })
             .then(result => {
                 resolve(result.data)
             })

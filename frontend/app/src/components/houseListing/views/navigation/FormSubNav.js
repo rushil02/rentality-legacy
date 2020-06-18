@@ -6,7 +6,7 @@ import parentStyles from './FormNav.module.css'
 
 import {alertUser} from "core/alert/Alert";
 
-import routes from "components/routes";
+import {PageRoutes} from "components/routes";
 import {reverse} from "named-urls";
 
 function preventClick(e) {
@@ -22,7 +22,7 @@ function getNavLink(path, verbose, disabled) {
     if (disabled) {
         if (path === '/1') {
 
-            path = reverse(routes.pages.listing.create);
+            path = reverse(PageRoutes.listing.create);
             return (
                 <NavLink to={path} className={parentStyles.noStyle} activeClassName={styles.active}>
                     <div className={styles.title}>{verbose}</div>

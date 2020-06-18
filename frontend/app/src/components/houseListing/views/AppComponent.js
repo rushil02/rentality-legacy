@@ -16,7 +16,7 @@ import {
 import Navigator from './navigation/Navigator';
 
 import {reverse} from "named-urls";
-import routes from "components/routes";
+import {PageRoutes} from "components/routes";
 
 const FormPrimaryContainer = React.lazy(() => import("./forms/primary/FormPrimaryContainer"));
 const FormRentAvailabilityContainer = React.lazy(() => import("./forms/rentAvailability/FormRentAvailabilityContainer"));
@@ -36,7 +36,7 @@ const PayoutInfoContainer = React.lazy(() => import("./forms/payoutInfo/PayoutIn
 export function EditAppComponent(props) {
     const houseUUID = props.houseUUID;
     return (
-        <BrowserRouter basename={reverse(routes.pages.listing.edit, {houseUUID: houseUUID})}>
+        <BrowserRouter basename={reverse(PageRoutes.listing.edit, {houseUUID: houseUUID})}>
             <NavigationContext.Consumer>
                 {navContext =>
                     <Navigator mode={'edit'} navContext={navContext} houseUUID={houseUUID}>
@@ -189,7 +189,7 @@ export function EditAppComponent(props) {
 
 export function CreateAppComponent(props) {
     return (
-        <BrowserRouter basename={reverse(routes.pages.listing.create)}>
+        <BrowserRouter basename={reverse(PageRoutes.listing.create)}>
             <NavigationContext.Consumer>
                 {navContext =>
                     <Navigator mode={'create'} navContext={navContext}>

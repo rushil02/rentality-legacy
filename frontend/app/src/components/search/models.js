@@ -1,4 +1,4 @@
-import APIModelAdapter, {DateRangeModel} from "core/utils/ModelHelper";
+import APIModelAdapter from "core/utils/ModelHelper";
 import {format} from "date-fns";
 
 export class ESHouse extends APIModelAdapter {
@@ -66,4 +66,13 @@ export class SearchFormModel extends APIModelAdapter {
         this.setData("paginationStart", this.getData("paginationStart") + offset);
         this.setData("paginationEnd", this.getData("paginationEnd") + offset);
     };
+}
+
+
+export class FormOptions {
+    constructor(dbObj) {
+        let fieldOptions = dbObj.field_options || {}
+        this.furnishedOptions = fieldOptions.furnished || {}
+        this.homeTypeOptions = fieldOptions.home_type || {}
+    }
 }

@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from "react"
+import React, { Component } from "react"
 import styles from "./Navigator.module.css"
 import FormSubNav from "./FormSubNav"
 import FormNav from "./FormNav"
@@ -9,10 +9,10 @@ import { activateHouse, deleteHouse } from "components/houseListing/services"
 import { alertUser } from "core/alert/Alert"
 import { DeleteModal, ActivateModal } from "./Modals"
 import {reverse} from "named-urls"
-import routes from "components/routes"
+import {PageRoutes} from "components/routes"
 import {withRouter} from "react-router-dom";
 
-const exitRoute = reverse(routes.pages.dashboard.home);
+const exitRoute = reverse(PageRoutes.dashboard.home);
 
 class Navigator extends Component {
     constructor(props) {
@@ -127,9 +127,9 @@ function NavigatorComponent(props) {
         backBtn = ""
     } else {
         backBtn = (
-            <a type="button" className={"btn float-left " + styles.btn} id="prev-step" onClick={props.onBack}>
+            <button className={"btn float-left " + styles.btn} id="prev-step" onClick={props.onBack}>
                 Back
-            </a>
+            </button>
         )
     }
 

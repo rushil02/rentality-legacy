@@ -1,5 +1,5 @@
 import React from "react"
-import routes from "components/routes"
+import {PageRoutes} from "components/routes"
 import {UserContext} from "./userContext"
 import {ComponentLoadingSpinner} from "core/UIComponents/loadingSpinners/LoadingSpinner"
 import {reverse} from "named-urls"
@@ -13,7 +13,7 @@ export const PrivateRoute = ({component: Component, location, ...componentProps}
                     if (user.isAuthenticated) {
                         return <Component {...componentProps} />
                     } else {
-                        window.location.href = reverse(routes.auth.login) + "?next=" + location.pathname;
+                        window.location.href = reverse(PageRoutes.auth.login) + "?next=" + location.pathname;
                         return null
                     }
                 } else {

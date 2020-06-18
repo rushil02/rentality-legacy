@@ -20,8 +20,9 @@ export default class FormRentAvailabilityComponent extends Component {
                                         onClick={() => {
                                             this.rentInput.focus()
                                         }}
+                                        role={"presentation"}
                                     >
-                                        <label>Rent</label>
+                                        <label htmlFor={"id_main-form-rent"}>Rent</label>
                                         <input
                                             type="number"
                                             name="main-form-rent"
@@ -47,8 +48,9 @@ export default class FormRentAvailabilityComponent extends Component {
                                         onClick={() => {
                                             this.minStayInput.focus()
                                         }}
+                                        role={"presentation"}
                                     >
-                                        <label>Minimum length of stay</label>
+                                        <label htmlFor={"id_main-form-min_stay"}>Minimum length of stay</label>
                                         <input
                                             type="number"
                                             name="main-form-min_stay"
@@ -71,6 +73,7 @@ export default class FormRentAvailabilityComponent extends Component {
                                 <div className="col-md-12 col-lg-6">
                                     <div
                                         className="input number-disp no-background"
+                                        role={"presentation"}
                                         onClick={() => {
                                             this.maxStayInput.focus()
                                         }}
@@ -99,8 +102,9 @@ export default class FormRentAvailabilityComponent extends Component {
                                         onClick={() => {
                                             this.maxPeopleAllowedInput.focus()
                                         }}
+                                        role={"presentation"}
                                     >
-                                        <label>Maximum people allowed</label>
+                                        <label htmlFor={"id_main-form-max_people_allowed"}>Maximum people allowed</label>
                                         <input
                                             type="number"
                                             name="main-form-max_people_allowed"
@@ -113,7 +117,7 @@ export default class FormRentAvailabilityComponent extends Component {
                                             onChange={e => this.props.onFieldChange("maxPeopleAllowed", e.target.value)}
                                         />
                                     </div>
-                                    <small className="form-text text-muted"></small>
+                                    <small className="form-text text-muted"/>
                                     {this.props.errors.maxPeopleAllowed && (
                                         <div className="invalid-feedback">{this.props.errors.maxPeopleAllowed}</div>
                                     )}

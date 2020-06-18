@@ -220,6 +220,7 @@ export default class HouseDetailPageComponent extends Component {
                                         <h2 className={styles.hl2}>About area</h2>
                                         <div className={styles.map}>
                                             <iframe
+                                                title={"House Location Map"}
                                                 width="100%"
                                                 height="100%"
                                                 style={{

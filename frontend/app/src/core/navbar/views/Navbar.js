@@ -4,7 +4,7 @@ import AuthNavbarComponent from "./components/AuthNavbarComponent";
 import AnonNavbarComponent from "./components/AnonNavbarComponent";
 import {reverse} from "named-urls";
 import styles from "./components/Navbar.module.css";
-import routes from "components/routes";
+import {PageRoutes} from "components/routes";
 
 
 class Navbar extends Component {
@@ -17,7 +17,7 @@ class Navbar extends Component {
     }
 
     handleResize = () => {
-        if (this.props.locContext.location.pathname !== routes.pages.home) {
+        if (this.props.locContext.location.pathname !== PageRoutes.home) {
             this.rootEle.style.marginTop = this.menuRef.current.clientHeight + "px";
         }
     };
@@ -55,7 +55,7 @@ class Navbar extends Component {
     }
 
     getCssClasses() {
-        if (this.props.locContext.location.pathname === routes.pages.home) {
+        if (this.props.locContext.location.pathname === PageRoutes.home) {
             return {cssMobile: "", cssClass: " " + styles.session, isHome: true};
         } else {
             return {cssMobile: " " + styles.white, cssClass: " " + styles.white, isHome: false};
@@ -91,16 +91,16 @@ class Navbar extends Component {
                                     >
                                         <ul className={styles.listInline}>
                                             <li className="list-inline-item">
-                                                <a href={reverse(routes.pages.home)}>Home</a>
+                                                <a href={reverse(PageRoutes.home)}>Home</a>
                                             </li>
                                             <li className="list-inline-item">
-                                                <a href={reverse(routes.pages.faq)}>FAQ</a>
+                                                <a href={reverse(PageRoutes.faq)}>FAQ</a>
                                             </li>
                                             <li className="list-inline-item">
-                                                <a href={reverse(routes.pages.howItWorks)}>How It Works</a>
+                                                <a href={reverse(PageRoutes.howItWorks)}>How It Works</a>
                                             </li>
                                             <li className="list-inline-item">
-                                                <a href={reverse(routes.pages.listing.create)}>List Your Home</a>
+                                                <a href={reverse(PageRoutes.listing.create)}>List Your Home</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -146,16 +146,16 @@ function MobileMenu(props) {
             <div className={styles.bottom}>
                 <ul className={styles.listInline}>
                     <li className="list-inline-item">
-                        <a href={reverse(routes.pages.home)}>Home</a>
+                        <a href={reverse(PageRoutes.home)}>Home</a>
                     </li>
                     <li className="list-inline-item">
-                        <a href={reverse(routes.pages.faq)}>FAQ</a>
+                        <a href={reverse(PageRoutes.faq)}>FAQ</a>
                     </li>
                     <li className="list-inline-item">
-                        <a href={reverse(routes.pages.howItWorks)}>How It Works</a>
+                        <a href={reverse(PageRoutes.howItWorks)}>How It Works</a>
                     </li>
                     <li className="list-inline-item">
-                        <a href={reverse(routes.pages.houseListing.create)}>List Your Home</a>
+                        <a href={reverse(PageRoutes.houseListing.create)}>List Your Home</a>
                     </li>
                 </ul>
             </div>

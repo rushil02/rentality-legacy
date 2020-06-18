@@ -1,7 +1,5 @@
-import routes from "components/routes";
 import React, {Component} from "react";
 import App from "./views/App";
-
 
 export default class WelcomeRouter extends Component {
 

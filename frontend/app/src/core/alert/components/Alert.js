@@ -1,14 +1,14 @@
 import React, { Component } from "react"
 import styles from "./Alert.module.css"
 
-function adjustHeight(height) {
+// function adjustHeight(height) {
     // var aTop = $(".menu").outerHeight() + 10;
     // if (height >= aTop) {
     // $(`${styles.alertsHolder}`).css({position: "fixed", top: "10px"});
     // } else {
     // $(`${styles.alertsHolder}`).css({position: "absolute", top: aTop + "px"});
     // }
-}
+// }
 
 export default class AlertComponent extends Component {
     getClasses() {

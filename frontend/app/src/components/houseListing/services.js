@@ -1,6 +1,6 @@
 import axios, { handleError } from "core/utils/serviceHelper"
 import { reverse } from "named-urls"
-import routes from "components/routes"
+import {APIRoutes} from "components/routes"
 import { alertUser } from "core/alert/Alert"
 import {
     Availability,
@@ -18,7 +18,7 @@ import { APIModelListAdapter } from "core/utils/ModelHelper"
 export function verifyUserCanStartListing() {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.userCanList))
+            .get(reverse(APIRoutes.house.userCanList))
             .then(result => {
                 resolve(result.data)
             })
@@ -31,7 +31,7 @@ export function verifyUserCanStartListing() {
 export function getHouseData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.detail, { houseUUID: houseUUID }), {})
+            .get(reverse(APIRoutes.house.detail, { houseUUID: houseUUID }), {})
             .then(result => {
                 resolve(new House(result.data))
             })
@@ -44,7 +44,7 @@ export function getHouseData(houseUUID) {
 export function postHouseData(data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.create), data.serialize())
+            .post(reverse(APIRoutes.house.create), data.serialize())
             .then(result => {
                 resolve(new House(result.data))
             })
@@ -59,7 +59,7 @@ export function postHouseData(data) {
 export function patchHouseData(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .patch(reverse(routes.house.edit, { houseUUID: houseUUID }), data.serialize("__partial__"))
+            .patch(reverse(APIRoutes.house.edit, { houseUUID: houseUUID }), data.serialize("__partial__"))
             .then(result => {
                 resolve(new House(result.data))
             })
@@ -72,7 +72,7 @@ export function patchHouseData(houseUUID, data) {
 export function deleteHouse(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .delete(reverse(routes.house.edit, { houseUUID: houseUUID }))
+            .delete(reverse(APIRoutes.house.edit, { houseUUID: houseUUID }))
             .then(res => {
                 resolve()
             })
@@ -85,7 +85,7 @@ export function deleteHouse(houseUUID) {
 export function activateHouse(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.activate, { houseUUID: houseUUID }))
+            .post(reverse(APIRoutes.house.activate, { houseUUID: houseUUID }))
             .then(res => {
                 resolve()
             })
@@ -98,7 +98,7 @@ export function activateHouse(houseUUID) {
 export function deactivateHouse(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.deactivate, { houseUUID: houseUUID }))
+            .post(reverse(APIRoutes.house.deactivate, { houseUUID: houseUUID }))
             .then(res => {
                 resolve()
             })
@@ -111,7 +111,7 @@ export function deactivateHouse(houseUUID) {
 export function getFormOptions() {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.formOptions), {})
+            .get(reverse(APIRoutes.house.formOptions), {})
             .then(result => {
                 resolve(new FormOptions(result.data))
             })
@@ -124,7 +124,7 @@ export function getFormOptions() {
 export function getFacilityData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.facilities, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.facilities, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, Facility, "id"))
             })
@@ -137,7 +137,7 @@ export function getFacilityData(houseUUID) {
 export function postFacilityData(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.facilities, { houseUUID: houseUUID }), data.serialize(true))
+            .post(reverse(APIRoutes.house.facilities, { houseUUID: houseUUID }), data.serialize(true))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, Facility, "id"))
             })
@@ -150,7 +150,7 @@ export function postFacilityData(houseUUID, data) {
 export function getAvailabilityData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.availability.list, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.availability.list, { houseUUID: houseUUID }))
             .then(result => {
                 let ret = {}
                 result.data.forEach(dbObj => {
@@ -168,7 +168,7 @@ export function getAvailabilityData(houseUUID) {
 export function postAvailabilityData(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.availability.create, { houseUUID: houseUUID }), data)
+            .post(reverse(APIRoutes.house.availability.create, { houseUUID: houseUUID }), data)
             .then(result => {
                 resolve(new Availability(result.data))
             })
@@ -181,7 +181,7 @@ export function postAvailabilityData(houseUUID, data) {
 export function putAvailabilityData(houseUUID, objID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .put(reverse(routes.house.availability.update, { houseUUID: houseUUID, objID: objID }), data)
+            .put(reverse(APIRoutes.house.availability.update, { houseUUID: houseUUID, objID: objID }), data)
             .then(result => {
                 resolve(new Availability(result.data))
             })
@@ -194,7 +194,7 @@ export function putAvailabilityData(houseUUID, objID, data) {
 export function deleteAvailabilityData(houseUUID, objID) {
     return new Promise(function (resolve, reject) {
         axios
-            .delete(reverse(routes.house.availability.remove, { houseUUID: houseUUID, objID: objID }))
+            .delete(reverse(APIRoutes.house.availability.remove, { houseUUID: houseUUID, objID: objID }))
             .then(result => {
                 resolve()
             })
@@ -207,7 +207,7 @@ export function deleteAvailabilityData(houseUUID, objID) {
 export function getRulesData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.rules.list, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.rules.list, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, Rule, "id"))
             })
@@ -220,7 +220,7 @@ export function getRulesData(houseUUID) {
 export function postRulesData(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.rules.update, { houseUUID: houseUUID }), data.serialize(true))
+            .post(reverse(APIRoutes.house.rules.update, { houseUUID: houseUUID }), data.serialize(true))
             .then(result => {
                 resolve(result.data)
             })
@@ -235,7 +235,7 @@ export function postRulesData(houseUUID, data) {
 export function getImagesData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.image.list, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.image.list, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, Image, "uuid"))
             })
@@ -255,7 +255,7 @@ export function postImagesFiles(houseUUID, data, progressTracker) {
         let formData = new FormData()
         formData.append("image", data)
         axios
-            .post(reverse(routes.house.image.upload, { houseUUID: houseUUID }), formData, config)
+            .post(reverse(APIRoutes.house.image.upload, { houseUUID: houseUUID }), formData, config)
             .then(result => {
                 resolve(new Image(result.data))
             })
@@ -271,7 +271,7 @@ export function updateImageData(houseUUID, imageUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
             .patch(
-                reverse(routes.house.image.update, {
+                reverse(APIRoutes.house.image.update, {
                     houseUUID: houseUUID,
                     imageUUID: imageUUID,
                 }),
@@ -291,7 +291,7 @@ export function updateImageData(houseUUID, imageUUID, data) {
 export function deleteImage(houseUUID, imageUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .delete(reverse(routes.house.image.update, { houseUUID: houseUUID, imageUUID: imageUUID }))
+            .delete(reverse(APIRoutes.house.image.update, { houseUUID: houseUUID, imageUUID: imageUUID }))
             .then(result => {
                 if (Object.entries(result.data).length > 0) {
                     resolve(new Image(result.data))
@@ -310,7 +310,7 @@ export function deleteImage(houseUUID, imageUUID) {
 export function getCancellationPolicies(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.canPol.list, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.canPol.list, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, CancellationPolicy, "id"))
             })
@@ -323,7 +323,7 @@ export function getCancellationPolicies(houseUUID) {
 export function postCancellationPolicy(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.canPol.update, { houseUUID: houseUUID }), data.serialize(["objID"]))
+            .post(reverse(APIRoutes.house.canPol.update, { houseUUID: houseUUID }), data.serialize(["objID"]))
             .then(result => {
                 resolve()
             })
@@ -336,7 +336,7 @@ export function postCancellationPolicy(houseUUID, data) {
 export function getNeighbourhoodDescriptors(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.neighbourhoodDescriptors, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.neighbourhoodDescriptors, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, NeighbourhoodDescriptor, "id"))
             })
@@ -349,7 +349,7 @@ export function getNeighbourhoodDescriptors(houseUUID) {
 export function postNeighbourhoodDescriptors(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.neighbourhoodDescriptors, { houseUUID: houseUUID }), data.serialize(true))
+            .post(reverse(APIRoutes.house.neighbourhoodDescriptors, { houseUUID: houseUUID }), data.serialize(true))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, NeighbourhoodDescriptor, "id"))
             })
@@ -362,7 +362,7 @@ export function postNeighbourhoodDescriptors(houseUUID, data) {
 export function getWelcomeTags(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.welcomeTags, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.welcomeTags, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, WelcomeTag, "id"))
             })
@@ -375,7 +375,7 @@ export function getWelcomeTags(houseUUID) {
 export function postWelcomeTags(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.welcomeTags, { houseUUID: houseUUID }), data.serialize(true))
+            .post(reverse(APIRoutes.house.welcomeTags, { houseUUID: houseUUID }), data.serialize(true))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, WelcomeTag, "id"))
             })
@@ -388,7 +388,7 @@ export function postWelcomeTags(houseUUID, data) {
 export function checkHousePayoutInfo(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.checkPayoutDetails, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.house.checkPayoutDetails, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(result)
             })
@@ -401,7 +401,7 @@ export function checkHousePayoutInfo(houseUUID) {
 export function createPaymentInfo(pgCode, houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.createPaymentInfo, { pgCode: pgCode, houseUUID: houseUUID }), data)
+            .post(reverse(APIRoutes.house.createPaymentInfo, { pgCode: pgCode, houseUUID: houseUUID }), data)
             .then(result => {
                 resolve(result.data)
             })
@@ -414,7 +414,7 @@ export function createPaymentInfo(pgCode, houseUUID, data) {
 export function updatePaymentInfo(pgCode, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.updatePaymentInfo, { pgCode: pgCode }), data)
+            .post(reverse(APIRoutes.house.updatePaymentInfo, { pgCode: pgCode }), data)
             .then(result => {
                 resolve(result.data)
             })
@@ -427,7 +427,7 @@ export function updatePaymentInfo(pgCode, data) {
 export function getAddUpdateBankAccount(pgCode) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.house.addUpdateBankAccount, { pgCode: pgCode }))
+            .get(reverse(APIRoutes.house.addUpdateBankAccount, { pgCode: pgCode }))
             .then(result => {
                 resolve(result.data)
             })
@@ -440,7 +440,7 @@ export function getAddUpdateBankAccount(pgCode) {
 export function postAddUpdateBankAccount(pgCode, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.house.addUpdateBankAccount, { pgCode: pgCode }), data)
+            .post(reverse(APIRoutes.house.addUpdateBankAccount, { pgCode: pgCode }), data)
             .then(result => {
                 resolve(result.data)
             })

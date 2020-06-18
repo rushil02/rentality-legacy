@@ -313,14 +313,12 @@ export default class BankDetailsContainer extends Component {
                                     </div>
                                     <div className={"col-12"} style={{ marginTop: "35px", marginBottom: "30px" }}>
                                         {this.state.showEditButton ? (
-                                            <a
-                                                type="button"
+                                            <button
                                                 className="btn float-right imp-button-style"
                                                 onClick={this.onEdit}
-                                                tabIndex={"0"}
                                             >
                                                 Edit
-                                            </a>
+                                            </button>
                                         ) : (
                                             <APIRequestButton
                                                 layoutClasses={"btn float-right imp-button-style"}

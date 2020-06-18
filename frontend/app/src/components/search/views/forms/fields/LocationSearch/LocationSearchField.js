@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import LocationSearchField from "core/UIComponents/LocationESAutosuggest/LocationSearchField";
-import theme from "./LocationSearchField.css";
+import theme from "./LocationSearchField.module.css";
 
 export default class SearchField extends Component {
     render() {

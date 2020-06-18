@@ -5,9 +5,6 @@ import { CardElement } from "@stripe/react-stripe-js"
 import styles from "./CheckoutForm.module.css"
 
 export default class CheckoutForm extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     submit = () => {
         let data = {

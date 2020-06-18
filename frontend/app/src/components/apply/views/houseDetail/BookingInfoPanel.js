@@ -196,6 +196,7 @@ export default class BookingInfoPanel extends Component {
                                 onClick={() => {
                                     inputRefs.guestNumSelect.focus()
                                 }}
+                                role={"presentation"}
                             >
                                 <h2 className={styles.subTitle}>Number of Guests</h2>
                             </div>

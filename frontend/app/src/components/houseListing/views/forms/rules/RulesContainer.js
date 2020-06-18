@@ -3,7 +3,6 @@ import {
     getHouseData,
     getRulesData,
     patchHouseData,
-    postFacilityData,
     postRulesData,
 } from "components/houseListing/services"
 import { RulesComponent } from "./RulesComponent"

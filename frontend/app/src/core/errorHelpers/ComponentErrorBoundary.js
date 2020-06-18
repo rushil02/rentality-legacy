@@ -1,7 +1,7 @@
 import { Component } from "react"
 import React from "react"
 import { reverse } from "named-urls"
-import routes from "components/routes"
+import {PageRoutes} from "components/routes"
 import styles from "./style.module.css"
 
 export default class ComponentErrorBoundary extends Component {
@@ -38,7 +38,7 @@ export default class ComponentErrorBoundary extends Component {
                                             <br />
                                         </p>
                                         <div className="float-right">
-                                            <a href={reverse(routes.contactUs)} className="btn btn-outline-primary">
+                                            <a href={reverse(PageRoutes.contactUs)} className="btn btn-outline-primary">
                                                 Contact us
                                             </a>
                                         </div>

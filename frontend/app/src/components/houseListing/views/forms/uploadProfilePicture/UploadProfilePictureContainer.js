@@ -53,7 +53,7 @@ export default class UploadProfilePictureContainer extends Component {
     }
 
     handleDrop = acceptedFiles => {
-        acceptedFiles.map(file => {
+        acceptedFiles.forEach(file => {
             uploadProfilePic(file).then(result => {
                 this.setState(prevState => ({
                     ...prevState,

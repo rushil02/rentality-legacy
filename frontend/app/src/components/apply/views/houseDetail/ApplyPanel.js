@@ -50,7 +50,7 @@ export default class ApplyPanel extends Component {
     constructor(props) {
         super(props)
         this.genderList = []
-        Object.entries(genders).map(item => {
+        Object.entries(genders).forEach(item => {
             this.genderList.push({ value: item[0], label: item[1] })
         })
     }

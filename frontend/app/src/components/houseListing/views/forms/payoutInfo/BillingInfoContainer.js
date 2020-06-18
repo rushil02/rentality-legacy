@@ -64,7 +64,7 @@ export default class BillingInfoContainer extends Component {
         this.maxDate.setFullYear(this.maxDate.getFullYear() - 18)
 
         this.genderList = []
-        Object.entries(genders).map(item => {
+        Object.entries(genders).forEach(item => {
             this.genderList.push({ value: item[0], label: item[1] })
         })
 
@@ -192,6 +192,7 @@ export default class BillingInfoContainer extends Component {
                                                             autoHide: true,
                                                         })
                                                     }
+                                                    role={"presentation"}
                                                 >
                                                     <b>{this.props.userInfo.getData("accountType")}</b>
                                                 </div>
@@ -225,6 +226,7 @@ export default class BillingInfoContainer extends Component {
                                                                     autoHide: true,
                                                                 })
                                                             }
+                                                            role={"presentation"}
                                                         >
                                                             <b>{this.props.billingCountryName}</b>
                                                         </div>
@@ -338,6 +340,7 @@ export default class BillingInfoContainer extends Component {
                                                             autoHide: true,
                                                         })
                                                     }
+                                                    role={"presentation"}
                                                 >
                                                     <b>{this.props.userInfo.getData("email")}</b>
                                                 </div>

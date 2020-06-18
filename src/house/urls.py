@@ -1,5 +1,6 @@
 from django.urls import path
 
+from house.views.api import HouseFilterOptionsView
 from house.views.api.create import HouseView, FormOptionsView, AvailabilityView, AvailabilityListView, ImageUploadView, \
     FacilityListView, HouseRuleListView, HouseRuleListCreateView, ImagesListView, ImageView, \
     ApplicableCancellationPolicyListView, CancellationPolicyView, NeighbourhoodDescriptorListView, WelcomeTagsListView, \
@@ -27,6 +28,8 @@ urlpatterns = [
     path('thumbnail/<uuid:house_uuid>', ThumbnailPublicView.as_view(), name='thumbnail'),
     path('current-availability/<uuid:house_uuid>', NetAvailableDatesView.as_view(), name='curr_avail'),
     path('current-unavailability/<uuid:house_uuid>', NetUnavailableDatesView.as_view(), name='curr_avail_rev'),
+
+    path('filter-options', HouseFilterOptionsView.as_view(), name='filter_options'),
 
     path('verify-user', VerifyUserCanStartListing.as_view(), name='verify_user_can_start_listing'),
 

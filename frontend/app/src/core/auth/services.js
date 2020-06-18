@@ -1,5 +1,5 @@
 import axios  from "core/utils/serviceHelper"
-import routes from "components/routes";
+import {APIRoutes} from "components/routes";
 
 import { User } from "./models"
 import { alertUser } from "core/alert/Alert"
@@ -7,7 +7,7 @@ import { alertUser } from "core/alert/Alert"
 export function getUserNavDetails(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(routes.userNavInfo, {})
+            .get(APIRoutes.userNavInfo, {})
             .then(result => {
                 resolve(new User(result.data))
             })

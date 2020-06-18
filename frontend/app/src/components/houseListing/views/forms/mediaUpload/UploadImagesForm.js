@@ -73,7 +73,7 @@ export default class UploadImagesForm extends Component {
     }
 
     handleDrop = acceptedFiles => {
-        acceptedFiles.map(file => {
+        acceptedFiles.forEach(file => {
             postImagesFiles(this.props.houseUUID, file).then(image => {
                 this.setState(prevState => ({
                     ...prevState,

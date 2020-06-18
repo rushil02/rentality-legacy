@@ -191,7 +191,7 @@ export default class AvailabilitySelectorComponent extends Component {
         }
 
         return (
-            <div className={"card-body " + styles.cardBody} onClick={action}>
+            <div className={"card-body " + styles.cardBody} onClick={action} role={"presentation"}>
                 <div className={styles.cardTextContent}>{this.getInfoText()}</div>
                 <div className="loading-container">{this.getSyncIndicator()}</div>
                 <div className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>

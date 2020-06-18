@@ -69,7 +69,7 @@ export default class UserProfileContainer extends Component {
         this.maxDate.setFullYear(this.maxDate.getFullYear() - 18)
 
         this.genderList = []
-        Object.entries(genders).map(item => {
+        Object.entries(genders).forEach(item => {
             this.genderList.push({ value: item[0], label: item[1] })
         })
 
@@ -165,6 +165,7 @@ export default class UserProfileContainer extends Component {
                                                     <div style={{ float: "left" }}>Account Type</div>
                                                     <div
                                                         style={{ float: "right" }}
+                                                        role={"presentation"}
                                                         onClick={() =>
                                                             alertUser.init({
                                                                 message:
@@ -200,6 +201,7 @@ export default class UserProfileContainer extends Component {
                                                             <div style={{ float: "left" }}>Country</div>
                                                             <div
                                                                 style={{ float: "right" }}
+                                                                role={"presentation"}
                                                                 onClick={() =>
                                                                     alertUser.init({
                                                                         message:
@@ -313,6 +315,7 @@ export default class UserProfileContainer extends Component {
                                                     <div style={{ float: "left" }}>Email</div>
                                                     <div
                                                         style={{ float: "right" }}
+                                                        role={"presentation"}
                                                         onClick={() =>
                                                             alertUser.init({
                                                                 message:

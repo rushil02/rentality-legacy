@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton"
 import styles from "./Navigator.module.css"
-import routes from "components/routes"
+import {PageRoutes} from "components/routes"
 import { reverse } from "named-urls"
 
 export function ActivateModal(props) {
@@ -11,25 +11,24 @@ export function ActivateModal(props) {
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
-    const successRoute = reverse(routes.pages.dashboard.home);
+    const successRoute = reverse(PageRoutes.dashboard.home);
 
     const getButton = () => {
         if (props.isAPIRequestButton === true && props.isDisabled === true) {
             return (
-                <a
-                    type="button"
+                <button
                     className="btn float-right imp-button-style disabled"
                     aria-disabled="true"
                     tabIndex={"-1"}
                 >
                     Activate
-                </a>
+                </button>
             )
         } else if (props.isAPIRequestButton === true && props.isDisabled === false) {
             return (
-                <a type="button" className="btn float-right imp-button-style" onClick={handleShow} tabIndex={"0"}>
+                <button className="btn float-right imp-button-style" onClick={handleShow} tabIndex={"0"}>
                     Activate
-                </a>
+                </button>
             )
         } else {
             return (

@@ -103,7 +103,7 @@ export default function FormPrimaryComponent(props) {
                                     )}
                                 </FormOptionsCache.Consumer>
                                 {displayErrors(props.errors.furnished)}
-                                <small className="form-text text-muted"></small>
+                                <small className="form-text text-muted"/>
                             </div>
                             <div className="col-md-12 col-lg-6">
                                 <div
@@ -111,8 +111,9 @@ export default function FormPrimaryComponent(props) {
                                     onClick={() => {
                                         inputRefs.bedroomInput.focus()
                                     }}
+                                    role={"presentation"}
                                 >
-                                    <label>Number of Bedrooms</label>
+                                    <label htmlFor={"id_main-form-bedrooms"}>Number of Bedrooms</label>
                                     <input
                                         type="number"
                                         name="main-form-bedrooms"
@@ -127,7 +128,7 @@ export default function FormPrimaryComponent(props) {
                                 </div>
                                 {displayErrors(props.errors.numBedrooms)}
 
-                                <small className="form-text text-muted"></small>
+                                <small className="form-text text-muted"/>
                             </div>
                             <div className="col-md-12 col-lg-6">
                                 <div
@@ -135,8 +136,9 @@ export default function FormPrimaryComponent(props) {
                                     onClick={() => {
                                         inputRefs.bathroomsInput.focus()
                                     }}
+                                    role={"presentation"}
                                 >
-                                    <label>Number of Bathrooms</label>
+                                    <label htmlFor={"id_main-form-bathrooms"}>Number of Bathrooms</label>
                                     <input
                                         type="number"
                                         name="main-form-bathrooms"
@@ -158,8 +160,9 @@ export default function FormPrimaryComponent(props) {
                                     onClick={() => {
                                         inputRefs.parkSpaceInput.focus()
                                     }}
+                                    role={"presentation"}
                                 >
-                                    <label>Number of parking spaces</label>
+                                    <label htmlFor={"id_main-form-parking"}>Number of parking spaces</label>
                                     <input
                                         type="number"
                                         name="main-form-parking"

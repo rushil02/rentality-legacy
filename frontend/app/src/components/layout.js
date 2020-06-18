@@ -7,10 +7,9 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import {useStaticQuery, graphql} from "gatsby"
 import {LocationProvider} from "@reach/router"
 
-import Header from "./header"
+// import Header from "./header"
 import Alert from "core/alert/Alert";
 import {UserStore} from "core/auth/userContext";
 import Navbar from "core/navbar/views/Navbar";
@@ -19,15 +18,15 @@ import Footer from "core/footer/views/Footer";
 // import ComponentErrorBoundary from "../../../old/src/core/errorHelpers/ComponentErrorBoundary";
 
 const Layout = ({children}) => {
-    const data = useStaticQuery(graphql`
-        query SiteTitleQuery {
-            site {
-                siteMetadata {
-                    title
-                }
-            }
-        }
-    `)
+    // const data = useStaticQuery(graphql`
+    //     query SiteTitleQuery {
+    //         site {
+    //             siteMetadata {
+    //                 title
+    //             }
+    //         }
+    //     }
+    // `)
 
     return (
         <div>

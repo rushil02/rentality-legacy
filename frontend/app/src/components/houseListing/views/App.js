@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import {reverse} from "named-urls"
 import { navigate } from "gatsby"
-import routes from "components/routes"
+import {PageRoutes} from "components/routes"
 import {getFormOptions} from "../services"
 import {StoreProvider} from "../dataContext"
 import {CreateAppComponent, EditAppComponent} from "./AppComponent"
@@ -42,7 +42,7 @@ export default class App extends Component {
     }
 
     nextToEditMode = houseUUID => {
-        navigate(reverse(routes.pages.listing.edit, {houseUUID: houseUUID}) + "/2")
+        navigate(reverse(PageRoutes.listing.edit, {houseUUID: houseUUID}) + "/2")
     }
 
     render() {

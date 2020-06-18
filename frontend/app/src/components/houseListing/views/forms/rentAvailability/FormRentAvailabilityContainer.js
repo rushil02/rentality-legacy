@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import FormRentAvailabilityComponent from "./FormRentAvailabilityComponent"
-import { postHouseData, patchHouseData, getHouseData } from "../../../services"
+import { patchHouseData, getHouseData } from "../../../services"
 import { House } from "../../../models"
 
 export default class FormRentAvailabilityContainer extends Component {

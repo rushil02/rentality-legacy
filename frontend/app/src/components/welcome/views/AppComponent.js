@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Slider from "react-slick";
 import {UserContext} from "core/auth/userContext";
 import {reverse} from "named-urls";
-import routes from "components/routes";
+import {PageRoutes} from "components/routes";
 import styles from "./App.module.css";
 import "./ImageCarousel.module.css";
 import theme from "./SearchInput.module.css";
@@ -17,7 +17,7 @@ function GetRecommendedHouse(props) {
 
     return (
         <div className={mainDivClass}>
-            <a href={reverse(routes.pages.apply.houseInfo, {houseUUID: house.getData("uuid")})} className={styles.list}>
+            <a href={reverse(PageRoutes.apply.houseInfo, {houseUUID: house.getData("uuid")})} className={styles.list}>
                 <div className={styles.image}>
                     <img src={house.getData("thumbnail")} className="w-100" alt="" title="" />
                     <div className="{% if house.is_marked_leased %} leased-img-tag {% else %} d-none {% endif %}">
@@ -219,12 +219,6 @@ export default class AppComponent extends Component {
                         <div className={styles.bests}>
                             <div className="container">
                                 <h1 className={styles.title}>Recommended for you</h1>
-                                <div className="row">
-                                    <div className="col-md-8">
-                                        <h2 className={styles.subTitle}/>
-                                    </div>
-                                    <div className="col-md-4 text-right align-self-end"/>
-                                </div>
                                 <div className={styles.lists}>
                                     <div className="row">
                                         {this.props.houses
@@ -254,6 +248,7 @@ export default class AppComponent extends Component {
                                 </div>
                                 <div className={styles.videoContainer}>
                                     <iframe
+                                        title={"How Does Rentality Work?"}
                                         src="https://www.youtube.com/embed/2JOkRAdTDNE"
                                         frameBorder="0"
                                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -269,7 +264,6 @@ export default class AppComponent extends Component {
                         <div className={styles.cities}>
                             <div className="container">
                                 <h1 className={styles.title}>Discover Furnished Apartments</h1>
-                                <h2 className={styles.subTitle}></h2>
                                 <div className={styles.bigLists}>
                                     <div className="row">
                                         <div className="col-md-6">

@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { reverse } from "named-urls"
-import routes from "components/routes"
+import routes, {PageRoutes} from "components/routes"
 import styles from "./Navbar.module.css"
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -34,7 +34,7 @@ export default class AuthNavbarComponent extends Component {
                             <Dropdown.Toggle bsPrefix={styles.dropdownToggle} as="a">
                                 Message<span>0</span>
                             </Dropdown.Toggle>
-                            <Dropdown.Menu alignRight></Dropdown.Menu>
+                            <Dropdown.Menu alignRight/>
                         </Dropdown>
                     </li>
                     <li className={"list-inline-item " + styles.notification}>
@@ -42,11 +42,11 @@ export default class AuthNavbarComponent extends Component {
                             <Dropdown.Toggle bsPrefix={styles.dropdownToggle} as="a">
                                 Notifications<span>0</span>
                             </Dropdown.Toggle>
-                            <Dropdown.Menu alignRight></Dropdown.Menu>
+                            <Dropdown.Menu alignRight/>
                         </Dropdown>
                     </li>
                     <li ref={this.liPersonRef} className={"list-inline-item " + styles.person}>
-                        <a href={reverse(routes.pages.dashboard.base)} style={{textTransform: "capitalize"}}>
+                        <a href={reverse(PageRoutes.dashboard.base)} style={{textTransform: "capitalize"}}>
                             <div className={styles.image}>
                                 <img
                                     src={
@@ -69,13 +69,13 @@ export default class AuthNavbarComponent extends Component {
                             <Dropdown.Menu alignRight>
                                 <Dropdown.Item
                                     bsPrefix={"dropdown-item " + styles.darkText}
-                                    href={reverse(routes.pages.user.userProfile)}
+                                    href={reverse(PageRoutes.user.userProfile)}
                                 >
                                     My Profile
                                 </Dropdown.Item>
                                 <Dropdown.Item
                                     bsPrefix={"dropdown-item " + styles.darkText}
-                                    href={reverse(routes.auth.logout)}
+                                    href={reverse(PageRoutes.auth.logout)}
                                 >
                                     Logout
                                 </Dropdown.Item>

@@ -5,7 +5,7 @@ import {getRecommendedHouses} from "../services";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 import {APIModelListAdapter} from "core/utils/ModelHelper";
 import {reverse} from "named-urls";
-import routes from "components/routes";
+import {PageRoutes} from "components/routes";
 import queryString from "query-string";
 
 export default class App extends Component {
@@ -44,12 +44,12 @@ export default class App extends Component {
     };
 
     handleCityLabel = (e) => {
-        window.location.href = reverse(routes.pages.searchPage) + "?location=" + e.target.innerText.trim();
+        window.location.href = reverse(PageRoutes.searchPage) + "?location=" + e.target.innerText.trim();
     };
 
     handleSearch = () => {
         window.location.href =
-            reverse(routes.pages.searchPage) + "?" + queryString.stringify(this.state.searchForm.serialize());
+            reverse(PageRoutes.searchPage) + "?" + queryString.stringify(this.state.searchForm.serialize());
     };
 
     render() {
