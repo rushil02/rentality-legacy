@@ -11,9 +11,6 @@ const renderSuggestion = suggestion => (
 )
 
 export default class PostalCodeAutoSuggestComponent extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         const inputProps = {

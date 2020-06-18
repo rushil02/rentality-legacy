@@ -71,7 +71,6 @@ export default class APIModelAdapter {
             const keyList = settings.key.split(".")
             value = source
             for (let i = 0; i < keyList.length; i++) {
-                console.log(value, keyList[i], "HOH")
                 if (Object.prototype.hasOwnProperty.call(value, keyList[i])) {
                     value = value[keyList[i]]
                     if (value === null && i !== keyList.length - 1) {

@@ -128,6 +128,7 @@ export default class DateRangePickerComponent extends Component {
                 {this.state.show ? (
                     <div
                         tabIndex={"-1"}
+                        role={"presentation"}
                         style={styleGuide.calendarContainer}
                         onMouseEnter={(e) => this.setInUse()}
                         onMouseLeave={(e) => this.setNotInUse()}

@@ -1,4 +1,4 @@
-a.btn {
+.btn {
     font-size: 16px;
     border-radius: 99px;
     font-weight: 700;
@@ -10,20 +10,26 @@ a.btn {
     -webkit-appearance: none;
 }
 
-a.btn:hover,
-a.btn:focus {
+.btn:hover,
+.btn:focus {
     text-decoration: none;
     color: #2a2b32 !important;
     background-color: #36ffb1 !important;
 }
 
-a.errorBtn {
+.errorBtn {
     color: red !important;
     background-color: #e6e6e6 !important;
     pointer-events: none !important;
 }
 
-a.loadingBtn {
+.errorBtn:focus {
+    text-decoration: none;
+    color: red !important;
+    background-color: #e6e6e6 !important;
+}
+
+.loadingBtn {
     pointer-events: none !important;
 }
 

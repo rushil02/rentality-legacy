@@ -88,7 +88,8 @@ export default class DatePickerComponent extends Component {
         return (
             <React.Fragment>
                 <div
-                    tabIndex={"0"}
+                    tabIndex={0}
+                    role={"button"}
                     className={this.props.containerClasses || "form-control no-background"}
                     style={styleGuide.container}
                     onFocus={e => this.showCalendar()}
@@ -102,7 +103,8 @@ export default class DatePickerComponent extends Component {
                     </div>
                     {this.state.show ? (
                         <div
-                            tabIndex={"-1"}
+                            tabIndex={-1}
+                            role={"presentation"}
                             style={styleGuide.calendarContainer}
                             onMouseEnter={e => this.setInUse()}
                             onMouseLeave={e => this.setNotInUse()}

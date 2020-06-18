@@ -162,36 +162,35 @@ export default class APIRequestButton extends Component {
 
         if (this.props.isDisabled) {
             return (
-                <a type="button" className={layoutClasses + " disabled"} aria-disabled="true" tabIndex={"-1"}>
+                <button className={layoutClasses + " disabled"} aria-disabled="true" tabIndex={"-1"}>
                     <div className={this.props.textDefaultClasses || styles.text}>{_textOptions.default}</div>
-                </a>
+                </button>
             )
         }
 
         if (this.state.status === "default") {
             return (
-                <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
+                <button className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
                     <div className={this.props.textDefaultClasses || styles.text}>{_textOptions.default}</div>
-                </a>
+                </button>
             )
         } else if (this.state.status === "error") {
             this.attachListener()
             layoutClasses += this.props.errorClass ? " " + this.props.errorClass : " disabled " + styles.errorBtn
             return (
-                <a
-                    type="button"
+                <button
                     className={layoutClasses}
                     onClick={this.onActionClick}
                     aria-disabled="true"
                     tabIndex={"-1"}
                 >
                     <div className={this.props.textErrorClasses || styles.text}>{_textOptions.error}</div>
-                </a>
+                </button>
             )
         } else if (this.state.status === "loading") {
             layoutClasses += this.props.loadingClass ? " " + this.props.loadingClass : " " + styles.loadingBtn
             return (
-                <a type="button" className={layoutClasses} onClick={this.onActionClick}>
+                <button className={layoutClasses} onClick={this.onActionClick}>
                     <div className={this.props.loadingContainerClasses || styles.loadingContainer}>
                         <PulseLoader
                             // css={override}
@@ -203,29 +202,28 @@ export default class APIRequestButton extends Component {
                     </div>
 
                     <div className={this.props.textLoadingClasses || styles.text}>{_textOptions.loading}</div>
-                </a>
+                </button>
             )
         } else if (this.state.status === "done") {
             this.attachListener()
             if (this.props.doneDisabled) {
                 layoutClasses += this.props.doneClass ? " " + this.props.doneClass : " disabled " + styles.doneBtn
                 return (
-                    <a
-                        type="button"
+                    <button
                         className={layoutClasses}
                         onClick={this.onActionClick}
                         aria-disabled="true"
                         tabIndex={"-1"}
                     >
                         <div className={this.props.textDoneClasses || styles.text}>{_textOptions.done}</div>
-                    </a>
+                    </button>
                 )
             } else {
                 layoutClasses += this.props.doneClass ? " " + this.props.doneClass : " " + styles.doneBtn
                 return (
-                    <a type="button" className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
+                    <button className={layoutClasses} onClick={this.onActionClick} tabIndex={"0"}>
                         <div className={this.props.textDoneClasses || styles.text}>{_textOptions.done}</div>
-                    </a>
+                    </button>
                 )
             }
         }

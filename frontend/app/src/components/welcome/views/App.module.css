@@ -158,6 +158,7 @@
     user-select: none;
     line-height: 1.5;
     transition: all 0.25s ease-in-out;
+    background-color: unset;
 }
 
 .header .search .cityTags #city a {

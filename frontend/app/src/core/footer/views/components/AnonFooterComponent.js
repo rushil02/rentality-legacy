@@ -29,25 +29,25 @@ export default class AnonFooterComponent extends Component {
                             <div className="list">
                                 <ul className="list-unstyled">
                                     <li>
-                                        <a href={reverse(routes.home)}>Terms of Service</a>
+                                        <a href={reverse(routes.pages.home)}>Terms of Service</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.home)}>Privacy Policy</a>
+                                        <a href={reverse(routes.pages.home)}>Privacy Policy</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.faq)}>FAQs</a>
+                                        <a href={reverse(routes.pages.faq)}>FAQs</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.home)}>Cookies</a>
+                                        <a href={reverse(routes.pages.home)}>Cookies</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.blogs)}>Blog</a>
+                                        <a href={reverse(routes.pages.blogs)}>Blog</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(routes.home)}>About Us</a>
+                                        <a href={reverse(routes.pages.home)}>About Us</a>
                                     </li>
                                     <li>
-                                        <a href="">Help</a>
+                                        <a href={reverse(routes.pages.contactUs)}>Help</a>
                                     </li>
                                 </ul>
                             </div>

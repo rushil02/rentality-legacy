@@ -107,7 +107,7 @@ export default class AppComponent extends Component {
                             <div className={styles.search}>
                                 <div className={"container-fluid " + styles.searchContainer}>
                                     <div className="row">
-                                        <div className="col-xl-1"></div>
+                                        <div className="col-xl-1"/>
                                         <div className="col-12 col-xl-10">
                                             <div>
                                                 <div className={styles.detail}>
@@ -134,7 +134,7 @@ export default class AppComponent extends Component {
                                                             onChange={this.props.onDateRangeChange}
                                                             inputClass={styles.formControl + " " + styles.date}
                                                             divClass={"col-md-4"}
-                                                        ></DateRangePickerComponent>
+                                                        />
                                                         {/* <div styles="position: relative">
                                                         <div className={styles.dropdown}>
                                                             <input
@@ -163,52 +163,52 @@ export default class AppComponent extends Component {
                                             </div>
                                             <div className={styles.cityTags}>
                                                 <div id="city" className={styles.city}>
-                                                    <label
+                                                    <button
                                                         className={styles.btn + " btn-link"}
                                                         onClick={this.props.handleCityLabel}
                                                     >
                                                         Melbourne
-                                                    </label>
-                                                    <label
+                                                    </button>
+                                                    <button
                                                         className={styles.btn + " btn-link"}
                                                         onClick={this.props.handleCityLabel}
                                                     >
                                                         Sydney
-                                                    </label>
-                                                    <label
+                                                    </button>
+                                                    <button
                                                         className={styles.btn + " btn-link"}
                                                         onClick={this.props.handleCityLabel}
                                                     >
                                                         Brisbane
-                                                    </label>
-                                                    <label
+                                                    </button>
+                                                    <button
                                                         className={styles.btn + " btn-link"}
                                                         onClick={this.props.handleCityLabel}
                                                     >
                                                         Adelaide
-                                                    </label>
-                                                    <label
+                                                    </button>
+                                                    <button
                                                         className={styles.btn + " btn-link"}
                                                         onClick={this.props.handleCityLabel}
                                                     >
                                                         Canberra
-                                                    </label>
-                                                    <label
+                                                    </button>
+                                                    <button
                                                         className={styles.btn + " btn-link"}
                                                         onClick={this.props.handleCityLabel}
                                                     >
                                                         Perth
-                                                    </label>
-                                                    <label
+                                                    </button>
+                                                    <button
                                                         className={styles.btn + " btn-link"}
                                                         onClick={this.props.handleCityLabel}
                                                     >
                                                         Gold Coast
-                                                    </label>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-xl-1"></div>
+                                        <div className="col-xl-1"/>
                                     </div>
                                 </div>
                             </div>
@@ -221,9 +221,9 @@ export default class AppComponent extends Component {
                                 <h1 className={styles.title}>Recommended for you</h1>
                                 <div className="row">
                                     <div className="col-md-8">
-                                        <h2 className={styles.subTitle}></h2>
+                                        <h2 className={styles.subTitle}/>
                                     </div>
-                                    <div className="col-md-4 text-right align-self-end"></div>
+                                    <div className="col-md-4 text-right align-self-end"/>
                                 </div>
                                 <div className={styles.lists}>
                                     <div className="row">
@@ -290,7 +290,7 @@ export default class AppComponent extends Component {
                                                                     Australia
                                                                 </h1>
                                                             </div>
-                                                            <div className="col-6 align-self-center text-right"></div>
+                                                            <div className="col-6 align-self-center text-right"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -315,7 +315,7 @@ export default class AppComponent extends Component {
                                                                         Australia
                                                                     </h1>
                                                                 </div>
-                                                                <div className="col-6 align-self-center text-right"></div>
+                                                                <div className="col-6 align-self-center text-right"/>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -11,10 +11,6 @@ function adjustHeight(height) {
 }
 
 export default class AlertComponent extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     getClasses() {
         let klassString = "alert alert-" + this.props.details.alertType
 
