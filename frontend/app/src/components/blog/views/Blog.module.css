@@ -1,0 +1,725 @@
+/***************************/
+/***** page blog start *****/
+/***************************/
+
+.pageBlog {
+    padding-top: 60px;
+    padding-bottom: 100px;
+}
+
+.pageBlog .title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.pageBlog .leftSlide {
+    position: relative;
+    z-index: 0;
+}
+
+.pageBlog .leftSlide .slide {
+    position: relative;
+}
+
+.pageBlog .leftSlide .slide .title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #3fc692;
+}
+
+.pageBlog .leftPost .post {
+    margin-bottom: 50px;
+}
+
+.pageBlog .leftPost .post a {
+    text-decoration: none;
+}
+
+.pageBlog .leftPost .post a h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #333333;
+    height: 85px;
+    position: relative;
+    margin-top: 15px;
+    transition: all 0.25s ease-in-out;
+}
+
+.pageBlog .leftPost .post a:hover h1 {
+    color: #3fc692;
+}
+
+.pageBlog .leftPost .post a h1::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #029bbf;
+    width: 75%;
+    height: 1px;
+}
+
+.pageBlog .leftPost .post a p {
+    font-size: 13px;
+    font-weight: 400;
+    color: #6d6d6d;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.pageBlog .leftPost .post a .tag {
+    font-size: 12px;
+    font-weight: 400;
+    color: #171717;
+    padding-left: 26px;
+    background-image: url("images/page-blog/left-post/tag.svg");
+    background-repeat: no-repeat;
+    background-position: left 5px;
+}
+
+.pageBlog .leftPost .post a .date {
+    font-size: 15px;
+    font-weight: 300;
+    color: #171717;
+    text-align: right;
+}
+
+.pageBlog .leftPage {
+    text-align: center;
+}
+
+.pageBlog .leftPage .list-inline {
+    margin-bottom: 0;
+}
+
+.pageBlog .leftPage .list-inline li a:hover,
+.pageBlog .leftPage .list-inline li.active a {
+    color: #3fc692;
+    border: 3px solid #3fc692;
+    padding: 3px;
+}
+
+.pageBlog .leftPage .list-inline li a {
+    font-size: 16px;
+    font-weight: 700;
+    color: #919191;
+    width: 35px;
+    display: inline-block;
+    text-align: center;
+    background-color: #ffffff;
+    border: 1px solid #b7b7b7;
+    border-radius: 5px;
+    padding: 5px;
+    line-height: 16px;
+    transition: all 0.25s ease-in-out;
+}
+
+.pageBlog .leftPage .list-inline li a:hover,
+.pageBlog .leftPage .list-inline li a:focus {
+    text-decoration: none;
+}
+
+.pageBlog .leftPage .list-inline li:not(:last-child) {
+    margin-right: 0px;
+}
+
+.pageBlog .leftPage .list-inline li.left {
+    float: left;
+}
+
+.pageBlog .leftPage .list-inline li.left a {
+    background-color: #3fc692;
+    width: 35px;
+    height: 28px;
+    border: none;
+    background-image: url("images/page-blog/left-page/left.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.pageBlog .leftPage .list-inline li.right {
+    float: right;
+}
+
+.pageBlog .leftPage .list-inline li.right a {
+    background-color: #3fc692;
+    width: 35px;
+    height: 28px;
+    border: none;
+    background-image: url("images/page-blog/left-page/right.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.pageBlog .rightSearch {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.pageBlog .rightSearch .title {
+    font-size: 15px;
+    font-weight: 400;
+    color: #a5a5a5;
+    padding-left: 15px;
+    margin-bottom: 20px;
+}
+
+.pageBlog .rightSearch .form {
+    background-color: #f3f3f3;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.pageBlog .rightSearch .form input.form-control {
+    background-color: transparent;
+    border: none;
+}
+
+.pageBlog .rightSearch .form input.form-control:hover,
+.pageBlog .rightSearch .form input.form-control:focus {
+    box-shadow: none;
+}
+
+.pageBlog .rightSearch .form .btn {
+    font-size: 15px;
+    font-weight: 400;
+    color: #ffffff;
+    background-color: #2a2b32;
+    border-radius: 99px;
+    transition: all 0.25s ease-in-out;
+}
+
+.pageBlog .rightSearch .form .btn:hover {
+    background-color: #3fc692;
+}
+
+.pageBlog .rightSearch .form .btn:hover,
+.pageBlog .rightSearch .form .btn:focus {
+    text-decoration: none;
+}
+
+.pageBlog .rightPost .title {
+    font-size: 15px;
+    font-weight: 400;
+    color: #a5a5a5;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d4d4d4;
+    margin-bottom: 10px;
+}
+
+.pageBlog .rightPost .post {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d4d4d4;
+    margin-bottom: 10px;
+}
+
+.pageBlog .rightPost .post a {
+}
+
+.pageBlog .rightPost .post a:hover,
+.pageBlog .rightPost .post a:focus {
+    text-decoration: none;
+}
+
+.pageBlog .rightPost .post a h1 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 30px;
+    transition: all 0.25s ease-in-out;
+}
+
+.pageBlog .rightPost .post a:hover h1 {
+    color: #3fc692;
+}
+
+.pageBlog .rightPost .post a p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #898989;
+    margin-bottom: 0;
+}
+
+.pageBlog .rightTag .title {
+    font-size: 15px;
+    font-weight: 400;
+    color: #a5a5a5;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d4d4d4;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+
+.pageBlog .rightTag .list-inline {
+    margin-bottom: 0;
+}
+
+.pageBlog .rightTag .list-inline li {
+    margin-top: 8px;
+}
+
+.pageBlog .rightTag .list-inline li a {
+    font-size: 12px;
+    font-weight: 400;
+    color: #a5a5a5;
+    border: 1px solid #cfcfcf;
+    padding: 3px 12px;
+    border-radius: 99px;
+    transition: all 0.25s ease-in-out;
+}
+
+.pageBlog .rightTag .list-inline li a:hover {
+    color: #3fc692;
+    border: 1px solid #3fc692;
+}
+
+.pageBlog .rightTag .list-inline li a:hover,
+.pageBlog .rightTag .list-inline li a:focus {
+    text-decoration: none;
+}
+
+.pageBlog .rightTag .list-inline li:not(:last-child) {
+    margin-right: 0;
+}
+
+.pageBlog .leftDetail h1 {
+    font-size: 35px;
+    font-weight: 700;
+    color: #171717;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.pageBlog .leftDetail .tag {
+    font-size: 17px;
+    font-weight: 400;
+    color: #171717;
+    padding-left: 26px;
+    background-image: url("images/page-blog/left-detail/tag.svg");
+    background-repeat: no-repeat;
+    background-position: left 5px;
+}
+
+.pageBlog .leftDetail .by {
+    text-align: right;
+}
+
+.pageBlog .leftDetail .by a {
+    color: #029bbf;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.pageBlog .leftDetail p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #3f3f3f;
+    margin-bottom: 40px;
+}
+
+.pageBlog .leftDetail p:last-of-type {
+    margin-bottom: 0;
+}
+
+.pageBlog .leftDetail p.date {
+    font-size: 17px;
+    color: #171717;
+    margin-top: 25px;
+}
+
+.pageBlog .leftDetail .video {
+    margin-top: 40px;
+    position: relative;
+    cursor: pointer;
+}
+
+.pageBlog .leftDetail .video .play {
+    position: absolute;
+    left: 50%;
+    right: 0;
+    top: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    background-image: url("images/page-blog/left-detail/video.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 135px;
+    height: 95px;
+    z-index: 1;
+}
+
+.pageBlog .leftDetail .comment {
+    margin-top: 100px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #2e2c34;
+}
+
+.pageBlog .leftDetail .comment .rate {
+    text-align: right;
+}
+
+.pageBlog .leftDetail .comment .rate .stars {
+    margin-bottom: 10px;
+}
+
+.pageBlog .leftDetail .comment .rate .star {
+    background-image: url("images/page-blog/left-detail/star.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.pageBlog .leftDetail .comment .rate .star.active {
+    background-image: url("images/page-blog/left-detail/star-active.svg");
+}
+
+.pageBlog .leftDetail .comment .rate .star:not(:first-child) {
+    margin-left: 5px;
+}
+
+.pageBlog .leftDetail .comment h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #2a2a2a;
+    margin-bottom: 20px;
+}
+
+.pageBlog .leftDetail .comment textarea.form-control {
+    background-color: #f2f2f2;
+    font-size: 15px;
+    color: #2e2c34;
+    border: none;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.pageBlog .leftDetail .comment textarea.form-control::placeholder {
+    opacity: 1;
+    color: #2e2c34;
+}
+
+.pageBlog .leftDetail .comment textarea.form-control:hover,
+.pageBlog .leftDetail .comment textarea.form-control:focus {
+    box-shadow: none;
+}
+
+.pageBlog .leftDetail .comment input.form-control {
+    border: none;
+    border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 20px;
+}
+
+.pageBlog .leftDetail .comment input.form-control::placeholder {
+    opacity: 1;
+    color: #a1a1a1;
+}
+
+.pageBlog .leftDetail .comment input.form-control:hover,
+.pageBlog .leftDetail .comment input.form-control:focus {
+    box-shadow: none;
+}
+
+.pageBlog .leftDetail .comment button.btn {
+    background-color: #2a2b32;
+    font-size: 17px;
+    font-weight: 700;
+    color: #36ffb1;
+    padding: 10px 40px;
+    border-radius: 99px;
+    float: right;
+}
+
+.pageBlog .leftDetail .comment button.btn:hover {
+    background-color: #36ffb1;
+    color: #2a2b32;
+}
+
+.pageBlog .leftDetail .comment button.btn:hover,
+.pageBlog .leftDetail .comment button.btn:focus {
+    text-decoration: none;
+}
+
+.pageBlog .leftDetail .comment .captcha {
+    margin-top: 20px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.pageBlog .leftDetail .comment .captcha input.form-control {
+    margin-bottom: 10px;
+    border-bottom: 0;
+}
+
+.pageBlog .leftDetail .comment p {
+    font-size: 15px;
+    font-weight: 400;
+    color: #6c6c6c;
+    margin-bottom: 20px;
+}
+
+.pageBlog .leftDetail .comment .profile {
+    margin-top: 50px;
+}
+
+.pageBlog .leftDetail .comment .profile h1 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.pageBlog .leftDetail .comment .profile .star {
+    display: inline-block;
+    width: 99px;
+    height: 14px;
+    background-image: url("images/page-blog/left-detail/comment-start.svg");
+    background-repeat: repeat-x;
+    background-position: left center;
+    margin-bottom: 20px;
+}
+
+.pageBlog .leftDetail .comment .profile .star.x1 {
+    width: 21px;
+}
+
+.pageBlog .leftDetail .comment .profile .star.x2 {
+    width: 42px;
+}
+
+.pageBlog .leftDetail .comment .profile.star.x3 {
+    width: 63px;
+}
+
+.pageBlog .leftDetail .comment .profile .star.x4 {
+    width: 84px;
+}
+
+.pageBlog .leftDetail .comment .profile .star.x5 {
+    width: 99px;
+}
+
+.pageBlog .leftDetail .comment .list {
+    border-bottom: 1px solid #cccccc;
+}
+
+.pageBlog .leftDetail .last h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2b32;
+    text-align: center;
+    margin-top: 70px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.pageBlog .leftDetail .last .post a {
+    text-decoration: none;
+}
+
+.pageBlog .leftDetail .last .post a h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #333333;
+    height: 65px;
+    position: relative;
+    margin-top: 15px;
+    transition: all 0.25s ease-in-out;
+    margin-bottom: 10px;
+    text-align: left;
+    text-transform: none;
+}
+
+.pageBlog .leftDetail .last .post a:hover h1 {
+    color: #3fc692;
+}
+
+.pageBlog .leftDetail .last .post a h1::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #029bbf;
+    width: 75%;
+    height: 1px;
+}
+
+.pageBlog .leftDetail .last .post a p {
+    font-size: 13px;
+    font-weight: 400;
+    color: #6d6d6d;
+    margin-bottom: 15px;
+}
+
+.pageBlog .leftDetail .last .post a .tag {
+    font-size: 12px;
+    font-weight: 400;
+    color: #171717;
+    padding-left: 26px;
+    background-image: url("/static/image/page-blog/left-post/tag.svg");
+    background-repeat: no-repeat;
+    background-position: left 5px;
+}
+
+.pageBlog .leftDetail .last .post a .date {
+    font-size: 15px;
+    font-weight: 300;
+    color: #171717;
+    text-align: right;
+}
+
+.pageBlog .list {
+    display: block;
+    margin-top: 30px;
+}
+
+.pageBlog .list:hover,
+.pageBlog .list:focus {
+    text-decoration: none;
+}
+
+.pageBlog .list .image {
+    position: relative;
+    overflow: hidden;
+}
+
+.pageBlog .list .image img {
+    transition: all 0.25s ease-in-out;
+    transform: scale(1, 1) rotate(0deg);
+}
+
+.pageBlog .list:hover .image img {
+    transform: scale(1.15, 1.15) rotate(-5deg);
+}
+
+.pageBlog .list h1 {
+    color: #4d4d4d;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 0;
+    transition: all 0.25s ease-in-out;
+}
+
+.pageBlog .list:hover h1 {
+    color: #36ffb1;
+}
+
+.pageBlog .list h2 {
+    color: #bcbcbc;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.pageBlog .list div {
+    color: #9d9d9d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.pageBlog .list div span {
+    color: #4d4d4d;
+    font-weight: 700;
+    margin-left: 8px;
+}
+
+.pageBlog .list div + div {
+    margin-top: 6px;
+}
+
+/*************************/
+/***** page blog end *****/
+/*************************/
+
+/************************************/
+/***** special resolution start *****/
+/************************************/
+@media screen and (min-width: 0) and (max-width: 1199.98px) {
+    .pageBlog .leftPage .list-inline li {
+        display: none;
+    }
+
+    .pageBlog .leftPage .list-inline li:nth-child(1),
+    .pageBlog .leftPage .list-inline li:nth-child(2),
+    .pageBlog .leftPage .list-inline li:nth-child(3),
+    .pageBlog .leftPage .list-inline li:nth-last-child(2),
+    .pageBlog .leftPage .list-inline li:last-child {
+        display: inline-block;
+    }
+
+    .pageBlog .leftDetail .comment button.btn {
+        margin-top: 20px;
+    }
+
+    .pageBlog .leftDetail .comment .profile {
+        margin-top: 0px;
+        margin-bottom: 20px;
+    }
+
+    .pageBlog .leftDetail .last .post {
+        margin-bottom: 40px;
+    }
+}
+
+/************************************/
+/***** special resolution end *****/
+/************************************/
+
+/************************/
+/***** mobile start *****/
+/************************/
+@media (max-width: 767.98px) {
+    .pageBlog .title {
+        text-align: center;
+    }
+
+    .pageBlog .leftSlide .slide .title {
+        padding: 10px 20px;
+        font-size: 15px;
+    }
+
+    .pageBlog .leftPage .list-inline li {
+        display: none;
+    }
+
+    .pageBlog .leftPage .list-inline li:nth-child(1),
+    .pageBlog .leftPage .list-inline li:nth-child(2),
+    .pageBlog .leftPage .list-inline li:nth-child(3),
+    .pageBlog .leftPage .list-inline li:nth-last-child(2),
+    .pageBlog .leftPage .list-inline li:last-child {
+        display: inline-block;
+    }
+
+    .pageBlog .rightSearch .form {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .pageBlog .rightSearch .form input.form-control {
+        border: 1px solid #e0e0e0 !important;
+        background-color: #f3f3f3;
+        border: none;
+        border-radius: 99px;
+        margin-bottom: 5px;
+    }
+}
+
+/************************/
+/***** mobile end *****/
+/************************/
