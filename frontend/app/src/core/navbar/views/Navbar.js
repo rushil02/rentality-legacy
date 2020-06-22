@@ -155,7 +155,7 @@ function MobileMenu(props) {
                         <a href={reverse(PageRoutes.howItWorks)}>How It Works</a>
                     </li>
                     <li className="list-inline-item">
-                        <a href={reverse(PageRoutes.houseListing.create)}>List Your Home</a>
+                        <a href={reverse(PageRoutes.listing.create)}>List Your Home</a>
                     </li>
                 </ul>
             </div>

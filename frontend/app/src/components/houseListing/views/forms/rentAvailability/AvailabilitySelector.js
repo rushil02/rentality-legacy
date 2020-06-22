@@ -1,8 +1,8 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRangePicker, createStaticRanges } from "react-date-range"
+import {DateRangePicker, createStaticRanges} from "react-date-range"
 import {
     addDays,
     endOfDay,
@@ -15,10 +15,11 @@ import {
     isSameDay,
     differenceInCalendarDays,
 } from "date-fns"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPlus, faPen, faTimes, faCheck } from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faPlus, faPen, faTimes, faCheck} from "@fortawesome/free-solid-svg-icons"
 import styles from "./AvailabilitySelector.module.css"
-import { PulseLoader } from "react-spinners"
+import {PulseLoader} from "react-spinners"
+import {Accordion, Card, Button} from "react-bootstrap";
 
 const defineds = {
     startOfWeek: startOfWeek(new Date()),
@@ -146,7 +147,7 @@ export default class AvailabilitySelectorComponent extends Component {
                 onClick={buttonConfig.action}
                 aria-controls={"collapsibleCalendar-" + this.props.idKey}
             >
-                <FontAwesomeIcon icon={buttonConfig.icon} />
+                <FontAwesomeIcon icon={buttonConfig.icon}/>
             </button>
         )
     }
@@ -172,7 +173,7 @@ export default class AvailabilitySelectorComponent extends Component {
                         this.props.onRemove()
                     }}
                 >
-                    <FontAwesomeIcon icon={faTimes} />
+                    <FontAwesomeIcon icon={faTimes}/>
                 </button>
             )
         }
@@ -229,11 +230,11 @@ export default class AvailabilitySelectorComponent extends Component {
                         className={"collapse " + styles.availabilitySelectorContainer}
                         id={"collapsibleCalendar-" + this.props.idKey}
                     >
-                        <div className={"col-11"} style={{ borderTop: "1px solid #e9ebf0" }}>
+                        <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
                             <div className={"row"}>
                                 <div
                                     className={"col-12 " + styles.availabilitySelectorContainer}
-                                    style={{ padding: "20px" }}
+                                    style={{padding: "20px"}}
                                 >
                                     <DateRangePicker
                                         ranges={[selectionRange]}
@@ -249,6 +250,70 @@ export default class AvailabilitySelectorComponent extends Component {
                         </div>
                     </div>
                 </div>
+                <div className={"card mb-3 " + styles.accordionBorder}>
+                    {this.getInfoCard()}
+                    <div
+                        className={"collapse " + styles.availabilitySelectorContainer}
+                        id={"collapsibleCalendar-" + this.props.idKey}
+                    >
+                        <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
+                            <div className={"row"}>
+                                <div
+                                    className={"col-12 " + styles.availabilitySelectorContainer}
+                                    style={{padding: "20px"}}
+                                >
+                                    <DateRangePicker
+                                        ranges={[selectionRange]}
+                                        onChange={this.handleSelect}
+                                        months={this.monthsScreenNum}
+                                        minDate={new Date()}
+                                        direction={"horizontal"}
+                                        staticRanges={staticRanges}
+                                        inputRanges={inputRanges}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <Accordion>
+                    <Card>
+                        <Card.Header>
+                            <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                                {this.getInfoText()}
+                                <div className="loading-container">{this.getSyncIndicator()}</div>
+                                <div
+                                    className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>
+                                <div className={styles.cardButtonGroup}>
+                                    {this.getEditButton()}
+                                    {this.getRemoveButton()}
+                                </div>
+                            </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body>
+                                <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
+                                    <div className={"row"}>
+                                        <div
+                                            className={"col-12 " + styles.availabilitySelectorContainer}
+                                            style={{padding: "20px"}}
+                                        >
+                                            <DateRangePicker
+                                                ranges={[selectionRange]}
+                                                onChange={this.handleSelect}
+                                                months={this.monthsScreenNum}
+                                                minDate={new Date()}
+                                                direction={"horizontal"}
+                                                staticRanges={staticRanges}
+                                                inputRanges={inputRanges}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
             </React.Fragment>
         )
     }
