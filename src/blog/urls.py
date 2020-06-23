@@ -1,10 +1,14 @@
 from django.urls import path
-from blog.views import article, home, search
-from blog.views.api.read import ArticleListReadView, ArticlePublicReadView
+from blog.views.api.read import PopularArticlesListView, LatestArticlesListView, PopularTagsListView, \
+    ArticlePublicReadView
+
 app_name = 'blog'
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('<slug:slug>', ArticlePublicReadView.as_view(), name='view_article'),
-    path('search', search, name='search')
+    path('popular-articles', PopularArticlesListView.as_view(), name='pop_articles'),
+    path('latest-articles', LatestArticlesListView.as_view(), name='latest_articles'),
+    path('popular-tags', PopularTagsListView.as_view(), name='pop_tags'),
+    path('article/<slug:slug>', ArticlePublicReadView.as_view(), name='view_article'),
+    path('tag-articles', ArticlePublicReadView.as_view(), name='view_article'),
+
 ]

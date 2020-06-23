@@ -58,3 +58,20 @@ class House(BaseModel):
 
     def add_availability(self, lower, upper):
         self.availabilities.append(Availability(date_range=Range(gte=lower, lt=upper)))
+
+
+class BlogArticle(BaseModel):
+    title = Text()
+    content = Boolean()
+    tags = Keyword()
+
+    class IndexInfo(BaseModel.IndexInfo):
+        index_this_model = True
+
+    class Index:
+        name = get_index_name('House')
+
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0
+        }

@@ -26,7 +26,8 @@ class Article(models.Model):
     slug = models.SlugField(unique=True)
     priority = models.PositiveSmallIntegerField(default=0, help_text="Higher number sets higher priority")
     thumbnail = models.ImageField(upload_to=get_article_thumbnail_path)
-    tags = models.TextField(help_text="Verbose Tags to find similar articles [Separate the tags using comma]")
+    thumbnail_alt_tags = models.CharField(max_length=150, help_text="Alternative tags for thumbnail image")
+    tags = models.ManyToManyField('blog.Tag', help_text="Verbose Tags to find similar articles [Separate the tags using comma]")
 
     active = models.BooleanField(default=False, help_text="Set to True to publish the article")
     update_time = models.DateTimeField(auto_now=True)
@@ -37,3 +38,12 @@ class Article(models.Model):
 
     def __str__(self):
         return "%s" % self.title
+
+
+class Tag(models.Model):
+    verbose = models.CharField(max_length=50)
+    priority = models.PositiveSmallIntegerField(default=0, help_text="Higher number sets higher priority")
+    create_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "%s" % self.verbose

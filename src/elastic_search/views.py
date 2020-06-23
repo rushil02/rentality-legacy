@@ -105,8 +105,13 @@ class HouseSearchView(APIView):
 
         start_date = request.GET.get('start-date', '')
         end_date = request.GET.get('end-date', '')
-        slice_start = int(request.GET.get('pagination-start', 0))
-        slice_end = int(request.GET.get('pagination-end', 12))
+
+        try:
+            slice_start = int(request.GET.get('pagination-start', 0))
+            slice_end = int(request.GET.get('pagination-end', 12))
+        except ValueError:
+            slice_start = 0
+            slice_end = 12
 
         in_loc = None
         if in_loc_id and in_loc_id != 'null':

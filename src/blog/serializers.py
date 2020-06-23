@@ -1,17 +1,21 @@
 from rest_framework import serializers
 
-from blog.models import Article
+from blog.models import Article, Tag
 
 
-class ArticlePublicSerializer(serializers.Serializer):
+class ArticlePublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = '__all__'
-        # read_only_fields = ('id', 'verbose', 'description', 'official_policy')
+        exclude = ('priority', 'active', 'id')
 
 
-class ArticleShortInfoSerializer(serializers.Serializer):
+class ArticleShortInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ('title', 'abstract')
-        # read_only_fields = ('id', 'verbose', 'description', 'official_policy')
+        fields = ('title', 'abstract', 'priority', 'thumbnail', 'update_time', 'create_time', 'tags', 'slug')
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('verbose', )
