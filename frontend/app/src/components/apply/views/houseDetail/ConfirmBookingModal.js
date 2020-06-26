@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton"
 import styles from "./ConfirmBookingModal.module.css"
-import routes from "components/routes"
+import {PageRoutes} from "components/routes"
 import { reverse } from "named-urls"
 
 export const ConfirmBookingModal = React.forwardRef((props, ref) => {
@@ -11,7 +11,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
-    const successRoute = reverse(routes.pages.apply.success, {
+    const successRoute = reverse(PageRoutes.apply.success, {
         applicationUUID: props.applicationUUID,
     })
 

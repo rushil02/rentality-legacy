@@ -1,12 +1,12 @@
 import axios, { handleError } from "core/utils/serviceHelper"
 import { reverse } from "named-urls"
-import routes from "components/routes"
+import {APIRoutes} from "components/routes"
 // import {UserPII} from "../userAccount/models";
 
 export function getHouseData(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.apply.houseDetails, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.apply.houseDetails, { houseUUID: houseUUID }))
             .then(response => {
                 resolve(response.data)
             })
@@ -19,7 +19,7 @@ export function getHouseData(houseUUID) {
 export function getHomeOwnerDetails(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.apply.homeOwnerDetails, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.apply.homeOwnerDetails, { houseUUID: houseUUID }))
             .then(response => {
                 resolve(response.data)
             })
@@ -32,7 +32,7 @@ export function getHomeOwnerDetails(houseUUID) {
 export function getAvailableDates(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.apply.availableDates, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.apply.availableDates, { houseUUID: houseUUID }))
             .then(response => {
                 resolve(response.data)
             })
@@ -45,7 +45,7 @@ export function getAvailableDates(houseUUID) {
 export function getUnavailableDates(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.apply.unavailableDates, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.apply.unavailableDates, { houseUUID: houseUUID }))
             .then(response => {
                 resolve(response.data)
             })
@@ -58,7 +58,7 @@ export function getUnavailableDates(houseUUID) {
 export function applyBooking(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.apply.applyBooking, { houseUUID: houseUUID }), data.serialize())
+            .post(reverse(APIRoutes.apply.applyBooking, { houseUUID: houseUUID }), data.serialize())
             .then(result => {
                 resolve(result)
             })
@@ -72,7 +72,7 @@ export function confirmBooking(houseUUID, applicationUUID) {
     return new Promise(function (resolve, reject) {
         axios
             .post(
-                reverse(routes.apply.confirmBooking, {
+                reverse(APIRoutes.apply.confirmBooking, {
                     houseUUID: houseUUID,
                     applicationUUID: applicationUUID,
                 })
@@ -89,7 +89,7 @@ export function confirmBooking(houseUUID, applicationUUID) {
 export function getApplicantData() {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.user.profile))
+            .get(reverse(APIRoutes.user.profile))
             .then(response => {
                 resolve(response.data)
             })
@@ -102,7 +102,7 @@ export function getApplicantData() {
 export function getBookingData(applicationUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.apply.bookingDetails, { applicationUUID: applicationUUID }))
+            .get(reverse(APIRoutes.apply.bookingDetails, { applicationUUID: applicationUUID }))
             .then(response => {
                 resolve(response.data)
             })
@@ -115,7 +115,7 @@ export function getBookingData(applicationUUID) {
 export function getFinancialData(houseUUID, bookingInfo) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.apply.amountDetails, { houseUUID: houseUUID }), { params: bookingInfo.serialize() })
+            .get(reverse(APIRoutes.apply.amountDetails, { houseUUID: houseUUID }), { params: bookingInfo.serialize() })
             .then(result => {
                 console.log(result)
                 resolve(result.data)
