@@ -1,13 +1,10 @@
 import os
 import traceback
 
-from allauth.socialaccount.models import SocialApp
 from django.contrib.flatpages.models import FlatPage
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sites.models import Site
-from django.db.utils import IntegrityError
 
-from elastic_search.core.utils import create_mappings
 from house.models import HomeType, Facility, Rule, NeighbourhoodDescriptor, WelcomeTag
 from django.conf import settings
 
@@ -132,9 +129,6 @@ def register_flat_pages(site_obj, **kwargs):
         obj.sites.add(site_obj)
 
 
-def initialize_es(**kwargs):
-    create_mappings()
-
 
 class Command(BaseCommand):
     """ Initialize website db with data """
@@ -151,7 +145,6 @@ class Command(BaseCommand):
             create_welcome_tags
         ],
         'Add flat pages': register_flat_pages,
-        'Initialize ElasticSearch Mappings': initialize_es
     }
 
     def ask_user_input(self, verbose):

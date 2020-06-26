@@ -8,33 +8,43 @@ from elasticsearch_dsl.connections import connections
 from elastic_search.core.settings import *
 
 
-# FIXME: remove this, and make check on docker end
-def establish_es_connection(try_num=1):
+def establish_es_connection():
     try:
         connection_obj = connections.create_connection(**DATABASE_CONNECTION_INFO)
     except TransportError as e:
-        if try_num <= CONNECTION_MAX_TRIES:
-            print("Trying to connect to ElastiSearch; Waiting %s seconds for it to start." % CONNECTION_WAIT_TIME)
-            time.sleep(CONNECTION_WAIT_TIME)
-            connection_obj = establish_es_connection(try_num + 1)
-        else:
-            raise e
-    return connection_obj
+        print("***** WARNING: Connection to ElasticSearch Failed ***** \n%s" % e)
+        return
+    else:
+        return connection_obj
 
 
 # Creates a singleton object of connection to transport layer [Paradigm support by elasticsearch-py creator - HonzaKral]
 # https://github.com/elastic/elasticsearch-py/issues/223#issuecomment-96199719
 # https://github.com/elastic/elasticsearch-py/issues/372#issuecomment-192025509
+# Make sure that global - ES_CONNECTION is loaded with django
 ES_CONNECTION = establish_es_connection()
 
 
-def create_connection():
-    # TODO: needs testing where the connection might close itself unexpectedly
-    try:
+def connect():
+    global ES_CONNECTION
+    if ES_CONNECTION is not None:
         return ES_CONNECTION
-    except Exception as e:
-        #  TODO: Activity Log
-        raise Exception(e)
+    else:
+        print("Connecting to ElasticSearch ...")
+        ES_CONNECTION = establish_es_connection()
+        if ES_CONNECTION is not None:
+            return ES_CONNECTION
+
+        try_num = 0
+        while try_num < CONNECTION_MAX_TRIES and ES_CONNECTION is None:
+            try_num += 1
+            print("Retrying (%s) in %s seconds - Wait for ES to start." % (try_num, CONNECTION_WAIT_TIME))
+            time.sleep(CONNECTION_WAIT_TIME)
+            ES_CONNECTION = establish_es_connection()
+            if ES_CONNECTION is not None:
+                return ES_CONNECTION
+
+        raise AssertionError("Failed to connect with ElasticSearch")
 
 
 def get_index_name(doc_name):
@@ -54,26 +64,6 @@ def get_mapping_classes():
             continue
     return klasses
 
-
-def create_mappings():
-    client = create_connection()
-    for klass in get_mapping_classes():
-        try:
-            if not klass._index.exists():
-                klass.init()
-        except Exception as e:
-            #  TODO: Activity Log
-            raise Exception(e)
-
-
-def recreate_indexes():
-    client = create_connection()
-    for klass in get_mapping_classes():
-        try:
-            klass.init()
-        except Exception as e:
-            #  TODO: Activity Log
-            raise Exception(e)
 
 # TODO: no mechanism to remove dangling indexes
 # TODO: Update mappings mechanism required : Re-index mechanism
