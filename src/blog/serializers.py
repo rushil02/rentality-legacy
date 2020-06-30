@@ -9,6 +9,22 @@ class TagSerializer(serializers.ModelSerializer):
         fields = ('verbose', )
 
 
+class ArticleShortInfoSerializer(serializers.ModelSerializer):
+    tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
+
+    class Meta:
+        model = Article
+        fields = ('title', 'abstract', 'priority', 'thumbnail', 'update_time', 'create_time', 'tags', 'slug')
+
+
+class TagAndArticleSerializer(serializers.ModelSerializer):
+    article_set = ArticleShortInfoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Tag
+        fields = ('verbose', 'article_set')
+
+
 class ArticlePublicSerializer(serializers.ModelSerializer):
     tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
 
@@ -17,12 +33,7 @@ class ArticlePublicSerializer(serializers.ModelSerializer):
         exclude = ('priority', 'active', 'id')
 
 
-class ArticleShortInfoSerializer(serializers.ModelSerializer):
-    tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
 
-    class Meta:
-        model = Article
-        fields = ('title', 'abstract', 'priority', 'thumbnail', 'update_time', 'create_time', 'tags', 'slug')
 
 
 

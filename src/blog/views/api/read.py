@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from blog.models import Article, Tag
-from blog.serializers import ArticlePublicSerializer, ArticleShortInfoSerializer, TagSerializer
+from blog.serializers import ArticlePublicSerializer, ArticleShortInfoSerializer, TagSerializer, TagAndArticleSerializer
 
 
 class ArticlePublicReadView(APIView):
@@ -15,6 +15,13 @@ class ArticlePublicReadView(APIView):
         else:
             article = ArticlePublicSerializer(article)
             return Response(article.data, status=status.HTTP_200_OK)
+
+
+class AllArticlesPublicReadView(APIView):
+    def get(self, request):
+        articles = Article.objects.filter(active=True)
+        article_serializer = ArticlePublicSerializer(articles, many=True)
+        return Response(article_serializer.data, status=status.HTTP_200_OK)
 
 
 class PopularArticlesListView(APIView):
@@ -39,6 +46,12 @@ class PopularTagsListView(APIView):
     def get(self, request):
         tags = Tag.objects.all().order_by('-priority')[0:20]
         return Response(TagSerializer(tags, many=True).data, status=status.HTTP_200_OK)
+
+
+class AllTagsAndArticlesListView(APIView):
+    def get(self, request):
+        tags = Tag.objects.all().prefetch_related('article_set')
+        return Response(TagAndArticleSerializer(tags, many=True).data, status=status.HTTP_200_OK)
 
 
 class TagsRelatedArticlesListView(APIView):

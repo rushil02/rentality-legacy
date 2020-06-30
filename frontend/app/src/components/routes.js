@@ -43,6 +43,7 @@ export const APIRoutes = include("/api", {
     blog: include("blog", blogRoutes.APIs),
     search: include("es", {
         house: "house/search",
+        blog: "blog",
     }),
     paymentGateway: include("pg", {
         createPaymentInfo: "add-ho-acc/:pgCode/:houseUUID",
