@@ -1,9 +1,8 @@
 import React, { Component } from "react"
 import styles from "./HouseDetailPage.module.css"
 import Modal from "react-bootstrap/Modal"
-
 import Slider from "react-slick"
-import "./ImageCarousel.module.css"
+import "./ImageCarousel.css"
 
 export default class ImageCarousel extends Component {
     constructor(props) {

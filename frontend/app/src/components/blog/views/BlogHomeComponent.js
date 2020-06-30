@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import RightSide from "./RightSide"
+import Slider from "react-slick"
+import "./ImageCarousel.css"
 
 export default class BlogHomeComponent extends Component {
     componentDidMount() {}
@@ -8,6 +10,19 @@ export default class BlogHomeComponent extends Component {
     componentWillUnmount() {}
 
     render() {
+        const settingsSlider = {
+            arrows: false,
+            autoplay: true,
+            variableWidth: false,
+            autoplaySpeed: 2000,
+            cssEase: "linear",
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            swipeToSlide: true,
+        }
+
         return (
             <React.Fragment>
                 {/* <!-- page blog start --> */}
@@ -16,19 +31,27 @@ export default class BlogHomeComponent extends Component {
                         <div className="row">
                             <div className="col-md-7 col-lg-8 col-xl-8">
                                 <div className={styles.leftSlide}>
-                                    <div className="loop owl-carousel owl-theme">
-                                        {/* loop through main slider blogs */}
-                                        <GetSliderBlogPost />
-                                    </div>
+                                    <Slider {...settingsSlider}>
+                                        {this.props.popularArticles
+                                            .getObjectList()
+                                            .slice(0, 3)
+                                            .map((article, index) => (
+                                                <GetSliderBlogPost key={article[0]} article={article[1]} />
+                                            ))}
+                                    </Slider>
                                 </div>
                                 <div className={styles.leftPost}>
                                     <div className="row">
-                                        {/* loop through normal blog posts */}
-                                        <GetLatestBlogPost />
+                                        {this.props.popularArticles
+                                            .getObjectList()
+                                            .slice(3, 7)
+                                            .map((article, index) => (
+                                                <GetLatestBlogPost key={article[0]} article={article[1]} />
+                                            ))}
                                     </div>
                                 </div>
                                 <div className={styles.leftPage}>
-                                    <ul className="list-inline">
+                                    <ul className={styles.listInline}>
                                         <li className="list-inline-item left">
                                             <a href=""></a>
                                         </li>
@@ -91,26 +114,23 @@ export default class BlogHomeComponent extends Component {
 }
 
 function GetLatestBlogPost(props) {
-    // let blogPost = props.blogPost
+    let article = props.article
+    let date = props.article.getData("updateDate")
     return (
         <div className="col-md-12 col-lg-6 col-xl-6">
             <div className={styles.post}>
                 <a href="">
-                    <img src="/static/image/page-blog/left-post/1.png" className="w-100" alt="" title="" />
-                    <h1>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna
-                    </h1>
-                    <p>
-                        One of the pertinent factors that contribute to the aesthetics and vividness of a city is its
-                        lighting. Proper illumination of the urban space after the sunset makes the city
-                    </p>
+                    <img src={article.getData("thumbnail")} className="w-100" alt="" title="" />
+                    <h1>{article.getData("title")}</h1>
+                    <p>{article.getData("abstract")}</p>
                     <div className="row">
                         <div className="col-6">
-                            <div className={styles.tag}>exchange nigerian naira, naira to dolar</div>
+                            <div className={styles.tag}>{article.getData("tags").map((tag, index) => tag + ",")}</div>
                         </div>
                         <div className="col-6">
-                            <div className={styles.date}>10.11.2018</div>
+                            <div className={styles.date}>
+                                {date.getDate() + "." + date.getMonth() + "." + date.getFullYear()}
+                            </div>
                         </div>
                     </div>
                 </a>
@@ -120,13 +140,12 @@ function GetLatestBlogPost(props) {
 }
 
 function GetSliderBlogPost(props) {
-    //let blogPost = props.blogPost
+    let article = props.article
+
     return (
-        <div className="item">
-            <div className={styles.slide}>
-                <img src="/static/image/page-blog/left-slide/1.png" alt="" title="" />
-                <div className={styles.title}>Over 1,000 firms bid for 2017 railway projects</div>
-            </div>
+        <div className={styles.slide}>
+            <img src={article.getData("thumbnail")} alt="" title="" />
+            <div className={styles.title}>{article.getData("title")}</div>
         </div>
     )
 }

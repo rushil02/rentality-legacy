@@ -39,7 +39,7 @@ urlpatterns = [
     path('accounts/confirm-email/', not_found),
     path('accounts/', include('allauth.urls')),
     path('property/', include('house.urls')),
-    path('blogs/', include('blog.urls')),
+    path('blog/', include('blog.urls')),
     path('app/', include('application.urls')),
     path('promo/', include('promotions.urls')),
     path('pg/', include('payment_gateway.urls')),
