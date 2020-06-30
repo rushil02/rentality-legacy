@@ -39,6 +39,9 @@ class Article(models.Model):
     def __str__(self):
         return "%s" % self.title
 
+    def is_public(self):
+        return self.active
+
 
 class Tag(models.Model):
     verbose = models.CharField(max_length=50)

@@ -1,14 +1,14 @@
 import axios, { handleError } from "core/utils/serviceHelper"
 import { reverse } from "named-urls"
 import { PersonalityTag, UserPII } from "./models"
-import routes from "components/routes"
+import {APIRoutes} from "components/routes"
 import { alertUser } from "core/alert/Alert"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
 
 export function getUserProfileData() {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.user.profile))
+            .get(reverse(APIRoutes.user.profile))
             .then(response => {
                 resolve(new UserPII(response.data))
             })
@@ -21,7 +21,7 @@ export function getUserProfileData() {
 export function patchUserProfileData(data) {
     return new Promise(function (resolve, reject) {
         axios
-            .patch(reverse(routes.user.profile), data.serialize("__partial__"))
+            .patch(reverse(APIRoutes.user.profile), data.serialize("__partial__"))
             .then(response => {
                 resolve(new UserPII(response.data))
             })
@@ -36,7 +36,7 @@ export function patchUserProfileData(data) {
 export function getProfilePicLink() {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.user.uploadProfilePic))
+            .get(reverse(APIRoutes.user.uploadProfilePic))
             .then(response => {
                 resolve(response.data["profile_pic"])
             })
@@ -56,7 +56,7 @@ export function uploadProfilePic(data, progressTracker) {
         let formData = new FormData()
         formData.append("profile_pic", data)
         axios
-            .post(reverse(routes.user.uploadProfilePic), formData, config)
+            .post(reverse(APIRoutes.user.uploadProfilePic), formData, config)
             .then(response => {
                 resolve(response.data["profile_pic"])
             })
@@ -71,7 +71,7 @@ export function uploadProfilePic(data, progressTracker) {
 export function deleteProfilePic() {
     return new Promise(function (resolve, reject) {
         axios
-            .delete(reverse(routes.user.uploadProfilePic))
+            .delete(reverse(APIRoutes.user.uploadProfilePic))
             .then(response => {
                 resolve(response.data)
             })
@@ -84,7 +84,7 @@ export function deleteProfilePic() {
 export function getPersonalityTags(houseUUID) {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.user.personalityTags, { houseUUID: houseUUID }))
+            .get(reverse(APIRoutes.user.personalityTags, { houseUUID: houseUUID }))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, PersonalityTag, "id"))
             })
@@ -97,7 +97,7 @@ export function getPersonalityTags(houseUUID) {
 export function postPersonalityTags(houseUUID, data) {
     return new Promise(function (resolve, reject) {
         axios
-            .post(reverse(routes.user.personalityTags, { houseUUID: houseUUID }), data.serialize(true))
+            .post(reverse(APIRoutes.user.personalityTags, { houseUUID: houseUUID }), data.serialize(true))
             .then(result => {
                 resolve(new APIModelListAdapter(result.data, PersonalityTag, "id"))
             })
