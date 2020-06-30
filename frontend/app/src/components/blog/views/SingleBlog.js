@@ -2,12 +2,15 @@ import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import RightSide from "./RightSide"
 
-export default class BlogHomeComponent extends Component {
-    componentDidMount() {}
+export default class SingleBlog extends Component {
+    componentDidMount() {
+        console.log(this.props.pageContext)
+    }
 
     componentWillUnmount() {}
 
     render() {
+        console.log(this.props.pageContext)
         return (
             <React.Fragment>
                 <div className={styles.pageBlog}>
@@ -103,9 +106,9 @@ export default class BlogHomeComponent extends Component {
                                                     width="600"
                                                     height="400"
                                                     src="https://www.youtube.com/embed/WNeLUngb-Xg"
-                                                    frameborder="0"
+                                                    frameBorder="0"
                                                     allow="autoplay; encrypted-media"
-                                                    allowfullscreen=""
+                                                    allowFullScreen=""
                                                 ></iframe>
                                             </div>
                                         </div>

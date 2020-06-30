@@ -4,7 +4,7 @@ import {UserContext} from "core/auth/userContext";
 import {reverse} from "named-urls";
 import {PageRoutes} from "components/routes";
 import styles from "./App.module.css";
-import "./ImageCarousel.module.css";
+import "./ImageCarousel.css";
 import theme from "./SearchInput.module.css";
 import Button from "react-bootstrap/Button";
 import DateRangePickerComponent from "core/UIComponents/DateRangePicker/DateRangePicker";

@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import RightSide from "./RightSide"
 
-export default class TagRelatedBlogsComponent extends Component {
+export default class TagRelatedBlogs extends Component {
     componentDidMount() {}
 
     componentWillUnmount() {}
@@ -13,7 +13,7 @@ export default class TagRelatedBlogsComponent extends Component {
                 {/* <!-- page blog start --> */}
                 <div className={styles.pageBlog}>
                     <div className="container">
-                        <h1 class={styles.title}>Tag: Tag Name</h1>
+                        <h1 className={styles.title}>Tag: Tag Name</h1>
                         <div className="row">
                             <div className="col-md-7 col-lg-8 col-xl-8">
                                 <div className="lists">

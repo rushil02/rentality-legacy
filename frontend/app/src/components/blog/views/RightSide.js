@@ -1,8 +1,36 @@
 import React, { Component } from "react"
 import styles from "./Blog.module.css"
+import { APIModelListAdapter } from "core/utils/ModelHelper"
+import { ArticleInfo, Tag } from "../models"
+import { getLatestArticles, getPopularTags } from "../services"
+import { Link } from "gatsby"
 
 export default class RightSide extends Component {
-    componentDidMount() {}
+    constructor(props) {
+        super(props)
+        this.state = {
+            status: "loading",
+            latestArticles: new APIModelListAdapter([], ArticleInfo, "slug", "empty"),
+            popularTags: new APIModelListAdapter([], Tag, "", "empty"),
+        }
+    }
+    componentDidMount() {
+        this.setState(prevState => ({ status: "loading" }))
+
+        getLatestArticles().then(result => {
+            this.setState(prevState => ({
+                ...prevState,
+                latestArticles: new APIModelListAdapter(result, ArticleInfo, "slug", "saved"),
+            }))
+        })
+
+        getPopularTags().then(result => {
+            this.setState(prevState => ({
+                ...prevState,
+                popularTags: new APIModelListAdapter(result, Tag, "", "saved"),
+            }))
+        })
+    }
 
     componentWillUnmount() {}
 
@@ -13,13 +41,17 @@ export default class RightSide extends Component {
                     <div className={styles.rightPost}>
                         <div className={styles.title}>New Posts</div>
                         {/* loop through popular posts */}
-                        <GetPopularBlogPost />
+                        {this.state.latestArticles.getObjectList().map((article, index) => (
+                            <GetPopularBlogPost key={article[0]} article={article[1]} />
+                        ))}
                     </div>
                     <div className={styles.rightTag}>
                         <div className={styles.title}>Tag</div>
-                        <ul className="list-inline">
+                        <ul className={styles.listInline}>
                             {/* loop through tags */}
-                            <GetTag />
+                            {this.state.popularTags.getObjectList().map((tag, index) => (
+                                <GetTag key={tag[0]} tag={tag[1]} />
+                            ))}
                         </ul>
                     </div>
                 </div>
@@ -28,30 +60,39 @@ export default class RightSide extends Component {
     }
 }
 
+function formatDate(date) {
+    if (date) {
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
+    } else {
+        return "N/A"
+    }
+}
+
 function GetTag(props) {
-    // let tag = props.tag
+    let tagTitle = props.tag.getData("title")
     return (
         <li className="list-inline-item">
-            <a href="">exchange nigerian naira</a>
+            <Link to={"/tags/" + tagTitle}>{tagTitle}</Link>
         </li>
     )
 }
 
 function GetPopularBlogPost(props) {
-    // let blogPost = props.blogPost
+    let article = props.article
     return (
         <div className={styles.post}>
-            <a href="#">
+            <Link to={"/blog/" + article.getData("slug")}>
                 <div className="row">
                     <div className="col-4">
-                        <img src="/static/image/page-blog/right-post/1.png" className="w-100" alt="" title="" />
+                        <img src={article.getData("thumbnail")} className="w-100" alt="" title="" />
                     </div>
                     <div className="col-8">
-                        <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do</h1>
-                        <p>October 15, 2017 </p>
+                        <h1>{article.getData("title")}</h1>
+                        <p>{formatDate(article.getData("updateDate"))} </p>
                     </div>
                 </div>
-            </a>
+            </Link>
         </div>
     )
 }

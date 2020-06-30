@@ -1,9 +1,10 @@
-import {include} from "named-urls"
+import { include } from "named-urls"
 import houseListingRoutes from "./houseListing/routes"
 import userRoutes from "./userAccount/routes"
 import applyRoutes from "./apply/routes"
-import welcomeRoutes from "./welcome/routes";
-import dashboardRoutes from './dashboard/routes';
+import welcomeRoutes from "./welcome/routes"
+import dashboardRoutes from "./dashboard/routes"
+import blogRoutes from "./blog/routes"
 
 export default {
     static_route: "/static/",
@@ -18,6 +19,7 @@ export const PageRoutes = {
     apply: include("apply", applyRoutes.interface),
     dashboard: include("dashboard", dashboardRoutes.interface),
     welcome: include("welcome", welcomeRoutes.interface),
+    blog: include("blog", blogRoutes.interface),
     faq: "/pages/faq/",
     howItWorks: "/pages/how-it-works/",
     contactUs: "/pages/contact-us/",
@@ -32,15 +34,16 @@ export const APIRoutes = include("/api", {
     apply: include("app", applyRoutes.APIs),
     user: userRoutes.APIs,
     welcome: welcomeRoutes.APIs,
-    sys: {messages: "sys-messages"},
+    sys: { messages: "sys-messages" },
     house: include("property", {
         ...houseListingRoutes.APIs,
-        filterOptions: "filter-options"
+        filterOptions: "filter-options",
     }),
     dashboard: include("dashboard", dashboardRoutes.APIs),
-
+    blog: include("blog", blogRoutes.APIs),
     search: include("es", {
         house: "house/search",
+        blog: "blog",
     }),
     paymentGateway: include("pg", {
         createPaymentInfo: "add-ho-acc/:pgCode/:houseUUID",
@@ -56,6 +59,4 @@ export const APIRoutes = include("/api", {
         location: "location_sugg",
     }),
     userNavInfo: "user-nav-info",
-
-
 })

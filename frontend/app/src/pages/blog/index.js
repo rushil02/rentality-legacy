@@ -1,13 +1,12 @@
 import React from "react"
-
+import BlogHomeContainer from "components/blog/views/BlogHomeContainer"
 import Layout from "components/layout"
 import SEO from "components/seo"
-import BlogRouter from "components/blog/Router"
 
 const BlogHomePage = () => (
     <Layout>
         <SEO title="Blog" />
-        <BlogRouter />
+        <BlogHomeContainer />
     </Layout>
 )
 

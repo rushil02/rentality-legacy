@@ -96,18 +96,20 @@
     text-align: center;
 }
 
-.pageBlog .leftPage .list-inline {
+.pageBlog .leftPage .listInline {
     margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
 }
 
-.pageBlog .leftPage .list-inline li a:hover,
-.pageBlog .leftPage .list-inline li.active a {
+.pageBlog .leftPage .listInline li a:hover,
+.pageBlog .leftPage .listInline li.active a {
     color: #3fc692;
     border: 3px solid #3fc692;
     padding: 3px;
 }
 
-.pageBlog .leftPage .list-inline li a {
+.pageBlog .leftPage .listInline li a {
     font-size: 16px;
     font-weight: 700;
     color: #919191;
@@ -122,20 +124,20 @@
     transition: all 0.25s ease-in-out;
 }
 
-.pageBlog .leftPage .list-inline li a:hover,
-.pageBlog .leftPage .list-inline li a:focus {
+.pageBlog .leftPage .listInline li a:hover,
+.pageBlog .leftPage .listInline li a:focus {
     text-decoration: none;
 }
 
-.pageBlog .leftPage .list-inline li:not(:last-child) {
+.pageBlog .leftPage .listInline li:not(:last-child) {
     margin-right: 0px;
 }
 
-.pageBlog .leftPage .list-inline li.left {
+.pageBlog .leftPage .listInline li.left {
     float: left;
 }
 
-.pageBlog .leftPage .list-inline li.left a {
+.pageBlog .leftPage .listInline li.left a {
     background-color: #3fc692;
     width: 35px;
     height: 28px;
@@ -145,11 +147,11 @@
     background-position: center center;
 }
 
-.pageBlog .leftPage .list-inline li.right {
+.pageBlog .leftPage .listInline li.right {
     float: right;
 }
 
-.pageBlog .leftPage .list-inline li.right a {
+.pageBlog .leftPage .listInline li.right a {
     background-color: #3fc692;
     width: 35px;
     height: 28px;
@@ -259,15 +261,17 @@
     margin-top: 40px;
 }
 
-.pageBlog .rightTag .list-inline {
+.pageBlog .rightTag .listInline {
     margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
 }
 
-.pageBlog .rightTag .list-inline li {
+.pageBlog .rightTag .listInline li {
     margin-top: 8px;
 }
 
-.pageBlog .rightTag .list-inline li a {
+.pageBlog .rightTag .listInline li a {
     font-size: 12px;
     font-weight: 400;
     color: #a5a5a5;
@@ -277,17 +281,17 @@
     transition: all 0.25s ease-in-out;
 }
 
-.pageBlog .rightTag .list-inline li a:hover {
+.pageBlog .rightTag .listInline li a:hover {
     color: #3fc692;
     border: 1px solid #3fc692;
 }
 
-.pageBlog .rightTag .list-inline li a:hover,
-.pageBlog .rightTag .list-inline li a:focus {
+.pageBlog .rightTag .listInline li a:hover,
+.pageBlog .rightTag .listInline li a:focus {
     text-decoration: none;
 }
 
-.pageBlog .rightTag .list-inline li:not(:last-child) {
+.pageBlog .rightTag .listInline li:not(:last-child) {
     margin-right: 0;
 }
 
@@ -650,15 +654,15 @@
 /***** special resolution start *****/
 /************************************/
 @media screen and (min-width: 0) and (max-width: 1199.98px) {
-    .pageBlog .leftPage .list-inline li {
+    .pageBlog .leftPage .listInline li {
         display: none;
     }
 
-    .pageBlog .leftPage .list-inline li:nth-child(1),
-    .pageBlog .leftPage .list-inline li:nth-child(2),
-    .pageBlog .leftPage .list-inline li:nth-child(3),
-    .pageBlog .leftPage .list-inline li:nth-last-child(2),
-    .pageBlog .leftPage .list-inline li:last-child {
+    .pageBlog .leftPage .listInline li:nth-child(1),
+    .pageBlog .leftPage .listInline li:nth-child(2),
+    .pageBlog .leftPage .listInline li:nth-child(3),
+    .pageBlog .leftPage .listInline li:nth-last-child(2),
+    .pageBlog .leftPage .listInline li:last-child {
         display: inline-block;
     }
 
@@ -693,15 +697,15 @@
         font-size: 15px;
     }
 
-    .pageBlog .leftPage .list-inline li {
+    .pageBlog .leftPage .listInline li {
         display: none;
     }
 
-    .pageBlog .leftPage .list-inline li:nth-child(1),
-    .pageBlog .leftPage .list-inline li:nth-child(2),
-    .pageBlog .leftPage .list-inline li:nth-child(3),
-    .pageBlog .leftPage .list-inline li:nth-last-child(2),
-    .pageBlog .leftPage .list-inline li:last-child {
+    .pageBlog .leftPage .listInline li:nth-child(1),
+    .pageBlog .leftPage .listInline li:nth-child(2),
+    .pageBlog .leftPage .listInline li:nth-child(3),
+    .pageBlog .leftPage .listInline li:nth-last-child(2),
+    .pageBlog .leftPage .listInline li:last-child {
         display: inline-block;
     }
 
