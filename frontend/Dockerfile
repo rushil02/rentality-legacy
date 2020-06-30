@@ -1,5 +1,3 @@
-FROM registry.gitlab.com/rushil0195/rentality/shared:latest as shared
-
 FROM node:14-alpine
 
 ARG dev_mode=false
@@ -24,10 +22,9 @@ COPY ./app/package*.json ./
 RUN npm ci
 
 COPY ./app/gatsby-*.js ./
+COPY ./app/.env.* ./
 COPY ./app/.prettier* ./
 COPY ./start_dev.sh ./
 COPY ./app/src ./src
-
-COPY --from=shared /shared/PUBLIC_KEYS /run/secrets/PUBLIC_KEYS
 
 CMD ["gatsby", "build"]

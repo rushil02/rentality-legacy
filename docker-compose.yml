@@ -40,9 +40,6 @@ services:
     image: 'docker.elastic.co/kibana/kibana:6.4.3'
     ports:
       - '5601:5601'
-  shared:
-    build: ./secrets
-    image: 'registry.gitlab.com/rushil0195/rentality/shared:latest'
   frontend:
     build:
       context: ./frontend
