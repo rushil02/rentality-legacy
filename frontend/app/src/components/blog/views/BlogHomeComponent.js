@@ -52,7 +52,7 @@ export default class BlogHomeComponent extends Component {
                                 </div>
                                 <div className={styles.leftPage}>
                                     <ul className={styles.listInline}>
-                                        <li className="list-inline-item left">
+                                        <li className={"list-inline-item " + styles.left}>
                                             <a href=""></a>
                                         </li>
                                         <li className="list-inline-item">
@@ -97,7 +97,7 @@ export default class BlogHomeComponent extends Component {
                                         <li className="list-inline-item">
                                             <a href="">14</a>
                                         </li>
-                                        <li className="list-inline-item right">
+                                        <li className={"list-inline-item " + styles.right}>
                                             <a href=""></a>
                                         </li>
                                     </ul>

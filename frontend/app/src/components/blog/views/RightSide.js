@@ -73,7 +73,7 @@ function GetTag(props) {
     let tagTitle = props.tag.getData("title")
     return (
         <li className="list-inline-item">
-            <Link to={"/tags/" + tagTitle}>{tagTitle}</Link>
+            <Link to={"/blog/tag/" + tagTitle}>{tagTitle}</Link>
         </li>
     )
 }
