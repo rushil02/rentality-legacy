@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import BlogHomeComponent from "./BlogHomeComponent"
-import { ArticleInfo } from "../models"
+import { PopularArticleInfo } from "../models"
 import { getPopularArticles } from "../services"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
 
@@ -9,7 +9,7 @@ export default class BlogHomeContainer extends Component {
         super(props)
         this.state = {
             status: "loading",
-            popularArticles: new APIModelListAdapter([], ArticleInfo, "slug", "empty"),
+            popularArticles: new APIModelListAdapter([], PopularArticleInfo, "slug", "empty"),
         }
     }
     componentDidMount() {
@@ -19,7 +19,7 @@ export default class BlogHomeContainer extends Component {
             this.setState(prevState => ({
                 ...prevState,
                 status: "done",
-                popularArticles: new APIModelListAdapter(result, ArticleInfo, "slug", "saved"),
+                popularArticles: new APIModelListAdapter(result, PopularArticleInfo, "slug", "saved"),
             }))
         })
     }

@@ -115,21 +115,26 @@ export default class BlogHomeComponent extends Component {
 
 function GetLatestBlogPost(props) {
     let article = props.article
-    let date = props.article.getData("updateDate")
+    let updateDate = props.article.getData("updateDate")
     return (
         <div className="col-md-12 col-lg-6 col-xl-6">
             <div className={styles.post}>
                 <a href="">
-                    <img src={article.getData("thumbnail")} className="w-100" alt="" title="" />
+                    <img
+                        src={article.getData("thumbnailSmall")}
+                        className="w-100"
+                        alt={article.getData("thumbnailAltTags")}
+                        title=""
+                    />
                     <h1>{article.getData("title")}</h1>
                     <p>{article.getData("abstract")}</p>
                     <div className="row">
                         <div className="col-6">
-                            <div className={styles.tag}>{article.getData("tags").map((tag, index) => tag + ",")}</div>
+                            <div className={styles.tag}>{article.getData("tags").map((tag, index) => tag + ", ")}</div>
                         </div>
                         <div className="col-6">
                             <div className={styles.date}>
-                                {date.getDate() + "." + date.getMonth() + "." + date.getFullYear()}
+                                {updateDate.getDate() + "." + updateDate.getMonth() + "." + updateDate.getFullYear()}
                             </div>
                         </div>
                     </div>
@@ -144,7 +149,7 @@ function GetSliderBlogPost(props) {
 
     return (
         <div className={styles.slide}>
-            <img src={article.getData("thumbnail")} alt="" title="" />
+            <img src={article.getData("thumbnailLarge")} alt={article.getData("thumbnailAltTags")} title="" />
             <div className={styles.title}>{article.getData("title")}</div>
         </div>
     )

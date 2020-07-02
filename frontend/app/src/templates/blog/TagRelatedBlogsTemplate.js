@@ -3,10 +3,10 @@ import TagRelatedBlogs from "components/blog/views/TagRelatedBlogs"
 import Layout from "components/layout"
 import SEO from "components/seo"
 
-const TagRelatedBlogsTemplate = () => (
+const TagRelatedBlogsTemplate = props => (
     <Layout>
         <SEO title="Blog" />
-        <TagRelatedBlogs />
+        <TagRelatedBlogs pageContext={props.pageContext} />
     </Layout>
 )
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
-import { ArticleInfo, Tag } from "../models"
+import { LatestArticleInfo, Tag } from "../models"
 import { getLatestArticles, getPopularTags } from "../services"
 import { Link } from "gatsby"
 
@@ -10,7 +10,7 @@ export default class RightSide extends Component {
         super(props)
         this.state = {
             status: "loading",
-            latestArticles: new APIModelListAdapter([], ArticleInfo, "slug", "empty"),
+            latestArticles: new APIModelListAdapter([], LatestArticleInfo, "slug", "empty"),
             popularTags: new APIModelListAdapter([], Tag, "", "empty"),
         }
     }
@@ -20,7 +20,7 @@ export default class RightSide extends Component {
         getLatestArticles().then(result => {
             this.setState(prevState => ({
                 ...prevState,
-                latestArticles: new APIModelListAdapter(result, ArticleInfo, "slug", "saved"),
+                latestArticles: new APIModelListAdapter(result, LatestArticleInfo, "slug", "saved"),
             }))
         })
 
@@ -85,7 +85,12 @@ function GetPopularBlogPost(props) {
             <Link to={"/blog/" + article.getData("slug")}>
                 <div className="row">
                     <div className="col-4">
-                        <img src={article.getData("thumbnail")} className="w-100" alt="" title="" />
+                        <img
+                            src={article.getData("thumbnail")}
+                            className="w-100"
+                            alt={article.getData("thumbnailAltTags")}
+                            title=""
+                        />
                     </div>
                     <div className="col-8">
                         <h1>{article.getData("title")}</h1>

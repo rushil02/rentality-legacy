@@ -1,15 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 html {
     scroll-behavior: smooth;
 }
 
-.invalid-feedback, .valid-feedback {
+.invalid-feedback,
+.valid-feedback {
     display: block;
 }
-
 
 /************************************/
 /***** Axios Progress Bar start *****/
@@ -34,7 +35,6 @@ html {
 /***** Axios Progress Bar End *****/
 /************************************/
 
-
 /************************************/
 /***** Theme v2 start ***************/
 /************************************/
@@ -52,7 +52,6 @@ input:-webkit-autofill {
     -webkit-animation-fill-mode: both;
 }
 
-
 /******** Text Input ***********/
 
 .input .form-control {
@@ -66,10 +65,10 @@ input:-webkit-autofill {
     height: calc(2.25rem + 15px);
     background-repeat: no-repeat;
     background-position: 5px center;
-    -webkit-transition: all 0.30s ease-in-out;
-    -moz-transition: all 0.30s ease-in-out;
-    -ms-transition: all 0.30s ease-in-out;
-    -o-transition: all 0.30s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
 }
 
 .input .form-control::placeholder {
@@ -81,7 +80,6 @@ input:-webkit-autofill {
     box-shadow: 0 6px 12px -7px #3fc692 !important;
     border-bottom: 1px solid #3fc692;
 }
-
 
 .input.big .form-control {
     font-size: 20px;
@@ -96,7 +94,6 @@ input:-webkit-autofill {
     padding-left: 10px !important;
     background: transparent !important;
 }
-
 
 /******** Number Input ***********/
 
@@ -116,10 +113,10 @@ input:-webkit-autofill {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
-    -webkit-transition: all 0.30s ease-in-out;
-    -moz-transition: all 0.30s ease-in-out;
-    -ms-transition: all 0.30s ease-in-out;
-    -o-transition: all 0.30s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
 }
 
 .input.number-disp:focus-within {
@@ -156,9 +153,9 @@ input:-webkit-autofill {
     margin-left: 0;
 }
 
-
 /******** Text and Number Input without Icon ***********/
-.input.no-background .form-control, .input.no-background.number-disp {
+.input.no-background .form-control,
+.input.no-background.number-disp {
     padding-left: 10px;
     background: none;
 }
@@ -174,7 +171,7 @@ input:-webkit-autofill {
 }
 
 .checkbox .list-inline li .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
-    background-image: url('/static/image/form-1/check.svg');
+    background-image: url("/static/image/form-1/check.svg");
     background-size: unset;
     opacity: 1;
 }
@@ -201,7 +198,7 @@ input:-webkit-autofill {
     border: 1px solid #cacaca !important;
     background-color: #ffffff !important;
     box-shadow: none;
-    bottom: .15rem;
+    bottom: 0.15rem;
     top: unset;
 }
 
@@ -209,7 +206,7 @@ input:-webkit-autofill {
     width: 25px;
     height: 25px;
     margin-top: -4px;
-    bottom: .15rem;
+    bottom: 0.15rem;
     top: unset;
 }
 
@@ -228,19 +225,20 @@ input:-webkit-autofill {
     padding-top: 10px;
     padding-bottom: 10px;
     min-width: 200px;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     margin-bottom: 8px;
     margin-right: 10px;
 }
 
-.selection .btn-group .btn:hover, .selection .btn-group .btn:focus, .selection .btn-group .btn.focus {
+.selection .btn-group .btn:hover,
+.selection .btn-group .btn:focus,
+.selection .btn-group .btn.focus {
     text-decoration: none;
 }
 
 .selection .btn-group .btn:hover {
     background-color: rgba(68, 235, 178, 0.32);
 }
-
 
 .selection .btn-group .btn.active {
     padding-top: 6px;
@@ -254,12 +252,12 @@ input:-webkit-autofill {
     display: block !important;
 }
 
-
 /************** Button *************/
-a.default-button-style, button.default-button-style {
+a.default-button-style,
+button.default-button-style {
     font-size: 16px;
     border-radius: 99px;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     font-weight: 400;
     color: #2a2b32;
     background-color: transparent;
@@ -268,15 +266,17 @@ a.default-button-style, button.default-button-style {
     border: 1px solid #2a2b32;
 }
 
-a.default-button-style:hover, a.default-button-style:focus,
-button.default-button-style:hover, button.default-button-style:focus {
+a.default-button-style:hover,
+a.default-button-style:focus,
+button.default-button-style:hover,
+button.default-button-style:focus {
     text-decoration: none;
     background-color: #2a2b32;
     color: #ffffff !important;
 }
 
-
-a.imp-button-style, button.imp-button-style {
+a.imp-button-style,
+button.imp-button-style {
     font-size: 16px;
     border-radius: 99px;
     font-weight: 700;
@@ -285,17 +285,18 @@ a.imp-button-style, button.imp-button-style {
     padding: 11px 59px;
     cursor: pointer;
     text-transform: uppercase;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     -webkit-appearance: none;
 }
 
-a.imp-button-style:hover, a.imp-button-style:focus,
-button.imp-button-style:hover, button.imp-button-style:focus {
+a.imp-button-style:hover,
+a.imp-button-style:focus,
+button.imp-button-style:hover,
+button.imp-button-style:focus {
     text-decoration: none;
     color: #2a2b32 !important;
     background-color: #36ffb1 !important;
 }
-
 
 /************** TextArea *************/
 textarea.form-control {
@@ -313,7 +314,6 @@ textarea.form-control {
 textarea.form-control:focus {
     box-shadow: 0 0 7px -1px #3fc692 !important;
 }
-
 
 /************************************/
 /***** Theme v2 End *****************/

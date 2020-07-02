@@ -80,6 +80,7 @@
     font-weight: 400;
     color: #171717;
     padding-left: 26px;
+    height: 100%;
     background-image: url("images/page-blog/left-post/tag.svg");
     background-repeat: no-repeat;
     background-position: left 5px;
@@ -529,6 +530,14 @@
     text-transform: uppercase;
 }
 
+.pageBlog .leftDetail .last .post {
+    padding: 0 15px;
+}
+
+.pageBlog .leftDetail .last .post img {
+    border-radius: 10px;
+}
+
 .pageBlog .leftDetail .last .post a {
     text-decoration: none;
 }
@@ -573,6 +582,7 @@
     font-weight: 400;
     color: #171717;
     padding-left: 26px;
+    height: 100%;
     background-image: url("/static/image/page-blog/left-post/tag.svg");
     background-repeat: no-repeat;
     background-position: left 5px;
@@ -644,6 +654,10 @@
 
 .pageBlog .list div + div {
     margin-top: 6px;
+}
+
+.colCentered {
+    margin: 0 auto;
 }
 
 /*************************/

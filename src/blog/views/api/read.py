@@ -68,4 +68,4 @@ class TagsRelatedArticlesListView(APIView):
             slice_start = 0
             slice_end = 10
         articles = Article.objects.filter(tags__verbose=tag).order_by('-update_time')[slice_start:slice_end]
-        return Response(ArticleShortInfoSerializer(articles, many=True).data, status=status.HTTP_200_OK)
+        return Response(PopularArticleShortInfoSerializer(articles, many=True).data, status=status.HTTP_200_OK)

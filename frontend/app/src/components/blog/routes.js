@@ -6,7 +6,7 @@ export default {
         popularArticles: "popular-articles",
         latestArticles: "latest-articles",
         popularTags: "popular-tags",
-        tagRelatedArticles: "tag-articles/:tag",
+        tagRelatedArticles: "tag-articles",
         articleBySlug: "article/:slug",
         allArticles: "all-articles",
         allTagsAndArticles: "all-tags-and-articles",

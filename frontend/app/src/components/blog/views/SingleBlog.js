@@ -1,33 +1,69 @@
 import React, { Component } from "react"
 import styles from "./Blog.module.css"
-import RightSide from "./RightSide"
+import { PopularArticleInfo } from "../models"
+import { APIModelListAdapter } from "core/utils/ModelHelper"
+import { getRelatedArticles } from "../services"
+import Slider from "react-slick"
+import "./ImageCarousel.css"
 
 export default class SingleBlog extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            status: "loading",
+            relatedArticles: new APIModelListAdapter([], PopularArticleInfo, "slug", "empty"),
+        }
+    }
+
     componentDidMount() {
-        console.log(this.props.pageContext)
+        let relatedTag = this.props.pageContext.article.tags[0]
+        console.log(this.props.pageContext.article.tags[0])
+        this.setState(prevState => ({ status: "loading" }))
+
+        getRelatedArticles(relatedTag).then(result => {
+            this.setState(prevState => ({
+                ...prevState,
+                status: "done",
+                relatedArticles: new APIModelListAdapter(result, PopularArticleInfo, "slug", "saved"),
+            }))
+        })
     }
 
     componentWillUnmount() {}
 
     render() {
-        console.log(this.props.pageContext)
+        const settingsSlider = {
+            arrows: true,
+            autoplay: true,
+            variableWidth: false,
+            autoplaySpeed: 2000,
+            cssEase: "linear",
+            infinite: true,
+            speed: 500,
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            swipeToSlide: true,
+        }
+        let article = this.props.pageContext.article
         return (
             <React.Fragment>
                 <div className={styles.pageBlog}>
                     <div className="container">
                         <div className="row">
-                            <div className="col-md-7 col-lg-8 col-xl-8">
+                            <div className={"col-md-10 col-lg-9 col-xl-9 " + styles.colCentered}>
                                 <div className={styles.leftDetail}>
                                     <img
-                                        src="/static/image/page-blog/left-detail/1.png"
+                                        src={article.thumbnail}
                                         className="w-100"
-                                        alt=""
+                                        alt={article.thumbnail_alt_tags}
                                         title=""
                                     />
-                                    <h1>Houses for you by a travel</h1>
+                                    <h1>{article.title}</h1>
                                     <div className="row">
                                         <div className="col-6">
-                                            <div className={styles.tag}>exchange nigerian naira, naira to dolar</div>
+                                            <div className={styles.tag}>
+                                                {article.tags.map((tag, index) => tag + ", ")}
+                                            </div>
                                         </div>
                                         <div className="col-6">
                                             <div className={styles.by}>
@@ -35,7 +71,7 @@ export default class SingleBlog extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <p className={styles.date}>20.07.2018</p>
+                                    <p className={styles.date}>{formatDate(article.update_time)}</p>
                                     <p>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
@@ -114,85 +150,57 @@ export default class SingleBlog extends Component {
                                         </div>
                                     </div>
                                     <div className={styles.last}>
-                                        <h1>Latest Blog</h1>
-                                        <div className="loop owl-carousel owl-theme">
-                                            <div className="item">
-                                                <div className="row">
-                                                    <div className="col-md-12 col-lg-6 col-xl-6">
-                                                        <div className={styles.post}>
-                                                            <a href="">
-                                                                <img
-                                                                    src="/static/image/page-blog/left-detail/last-1.png"
-                                                                    className="w-100"
-                                                                    alt=""
-                                                                    title=""
-                                                                />
-                                                                <h1>
-                                                                    Runaway black market - gap between exchange rates
-                                                                    near widest since devaluation
-                                                                </h1>
-                                                                <p>
-                                                                    One of the pertinent factors that contribute to the
-                                                                    aesthetics and vividness of a city is its lighting.
-                                                                    Proper illumination of the urban space after the
-                                                                    sunset makes the city
-                                                                </p>
-                                                                <div className="row">
-                                                                    <div className="col-6">
-                                                                        <div className={styles.tag}>
-                                                                            exchange nigerian naira, naira to dolar
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="col-6">
-                                                                        <div className={styles.date}>10.11.2018</div>
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12 col-lg-6 col-xl-6">
-                                                        <div className={styles.post}>
-                                                            <a href="">
-                                                                <img
-                                                                    src="/static/image/page-blog/left-detail/last-2.png"
-                                                                    className="w-100"
-                                                                    alt=""
-                                                                    title=""
-                                                                />
-                                                                <h1>
-                                                                    Nigerian foreign reserves fall 20.5 pct to $23.95
-                                                                    bln by Oct. 27 -central bank – Reuters
-                                                                </h1>
-                                                                <p>
-                                                                    One of the pertinent factors that contribute to the
-                                                                    aesthetics and vividness of a city is its lighting.
-                                                                    Proper illumination of the urban space after the
-                                                                    sunset makes the city
-                                                                </p>
-                                                                <div className="row">
-                                                                    <div className="col-6">
-                                                                        <div className={styles.tag}>
-                                                                            exchange nigerian naira, naira to dolar
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="col-6">
-                                                                        <div className={styles.date}>10.11.2018</div>
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <h1>Related Blog</h1>
+                                            <Slider {...settingsSlider}>
+                                                {this.state.relatedArticles.getObjectList().map((article, index) => (
+                                                    <GetSliderRelatedPost key={article[0]} article={article[1]} />
+                                                ))}
+                                            </Slider>
                                     </div>
                                 </div>
                             </div>
-                            <RightSide />
                         </div>
                     </div>
                 </div>
             </React.Fragment>
         )
     }
+}
+
+function formatDate(dateStr) {
+    if (dateStr) {
+        let updateDate = new Date(dateStr)
+        return updateDate.getDate() + "." + updateDate.getMonth() + "." + updateDate.getFullYear()
+    } else {
+        return "N/A"
+    }
+}
+
+function GetSliderRelatedPost(props) {
+    let article = props.article
+    let updateDate = article.getData("updateDate")
+    return (
+        <div className={styles.post}>
+            <a href="">
+                <img
+                    src={article.getData("thumbnailSmall")}
+                    className="w-100"
+                    alt={article.getData("thumbnailAltTags")}
+                    title=""
+                />
+                <h1>{article.getData("title")}</h1>
+                <p>{article.getData("abstract")}</p>
+                <div className="row">
+                    <div className="col-6">
+                        <div className={styles.tag}>{article.getData("tags").map((tag, index) => tag + ", ")}</div>
+                    </div>
+                    <div className="col-6">
+                        <div className={styles.date}>
+                            {updateDate.getDate() + "." + updateDate.getMonth() + "." + updateDate.getFullYear()}
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    )
 }

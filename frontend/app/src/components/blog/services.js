@@ -53,3 +53,16 @@ export function getArticle(slug) {
             })
     })
 }
+
+export function getRelatedArticles(relatedTag) {
+    return new Promise(function (resolve, reject) {
+        axios
+            .get(reverse(APIRoutes.blog.tagRelatedArticles), { params: { tag: relatedTag } })
+            .then(response => {
+                resolve(response.data)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+}

@@ -1,12 +1,33 @@
 import APIModelAdapter from "core/utils/ModelHelper"
 
-export class ArticleInfo extends APIModelAdapter {
+export class LatestArticleInfo extends APIModelAdapter {
     fieldMap() {
         return {
             title: { key: "title" },
             abstract: { key: "abstract" },
             priority: { key: "priority" },
             thumbnail: { key: "thumbnail" },
+            thumbnailAltTags: { key: "thumbnail_alt_tags" },
+            createDate: { key: "create_time", parser: this.parseDate },
+            updateDate: { key: "update_time", parser: this.parseDate },
+            tags: { key: "tags" },
+            slug: { key: "slug" },
+        }
+    }
+    parseDate(dateStr) {
+        return new Date(dateStr)
+    }
+}
+
+export class PopularArticleInfo extends APIModelAdapter {
+    fieldMap() {
+        return {
+            title: { key: "title" },
+            abstract: { key: "abstract" },
+            priority: { key: "priority" },
+            thumbnailSmall: { key: "thumbnail_small" },
+            thumbnailLarge: { key: "thumbnail_large" },
+            thumbnailAltTags: { key: "thumbnail_alt_tags" },
             createDate: { key: "create_time", parser: this.parseDate },
             updateDate: { key: "update_time", parser: this.parseDate },
             tags: { key: "tags" },

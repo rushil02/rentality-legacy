@@ -15,7 +15,7 @@ class ArticleShortInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('title', 'abstract', 'priority', 'thumbnail', 'update_time', 'create_time', 'tags', 'slug')
+        fields = ('title', 'abstract', 'priority', 'thumbnail', 'thumbnail_alt_tags', 'update_time', 'create_time', 'tags', 'slug')
 
 
 class LatestArticleShortInfoSerializer(serializers.ModelSerializer):
