@@ -316,7 +316,9 @@ FLAT_PAGE_TEMPLATES = (
 THUMBNAIL_ALIASES = {
     '': {
         'th_col_3': {'size': (263, 196), 'crop': "smart", 'autocrop': True, 'upscale': True},
-
+        'latest_blog_articles': {'size': (97, 97), 'crop': "smart", 'autocrop': True, 'upscale': True},
+        'popular_blog_articles_large': {'size': (752, 383), 'crop': "smart", 'autocrop': True, 'upscale': True},
+        'popular_blog_articles_small': {'size': (360, 267), 'crop': "smart", 'autocrop': True, 'upscale': True},
         'profile_navbar': {'size': (41, 41), 'crop': "smart", 'autocrop': True, 'upscale': True},
         'profile_search_page': {'size': (31, 31), 'crop': "smart", 'autocrop': True, 'upscale': True},
         'house_search_page': {'size': (263, 196), 'crop': "smart", 'autocrop': True, 'upscale': True},

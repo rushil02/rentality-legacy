@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from blog.models import Article, Tag
-from blog.serializers import ArticlePublicSerializer, ArticleShortInfoSerializer, TagSerializer, TagAndArticleSerializer
+from blog.serializers import ArticlePublicSerializer, ArticleShortInfoSerializer, TagSerializer, \
+    TagAndArticleSerializer, PopularArticleShortInfoSerializer, LatestArticleShortInfoSerializer
 
 
 class ArticlePublicReadView(APIView):
@@ -33,13 +34,13 @@ class PopularArticlesListView(APIView):
             slice_start = 0
             slice_end = 10
         articles = Article.objects.all().order_by('-priority')[slice_start:slice_end]
-        return Response(ArticleShortInfoSerializer(articles, many=True).data, status=status.HTTP_200_OK)
+        return Response(PopularArticleShortInfoSerializer(articles, many=True).data, status=status.HTTP_200_OK)
 
 
 class LatestArticlesListView(APIView):
     def get(self, request):
         articles = Article.objects.filter(active=True).order_by('-update_time')
-        return Response(ArticleShortInfoSerializer(articles, many=True).data, status=status.HTTP_200_OK)
+        return Response(LatestArticleShortInfoSerializer(articles, many=True).data, status=status.HTTP_200_OK)
 
 
 class PopularTagsListView(APIView):

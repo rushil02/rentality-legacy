@@ -1,12 +1,11 @@
 from django.utils import timezone
-from easy_thumbnails.exceptions import InvalidImageFormatError
-from easy_thumbnails.files import get_thumbnailer
 from elasticsearch_dsl import (
     Text, Completion, Keyword, Integer, DateRange, HalfFloat, GeoPoint, InnerDoc, Nested, Range, Boolean, analyzer
 )
 
 from elastic_search.core.models import BaseModel
 from elastic_search.core.utils import get_index_name
+from utils.api_thumbnailer import resize_image
 
 
 class Location(BaseModel):
@@ -79,19 +78,8 @@ class House(BaseModel):
 
     @classmethod
     def parse_db_obj(cls, db_obj):
-        profile_image = db_obj.get_owner().userprofile.get_profile_pic()
-        if profile_image:
-            try:
-                profile_image = get_thumbnailer(profile_image)['profile_search_page'].url
-            except InvalidImageFormatError:
-                pass
-
-        thumbnail = db_obj.get_thumbnail()
-        if thumbnail:
-            try:
-                thumbnail = get_thumbnailer(thumbnail)['house_search_page'].url
-            except InvalidImageFormatError:
-                pass
+        profile_image = resize_image(db_obj.get_owner().userprofile.get_profile_pic(), preset='profile_search_page')
+        thumbnail = resize_image(db_obj.get_thumbnail(), preset='house_search_page')
 
         es_obj = cls(
             obj_pk=db_obj.pk, address=db_obj.address, location=db_obj.get_location(), home_type=db_obj.home_type.name,
