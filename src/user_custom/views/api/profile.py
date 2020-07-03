@@ -1,14 +1,12 @@
-from easy_thumbnails.exceptions import InvalidImageFormatError
 from rest_framework.views import APIView, Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q, Exists, OuterRef
 
 from user_custom.models import UserProfile, PersonalityTag
 from user_custom.serializers.common import PersonalityTagSerializer
 from user_custom.serializers.profile import UserProfileSerializer, UserInfoSerializer, ProfileImageUploadSerializer
-from rest_framework.exceptions import ParseError
 
 from utils.api_thumbnailer import resize_image
 
@@ -58,16 +56,9 @@ class ProfilePicUploadView(APIView):
 
     def get(self, request):
         image = request.user.userprofile.profile_pic
-        if image:
-            try:
-                response = {
-                    'profile_pic': resize_image(image, 'th_col_3'),
-                }
-            except InvalidImageFormatError:
-                response = {'profile_pic': None}
-        else:
-            response = {'profile_pic': None}
-
+        response = {
+            'profile_pic': resize_image(image, 'th_col_3'),
+        }
         return Response(response, status=status.HTTP_200_OK)
 
     def post(self, request):

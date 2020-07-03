@@ -1,11 +1,8 @@
 from django import forms
 from django.conf import settings
-from django.contrib.auth import get_user_model, authenticate, password_validation
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import get_user_model
 
 from house.models import HomeType
-from utils.email_validator import clean_gmail
 from user_custom.models import UserProfile
 from allauth.account.forms import LoginForm as AllAuthLoginForm
 from allauth.account.forms import SignupForm as AllAuthSignupForm

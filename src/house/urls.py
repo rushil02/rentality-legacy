@@ -8,7 +8,6 @@ from house.views.api.create import HouseView, FormOptionsView, AvailabilityView,
 from house.views.api.actions import ActivateHouseListing, DeactivateHouseListing
 from house.views.api.read import HouseDetailsPublicView, NetAvailableDatesView, NetUnavailableDatesView
 
-from house.views.old import search_house_page, search_house_api
 
 from utils.api_utils import LocationAutocomplete
 
@@ -18,8 +17,6 @@ from house.views import ImagesPublicView, ThumbnailPublicView
 app_name = 'house'
 
 urlpatterns = [
-    path('search', search_house_page, name='search_house'),
-    path('search-api', search_house_api, name='search_house_api'),
     path('postal-location', LocationAutocomplete.as_view(), name='postal_code_api'),
 
     # APIs

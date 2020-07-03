@@ -114,7 +114,7 @@ class BlogArticle(BaseModel):
         index_this_model = True
 
     class Index:
-        name = get_index_name('House')
+        name = get_index_name('Blog')
 
         settings = {
             'number_of_shards': 1,

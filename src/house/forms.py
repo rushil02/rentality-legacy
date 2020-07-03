@@ -1,10 +1,8 @@
 from django import forms
-from django.contrib.postgres.forms import DateRangeField, RangeWidget
+from django.contrib.postgres.forms import RangeWidget
 from django.core.exceptions import ValidationError
-from django.forms import inlineformset_factory, modelformset_factory
+from django.forms import inlineformset_factory
 from dal import autocomplete
-from psycopg2.extras import DateRange
-from easy_thumbnails.widgets import ImageClearableFileInput
 
 from house.models import House, Image, Availability, HouseRule
 from rentality import settings

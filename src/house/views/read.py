@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from house.models import Image
 
-from house.serializers import ImagePublicSerializer
+from house.serializers.read import ImagePublicSerializer
 
 
 class ImagesPublicView(GenericAPIView):

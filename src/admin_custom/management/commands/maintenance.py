@@ -42,6 +42,7 @@ def clean_house_image_thumbnails():
     Use when there are images but either none is selected as thumbnail,
     :return:
     """
+    # FIXME
     pass
 
 

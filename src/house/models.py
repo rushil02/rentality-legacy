@@ -11,12 +11,8 @@ from django.contrib.postgres.fields import DateRangeField, ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import FileField
-from django.db.models.fields.files import ImageFieldFile
 from django.utils.translation import gettext_lazy as _
-from easy_thumbnails.files import get_thumbnailer
-from django.contrib.postgres.fields import JSONField
-from django.conf import settings
+
 
 from house.helpers import check_house_availability, filter_past_dates, filter_small_date_ranges, get_available_dates, \
     filter_dates_wrt_lower
@@ -187,14 +183,6 @@ class House(models.Model):
 
     def get_rent_per_day(self):
         return Decimal(self.rent) / 7
-
-    # FIXME: needs to be removed
-    def get_thumbnail_2(self):
-        if self.is_thumbnail_available():
-            thumbnailer = get_thumbnailer(self.get_thumbnail())
-            url = thumbnailer.get_thumbnail({'crop': 'smart', 'size': (540, 360)})
-            return '/media/' + str(url)
-        return self.get_thumbnail()
 
     def get_images(self):
         return self.image_set.all()

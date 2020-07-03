@@ -1,11 +1,9 @@
 import uuid
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.postgres.fields import JSONField, DateRangeField
+from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
-from easy_thumbnails.files import get_thumbnailer
 
 from utils.privacy import ModelWithPrivacy
 
@@ -74,8 +72,6 @@ class HousePreference(ModelWithPrivacy):
 
     def __str__(self):
         return "%s" % self.tenant
-
-    # FIXME: get_thumbnail and is_thumbnail_available merge methods
 
     def preferred_suburbs(self):
         return self.get_locations_display_short()

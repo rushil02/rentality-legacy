@@ -7,7 +7,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
 
-from house.serializers import HouseAllDetailsSerializer, HomeTypeSerializer
+from house.serializers import HouseAllDetailsSerializer
 from utils.helpers import merge_dicts
 from utils.model_utils import next_ref_code, get_nested_info
 from .utils import STATUS_CHOICES, ACTOR_CHOICES
