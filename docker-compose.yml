@@ -56,7 +56,7 @@ services:
       - 'frontenddata:/app/public'
   web:
     build:
-      context: ./src
+      context: ./backend
       args:
         test_mode: "true"
     image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
@@ -64,7 +64,7 @@ services:
       - './static_dev/static_root:/rentality/static_dev/static_root'
       - './static_dev/media_root:/rentality/static_dev/media_root'
       - './secrets:/run/secrets'
-      - './src:/rentality/src'
+      - './backend/app/src:/rentality/app/src'
     depends_on:
       - postgres
       - frontend
@@ -73,20 +73,20 @@ services:
     ports:
       - '3002:8000'
     entrypoint:
-      - ./entrypoint.dev.sh
+      - './bin/entrypoint.dev.sh'
   celery-worker:
-    build: ./src
+    build: ./backend
     image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
     volumes:
       - './static_dev/static_root:/rentality/static_dev/static_root'
       - './static_dev/media_root:/rentality/static_dev/media_root'
       - './secrets:/run/secrets'
-      - './src:/rentality/src'
     depends_on:
       - postgres
       - elasticsearch
       - rabbitmq
-    entrypoint: celery -A rentality worker -l info
+    entrypoint:
+      - './bin/start_celery_worker.sh'
   rabbitmq:
     image: 'rabbitmq:3.7.13-management'
     environment:
@@ -101,14 +101,14 @@ services:
     depends_on:
       - postgres
   migration:
-    build: ./src
+    build: ./backend
     image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
     volumes:
       - './secrets:/run/secrets'
     depends_on:
       - postgres
       - frontend
-    entrypoint: ./sync.sh
+    entrypoint: './bin/sync.sh'
 volumes:
   pgdata: null
   esdata: null
