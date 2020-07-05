@@ -19,7 +19,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faPlus, faPen, faTimes, faCheck} from "@fortawesome/free-solid-svg-icons"
 import styles from "./AvailabilitySelector.module.css"
 import {PulseLoader} from "react-spinners"
-import {Accordion, Card, Button} from "react-bootstrap";
+import {Accordion, Card, Button, Row, useAccordionToggle} from "react-bootstrap";
 
 const defineds = {
     startOfWeek: startOfWeek(new Date()),
@@ -81,9 +81,10 @@ export default class AvailabilitySelectorComponent extends Component {
             addNewDisplayText = <span>Select dates</span>
         } else {
             if (this.props.modeNew) {
-                addNewDisplayText = <span>Click to Add Dates</span>
+                addNewDisplayText = <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    <span>Click to Add Dates</span>
+                </Accordion.Toggle>
             } else {
-                console.log(this.props.srcStartDate)
                 addNewDisplayText = (
                     <span>
                         <b>{this.props.srcStartDate.toDateString()}</b> to <b>{this.props.srcEndDate.toDateString()}</b>
@@ -192,15 +193,16 @@ export default class AvailabilitySelectorComponent extends Component {
         }
 
         return (
-            <div className={"card-body " + styles.cardBody} onClick={action} role={"presentation"}>
+            <Card.Body>
                 <div className={styles.cardTextContent}>{this.getInfoText()}</div>
                 <div className="loading-container">{this.getSyncIndicator()}</div>
-                <div className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>
+                <div
+                    className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>
                 <div className={styles.cardButtonGroup}>
                     {this.getEditButton()}
                     {this.getRemoveButton()}
                 </div>
-            </div>
+            </Card.Body>
         )
     }
 
@@ -224,76 +226,13 @@ export default class AvailabilitySelectorComponent extends Component {
 
         return (
             <React.Fragment>
-                <div className={"card mb-3 " + styles.accordionBorder}>
-                    {this.getInfoCard()}
-                    <div
-                        className={"collapse " + styles.availabilitySelectorContainer}
-                        id={"collapsibleCalendar-" + this.props.idKey}
-                    >
-                        <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
-                            <div className={"row"}>
-                                <div
-                                    className={"col-12 " + styles.availabilitySelectorContainer}
-                                    style={{padding: "20px"}}
-                                >
-                                    <DateRangePicker
-                                        ranges={[selectionRange]}
-                                        onChange={this.handleSelect}
-                                        months={this.monthsScreenNum}
-                                        minDate={new Date()}
-                                        direction={"horizontal"}
-                                        staticRanges={staticRanges}
-                                        inputRanges={inputRanges}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={"card mb-3 " + styles.accordionBorder}>
-                    {this.getInfoCard()}
-                    <div
-                        className={"collapse " + styles.availabilitySelectorContainer}
-                        id={"collapsibleCalendar-" + this.props.idKey}
-                    >
-                        <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
-                            <div className={"row"}>
-                                <div
-                                    className={"col-12 " + styles.availabilitySelectorContainer}
-                                    style={{padding: "20px"}}
-                                >
-                                    <DateRangePicker
-                                        ranges={[selectionRange]}
-                                        onChange={this.handleSelect}
-                                        months={this.monthsScreenNum}
-                                        minDate={new Date()}
-                                        direction={"horizontal"}
-                                        staticRanges={staticRanges}
-                                        inputRanges={inputRanges}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <Accordion>
-                    <Card>
-                        <Card.Header>
-                            <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                {this.getInfoText()}
-                                <div className="loading-container">{this.getSyncIndicator()}</div>
-                                <div
-                                    className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>
-                                <div className={styles.cardButtonGroup}>
-                                    {this.getEditButton()}
-                                    {this.getRemoveButton()}
-                                </div>
-                            </Accordion.Toggle>
-                        </Card.Header>
+                    <Card className={"mb-3 " + styles.accordionBorder}>
+                        {this.getInfoCard()}
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
                                 <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
-                                    <div className={"row"}>
+                                    <Row>
                                         <div
                                             className={"col-12 " + styles.availabilitySelectorContainer}
                                             style={{padding: "20px"}}
@@ -308,7 +247,7 @@ export default class AvailabilitySelectorComponent extends Component {
                                                 inputRanges={inputRanges}
                                             />
                                         </div>
-                                    </div>
+                                    </Row>
                                 </div>
                             </Card.Body>
                         </Accordion.Collapse>

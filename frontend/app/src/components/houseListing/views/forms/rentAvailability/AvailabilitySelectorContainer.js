@@ -42,8 +42,8 @@ export default class AvailabilitySelectorHandler extends Component {
     onAdd = (startDate, endDate) => {
         let dataToSend = {
             date_range: {
-                lower: format(startDate, "YYYY-MM-DD"),
-                upper: format(endDate, "YYYY-MM-DD"),
+                lower: format(startDate, "yyyy-MM-dd"),
+                upper: format(endDate, "yyyy-MM-dd"),
             },
         }
 
@@ -64,8 +64,8 @@ export default class AvailabilitySelectorHandler extends Component {
     onUpdate = (objID, startDate, endDate, successCallback) => {
         let dataToSend = {
             date_range: {
-                lower: format(startDate, "YYYY-MM-DD"),
-                upper: format(endDate, "YYYY-MM-DD"),
+                lower: format(startDate, "yyyy-MM-dd"),
+                upper: format(endDate, "yyyy-MM-dd"),
             },
         }
         putAvailabilityData(this.props.houseUUID, objID, dataToSend)
