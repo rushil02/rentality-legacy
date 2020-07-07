@@ -61,14 +61,14 @@ services:
         test_mode: "true"
     image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
     volumes:
-      - './static_dev/static_root:/rentality/static_dev/static_root'
-      - './static_dev/media_root:/rentality/static_dev/media_root'
+      - './static_dev/static_root:/rentality/app/static_dev/static_root'
+      - './static_dev/media_root:/rentality/app/static_dev/media_root'
       - './secrets:/run/secrets'
       - './backend/app/src:/rentality/app/src'
     depends_on:
       - postgres
       - frontend
-      - migration
+      # - migration
       - elasticsearch
     ports:
       - '3002:8000'

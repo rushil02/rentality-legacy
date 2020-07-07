@@ -8,17 +8,22 @@ export default class TagRelatedBlogs extends Component {
     componentWillUnmount() {}
 
     render() {
+        let tagVerbose = this.props.pageContext.tagAndArticles.verbose
+        let articleSet = this.props.pageContext.tagAndArticles.article_set
+
         return (
             <React.Fragment>
                 {/* <!-- page blog start --> */}
                 <div className={styles.pageBlog}>
                     <div className="container">
-                        <h1 className={styles.title}>Tag: Tag Name</h1>
+                        <h1 className={styles.title}>Tag: {tagVerbose}</h1>
                         <div className="row">
                             <div className="col-md-7 col-lg-8 col-xl-8">
                                 <div className="lists">
                                     <div className="row">
-                                        <GetTagRelatedBlog />
+                                        {articleSet.map((article, index) => (
+                                            <GetTagRelatedBlog key={index} article={article} />
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -32,8 +37,7 @@ export default class TagRelatedBlogs extends Component {
 }
 
 function GetTagRelatedBlog(props) {
-    // let house = props.blog
-    // let mainDivClass = props.mainDivClass
+    let article = props.article
 
     return (
         <React.Fragment>
@@ -44,23 +48,10 @@ function GetTagRelatedBlog(props) {
                     className={styles.list}
                 >
                     <div className={styles.image}>
-                        <img src="/static/image/page-blog/left-post/1.png" className="w-100" alt="" title="" />
+                        <img src={article.thumbnail} className="w-100" alt={article.thumbnail_alt_tags} title="" />
                     </div>
-                    <h1>Blog Title</h1>
-                    <h2>Something Else</h2>
-                </a>
-            </div>
-            <div className="col-md-6 col-lg-6">
-                <a
-                    href="singleblogurl"
-                    // {reverse(routes.react.apply.houseInfo, { houseUUID: house.getData("uuid") })}
-                    className={styles.list}
-                >
-                    <div className={styles.image}>
-                        <img src="/static/image/page-blog/left-post/1.png" className="w-100" alt="" title="" />
-                    </div>
-                    <h1>Blog Title</h1>
-                    <h2>Something Else</h2>
+                    <h1>{article.title}</h1>
+                    <h2>{article.abstract}</h2>
                 </a>
             </div>
         </React.Fragment>

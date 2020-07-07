@@ -33,10 +33,10 @@ export default class SingleBlog extends Component {
 
     render() {
         const settingsSlider = {
-            arrows: true,
+            arrows: false,
             autoplay: true,
             variableWidth: false,
-            autoplaySpeed: 2000,
+            autoplaySpeed: 5000,
             cssEase: "linear",
             infinite: true,
             speed: 500,
@@ -72,90 +72,14 @@ export default class SingleBlog extends Component {
                                         </div>
                                     </div>
                                     <p className={styles.date}>{formatDate(article.update_time)}</p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde
-                                        omnis iste
-                                    </p>
-                                    <p>
-                                        natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                                        dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur
-                                        aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                                        voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia
-                                        dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi
-                                        tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                                    </p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde
-                                        omnis iste
-                                    </p>
-                                    <p>
-                                        natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                                        dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur
-                                        aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                                        voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia
-                                        dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi
-                                        tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                                    </p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde
-                                        omnis iste
-                                    </p>
-                                    <p>
-                                        natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                                        dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur
-                                        aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                                        voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia
-                                        dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi
-                                        tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                                    </p>
-                                    <div className={styles.video} data-toggle="modal" data-target="#video">
-                                        <img
-                                            src="/static/image/page-blog/left-detail/video.png"
-                                            className="w-100"
-                                            alt=""
-                                            title=""
-                                        />
-                                        <div className="play"></div>
-                                    </div>
-                                    <div id="video" className="modal fade">
-                                        <div className="modal-dialog modal-dialog-centered">
-                                            <div className="modal-content">
-                                                <iframe
-                                                    width="600"
-                                                    height="400"
-                                                    src="https://www.youtube.com/embed/WNeLUngb-Xg"
-                                                    frameBorder="0"
-                                                    allow="autoplay; encrypted-media"
-                                                    allowFullScreen=""
-                                                ></iframe>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {article.content}
                                     <div className={styles.last}>
                                         <h1>Related Blog</h1>
-                                            <Slider {...settingsSlider}>
-                                                {this.state.relatedArticles.getObjectList().map((article, index) => (
-                                                    <GetSliderRelatedPost key={article[0]} article={article[1]} />
-                                                ))}
-                                            </Slider>
+                                        <Slider {...settingsSlider}>
+                                            {this.state.relatedArticles.getObjectList().map((article, index) => (
+                                                <GetSliderRelatedPost key={article[0]} article={article[1]} />
+                                            ))}
+                                        </Slider>
                                     </div>
                                 </div>
                             </div>

@@ -60,6 +60,18 @@ export default class RightSide extends Component {
     }
 }
 
+function slugify(verbose) {
+    return verbose
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/--+/g, "-")
+}
+
 function formatDate(date) {
     if (date) {
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -70,10 +82,10 @@ function formatDate(date) {
 }
 
 function GetTag(props) {
-    let tagTitle = props.tag.getData("title")
+    let tagVerbose = props.tag.getData("title")
     return (
         <li className="list-inline-item">
-            <Link to={"/blog/tag/" + tagTitle}>{tagTitle}</Link>
+            <Link to={"/blog/tag/" + slugify(tagVerbose)}>{tagVerbose}</Link>
         </li>
     )
 }
