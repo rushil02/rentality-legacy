@@ -4,12 +4,14 @@ import { APIModelListAdapter } from "core/utils/ModelHelper"
 import { LatestArticleInfo, Tag } from "../models"
 import { getLatestArticles, getPopularTags } from "../services"
 import { Link } from "gatsby"
+import { navigate } from "gatsby"
 
 export default class RightSide extends Component {
     constructor(props) {
         super(props)
         this.state = {
             status: "loading",
+            searchValue: "",
             latestArticles: new APIModelListAdapter([], LatestArticleInfo, "slug", "empty"),
             popularTags: new APIModelListAdapter([], Tag, "", "empty"),
         }
@@ -32,12 +34,51 @@ export default class RightSide extends Component {
         })
     }
 
+    onFieldChange = value => {
+        this.setState(prevState => ({
+            ...prevState,
+            searchValue: value,
+        }))
+    }
+
+    handleSearch = e => {
+        let searchValue = this.state.searchValue
+        navigate("/blog/search?q=" + this.state.searchValue, {
+            state: { searchValue },
+        })
+    }
+
     componentWillUnmount() {}
 
     render() {
         return (
             <React.Fragment>
                 <div className="col-md-5 col-lg-4 col-xl-4">
+                    <div className={styles.rightSearch}>
+                        <div className={styles.title}>Search</div>
+                        <div className={styles.form}>
+                            <div className="row">
+                                <div className="col-md-7 col-lg-8">
+                                    <input
+                                        type="text"
+                                        name=""
+                                        className={styles.formControl}
+                                        placeholder="Type here to search"
+                                        onChange={e => this.onFieldChange(e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-md-5 col-lg-4">
+                                    <button
+                                        type="button"
+                                        className={styles.btn + " btn-link btn-block"}
+                                        onClick={this.handleSearch}
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className={styles.rightPost}>
                         <div className={styles.title}>New Posts</div>
                         {/* loop through popular posts */}

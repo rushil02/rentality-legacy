@@ -17,7 +17,6 @@ export default class SingleBlog extends Component {
 
     componentDidMount() {
         let relatedTag = this.props.pageContext.article.tags[0]
-        console.log(this.props.pageContext.article.tags[0])
         this.setState(prevState => ({ status: "loading" }))
 
         getRelatedArticles(relatedTag).then(result => {

@@ -66,3 +66,16 @@ export function getRelatedArticles(relatedTag) {
             })
     })
 }
+
+export function getSearchArticles(value) {
+    return new Promise(function (resolve, reject) {
+        axios
+            .get(reverse(APIRoutes.search.blog), { params: { q: value } })
+            .then(response => {
+                resolve(response.data)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+}

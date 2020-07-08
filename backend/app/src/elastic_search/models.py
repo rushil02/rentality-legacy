@@ -59,7 +59,7 @@ class House(BaseModel):
     rent = Integer()
     availabilities = Nested(Availability, multi=True)
     min_stay = Integer()
-    uuid = Keyword()
+    uuid = Keyword(index=False)
     geo_point = GeoPoint()
     rating = HalfFloat()
     thumbnail = Text(index=False)
@@ -107,8 +107,13 @@ html_strip = analyzer('html_strip',
 
 class BlogArticle(BaseModel):
     title = Text()
+    abstract = Text()
     content = Text(analyzer=html_strip)
+    slug = Keyword()
     tags = Keyword(multi=True)
+    thumbnail = Text(index=False)
+    thumbnail_alt_tags = Text()
+
 
     class IndexInfo(BaseModel.IndexInfo):
         index_this_model = True
@@ -123,7 +128,9 @@ class BlogArticle(BaseModel):
 
     @classmethod
     def parse_db_obj(cls, db_obj):
-        es_obj = cls(title=db_obj.title, content=db_obj.content)
+        thumbnail = resize_image(db_obj.thumbnail, preset='popular_blog_articles_small')
+        es_obj = cls(title=db_obj.title, abstract=db_obj.abstract, content=db_obj.content,
+                     slug=db_obj.slug, thumbnail=thumbnail, thumbnail_alt_tags=db_obj.thumbnail_alt_tags)
         for tag in db_obj.tags.all():
             es_obj.tags.append(tag.verbose)
         return es_obj

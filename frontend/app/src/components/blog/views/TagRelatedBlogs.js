@@ -42,11 +42,7 @@ function GetTagRelatedBlog(props) {
     return (
         <React.Fragment>
             <div className="col-md-6 col-lg-6">
-                <a
-                    href="singleblogurl"
-                    // {reverse(routes.react.apply.houseInfo, { houseUUID: house.getData("uuid") })}
-                    className={styles.list}
-                >
+                <a href="singleblogurl" className={styles.list}>
                     <div className={styles.image}>
                         <img src={article.thumbnail} className="w-100" alt={article.thumbnail_alt_tags} title="" />
                     </div>

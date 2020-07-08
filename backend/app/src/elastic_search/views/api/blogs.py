@@ -1,12 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from elastic_search.core.utils import connect
 
 from elastic_search.models import BlogArticle
 
 
 class BlogSearchView(APIView):
     def get(self, request, *args, **kwargs):
+        connect()
         s = BlogArticle.search()
         query = request.GET.get('q', '')
         slice_start = int(request.GET.get('pagination-start', 0))
