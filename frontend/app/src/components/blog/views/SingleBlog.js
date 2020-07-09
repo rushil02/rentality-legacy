@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import { PopularArticleInfo } from "../models"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
+import { Link } from "gatsby"
 import { getRelatedArticles } from "../services"
 import Slider from "react-slick"
 import "./ImageCarousel.css"
@@ -13,9 +14,11 @@ export default class SingleBlog extends Component {
             status: "loading",
             relatedArticles: new APIModelListAdapter([], PopularArticleInfo, "slug", "empty"),
         }
+        this.articleContent = React.createRef()
     }
 
     componentDidMount() {
+        this.articleContent.current.innerHTML = this.props.pageContext.article.content
         let relatedTag = this.props.pageContext.article.tags[0]
         this.setState(prevState => ({ status: "loading" }))
 
@@ -71,7 +74,17 @@ export default class SingleBlog extends Component {
                                         </div>
                                     </div>
                                     <p className={styles.date}>{formatDate(article.update_time)}</p>
-                                    {article.content}
+                                    <div ref={this.articleContent}>{article.content}</div>
+                                    <div className={styles.rightTag}>
+                                        <div className={styles.title}>Tag</div>
+                                        <ul className={styles.listInline}>
+                                            {article.tags.map((tag, index) => (
+                                                <li className="list-inline-item" key={index}>
+                                                    <Link to={"/blog/tag/"}>{tag}</Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                     <div className={styles.last}>
                                         <h1>Related Blog</h1>
                                         <Slider {...settingsSlider}>

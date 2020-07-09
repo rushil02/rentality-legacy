@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import RightSide from "./RightSide"
 import Slider from "react-slick"
+import { Link } from "gatsby"
 import "./ImageCarousel.css"
 
 export default class BlogHomeComponent extends Component {
@@ -119,7 +120,7 @@ function GetLatestBlogPost(props) {
     return (
         <div className="col-md-12 col-lg-6 col-xl-6">
             <div className={styles.post}>
-                <a href="">
+                <Link to={"/blog/" + article.getData("slug")}>
                     <img
                         src={article.getData("thumbnailSmall")}
                         className="w-100"
@@ -138,7 +139,7 @@ function GetLatestBlogPost(props) {
                             </div>
                         </div>
                     </div>
-                </a>
+                </Link>
             </div>
         </div>
     )

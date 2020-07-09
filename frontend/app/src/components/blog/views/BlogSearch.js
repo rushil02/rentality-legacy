@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import RightSide from "./RightSide"
 import queryString from "query-string"
+import { Link } from "gatsby"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
 import { LatestArticleInfo } from "../models"
 import { getSearchArticles } from "../services"
@@ -64,7 +65,7 @@ function GetSearchBlogs(props) {
     return (
         <React.Fragment>
             <div className="col-md-6 col-lg-6">
-                <a href="singleblogurl" className={styles.list}>
+                <Link to={"/blog/" + article.getData("slug")} className={styles.list}>
                     <div className={styles.image}>
                         <img
                             src={article.getData("thumbnail")}
@@ -75,7 +76,7 @@ function GetSearchBlogs(props) {
                     </div>
                     <h1>{article.getData("title")}</h1>
                     <h2>{article.getData("abstract")}</h2>
-                </a>
+                </Link>
             </div>
         </React.Fragment>
     )

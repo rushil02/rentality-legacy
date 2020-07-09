@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import styles from "./Blog.module.css"
+import { Link } from "gatsby"
 import RightSide from "./RightSide"
 
 export default class TagRelatedBlogs extends Component {
@@ -42,13 +43,13 @@ function GetTagRelatedBlog(props) {
     return (
         <React.Fragment>
             <div className="col-md-6 col-lg-6">
-                <a href="singleblogurl" className={styles.list}>
+                <Link to={"/blog/" + article.getData("slug")} className={styles.list}>
                     <div className={styles.image}>
                         <img src={article.thumbnail} className="w-100" alt={article.thumbnail_alt_tags} title="" />
                     </div>
                     <h1>{article.title}</h1>
                     <h2>{article.abstract}</h2>
-                </a>
+                </Link>
             </div>
         </React.Fragment>
     )

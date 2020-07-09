@@ -42,10 +42,7 @@ export default class RightSide extends Component {
     }
 
     handleSearch = e => {
-        let searchValue = this.state.searchValue
-        navigate("/blog/search?q=" + this.state.searchValue, {
-            state: { searchValue },
-        })
+        navigate("/blog/search?q=" + this.state.searchValue)
     }
 
     componentWillUnmount() {}
