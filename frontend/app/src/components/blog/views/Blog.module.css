@@ -16,10 +16,16 @@
 .pageBlog .leftSlide {
     position: relative;
     z-index: 0;
+    margin-bottom: 24px;
 }
 
 .pageBlog .leftSlide .slide {
     position: relative;
+}
+
+.pageBlog .leftSlide .slide img {
+    display: block;
+    width: 100%;
 }
 
 .pageBlog .leftSlide .slide .title {
@@ -28,6 +34,7 @@
     right: 0;
     bottom: 0;
     padding: 20px;
+    margin-bottom: 0;
     font-size: 20px;
     font-weight: 700;
     color: #ffffff;
@@ -131,7 +138,7 @@
 }
 
 .pageBlog .leftPage .listInline li:not(:last-child) {
-    margin-right: 0px;
+    margin-right: 4px;
 }
 
 .pageBlog .leftPage .listInline li.left {
@@ -311,7 +318,7 @@
 }
 
 .pageBlog .rightTag .listInline li:not(:last-child) {
-    margin-right: 0;
+    margin-right: 4px;
 }
 
 .pageBlog .leftDetail h1 {
@@ -548,9 +555,14 @@
     text-transform: uppercase;
 }
 
-.pageBlog .leftDetail .last .post {
-    padding: 0 15px;
+.pageBlog .leftDetail .last .post:nth-child(odd) {
+    padding: 0 15px 0 0;
 }
+
+.pageBlog .leftDetail .last .post:nth-child(even) {
+    padding: 0 0 0 15px;
+}
+
 
 .pageBlog .leftDetail .last .post img {
     border-radius: 10px;

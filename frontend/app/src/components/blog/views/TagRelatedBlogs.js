@@ -43,7 +43,7 @@ function GetTagRelatedBlog(props) {
     return (
         <React.Fragment>
             <div className="col-md-6 col-lg-6">
-                <Link to={"/blog/" + article.getData("slug")} className={styles.list}>
+                <Link to={"/blog/" + article.slug} className={styles.list}>
                     <div className={styles.image}>
                         <img src={article.thumbnail} className="w-100" alt={article.thumbnail_alt_tags} title="" />
                     </div>

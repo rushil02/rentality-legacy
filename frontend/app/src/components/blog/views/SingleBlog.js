@@ -80,7 +80,7 @@ export default class SingleBlog extends Component {
                                         <ul className={styles.listInline}>
                                             {article.tags.map((tag, index) => (
                                                 <li className="list-inline-item" key={index}>
-                                                    <Link to={"/blog/tag/"}>{tag}</Link>
+                                                    <Link to={"/blog/tag/" + slugify(tag)}>{tag}</Link>
                                                 </li>
                                             ))}
                                         </ul>
@@ -103,6 +103,18 @@ export default class SingleBlog extends Component {
     }
 }
 
+function slugify(verbose) {
+    return verbose
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/--+/g, "-")
+}
+
 function formatDate(dateStr) {
     if (dateStr) {
         let updateDate = new Date(dateStr)
@@ -117,7 +129,7 @@ function GetSliderRelatedPost(props) {
     let updateDate = article.getData("updateDate")
     return (
         <div className={styles.post}>
-            <a href="">
+            <Link to={"/blog/" + article.getData("slug")}>
                 <img
                     src={article.getData("thumbnailSmall")}
                     className="w-100"
@@ -136,7 +148,7 @@ function GetSliderRelatedPost(props) {
                         </div>
                     </div>
                 </div>
-            </a>
+            </Link>
         </div>
     )
 }

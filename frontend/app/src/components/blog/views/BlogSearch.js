@@ -23,7 +23,9 @@ export default class BlogSearch extends Component {
         getSearchArticles(searchVal.q).then(result => {
             this.setState(prevState => ({
                 ...prevState,
-                searchArticles: new APIModelListAdapter(result, LatestArticleInfo, undefined, "saved", ["_source"]),
+                searchArticles: new APIModelListAdapter(result.hits, LatestArticleInfo, undefined, "saved", [
+                    "_source",
+                ]),
             }))
         })
     }

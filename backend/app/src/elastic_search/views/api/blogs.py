@@ -19,4 +19,4 @@ class BlogSearchView(APIView):
         s.query("match_all")
         s = s.sort('_score')[slice_start:slice_end]
         results = s.execute().to_dict()
-        return Response(results['hits']['hits'], status=status.HTTP_200_OK)
+        return Response(results['hits'], status=status.HTTP_200_OK)

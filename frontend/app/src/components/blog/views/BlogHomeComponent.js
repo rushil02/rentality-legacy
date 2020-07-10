@@ -24,6 +24,9 @@ export default class BlogHomeComponent extends Component {
             swipeToSlide: true,
         }
 
+        let noOfPages = Math.ceil(this.props.articlesCount / 7)
+        let activePageNo = this.props.activePageNo
+
         return (
             <React.Fragment>
                 {/* <!-- page blog start --> */}
@@ -54,52 +57,21 @@ export default class BlogHomeComponent extends Component {
                                 <div className={styles.leftPage}>
                                     <ul className={styles.listInline}>
                                         <li className={"list-inline-item " + styles.left}>
-                                            <a href=""></a>
+                                            <a onClick={() => this.props.handlePagination(activePageNo - 1)}></a>
                                         </li>
-                                        <li className="list-inline-item">
-                                            <a href="">1</a>
-                                        </li>
-                                        <li className="list-inline-item active">
-                                            <a href="">2</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">3</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">4</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">5</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">6</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">7</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">8</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">9</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">10</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">11</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">12</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">13</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">14</a>
-                                        </li>
+                                        {[...Array(noOfPages)].map((_, i) => (
+                                            <li
+                                                className={
+                                                    "list-inline-item" +
+                                                    (this.props.activePageNo === i + 1 ? " " + styles.active : "")
+                                                }
+                                                key={i}
+                                            >
+                                                <a onClick={() => this.props.handlePagination(i + 1)}>{i + 1}</a>
+                                            </li>
+                                        ))}
                                         <li className={"list-inline-item " + styles.right}>
-                                            <a href=""></a>
+                                            <a onClick={() => this.props.handlePagination(activePageNo + 1)}></a>
                                         </li>
                                     </ul>
                                 </div>
