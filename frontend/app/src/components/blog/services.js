@@ -1,4 +1,4 @@
-import axios, { handleError } from "core/utils/serviceHelper"
+import axios from "core/utils/serviceHelper"
 import { reverse } from "named-urls"
 import { APIRoutes } from "components/routes"
 

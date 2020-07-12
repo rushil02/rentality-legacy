@@ -57,7 +57,7 @@ export default class BlogHomeComponent extends Component {
                                 <div className={styles.leftPage}>
                                     <ul className={styles.listInline}>
                                         <li className={"list-inline-item " + styles.left}>
-                                            <a onClick={() => this.props.handlePagination(activePageNo - 1)}></a>
+                                            <Link onClick={() => this.props.handlePagination(activePageNo - 1)}></Link>
                                         </li>
                                         {[...Array(noOfPages)].map((_, i) => (
                                             <li
@@ -67,11 +67,11 @@ export default class BlogHomeComponent extends Component {
                                                 }
                                                 key={i}
                                             >
-                                                <a onClick={() => this.props.handlePagination(i + 1)}>{i + 1}</a>
+                                                <Link onClick={() => this.props.handlePagination(i + 1)}>{i + 1}</Link>
                                             </li>
                                         ))}
                                         <li className={"list-inline-item " + styles.right}>
-                                            <a onClick={() => this.props.handlePagination(activePageNo + 1)}></a>
+                                            <Link onClick={() => this.props.handlePagination(activePageNo + 1)}></Link>
                                         </li>
                                     </ul>
                                 </div>

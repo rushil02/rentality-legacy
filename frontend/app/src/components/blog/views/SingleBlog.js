@@ -69,7 +69,7 @@ export default class SingleBlog extends Component {
                                         </div>
                                         <div className="col-6">
                                             <div className={styles.by}>
-                                                by: <a href="">Admin</a>
+                                                by: <Link to={""}>Admin</Link>
                                             </div>
                                         </div>
                                     </div>
