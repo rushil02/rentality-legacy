@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { reverse } from 'named-urls';
 import {PageRoutes} from "components/routes";
-import styles from './HouseComponent.css';
+import styles from './HouseComponent.module.css';
 
 export default class HouseComponent extends Component{
     render(){
