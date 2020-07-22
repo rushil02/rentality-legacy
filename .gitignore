@@ -30,4 +30,4 @@ src/static/v2/frontend/
 bin/old/
 nginx/production/
 
-src/__test_emails
+./backend/app/src/__test_emails

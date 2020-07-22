@@ -1,0 +1,9 @@
+FROM rentality/backend-common:latest
+
+WORKDIR /rentality
+
+COPY ./bin/celery_worker ./bin/celery_worker
+
+RUN ["chmod", "+x", "./bin/celery_worker/entrypoint.sh"]
+
+ENTRYPOINT [ "./bin/celery_worker/entrypoint.sh" ]

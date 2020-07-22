@@ -1,19 +1,19 @@
 version: '3.6'
 services:
-  nginx:
-    build: ./nginx
-    image: 'registry.gitlab.com/rushil0195/rentality/nginx:latest'
-    ports:
-      - '8000:80'
-      - '8001:8001'
-      - '8002:8002'
-    volumes:
-      - './nginx/config/localhost.conf:/etc/nginx/conf.d/default.conf'
-      - './static_dev/static_root:/static'
-      - './static_dev/media_root:/media'
-      - 'frontenddata:/var/www/rentality.com.au'
-    depends_on:
-      - web
+#  nginx:
+#    build: ./nginx
+#    image: 'rentality/nginx:latest'
+#    ports:
+#      - '8000:80'
+#      - '8001:8001'
+#      - '8002:8002'
+#    volumes:
+#      - './nginx/config/localhost.conf:/etc/nginx/conf.d/default.conf'
+#      - './static_dev/static_root:/static'
+#      - './static_dev/media_root:/media'
+#      - 'frontenddata:/var/www/rentality.com.au'
+#    depends_on:
+#      - web
   postgres:
     image: 'mdillon/postgis:10-alpine'
     environment:
@@ -40,43 +40,50 @@ services:
     image: 'docker.elastic.co/kibana/kibana:6.4.3'
     ports:
       - '5601:5601'
-  frontend:
-    build:
-      context: ./frontend
-      args:
-        dev_mode: "true"
-    image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
-    ports:
-      - '3000:8000'
-      - '3001:9000'
-    entrypoint:
-      - './start_dev.sh'
-    volumes:
-      - './frontend/app/src:/app/src'
-      - 'frontenddata:/app/public'
-  web:
+#    volumes:
+#      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    depends_on:
+      - elasticsearch
+#  frontend:
+#    build:
+#      context: ./frontend
+#      args:
+#        dev_mode: "true"
+#    image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
+#    ports:
+#      - '3000:8000'
+#    entrypoint:
+#      - './bin/celery_worker.sh'
+#    volumes:
+#      - './frontend/app/src:/app/src'
+#      - 'frontenddata:/app/public'
+#    depends_on:
+#      - web
+  backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile.web
       args:
         test_mode: "true"
-    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
+    image: 'rentality/backend:latest'
     volumes:
-      - './static_dev/static_root:/rentality/static_dev/static_root'
-      - './static_dev/media_root:/rentality/static_dev/media_root'
+      - './static_dev/static_root:/rentality/app/static_dev/static_root'
+      - './static_dev/media_root:/rentality/app/static_dev/media_root'
       - './secrets:/run/secrets'
       - './backend/app/src:/rentality/app/src'
     depends_on:
       - postgres
-      - frontend
-      - migration
       - elasticsearch
+      - rabbitmq
     ports:
       - '3002:8000'
     entrypoint:
-      - './bin/entrypoint.dev.sh'
+      - './bin/web/entrypoint.dev.sh'
   celery-worker:
-    build: ./backend
-    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.async-worker
+    image: 'rentality/celery-worker:latest'
     volumes:
       - './static_dev/static_root:/rentality/static_dev/static_root'
       - './static_dev/media_root:/rentality/static_dev/media_root'
@@ -85,8 +92,6 @@ services:
       - postgres
       - elasticsearch
       - rabbitmq
-    entrypoint:
-      - './bin/start_celery_worker.sh'
   rabbitmq:
     image: 'rabbitmq:3.7.13-management'
     environment:
@@ -98,17 +103,6 @@ services:
     volumes:
       - './secrets/RABBITMQ_DEFAULT_USER:/run/secrets/RABBITMQ_DEFAULT_USER'
       - './secrets/RABBITMQ_DEFAULT_PASS:/run/secrets/RABBITMQ_DEFAULT_PASS'
-    depends_on:
-      - postgres
-  migration:
-    build: ./backend
-    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
-    volumes:
-      - './secrets:/run/secrets'
-    depends_on:
-      - postgres
-      - frontend
-    entrypoint: './bin/sync.sh'
 volumes:
   pgdata: null
   esdata: null

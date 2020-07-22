@@ -1,0 +1,11 @@
+FROM rentality/backend-common:latest
+
+EXPOSE 1299
+
+WORKDIR /rentality
+
+COPY ./bin/migration ./bin/migration
+
+RUN ["chmod", "+x", "./bin/migration/entrypoint.sh"]
+
+ENTRYPOINT [ "./bin/migration/entrypoint.sh" ]

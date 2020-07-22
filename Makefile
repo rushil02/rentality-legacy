@@ -22,46 +22,52 @@ req-install: ## Install and setup requisites: docker-ce and docker-compose
 
 # First time data setup
 initialize: ## Initialize the project first time from empty database
-	@sudo sysctl vm.max_map_count=262144
+	@sudo sysctl -w vm.max_map_count=262144
 	@cd ./bin/db_init/  && sh ./load-db.sh
 	@docker-compose up -d --build
 	@sh ./bin/post-installation.sh
 
 # Build and run the container
 build: ## Rebuilds container without cache
-	docker-compose build --no-cache
+	@echo "Building rentality/backend-common:latest ..."
+	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend
+	@echo "Building from docker-compose.yml ..."
+	@docker-compose build --no-cache
 
-run: ## Build and spin up the project in development mode for first time on system start
-	@sudo sysctl vm.max_map_count=262144
-	docker-compose down && docker-compose up -d --build
+build-run: ## Build and spin up the project in development mode for first time on system start
+	@sudo sysctl -w vm.max_map_count=262144
+	docker-compose down
+	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
+	docker-compose up -d --build
 
 restart: ## Shutdown and Run the project again
 	docker-compose down && docker-compose up -d
 
-fast-run: ## Spin up the project without build
+run: ## Spin up the project without build
+	@sudo sysctl -w vm.max_map_count=262144
 	@docker-compose up -d
 
 # Logging
 be-logs: ## View recent backend logs
-	@docker-compose logs web
+	@docker-compose logs backend
 
 fe-logs: ## View recent frontend logs
 	@docker-compose logs frontend
 
 be-attach: ## Attach to backend logger
-	@docker attach rentality_web_1
+	@docker attach rentality_backend_1
 
 fe-attach: ## Attach to frontend logger
 	@docker attach rentality_frontend_1
 
 
 # Backend
-cd-backend: ## Start STANDALONE container from web image which will be ready for development and package installations
-	@sh ./bin/isolated-BE-container.sh
-
+#cd-backend: ## Start STANDALONE container from web image which will be ready for development and package installations
+#	@sh ./bin/isolated-BE-container.sh
+#
 # Frontend
-cd-frontend: ## Start STANDALONE container from frontend image which will be ready for development and package installations
-	@sh ./bin/isolated-FE-container.sh
+#cd-frontend: ## Start STANDALONE container from frontend image which will be ready for development and package installations
+#	@sh ./bin/isolated-FE-container.sh
 
 sync-pkg-list: ## Sync package.json and package-lock.json from running container. Useful after testing new 3rd party packages.
 	@sh ./bin/sync-FE-kg-list.sh
