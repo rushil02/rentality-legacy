@@ -48,14 +48,14 @@ run: ## Spin up the project without build
 	@docker-compose up -d
 
 # Logging
-be-logs: ## View recent backend logs
-	@docker-compose logs backend
+be-logs: ## View recent backend - service 'web' logs
+	@docker-compose logs web
 
 fe-logs: ## View recent frontend logs
 	@docker-compose logs frontend
 
-be-attach: ## Attach to backend logger
-	@docker attach rentality_backend_1
+be-attach: ## Attach to backend - service 'web' logger
+	@docker attach rentality_web_1
 
 fe-attach: ## Attach to frontend logger
 	@docker attach rentality_frontend_1

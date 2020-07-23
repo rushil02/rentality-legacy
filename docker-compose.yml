@@ -44,27 +44,23 @@ services:
 #      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
     depends_on:
       - elasticsearch
-#  frontend:
-#    build:
-#      context: ./frontend
-#      args:
-#        dev_mode: "true"
-#    image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
-#    ports:
-#      - '3000:8000'
-#    entrypoint:
-#      - './bin/celery_worker.sh'
-#    volumes:
-#      - './frontend/app/src:/app/src'
-#      - 'frontenddata:/app/public'
-#    depends_on:
-#      - web
-  backend:
+  frontend:
+    build:
+      context: ./frontend
+    image: 'rentality/frontend:latest'
+    ports:
+      - '3000:8000'
+    volumes:
+      - './frontend/app/src:/app/src'
+      - 'frontenddata:/app/public'
+    depends_on:
+      - web
+    entrypoint:
+      - './bin/entrypoint.dev.sh'
+  web:
     build:
       context: ./backend
       dockerfile: Dockerfile.web
-      args:
-        test_mode: "true"
     image: 'rentality/backend:latest'
     volumes:
       - './static_dev/static_root:/rentality/app/static_dev/static_root'

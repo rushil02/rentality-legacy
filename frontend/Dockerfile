@@ -1,6 +1,5 @@
 FROM node:14-alpine
 
-ARG dev_mode=false
 ENV GATSBY_TELEMETRY_DISABLED=1
 
 # Required if accessing packages on git via npm
@@ -21,10 +20,13 @@ COPY ./app/package*.json ./
 
 RUN npm ci
 
-COPY ./app/gatsby-*.js ./
-COPY ./app/.env.* ./
-COPY ./app/.prettier* ./
-COPY ./start_dev.sh ./
+COPY ./app/gatsby-*.js ./app/.env.* ./app/.prettier* ./
 COPY ./app/src ./src
 
-CMD ["gatsby", "build"]
+COPY ./bin ./bin
+
+COPY ./bin/cronjobs /etc/crontabs/root
+
+RUN ["chmod", "+x", "./bin/entrypoint.sh", "./bin/frontend_builder.sh"]
+
+ENTRYPOINT [ "./bin/entrypoint.sh" ]
