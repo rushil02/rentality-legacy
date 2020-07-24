@@ -1,6 +1,7 @@
 FROM node:14-alpine
 
-ENV GATSBY_TELEMETRY_DISABLED=1
+ENV GATSBY_TELEMETRY_DISABLED=1 \
+    GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true
 
 # Required if accessing packages on git via npm
 RUN apk update && apk upgrade && \

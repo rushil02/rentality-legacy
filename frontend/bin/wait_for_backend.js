@@ -7,11 +7,13 @@ const options = {
 };
 
 function sleep(ms) {
+    console.log(`Sleeping ... (${ms/1000})`)
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function main() {
     let waiting = true
+    let wait_time = 500
     do {
         http.get(options, function (res) {
             if (res.statusCode === 200) {
@@ -21,9 +23,10 @@ async function main() {
         }).on('error', function (e) {
             console.log("Backend Service is not reachable yet : " + e.message);
         });
-        console.log("Sleeping ... (3)")
-        await sleep(3000)
+        await sleep(wait_time)
+        wait_time = wait_time <= 5000 ? wait_time + 500 : wait_time
     } while (waiting)
+    return 0
 }
 
-main().then(console.log("Continue to execution ..."))
+main().then(res => {console.log("Continue to execution ...")})
