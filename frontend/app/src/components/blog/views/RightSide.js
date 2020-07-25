@@ -4,12 +4,14 @@ import { APIModelListAdapter } from "core/utils/ModelHelper"
 import { LatestArticleInfo, Tag } from "../models"
 import { getLatestArticles, getPopularTags } from "../services"
 import { Link } from "gatsby"
+import { navigate } from "gatsby"
 
 export default class RightSide extends Component {
     constructor(props) {
         super(props)
         this.state = {
             status: "loading",
+            searchValue: "",
             latestArticles: new APIModelListAdapter([], LatestArticleInfo, "slug", "empty"),
             popularTags: new APIModelListAdapter([], Tag, "", "empty"),
         }
@@ -32,12 +34,48 @@ export default class RightSide extends Component {
         })
     }
 
+    onFieldChange = value => {
+        this.setState(prevState => ({
+            ...prevState,
+            searchValue: value,
+        }))
+    }
+
+    handleSearch = e => {
+        navigate("/blog/search?q=" + this.state.searchValue)
+    }
+
     componentWillUnmount() {}
 
     render() {
         return (
             <React.Fragment>
                 <div className="col-md-5 col-lg-4 col-xl-4">
+                    <div className={styles.rightSearch}>
+                        <div className={styles.title}>Search</div>
+                        <div className={styles.form}>
+                            <div className="row">
+                                <div className="col-md-7 col-lg-8">
+                                    <input
+                                        type="text"
+                                        name=""
+                                        className={styles.formControl}
+                                        placeholder="Type here to search"
+                                        onChange={e => this.onFieldChange(e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-md-5 col-lg-4">
+                                    <button
+                                        type="button"
+                                        className={styles.btn + " btn-link btn-block"}
+                                        onClick={this.handleSearch}
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className={styles.rightPost}>
                         <div className={styles.title}>New Posts</div>
                         {/* loop through popular posts */}
@@ -60,6 +98,18 @@ export default class RightSide extends Component {
     }
 }
 
+function slugify(verbose) {
+    return verbose
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/--+/g, "-")
+}
+
 function formatDate(date) {
     if (date) {
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -70,10 +120,10 @@ function formatDate(date) {
 }
 
 function GetTag(props) {
-    let tagTitle = props.tag.getData("title")
+    let tagVerbose = props.tag.getData("title")
     return (
         <li className="list-inline-item">
-            <Link to={"/blog/tag/" + tagTitle}>{tagTitle}</Link>
+            <Link to={"/blog/tag/" + slugify(tagVerbose)}>{tagVerbose}</Link>
         </li>
     )
 }

@@ -12,10 +12,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ArticleShortInfoSerializer(serializers.ModelSerializer):
     tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field='verbose')
+    thumbnail = serializers.SerializerMethodField(method_name='get_resized_image_small')
 
     class Meta:
         model = Article
         fields = ('title', 'abstract', 'priority', 'thumbnail', 'thumbnail_alt_tags', 'update_time', 'create_time', 'tags', 'slug')
+
+    def get_resized_image_small(self, obj):
+        return resize_image(obj.thumbnail, preset='popular_blog_articles_small')
 
 
 class LatestArticleShortInfoSerializer(serializers.ModelSerializer):
@@ -24,7 +28,7 @@ class LatestArticleShortInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('title', 'abstract', 'priority', 'thumbnail', 'update_time', 'create_time', 'tags', 'slug')
+        fields = ('title', 'abstract', 'priority', 'thumbnail', 'thumbnail_alt_tags', 'update_time', 'create_time', 'tags', 'slug')
 
     def get_resized_image(self, obj):
         return resize_image(obj.thumbnail, preset='latest_blog_articles')
@@ -38,7 +42,7 @@ class PopularArticleShortInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = (
-            'title', 'abstract', 'priority', 'thumbnail_small', 'thumbnail_large',
+            'title', 'abstract', 'priority', 'thumbnail_small', 'thumbnail_large', 'thumbnail_alt_tags',
             'update_time', 'create_time', 'tags', 'slug'
         )
 

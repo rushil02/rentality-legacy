@@ -62,6 +62,7 @@ export default class ImageCarousel extends Component {
                             alt={item[0]}
                             key={item[0]}
                             onClick={() => this.setState({ showImageModal: true, clickedImage: index })}
+                            role="presentation"
                         />
                     ))}
                 </Slider>

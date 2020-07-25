@@ -26,6 +26,18 @@ function getAllTagsAndArticles() {
     })
 }
 
+function slugify(verbose) {
+    return verbose
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/--+/g, "-")
+}
+
 exports.createPages = async ({ actions: { createPage } }) => {
     const allArticles = await getAllArticles()
     const allTagsAndArticles = await getAllTagsAndArticles()
@@ -41,7 +53,7 @@ exports.createPages = async ({ actions: { createPage } }) => {
 
     allTagsAndArticles.forEach(tagAndArticles => {
         createPage({
-            path: `/blog/tag/${tagAndArticles.verbose}`,
+            path: `/blog/tag/${slugify(tagAndArticles.verbose)}`,
             component: require.resolve("./src/templates/blog/TagRelatedBlogsTemplate.js"),
             context: { tagAndArticles },
         })

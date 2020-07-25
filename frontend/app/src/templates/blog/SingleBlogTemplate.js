@@ -4,9 +4,9 @@ import Layout from "components/layout"
 import SEO from "components/seo"
 
 const SingleBlogTemplate = props => (
-    <Layout>
+    <Layout {...props}>
         <SEO title="Blog" />
-        <SingleBlog pageContext={props.pageContext} />
+        <SingleBlog {...props} />
     </Layout>
 )
 

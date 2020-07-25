@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styles from "./Blog.module.css"
 import RightSide from "./RightSide"
 import Slider from "react-slick"
+import { Link } from "gatsby"
 import "./ImageCarousel.css"
 
 export default class BlogHomeComponent extends Component {
@@ -22,6 +23,9 @@ export default class BlogHomeComponent extends Component {
             slidesToScroll: 1,
             swipeToSlide: true,
         }
+
+        let noOfPages = Math.ceil(this.props.articlesCount / 7)
+        let activePageNo = this.props.activePageNo
 
         return (
             <React.Fragment>
@@ -53,52 +57,21 @@ export default class BlogHomeComponent extends Component {
                                 <div className={styles.leftPage}>
                                     <ul className={styles.listInline}>
                                         <li className={"list-inline-item " + styles.left}>
-                                            <a href=""></a>
+                                            <Link onClick={() => this.props.handlePagination(activePageNo - 1)}></Link>
                                         </li>
-                                        <li className="list-inline-item">
-                                            <a href="">1</a>
-                                        </li>
-                                        <li className="list-inline-item active">
-                                            <a href="">2</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">3</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">4</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">5</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">6</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">7</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">8</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">9</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">10</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">11</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">12</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">13</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="">14</a>
-                                        </li>
+                                        {[...Array(noOfPages)].map((_, i) => (
+                                            <li
+                                                className={
+                                                    "list-inline-item" +
+                                                    (this.props.activePageNo === i + 1 ? " " + styles.active : "")
+                                                }
+                                                key={i}
+                                            >
+                                                <Link onClick={() => this.props.handlePagination(i + 1)}>{i + 1}</Link>
+                                            </li>
+                                        ))}
                                         <li className={"list-inline-item " + styles.right}>
-                                            <a href=""></a>
+                                            <Link onClick={() => this.props.handlePagination(activePageNo + 1)}></Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -119,7 +92,7 @@ function GetLatestBlogPost(props) {
     return (
         <div className="col-md-12 col-lg-6 col-xl-6">
             <div className={styles.post}>
-                <a href="">
+                <Link to={"/blog/" + article.getData("slug")}>
                     <img
                         src={article.getData("thumbnailSmall")}
                         className="w-100"
@@ -138,7 +111,7 @@ function GetLatestBlogPost(props) {
                             </div>
                         </div>
                     </div>
-                </a>
+                </Link>
             </div>
         </div>
     )

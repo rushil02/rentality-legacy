@@ -33,8 +33,9 @@ class PopularArticlesListView(APIView):
         except ValueError:
             slice_start = 0
             slice_end = 10
-        articles = Article.objects.all().order_by('-priority')[slice_start:slice_end]
-        return Response(PopularArticleShortInfoSerializer(articles, many=True).data, status=status.HTTP_200_OK)
+        total = Article.objects.filter(active=True).count()
+        articles = Article.objects.filter(active=True).order_by('-priority')[slice_start:slice_end]
+        return Response({"data": PopularArticleShortInfoSerializer(articles, many=True).data, "total": total}, status=status.HTTP_200_OK)
 
 
 class LatestArticlesListView(APIView):

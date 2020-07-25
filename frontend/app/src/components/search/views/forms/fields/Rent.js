@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import styles from "../SearchForm.module.css";
+import React, { Component } from "react"
+import styles from "../SearchForm.module.css"
 
 export default class Rent extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="col-md-2">
+                <div className="col-md-3 col-lg-2">
                     <input
                         type="text"
                         name="rent"
@@ -13,12 +13,12 @@ export default class Rent extends Component {
                         id="id_rent"
                         className={styles.formControl + " " + styles.amount}
                         onChange={e => {
-                            this.props.onChange("rent", e.target.value);
+                            this.props.onChange("rent", e.target.value)
                         }}
                         defaultValue={this.props.value}
                     />
                 </div>
             </React.Fragment>
-        );
+        )
     }
 }

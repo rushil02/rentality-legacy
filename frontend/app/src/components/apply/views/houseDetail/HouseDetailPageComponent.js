@@ -5,6 +5,7 @@ import ApplyPanel from "./ApplyPanel"
 import ImageCarousel from "./ImageCarousel"
 import { ConfirmBookingModal } from "./ConfirmBookingModal"
 import styles from "./HouseDetailPage.module.css"
+import { Link } from "gatsby"
 
 export default class HouseDetailPageComponent extends Component {
     constructor(props) {
@@ -270,7 +271,7 @@ export default class HouseDetailPageComponent extends Component {
                                                             .getData("personalityTags")
                                                             .map((item, index) => (
                                                                 <li key={index} className={"list-inline-item"}>
-                                                                    <a>{item}</a>
+                                                                    <Link>{item}</Link>
                                                                 </li>
                                                             ))}
                                                     </ul>
@@ -348,14 +349,14 @@ function getInfoSidePanel(that, address) {
                                     applicationUUID={that.props.applicationUUID}
                                 />
                             ) : (
-                                <a
+                                <Link
                                     className="imp-button-style"
                                     onClick={() => {
                                         that.scrollToRef(that.elementRefs.bookingSection)
                                     }}
                                 >
                                     Book Now
-                                </a>
+                                </Link>
                             )}
                         </div>
                     </div>

@@ -1,6 +1,5 @@
 .container {
     position: relative;
-    font-family: Helvetica, sans-serif;
 }
 
 .input {
@@ -9,7 +8,7 @@
     height: calc(2.25rem + 10px);
     font-size: 13px;
     font-weight: 400;
-    padding: 0.375rem 0px 0.375rem 50px;
+    padding: 0.375rem 0px 0.375rem 30px;
     border: none;
     border-bottom: 1px solid #c3c3c5;
     border-image: initial;
@@ -116,7 +115,15 @@ input[type="number"] {
 input::placeholder {
     opacity: 1;
     color: #2a2b32;
+    overflow: hidden;
+    white-space: nowrap;
 }
+
+[placeholder]{
+    text-overflow:ellipsis;
+}
+
+
 /* 
 div.input > #location-verbose {
     padding-top: 0.8rem;
