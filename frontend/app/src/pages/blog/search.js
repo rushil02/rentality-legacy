@@ -4,7 +4,7 @@ import Layout from "components/layout"
 import SEO from "components/seo"
 
 const BlogSearchPage = props => (
-    <Layout>
+    <Layout {...props}>
         <SEO title="Blog Search" />
         <BlogSearch {...props} />
     </Layout>

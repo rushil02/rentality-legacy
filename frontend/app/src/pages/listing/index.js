@@ -6,11 +6,11 @@ import Loadable from "@loadable/component"
 
 const LoadableApp = Loadable(() => import("components/houseListing/Router"))
 
-const SecondPage = () => (
-    <Layout>
+const HouseListingPage = props => (
+    <Layout {...props}>
         <SEO title="Page two" />
-        <LoadableApp/>
+        <LoadableApp />
     </Layout>
 )
 
-export default SecondPage
+export default HouseListingPage
