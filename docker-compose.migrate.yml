@@ -1,0 +1,12 @@
+version: '3.6'
+services:
+  migration:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.migration-control
+    image: 'rentality/backend-migration:latest'
+    volumes:
+      - './secrets:/run/secrets'
+    depends_on:
+      - postgres
+      - elasticsearch
