@@ -22,7 +22,9 @@ def establish_es_connection():
 # https://github.com/elastic/elasticsearch-py/issues/223#issuecomment-96199719
 # https://github.com/elastic/elasticsearch-py/issues/372#issuecomment-192025509
 # Make sure that global - ES_CONNECTION is loaded with django
-ES_CONNECTION = establish_es_connection()
+# TODO: This works but might need a better way to create connection -
+#  ie. Not when django starts, but when the service is actually first accessed
+ES_CONNECTION = None
 
 
 def connect():
