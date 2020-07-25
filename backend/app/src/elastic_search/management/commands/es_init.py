@@ -42,8 +42,6 @@ class Command(BaseCommand):
 
     help = 'Use for periodic cleanup and synchronisation of System'
 
-    # FIXME: need to remove dangling facilities, welcome_tags, etc
-
     cleanup_func = {
         'Synchronise ElasticSearch Index - Locations': synchronise_es_location,
         'Synchronise ElasticSearch Index - House': synchronise_es_house,
