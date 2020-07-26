@@ -1,6 +1,3 @@
-MAJOR_VERSION := 2
-MINOR_VERSION := 0
-
 .PHONY: help
 
 help: ## This help.
@@ -32,7 +29,7 @@ build: ## Rebuilds container without cache
 	@echo "Building rentality/backend-common:latest ..."
 	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend
 	@echo "Building from docker-compose.yml ..."
-	@docker-compose build --no-cache
+	@docker-compose build --no-cache --parallel
 
 build-run: ## Build and spin up the project in development mode for first time on system start
 	@sudo sysctl -w vm.max_map_count=262144
@@ -82,27 +79,13 @@ clean: ## Clean all persistent data and Remove all containers
 	@docker system prune -f
 	@docker volume prune -f
 
+
 # Docker release - build, tag and push the container
-# release: build publish ## Make a release by building and publishing the `{version}` ans `latest` tagged containers to ECR
+ci-build: ## Build and Tag containers versioned as per docker-compose.prod-build.yml
+	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common  --no-cache ./backend
+	GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml build --no-cache
 
-# Docker publish
-# publish: repo-login publish-latest publish-version ## publish the `{version}` ans `latest` tagged containers to ECR
+publish:  ## Push all containers to registry
+	GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml push
 
-# publish-latest: tag-latest ## publish the `latest` tagged container to ECR
-# 	@echo 'publish latest to $(DOCKER_REPO)'
-# 	docker push $(DOCKER_REPO)/$(APP_NAME):latest
-
-# publish-version: tag-version ## publish the `{version}` tagged container to ECR
-# 	@echo 'publish $(VERSION) to $(DOCKER_REPO)'
-# 	docker push $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
-
-# Docker tagging
-# tag: tag-latest tag-version ## Generate container tags for the `{version}` ans `latest` tags
-
-# tag-latest: ## Generate container `{version}` tag
-# 	@echo 'create tag latest'
-# 	docker tag $(APP_NAME) $(DOCKER_REPO)/$(APP_NAME):latest
-
-# tag-version: ## Generate container `latest` tag
-# 	@echo 'create tag $(VERSION)'
-# 	docker tag $(APP_NAME) $(DOCKER_REPO)/$(APP_NAME):$(VERSION)
+release: ci-build publish ## Make a release by building and publishing containers

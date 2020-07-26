@@ -2,111 +2,22 @@ version: '3.6'
 services:
   nginx:
     build: ./nginx
-    image: 'registry.gitlab.com/rushil0195/rentality/nginx:latest'
-    ports:
-      - '8000:80'
-    volumes:
-      - './nginx/config/common.conf:/etc/nginx/conf.d/common.conf'
-      - './nginx/config/localhost.conf:/etc/nginx/conf.d/default.conf'
-      - './static_dev/static_root:/static'
-      - './static_dev/media_root:/media'
-    depends_on:
-      - web
-  postgres:
-    image: 'mdillon/postgis:10-alpine'
-    environment:
-      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
-      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
-    ports:
-      - '5431:5432'
-    volumes:
-      - './secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER'
-      - './secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD'
-      - './secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB'
-      - 'pgdata:/var/lib/postgresql/data'
-  elasticsearch:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch:6.4.2'
-    environment:
-      - cluster.name=rentality-cluster
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    volumes:
-      - 'esdata:/usr/share/elasticsearch/data'
-    ports:
-      - '9200:9200'
-  kibana:
-    image: 'docker.elastic.co/kibana/kibana:6.4.3'
-    ports:
-      - '5601:5601'
-  shared:
-    build: ./secrets
-    image: 'registry.gitlab.com/rushil0195/rentality/shared:latest'
+    image: 'registry.gitlab.com/rushil0195/rentality/nginx:v3.0.${GIT_HEAD_HASH}'
   frontend:
     build: ./frontend
-    image: 'registry.gitlab.com/rushil0195/rentality/frontend:latest'
-    entrypoint:
-      - npm
-      - run
-      - dev
-    volumes:
-      - './frontend/src:/app/src'
-      - './src/static/v2/frontend:/app/dist'
+    image: 'registry.gitlab.com/rushil0195/rentality/frontend:v3.0.${GIT_HEAD_HASH}'
   web:
     build:
-      context: ./src
-      args:
-        test_mode: "false"
-    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
-    volumes:
-      - './static_dev/static_root:/rentality/static_dev/static_root'
-      - './static_dev/media_root:/rentality/static_dev/media_root'
-      - './secrets:/run/secrets'
-      - './src:/rentality/src'
-    depends_on:
-      - postgres
-      - frontend
-      - migration
-      - elasticsearch
-    ports:
-      - '8001:8000'
-    entrypoint:
-      - ./entrypoint.dev.sh
+      context: ./backend
+      dockerfile: Dockerfile.web
+    image: 'registry.gitlab.com/rushil0195/rentality/web:v3.0.${GIT_HEAD_HASH}'
   celery-worker:
-    build: ./src
-    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
-    volumes:
-      - './static_dev/static_root:/rentality/static_dev/static_root'
-      - './static_dev/media_root:/rentality/static_dev/media_root'
-      - './secrets:/run/secrets'
-      - './src:/rentality/src'
-    depends_on:
-      - postgres
-      - elasticsearch
-      - rabbitmq
-    entrypoint: celery -A rentality worker -l info
-  rabbitmq:
-    image: 'rabbitmq:3.7.13-management'
-    environment:
-      RABBITMQ_DEFAULT_USER_FILE: /run/secrets/RABBITMQ_DEFAULT_USER
-      RABBITMQ_DEFAULT_PASS_FILE: /run/secrets/RABBITMQ_DEFAULT_PASS
-    ports:
-      - '5672:5672'
-      - '15672:15672'
-    volumes:
-      - './secrets/RABBITMQ_DEFAULT_USER:/run/secrets/RABBITMQ_DEFAULT_USER'
-      - './secrets/RABBITMQ_DEFAULT_PASS:/run/secrets/RABBITMQ_DEFAULT_PASS'
-    depends_on:
-      - postgres
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.async-worker
+    image: 'registry.gitlab.com/rushil0195/rentality/celery-worker:v3.0.${GIT_HEAD_HASH}'
   migration:
-    build: ./src
-    image: 'registry.gitlab.com/rushil0195/rentality/web:latest'
-    volumes:
-      - './secrets:/run/secrets'
-    depends_on:
-      - postgres
-      - frontend
-    entrypoint: ./sync.sh
-volumes:
-  pgdata: null
-  esdata: null
-  tsdbdata: null
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.migration-control
+    image: 'registry.gitlab.com/rushil0195/rentality/migration-control:v3.0.${GIT_HEAD_HASH}'
