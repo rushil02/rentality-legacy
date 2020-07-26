@@ -9,7 +9,7 @@ services:
       - './nginx/config/localhost.conf:/home/bin/online.conf'
       - './static_dev/static_root:/static'
       - './static_dev/media_root:/media'
-      - 'frontenddata:/var/www/rentality.com.au'
+      - 'frontend_data:/var/www/rentality.com.au'
   postgres:
     image: 'mdillon/postgis:10-alpine'
     environment:
@@ -48,7 +48,8 @@ services:
       - '3000:8000'
     volumes:
       - './frontend/app/src:/app/src'
-      - 'frontenddata:/app/public'
+      - 'frontend_data:/app/public'
+      - 'frontend_cache:/app/.cache'
     depends_on:
       - web
     entrypoint:
@@ -99,4 +100,5 @@ volumes:
   pgdata: null
   esdata: null
   tsdbdata: null
-  frontenddata: null
+  frontend_data: null
+  frontend_cache: null
