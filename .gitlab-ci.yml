@@ -9,13 +9,10 @@ variables:
   DOCKER_DRIVER: overlay2
 
 services:
-  - docker:dind
+  - docker:19.03.12-dind
 
 before_script:
-  - apk update
-  - apk upgrade
-  - apk add python python-dev py-pip build-base libffi-dev openssl-dev
-  - pip install docker-compose
+  - apk add --update python3 py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make && pip install docker-compose
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
 build:
