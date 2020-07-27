@@ -82,10 +82,10 @@ clean: ## Clean all persistent data and Remove all containers
 
 # Docker release - build, tag and push the container
 ci-build: ## Build and Tag containers versioned as per docker-compose.prod-build.yml
-	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common  --no-cache ./backend
-	GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml build --no-cache --parallel
+	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend
+	COMMIT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)" GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml build --no-cache --parallel
 
 publish:  ## Push all containers to registry
-	GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml push
+	COMMIT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)" GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml push
 
-release: ci-build publish ## Make a release by building and publishing containersrelease
+release: ci-build publish ## Make a release by building and publishing images as per docker-compose.prod-build.yml

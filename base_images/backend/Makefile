@@ -11,6 +11,8 @@ help: ## This help.
 build: ## Build image with latest tag
 	docker build -t backend-geo-base:latest .
 
-push: ## Push image to Gitlab's container registry
+publish: ## Push image to Gitlab's container registry
 	docker tag backend-geo-base:latest registry.gitlab.com/rushil0195/rentality/backend-geo-base:v${MAJOR_VERSION}.${MINOR_VERSION}
 	docker push registry.gitlab.com/rushil0195/rentality/backend-geo-base:v${MAJOR_VERSION}.${MINOR_VERSION}
+
+release: build publish ## Build, Tag and Push to container registry

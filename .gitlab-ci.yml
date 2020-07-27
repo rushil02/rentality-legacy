@@ -20,7 +20,8 @@ build:
   tags:
     - docker
   script:
-    - make ci-build
+    - docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend
+    - COMMIT_BRANCH="$CI_COMMIT_BRANCH" GIT_HEAD_HASH="$CI_COMMIT_SHORT_SHA" docker-compose -f docker-compose.prod-build.yml build --no-cache --parallel
   only:
     - staging
     - master
@@ -30,6 +31,6 @@ release:
   tags:
     - docker
   script:
-    - make publish
+    - COMMIT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)" GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml push
   only:
     - master

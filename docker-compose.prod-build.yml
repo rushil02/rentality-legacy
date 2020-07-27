@@ -2,22 +2,22 @@ version: '3.6'
 services:
   nginx:
     build: ./nginx
-    image: 'registry.gitlab.com/rushil0195/rentality/nginx:v3.0.${GIT_HEAD_HASH}'
+    image: 'registry.gitlab.com/rushil0195/rentality/nginx:v3.0-${COMMIT_BRANCH}.${GIT_HEAD_HASH}'
   frontend:
     build: ./frontend
-    image: 'registry.gitlab.com/rushil0195/rentality/frontend:v3.0.${GIT_HEAD_HASH}'
+    image: 'registry.gitlab.com/rushil0195/rentality/frontend:v3.0-${COMMIT_BRANCH}.${GIT_HEAD_HASH}'
   web:
     build:
       context: ./backend
       dockerfile: Dockerfile.web
-    image: 'registry.gitlab.com/rushil0195/rentality/web:v3.0.${GIT_HEAD_HASH}'
+    image: 'registry.gitlab.com/rushil0195/rentality/web:v3.0-${COMMIT_BRANCH}.${GIT_HEAD_HASH}'
   celery-worker:
     build:
       context: ./backend
       dockerfile: Dockerfile.async-worker
-    image: 'registry.gitlab.com/rushil0195/rentality/celery-worker:v3.0.${GIT_HEAD_HASH}'
+    image: 'registry.gitlab.com/rushil0195/rentality/celery-worker:v3.0-${COMMIT_BRANCH}.${GIT_HEAD_HASH}'
   migration:
     build:
       context: ./backend
       dockerfile: Dockerfile.migration-control
-    image: 'registry.gitlab.com/rushil0195/rentality/migration-control:v3.0.${GIT_HEAD_HASH}'
+    image: 'registry.gitlab.com/rushil0195/rentality/migration-control:v3.0-${COMMIT_BRANCH}.${GIT_HEAD_HASH}'
