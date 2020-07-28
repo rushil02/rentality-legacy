@@ -31,6 +31,7 @@ release:
   tags:
     - docker
   script:
-    - COMMIT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)" GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml push
+    - COMMIT_BRANCH="$CI_COMMIT_BRANCH" GIT_HEAD_HASH="$CI_COMMIT_SHORT_SHA" docker-compose -f docker-compose.prod-build.yml push
   only:
+    - staging
     - master
