@@ -1,6 +1,6 @@
 .PHONY: help
 
-help: ## This help.
+help: ## This help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 .DEFAULT_GOAL := help
@@ -33,12 +33,15 @@ build: ## Rebuilds container without cache
 
 build-run: ## Build and spin up the project in development mode for first time on system start
 	@sudo sysctl -w vm.max_map_count=262144
-	docker-compose down
-	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
-	docker-compose up -d --build
+	@docker-compose down
+	@make fe-vol-clean
+	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
+	@docker-compose up -d --build
 
 restart: ## Shutdown and Run the project again
-	docker-compose down && docker-compose up -d
+	@docker-compose down
+	@make fe-vol-clean
+	@docker-compose up -d
 
 run: ## Spin up the project without build
 	@sudo sysctl -w vm.max_map_count=262144
@@ -46,11 +49,14 @@ run: ## Spin up the project without build
 
 run-migration-service: ## Closely imitates production behaviour for migration-control
 	@sudo sysctl -w vm.max_map_count=262144
-	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
-	docker-compose -f ./docker-compose.migrate.yml up -d --build
+	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
+	@docker-compose -f ./docker-compose.migrate.yml up -d --build
 	docker wait rentality_migration_1
 	@echo "Task complete"
 
+fe-vol-clean: ## Clean frontend persistent data
+	docker volume rm rentality_frontend_data
+	docker volume rm rentality_frontend_cache
 
 # Logging
 be-logs: ## View recent backend - service 'web' logs
