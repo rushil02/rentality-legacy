@@ -44,6 +44,14 @@ run: ## Spin up the project without build
 	@sudo sysctl -w vm.max_map_count=262144
 	@docker-compose up -d
 
+run-migration-service: ## Closely imitates production behaviour for migration-control
+	@sudo sysctl -w vm.max_map_count=262144
+	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
+	docker-compose -f ./docker-compose.migrate.yml up -d --build
+	docker wait rentality_migration_1
+	@echo "Task complete"
+
+
 # Logging
 be-logs: ## View recent backend - service 'web' logs
 	@docker-compose logs web
@@ -82,6 +90,7 @@ clean: ## Clean all persistent data and Remove all containers
 
 # Docker release - build, tag and push the container
 ci-build: ## Build and Tag containers versioned as per docker-compose.prod-build.yml
+	# TODO: check if working directory is clean in terms of git
 	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend
 	COMMIT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)" GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml build --no-cache --parallel
 

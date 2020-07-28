@@ -5,7 +5,7 @@ PORT = 1299
 
 # The service will be stopped after following finite successful returns
 LISTEN_COUNT = 2
-LISTEN_TIME = 3000  # in seconds
+LISTEN_TIME = 300  # in seconds
 
 
 def handle_conn():

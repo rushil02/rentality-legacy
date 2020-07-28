@@ -6,7 +6,11 @@ python manage.py collectstatic --noinput
 python manage.py check_services --postgres
 python manage.py migrate --noinput
 
-cd /rentality/bin && python service_active_webhook.py
+echo "Notifier settings: $NOTIFIER_WEBHOOK"
 
-# FIXME: should be in separate container with live parallel data availability
-#python /rentality/app/src/manage.py es_init --noinput
+if test "$NOTIFIER_WEBHOOK" -eq 1; then
+    cd /rentality/bin/migration && python service_active_webhook.py
+else
+    echo "NOTIFIER_WEBHOOK is 0. Notifier webhook is not started. Service will now stop."
+fi
+

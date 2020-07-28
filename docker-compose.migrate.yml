@@ -1,12 +1,28 @@
 version: '3.6'
 services:
+  postgres:
+    image: 'mdillon/postgis:10-alpine'
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+      POSTGRES_DB_FILE: /run/secrets/POSTGRES_DB
+    ports:
+      - '5431:5432'
+    volumes:
+      - './secrets/POSTGRES_USER:/run/secrets/POSTGRES_USER'
+      - './secrets/POSTGRES_PASSWORD:/run/secrets/POSTGRES_PASSWORD'
+      - './secrets/POSTGRES_DB:/run/secrets/POSTGRES_DB'
+      - 'pgdata:/var/lib/postgresql/data'
   migration:
     build:
       context: ./backend
       dockerfile: Dockerfile.migration-control
     image: 'rentality/backend-migration:latest'
+    environment:
+      - NOTIFIER_WEBHOOK=0
     volumes:
       - './secrets:/run/secrets'
     depends_on:
       - postgres
-      - elasticsearch
+volumes:
+  pgdata: null
