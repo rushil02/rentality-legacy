@@ -11,6 +11,8 @@ echo "Notifier settings: $NOTIFIER_WEBHOOK"
 if test "$NOTIFIER_WEBHOOK" -eq 1; then
     cd /rentality/bin/migration && python service_active_webhook.py
 else
-    echo "NOTIFIER_WEBHOOK is 0. Notifier webhook is not started. Service will now stop."
+    echo "NOTIFIER_WEBHOOK is 0. Notifier webhook is not started."
+    sleep 5
+    echo "Service will now stop."
 fi
 
