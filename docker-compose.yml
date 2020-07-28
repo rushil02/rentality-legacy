@@ -99,6 +99,5 @@ services:
 volumes:
   pgdata: null
   esdata: null
-  tsdbdata: null
   frontend_data: null
   frontend_cache: null
