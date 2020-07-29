@@ -19,11 +19,11 @@ const HomePage = props => {
         <Layout {...props}>
             <SEO
                 title="Rentality: Creating a Global Community for Mid-Term Rental"
-                description="Rentality offers medium term fully
-furnished apartments for rent in Sydney, Melbourne, Brisbane, Perth, Gold Coast and surrounding areas."
+                description="Rent your home for the next few months on Rentality, the leading marketplace for monthly rental in Australia"
                 keywords="short term rentals, short term accommodations
 sydney, apartments for rent brisbane, furnished apartments melbourne"
                 microdata={microdata}
+                pathname={props.location.pathname}
             />
             <WelcomeRouter {...props} />
         </Layout>

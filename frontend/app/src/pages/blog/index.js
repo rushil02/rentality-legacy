@@ -5,7 +5,11 @@ import SEO from "components/seo"
 
 const BlogHomePage = props => (
     <Layout {...props}>
-        <SEO title="Blog" />
+        <SEO
+            title="Blog: Rentality: Creating a Global Community for Mid-Term Rental"
+            description=""
+            pathname={props.location.pathname}
+        />
         <BlogHomeContainer {...props} />
     </Layout>
 )

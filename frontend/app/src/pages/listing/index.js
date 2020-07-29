@@ -8,7 +8,11 @@ const LoadableApp = Loadable(() => import("components/houseListing/Router"))
 
 const HouseListingPage = props => (
     <Layout {...props}>
-        <SEO title="Page two" />
+        <SEO
+            title="List your home on Rentality: Creating a Global Community for Mid-Term Rental"
+            description=""
+            pathname={props.location.pathname}
+        />
         <LoadableApp />
     </Layout>
 )
