@@ -5,6 +5,7 @@ from elasticsearch_dsl import Q
 from rest_framework import status
 from rest_framework.response import Response
 
+from elastic_search.core.utils import connect
 from elastic_search.models import House, Location
 
 
@@ -18,6 +19,7 @@ class HouseSearchView(APIView):
         if (not location or location == 'null') and not in_loc_id:
             return Response({'details': "Invalid Data"}, status=status.HTTP_400_BAD_REQUEST)
 
+        connect()
         start_date = request.GET.get('start-date', '')
         end_date = request.GET.get('end-date', '')
 
