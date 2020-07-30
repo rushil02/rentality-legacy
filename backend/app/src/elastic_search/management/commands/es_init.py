@@ -5,6 +5,7 @@ from blog.models import Article
 from cities_custom.models import PostalCodeCustom, CityCustom, DistrictCustom, RegionCustom, SubRegionCustom
 from elastic_search.models import House as HouseElastic, Location as LocationElastic, BlogArticle as BlogArticleElastic
 from house.models import House
+from elastic_search.core.utils import connect
 
 
 def synchronise_es_house():
@@ -17,6 +18,7 @@ def synchronise_es_location():
     Use to update ElasticSearch Location Index
     :return:
     """
+    connect()
     LocationElastic._index.delete()
     LocationElastic.init()
 

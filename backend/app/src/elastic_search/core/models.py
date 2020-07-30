@@ -75,7 +75,7 @@ class _BaseManager(object):
         if buffer_chunk_size:
             first = 0
             last = first + buffer_chunk_size
-            while last < total:
+            while last + buffer_chunk_size < total:
                 cls.bulk_create(qs=qs[first:last])
                 print(
                     'Loading: %s%s %d%% [%d]    ' % (
