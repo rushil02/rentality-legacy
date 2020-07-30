@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, {Component, useContext} from "react"
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -20,6 +20,8 @@ import {faPlus, faPen, faTimes, faCheck} from "@fortawesome/free-solid-svg-icons
 import styles from "./AvailabilitySelector.module.css"
 import {PulseLoader} from "react-spinners"
 import {Accordion, Card, Button, Row, useAccordionToggle} from "react-bootstrap";
+import AccordionContext from "react-bootstrap/AccordionContext";
+
 
 const defineds = {
     startOfWeek: startOfWeek(new Date()),
@@ -81,8 +83,8 @@ export default class AvailabilitySelectorComponent extends Component {
             addNewDisplayText = <span>Select dates</span>
         } else {
             if (this.props.modeNew) {
-                addNewDisplayText = <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                    <span>Click to Add Dates</span>
+                addNewDisplayText = <Accordion.Toggle as={"span"} eventKey={this.props.idKey}>
+                    Click to Add Dates
                 </Accordion.Toggle>
             } else {
                 addNewDisplayText = (
@@ -141,15 +143,15 @@ export default class AvailabilitySelectorComponent extends Component {
         }
 
         return (
-            <button
+            <Accordion.Toggle
+                eventKey={this.props.idKey}
+                as={Button}
                 className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
-                type="button"
                 title={buttonConfig.title}
                 onClick={buttonConfig.action}
-                aria-controls={"collapsibleCalendar-" + this.props.idKey}
             >
                 <FontAwesomeIcon icon={buttonConfig.icon}/>
-            </button>
+            </Accordion.Toggle>
         )
     }
 
@@ -158,16 +160,10 @@ export default class AvailabilitySelectorComponent extends Component {
             return " "
         } else {
             return (
-                <button
-                    className={
-                        "btn btn-danger btn-circle btn-xl " +
-                        styles.btnCircle +
-                        " " +
-                        styles.btnXl +
-                        " " +
-                        styles.cancelCustom
-                    }
-                    type="button"
+                <Accordion.Toggle
+                    eventKey={this.props.idKey}
+                    className={`btn btn-danger btn-circle btn-xl ${styles.btnCircle} ${styles.btnXl} ${styles.cancelCustom}`}
+                    as={Button}
                     title={"Delete"}
                     onClick={e => {
                         e.stopPropagation()
@@ -175,35 +171,45 @@ export default class AvailabilitySelectorComponent extends Component {
                     }}
                 >
                     <FontAwesomeIcon icon={faTimes}/>
-                </button>
+                </Accordion.Toggle>
             )
         }
     }
 
     getInfoCard = () => {
-        let action
         if (this.props.modeNew) {
-            action = () => {
-                this.props.toggleEditState()
-            }
+            return (
+                <Accordion.Toggle
+                    as={Card.Header}
+                    eventKey={this.props.idKey}
+                    className={styles.cardHeader}
+                    onClick={(e) => {
+                        this.props.toggleEditState()
+                    }}
+                >
+                    <div className={styles.cardTextContent}>{this.getInfoText()}</div>
+                    <div className="loading-container">{this.getSyncIndicator()}</div>
+                    <div className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>
+                    <div className={styles.cardButtonGroup}>
+                        {this.getEditButton()}
+                        {this.getRemoveButton()}
+                    </div>
+                </Accordion.Toggle>
+            )
         } else {
-            action = () => {
-                // Empty on purpose - Do nothing
-            }
+            return (
+                <Card.Header className={styles.cardHeader}>
+                    <div className={styles.cardTextContent}>{this.getInfoText()}</div>
+                    <div className="loading-container">{this.getSyncIndicator()}</div>
+                    <div className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>
+                    <div className={styles.cardButtonGroup}>
+                        {this.getEditButton()}
+                        {this.getRemoveButton()}
+                    </div>
+                </Card.Header>
+            )
         }
 
-        return (
-            <Card.Body>
-                <div className={styles.cardTextContent}>{this.getInfoText()}</div>
-                <div className="loading-container">{this.getSyncIndicator()}</div>
-                <div
-                    className={"invalid-feedback " + styles.invalidFeedback}>{this.props.error || ""}</div>
-                <div className={styles.cardButtonGroup}>
-                    {this.getEditButton()}
-                    {this.getRemoveButton()}
-                </div>
-            </Card.Body>
-        )
     }
 
     handleSelect = range => {
@@ -218,37 +224,29 @@ export default class AvailabilitySelectorComponent extends Component {
             color: "#3fc692",
         }
 
-        if (this.props.modeEditing) {
-            // $("#collapsibleCalendar-" + this.props.idKey).collapse("show")
-        } else {
-            // $("#collapsibleCalendar-" + this.props.idKey).collapse("hide")
-        }
-
         return (
             <React.Fragment>
                 <Accordion>
                     <Card className={"mb-3 " + styles.accordionBorder}>
                         {this.getInfoCard()}
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                <div className={"col-11"} style={{borderTop: "1px solid #e9ebf0"}}>
-                                    <Row>
-                                        <div
-                                            className={"col-12 " + styles.availabilitySelectorContainer}
-                                            style={{padding: "20px"}}
-                                        >
-                                            <DateRangePicker
-                                                ranges={[selectionRange]}
-                                                onChange={this.handleSelect}
-                                                months={this.monthsScreenNum}
-                                                minDate={new Date()}
-                                                direction={"horizontal"}
-                                                staticRanges={staticRanges}
-                                                inputRanges={inputRanges}
-                                            />
-                                        </div>
-                                    </Row>
-                                </div>
+                        <Accordion.Collapse eventKey={this.props.idKey}>
+                            <Card.Body className={styles.cardBody}>
+                                <Row className={styles.cardBodyCollapsibleRow}>
+                                    <div
+                                        className={"col-12 " + styles.availabilitySelectorContainer}
+                                        style={{padding: "20px"}}
+                                    >
+                                        <DateRangePicker
+                                            ranges={[selectionRange]}
+                                            onChange={this.handleSelect}
+                                            months={this.monthsScreenNum}
+                                            minDate={new Date()}
+                                            direction={"horizontal"}
+                                            staticRanges={staticRanges}
+                                            inputRanges={inputRanges}
+                                        />
+                                    </div>
+                                </Row>
                             </Card.Body>
                         </Accordion.Collapse>
                     </Card>

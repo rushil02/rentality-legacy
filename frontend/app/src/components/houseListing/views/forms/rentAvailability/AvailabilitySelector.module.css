@@ -64,9 +64,21 @@
     flex-basis: 40%;
 }
 
-.cardBody {
+.cardHeader {
     display: flex;
     align-items: center;
+    background-color: unset;
+    border-bottom: none;
+}
+
+.cardBody {
+    padding-top: 0;
+}
+
+.cardBodyCollapsibleRow {
+    border-top: 1px solid #e9ebf0;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .availabilitySelectorContainer{

@@ -1,8 +1,8 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 import AvailabilitySelectorComponent from "./AvailabilitySelector"
-import { differenceInDays } from "date-fns"
-import { alertUser } from "core/alert/Alert"
-import { omit } from "lodash"
+import {differenceInDays} from "date-fns"
+import {alertUser} from "core/alert/Alert"
+import {omit} from "lodash"
 import format from "date-fns/format"
 import {
     deleteAvailabilityData,
@@ -10,7 +10,8 @@ import {
     putAvailabilityData,
     postAvailabilityData,
 } from "components/houseListing/services"
-import { NavigationContext } from "components/houseListing/dataContext"
+import {NavigationContext} from "components/houseListing/dataContext"
+import {Accordion} from "react-bootstrap";
 
 export default class AvailabilitySelectorHandler extends Component {
     constructor(props) {
@@ -57,7 +58,7 @@ export default class AvailabilitySelectorHandler extends Component {
                 }))
             })
             .catch(error => {
-                alertUser.init({ stockAlertType: "unknownError" })
+                alertUser.init({stockAlertType: "unknownError"})
             })
     }
 
@@ -79,7 +80,7 @@ export default class AvailabilitySelectorHandler extends Component {
                 successCallback()
             })
             .catch(error => {
-                alertUser.init({ stockAlertType: "unknownError" })
+                alertUser.init({stockAlertType: "unknownError"})
             })
     }
 
@@ -92,7 +93,7 @@ export default class AvailabilitySelectorHandler extends Component {
                 }))
             })
             .catch(error => {
-                alertUser.init({ stockAlertType: "unknownError" })
+                alertUser.init({stockAlertType: "unknownError"})
             })
     }
 
@@ -100,9 +101,9 @@ export default class AvailabilitySelectorHandler extends Component {
         // Accepts Date Objects
         if (differenceInDays(endDate, startDate) < 28) {
             // FIXME:  Fetch this number from business constraints
-            return { error: true, message: "The Range should be greater than 28 days." }
+            return {error: true, message: "The Range should be greater than 28 days."}
         } else {
-            return { error: false }
+            return {error: false}
         }
     }
 
@@ -173,9 +174,9 @@ class AvailabilitySelector extends Component {
 
     toggleEditState = val => {
         if (val === null || val === undefined) {
-            this.setState(prevState => ({ modeEditing: !prevState.modeEditing }))
+            this.setState(prevState => ({modeEditing: !prevState.modeEditing}))
         } else {
-            this.setState({ modeEditing: val })
+            this.setState({modeEditing: val})
         }
     }
 
@@ -186,16 +187,16 @@ class AvailabilitySelector extends Component {
             this.setState({
                 error: validResult.message,
             })
-            alertUser.init({ alertType: "danger", message: "Please enter a valid Date Range", autoHide: true })
+            alertUser.init({alertType: "danger", message: "Please enter a valid Date Range", autoHide: true})
             return false
         } else {
-            this.setState({ inSyncMode: true })
+            this.setState({inSyncMode: true})
             // Passed
             if (this.props.modeNew) {
                 this.props.onAdd(this.state.tempStartDate, this.state.tempEndDate)
             } else {
                 this.props.onUpdate(this.objID, this.state.tempStartDate, this.state.tempEndDate, () =>
-                    this.setState({ inSyncMode: false })
+                    this.setState({inSyncMode: false})
                 )
                 this.toggleEditState(false)
             }
@@ -207,7 +208,7 @@ class AvailabilitySelector extends Component {
         if (this.props.modeNew) {
             this.toggleEditState(false)
         } else {
-            this.setState({ inSyncMode: true })
+            this.setState({inSyncMode: true})
             this.props.onRemove(this.objID)
         }
     }

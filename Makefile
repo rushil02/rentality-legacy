@@ -14,24 +14,22 @@ req-install: ## Install and setup requisites: docker-ce and docker-compose
 	@echo "Command - docker login registry.gitlab.com"
 	@echo "After registry login, use 'make initialize' command to start development server for first time after this setup."
 	@echo "Thereafter use, 'make run' command every time to start development server."
-	@echo "Development server will run on 0.0.0.0:8001"
+	@echo "Development server will run on 0.0.0.0:8000"
 	newgrp docker
 
-# First time data setup
 initialize: ## Initialize the project first time from empty database
 	@sudo sysctl -w vm.max_map_count=262144
 	@cd ./bin/db_init/  && sh ./load-db.sh
 	@docker-compose up -d --build
 	@sh ./bin/post-installation.sh
 
-# Build and run the container
-build: ## Rebuilds container without cache
+build: ## Rebuilds docker images without cache
 	@echo "Building rentality/backend-common:latest ..."
 	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend
 	@echo "Building from docker-compose.yml ..."
 	@docker-compose build --no-cache --parallel
 
-build-run: ## Build and spin up the project in development mode for first time on system start
+build-run: ## Build and spin up the project in development mode for first time on system start or when app configs are changed
 	@sudo sysctl -w vm.max_map_count=262144
 	@docker-compose down
 	@make fe-vol-clean
