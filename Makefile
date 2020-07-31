@@ -53,8 +53,7 @@ run-migration-service: ## Closely imitates production behaviour for migration-co
 	@echo "Task complete"
 
 fe-vol-clean: ## Clean frontend persistent data
-	docker volume rm rentality_frontend_data || true
-	docker volume rm rentality_frontend_cache || true
+	docker volume rm rentality_frontend_data rentality_frontend_cache || true
 
 # Logging
 be-logs: ## View recent backend - service 'web' logs

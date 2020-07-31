@@ -19,8 +19,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faPlus, faPen, faTimes, faCheck} from "@fortawesome/free-solid-svg-icons"
 import styles from "./AvailabilitySelector.module.css"
 import {PulseLoader} from "react-spinners"
-import {Accordion, Card, Button, Row, useAccordionToggle} from "react-bootstrap";
-import AccordionContext from "react-bootstrap/AccordionContext";
+import {Accordion, Card, Button, Row} from "react-bootstrap";
 
 
 const defineds = {
