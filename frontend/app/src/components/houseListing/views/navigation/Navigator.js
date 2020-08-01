@@ -22,11 +22,9 @@ class Navigator extends Component {
     }
 
     onNext = data => {
-        console.log("Adasd", data)
         if (this.props.mode === "create") {
             this.props.navContext.data.nextToEditMode(data.getData("UUID"))
         } else {
-            console.log("hrer");
             this.props.history.push("/" + (this.props.navContext.data.currForm + 1))
         }
     }

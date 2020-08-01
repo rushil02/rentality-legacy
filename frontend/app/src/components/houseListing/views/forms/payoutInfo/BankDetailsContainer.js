@@ -1,10 +1,10 @@
-import React, { Component } from "react"
-import { alertUser } from "core/alert/Alert"
-import { PulseLoader } from "react-spinners"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faChevronUp, faPen, faPlus } from "@fortawesome/free-solid-svg-icons"
+import React, {Component} from "react"
+import {alertUser} from "core/alert/Alert"
+import {PulseLoader} from "react-spinners"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faChevronUp, faPen, faPlus} from "@fortawesome/free-solid-svg-icons"
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton"
-import { getAddUpdateBankAccount, postAddUpdateBankAccount } from "components/houseListing/services"
+import {getAddUpdateBankAccount, postAddUpdateBankAccount} from "components/houseListing/services"
 import styles from "./PayoutInfoContainer.module.css"
 
 export default class BankDetailsContainer extends Component {
@@ -44,7 +44,7 @@ export default class BankDetailsContainer extends Component {
     }
 
     onEdit = () => {
-        this.setState({ showEditButton: false, routingNumber: "", accountNumber: "" })
+        this.setState({showEditButton: false, routingNumber: "", accountNumber: ""})
     }
 
     onFieldChange = (field, value) => {
@@ -56,25 +56,25 @@ export default class BankDetailsContainer extends Component {
     getBadge = () => {
         if (this.props.statusBI === "Incomplete") {
             return (
-                <span className="badge badge-danger" style={{ marginLeft: "20px" }}>
+                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
                     Please Complete Billing Information
                 </span>
             )
         } else if (this.props.statusPI === "Incomplete" || this.props.statusII === "Incomplete") {
             return (
-                <span className="badge badge-danger" style={{ marginLeft: "20px" }}>
+                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
                     Please Complete Payment Information
                 </span>
             )
         } else if (this.props.statusEA === "Incomplete") {
             return (
-                <span className="badge badge-danger" style={{ marginLeft: "20px" }}>
+                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
                     Required
                 </span>
             )
         } else if (this.props.statusEA === "Complete") {
             return (
-                <span className="badge badge-success" style={{ marginLeft: "20px" }}>
+                <span className="badge badge-success" style={{marginLeft: "20px"}}>
                     Complete
                 </span>
             )
@@ -85,47 +85,26 @@ export default class BankDetailsContainer extends Component {
 
     toggleEditState = val => {
         if (val === null || val === undefined) {
-            this.setState(prevState => ({ modeEditing: !prevState.modeEditing }))
+            this.setState(prevState => ({modeEditing: !prevState.modeEditing}))
         } else {
-            this.setState({ modeEditing: val })
+            this.setState({modeEditing: val})
         }
     }
 
     getEditButton = () => {
         let buttonConfig = {}
-        if (this.props.verifying) {
-            buttonConfig = {
-                title: "Please Wait",
-                action: e => {
-                    e.stopPropagation()
-                },
-                icon: faPlus,
-            }
-        } else if (this.state.modeEditing) {
-            buttonConfig = {
-                title: "Collapse",
-                action: e => {
-                    e.stopPropagation()
-                    this.toggleEditState(false)
-                },
-                icon: faChevronUp,
-            }
-        } else {
-            buttonConfig = {
-                title: "Edit",
-                action: e => {
-                    e.stopPropagation()
-                    this.toggleEditState(true)
-                },
-                icon: faPen,
-            }
-        }
-
         if (
             this.props.statusBI === "Incomplete" ||
             this.props.statusPI === "Incomplete" ||
             this.props.statusII === "Incomplete"
         ) {
+            buttonConfig = {
+                title: "Edit",
+                action: e => {
+                    e.stopPropagation()
+                },
+                icon: faPen,
+            }
             return (
                 <button
                     className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
@@ -135,10 +114,37 @@ export default class BankDetailsContainer extends Component {
                     aria-controls={"collapsibleCalendar-"}
                     disabled
                 >
-                    <FontAwesomeIcon icon={buttonConfig.icon} />
+                    <FontAwesomeIcon icon={buttonConfig.icon}/>
                 </button>
             )
         } else {
+            if (this.props.verifying) {
+                buttonConfig = {
+                    title: "Please Wait",
+                    action: e => {
+                        e.stopPropagation()
+                    },
+                    icon: faPlus,
+                }
+            } else if (this.state.modeEditing) {
+                buttonConfig = {
+                    title: "Collapse",
+                    action: e => {
+                        e.stopPropagation()
+                        this.toggleEditState(false)
+                    },
+                    icon: faChevronUp,
+                }
+            } else {
+                buttonConfig = {
+                    title: "Edit",
+                    action: e => {
+                        e.stopPropagation()
+                        this.toggleEditState(true)
+                    },
+                    icon: faPen,
+                }
+            }
             return (
                 <button
                     className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
@@ -147,7 +153,7 @@ export default class BankDetailsContainer extends Component {
                     onClick={buttonConfig.action}
                     aria-controls={"collapsibleCalendar-"}
                 >
-                    <FontAwesomeIcon icon={buttonConfig.icon} />
+                    <FontAwesomeIcon icon={buttonConfig.icon}/>
                 </button>
             )
         }
@@ -195,7 +201,7 @@ export default class BankDetailsContainer extends Component {
 
     submitToken = tokenID => {
         // FIXME
-        postAddUpdateBankAccount(this.props.PG, { token: tokenID })
+        postAddUpdateBankAccount(this.props.PG, {token: tokenID})
             .then(result => {
                 if (result.pg.error) {
                     alertUser.init({
@@ -253,7 +259,7 @@ export default class BankDetailsContainer extends Component {
                     <div className={"collapse " + styles.cardContainer} id={"collapsibleBankDetails"}>
                         <div
                             className={"col-11 " + styles.cardContainer}
-                            style={{ borderTop: "1px solid #e9ebf0", padding: "40px" }}
+                            style={{borderTop: "1px solid #e9ebf0", padding: "40px"}}
                         >
                             <div className={"col-10"}>
                                 <div className={"row"}>
@@ -282,7 +288,7 @@ export default class BankDetailsContainer extends Component {
                                                 />
                                             )}
                                         </div>
-                                        <div id="bank-error-message" className="invalid-feedback" />
+                                        <div id="bank-error-message" className="invalid-feedback"/>
                                     </div>
                                     <div className="col-12">
                                         <div className="input no-background">
@@ -309,9 +315,9 @@ export default class BankDetailsContainer extends Component {
                                                 />
                                             )}
                                         </div>
-                                        <div id="bank-warning-message" className="invalid-feedback" />
+                                        <div id="bank-warning-message" className="invalid-feedback"/>
                                     </div>
-                                    <div className={"col-12"} style={{ marginTop: "35px", marginBottom: "30px" }}>
+                                    <div className={"col-12"} style={{marginTop: "35px", marginBottom: "30px"}}>
                                         {this.state.showEditButton ? (
                                             <button
                                                 className="btn float-right imp-button-style"

@@ -44,6 +44,9 @@
 }
 
 .btnCircle:focus {
+    background-color: transparent;
+    color: #39ffaf;
+    border-color: transparent;
     box-shadow: 0 0 0 0.2rem rgba(57, 255, 175, 0.5);
 }
 
@@ -82,9 +85,11 @@
     flex-basis: 40%;
 }
 
-.cardBody {
+.cardHeader {
     display: flex;
     align-items: center;
+    background-color: unset;
+    border-bottom: none;
 }
 
 .cardContainer {
