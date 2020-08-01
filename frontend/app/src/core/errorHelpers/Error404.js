@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 import styles from "./style.module.css"
 
 export default class Error404 extends Component {
@@ -6,22 +6,16 @@ export default class Error404 extends Component {
         return (
             <React.Fragment>
                 <div className="container-fluid">
-                    <div className="row" style={{ paddingTop: "10%", marginBottom: "10%" }}>
-                        <div className="col-sm-3" />
-                        <div className="col-sm-6">
-                            <div className={"card " + styles.pageErrorCard}>
-                                <div className="card-body">
-                                    <h1>404</h1>
-                                    <h5 className="card-title">Oops, the page you're looking for does not exist.</h5>
-                                    <p className="card-text">
-                                        You may want to head back to the homepage. Or report the problem if you think
-                                        something is broken.
-                                    </p>
-                                    {/*<a href="#" className="btn btn-default-color">Go somewhere</a>*/}
-                                </div>
-                            </div>
+                    <div className="row" style={{paddingTop: "15%", marginBottom: "15%"}}>
+                        <div className="col-3"/>
+                        <div className="col-6">
+                            <h5 className={styles.greyText}>404 | Oops, the page you're looking for does not exist.</h5>
+                            <p className={styles.greyText}>
+                                You may want to head back to the <a href="/">homepage</a>. Or <a href={"mailto:admin@rentality.com.au"}>report</a> the problem if you think
+                                something is broken.
+                            </p>
                         </div>
-                        <div className="col-sm-3" />
+                        <div className="col-3"/>
                     </div>
                 </div>
             </React.Fragment>
