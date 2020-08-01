@@ -1,18 +1,17 @@
 import React, {Component} from "react";
-import AppComponent from "./AppComponent";
+import DashboardComponent from "./DashboardComponent";
 import {APIModelListAdapter} from "core/utils/ModelHelper";
 import {House, Booking} from "../models";
 import {getPublishedHouses, getBookingsData} from "../services";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 
-export default class App extends Component {
+export default class DashboardContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             status: "loading",
             houses: new APIModelListAdapter([], House, "uuid", "empty"),
             bookings: new APIModelListAdapter([], Booking, "", "empty"),
-            // booking:
         };
     }
 
@@ -35,10 +34,9 @@ export default class App extends Component {
     }
 
     render() {
-        console.log(this.state.bookings);
         return (
             <RequestErrorBoundary status={this.state.status}>
-                <AppComponent houses={this.state.houses} bookings={this.state.bookings} />
+                <DashboardComponent houses={this.state.houses} bookings={this.state.bookings} />
             </RequestErrorBoundary>
         );
     }

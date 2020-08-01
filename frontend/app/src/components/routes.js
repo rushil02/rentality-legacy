@@ -39,7 +39,7 @@ export const APIRoutes = include("/api", {
         ...houseListingRoutes.APIs,
         filterOptions: "filter-options",
     }),
-    dashboard: include("dashboard", dashboardRoutes.APIs),
+    dashboard: include("/api", dashboardRoutes.APIs), // URL starts from root
     blog: include("blog", blogRoutes.APIs),
     search: include("es", {
         house: "house/search",

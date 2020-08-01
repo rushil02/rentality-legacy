@@ -1,19 +1,19 @@
-import React, {Component} from "react";
-import styles from "./App.module.css";
-import {reverse} from "named-urls";
-import routes from "components/routes";
+import React, { Component } from "react"
+import styles from "./App.module.css"
+import { reverse } from "named-urls"
+import { PageRoutes } from "components/routes"
 
 function formatDate(date) {
     if (date) {
-        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        return months[date.getMonth()] + ", " + date.getDate() + " " + date.getFullYear();
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        return months[date.getMonth()] + ", " + date.getDate() + " " + date.getFullYear()
     } else {
-        return "N/A";
+        return "N/A"
     }
 }
 
 function GetHouseListing(props) {
-    let house = props.house;
+    let house = props.house
 
     return (
         <div className={styles.board}>
@@ -52,7 +52,7 @@ function GetHouseListing(props) {
                             <div className={styles.detail}>
                                 <a
                                     className={styles.btn + " btn-link"}
-                                    href={reverse(routes.pages.houseListing.edit, {houseUUID: house.getData("uuid")})}
+                                    href={reverse(PageRoutes.listing.edit, { houseUUID: house.getData("uuid") }) + "/1"}
                                 >
                                     Manage
                                 </a>
@@ -62,11 +62,11 @@ function GetHouseListing(props) {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 function GetBookingListing(props) {
-    let booking = props.booking;
+    let booking = props.booking
     let displayStatus = {
         I: "Incomplete",
         P: "Pending",
@@ -81,15 +81,15 @@ function GetBookingListing(props) {
         X: "In-Dispute",
         F: "In-Dispute Locked",
         R: "Dispute Resolved",
-    };
-    let displayStatusClassName = styles.btn + " btn-link";
-    let bookingStatus = booking.getData("status");
+    }
+    let displayStatusClassName = styles.btn + " btn-link"
+    let bookingStatus = booking.getData("status")
     if (bookingStatus === "P" || bookingStatus === "L") {
-        displayStatusClassName += " " + styles.pendingBorder;
+        displayStatusClassName += " " + styles.pendingBorder
     } else if (bookingStatus === "I") {
-        displayStatusClassName += " " + styles.incompleteBorder;
+        displayStatusClassName += " " + styles.incompleteBorder
     } else if (bookingStatus === "B") {
-        displayStatusClassName += " " + styles.successBorder;
+        displayStatusClassName += " " + styles.successBorder
     }
     return (
         <div className={styles.board}>
@@ -176,11 +176,15 @@ function GetBookingListing(props) {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default class AppComponent extends Component {
+export default class DashboardComponent extends Component {
     render() {
+        let houses = this.props.houses.getObjectList()
+        let bookings = this.props.bookings.getObjectList()
+        let houseCount = houses.length
+        let bookingCount = bookings.length
         return (
             <React.Fragment>
                 <div className={styles.pageDashboard}>
@@ -188,19 +192,22 @@ export default class AppComponent extends Component {
                         <h1>Dashboard</h1>
                         <div className="row">
                             <div className="col-md-12 col-lg-12 col-xl-12">
-                                <h2>Property Listing</h2>
-                                {this.props.houses.getObjectList().map((house, index) => (
+                                {houseCount > 0 ? <h2>Property Listing</h2> : null}
+
+                                {houses.map((house, index) => (
                                     <GetHouseListing key={house[0]} house={house[1]} />
                                 ))}
-                                <h2>Booking Applications</h2>
-                                {this.props.bookings.getObjectList().map((booking, index) => (
+                                {bookingCount > 0 ? <h2>Booking Applications</h2> : null}
+
+                                {bookings.map((booking, index) => (
                                     <GetBookingListing key={booking[0]} booking={booking[1]} />
                                 ))}
+                                {houseCount === 0 && bookingCount === 0 ? <h2>No data found</h2> : null}
                             </div>
                         </div>
                     </div>
                 </div>
             </React.Fragment>
-        );
+        )
     }
 }
