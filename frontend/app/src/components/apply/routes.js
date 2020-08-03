@@ -1,7 +1,7 @@
 export default {
     interface: {
         base: "",
-        houseInfo: "property/info/:houseUUID",
+        houseInfo: "info/:houseUUID",
         success: "app/success/:applicationUUID",
     },
     APIs: {
