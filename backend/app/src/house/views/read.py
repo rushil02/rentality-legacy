@@ -1,9 +1,11 @@
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from house.models import Image
+from house.models import Image, House
 
-from house.serializers.read import ImagePublicSerializer
+from house.serializers.read import ImagePublicSerializer, AllHouseDetailsPublicSerializer
+from utils.api_utils import InternalAccessAPIView
 
 
 class ImagesPublicView(GenericAPIView):
@@ -22,3 +24,14 @@ class ThumbnailPublicView(GenericAPIView):
         image = Image.objects.get(house__uuid=house_uuid, is_thumbnail=True)
         serializer = self.serializer_class(image)
         return Response(serializer.data)
+
+
+class AllSEOHouses(InternalAccessAPIView):
+    serializer_class = AllHouseDetailsPublicSerializer
+
+    def get(self, request, internal_access_key):
+        super(AllSEOHouses, self).get(request, internal_access_key)
+        houses = House.active_objects.filter(houseprofile__seo=True)
+        serializer = self.serializer_class(houses, many=True)
+        return Response(serializer.data)
+

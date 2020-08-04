@@ -350,3 +350,7 @@ CELERY_BROKER_URL = 'amqp://%s:%s@rabbitmq:5672//' % (get_env_var('RABBITMQ_DEFA
 
 # Using the database to store task state and results.
 CELERY_RESULT_BACKEND = 'django-db'
+
+
+# Unique key required to access internal APIs
+INTERNAL_ACCESS_API_KEY = get_env_var('INTERNAL_ACCESSOR')

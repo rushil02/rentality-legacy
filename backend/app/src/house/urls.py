@@ -11,8 +11,7 @@ from house.views.api.read import HouseDetailsPublicView, NetAvailableDatesView, 
 
 from utils.api_utils import LocationAutocomplete
 
-from house.views import ImagesPublicView, ThumbnailPublicView
-
+from house.views import ImagesPublicView, ThumbnailPublicView, AllSEOHouses
 
 app_name = 'house'
 
@@ -54,5 +53,8 @@ urlpatterns = [
     # Actions
     path('activate/<uuid:house_uuid>', ActivateHouseListing.as_view(), name='activate_listing'),
     path('deactivate/<uuid:house_uuid>', DeactivateHouseListing.as_view(), name='deactivate_listing'),
+
+    # Internal APIs
+    path('all-seo-houses/<str:internal_access_key>', AllSEOHouses.as_view(), name='all_seo_houses'),
 
 ]

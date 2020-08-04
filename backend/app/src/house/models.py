@@ -489,10 +489,12 @@ class Image(models.Model):
 
 class HouseProfile(models.Model):
     """
-    priority : Lower number represents higher priority (is particularly used in building frontend)
+    priority : Higher number represents higher priority (is particularly used in building frontend)
     """
     house = models.OneToOneField(House, on_delete=models.CASCADE)
-    priority = models.PositiveSmallIntegerField(default=100)
+    priority = models.PositiveSmallIntegerField(default=0, help_text="Higher number sets higher priority")
+    seo = models.BooleanField(default=False, help_text="Optimize listing for seo.")
+    updated_on = models.DateTimeField(auto_now=True)
 
 
 class Facility(models.Model):

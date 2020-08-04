@@ -1,9 +1,13 @@
 from rest_framework import serializers
 from cities.models import PostalCode, City
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from dal import autocomplete
+from rest_framework.views import APIView
+
+from django.conf import settings
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -63,3 +67,10 @@ class CityLocationAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_selected_result_label(self, item):
         return self.get_result_label(item)
+
+
+class InternalAccessAPIView(APIView):
+    def get(self, request, internal_access_key):
+        if internal_access_key != settings.INTERNAL_ACCESS_API_KEY:
+            raise PermissionDenied
+
