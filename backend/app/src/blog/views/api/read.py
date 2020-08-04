@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from blog.models import Article, Tag
 from blog.serializers import ArticlePublicSerializer, ArticleShortInfoSerializer, TagSerializer, \
     TagAndArticleSerializer, PopularArticleShortInfoSerializer, LatestArticleShortInfoSerializer
+from utils.api_utils import InternalAccessAPIView
 
 
 class ArticlePublicReadView(APIView):
@@ -18,8 +19,9 @@ class ArticlePublicReadView(APIView):
             return Response(article.data, status=status.HTTP_200_OK)
 
 
-class AllArticlesPublicReadView(APIView):
-    def get(self, request):
+class AllArticlesPublicReadView(InternalAccessAPIView):
+    def get(self, request, internal_access_key):
+        super(AllArticlesPublicReadView, self).get(request, internal_access_key)
         articles = Article.objects.filter(active=True)
         article_serializer = ArticlePublicSerializer(articles, many=True)
         return Response(article_serializer.data, status=status.HTTP_200_OK)
@@ -50,8 +52,9 @@ class PopularTagsListView(APIView):
         return Response(TagSerializer(tags, many=True).data, status=status.HTTP_200_OK)
 
 
-class AllTagsAndArticlesListView(APIView):
-    def get(self, request):
+class AllTagsAndArticlesListView(InternalAccessAPIView):
+    def get(self, request, internal_access_key):
+        super(AllTagsAndArticlesListView, self).get(request, internal_access_key)
         tags = Tag.objects.all().prefetch_related('article_set')
         return Response(TagAndArticleSerializer(tags, many=True).data, status=status.HTTP_200_OK)
 

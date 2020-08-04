@@ -11,8 +11,7 @@ urlpatterns = [
     path('article/<slug:slug>', ArticlePublicReadView.as_view(), name='view_article'),
     path('tag-articles', TagsRelatedArticlesListView.as_view(), name='view_article'),
 
-    # System Level API
-    # TODO: add signature/system level auth key since it should not be accessed publicly
-    path('all-articles', AllArticlesPublicReadView.as_view(), name='all_articles'),
-    path('all-tags-and-articles', AllTagsAndArticlesListView.as_view(), name='all_tag_and_articles')
+    # Internal System Level API
+    path('all-articles/<str:internal_access_key>', AllArticlesPublicReadView.as_view(), name='all_articles'),
+    path('all-tags-and-articles/<str:internal_access_key>', AllTagsAndArticlesListView.as_view(), name='all_tag_and_articles')
 ]
