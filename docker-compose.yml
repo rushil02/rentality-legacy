@@ -50,6 +50,7 @@ services:
       - './frontend/app/src:/app/src'
       - 'frontend_data:/app/public'
       - 'frontend_cache:/app/.cache'
+      - './secrets/COMM_ENV:/run/secrets/COMM_ENV'
     depends_on:
       - web
     entrypoint:
