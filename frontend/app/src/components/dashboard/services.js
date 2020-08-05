@@ -1,28 +1,29 @@
-import axios, {handleError} from "core/utils/serviceHelper";
-import {reverse} from "named-urls";
-import routes from "components/routes";
+import axios, { handleError } from "core/utils/serviceHelper"
+import { reverse } from "named-urls"
+import { APIRoutes } from "components/routes"
 
 export function getPublishedHouses() {
     return new Promise(function (resolve, reject) {
-        axios.get(reverse(routes.dashboard.publishedHouses))
+        axios
+            .get(reverse(APIRoutes.dashboard.publishedHouses))
             .then(response => {
-                resolve(response.data);
+                resolve(response.data)
             })
             .catch(error => {
-                reject(error);
-            });
-    });
+                reject(error)
+            })
+    })
 }
 
 export function getBookingsData() {
     return new Promise(function (resolve, reject) {
         axios
-            .get(reverse(routes.dashboard.bookingsData))
-            .then((response) => {
-                resolve(response.data);
+            .get(reverse(APIRoutes.dashboard.bookingsData))
+            .then(response => {
+                resolve(response.data)
             })
-            .catch((error) => {
-                reject(error);
-            });
-    });
+            .catch(error => {
+                reject(error)
+            })
+    })
 }
