@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONTAINER_ID=$(docker ps -q --filter ancestor=registry.gitlab.com/rushil0195/rentality/frontend | head -n 1)
+CONTAINER_ID=$(docker ps -q --filter ancestor=rentality/frontend | head -n 1)
 
 echo "Working with container: $CONTAINER_ID"
 
