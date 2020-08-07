@@ -47,12 +47,17 @@ class AvailabilityAdmin(admin.ModelAdmin):
     search_fields = ('house__address', 'house__uuid')
 
 
+
+class HouseProfileAdmin(admin.ModelAdmin):
+    list_display = ('house',)
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(House, HouseAdmin)
 admin.site.register(HomeType)
 admin.site.register(Facility, FacilityAdmin)
 admin.site.register(Availability, AvailabilityAdmin)
-admin.site.register(HouseProfile)
+admin.site.register(HouseProfile, HouseProfileAdmin)
 admin.site.register(HouseRule)
 admin.site.register(Rule)
 admin.site.register(NeighbourhoodDescriptor, NeighbourhoodDescriptorAdmin)

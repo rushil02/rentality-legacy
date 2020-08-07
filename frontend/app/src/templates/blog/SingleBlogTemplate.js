@@ -4,7 +4,7 @@ import Layout from "components/layout"
 import SEO from "components/seo"
 
 const SingleBlogTemplate = props => {
-    let article = props.pathContext.article
+    let article = props.pageContext.article
 
     return (
         <Layout {...props}>

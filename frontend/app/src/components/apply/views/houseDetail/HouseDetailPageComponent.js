@@ -349,14 +349,14 @@ function getInfoSidePanel(that, address) {
                                     applicationUUID={that.props.applicationUUID}
                                 />
                             ) : (
-                                <Link
+                                <a
                                     className="imp-button-style"
                                     onClick={() => {
                                         that.scrollToRef(that.elementRefs.bookingSection)
                                     }}
                                 >
                                     Book Now
-                                </Link>
+                                </a>
                             )}
                         </div>
                     </div>

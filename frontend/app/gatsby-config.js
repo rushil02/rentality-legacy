@@ -31,7 +31,7 @@ module.exports = {
         `gatsby-alias-imports`,
         {
             resolve: `gatsby-plugin-create-client-paths`,
-            options: { prefixes: [`/listing/*`] },
+            options: { prefixes: [`/listing/*`, `/apply/info/*`] },
         },
         `gatsby-plugin-sitemap`,
         // this (optional) plugin enables Progressive Web App + Offline functionality
