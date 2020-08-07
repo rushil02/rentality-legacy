@@ -1,11 +1,12 @@
-import React, {Component} from "react"
-import {alertUser} from "core/alert/Alert"
-import {PulseLoader} from "react-spinners"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faChevronUp, faPen, faPlus} from "@fortawesome/free-solid-svg-icons"
+import React, { Component } from "react"
+import { alertUser } from "core/alert/Alert"
+import { PulseLoader } from "react-spinners"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faChevronUp, faPen, faPlus } from "@fortawesome/free-solid-svg-icons"
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton"
-import {getAddUpdateBankAccount, postAddUpdateBankAccount} from "components/houseListing/services"
+import { getAddUpdateBankAccount, postAddUpdateBankAccount } from "components/houseListing/services"
 import styles from "./PayoutInfoContainer.module.css"
+import { Accordion, Card, Button } from "react-bootstrap"
 
 export default class BankDetailsContainer extends Component {
     constructor(props) {
@@ -44,7 +45,7 @@ export default class BankDetailsContainer extends Component {
     }
 
     onEdit = () => {
-        this.setState({showEditButton: false, routingNumber: "", accountNumber: ""})
+        this.setState({ showEditButton: false, routingNumber: "", accountNumber: "" })
     }
 
     onFieldChange = (field, value) => {
@@ -56,25 +57,25 @@ export default class BankDetailsContainer extends Component {
     getBadge = () => {
         if (this.props.statusBI === "Incomplete") {
             return (
-                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
+                <span className="badge badge-danger" style={{ marginLeft: "20px" }}>
                     Please Complete Billing Information
                 </span>
             )
         } else if (this.props.statusPI === "Incomplete" || this.props.statusII === "Incomplete") {
             return (
-                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
+                <span className="badge badge-danger" style={{ marginLeft: "20px" }}>
                     Please Complete Payment Information
                 </span>
             )
         } else if (this.props.statusEA === "Incomplete") {
             return (
-                <span className="badge badge-danger" style={{marginLeft: "20px"}}>
+                <span className="badge badge-danger" style={{ marginLeft: "20px" }}>
                     Required
                 </span>
             )
         } else if (this.props.statusEA === "Complete") {
             return (
-                <span className="badge badge-success" style={{marginLeft: "20px"}}>
+                <span className="badge badge-success" style={{ marginLeft: "20px" }}>
                     Complete
                 </span>
             )
@@ -85,9 +86,9 @@ export default class BankDetailsContainer extends Component {
 
     toggleEditState = val => {
         if (val === null || val === undefined) {
-            this.setState(prevState => ({modeEditing: !prevState.modeEditing}))
+            this.setState(prevState => ({ modeEditing: !prevState.modeEditing }))
         } else {
-            this.setState({modeEditing: val})
+            this.setState({ modeEditing: val })
         }
     }
 
@@ -106,16 +107,16 @@ export default class BankDetailsContainer extends Component {
                 icon: faPen,
             }
             return (
-                <button
-                    className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
-                    type="button"
+                <Accordion.Toggle
+                    as={Button}
+                    className={"btn btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
                     title={buttonConfig.title}
                     onClick={buttonConfig.action}
-                    aria-controls={"collapsibleCalendar-"}
+                    eventKey={0}
                     disabled
                 >
-                    <FontAwesomeIcon icon={buttonConfig.icon}/>
-                </button>
+                    <FontAwesomeIcon icon={buttonConfig.icon} />
+                </Accordion.Toggle>
             )
         } else {
             if (this.props.verifying) {
@@ -146,15 +147,15 @@ export default class BankDetailsContainer extends Component {
                 }
             }
             return (
-                <button
-                    className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
-                    type="button"
+                <Accordion.Toggle
+                    as={Button}
+                    className={"btn btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
                     title={buttonConfig.title}
                     onClick={buttonConfig.action}
-                    aria-controls={"collapsibleCalendar-"}
+                    eventKey={0}
                 >
-                    <FontAwesomeIcon icon={buttonConfig.icon}/>
-                </button>
+                    <FontAwesomeIcon icon={buttonConfig.icon} />
+                </Accordion.Toggle>
             )
         }
     }
@@ -201,7 +202,7 @@ export default class BankDetailsContainer extends Component {
 
     submitToken = tokenID => {
         // FIXME
-        postAddUpdateBankAccount(this.props.PG, {token: tokenID})
+        postAddUpdateBankAccount(this.props.PG, { token: tokenID })
             .then(result => {
                 if (result.pg.error) {
                     alertUser.init({
@@ -229,121 +230,133 @@ export default class BankDetailsContainer extends Component {
     }
 
     render() {
-        if (this.state.modeEditing) {
-            // $("#collapsibleBankDetails").collapse("show")
-        } else {
-            // $("#collapsibleBankDetails").collapse("hide")
-        }
         return (
             <React.Fragment>
-                <div className={"card mb-3 " + styles.accordionBorder}>
-                    <div className={"card-body " + styles.cardBody}>
-                        <div className={styles.cardTextContent}>
-                            <span>
-                                <b>Step 3: Bank Details</b>
-                            </span>
-                            {this.getBadge()}
-                        </div>
-                        <div className="loading-container">
-                            <PulseLoader
-                                // css={override}
-                                sizeUnit={"px"}
-                                size={10}
-                                color={"#3fc692"}
-                                loading={false}
-                            />
-                        </div>
+                <Accordion>
+                    <Card className={"mb-3 " + styles.accordionBorder}>
+                        <Card.Header className={styles.cardHeader}>
+                            <div className={styles.cardTextContent}>
+                                <span>
+                                    <b>Step 3: Bank Details</b>
+                                </span>
+                                {this.getBadge()}
+                            </div>
+                            <div className="loading-container">
+                                <PulseLoader
+                                    // css={override}
+                                    sizeUnit={"px"}
+                                    size={10}
+                                    color={"#3fc692"}
+                                    loading={false}
+                                />
+                            </div>
 
-                        <div className={styles.cardButtonGroup}>{this.getEditButton()}</div>
-                    </div>
-                    <div className={"collapse " + styles.cardContainer} id={"collapsibleBankDetails"}>
-                        <div
-                            className={"col-11 " + styles.cardContainer}
-                            style={{borderTop: "1px solid #e9ebf0", padding: "40px"}}
-                        >
-                            <div className={"col-10"}>
-                                <div className={"row"}>
-                                    <div className="col-12">
-                                        <div className="input no-background">
-                                            {this.state.showEditButton ? (
-                                                <input
-                                                    type="text"
-                                                    className={
-                                                        "inp-routing-number form-control " + styles.disabledInput
-                                                    }
-                                                    name="routing_number"
-                                                    placeholder="BSB"
-                                                    onChange={e => this.onFieldChange("routingNumber", e.target.value)}
-                                                    value={this.state.routingNumber}
-                                                    disabled
-                                                />
-                                            ) : (
-                                                <input
-                                                    type="text"
-                                                    className="inp-routing-number form-control"
-                                                    name="routing_number"
-                                                    placeholder="BSB"
-                                                    onChange={e => this.onFieldChange("routingNumber", e.target.value)}
-                                                    value={this.state.routingNumber}
-                                                />
-                                            )}
-                                        </div>
-                                        <div id="bank-error-message" className="invalid-feedback"/>
-                                    </div>
-                                    <div className="col-12">
-                                        <div className="input no-background">
-                                            {this.state.showEditButton ? (
-                                                <input
-                                                    type="text"
-                                                    className={
-                                                        "inp-account-number form-control " + styles.disabledInput
-                                                    }
-                                                    name="account_number"
-                                                    placeholder="Account Number"
-                                                    onChange={e => this.onFieldChange("accountNumber", e.target.value)}
-                                                    value={this.state.accountNumber}
-                                                    disabled
-                                                />
-                                            ) : (
-                                                <input
-                                                    type="text"
-                                                    className="inp-account-number form-control"
-                                                    name="account_number"
-                                                    placeholder="Account Number"
-                                                    onChange={e => this.onFieldChange("accountNumber", e.target.value)}
-                                                    value={this.state.accountNumber}
-                                                />
-                                            )}
-                                        </div>
-                                        <div id="bank-warning-message" className="invalid-feedback"/>
-                                    </div>
-                                    <div className={"col-12"} style={{marginTop: "35px", marginBottom: "30px"}}>
-                                        {this.state.showEditButton ? (
-                                            <button
-                                                className="btn float-right imp-button-style"
-                                                onClick={this.onEdit}
+                            <div className={styles.cardButtonGroup}>{this.getEditButton()}</div>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey={0}>
+                            <Card.Body className={styles.cardContainer} id={"collapsibleBankDetails"}>
+                                <div
+                                    className={"col-11 " + styles.cardContainer}
+                                    style={{ borderTop: "1px solid #e9ebf0", padding: "40px" }}
+                                >
+                                    <div className={"col-10"}>
+                                        <div className={"row"}>
+                                            <div className="col-12">
+                                                <div className="input no-background">
+                                                    {this.state.showEditButton ? (
+                                                        <input
+                                                            type="text"
+                                                            className={
+                                                                "inp-routing-number form-control " +
+                                                                styles.disabledInput
+                                                            }
+                                                            name="routing_number"
+                                                            placeholder="BSB"
+                                                            onChange={e =>
+                                                                this.onFieldChange("routingNumber", e.target.value)
+                                                            }
+                                                            value={this.state.routingNumber}
+                                                            disabled
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type="text"
+                                                            className="inp-routing-number form-control"
+                                                            name="routing_number"
+                                                            placeholder="BSB"
+                                                            onChange={e =>
+                                                                this.onFieldChange("routingNumber", e.target.value)
+                                                            }
+                                                            value={this.state.routingNumber}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <div id="bank-error-message" className="invalid-feedback" />
+                                            </div>
+                                            <div className="col-12">
+                                                <div className="input no-background">
+                                                    {this.state.showEditButton ? (
+                                                        <input
+                                                            type="text"
+                                                            className={
+                                                                "inp-account-number form-control " +
+                                                                styles.disabledInput
+                                                            }
+                                                            name="account_number"
+                                                            placeholder="Account Number"
+                                                            onChange={e =>
+                                                                this.onFieldChange("accountNumber", e.target.value)
+                                                            }
+                                                            value={this.state.accountNumber}
+                                                            disabled
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type="text"
+                                                            className="inp-account-number form-control"
+                                                            name="account_number"
+                                                            placeholder="Account Number"
+                                                            onChange={e =>
+                                                                this.onFieldChange("accountNumber", e.target.value)
+                                                            }
+                                                            value={this.state.accountNumber}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <div id="bank-warning-message" className="invalid-feedback" />
+                                            </div>
+                                            <div
+                                                className={"col-12"}
+                                                style={{ marginTop: "35px", marginBottom: "30px" }}
                                             >
-                                                Edit
-                                            </button>
-                                        ) : (
-                                            <APIRequestButton
-                                                layoutClasses={"btn float-right imp-button-style"}
-                                                cTextOptions={{
-                                                    default: "Save",
-                                                    loading: "Saving",
-                                                    done: "Saved",
-                                                    error: "Error!",
-                                                }}
-                                                callback={this.onSave}
-                                                containerID={"collapsibleBankDetails"}
-                                            />
-                                        )}
+                                                {this.state.showEditButton ? (
+                                                    <button
+                                                        className="btn float-right imp-button-style"
+                                                        onClick={this.onEdit}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                ) : (
+                                                    <APIRequestButton
+                                                        layoutClasses={"btn float-right imp-button-style"}
+                                                        cTextOptions={{
+                                                            default: "Save",
+                                                            loading: "Saving",
+                                                            done: "Saved",
+                                                            error: "Error!",
+                                                        }}
+                                                        callback={this.onSave}
+                                                        containerID={"collapsibleBankDetails"}
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
             </React.Fragment>
         )
     }

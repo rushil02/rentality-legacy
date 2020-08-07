@@ -6,6 +6,7 @@ import { faChevronUp, faPen, faPlus } from "@fortawesome/free-solid-svg-icons"
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton"
 import { createPaymentInfo, updatePaymentInfo } from "components/houseListing/services"
 import styles from "./PayoutInfoContainer.module.css"
+import { Accordion, Card, Button } from "react-bootstrap"
 
 export default class PGInfoContainer extends Component {
     constructor(props) {
@@ -79,28 +80,28 @@ export default class PGInfoContainer extends Component {
 
         if (this.props.statusBI === "Incomplete") {
             return (
-                <button
-                    className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
-                    type="button"
+                <Accordion.Toggle
+                    as={Button}
+                    className={"btn btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
                     title={buttonConfig.title}
                     onClick={buttonConfig.action}
-                    aria-controls={"collapsibleCalendar-"}
+                    eventKey={0}
                     disabled
                 >
                     <FontAwesomeIcon icon={buttonConfig.icon} />
-                </button>
+                </Accordion.Toggle>
             )
         } else {
             return (
-                <button
-                    className={"btn btn-primary btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
-                    type="button"
+                <Accordion.Toggle
+                    as={Button}
+                    className={"btn btn-circle btn-xl " + styles.btnCircle + " " + styles.btnXl}
                     title={buttonConfig.title}
                     onClick={buttonConfig.action}
-                    aria-controls={"collapsibleCalendar-"}
+                    eventKey={0}
                 >
                     <FontAwesomeIcon icon={buttonConfig.icon} />
-                </button>
+                </Accordion.Toggle>
             )
         }
     }
@@ -167,85 +168,84 @@ export default class PGInfoContainer extends Component {
     }
 
     render() {
-        if (this.state.modeEditing) {
-            // $("#collapsiblePaymentInfo").collapse("show")
-        } else {
-            // $("#collapsiblePaymentInfo").collapse("hide")
-        }
         return (
             <React.Fragment>
-                <div className={"card mb-3 " + styles.accordionBorder}>
-                    <div className={"card-body " + styles.cardBody}>
-                        <div className={styles.cardTextContent}>
-                            <span>
-                                <b>Step 2: Payment Information</b>
-                            </span>
-                            {this.getBadge()}
-                        </div>
-                        <div className="loading-container">
-                            <PulseLoader
-                                // css={override}
-                                sizeUnit={"px"}
-                                size={10}
-                                color={"#3fc692"}
-                                loading={false}
-                            />
-                        </div>
+                <Accordion>
+                    <Card className={"card mb-3 " + styles.accordionBorder}>
+                        <Card.Header className={"card-body " + styles.cardHeader}>
+                            <div className={styles.cardTextContent}>
+                                <span>
+                                    <b>Step 2: Payment Information</b>
+                                </span>
+                                {this.getBadge()}
+                            </div>
+                            <div className="loading-container">
+                                <PulseLoader
+                                    // css={override}
+                                    sizeUnit={"px"}
+                                    size={10}
+                                    color={"#3fc692"}
+                                    loading={false}
+                                />
+                            </div>
 
-                        <div className={styles.cardButtonGroup}>{this.getEditButton()}</div>
-                    </div>
-                    <div className={"collapse " + styles.cardContainer} id={"collapsiblePaymentInfo"}>
-                        <div
-                            className={"col-11 " + styles.cardContainer}
-                            style={{ borderTop: "1px solid #e9ebf0", padding: "40px" }}
-                        >
-                            <div className={"col-10"}>
-                                <div className={"row"}>
-                                    <div className="col-12">
-                                        <div className={styles.stripeInformation}>
-                                            <p className={styles.stripeDetail}>
-                                                We use Stripe to make sure you get paid on time and to keep your
-                                                personal bank and details secure. Click <strong>Add Details</strong> to
-                                                set up your payments on Stripe.
-                                            </p>
+                            <div className={styles.cardButtonGroup}>{this.getEditButton()}</div>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey={0}>
+                            <Card.Body className={styles.cardContainer} id={"collapsiblePaymentInfo"}>
+                                <div
+                                    className={"col-11 " + styles.cardContainer}
+                                    style={{ borderTop: "1px solid #e9ebf0", padding: "40px" }}
+                                >
+                                    <div className={"col-10"}>
+                                        <div className={"row"}>
+                                            <div className="col-12">
+                                                <div className={styles.stripeInformation}>
+                                                    <p className={styles.stripeDetail}>
+                                                        We use Stripe to make sure you get paid on time and to keep your
+                                                        personal bank and details secure. Click{" "}
+                                                        <strong>Add Details</strong> to set up your payments on Stripe.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="col-7"></div>
+                                            <div className="col-5">
+                                                <APIRequestButton
+                                                    layoutClasses={"btn float-right " + styles.stripeSaveBtn}
+                                                    cTextOptions={{
+                                                        default: "Add Details",
+                                                        loading: " ",
+                                                        done: "Redirecting...",
+                                                        error: "Error!",
+                                                    }}
+                                                    callback={this.onSave}
+                                                    containerID={"collapsiblePaymentInfo"}
+                                                    loaderColor={"#f8bf25"}
+                                                />
+                                            </div>
+                                            <div className="col-12">
+                                                <p className={styles.stripeDetail + " " + styles.alignRight}>
+                                                    By clicking, you agree to{" "}
+                                                    <a className={styles.fadedBlue} href="/pages/tos/">
+                                                        our terms{" "}
+                                                    </a>
+                                                    and the{" "}
+                                                    <a
+                                                        className={styles.fadedBlue}
+                                                        href="https://stripe.com/au/connect-account/legal"
+                                                    >
+                                                        Stripe Connected Account Agreement
+                                                    </a>
+                                                    .
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="col-7"></div>
-                                    <div className="col-5">
-                                        <APIRequestButton
-                                            layoutClasses={"btn float-right " + styles.stripeSaveBtn}
-                                            cTextOptions={{
-                                                default: "Add Details",
-                                                loading: " ",
-                                                done: "Redirecting...",
-                                                error: "Error!",
-                                            }}
-                                            callback={this.onSave}
-                                            containerID={"collapsiblePaymentInfo"}
-                                            loaderColor={"#f8bf25"}
-                                        />
-                                    </div>
-                                    <div className="col-12">
-                                        <p className={styles.stripeDetail + " " + styles.alignRight}>
-                                            By clicking, you agree to{" "}
-                                            <a className={styles.fadedBlue} href="/pages/tos/">
-                                                our terms{" "}
-                                            </a>
-                                            and the{" "}
-                                            <a
-                                                className={styles.fadedBlue}
-                                                href="https://stripe.com/au/connect-account/legal"
-                                            >
-                                                Stripe Connected Account Agreement
-                                            </a>
-                                            .
-                                        </p>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
             </React.Fragment>
         )
     }
