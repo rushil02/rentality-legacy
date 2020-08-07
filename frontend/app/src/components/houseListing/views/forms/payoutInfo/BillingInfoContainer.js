@@ -10,7 +10,7 @@ import PostalCodeAutoSuggest from "core/UIComponents/PostalCodeAutoSuggest/Posta
 import CountryAutoSuggestContainer from "core/UIComponents/CountryAutoSuggest/CountryAutoSuggestContainer"
 import autoSuggestTheme from "./AutoSuggestTheme.module.css"
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton"
-import {Accordion, Card, Button, Row} from "react-bootstrap";
+import {Accordion, Card, Button} from "react-bootstrap";
 
 const genderSelectStyles = {
     option: (provided, state) => ({

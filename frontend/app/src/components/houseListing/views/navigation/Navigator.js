@@ -8,11 +8,12 @@ import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButto
 import { activateHouse, deleteHouse } from "components/houseListing/services"
 import { alertUser } from "core/alert/Alert"
 import { DeleteModal, ActivateModal } from "./Modals"
-import {reverse} from "named-urls"
-import {PageRoutes} from "components/routes"
-import {withRouter} from "react-router-dom";
+import { reverse } from "named-urls"
+import { PageRoutes } from "components/routes"
+import { withRouter } from "react-router-dom"
+import Dropdown from "react-bootstrap/Dropdown"
 
-const exitRoute = reverse(PageRoutes.dashboard.home);
+const exitRoute = reverse(PageRoutes.dashboard.home)
 
 class Navigator extends Component {
     constructor(props) {
@@ -103,7 +104,7 @@ class Navigator extends Component {
     }
 }
 
-export default withRouter(Navigator);
+export default withRouter(Navigator)
 
 function NavigatorComponent(props) {
     let backBtn
@@ -165,42 +166,58 @@ function NavigatorComponent(props) {
                                 {props.mode === "edit" ? (
                                     <div className="row">
                                         <div className="col-12">
-                                            <div className="dropdown float-right">
-                                                <div
+                                            <Dropdown bsPrefix="dropdown float-right">
+                                                <Dropdown.Toggle
+                                                    bsPrefix={"dropdown-toggle " + styles.formSettings}
+                                                    as="div"
+                                                >
+                                                    {/* <div
                                                     className={"dropdown-toggle " + styles.formSettings}
                                                     data-toggle="dropdown"
                                                     aria-haspopup="true"
                                                     aria-expanded="false"
-                                                >
+                                                > */}
                                                     <FontAwesomeIcon icon={faCog} size="lg" />
-                                                </div>
-                                                <div
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu alignRight bsPrefix={"dropdown-menu "+styles.dropdownList}>
+                                                    {/* <div
                                                     className={
                                                         "dropdown-menu dropdown-menu-right " + styles.dropdownList
                                                     }
                                                     id="dropdown-list"
-                                                >
-                                                    <APIRequestButton
-                                                        layoutClasses={"dropdown-item " + styles.dropdownItem}
-                                                        textOption={"save"}
-                                                        loaderSize={6}
-                                                        callback={currFormCallback}
-                                                        containerID={"main-input-page"}
-                                                    />
-                                                    <APIRequestButton
-                                                        layoutClasses={"dropdown-item " + styles.dropdownItem}
-                                                        textOption={"saveExit"}
-                                                        loaderSize={6}
-                                                        callback={currFormCallback}
-                                                        onSuccess={props.onExit}
-                                                        containerID={"main-input-page"}
-                                                    />
-                                                    <hr />
-                                                    <ActivateModal onActivate={props.onActivate} />
-                                                    <hr />
-                                                    <DeleteModal onDelete={props.onDelete} onSuccess={props.onExit} />
-                                                </div>
-                                            </div>
+                                                > */}
+                                                    <Dropdown.Item>
+                                                        <APIRequestButton
+                                                            layoutClasses={"dropdown-item " + styles.dropdownItem}
+                                                            textOption={"save"}
+                                                            loaderSize={6}
+                                                            callback={currFormCallback}
+                                                            containerID={"main-input-page"}
+                                                        />
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item>
+                                                        <APIRequestButton
+                                                            layoutClasses={"dropdown-item " + styles.dropdownItem}
+                                                            textOption={"saveExit"}
+                                                            loaderSize={6}
+                                                            callback={currFormCallback}
+                                                            onSuccess={props.onExit}
+                                                            containerID={"main-input-page"}
+                                                        />
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Divider />
+                                                    <Dropdown.Item>
+                                                        <ActivateModal onActivate={props.onActivate} />
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Divider />
+                                                    <Dropdown.Item>
+                                                        <DeleteModal
+                                                            onDelete={props.onDelete}
+                                                            onSuccess={props.onExit}
+                                                        />
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
                                         </div>
                                     </div>
                                 ) : null}
