@@ -21,7 +21,7 @@ COPY ./app/package*.json ./
 
 RUN npm ci
 
-COPY ./app/gatsby-*.js ./app/.env.* ./app/.prettier* ./
+COPY ./app/gatsby-*.js ./app/.prettier* ./app/.babelrc ./
 COPY ./app/src ./src
 
 COPY ./bin ./bin
