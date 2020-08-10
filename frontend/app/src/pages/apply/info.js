@@ -11,7 +11,7 @@ const IndexPage = props => (
             description="About the property truncated to 160 characters"
             pathname={props.location.pathname}
         />
-        <HouseDetailPage {...props} />
+        {/* <HouseDetailPage {...props} /> */}
     </Layout>
 )
 
