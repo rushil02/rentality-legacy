@@ -32,11 +32,13 @@ build: ## Rebuilds docker images without cache
 build-run: ## Build and spin up the project in development mode for first time on system start or when app configs are changed
 	@sudo sysctl -w vm.max_map_count=262144
 	@docker-compose down
+	@make fe-vol-clean
 	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
 	@docker-compose up -d --build
 
 restart: ## Shutdown and Run the project again
 	@docker-compose down
+	@make fe-vol-clean
 	@docker-compose up -d
 
 run: ## Spin up the project without build
