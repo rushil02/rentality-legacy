@@ -16,15 +16,6 @@
     padding: 20px;
     z-index: 2000;
     flex-wrap: wrap;
-    top: 10px;
+    top: 100px;
     pointer-events: none;
-}
-
-.alert > button.close {
-    position: absolute;
-    right: 15px;
-}
-
-.alert > p {
-    margin-right: 30px;
 }

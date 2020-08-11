@@ -37,6 +37,24 @@ export default class Alert extends Component {
         };
     }
 
+    askForSysMessages = () => {
+        getSystemMessages().then((data) => {
+            let sysAlerts = [];
+            data.forEach((item, index) => {
+                let alertType = item['level_tag'].replace(/^(alert-)/, "");
+                if (availableAlertTypes.indexOf(alertType) === -1) {
+                    console.error("Invalid alertType : " + alertType);
+                } else {
+                    sysAlerts.push({message: item.message, alertType: alertType, autoHide: true});
+                }
+            });
+
+            this.setState((prevState) => ({
+                alertList: [...prevState.alertList, ...sysAlerts],
+            }));
+        });
+    }
+
     componentDidMount() {
         alertUser.init = ({stockAlertType, message, alertType, autoHide}) => {
             if (stockAlertType) {
@@ -60,27 +78,14 @@ export default class Alert extends Component {
                 }
             }
         };
-        getSystemMessages().then((data) => {
-            let sysAlerts = [];
-            data.forEach((item, index) => {
-                let alertType = item.level_tag.replace(/^(alert-)/, "");
-                if (availableAlertTypes.indexOf(alertType) === -1) {
-                    console.error("Invalid alertType : " + alertType);
-                } else {
-                    sysAlerts.push({message: item.message, alertType: alertType, autoHide: true});
-                }
-            });
-
-            this.setState((prevState) => ({
-                alertList: [...prevState.alertList, ...sysAlerts],
-            }));
-        });
+        this.askForSysMessages()
+        setInterval(this.askForSysMessages, 10000);
     }
 
     render() {
         return (
             <React.Fragment>
-                <AlertListComponent alertList={this.state.alertList} />
+                <AlertListComponent alertList={this.state.alertList}/>
             </React.Fragment>
         );
     }
