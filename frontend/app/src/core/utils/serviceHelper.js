@@ -1,8 +1,10 @@
 import axios from "axios"
+import { loadProgressBar } from 'axios-progress-bar'
 import { alertUser } from "core/alert/Alert"
 
 axios.defaults.xsrfCookieName = "csrftoken"
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
+loadProgressBar()
 
 export default axios
 
