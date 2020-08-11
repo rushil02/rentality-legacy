@@ -271,7 +271,7 @@ export default class HouseDetailPageComponent extends Component {
                                                             .getData("personalityTags")
                                                             .map((item, index) => (
                                                                 <li key={index} className={"list-inline-item"}>
-                                                                    <Link>{item}</Link>
+                                                                    <span>{item}</span>
                                                                 </li>
                                                             ))}
                                                     </ul>
@@ -320,10 +320,63 @@ export default class HouseDetailPageComponent extends Component {
 }
 
 function getInfoSidePanel(that, address) {
-    if (window.innerWidth >= 992) {
-        return (
-            <div className="d-none d-lg-block col-lg-5 col-xl-4">
-                <div className={styles.right}>
+    if (typeof window !== `undefined`) {
+        if (window.innerWidth >= 992) {
+            return (
+                <div className="d-none d-lg-block col-lg-5 col-xl-4">
+                    <div className={styles.right}>
+                        <BookingInfoPanel
+                            house={that.props.house}
+                            bookingDateRange={{
+                                startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
+                                endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
+                            }}
+                            numGuests={that.props.application.getData("bookingInfo.numGuests")}
+                            onNumGuestsChange={that.props.handleGuestsNumChange}
+                            address={address}
+                            cancellationPolicy={that.props.cancellationPolicy}
+                            handleDateChange={that.props.handleDateChange}
+                            finInfo={that.props.finInfo}
+                            inSyncFinInfo={that.props.inSyncFinInfo}
+                        />
+
+                        <div className="row" style={{ margin: "20px 0" }}>
+                            <div className="col-12 d-flex justify-content-center">
+                                {that.state.bookButtonActive ? (
+                                    <ConfirmBookingModal
+                                        onApply={that.props.onApply}
+                                        onConfirmBooking={that.props.onConfirmBooking}
+                                        ref={that.props.confirmModalRef}
+                                        applicationUUID={that.props.applicationUUID}
+                                    />
+                                ) : (
+                                    <a
+                                        className="imp-button-style"
+                                        onClick={() => {
+                                            that.scrollToRef(that.elementRefs.bookingSection)
+                                        }}
+                                    >
+                                        Book Now
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        } else {
+            return <div className="d-none d-lg-block col-lg-5 col-xl-4" />
+        }
+    } else {
+        return null
+    }
+}
+
+function getInfoMobilePanel(that, address) {
+    if (typeof window !== `undefined`) {
+        if (window.innerWidth < 992) {
+            return (
+                <div className={"d-lg-none"}>
                     <BookingInfoPanel
                         house={that.props.house}
                         bookingDateRange={{
@@ -338,57 +391,12 @@ function getInfoSidePanel(that, address) {
                         finInfo={that.props.finInfo}
                         inSyncFinInfo={that.props.inSyncFinInfo}
                     />
-
-                    <div className="row" style={{ margin: "20px 0" }}>
-                        <div className="col-12 d-flex justify-content-center">
-                            {that.state.bookButtonActive ? (
-                                <ConfirmBookingModal
-                                    onApply={that.props.onApply}
-                                    onConfirmBooking={that.props.onConfirmBooking}
-                                    ref={that.props.confirmModalRef}
-                                    applicationUUID={that.props.applicationUUID}
-                                />
-                            ) : (
-                                <a
-                                    className="imp-button-style"
-                                    onClick={() => {
-                                        that.scrollToRef(that.elementRefs.bookingSection)
-                                    }}
-                                >
-                                    Book Now
-                                </a>
-                            )}
-                        </div>
-                    </div>
                 </div>
-            </div>
-        )
+            )
+        } else {
+            return <div className={"d-lg-none"} />
+        }
     } else {
-        return <div className="d-none d-lg-block col-lg-5 col-xl-4" />
-    }
-}
-
-function getInfoMobilePanel(that, address) {
-    if (window.innerWidth < 992) {
-        return (
-            <div className={"d-lg-none"}>
-                <BookingInfoPanel
-                    house={that.props.house}
-                    bookingDateRange={{
-                        startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
-                        endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
-                    }}
-                    numGuests={that.props.application.getData("bookingInfo.numGuests")}
-                    onNumGuestsChange={that.props.handleGuestsNumChange}
-                    address={address}
-                    cancellationPolicy={that.props.cancellationPolicy}
-                    handleDateChange={that.props.handleDateChange}
-                    finInfo={that.props.finInfo}
-                    inSyncFinInfo={that.props.inSyncFinInfo}
-                />
-            </div>
-        )
-    } else {
-        return <div className={"d-lg-none"} />
+        return null
     }
 }

@@ -21,13 +21,8 @@ export default class HouseDetailPage extends Component {
      */
     constructor(props) {
         super(props)
-        this.houseUUID = "props.routerProps.match.params.houseUUID"
         this.state = {
-            status: "loading",
-            house: new House({}, "empty"),
-            images: new APIModelListAdapter([], Image, "uuid", "empty"),
-            cancellationPolicy: new CancellationPolicy({}, "empty"),
-            location: new PostalLocation({}, "empty"),
+            status: "done",
             homeOwnerInfo: new HomeOwnerInfo({}, "empty"),
             application: new Application({}, "empty"),
             finInfo: new FinancialInfo({}, "empty"),
@@ -36,30 +31,55 @@ export default class HouseDetailPage extends Component {
             disableDisplay: false,
             inSyncFinInfo: false,
         }
+        if (this.props.pageContext) {
+            this.houseUUID = this.props.pageContext.house.uuid
+            this.state = {
+                ...this.state,
+                house: new House(this.props.pageContext.house),
+                images: new APIModelListAdapter(this.props.pageContext.house.images, Image, "uuid", "saved"),
+                cancellationPolicy: new CancellationPolicy(this.props.pageContext.house.cancellation_policy),
+                location: new PostalLocation(this.props.pageContext.house.location),
+            }
+        } else {
+            this.houseUUID = "props.routerProps.match.params.houseUUID"
+            this.state = {
+                ...this.state,
+                house: new House({}, "empty"),
+                images: new APIModelListAdapter([], Image, "uuid", "empty"),
+                cancellationPolicy: new CancellationPolicy({}, "empty"),
+                location: new PostalLocation({}, "empty"),
+            }
+        }
         this.checkoutFormChild = React.createRef()
         this.confirmModalChild = React.createRef()
+        console.log(this.props.pageContext.house, "Constructor*******")
     }
 
     componentDidMount() {
-        this.setState(prevState => ({ status: "loading" }))
-        getHouseData(this.houseUUID)
-            .then(result => {
-                this.setState(prevState => ({
-                    ...prevState,
-                    status: "done",
-                    house: new House(result),
-                    images: new APIModelListAdapter(result["images"], Image, "uuid", "saved"),
-                    cancellationPolicy: new CancellationPolicy(result["cancellation_policy"], "saved"),
-                    location: new PostalLocation(result["location"], "saved"),
-                }))
-            })
-            .catch(error => {
-                this.setState(prevState => ({
-                    ...prevState,
-                    status: "error",
-                }))
-            })
-
+        if (!this.props.pageContext) {
+            getHouseData(this.houseUUID)
+                .then(result => {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        status: "done",
+                        house: new House(result),
+                        images: new APIModelListAdapter(result["images"], Image, "uuid", "saved"),
+                        cancellationPolicy: new CancellationPolicy(result["cancellation_policy"], "saved"),
+                        location: new PostalLocation(result["location"], "saved"),
+                    }))
+                })
+                .catch(error => {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        status: "error",
+                    }))
+                })
+        } else {
+            this.setState(prevState => ({
+                ...prevState,
+                status: "done",
+            }))
+        }
         getHomeOwnerDetails(this.houseUUID)
             .then(result => {
                 this.setState(prevState => ({
@@ -197,7 +217,6 @@ export default class HouseDetailPage extends Component {
             confirmBooking(that.houseUUID, that.state.applicationUUID)
                 .then(result => {
                     that.setClientSecret(result.data.PG.client_secret)
-                    console.log(that.state.clientSecret, result, that.checkoutFormChild)
                     return that.checkoutFormChild.current.submit()
                 })
                 .then(result => {
@@ -213,14 +232,12 @@ export default class HouseDetailPage extends Component {
                     } else {
                         if (result.paymentIntent.status === "succeeded") {
                             //Redirect to success page
-                            console.log("Hurray")
                             resolve()
                         }
                     }
                 })
                 .catch(error => {
                     that.enableDisplay()
-                    console.log(error)
                     reject(error)
                 })
         })
@@ -235,6 +252,7 @@ export default class HouseDetailPage extends Component {
     }
 
     render() {
+        console.log(this.props.pageContext.house, "*******", this.state.house)
         return (
             <RequestErrorBoundary status={this.state.status}>
                 <SecretContext.Provider value={this.state.clientSecret}>
