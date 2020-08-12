@@ -35,7 +35,7 @@
         "react": "^16.12.0",
         "react-autosuggest": "^10.0.2",
         "react-bootstrap": "^1.0.1",
-        "react-date-range": "file:ext_lib/react-date-range-1.0.0-beta.tgz",
+        "react-date-range": "file:ext_lib/react-date-range-v1.0.3.tgz",
         "react-dom": "^16.12.0",
         "react-dropzone": "^11.0.1",
         "react-helmet": "^6.0.0",

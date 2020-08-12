@@ -1,8 +1,13 @@
 #### Building from customised external packages (local)
-\#1 Pack the package using npm to *.tgz format (https://docs.npmjs.com/cli/pack.html)
+\#1 Pack the package using npm or yarn (depending on the package manager used by the external package) to *.tgz format (https://docs.npmjs.com/cli/pack.html)
 ```
-npm pack .
+npm pack
 ```
+OR
+```
+yarn pack
+```
+
 \#2 Copy compressed file to 'frontend/ext_lib/' folder.
 
 \#3 Add entry to package.json as in the following example.

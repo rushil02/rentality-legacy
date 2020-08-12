@@ -24,6 +24,7 @@ initialize: ## Initialize the project first time from empty database
 	@sh ./bin/post-installation.sh
 
 build: ## Rebuilds docker images without cache
+	@make fe-vol-clean
 	@echo "Building rentality/backend-common:latest ..."
 	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend
 	@echo "Building from docker-compose.yml ..."
