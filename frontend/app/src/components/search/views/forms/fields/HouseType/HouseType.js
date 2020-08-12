@@ -14,7 +14,6 @@ export default class HouseType extends Component {
     componentDidMount() {
         getHouseFilterOptions().then(result => {
             this.setState({ filterOptions: new FormOptions(result) })
-            console.log(this.state)
         })
     }
 
@@ -41,10 +40,6 @@ export default class HouseType extends Component {
 
     render() {
         const customStyles = {
-            option: (provided, state) => ({
-                ...provided,
-            }),
-
             singleValue: (provided, state) => {
                 const opacity = state.isDisabled ? 0.5 : 1
                 const transition = "opacity 300ms"

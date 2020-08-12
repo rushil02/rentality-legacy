@@ -5,11 +5,23 @@ import {House, Booking} from "../models";
 import {getPublishedHouses, getBookingsData} from "../services";
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary";
 
+
+function compositeState(states) {
+    if (states.includes("loading")) {
+        return "loading"
+    } else if (states.includes("error")) {
+        return "error"
+    } else {
+        return "done"
+    }
+}
+
 export default class DashboardContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            status: "loading",
+            statusAPIHouses: "loading",
+            statusAPIBookings: "loading",
             houses: new APIModelListAdapter([], House, "uuid", "empty"),
             bookings: new APIModelListAdapter([], Booking, "", "empty"),
         };
@@ -20,23 +32,33 @@ export default class DashboardContainer extends Component {
         getPublishedHouses().then((result) => {
             this.setState((prevState) => ({
                 ...prevState,
-                status: "done",
+                statusAPIHouses: "done",
                 houses: new APIModelListAdapter(result, House, "uuid", "saved"),
+            }));
+        }).catch((error) => {
+            this.setState((prevState) => ({
+                ...prevState,
+                statusAPIHouses: "error",
             }));
         });
         getBookingsData().then((result) => {
             this.setState((prevState) => ({
                 ...prevState,
-                status: "done",
+                statusAPIBookings: "done",
                 bookings: new APIModelListAdapter(result, Booking, "", "saved"),
+            }));
+        }).catch((error) => {
+            this.setState((prevState) => ({
+                ...prevState,
+                statusAPIBookings: "error",
             }));
         });
     }
 
     render() {
         return (
-            <RequestErrorBoundary status={this.state.status}>
-                <DashboardComponent houses={this.state.houses} bookings={this.state.bookings} />
+            <RequestErrorBoundary status={compositeState([this.state.statusAPIBookings, this.state.statusAPIHouses])}>
+                <DashboardComponent houses={this.state.houses} bookings={this.state.bookings}/>
             </RequestErrorBoundary>
         );
     }

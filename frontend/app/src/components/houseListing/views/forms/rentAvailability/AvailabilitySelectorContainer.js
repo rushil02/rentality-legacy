@@ -11,7 +11,7 @@ import {
     postAvailabilityData,
 } from "components/houseListing/services"
 import {NavigationContext} from "components/houseListing/dataContext"
-import {Accordion} from "react-bootstrap";
+
 
 export default class AvailabilitySelectorHandler extends Component {
     constructor(props) {

@@ -10,7 +10,7 @@ export function getPublishedHouses() {
                 resolve(response.data)
             })
             .catch(error => {
-                reject(error)
+                reject(handleError(error).error)
             })
     })
 }
@@ -23,7 +23,7 @@ export function getBookingsData() {
                 resolve(response.data)
             })
             .catch(error => {
-                reject(error)
+                reject(handleError(error).error)
             })
     })
 }
