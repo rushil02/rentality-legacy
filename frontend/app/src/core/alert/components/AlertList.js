@@ -20,8 +20,9 @@ export default class AlertListComponent extends Component {
 
 function AlertComponent(props) {
     const [show, setShow] = useState(true);
+
     if (props.details.autoHide){
-        setTimeout(() => {  setShow(false) }, 4000);
+        setTimeout(() => {  setShow(false) }, Math.max(props.details.message.split(' ').length * 500, 5000));
     }
 
     if (show) {
