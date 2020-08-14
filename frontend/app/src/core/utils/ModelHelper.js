@@ -46,7 +46,7 @@ export default class APIModelAdapter {
         for (let [field, settings] of Object.entries(this._fieldMap)) {
             this._constructAttribute(field, settings, dbObj)
         }
-        this.changedFields = []
+        this.changedFields = {}
     }
 
     _silentUpdate(key, value) {
@@ -202,6 +202,10 @@ export default class APIModelAdapter {
         }
     }
 
+    _addToChangedFields = (field) => {
+        this.changedFields[field] = true
+    }
+
     setData = (key, value) => {
         /**
          * #TODO: Add functionality to validate content and raise errors
@@ -217,7 +221,7 @@ export default class APIModelAdapter {
         for (let i = 0; i < keyList.length - 1; i++) {
             if (modelObj._fieldMap.hasOwnProperty(keyList[i])) {
                 modelObj.status = "hasChanged"
-                modelObj.changedFields.push(keyList[i])
+                modelObj._addToChangedFields(keyList[i])
                 modelObj = modelObj.getData(keyList[i])
             } else {
                 throw new APIModelAdapterError(`${keyList[i]} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`)
@@ -230,7 +234,7 @@ export default class APIModelAdapter {
                 console.warn("You are trying to change readOnly data. The data will not be serialized.")
             }
             modelObj.status = "hasChanged"
-            modelObj.changedFields.push(key)
+            modelObj._addToChangedFields(key)
             modelObj._attrs[key] = value
             return this
         } else {
@@ -278,7 +282,7 @@ export default class APIModelAdapter {
                 ret = this._serializeCompositeKeys(settings.key, this._serializeData(field, settings), ret)
             }
         } else if (fields === "__partial__") {
-            fields = this.changedFields
+            fields = Object.keys(this.changedFields)
             for (let i = 0; i < fields.length; i++) {
                 ret = this._serializeCompositeKeys(
                     this._fieldMap[fields[i]].key,
@@ -341,7 +345,7 @@ export default class APIModelAdapter {
             for (let i = 0; i < parentList.length; i++) {
                 if (modelObj._fieldMap.hasOwnProperty(parentList[i])) {
                     modelObj.status = "hasChanged"
-                    modelObj.changedFields.push(parentList[i])
+                    modelObj._addToChangedFields(parentList[i])
                     modelObj = modelObj.getData(parentList[i])
                 } else {
                     throw  new APIModelAdapterError(`${parentList[i]} is not a valid key in ${this.constructor.name} ${parentList}`)
