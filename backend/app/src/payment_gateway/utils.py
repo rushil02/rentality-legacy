@@ -223,7 +223,7 @@ class PaymentGateway(object):
         try:
             self.tenant.set_pg_account(user.account_set.get(payment_gateway=self._pg_db))
         except ObjectDoesNotExist:
-            raise AttributeError("Required Home Owner account is not found.")
+            raise AttributeError("Required Tenant account is not found.")
         if user_request:
             self.tenant.user_data = user_request
         if request:
