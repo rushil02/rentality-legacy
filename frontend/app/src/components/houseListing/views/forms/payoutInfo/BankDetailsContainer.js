@@ -4,7 +4,7 @@ import { PulseLoader } from "react-spinners"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronUp, faPen, faPlus } from "@fortawesome/free-solid-svg-icons"
 import APIRequestButton from "core/UIComponents/APIRequestButton/APIRequestButton"
-import { getAddUpdateBankAccount, postAddUpdateBankAccount } from "components/houseListing/services"
+import { getBankAccount, postAddUpdateBankAccount } from "components/houseListing/services"
 import styles from "./PayoutInfoContainer.module.css"
 import { Accordion, Card, Button } from "react-bootstrap"
 
@@ -21,8 +21,8 @@ export default class BankDetailsContainer extends Component {
 
     componentDidMount() {
         //hit addUpdatebankaccount, if yes show edit button, if no show save button
-        if (this.props.statusEA === "Incomplete") {
-            getAddUpdateBankAccount(this.props.PG)
+        if (this.props.statusEA === "Complete") {
+            getBankAccount(this.props.PG)
                 .then(result => {
                     if (!result.pg.error) {
                         this.setState(prevState => ({

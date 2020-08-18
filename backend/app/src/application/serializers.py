@@ -68,8 +68,7 @@ class BookingInfoSerializer(serializers.Serializer):
     start_date = serializers.DateField()
     end_date = serializers.DateField()
     guests = serializers.IntegerField()
-    promo_codes = serializers.ListField(
-        child=serializers.CharField(required=False), required=False)
+    promo_codes = serializers.ListField(child=serializers.CharField(required=False), required=False)
 
 
 class BookingAmountDetailsSerializer(serializers.Serializer):

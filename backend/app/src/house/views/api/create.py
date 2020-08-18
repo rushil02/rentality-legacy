@@ -519,4 +519,4 @@ class CheckPayoutDetailsView(APIView):
                     }
                     return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-                return Response(status=status.HTTP_200_OK)
+                return Response({'payment_gateway': payment_gateway.db.code}, status=status.HTTP_200_OK)

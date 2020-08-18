@@ -424,7 +424,7 @@ export function updatePaymentInfo(pgCode, data) {
     })
 }
 
-export function getAddUpdateBankAccount(pgCode) {
+export function getBankAccount(pgCode) {
     return new Promise(function (resolve, reject) {
         axios
             .get(reverse(APIRoutes.house.addUpdateBankAccount, { pgCode: pgCode }))

@@ -1,15 +1,15 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 import BillingInfoContainer from "./BillingInfoContainer"
-import { checkHousePayoutInfo } from "components/houseListing/services"
-import { ResponseLoadingSpinner } from "core/UIComponents/loadingSpinners/LoadingSpinner"
+import {checkHousePayoutInfo} from "components/houseListing/services"
+import {ResponseLoadingSpinner} from "core/UIComponents/loadingSpinners/LoadingSpinner"
 import PGInfoContainer from "./PGInfoContainer"
 import BankDetailsContainer from "./BankDetailsContainer"
-import { loadStripe } from "@stripe/stripe-js"
-import { Elements, ElementsConsumer } from "@stripe/react-stripe-js"
+import {loadStripe} from "@stripe/stripe-js"
+import {Elements, ElementsConsumer} from "@stripe/react-stripe-js"
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary"
-import { UserPII } from "components/userAccount/models"
-import { patchUserProfileData, getUserProfileData } from "components/userAccount/services"
-import { getCountryData } from "core/UIComponents/CountryAutoSuggest/services"
+import {UserPII} from "components/userAccount/models"
+import {patchUserProfileData, getUserProfileData} from "components/userAccount/services"
+import {getCountryData} from "core/UIComponents/CountryAutoSuggest/services"
 import {alertUser} from "core/alert/Alert";
 
 /**
@@ -99,7 +99,7 @@ export default class PayoutInfoContainer extends Component {
                     billingCountryName: result.name,
                 }))
             })
-            .catch(error => alertUser.init({ stockAlertType: "connectionError" }))
+            .catch(error => alertUser.init({stockAlertType: "connectionError"}))
     }
 
     onBillingInfoSave = () => {
@@ -131,6 +131,7 @@ export default class PayoutInfoContainer extends Component {
                     statusPI: "Complete",
                     statusII: "Complete",
                     statusEA: "Complete",
+                    PG: result.data["payment_gateway"],
                 }))
                 this.props.navContext.data.updateFormState(this.formID, "hasChanged")
                 this.props.navContext.sync()
@@ -189,52 +190,53 @@ export default class PayoutInfoContainer extends Component {
         return (
             <React.Fragment>
                 {this.state.verifying ? (
-                    <ResponseLoadingSpinner height={"20vh"} message={"Verifying your Billing details"} />
-                ) : null}
-                <div className="col-md-12" style={{ marginTop: "50px" }}>
-                    <BillingInfoContainer
-                        status={this.state.statusBI}
-                        userInfo={this.state.userInfo}
-                        showSelectCountry={this.state.showSelectCountry}
-                        addBusinessNameField={this.state.addBusinessNameField}
-                        billingCountryName={this.state.billingCountryName}
-                        verifyPayoutInfo={this.verifyPayoutInfo}
-                        getUserProfile={this.getUserProfile}
-                        onFieldChange={this.onFieldChange}
-                        onSave={this.onBillingInfoSave}
-                        verifying={this.state.verifying}
-                    />
-                    <PGInfoContainer
-                        statusBI={this.state.statusBI}
-                        statusPI={this.state.statusPI}
-                        statusII={this.state.statusII}
-                        houseUUID={this.props.houseUUID}
-                        verifyPayoutInfo={this.verifyPayoutInfo}
-                        verifying={this.state.verifying}
-                        PG={this.state.PG}
-                    />
-                    <Elements stripe={stripePromise}>
-                        <ElementsConsumer>
-                            {({ stripe }) => {
-                                return (
-                                    <RequestErrorBoundary status={getLoadStatus(stripe)}>
-                                        <BankDetailsContainer
-                                            statusBI={this.state.statusBI}
-                                            statusPI={this.state.statusPI}
-                                            statusII={this.state.statusII}
-                                            statusEA={this.state.statusEA}
-                                            stripe={stripe}
-                                            userInfo={this.state.userInfo}
-                                            verifyPayoutInfo={this.verifyPayoutInfo}
-                                            verifying={this.state.verifying}
-                                            PG={this.state.PG}
-                                        />
-                                    </RequestErrorBoundary>
-                                )
-                            }}
-                        </ElementsConsumer>
-                    </Elements>
-                </div>
+                        <ResponseLoadingSpinner height={"20vh"} message={"Verifying your Billing details"}/>
+                    ) :
+                    <div className="col-md-12" style={{marginTop: "50px"}}>
+                        <BillingInfoContainer
+                            status={this.state.statusBI}
+                            userInfo={this.state.userInfo}
+                            showSelectCountry={this.state.showSelectCountry}
+                            addBusinessNameField={this.state.addBusinessNameField}
+                            billingCountryName={this.state.billingCountryName}
+                            verifyPayoutInfo={this.verifyPayoutInfo}
+                            getUserProfile={this.getUserProfile}
+                            onFieldChange={this.onFieldChange}
+                            onSave={this.onBillingInfoSave}
+                            verifying={this.state.verifying}
+                        />
+                        <PGInfoContainer
+                            statusBI={this.state.statusBI}
+                            statusPI={this.state.statusPI}
+                            statusII={this.state.statusII}
+                            houseUUID={this.props.houseUUID}
+                            verifyPayoutInfo={this.verifyPayoutInfo}
+                            verifying={this.state.verifying}
+                            PG={this.state.PG}
+                        />
+                        <Elements stripe={stripePromise}>
+                            <ElementsConsumer>
+                                {({stripe}) => {
+                                    return (
+                                        <RequestErrorBoundary status={getLoadStatus(stripe)}>
+                                            <BankDetailsContainer
+                                                statusBI={this.state.statusBI}
+                                                statusPI={this.state.statusPI}
+                                                statusII={this.state.statusII}
+                                                statusEA={this.state.statusEA}
+                                                stripe={stripe}
+                                                userInfo={this.state.userInfo}
+                                                verifyPayoutInfo={this.verifyPayoutInfo}
+                                                verifying={this.state.verifying}
+                                                PG={this.state.PG}
+                                            />
+                                        </RequestErrorBoundary>
+                                    )
+                                }}
+                            </ElementsConsumer>
+                        </Elements>
+                    </div>
+                }
             </React.Fragment>
         )
     }

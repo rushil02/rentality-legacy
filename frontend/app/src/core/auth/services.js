@@ -12,7 +12,6 @@ export function getUserNavDetails(houseUUID) {
                 resolve(new User(result.data))
             })
             .catch(error => {
-                console.log(error)
                 if (error.response.status === 403) {
                     reject(error);
                 } else {
