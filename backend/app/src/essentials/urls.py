@@ -9,5 +9,5 @@ urlpatterns = [
     path('policy/<str:policy_type>', get_policy, name='get_policy'),
 
     # Internal System Level API
-    path('policy/<str:policy_type>/<str:internal_access_key>', GetPolicyPublicReadView.as_view(), name='all_articles'),
+    path('all-policies/<str:internal_access_key>', GetPolicyPublicReadView.as_view(), name='all_policies'),
 ]

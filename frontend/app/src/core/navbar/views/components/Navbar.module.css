@@ -14,7 +14,7 @@
 }
 
 .menu .left .logo {
-    background-image: url("/static/image/logo.svg");
+    background-image: url(images/rentality-logo/logo.png);
     background-repeat: no-repeat;
     background-position: top left;
     width: 243px;
@@ -99,7 +99,7 @@
 }
 
 .menu.white .left .logo {
-    background-image: url("/static/image/logo-black.svg");
+    background-image: url(images/rentality-logo/logo-black.png);
     background-repeat: no-repeat;
     background-position: top left;
     width: 209px;
@@ -130,7 +130,7 @@
 
 .menu.white .right .listInline li.message > .dropdown > a,
 .menu.session .right .listInline li.message > .dropdown > a {
-    background-image: url("/static/image/message.svg");
+    background-image: url("/dj_static/image/message.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -138,7 +138,7 @@
 }
 
 .menu.session .right .listInline li.message > .dropdown > a {
-    background-image: url("/static/image/message-white.svg");
+    background-image: url("/dj_static/image/message-white.svg");
 }
 
 .menu.white .right .listInline li > .dropdown > a > span,
@@ -181,7 +181,7 @@
 
 .menu.white .right .listInline li.notification > .dropdown > a,
 .menu.session .right .listInline li.notification > .dropdown > a {
-    background-image: url("/static/image/notification.svg");
+    background-image: url("/dj_static/image/notification.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -189,7 +189,7 @@
 }
 
 .menu.session .right .listInline li.notification > .dropdown > a {
-    background-image: url("/static/image/notification-white.svg");
+    background-image: url("/dj_static/image/notification-white.svg");
 }
 
 .menu.white .right .listInline li.notification > .dropdown .dropdownMenu,
@@ -217,7 +217,7 @@
 
 .menu.white .right .listInline li.setting > .dropdown > a,
 .menu.session .right .listInline li.setting > .dropdown > a {
-    background-image: url("/static/image/setting.svg");
+    background-image: url("/dj_static/image/setting.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -225,7 +225,7 @@
 }
 
 .menu.session .right .listInline li.setting > .dropdown > a {
-    background-image: url("/static/image/setting-white.svg");
+    background-image: url("/dj_static/image/setting-white.svg");
 }
 
 .menu.white .right .listInline li.person,
@@ -312,22 +312,22 @@
     z-index: 99999;
     width: 36px;
     height: 27px;
-    background-image: url("/static/image/mobile-menu-open.svg");
+    background-image: url("/dj_static/image/mobile-menu-open.svg");
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 .mobileMenu.white {
     top: 26px;
-    background-image: url("/static/image/mobile-menu-white-open.svg");
+    background-image: url("/dj_static/image/mobile-menu-white-open.svg");
 }
 
 .mobileMenu.open {
-    background-image: url("/static/image/mobile-menu-close.svg");
+    background-image: url("/dj_static/image/mobile-menu-close.svg");
 }
 
 .mobileMenu.white.open {
-    background-image: url("/static/image/mobile-menu-white-close.svg");
+    background-image: url("/dj_static/image/mobile-menu-white-close.svg");
 }
 
 .mobileMenuContent {
@@ -438,7 +438,7 @@
 
 .mobileMenuContent ul li.message .dropdown > a,
 .mobileMenuContent.white ul li.message .dropdown > a {
-    background-image: url("/static/image/message.svg");
+    background-image: url("/dj_static/image/message.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -449,7 +449,7 @@
 }
 
 .mobileMenuContent ul li.message .dropdown > a {
-    background-image: url("/static/image/message-white.svg");
+    background-image: url("/dj_static/image/message-white.svg");
 }
 
 .mobileMenuContent ul li.message .dropdown {
@@ -488,7 +488,7 @@
 
 .mobileMenuContent ul li.notification > .dropdown > a,
 .mobileMenuContent.white ul li.notification > .dropdown > a {
-    background-image: url("/static/image/notification.svg");
+    background-image: url("/dj_static/image/notification.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -498,7 +498,7 @@
 }
 
 .mobileMenuContent ul li.notification > .dropdown > a {
-    background-image: url("/static/image/notification-white.svg");
+    background-image: url("/dj_static/image/notification-white.svg");
 }
 
 .mobileMenuContent ul li.notification > .dropdown .dropdownMenu a span {
@@ -515,7 +515,7 @@
 
 .mobileMenuContent ul li.setting > .dropdown > a,
 .mobileMenuContent.white ul li.setting > .dropdown > a {
-    background-image: url("/static/image/setting.svg");
+    background-image: url("/dj_static/image/setting.svg");
     background-repeat: no-repeat;
     background-position: center center;
     color: transparent;
@@ -525,7 +525,7 @@
 }
 
 .mobileMenuContent ul li.setting > .dropdown > a {
-    background-image: url("/static/image/setting-white.svg");
+    background-image: url("/dj_static/image/setting-white.svg");
 }
 
 .mobileMenuContent ul li.setting > .dropdown .dropdownMenu a:hover,

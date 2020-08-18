@@ -20,7 +20,7 @@ class ArticlePublicReadView(APIView):
 
 
 class AllArticlesPublicReadView(InternalAccessAPIView):
-    def get(self, request, internal_access_key):
+    def get(self, request, internal_access_key, *args, **kwargs):
         super(AllArticlesPublicReadView, self).get(request, internal_access_key)
         articles = Article.objects.filter(active=True)
         article_serializer = ArticlePublicSerializer(articles, many=True)
@@ -53,7 +53,7 @@ class PopularTagsListView(APIView):
 
 
 class AllTagsAndArticlesListView(InternalAccessAPIView):
-    def get(self, request, internal_access_key):
+    def get(self, request, internal_access_key, *args, **kwargs):
         super(AllTagsAndArticlesListView, self).get(request, internal_access_key)
         tags = Tag.objects.all().prefetch_related('article_set')
         return Response(TagAndArticleSerializer(tags, many=True).data, status=status.HTTP_200_OK)

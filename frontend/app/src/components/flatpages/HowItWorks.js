@@ -25,7 +25,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/1/1.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/1.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>1</div>
@@ -40,7 +40,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/1/2.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/2.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>2</div>
@@ -54,7 +54,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/1/3.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/3.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>3</div>
@@ -68,7 +68,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/1/4.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/4.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>4</div>
@@ -83,7 +83,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/1/5.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/5.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>5</div>
@@ -102,7 +102,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/2/1.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/1.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>1</div>
@@ -118,7 +118,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/2/2.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/2.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>2</div>
@@ -131,7 +131,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/2/3.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/3.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>3</div>
@@ -145,7 +145,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/2/4.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/4.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>4</div>
@@ -160,7 +160,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/2/5.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/5.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>5</div>
@@ -175,7 +175,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/2/6.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/6.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>6</div>
@@ -191,7 +191,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/static/image/page-how-does-it-work/2/8.svg")`,
+                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/8.svg")`,
                                             }}
                                         >
                                             <div className={styles.rank}>7</div>

@@ -3,7 +3,7 @@
 }
 
 .input {
-    background-image: url("/static/image/page-map/filter/search.svg");
+    background-image: url("/dj_static/image/page-map/filter/search.svg");
     width: 100%;
     height: calc(2.25rem + 10px);
     font-size: 13px;

@@ -20,7 +20,7 @@ function GetHouseListing(props) {
             <div className="row">
                 <div className="col-md-3">
                     <div className="image">
-                        <img src="/static/image/page-dashboard/1.png" className="w-100" alt="" title="" />
+                        <img src="/dj_static/image/page-dashboard/1.png" className="w-100" alt="" title="" />
                     </div>
                 </div>
                 <div className="col-md-9">
@@ -96,7 +96,7 @@ function GetBookingListing(props) {
             <div className="row">
                 <div className="col-md-3">
                     <div className="image">
-                        <img src="/static/image/page-dashboard/1.png" className="w-100" alt="" title="" />
+                        <img src="/dj_static/image/page-dashboard/1.png" className="w-100" alt="" title="" />
                     </div>
                 </div>
                 <div className="col-md-9">

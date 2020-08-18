@@ -91,7 +91,7 @@ export default class HouseDetailPageComponent extends Component {
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
                                                         <img
-                                                            src="/static/image/page-detail/left-box/1.svg"
+                                                            src="/dj_static/image/page-detail/left-box/1.svg"
                                                             alt=""
                                                             title=""
                                                         />
@@ -105,7 +105,7 @@ export default class HouseDetailPageComponent extends Component {
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
                                                         <img
-                                                            src="/static/image/page-detail/left-box/2.svg"
+                                                            src="/dj_static/image/page-detail/left-box/2.svg"
                                                             alt=""
                                                             title=""
                                                         />
@@ -119,7 +119,7 @@ export default class HouseDetailPageComponent extends Component {
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
                                                         <img
-                                                            src="/static/image/page-detail/left-box/3.svg"
+                                                            src="/dj_static/image/page-detail/left-box/3.svg"
                                                             alt=""
                                                             title=""
                                                         />

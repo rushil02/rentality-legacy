@@ -41,7 +41,7 @@
 }
 
 .footer .social-media ul li.facebook a {
-    background-image: url("/static/image/footer/facebook.svg");
+    background-image: url("/dj_static/image/footer/facebook.svg");
 }
 
 .footer .social-media ul li.facebook a:hover {
@@ -49,7 +49,7 @@
 }
 
 .footer .social-media ul li.instagram a {
-    background-image: url("/static/image/footer/instagram.svg");
+    background-image: url("/dj_static/image/footer/instagram.svg");
 }
 
 .footer .social-media ul li.instagram a:hover {
@@ -57,7 +57,7 @@
 }
 
 .footer .social-media ul li.twitter a {
-    background-image: url("/static/image/footer/twitter.svg");
+    background-image: url("/dj_static/image/footer/twitter.svg");
 }
 
 .footer .social-media ul li.twitter a:hover {
@@ -65,7 +65,7 @@
 }
 
 .footer .social-media ul li.linkedin a {
-    background-image: url("/static/image/footer/linkedin.svg");
+    background-image: url("/dj_static/image/footer/linkedin.svg");
 }
 
 .footer .social-media ul li.linkedin a:hover {

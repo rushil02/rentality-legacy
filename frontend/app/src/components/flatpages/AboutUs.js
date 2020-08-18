@@ -35,7 +35,7 @@ export default class AboutUs extends Component {
                         <div className={"row " + styles.mb50}>
                             <div className="col-md-6">
                                 <img
-                                    src="/static/image/page-about/content/1.jpeg"
+                                    src="/dj_static/image/page-about/content/1.jpeg"
                                     className="w-100 bottom-margin"
                                     alt=""
                                     title=""
@@ -58,7 +58,7 @@ export default class AboutUs extends Component {
                         <div className={"row " + styles.mb50}>
                             <div className="col-md-6 d-block d-md-none d-lg-none d-xl-none">
                                 <img
-                                    src="/static/image/page-about/content/2.jpeg"
+                                    src="/dj_static/image/page-about/content/2.jpeg"
                                     className="w-100 bottom-margin"
                                     alt=""
                                     title=""
@@ -81,7 +81,7 @@ export default class AboutUs extends Component {
                             </div>
                             <div className="col-md-6 d-none d-md-block d-lg-block d-xl-block">
                                 <img
-                                    src="/static/image/page-about/content/2.jpeg"
+                                    src="/dj_static/image/page-about/content/2.jpeg"
                                     className="w-100 top-margin"
                                     alt=""
                                     title=""
@@ -91,7 +91,7 @@ export default class AboutUs extends Component {
                         <div className="row">
                             <div className="col-md-6">
                                 <img
-                                    src="/static/image/page-about/content/3.jpg"
+                                    src="/dj_static/image/page-about/content/3.jpg"
                                     className="w-100 bottom-margin"
                                     alt=""
                                     title=""
@@ -123,7 +123,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/static/image/page-about/our-values/1.svg" alt="" title="" />
+                                        <img src="/dj_static/image/page-about/our-values/1.svg" alt="" title="" />
                                     </div>
                                     <h2>Safe and Secure</h2>
                                 </div>
@@ -131,7 +131,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/static/image/page-about/our-values/2.svg" alt="" title="" />
+                                        <img src="/dj_static/image/page-about/our-values/2.svg" alt="" title="" />
                                     </div>
                                     <h2>Affordable and Quality Homes</h2>
                                 </div>
@@ -139,7 +139,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/static/image/page-about/our-values/3.svg" alt="" title="" />
+                                        <img src="/dj_static/image/page-about/our-values/3.svg" alt="" title="" />
                                     </div>
                                     <h2>Seamless Experience</h2>
                                 </div>
@@ -147,7 +147,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/static/image/page-about/our-values/4.svg" alt="" title="" />
+                                        <img src="/dj_static/image/page-about/our-values/4.svg" alt="" title="" />
                                     </div>
                                     <h2>Community Orientated</h2>
                                 </div>

@@ -20,6 +20,7 @@ def get_policy(request, policy_type):
 
 class GetPolicyPublicReadView(InternalAccessAPIView):
     def get(self, request, internal_access_key, *args, **kwargs):
-        policy = get_object_or_404(Policy, policy_type=kwargs.get('policy_type'), status='A')
-        policy_serializer = PolicyPublicSerializer(policy)
+        super(GetPolicyPublicReadView, self).get(request, internal_access_key)
+        policies = Policy.objects.filter(status='A')
+        policy_serializer = PolicyPublicSerializer(policies, many=True)
         return Response(policy_serializer.data, status=status.HTTP_200_OK)
