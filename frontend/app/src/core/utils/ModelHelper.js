@@ -236,6 +236,7 @@ export default class APIModelAdapter {
             modelObj.status = "hasChanged"
             modelObj._addToChangedFields(key)
             modelObj._attrs[key] = value
+            modelObj.updateError({[key]: null})
             return this
         } else {
             throw new APIModelAdapterError(`${key} is not a valid key in ${modelObj.constructor.name} | Used by ${this.constructor.name}`)

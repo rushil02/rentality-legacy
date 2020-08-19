@@ -1,11 +1,11 @@
-import React, { Component } from "react"
-import { lowerCase, startCase } from "lodash"
+import React, {Component} from "react"
+import {lowerCase, startCase} from "lodash"
 import BookingInfoPanel from "./BookingInfoPanel"
 import ApplyPanel from "./ApplyPanel"
 import ImageCarousel from "./ImageCarousel"
-import { ConfirmBookingModal } from "./ConfirmBookingModal"
+import {ConfirmBookingModal} from "./ConfirmBookingModal"
 import styles from "./HouseDetailPage.module.css"
-import { Link } from "gatsby"
+
 
 export default class HouseDetailPageComponent extends Component {
     constructor(props) {
@@ -25,7 +25,7 @@ export default class HouseDetailPageComponent extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener("scroll", this.handleScroll, { passive: true })
+        window.addEventListener("scroll", this.handleScroll, {passive: true})
     }
 
     componentWillUnmount() {
@@ -68,11 +68,11 @@ export default class HouseDetailPageComponent extends Component {
 
         return (
             <React.Fragment>
-                {this.props.disableDisplay ? <div className={styles.disabledOverlay} /> : null}
-                <ImageCarousel images={this.props.images} />
+                {this.props.disableDisplay ? <div className={styles.disabledOverlay}/> : null}
+                <ImageCarousel images={this.props.images}/>
                 <div className={styles.pageDetail}>
                     <div className="container">
-                        <div className="row" style={{ paddingBottom: "120px" }}>
+                        <div className="row" style={{paddingBottom: "120px"}}>
                             <div className="col-lg-7 col-xl-8">
                                 <div className="left">
                                     <div className={styles.title}>
@@ -86,7 +86,7 @@ export default class HouseDetailPageComponent extends Component {
                                                     {furnished} {this.props.house.getData("homeType")}
                                                 </div>
                                             </div>
-                                            <div className="col-md-3" />
+                                            <div className="col-md-3"/>
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
@@ -247,7 +247,7 @@ export default class HouseDetailPageComponent extends Component {
 
                                     <div className={styles.infoSection}>
                                         <h2 className={styles.hl2}>About Home Owner</h2>
-                                        <div className={"row"} style={{ marginBottom: "30px" }}>
+                                        <div className={"row"} style={{marginBottom: "30px"}}>
                                             <div className={"col-3"}>
                                                 <div
                                                     style={{
@@ -301,8 +301,9 @@ export default class HouseDetailPageComponent extends Component {
                                 </div>
                             </div>
 
-                            <div className="d-lg-none col-12" style={{ marginTop: "70px" }}>
+                            <div className="d-lg-none col-12" style={{marginTop: "70px"}}>
                                 <ConfirmBookingModal
+                                    application={this.props.application}
                                     onApply={this.props.onApply}
                                     onConfirmBooking={this.props.onConfirmBooking}
                                     ref={this.props.confirmModalRef}
@@ -327,11 +328,7 @@ function getInfoSidePanel(that, address) {
                     <div className={styles.right}>
                         <BookingInfoPanel
                             house={that.props.house}
-                            bookingDateRange={{
-                                startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
-                                endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
-                            }}
-                            numGuests={that.props.application.getData("bookingInfo.numGuests")}
+                            bookingInfo={that.props.application.getData("bookingInfo")}
                             onNumGuestsChange={that.props.handleGuestsNumChange}
                             address={address}
                             cancellationPolicy={that.props.cancellationPolicy}
@@ -340,10 +337,11 @@ function getInfoSidePanel(that, address) {
                             inSyncFinInfo={that.props.inSyncFinInfo}
                         />
 
-                        <div className="row" style={{ margin: "20px 0" }}>
+                        <div className="row" style={{margin: "20px 0"}}>
                             <div className="col-12 d-flex justify-content-center">
                                 {that.state.bookButtonActive ? (
                                     <ConfirmBookingModal
+                                        application={that.props.application}
                                         onApply={that.props.onApply}
                                         onConfirmBooking={that.props.onConfirmBooking}
                                         ref={that.props.confirmModalRef}
@@ -365,7 +363,7 @@ function getInfoSidePanel(that, address) {
                 </div>
             )
         } else {
-            return <div className="d-none d-lg-block col-lg-5 col-xl-4" />
+            return <div className="d-none d-lg-block col-lg-5 col-xl-4"/>
         }
     } else {
         return null
@@ -379,11 +377,7 @@ function getInfoMobilePanel(that, address) {
                 <div className={"d-lg-none"}>
                     <BookingInfoPanel
                         house={that.props.house}
-                        bookingDateRange={{
-                            startDate: that.props.application.getData("bookingInfo.bookingStartDate"),
-                            endDate: that.props.application.getData("bookingInfo.bookingEndDate"),
-                        }}
-                        numGuests={that.props.application.getData("bookingInfo.numGuests")}
+                        bookingInfo={that.props.application.getData("bookingInfo")}
                         onNumGuestsChange={that.props.handleGuestsNumChange}
                         address={address}
                         cancellationPolicy={that.props.cancellationPolicy}
@@ -394,7 +388,7 @@ function getInfoMobilePanel(that, address) {
                 </div>
             )
         } else {
-            return <div className={"d-lg-none"} />
+            return <div className={"d-lg-none"}/>
         }
     } else {
         return null

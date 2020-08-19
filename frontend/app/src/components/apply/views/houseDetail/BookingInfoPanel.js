@@ -5,12 +5,13 @@ import { Accordion, Card, Button } from "react-bootstrap"
 import { DateRange } from "react-date-range"
 import { addDays, format } from "date-fns"
 
-// import "react-date-range/dist/styles.css"; // main style file
-// import "react-date-range/dist/theme/default.css"; // theme css file
-// import "./DateRangeCalendar.css";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import "./DateRangeCalendar.css";
 
 import { getUnavailableDates } from "components/apply/services"
 import { ResponseLoadingSpinner } from "core/UIComponents/loadingSpinners/LoadingSpinner"
+import {displayErrors} from "core/UIComponents/helpers";
 
 const guestNumSelectStyles = {
     option: (provided, state) => ({
@@ -52,8 +53,8 @@ export default class BookingInfoPanel extends Component {
         super(props)
         this.state = {
             bookingDates: {
-                startDate: this.props.bookingDateRange.startDate ? this.props.bookingDateRange.startDate : new Date(),
-                endDate: this.props.bookingDateRange.endDate ? this.props.bookingDateRange.endDate : new Date(),
+                startDate: this.props.bookingInfo.getData("bookingStartDate") ? this.props.bookingInfo.getData("bookingStartDate") : new Date(),
+                endDate: this.props.bookingInfo.getData("bookingEndDate") ? this.props.bookingInfo.getData("bookingEndDate") : new Date(),
             },
             unavailableDates: [],
             maxDate: addDays(new Date(), 1),
@@ -130,17 +131,17 @@ export default class BookingInfoPanel extends Component {
             key: "selection",
             color: "#3fc692",
         }
-
-        console.log(this.props.finInfo)
-
+        
+        let dateError = this.props.bookingInfo.getErrorsForField("bookingStartDate") || this.props.bookingInfo.getErrorsForField("bookingEndDate")
         return (
             <React.Fragment>
-                <div className="padding">
+                <div>
                     <div className={styles.title + " " + styles.infoSection}>
                         <h1>{this.props.house.getData("title")}</h1>
                         <p>{this.props.address}</p>
                     </div>
                     <div className={styles.infoSection} id="bookingInfoPanelID">
+                        {dateError ? displayErrors(dateError) : null}
                         <Accordion>
                             <Card className={styles.dateDisplayCard}>
                                 <Card.Header className={styles.dateDisplayCardHeader}>
@@ -151,12 +152,12 @@ export default class BookingInfoPanel extends Component {
                                         variant={"link"}
                                         eventKey="dateRangeSel"
                                     >
-                                        <div className="row" style={{ cursor: "pointer" }}>
+                                        <div className="row" style={{ cursor: "pointer" }} id={'dateSelectorPanel'}>
                                             <div className="col-5">
                                                 <div className={styles.dateSubtitle + " text-left"}>Move in</div>
-                                                <div className={styles.dateDisplay + " text-left"}>
-                                                    {this.props.bookingDateRange.startDate
-                                                        ? format(this.props.bookingDateRange.startDate, "MMM DD YYYY")
+                                                <div className={styles.dateDisplay + " text-left"} id={'dateSelectorPanel1'}>
+                                                    {this.props.bookingInfo.getData("bookingStartDate")
+                                                        ? format(this.props.bookingInfo.getData("bookingStartDate"), "MMM dd yyyy")
                                                         : "Select Date"}
                                                 </div>
                                             </div>
@@ -164,8 +165,8 @@ export default class BookingInfoPanel extends Component {
                                             <div className="col-5">
                                                 <div className={styles.dateSubtitle + " text-right"}>Move out</div>
                                                 <div className={styles.dateDisplay + " text-right"}>
-                                                    {this.props.bookingDateRange.endDate
-                                                        ? format(this.props.bookingDateRange.endDate, "MMM DD YYYY")
+                                                    {this.props.bookingInfo.getData("bookingEndDate")
+                                                        ? format(this.props.bookingInfo.getData("bookingEndDate"), "MMM dd yyyy")
                                                         : "Select Date"}
                                                 </div>
                                             </div>
@@ -206,7 +207,7 @@ export default class BookingInfoPanel extends Component {
                                     options={guestsNumOptions}
                                     placeholder="0"
                                     onChange={e => this.props.onNumGuestsChange(e.value)}
-                                    value={{ value: this.props.numGuests, label: this.props.numGuests }}
+                                    value={{ value: this.props.bookingInfo.getData('numGuests'), label: this.props.bookingInfo.getData('numGuests') }}
                                     ref={el => (inputRefs.guestNumSelect = el)}
                                 />
                             </div>

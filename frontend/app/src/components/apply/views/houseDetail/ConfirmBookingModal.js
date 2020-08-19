@@ -27,7 +27,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                 layoutClasses={"btn imp-button-style"}
                 cTextOptions={{
                     default: "Book Now",
-                    loading: " ",
+                    loading: "",
                     done: "Processing",
                     error: "Error!",
                 }}
@@ -35,6 +35,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                 onSuccess={() => {
                     handleShow()
                 }}
+                observeMutations={[{domID: "dateSelectorPanel"}, {domID: "dateSelectorPanel1"}]}
                 containerID={["applyPanelID", "bookingInfoPanelID"]}
             />
             <Modal

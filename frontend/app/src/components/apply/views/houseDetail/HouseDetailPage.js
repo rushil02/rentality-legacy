@@ -1,16 +1,17 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 import {
     confirmBooking,
     applyBooking,
     getHomeOwnerDetails,
     getHouseData,
     getFinancialData,
+    getApplicantData
 } from "components/apply/services"
-import { House, Image, CancellationPolicy, HomeOwnerInfo, Application, FinancialInfo } from "components/apply/models"
+import {House, Image, CancellationPolicy, HomeOwnerInfo, Application, FinancialInfo} from "components/apply/models"
 import HouseDetailPageComponent from "./HouseDetailPageComponent"
-import { APIModelListAdapter, PostalLocation } from "core/utils/ModelHelper"
+import {APIModelListAdapter, PostalLocation} from "core/utils/ModelHelper"
 import RequestErrorBoundary from "core/errorHelpers/RequestErrorBoundary"
-import { alertUser } from "core/alert/Alert"
+import {alertUser} from "core/alert/Alert"
 
 export const SecretContext = React.createContext(undefined)
 
@@ -22,7 +23,6 @@ export default class HouseDetailPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: "done",
             homeOwnerInfo: new HomeOwnerInfo({}, "empty"),
             application: new Application({}, "empty"),
             finInfo: new FinancialInfo({}, "empty"),
@@ -35,6 +35,7 @@ export default class HouseDetailPage extends Component {
             this.houseUUID = this.props.pageContext.house.uuid
             this.state = {
                 ...this.state,
+                status: "done",
                 house: new House(this.props.pageContext.house),
                 images: new APIModelListAdapter(this.props.pageContext.house.images, Image, "uuid", "saved"),
                 cancellationPolicy: new CancellationPolicy(this.props.pageContext.house.cancellation_policy),
@@ -44,15 +45,16 @@ export default class HouseDetailPage extends Component {
             this.houseUUID = "props.routerProps.match.params.houseUUID"
             this.state = {
                 ...this.state,
+                status: "loading",
                 house: new House({}, "empty"),
                 images: new APIModelListAdapter([], Image, "uuid", "empty"),
                 cancellationPolicy: new CancellationPolicy({}, "empty"),
                 location: new PostalLocation({}, "empty"),
             }
         }
+        console.log(props, this.props, this.houseUUID)
         this.checkoutFormChild = React.createRef()
         this.confirmModalChild = React.createRef()
-        console.log(this.props.pageContext.house, "Constructor*******")
     }
 
     componentDidMount() {
@@ -94,12 +96,12 @@ export default class HouseDetailPage extends Component {
                 }))
             })
 
-        // getApplicantData().then((result) => {
-        //     this.setState((prevState) => ({
-        //         ...prevState,
-        //         application: prevState.application.bulkUpdate(result, "DB", "applicant"),
-        //     }));
-        // });
+        getApplicantData().then((result) => {
+            this.setState((prevState) => ({
+                ...prevState,
+                application: prevState.application.bulkUpdate(result, "DB", "applicant"),
+            }));
+        });
     }
 
     updateFinInfo = () => {
@@ -108,7 +110,7 @@ export default class HouseDetailPage extends Component {
             this.state.application.getData("bookingInfo.bookingEndDate") &&
             this.state.application.getData("bookingInfo.numGuests")
         ) {
-            this.setState({ inSyncFinInfo: true })
+            this.setState({inSyncFinInfo: true})
             getFinancialData(this.houseUUID, this.state.application.getData("bookingInfo"))
                 .then(result => {
                     this.setState(prevState => ({
@@ -167,14 +169,15 @@ export default class HouseDetailPage extends Component {
     }
 
     setApplicationUUID = value => {
-        this.setState({ applicationUUID: value })
+        this.setState({applicationUUID: value})
     }
 
     setClientSecret = value => {
-        this.setState({ clientSecret: value })
+        this.setState({clientSecret: value})
     }
 
     submitApplication = () => {
+        console.log("HERE", this.state.application)
         let that = this
         return new Promise(function (resolve, reject) {
             applyBooking(that.houseUUID, that.state.application)
@@ -183,6 +186,7 @@ export default class HouseDetailPage extends Component {
                     resolve(result)
                 })
                 .catch(error => {
+                    console.log(error)
                     if (error.badRequest) {
                         let errorData = error.error.response.data
                         if (errorData.code === "AA") {
@@ -244,15 +248,14 @@ export default class HouseDetailPage extends Component {
     }
 
     disableDisplay = () => {
-        this.setState({ disableDisplay: true })
+        this.setState({disableDisplay: true})
     }
 
     enableDisplay = () => {
-        this.setState({ disableDisplay: false })
+        this.setState({disableDisplay: false})
     }
 
     render() {
-        console.log(this.props.pageContext.house, "*******", this.state.house)
         return (
             <RequestErrorBoundary status={this.state.status}>
                 <SecretContext.Provider value={this.state.clientSecret}>

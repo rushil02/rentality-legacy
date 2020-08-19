@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-// import {CardElement, injectStripe} from 'react-stripe-elements';
 import { CardElement } from "@stripe/react-stripe-js"
 
 import styles from "./CheckoutForm.module.css"
@@ -18,33 +17,9 @@ export default class CheckoutForm extends Component {
 
         return this.props.stripe.confirmCardPayment(this.props.clientSecret, data)
 
-        // this.props.stripe
-        //     .confirmCardPayment(this.props.clientSecret, data)
-        //     .then(result => {
-        //         console.log(result);
-        //         if (result.error) {
-        //             // Show error to your customer (e.g., insufficient funds)
-        //             // close modal
-        //             // use alert
-        //             console.log(result.error.message);
-        //         } else {
-        //             if (result.paymentIntent.status === "succeeded") {
-        //                 //Redirect to success page
-        //                 console.log("Hurray");
-        //             }
-        //         }
-        //         return result;
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //     });
     }
 
-    componentDidUpdate(prevProps) {
-        // if (this.props.requestForToken && this.props.requestForToken !== prevProps.requestForToken) {
-        //     this.submit(this.props.name);
-        // }
-    }
+
 
     render() {
         const CARD_ELEMENT_OPTIONS = {
@@ -72,19 +47,3 @@ export default class CheckoutForm extends Component {
         )
     }
 }
-
-// export default function() {
-//     return (
-//         <ElementsConsumer>
-//             {({ stripe, elements }) => {
-//                 return (
-//                     <RequestErrorBoundary
-//                         status={getLoadStatus(stripe, elements)}
-//                     >
-//                         <CheckoutForm stripe={stripe} elements={elements} />
-//                     </RequestErrorBoundary>
-//                 );
-//             }}
-//         </ElementsConsumer>
-//     );
-// }

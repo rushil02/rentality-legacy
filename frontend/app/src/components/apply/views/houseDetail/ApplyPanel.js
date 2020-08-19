@@ -21,7 +21,7 @@ const genderSelectStyles = {
         display: "flex",
         flexWrap: "wrap",
         paddingTop: "6px",
-        paddingBbottom: "6px",
+        paddingBottom: "6px",
         height: "calc(2.25rem + 15px)",
     }),
 
@@ -33,7 +33,7 @@ const genderSelectStyles = {
         borderBottom: state.isFocused ? "1px solid #3fc692" : "1px solid #c7cdd9",
         paddingLeft: "0",
         WebkitTransition: "all 0.30s ease-in-out",
-        Moztransition: "all 0.30s ease-in-out",
+        MozTransition: "all 0.30s ease-in-out",
         msTransition: "all 0.30s ease-in-out",
         OTransition: "all 0.30s ease-in-out",
         boxShadow: state.isFocused ? "0 6px 12px -7px #3fc692 !important" : "initial",
@@ -58,7 +58,6 @@ export default class ApplyPanel extends Component {
     render() {
         let application = this.props.application
         let onFieldChange = this.props.onFieldChange
-        console.log(this.props.application.asd)
 
         return (
             <React.Fragment>

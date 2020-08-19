@@ -98,10 +98,6 @@ export class Booking extends APIModelAdapter {
             bookedHouse: { key: "house_meta", adapter: BookedHouse },
         }
     }
-
-    dateSerializer(date) {
-        return format(date, "yyyy-MM-dd")
-    }
 }
 
 export class BookedHouse extends APIModelAdapter {
@@ -134,12 +130,10 @@ export class BookingInfo extends APIModelAdapter {
         return {
             bookingStartDate: {
                 key: "start_date",
-                default: null,
                 serializer: this.dateSerializer,
             },
             bookingEndDate: {
                 key: "end_date",
-                default: null,
                 serializer: this.dateSerializer,
             },
             numGuests: { key: "guests", default: 1 },

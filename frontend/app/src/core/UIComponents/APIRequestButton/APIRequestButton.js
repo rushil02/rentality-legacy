@@ -1,6 +1,6 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 
-import { PulseLoader } from "react-spinners"
+import {PulseLoader} from "react-spinners"
 
 import styles from "./APIRequestButton.module.css"
 
@@ -26,8 +26,8 @@ import styles from "./APIRequestButton.module.css"
  *
  *      initialState - initial State of button
  *
- *      containerID - [optional] ID of Form container to track all child inputs to reset state on change to default
- *                    Works only with input based forms
+ *      containerID - [optional] ID or Array of IDs of Form container(s) to track all child inputs to reset state
+ *          on change to default. Works only with input based forms
  *
  *      callback - Promise function
  *      onSuccess - ran when callback is a success
@@ -78,6 +78,10 @@ const _formStateMap = {
     error: "error",
 }
 
+const _defaultMutationObserverConfig = {childList: true, characterData: true};
+
+// FIXME: Optimize Mutation Observer (disconnect observer on reset - similar to event listener)
+// FIXME: Merge state management for event listener and Mutation Observer
 export default class APIRequestButton extends Component {
     constructor(props) {
         super(props)
@@ -85,6 +89,7 @@ export default class APIRequestButton extends Component {
             status: props.initialState || "default",
         }
         this.containerList = []
+        this.mutationObserver = new MutationObserver(this.resetButtonOnMutation)
     }
 
     componentDidMount() {
@@ -97,10 +102,20 @@ export default class APIRequestButton extends Component {
                 this.containerList.push(document.getElementById(this.props.containerID))
             }
         }
+        if (this.props.observeMutations && this.props.observeMutations.length !== 0) {
+            this.props.observeMutations.forEach(targetNode => {
+                console.log(document.getElementById(targetNode.domID))
+                this.mutationObserver.observe(
+                    document.getElementById(targetNode.domID),
+                    targetNode.config || _defaultMutationObserverConfig
+                )
+            })
+        }
     }
 
     componentWillUnmount() {
         this.removeListener()
+        this.mutationObserver.disconnect()
     }
 
     attachListener = () => {
@@ -124,22 +139,26 @@ export default class APIRequestButton extends Component {
             this.containerList.forEach(container => {
                 container.removeEventListener("input", this.resetButtonOnInput)
             })
-            this.setState({ status: "default" })
+            this.setState({status: "default"})
         }
     }
 
+    resetButtonOnMutation = (mutationsList, observer) => {
+        this.setState({status: "default"})
+        this.removeListener()
+    }
+
     onActionClick = e => {
-        this.setState({ status: "loading" })
-        this.props
-            .callback(e)
+        this.setState({status: "loading"})
+        this.props.callback(e)
             .then(result => {
-                this.setState({ status: "done" })
+                this.setState({status: "done"})
                 if (this.props.onSuccess !== undefined) {
                     this.props.onSuccess(result)
                 }
             })
             .catch(error => {
-                this.setState({ status: "error" })
+                this.setState({status: "error"})
                 if (this.props.onFailure !== undefined) {
                     this.props.onFailure(error)
                 }
@@ -149,7 +168,7 @@ export default class APIRequestButton extends Component {
     static getDerivedStateFromProps(props, state) {
         // Overrides state with formState, except for when loading
         if (props.formState && state.status !== "loading") {
-            return { status: _formStateMap[props.formState] }
+            return {status: _formStateMap[props.formState]}
         } else {
             return null
         }
