@@ -3,6 +3,7 @@ import styles from "./Blog.module.css"
 import { APIModelListAdapter } from "core/utils/ModelHelper"
 import { LatestArticleInfo, Tag } from "../models"
 import { getLatestArticles, getPopularTags } from "../services"
+import { formatDateMDY } from "core/UIComponents/helpers"
 import { Link } from "gatsby"
 import { navigate } from "gatsby"
 
@@ -110,15 +111,6 @@ function slugify(verbose) {
         .replace(/--+/g, "-")
 }
 
-function formatDate(date) {
-    if (date) {
-        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
-    } else {
-        return "N/A"
-    }
-}
-
 function GetTag(props) {
     let tagVerbose = props.tag.getData("title")
     return (
@@ -144,7 +136,7 @@ function GetPopularBlogPost(props) {
                     </div>
                     <div className="col-8">
                         <h1>{article.getData("title")}</h1>
-                        <p>{formatDate(article.getData("updateDate"))} </p>
+                        <p>{formatDateMDY(article.getData("updateDate"))} </p>
                     </div>
                 </div>
             </Link>

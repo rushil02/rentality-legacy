@@ -29,7 +29,7 @@ class ThumbnailPublicView(GenericAPIView):
 class AllSEOHouses(InternalAccessAPIView):
     serializer_class = AllHouseDetailsPublicSerializer
 
-    def get(self, request, internal_access_key):
+    def get(self, request, internal_access_key, *args, **kwargs):
         super(AllSEOHouses, self).get(request, internal_access_key)
         houses = House.active_objects.filter(houseprofile__seo=True)
         serializer = self.serializer_class(houses, many=True)

@@ -613,7 +613,7 @@
     color: #171717;
     padding-left: 26px;
     height: 100%;
-    background-image: url("/static/image/page-blog/left-post/tag.svg");
+    background-image: url("/dj_static/image/page-blog/left-post/tag.svg");
     background-repeat: no-repeat;
     background-position: left 5px;
 }

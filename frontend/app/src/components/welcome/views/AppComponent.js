@@ -48,11 +48,11 @@ export default class AppComponent extends Component {
 
     render() {
         const logoImages = [
-            {src: "/static/image/logo/1.png", alt: ""},
-            {src: "/static/image/logo/3.png", alt: ""},
-            {src: "/static/image/logo/4.png", alt: ""},
-            {src: "/static/image/logo/5.png", alt: ""},
-            {src: "/static/image/logo/6.png", alt: ""},
+            {src: "/dj_static/image/logo/1.png", alt: ""},
+            {src: "/dj_static/image/logo/3.png", alt: ""},
+            {src: "/dj_static/image/logo/4.png", alt: ""},
+            {src: "/dj_static/image/logo/5.png", alt: ""},
+            {src: "/dj_static/image/logo/6.png", alt: ""},
         ];
         const settingsSlider = {
             arrows: false,
@@ -270,7 +270,7 @@ export default class AppComponent extends Component {
                                             <a href="/rep/search/?location=Melbourne" className={styles.bigList}>
                                                 <div className={styles.image}>
                                                     <img
-                                                        src="/static/image/cities/melbourne-home-page.jpg"
+                                                        src="/dj_static/image/cities/melbourne-home-page.jpg"
                                                         className="w-100"
                                                         alt=""
                                                         title=""
@@ -295,7 +295,7 @@ export default class AppComponent extends Component {
                                                 <a href="/rep/search/?location=Perth" className={styles.bigList}>
                                                     <div className={styles.image}>
                                                         <img
-                                                            src="/static/image/cities/perth-home-page.jpg"
+                                                            src="/dj_static/image/cities/perth-home-page.jpg"
                                                             className="w-100"
                                                             alt=""
                                                             title=""
@@ -317,7 +317,7 @@ export default class AppComponent extends Component {
                                                 <a href="/rep/search/?location=Sydney" className={styles.bigList}>
                                                     <div className={styles.image}>
                                                         <img
-                                                            src="/static/image/cities/sydney-home-page.jpg"
+                                                            src="/dj_static/image/cities/sydney-home-page.jpg"
                                                             className="w-100"
                                                             alt=""
                                                             title=""
@@ -393,7 +393,7 @@ export default class AppComponent extends Component {
                                             >
                                                 <div className={styles.image}>
                                                     <img
-                                                        src="/static/image/start-now/1.png"
+                                                        src="/dj_static/image/start-now/1.png"
                                                         className="w-100"
                                                         alt=""
                                                         title=""
@@ -407,7 +407,7 @@ export default class AppComponent extends Component {
                                             <a href="/rep/search/" className={styles.list + " " + styles.right}>
                                                 <div className={styles.image}>
                                                     <img
-                                                        src="/static/image/start-now/2.png"
+                                                        src="/dj_static/image/start-now/2.png"
                                                         className="w-100"
                                                         alt=""
                                                         title=""

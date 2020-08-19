@@ -70,7 +70,7 @@ class CityLocationAutocomplete(autocomplete.Select2QuerySetView):
 
 
 class InternalAccessAPIView(APIView):
-    def get(self, request, internal_access_key):
+    def get(self, request, internal_access_key, *args, **kwargs):
         if internal_access_key != settings.INTERNAL_ACCESS_API_KEY:
             raise PermissionDenied
 

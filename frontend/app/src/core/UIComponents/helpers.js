@@ -18,3 +18,12 @@ export function displayErrors(errorList, styleClass = "invalid-feedback") {
         return null
     }
 }
+
+export function formatDateMDY(date) {
+    if (date) {
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
+    } else {
+        return "N/A"
+    }
+}

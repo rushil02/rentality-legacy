@@ -10,7 +10,6 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class PolicyPublicSerializer(serializers.ModelSerializer):
-    # FIXME: Needs recursive relationship to parent
     class Meta:
         model = Policy
         fields = '__all__'

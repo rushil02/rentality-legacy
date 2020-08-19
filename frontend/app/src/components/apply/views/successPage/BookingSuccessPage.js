@@ -61,7 +61,7 @@ export default class BookingSuccessPage extends Component {
                                             <div className="col-md-3">
                                                 <div className="image">
                                                     <img
-                                                        src="/static/image/page-dashboard/1.png"
+                                                        src="/dj_static/image/page-dashboard/1.png"
                                                         className="w-100"
                                                         alt=""
                                                         title=""
