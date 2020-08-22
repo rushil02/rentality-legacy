@@ -98,7 +98,7 @@
 }
 
 .checkList li {
-    background-image: url("/dj_static/image/check.svg");
+    background-image: url(images/icons/check.svg);
     background-repeat: no-repeat;
     background-position: left center;
     padding-left: 27px;

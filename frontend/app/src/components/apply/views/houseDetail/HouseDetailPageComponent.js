@@ -1,11 +1,13 @@
-import React, {Component} from "react"
-import {lowerCase, startCase} from "lodash"
+import React, { Component } from "react"
+import { lowerCase, startCase } from "lodash"
 import BookingInfoPanel from "./BookingInfoPanel"
 import ApplyPanel from "./ApplyPanel"
 import ImageCarousel from "./ImageCarousel"
-import {ConfirmBookingModal} from "./ConfirmBookingModal"
+import { ConfirmBookingModal } from "./ConfirmBookingModal"
 import styles from "./HouseDetailPage.module.css"
-
+import bedroomIcon from "images/page-detail/left-box/1.svg"
+import bathroomIcon from "images/page-detail/left-box/2.svg"
+import parkingIcon from "images/page-detail/left-box/1.svg"
 
 export default class HouseDetailPageComponent extends Component {
     constructor(props) {
@@ -25,7 +27,7 @@ export default class HouseDetailPageComponent extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener("scroll", this.handleScroll, {passive: true})
+        window.addEventListener("scroll", this.handleScroll, { passive: true })
     }
 
     componentWillUnmount() {
@@ -68,11 +70,11 @@ export default class HouseDetailPageComponent extends Component {
 
         return (
             <React.Fragment>
-                {this.props.disableDisplay ? <div className={styles.disabledOverlay}/> : null}
-                <ImageCarousel images={this.props.images}/>
+                {this.props.disableDisplay ? <div className={styles.disabledOverlay} /> : null}
+                <ImageCarousel images={this.props.images} />
                 <div className={styles.pageDetail}>
                     <div className="container">
-                        <div className="row" style={{paddingBottom: "120px"}}>
+                        <div className="row" style={{ paddingBottom: "120px" }}>
                             <div className="col-lg-7 col-xl-8">
                                 <div className="left">
                                     <div className={styles.title}>
@@ -86,15 +88,11 @@ export default class HouseDetailPageComponent extends Component {
                                                     {furnished} {this.props.house.getData("homeType")}
                                                 </div>
                                             </div>
-                                            <div className="col-md-3"/>
+                                            <div className="col-md-3" />
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
-                                                        <img
-                                                            src="/dj_static/image/page-detail/left-box/1.svg"
-                                                            alt=""
-                                                            title=""
-                                                        />
+                                                        <img src={bedroomIcon} alt="" title="" />
                                                     </div>
                                                     <p className={styles.boxText}>
                                                         {this.props.house.getData("numBedrooms")} bedrooms
@@ -104,11 +102,7 @@ export default class HouseDetailPageComponent extends Component {
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
-                                                        <img
-                                                            src="/dj_static/image/page-detail/left-box/2.svg"
-                                                            alt=""
-                                                            title=""
-                                                        />
+                                                        <img src={bathroomIcon} alt="" title="" />
                                                     </div>
                                                     <p className={styles.boxText}>
                                                         {this.props.house.getData("numBathrooms")} bathroom
@@ -118,11 +112,7 @@ export default class HouseDetailPageComponent extends Component {
                                             <div className="col-md-3">
                                                 <div className={styles.icon}>
                                                     <div className={styles.iconImage}>
-                                                        <img
-                                                            src="/dj_static/image/page-detail/left-box/3.svg"
-                                                            alt=""
-                                                            title=""
-                                                        />
+                                                        <img src={parkingIcon} alt="" title="" />
                                                     </div>
                                                     <p className={styles.boxText}>
                                                         {this.props.house.getData("numParkSpaces")} Garage
@@ -247,7 +237,7 @@ export default class HouseDetailPageComponent extends Component {
 
                                     <div className={styles.infoSection}>
                                         <h2 className={styles.hl2}>About Home Owner</h2>
-                                        <div className={"row"} style={{marginBottom: "30px"}}>
+                                        <div className={"row"} style={{ marginBottom: "30px" }}>
                                             <div className={"col-3"}>
                                                 <div
                                                     style={{
@@ -301,7 +291,7 @@ export default class HouseDetailPageComponent extends Component {
                                 </div>
                             </div>
 
-                            <div className="d-lg-none col-12" style={{marginTop: "70px"}}>
+                            <div className="d-lg-none col-12" style={{ marginTop: "70px" }}>
                                 <ConfirmBookingModal
                                     application={this.props.application}
                                     onApply={this.props.onApply}
@@ -337,7 +327,7 @@ function getInfoSidePanel(that, address) {
                             inSyncFinInfo={that.props.inSyncFinInfo}
                         />
 
-                        <div className="row" style={{margin: "20px 0"}}>
+                        <div className="row" style={{ margin: "20px 0" }}>
                             <div className="col-12 d-flex justify-content-center">
                                 {that.state.bookButtonActive ? (
                                     <ConfirmBookingModal
@@ -363,7 +353,7 @@ function getInfoSidePanel(that, address) {
                 </div>
             )
         } else {
-            return <div className="d-none d-lg-block col-lg-5 col-xl-4"/>
+            return <div className="d-none d-lg-block col-lg-5 col-xl-4" />
         }
     } else {
         return null
@@ -388,7 +378,7 @@ function getInfoMobilePanel(that, address) {
                 </div>
             )
         } else {
-            return <div className={"d-lg-none"}/>
+            return <div className={"d-lg-none"} />
         }
     } else {
         return null

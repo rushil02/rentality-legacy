@@ -7,7 +7,7 @@
 }
 
 .pageTitle i {
-    background-image: url('/static/image/popover.svg');
+    background-image: url(images/icons/popover.svg);
     background-repeat: no-repeat;
     background-position: center right;
     margin-left: 30px;

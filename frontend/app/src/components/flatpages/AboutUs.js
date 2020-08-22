@@ -1,5 +1,12 @@
 import React, { Component } from "react"
 import styles from "./AboutUs.module.css"
+import aboutContent1 from "images/page-about/content/1.jpeg"
+import aboutContent2 from "images/page-about/content/2.jpeg"
+import aboutContent3 from "images/page-about/content/3.jpg"
+import aboutValues1 from "images/page-about/our-values/1.svg"
+import aboutValues2 from "images/page-about/our-values/2.svg"
+import aboutValues3 from "images/page-about/our-values/3.svg"
+import aboutValues4 from "images/page-about/our-values/4.svg"
 
 export default class AboutUs extends Component {
     render() {
@@ -34,12 +41,7 @@ export default class AboutUs extends Component {
                     <div className="container">
                         <div className={"row " + styles.mb50}>
                             <div className="col-md-6">
-                                <img
-                                    src="/dj_static/image/page-about/content/1.jpeg"
-                                    className="w-100 bottom-margin"
-                                    alt=""
-                                    title=""
-                                />
+                                <img src={aboutContent1} className="w-100 bottom-margin" alt="" title="" />
                             </div>
                             <div className="col-md-6">
                                 <h2>We make finding temporary home rentals easy</h2>
@@ -57,12 +59,7 @@ export default class AboutUs extends Component {
                         </div>
                         <div className={"row " + styles.mb50}>
                             <div className="col-md-6 d-block d-md-none d-lg-none d-xl-none">
-                                <img
-                                    src="/dj_static/image/page-about/content/2.jpeg"
-                                    className="w-100 bottom-margin"
-                                    alt=""
-                                    title=""
-                                />
+                                <img src={aboutContent2} className="w-100 bottom-margin" alt="" title="" />
                             </div>
                             <div className="col-md-6">
                                 <h2>Book your next accommodation with confidence</h2>
@@ -80,22 +77,12 @@ export default class AboutUs extends Component {
                                 </p>
                             </div>
                             <div className="col-md-6 d-none d-md-block d-lg-block d-xl-block">
-                                <img
-                                    src="/dj_static/image/page-about/content/2.jpeg"
-                                    className="w-100 top-margin"
-                                    alt=""
-                                    title=""
-                                />
+                                <img src={aboutContent2} className="w-100 top-margin" alt="" title="" />
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-6">
-                                <img
-                                    src="/dj_static/image/page-about/content/3.jpg"
-                                    className="w-100 bottom-margin"
-                                    alt=""
-                                    title=""
-                                />
+                                <img src={aboutContent3} className="w-100 bottom-margin" alt="" title="" />
                             </div>
                             <div className="col-md-6">
                                 <h2>The Story of Rentality</h2>
@@ -123,7 +110,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/dj_static/image/page-about/our-values/1.svg" alt="" title="" />
+                                        <img src={aboutValues1} alt="" title="" />
                                     </div>
                                     <h2>Safe and Secure</h2>
                                 </div>
@@ -131,7 +118,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/dj_static/image/page-about/our-values/2.svg" alt="" title="" />
+                                        <img src={aboutValues2} alt="" title="" />
                                     </div>
                                     <h2>Affordable and Quality Homes</h2>
                                 </div>
@@ -139,7 +126,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/dj_static/image/page-about/our-values/3.svg" alt="" title="" />
+                                        <img src={aboutValues3} alt="" title="" />
                                     </div>
                                     <h2>Seamless Experience</h2>
                                 </div>
@@ -147,7 +134,7 @@ export default class AboutUs extends Component {
                             <div className="col-md-6">
                                 <div className={styles.icon}>
                                     <div className={styles.image}>
-                                        <img src="/dj_static/image/page-about/our-values/4.svg" alt="" title="" />
+                                        <img src={aboutValues4} alt="" title="" />
                                     </div>
                                     <h2>Community Orientated</h2>
                                 </div>

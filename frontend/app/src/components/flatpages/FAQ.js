@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import styles from "./FAQ.module.css"
 import { Accordion, Card, Button } from "react-bootstrap"
+import { Link } from "gatsby"
 
 export default class FAQ extends Component {
     render() {
@@ -106,15 +107,14 @@ export default class FAQ extends Component {
                                                         <Accordion.Collapse eventKey={4}>
                                                             <Card.Body bsPrefix={styles.innerCardBody}>
                                                                 <p>
-                                                                    Select the 'Sign Up / Login' button on the top right
-                                                                    of the page.
+                                                                    Select the ‘Signup/Login’ button on the top right of
+                                                                    the page.
                                                                     <br />
-                                                                    On the Sign Up / Login page, select the 'Password
-                                                                    reset' button.
+                                                                    Select ‘Password Reset’ button.
                                                                     <br />
-                                                                    Enter in your email address associated with your
-                                                                    account and we will send you an email with a link to
-                                                                    reset your password.
+                                                                    Enter your email address for your account and we
+                                                                    will send you an email with a link to reset your
+                                                                    password.
                                                                 </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>
@@ -189,10 +189,10 @@ export default class FAQ extends Component {
                                                         <Accordion.Collapse eventKey={7}>
                                                             <Card.Body bsPrefix={styles.innerCardBody}>
                                                                 <p>
-                                                                    Rentality specialises in temporary home rentals.
-                                                                    Tenants and homeowners are only allowed to book and
-                                                                    list properties for a minimum rental period of 1
-                                                                    month.
+                                                                    Rentality specialises in monthly home rental. The
+                                                                    minimum rental period on Rentality is 4 weeks.
+                                                                    However, there are many tenants who book up to 12
+                                                                    months!
                                                                 </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>
@@ -201,23 +201,22 @@ export default class FAQ extends Component {
                                                         <Card.Header bsPrefix={styles.innerCardHeader}>
                                                             <h5 className="mb-0">
                                                                 <Accordion.Toggle className="btn btn-link" eventKey={7}>
-                                                                    Why am I only charged for 1 month of rent to book?
+                                                                    Why am I only charged with 4 weeks of rent to book?
                                                                 </Accordion.Toggle>
                                                             </h5>
                                                         </Card.Header>
                                                         <Accordion.Collapse eventKey={7}>
                                                             <Card.Body bsPrefix={styles.innerCardBody}>
                                                                 <p>
-                                                                    Rentality provides booking arrangement services
+                                                                    Rentality only facilitates the booking arrangement
                                                                     between homeowners and tenants.
                                                                     <br />
-                                                                    Hence we only charge 1 month of rent as the payment
-                                                                    amount to secure the booking.
+                                                                    To secure the booking, you will be charge with the
+                                                                    first 4 weeks of rent.
                                                                     <br />
                                                                     <br />
-                                                                    If your rental arrangements are for more than 1
-                                                                    month, both the tenant and homeowner would need to
-                                                                    arrange the remaining rental payments themselves.
+                                                                    For the remaining rental payment, you and the
+                                                                    homeowner will make private arrangement yourself.
                                                                 </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>
@@ -233,43 +232,16 @@ export default class FAQ extends Component {
                                                         <Accordion.Collapse eventKey={8}>
                                                             <Card.Body bsPrefix={styles.innerCardBody}>
                                                                 <p>
-                                                                    On your dashboard page, select the 'Change or Cancel
-                                                                    Reservation' button.
+                                                                    On your dashboard page, select the ‘Change or Cancel
+                                                                    Reservation’ button.
                                                                     <br />
-                                                                    Provide your reason of why you have decided to
-                                                                    cancel or change your reservation.
-                                                                    <br />
-                                                                    <br />
-                                                                    Dependent on your cancellation policy or the host
-                                                                    you have, you may be able to cancel your booking
-                                                                    with a full refund (Not including booking service
-                                                                    fee).
-                                                                </p>
-                                                            </Card.Body>
-                                                        </Accordion.Collapse>
-                                                    </Card>
-                                                    <Card bsPrefix={styles.innerCard}>
-                                                        <Card.Header bsPrefix={styles.innerCardHeader}>
-                                                            <h5 className="mb-0">
-                                                                <Accordion.Toggle className="btn btn-link" eventKey={9}>
-                                                                    How long would it take for the homeonwer to respond
-                                                                    back to my booking request?
-                                                                </Accordion.Toggle>
-                                                            </h5>
-                                                        </Card.Header>
-                                                        <Accordion.Collapse eventKey={9}>
-                                                            <Card.Body bsPrefix={styles.innerCardBody}>
-                                                                <p>
-                                                                    The homeowner is given 24 hours to respond back to
-                                                                    your booking request. If the homeowner does not
-                                                                    respond back in 24 hours, you would receive an
-                                                                    automatic rejection due to the homeowner's
-                                                                    inactivity.
+                                                                    Provide your reason of why you need to cancel or
+                                                                    change your reservation.
                                                                     <br />
                                                                     <br />
-                                                                    If you really like the property listed and received
-                                                                    a rejection due to the homeonwer's inactivity, you
-                                                                    can try to book for that accommodation again.
+                                                                    Depending on your cancellation policy, you may be
+                                                                    able to cancel your booking with a full refund,
+                                                                    partial refund or no refund.
                                                                 </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>
@@ -303,7 +275,14 @@ export default class FAQ extends Component {
                                                         </Card.Header>
                                                         <Accordion.Collapse eventKey={11}>
                                                             <Card.Body bsPrefix={styles.innerCardBody}>
-                                                                <p>1</p>
+                                                                <p>
+                                                                    You may use a credit card or a debit card for the
+                                                                    transaction. Your credit/debit card would be charged
+                                                                    immediately after making a booking. The payment
+                                                                    would be held by Rentality and would then be
+                                                                    transferred to the homeowner 24 hours after you have
+                                                                    moved in.
+                                                                </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>
                                                     </Card>
@@ -314,7 +293,7 @@ export default class FAQ extends Component {
                                                                     className="btn btn-link"
                                                                     eventKey={12}
                                                                 >
-                                                                    Verify Email ?
+                                                                    How do I verify my mail ?
                                                                     <span>
                                                                         Once Registered, an email link will be sent to
                                                                         activate the account.
@@ -334,11 +313,6 @@ export default class FAQ extends Component {
                                                                     would be stored into Rentality's digital trust
                                                                     account. The purpose of this payment is to secure
                                                                     the booking.
-                                                                    <br />
-                                                                    <br />
-                                                                    This booking payment is then transferred to the
-                                                                    homeowner 24 hours after the tenant has moved in
-                                                                    into their accommodation.
                                                                 </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>
@@ -351,7 +325,7 @@ export default class FAQ extends Component {
                                                                     eventKey={13}
                                                                 >
                                                                     What is stripe and why is it used for payment
-                                                                    transactions? &lt;
+                                                                    transactions?
                                                                 </Accordion.Toggle>
                                                             </h5>
                                                         </Card.Header>
@@ -476,8 +450,10 @@ export default class FAQ extends Component {
                                                         <Accordion.Collapse eventKey={17}>
                                                             <Card.Body bsPrefix={styles.innerCardBody}>
                                                                 <p>
-                                                                    Rentality charges the homeowner a 4% service fee of
-                                                                    the total booking price.
+                                                                    It is free of charge to list your properties on
+                                                                    Rentality. When there is a successful booking,
+                                                                    Rentality will automatically charge 5% service fee
+                                                                    of the total booking price.
                                                                 </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>
@@ -497,8 +473,16 @@ export default class FAQ extends Component {
                                                         <Accordion.Collapse eventKey={18}>
                                                             <Card.Body bsPrefix={styles.innerCardBody}>
                                                                 <p>
-                                                                    Rentality charges the tenant a 8% service fee of one
-                                                                    month of rental.
+                                                                    Rentality does not charge the tenant any service
+                                                                    fee. However, Stripe Payment Gateway charges the
+                                                                    tenant a card transaction fees.
+                                                                    <br />
+                                                                    <br />
+                                                                    For more details about Stripe’s transaction fee
+                                                                    check out:&nbsp;
+                                                                    <Link to={"https://stripe.com/au/pricing"}>
+                                                                        Stripe Verbose
+                                                                    </Link>
                                                                 </p>
                                                             </Card.Body>
                                                         </Accordion.Collapse>

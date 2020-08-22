@@ -201,7 +201,7 @@
 }
 
 .centerArrow {
-    background-image: url(/static/image/page-detail/right-date/arrow.svg);
+    background-image: url(images/page-detail/right-date/arrow.svg);
     background-repeat: no-repeat;
     background-position: center center;
 }

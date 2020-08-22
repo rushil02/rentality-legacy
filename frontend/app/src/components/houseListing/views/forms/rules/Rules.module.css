@@ -2,7 +2,7 @@ h2.title {
     font-size: 17px;
     font-weight: 700;
     color: #2a2b32;
-    background-image: url('/static/image/form-1/alert.svg');
+    background-image: url(images/form-1/alert.svg);
     background-repeat: no-repeat;
     background-position: left center;
     padding-left: 38px;

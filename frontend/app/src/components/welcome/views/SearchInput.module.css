@@ -4,7 +4,7 @@
 }
 
 .input {
-    background-image: url("/dj_static/image/header/marker.svg");
+    background-image: url(images/header/marker.svg);
     background-position: 16px center;
     background-repeat: no-repeat;
     display: block;

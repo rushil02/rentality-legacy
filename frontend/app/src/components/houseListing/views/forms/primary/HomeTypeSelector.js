@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import Select from "react-select"
+import homeTypeIcon from "images/form-1/type.svg"
 
 export default class HomeTypeSelectorComponent extends Component {
     getValue = key => {
@@ -45,7 +46,7 @@ export default class HomeTypeSelectorComponent extends Component {
             }),
 
             container: (provided, state) => ({
-                backgroundImage: "url(/static/image/form-1/type.svg)",
+                backgroundImage: `url(${homeTypeIcon})`,
                 position: "relative",
                 fontSize: "15px",
                 color: "#676767",

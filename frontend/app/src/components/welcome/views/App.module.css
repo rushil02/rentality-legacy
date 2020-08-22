@@ -24,7 +24,7 @@
 .header {
     width: 100%;
     height: 789px;
-    background-image: url("/dj_static/image/header/background.png");
+    background-image: url(images/header/background.png);
     background-repeat: no-repeat;
     background-position: top center;
     background-size: cover;
@@ -130,7 +130,7 @@
 }
 
 .header .search .detail .date {
-    background-image: url("/dj_static/image/header/date.svg");
+    background-image: url(images/header/date.svg);
     background-position: left center;
     background-repeat: no-repeat;
 }
@@ -172,15 +172,15 @@
     top: 8px;
     right: 10px;
     background-color: #ffffff;
-    -webkit-mask: url("/dj_static/image/header/other-city.svg");
-    mask: url("/dj_static/image/header/other-city.svg") no-repeat;
+    -webkit-mask: url(images/header/other-city.svg);
+    mask: url(images/header/other-city.svg) no-repeat;
 }
 
 .header .search .cityTags #city a:hover::after,
 .header .search .cityTags #city a.active::after {
     background-color: #2a2b32;
-    -webkit-mask: url("/dj_static/image/header/other-city.svg");
-    mask: url("/dj_static/image/header/other-city.svg") no-repeat;
+    -webkit-mask: url(images/header/other-city.svg);
+    mask: url(images/header/other-city.svg) no-repeat;
 }
 
 .header .search .cityTags .btn:hover,
@@ -252,7 +252,7 @@
     top: 24px !important;
     left: 30px !important;
     color: transparent !important;
-    background-image: url(/static/image/chevron-left.png) !important;
+    background-image: url(images/icons/chevron-left.png) !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
     width: 20px !important;
@@ -265,7 +265,7 @@
     top: 24px !important;
     left: 585px !important;
     color: transparent !important;
-    background-image: url(/static/image/chevron-right.png) !important;
+    background-image: url(images/icons/chevron-right.png) !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
     width: 20px !important;
