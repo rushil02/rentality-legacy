@@ -4,7 +4,7 @@ import { alertUser } from "core/alert/Alert"
 
 axios.defaults.xsrfCookieName = "csrftoken"
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
-loadProgressBar()
+loadProgressBar({ showSpinner: false })
 
 export default axios
 

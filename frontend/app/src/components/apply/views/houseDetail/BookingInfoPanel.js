@@ -152,10 +152,10 @@ export default class BookingInfoPanel extends Component {
                                         variant={"link"}
                                         eventKey="dateRangeSel"
                                     >
-                                        <div className="row" style={{ cursor: "pointer" }} id={'dateSelectorPanel'}>
+                                        <div className="row" style={{ cursor: "pointer" }}>
                                             <div className="col-5">
                                                 <div className={styles.dateSubtitle + " text-left"}>Move in</div>
-                                                <div className={styles.dateDisplay + " text-left"} id={'dateSelectorPanel1'}>
+                                                <div className={styles.dateDisplay + " text-left"} id={'startDateDOM'}>
                                                     {this.props.bookingInfo.getData("bookingStartDate")
                                                         ? format(this.props.bookingInfo.getData("bookingStartDate"), "MMM dd yyyy")
                                                         : "Select Date"}
@@ -164,7 +164,7 @@ export default class BookingInfoPanel extends Component {
                                             <div className={"col-2 " + styles.centerArrow} />
                                             <div className="col-5">
                                                 <div className={styles.dateSubtitle + " text-right"}>Move out</div>
-                                                <div className={styles.dateDisplay + " text-right"}>
+                                                <div className={styles.dateDisplay + " text-right"} id={'endDateDOM'}>
                                                     {this.props.bookingInfo.getData("bookingEndDate")
                                                         ? format(this.props.bookingInfo.getData("bookingEndDate"), "MMM dd yyyy")
                                                         : "Select Date"}

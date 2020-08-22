@@ -35,7 +35,7 @@ export const ConfirmBookingModal = React.forwardRef((props, ref) => {
                 onSuccess={() => {
                     handleShow()
                 }}
-                observeMutations={[{domID: "dateSelectorPanel"}, {domID: "dateSelectorPanel1"}]}
+                observeMutations={[{domID: "startDateDOM"}, {domID: "endDateDOM"}]}
                 containerID={["applyPanelID", "bookingInfoPanelID"]}
             />
             <Modal

@@ -29,6 +29,11 @@ import styles from "./APIRequestButton.module.css"
  *      containerID - [optional] ID or Array of IDs of Form container(s) to track all child inputs to reset state
  *          on change to default. Works only with input based forms
  *
+ *      observeMutations - [optional] Array of object {targetNode: DOM id [string], config: observer config [object]}
+ *          Tracks all changes in mutation and resets the button, similar to functionality of containerID but works for
+ *          non-input DOMs.
+ *          For config options, refer to - https://dom.spec.whatwg.org/#dom-mutationobserver-mutationobserver
+ *
  *      callback - Promise function
  *      onSuccess - ran when callback is a success
  *      onFailure - ran when callback is failed (IMP! - If something fails in OnSuccess function, onFailure function
@@ -78,7 +83,7 @@ const _formStateMap = {
     error: "error",
 }
 
-const _defaultMutationObserverConfig = {childList: true, characterData: true};
+const _defaultMutationObserverConfig = {attributes: true, childList: true, subtree: true, characterData: true};
 
 // FIXME: Optimize Mutation Observer (disconnect observer on reset - similar to event listener)
 // FIXME: Merge state management for event listener and Mutation Observer
@@ -89,10 +94,11 @@ export default class APIRequestButton extends Component {
             status: props.initialState || "default",
         }
         this.containerList = []
-        this.mutationObserver = new MutationObserver(this.resetButtonOnMutation)
     }
 
     componentDidMount() {
+        this.mutationObserver = new MutationObserver(this.resetButtonOnMutation)
+
         if (this.props.containerID) {
             if (Array.isArray(this.props.containerID)) {
                 this.props.containerID.forEach(containerID => {
@@ -104,11 +110,8 @@ export default class APIRequestButton extends Component {
         }
         if (this.props.observeMutations && this.props.observeMutations.length !== 0) {
             this.props.observeMutations.forEach(targetNode => {
-                console.log(document.getElementById(targetNode.domID))
-                this.mutationObserver.observe(
-                    document.getElementById(targetNode.domID),
-                    targetNode.config || _defaultMutationObserverConfig
-                )
+                let config = targetNode.config || _defaultMutationObserverConfig
+                this.mutationObserver.observe(document.getElementById(targetNode.domID), config)
             })
         }
     }

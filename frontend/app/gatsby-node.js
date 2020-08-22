@@ -43,7 +43,7 @@ exports.createPages = async ({ actions: { createPage } }) => {
 
         allSEOHouses.data.forEach(house => {
             createPage({
-                path: `/apply/info1/${slugify(house.uuid)}`,
+                path: `/apply/info/${slugify(house.uuid)}`,
                 component: require.resolve("./src/templates/apply/HouseInfo.js"),
                 context: { house },
             })
