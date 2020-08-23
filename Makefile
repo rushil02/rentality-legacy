@@ -53,33 +53,49 @@ run-migration-service: ## Closely imitates production behaviour for migration-co
 	docker wait rentality_migration_1
 	@echo "Task complete"
 
-fe-vol-clean: ## Clean frontend persistent data
-	docker volume rm rentality_frontend_data rentality_frontend_cache || true
 
-# Logging
-be-logs: ## View recent backend - service 'web' logs
-	@docker-compose logs web
-
-fe-logs: ## View recent frontend logs
-	@docker-compose logs frontend
+### Backend ###
+#cd-backend: ## Start STANDALONE container from web image which will be ready for development and package installations
+#	@sh ./bin/isolated-BE-container.sh
 
 be-attach: ## Attach to backend - service 'web' logger
 	@docker attach rentality_web_1
 
-fe-attach: ## Attach to frontend logger
-	@docker attach rentality_frontend_1
+be-logs: ## View recent backend - service 'web' logs
+	@docker-compose logs web
 
 
-# Backend
-#cd-backend: ## Start STANDALONE container from web image which will be ready for development and package installations
-#	@sh ./bin/isolated-BE-container.sh
-#
-# Frontend
+### Frontend ###
+
 #cd-frontend: ## Start STANDALONE container from frontend image which will be ready for development and package installations
 #	@sh ./bin/isolated-FE-container.sh
 
+fe-logs: ## View recent frontend logs
+	@docker-compose logs frontend
+
+fe-vol-clean: ## Clean frontend persistent data
+	docker volume rm rentality_frontend_data rentality_frontend_cache || true
+
+fe-attach: ## Attach to frontend logger
+	@docker attach rentality_frontend_1
+
 sync-pkg-list: ## Sync package.json and package-lock.json from running container. Useful after testing new 3rd party packages.
 	@sh ./bin/sync-FE-kg-list.sh
+
+build-prod-FE-run: ## Start Frontend service using gatsby production build (using gatsby's server)
+	@sudo sysctl -w vm.max_map_count=262144
+	@docker-compose down
+	@make fe-vol-clean
+	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
+	@docker-compose -f docker-compose.yml -f docker-compose.prod-dev-1.yml up -d --build
+
+build-nx-prod-FE-run: ## Start Frontend service using gatsby production build (using nginx)
+	@sudo sysctl -w vm.max_map_count=262144
+	@docker-compose down
+	@make fe-vol-clean
+	@docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common ./backend
+	@docker-compose -f docker-compose.yml -f docker-compose.prod-dev-2.yml up -d --build
+
 
 # Reset DB to test custom migrations
 reset-db-mig: ## Reset database to the provided dump file (in ./bin/db_reload and run migrate
@@ -91,8 +107,8 @@ clean: ## Clean all persistent data and Remove all containers
 	@docker system prune -f
 	@docker volume prune -f
 
+### Docker release - build, tag and push the container ###
 
-# Docker release - build, tag and push the container
 ci-build: ## Build and Tag containers versioned as per docker-compose.prod-build.yml
 	# TODO: check if working directory is clean in terms of git
 	docker build -t rentality/backend-common:latest -f ./backend/Dockerfile.common --no-cache ./backend

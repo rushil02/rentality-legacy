@@ -1,0 +1,29 @@
+### Start Frontend service using gatsby production build (served via Nginx) ###
+
+version: '3.6'
+services:
+  nginx:
+    build: ./nginx
+    image: 'rentality/nginx:latest'
+    ports:
+      - '8000:80'
+    volumes:
+      - './nginx/config/localhost_prod.conf:/home/bin/online.conf'
+      - './nginx/config/maintenance.dev.conf:/home/bin/maintenance.conf'
+      - './nginx/bin/maintenance_site:/var/www/maintenance'
+      - './static_dev/static_root:/static'
+      - './static_dev/media_root:/media'
+      - 'frontend_data:/var/www/rentality.com.au'
+  frontend:
+    build:
+      context: ./frontend
+    image: 'rentality/frontend:latest'
+    volumes:
+      - 'frontend_data:/app/public'
+      - 'frontend_cache:/app/.cache'
+      - './secrets/COMM_ENV:/run/secrets/COMM_ENV'
+    depends_on:
+      - web
+    entrypoint:
+      - './bin/entrypoint.sh'
+

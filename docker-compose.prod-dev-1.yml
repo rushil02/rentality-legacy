@@ -1,0 +1,18 @@
+### Start Frontend service using gatsby production build ###
+
+version: '3.6'
+services:
+  frontend:
+    build:
+      context: ./frontend
+    image: 'rentality/frontend:latest'
+    ports:
+      - '3000:8000'
+    volumes:
+      - 'frontend_data:/app/public'
+      - 'frontend_cache:/app/.cache'
+      - './secrets/COMM_ENV:/run/secrets/COMM_ENV'
+    depends_on:
+      - web
+    entrypoint:
+      - './bin/entrypoint.prod-dev.sh'
