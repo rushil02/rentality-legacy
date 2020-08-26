@@ -1,8 +1,8 @@
 export default {
     interface: {
         base: "",
-        userProfile: "profile",
-        paymentInfo: "paymentInfo",
+        userProfile: "profile/",
+        paymentInfo: "paymentInfo/",
     },
     APIs: {
         profile: "user-profile",

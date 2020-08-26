@@ -1,8 +1,8 @@
 export default {
     interface: {
         base: "",
-        houseInfo: "info/:houseUUID",
-        success: "app/success/:applicationUUID",
+        houseInfo: "info/:houseUUID/",
+        success: "app/success/:applicationUUID/",
     },
     APIs: {
         houseDetails: "/api/property/detail/:houseUUID", // URL starts from root

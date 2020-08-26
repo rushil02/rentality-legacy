@@ -42,7 +42,7 @@ export default class HouseDetailPage extends Component {
                 location: new PostalLocation(this.props.pageContext.house.location),
             }
         } else {
-            this.houseUUID = "props.routerProps.match.params.houseUUID"
+            this.houseUUID = props.houseUUID
             this.state = {
                 ...this.state,
                 status: "loading",
@@ -52,7 +52,6 @@ export default class HouseDetailPage extends Component {
                 location: new PostalLocation({}, "empty"),
             }
         }
-        console.log(props, this.props, this.houseUUID)
         this.checkoutFormChild = React.createRef()
         this.confirmModalChild = React.createRef()
     }

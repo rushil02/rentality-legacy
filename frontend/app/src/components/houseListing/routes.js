@@ -2,8 +2,8 @@ import { include } from "named-urls"
 
 export default {
     interface: {
-        create: "create",
-        edit: "edit/:houseUUID",
+        create: "create/",
+        edit: "edit/:houseUUID/",
     },
     APIs: {
         formOptions: "form-options",

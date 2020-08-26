@@ -4,12 +4,10 @@ import Layout from "components/layout"
 import SEO from "components/seo"
 
 const HouseDetailPageTemplate = props => {
-    // let verbose = props.pageContext.tagAndArticles.verbose
-
     return (
         <Layout {...props}>
             <SEO
-                title={`: Rentality: Creating a Global Community for Mid-Term Rental`}
+                title={`Rentality: Creating a Global Community for Mid-Term Rental`}
                 description={`Get latest blogs on. Rentality, the leading marketplace for monthly rental in Australia`}
                 pathname={props.location.pathname}
             />
