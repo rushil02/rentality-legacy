@@ -33,19 +33,19 @@
 }
 
 .formControl.search {
-    background-image: url("/dj_static/image/page-map/filter/search.svg");
+    background-image: url(images/page-map/filter/search.svg);
 }
 
 .formControl.date {
-    background-image: url("/dj_static/image/page-map/filter/date.svg");
+    background-image: url(images/page-map/filter/date.svg);
 }
 
 .formControl.type {
-    background-image: url("/dj_static/image/page-map/filter/type.svg");
+    background-image: url(images/page-map/filter/type.svg);
 }
 
 .formControl.amount {
-    background-image: url("/dj_static/image/page-map/filter/amount.svg");
+    background-image: url(images/page-map/filter/amount.svg);
 }
 
 .fixedHeight {

@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import Select from "react-select"
 import { FormOptions } from "../../../../models"
 import { getHouseFilterOptions } from "../../../../services"
+import homeTypeIcon from "images/form-1/type.svg"
 
 export default class HouseType extends Component {
     constructor(props) {
@@ -91,7 +92,7 @@ export default class HouseType extends Component {
             },
 
             container: (provided, state) => ({
-                backgroundImage: "url(/static/image/form-1/type.svg)",
+                backgroundImage: `url(${homeTypeIcon})`,
                 backgroundSize: "19px",
                 position: "relative",
                 fontSize: "13px",

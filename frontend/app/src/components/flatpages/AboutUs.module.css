@@ -4,7 +4,7 @@
 /**********************************/
 
 .aboutImage {
-    background-image: url('/static/image/page-about/image/background.png');
+    background-image: url(images/page-about/image/background.png);
     background-repeat: no-repeat;
     background-size: cover;
     height: 520px;

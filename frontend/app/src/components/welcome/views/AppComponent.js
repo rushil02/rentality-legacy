@@ -1,23 +1,34 @@
-import React, {Component} from "react";
-import Slider from "react-slick";
-import {UserContext} from "core/auth/userContext";
-import {reverse} from "named-urls";
-import {PageRoutes} from "components/routes";
-import styles from "./App.module.css";
-import "./ImageCarousel.css";
-import theme from "./SearchInput.module.css";
-import Button from "react-bootstrap/Button";
-import DateRangePickerComponent from "core/UIComponents/DateRangePicker/DateRangePicker";
-import LocationSearchField from "core/UIComponents/LocationESAutosuggest/LocationSearchField";
-import {SubscriptionSection} from "./Subscription/SubscriptionSection";
+import React, { Component } from "react"
+import Slider from "react-slick"
+import { UserContext } from "core/auth/userContext"
+import { reverse } from "named-urls"
+import { PageRoutes } from "components/routes"
+import styles from "./App.module.css"
+import "./ImageCarousel.css"
+import theme from "./SearchInput.module.css"
+import Button from "react-bootstrap/Button"
+import DateRangePickerComponent from "core/UIComponents/DateRangePicker/DateRangePicker"
+import LocationSearchField from "core/UIComponents/LocationESAutosuggest/LocationSearchField"
+import { SubscriptionSection } from "./Subscription/SubscriptionSection"
+import featuredLogo1 from "images/featured-logo/1.png"
+import featuredLogo2 from "images/featured-logo/3.png"
+import featuredLogo3 from "images/featured-logo/4.png"
+import featuredLogo4 from "images/featured-logo/5.png"
+import featuredLogo5 from "images/featured-logo/6.png"
+
+import rentHouse from "images/start-now/1.png"
+import lookingForHouse from "images/start-now/2.png"
+import melbourneHomePage from "images/cities/melbourne-home-page.jpg"
+import perthHomePage from "images/cities/perth-home-page.jpg"
+import sydneyHomePage from "images/cities/sydney-home-page.jpg"
 
 function GetRecommendedHouse(props) {
-    let house = props.house;
-    let mainDivClass = props.mainDivClass;
+    let house = props.house
+    let mainDivClass = props.mainDivClass
 
     return (
         <div className={mainDivClass}>
-            <a href={reverse(PageRoutes.apply.houseInfo, {houseUUID: house.getData("uuid")})} className={styles.list}>
+            <a href={reverse(PageRoutes.apply.houseInfo, { houseUUID: house.getData("uuid") })} className={styles.list}>
                 <div className={styles.image}>
                     <img src={house.getData("thumbnail")} className="w-100" alt="" title="" />
                     <div className="{% if house.is_marked_leased %} leased-img-tag {% else %} d-none {% endif %}">
@@ -38,7 +49,7 @@ function GetRecommendedHouse(props) {
                 </div>
             </a>
         </div>
-    );
+    )
 }
 
 export default class AppComponent extends Component {
@@ -48,12 +59,12 @@ export default class AppComponent extends Component {
 
     render() {
         const logoImages = [
-            {src: "/dj_static/image/logo/1.png", alt: ""},
-            {src: "/dj_static/image/logo/3.png", alt: ""},
-            {src: "/dj_static/image/logo/4.png", alt: ""},
-            {src: "/dj_static/image/logo/5.png", alt: ""},
-            {src: "/dj_static/image/logo/6.png", alt: ""},
-        ];
+            { src: featuredLogo1, alt: "" },
+            { src: featuredLogo2, alt: "" },
+            { src: featuredLogo3, alt: "" },
+            { src: featuredLogo4, alt: "" },
+            { src: featuredLogo5, alt: "" },
+        ]
         const settingsSlider = {
             arrows: false,
             autoplay: true,
@@ -88,11 +99,11 @@ export default class AppComponent extends Component {
                     },
                 },
             ],
-        };
+        }
 
         return (
             <UserContext.Consumer>
-                {(userContext) => (
+                {userContext => (
                     <React.Fragment>
                         {/* <!-- header start --> */}
                         <div className={styles.header + " d-flex"}>
@@ -107,11 +118,11 @@ export default class AppComponent extends Component {
                             <div className={styles.search}>
                                 <div className={"container-fluid " + styles.searchContainer}>
                                     <div className="row">
-                                        <div className="col-xl-1"/>
+                                        <div className="col-xl-1" />
                                         <div className="col-12 col-xl-10">
                                             <div>
                                                 <div className={styles.detail}>
-                                                    <div className="row" style={{paddingLeft: "10px"}}>
+                                                    <div className="row" style={{ paddingLeft: "10px" }}>
                                                         <LocationSearchField
                                                             value={this.props.searchForm.getData("location")}
                                                             onChange={this.props.onValueChange}
@@ -208,7 +219,7 @@ export default class AppComponent extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-xl-1"/>
+                                        <div className="col-xl-1" />
                                     </div>
                                 </div>
                             </div>
@@ -253,7 +264,7 @@ export default class AppComponent extends Component {
                                         frameBorder="0"
                                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen
-                                        style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%"}}
+                                        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
                                     />
                                 </div>
                             </div>
@@ -269,12 +280,7 @@ export default class AppComponent extends Component {
                                         <div className="col-md-6">
                                             <a href="/rep/search/?location=Melbourne" className={styles.bigList}>
                                                 <div className={styles.image}>
-                                                    <img
-                                                        src="/dj_static/image/cities/melbourne-home-page.jpg"
-                                                        className="w-100"
-                                                        alt=""
-                                                        title=""
-                                                    />
+                                                    <img src={melbourneHomePage} className="w-100" alt="" title="" />
                                                     <div className={styles.bottom}>
                                                         <div className="row">
                                                             <div className="col-6">
@@ -284,7 +290,7 @@ export default class AppComponent extends Component {
                                                                     Australia
                                                                 </h1>
                                                             </div>
-                                                            <div className="col-6 align-self-center text-right"/>
+                                                            <div className="col-6 align-self-center text-right" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -294,12 +300,7 @@ export default class AppComponent extends Component {
                                             <div className={styles.bigListsRight}>
                                                 <a href="/rep/search/?location=Perth" className={styles.bigList}>
                                                     <div className={styles.image}>
-                                                        <img
-                                                            src="/dj_static/image/cities/perth-home-page.jpg"
-                                                            className="w-100"
-                                                            alt=""
-                                                            title=""
-                                                        />
+                                                        <img src={perthHomePage} className="w-100" alt="" title="" />
                                                         <div className={styles.bottom}>
                                                             <div className="row">
                                                                 <div className="col-6">
@@ -309,19 +310,14 @@ export default class AppComponent extends Component {
                                                                         Australia
                                                                     </h1>
                                                                 </div>
-                                                                <div className="col-6 align-self-center text-right"/>
+                                                                <div className="col-6 align-self-center text-right" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </a>
                                                 <a href="/rep/search/?location=Sydney" className={styles.bigList}>
                                                     <div className={styles.image}>
-                                                        <img
-                                                            src="/dj_static/image/cities/sydney-home-page.jpg"
-                                                            className="w-100"
-                                                            alt=""
-                                                            title=""
-                                                        />
+                                                        <img src={sydneyHomePage} className="w-100" alt="" title="" />
                                                         <div className={styles.bottom}>
                                                             <div className="row">
                                                                 <div className="col-6">
@@ -392,12 +388,7 @@ export default class AppComponent extends Component {
                                                 className={styles.list + " " + styles.left}
                                             >
                                                 <div className={styles.image}>
-                                                    <img
-                                                        src="/dj_static/image/start-now/1.png"
-                                                        className="w-100"
-                                                        alt=""
-                                                        title=""
-                                                    />
+                                                    <img src={rentHouse} className="w-100" alt="" title="" />
                                                 </div>
                                                 <h1>Rent your House</h1>
                                             </a>
@@ -406,12 +397,7 @@ export default class AppComponent extends Component {
                                         <div className="col-md-4">
                                             <a href="/rep/search/" className={styles.list + " " + styles.right}>
                                                 <div className={styles.image}>
-                                                    <img
-                                                        src="/dj_static/image/start-now/2.png"
-                                                        className="w-100"
-                                                        alt=""
-                                                        title=""
-                                                    />
+                                                    <img src={lookingForHouse} className="w-100" alt="" title="" />
                                                 </div>
                                                 <h1>Looking for a House</h1>
                                             </a>
@@ -426,6 +412,6 @@ export default class AppComponent extends Component {
                     </React.Fragment>
                 )}
             </UserContext.Consumer>
-        );
+        )
     }
 }

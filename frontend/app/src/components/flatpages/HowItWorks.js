@@ -2,6 +2,18 @@ import React, { Component } from "react"
 import styles from "./HowItWorks.module.css"
 import Tab from "react-bootstrap/Tab"
 import Nav from "react-bootstrap/Nav"
+import hdiwBooking1 from "images/page-how-does-it-work/1/1.svg"
+import hdiwBooking2 from "images/page-how-does-it-work/1/2.svg"
+import hdiwBooking3 from "images/page-how-does-it-work/1/3.svg"
+import hdiwBooking4 from "images/page-how-does-it-work/1/4.svg"
+import hdiwBooking5 from "images/page-how-does-it-work/1/5.svg"
+import hdiwHost1 from "images/page-how-does-it-work/2/1.svg"
+import hdiwHost2 from "images/page-how-does-it-work/2/2.svg"
+import hdiwHost3 from "images/page-how-does-it-work/2/3.svg"
+import hdiwHost4 from "images/page-how-does-it-work/2/4.svg"
+import hdiwHost5 from "images/page-how-does-it-work/2/5.svg"
+import hdiwHost6 from "images/page-how-does-it-work/2/6.svg"
+import hdiwHost7 from "images/page-how-does-it-work/2/8.svg"
 
 export default class HowItWorks extends Component {
     render() {
@@ -25,7 +37,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/1.svg")`,
+                                                backgroundImage: `url(${hdiwBooking1})`,
                                             }}
                                         >
                                             <div className={styles.rank}>1</div>
@@ -40,7 +52,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/2.svg")`,
+                                                backgroundImage: `url(${hdiwBooking2})`,
                                             }}
                                         >
                                             <div className={styles.rank}>2</div>
@@ -54,36 +66,35 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/3.svg")`,
+                                                backgroundImage: `url(${hdiwBooking3})`,
                                             }}
                                         >
                                             <div className={styles.rank}>3</div>
                                             <h1>
                                                 <br />
                                                 <br />
-                                                Click the “Apply Now” button to request for a booking
+                                                Click the “Book Now” button to make a reservation for the dates.
                                                 <br />
                                             </h1>
                                         </div>
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/4.svg")`,
+                                                backgroundImage: `url(${hdiwBooking4})`,
                                             }}
                                         >
                                             <div className={styles.rank}>4</div>
                                             <h1>
                                                 <br />
                                                 <br />
-                                                You will then be prompted to fill in your payment details. (The payment
-                                                is inclusive of Rentality's service fee)
+                                                You will be prompt to pay a 4 weeks deposit using Stripe.
                                                 <br />
                                             </h1>
                                         </div>
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/1/5.svg")`,
+                                                backgroundImage: `url(${hdiwBooking5})`,
                                             }}
                                         >
                                             <div className={styles.rank}>5</div>
@@ -102,7 +113,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/1.svg")`,
+                                                backgroundImage: `url(${hdiwHost1})`,
                                             }}
                                         >
                                             <div className={styles.rank}>1</div>
@@ -118,7 +129,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/2.svg")`,
+                                                backgroundImage: `url(${hdiwHost2})`,
                                             }}
                                         >
                                             <div className={styles.rank}>2</div>
@@ -131,7 +142,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/3.svg")`,
+                                                backgroundImage: `url(${hdiwHost3})`,
                                             }}
                                         >
                                             <div className={styles.rank}>3</div>
@@ -145,7 +156,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/4.svg")`,
+                                                backgroundImage: `url(${hdiwHost4})`,
                                             }}
                                         >
                                             <div className={styles.rank}>4</div>
@@ -160,7 +171,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/5.svg")`,
+                                                backgroundImage: `url(${hdiwHost5})`,
                                             }}
                                         >
                                             <div className={styles.rank}>5</div>
@@ -175,7 +186,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/6.svg")`,
+                                                backgroundImage: `url(${hdiwHost6})`,
                                             }}
                                         >
                                             <div className={styles.rank}>6</div>
@@ -191,7 +202,7 @@ export default class HowItWorks extends Component {
                                         <div
                                             className={styles.list}
                                             style={{
-                                                backgroundImage: `url("/dj_static/image/page-how-does-it-work/2/8.svg")`,
+                                                backgroundImage: `url(${hdiwHost7})`,
                                             }}
                                         >
                                             <div className={styles.rank}>7</div>
@@ -199,7 +210,7 @@ export default class HowItWorks extends Component {
                                                 <br />
                                                 <br />
                                                 24 Hours after the tenant has moved in, you would receive one month of
-                                                rent as the booking payment (Rentality would charge a 4% service fee of
+                                                rent as the booking payment (Rentality would charge a 5% service fee of
                                                 the whole booking)
                                                 <br />
                                             </h1>

@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import Select from "react-select"
+import kitchenIcon from "images/form-1/kitchen.svg"
 
 function substituteVerbose(key, verbose) {
     const subs = {
@@ -58,7 +59,7 @@ export default class FurnishedSelectorComponent extends Component {
             }),
 
             container: (provided, state) => ({
-                backgroundImage: "url(/static/image/form-1/kitchen.svg)",
+                backgroundImage: `url(${kitchenIcon})`,
                 position: "relative",
                 fontSize: "15px",
                 color: "#676767",
