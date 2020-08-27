@@ -44,7 +44,11 @@
 .outerCardHeader h5 button:hover,
 .outerCardHeader h5 button:focus {
     text-decoration: none;
-    padding-top: 0;
+    box-shadow: none;
+}
+
+.outerCardHeader h5 button:hover {
+    color: #3fc692;
 }
 
 .outerCardBody {
@@ -89,6 +93,11 @@
 .innerCardHeader h5 button:hover,
 .innerCardHeader h5 button:focus {
     text-decoration: none;
+    box-shadow: none;
+}
+
+.innerCardHeader h5 button:hover {
+    color: #3fc692;
 }
 
 .innerCardHeader h5 button span {

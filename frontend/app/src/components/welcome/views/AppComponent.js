@@ -19,7 +19,7 @@ import featuredLogo5 from "images/featured-logo/6.png"
 import rentHouse from "images/start-now/1.png"
 import lookingForHouse from "images/start-now/2.png"
 import melbourneHomePage from "images/cities/melbourne-home-page.jpg"
-import perthHomePage from "images/cities/perth-home-page.jpg"
+import goldCoastHomePage from "images/cities/goldcoast-home-page.jpg"
 import sydneyHomePage from "images/cities/sydney-home-page.jpg"
 
 function GetRecommendedHouse(props) {
@@ -278,7 +278,10 @@ export default class AppComponent extends Component {
                                 <div className={styles.bigLists}>
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <a href="/rep/search/?location=Melbourne" className={styles.bigList}>
+                                            <a
+                                                href={reverse(PageRoutes.searchPage) + "?location=Melbourne"}
+                                                className={styles.bigList}
+                                            >
                                                 <div className={styles.image}>
                                                     <img src={melbourneHomePage} className="w-100" alt="" title="" />
                                                     <div className={styles.bottom}>
@@ -298,14 +301,22 @@ export default class AppComponent extends Component {
                                         </div>
                                         <div className="col-md-6">
                                             <div className={styles.bigListsRight}>
-                                                <a href="/rep/search/?location=Perth" className={styles.bigList}>
+                                                <a
+                                                    href={reverse(PageRoutes.searchPage) + "?location=Gold%20Coast"}
+                                                    className={styles.bigList}
+                                                >
                                                     <div className={styles.image}>
-                                                        <img src={perthHomePage} className="w-100" alt="" title="" />
+                                                        <img
+                                                            src={goldCoastHomePage}
+                                                            className="w-100"
+                                                            alt=""
+                                                            title=""
+                                                        />
                                                         <div className={styles.bottom}>
                                                             <div className="row">
                                                                 <div className="col-6">
                                                                     <h1>
-                                                                        Perth
+                                                                        Gold Coast
                                                                         <br />
                                                                         Australia
                                                                     </h1>
@@ -315,7 +326,10 @@ export default class AppComponent extends Component {
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <a href="/rep/search/?location=Sydney" className={styles.bigList}>
+                                                <a
+                                                    href={reverse(PageRoutes.searchPage) + "?location=Sydney"}
+                                                    className={styles.bigList}
+                                                >
                                                     <div className={styles.image}>
                                                         <img src={sydneyHomePage} className="w-100" alt="" title="" />
                                                         <div className={styles.bottom}>

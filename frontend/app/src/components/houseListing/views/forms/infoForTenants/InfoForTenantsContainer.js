@@ -131,7 +131,7 @@ export default class InfoForTenantsContainer extends Component {
                                 </div>
                             </div>
                             <h1 className={commonStyles.pageTitle} style={{ marginBottom: "20px" }}>
-                                Are there any area restrictions for the tenant?
+                                Are there any area restricted to the tenant?
                             </h1>
                             <div className="black-textarea">
                                 <div className="row">
@@ -143,7 +143,7 @@ export default class InfoForTenantsContainer extends Component {
                                                 cols="40"
                                                 className="form-control"
                                                 id="id_main-form-access_restrictions"
-                                                placeholder="Examples -&#10;No acgetErrorcess upstairs.&#10;No access to the garden outside.&#10;No access to the granny flat.&#10;Only assigned bathroom will be accessible.&#10;No access to farm animal without permission."
+                                                placeholder="Examples -&#10;No access to upstairs.&#10;No access to the garden outside.&#10;No access to the granny flat.&#10;Only assigned bathroom will be accessible.&#10;No access to farm animal without permission."
                                                 value={this.state.data.getData("accessRestrictions")}
                                                 onChange={e => this.onFieldChange("accessRestrictions", e.target.value)}
                                             />
