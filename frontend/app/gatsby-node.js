@@ -16,7 +16,7 @@ function slugify(verbose) {
         .replace(/--+/g, "-")
 }
 
-exports.createPages = async ({actions: {createPage}}) => {
+exports.createPages = async ({ actions: { createPage } }) => {
     try {
         const allArticles = await axios.get(`http://web:8000/blog/all-articles/${process.env.INTERNAL_ACCESSOR}`)
         const allTagsAndArticles = await axios.get(
@@ -29,7 +29,7 @@ exports.createPages = async ({actions: {createPage}}) => {
             createPage({
                 path: `/blog/${article.slug}`,
                 component: require.resolve("./src/templates/blog/SingleBlogTemplate.js"),
-                context: {article},
+                context: { article },
             })
         })
 
@@ -37,7 +37,7 @@ exports.createPages = async ({actions: {createPage}}) => {
             createPage({
                 path: `/blog/tag/${slugify(tagAndArticles.verbose)}`,
                 component: require.resolve("./src/templates/blog/TagRelatedBlogsTemplate.js"),
-                context: {tagAndArticles},
+                context: { tagAndArticles },
             })
         })
 
@@ -45,15 +45,23 @@ exports.createPages = async ({actions: {createPage}}) => {
             createPage({
                 path: `/apply/info/${slugify(house.uuid)}`,
                 component: require.resolve("./src/templates/apply/HouseInfo.js"),
-                context: {house},
+                context: { house },
             })
         })
 
         allPolicies.data.forEach(policy => {
+            let name
+            if (policy.code_name === "PP") {
+                name = "privacy-policy"
+            } else if (policy.code_name === "CP") {
+                name = "cookie-policy"
+            } else if (policy.code_name === "ToS") {
+                name = "terms-of-service"
+            }
             createPage({
-                path: `/pages/policy/${policy.code_name}`,
+                path: `/pages/policy/${name}`,
                 component: require.resolve("./src/templates/policy/PolicyTemplate.js"),
-                context: {policy},
+                context: { policy },
             })
         })
     } catch (e) {
@@ -62,8 +70,8 @@ exports.createPages = async ({actions: {createPage}}) => {
     }
 }
 
-exports.onCreatePage = async ({page, actions}) => {
-    const {createPage} = actions
+exports.onCreatePage = async ({ page, actions }) => {
+    const { createPage } = actions
     // Only update the `/app` page.
     if (page.path.match(/^\/apply-d/)) {
         // page.matchPath is a special key that's used for matching pages

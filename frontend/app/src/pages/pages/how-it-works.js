@@ -8,7 +8,7 @@ const HowItWorksPage = props => {
         <Layout {...props}>
             <SEO
                 title={`How It Works: Rentality: Creating a Global Community for Mid-Term Rental`}
-                description={`Mid term rentals in. Explore from wide range of rentals in today!`}
+                description={`Know how Rentality platform works, the simple and easy steps to rent your next home.`}
                 pathname={props.location.pathname}
             />
             <HowItWorks {...props} />

@@ -10,7 +10,7 @@ const HouseListingPage = props => (
     <Layout {...props}>
         <SEO
             title="List your home on Rentality: Creating a Global Community for Mid-Term Rental"
-            description=""
+            description="Simple and easy steps to list your home for mid-term rental on Rentality"
             pathname={props.location.pathname}
         />
         <LoadableApp />

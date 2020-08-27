@@ -7,7 +7,7 @@ import Error404 from "core/errorHelpers/Error404"
 const NotFoundPage = props => (
     <Layout {...props}>
         <SEO
-            title="Page Not Found: Rentality"
+            title="Page Not Found: Rentality: Creating a Global Community for Mid-Term Rental"
             description="Oops, the page you're looking for does not exist. It may be due to a typo or you can report the problem if you think something is broken."
             pathname={props.location.pathname}
         />
