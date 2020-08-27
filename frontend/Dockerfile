@@ -23,7 +23,7 @@ RUN npm ci
 
 COPY ./app/gatsby-*.js ./app/.prettier* ./app/.babelrc ./
 COPY ./app/src ./src
-
+COPY ./app/static ./static
 COPY ./bin ./bin
 
 COPY ./bin/cronjobs /etc/crontabs/root

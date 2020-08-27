@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styles from "./App.module.css"
 import { reverse } from "named-urls"
 import { PageRoutes } from "components/routes"
+import {defaultDashImage} from "images/page-dashboard/1.png"
 
 function formatDate(date) {
     if (date) {
@@ -20,7 +21,7 @@ function GetHouseListing(props) {
             <div className="row">
                 <div className="col-md-3">
                     <div className="image">
-                        <img src="images/page-dashboard/1.png" className="w-100" alt="" title="" />
+                        <img src={defaultDashImage} className="w-100" alt="" title="" />
                     </div>
                 </div>
                 <div className="col-md-9">
@@ -52,7 +53,7 @@ function GetHouseListing(props) {
                             <div className={styles.detail}>
                                 <a
                                     className={styles.btn + " btn-link"}
-                                    href={reverse(PageRoutes.listing.edit, { houseUUID: house.getData("uuid") }) + "/1"}
+                                    href={reverse(PageRoutes.listing.edit, { houseUUID: house.getData("uuid") }) + "1"}
                                 >
                                     Manage
                                 </a>

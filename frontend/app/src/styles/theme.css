@@ -172,7 +172,7 @@ input:-webkit-autofill {
 }
 
 .checkbox .list-inline li .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
-    background-image: url(/images/form-1/check.svg);
+    background-image: url(./images/check.svg);
     background-size: unset;
     opacity: 1;
 }

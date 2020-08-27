@@ -3,5 +3,5 @@
 **/public/
 .gitignore
 .git
-README*
+**/README*
 .dockerignore

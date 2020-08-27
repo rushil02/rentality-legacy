@@ -42,7 +42,7 @@ restart: ## Shutdown and Run the project again
 	@make fe-vol-clean
 	@docker-compose up -d
 
-run: ## Spin up the project without build
+run: ## Spin up the project from last build
 	@sudo sysctl -w vm.max_map_count=262144
 	@docker-compose up -d
 
@@ -98,7 +98,7 @@ build-nx-prod-FE-run: ## Start Frontend service using gatsby production build (u
 
 
 # Reset DB to test custom migrations
-reset-db-mig: ## Reset database to the provided dump file (in ./bin/db_reload and run migrate
+reset-db-mig: ## Reset database to the provided dump file (in ./bin/db_reload) and run migrate
 	@cd ./bin/db_reload/  && sh ./reset-savepoint.sh
 
 # Clean all persistent data and containers

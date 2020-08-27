@@ -2,7 +2,7 @@ export default {
     interface: {
         base: "",
         houseInfo: "info/:houseUUID/",
-        success: "app/success/:applicationUUID/",
+        success: "/booking/info/:applicationUUID/",
     },
     APIs: {
         houseDetails: "/api/property/detail/:houseUUID", // URL starts from root
