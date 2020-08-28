@@ -27,7 +27,7 @@ exports.createPages = async ({ actions: { createPage } }) => {
 
         allArticles.data.forEach(article => {
             createPage({
-                path: `/blog/${article.slug}`,
+                path: `/blog/${article.slug}/`,
                 component: require.resolve("./src/templates/blog/SingleBlogTemplate.js"),
                 context: { article },
             })
@@ -35,7 +35,7 @@ exports.createPages = async ({ actions: { createPage } }) => {
 
         allTagsAndArticles.data.forEach(tagAndArticles => {
             createPage({
-                path: `/blog/tag/${slugify(tagAndArticles.verbose)}`,
+                path: `/blog/tag/${slugify(tagAndArticles.verbose)}/`,
                 component: require.resolve("./src/templates/blog/TagRelatedBlogsTemplate.js"),
                 context: { tagAndArticles },
             })
@@ -43,7 +43,7 @@ exports.createPages = async ({ actions: { createPage } }) => {
 
         allSEOHouses.data.forEach(house => {
             createPage({
-                path: `/apply/info/${slugify(house.uuid)}`,
+                path: `/apply/info/${slugify(house.uuid)}/`,
                 component: require.resolve("./src/templates/apply/HouseInfo.js"),
                 context: { house },
             })
@@ -57,9 +57,11 @@ exports.createPages = async ({ actions: { createPage } }) => {
                 name = "cookie-policy"
             } else if (policy.code_name === "ToS") {
                 name = "terms-of-service"
+            } else {
+                return
             }
             createPage({
-                path: `/pages/policy/${name}`,
+                path: `/${name}/`,
                 component: require.resolve("./src/templates/policy/PolicyTemplate.js"),
                 context: { policy },
             })
