@@ -1,8 +1,8 @@
-import React, {Component} from "react";
-import {reverse} from "named-urls";
-import {PageRoutes} from "components/routes";
+import React, { Component } from "react"
+import { reverse } from "named-urls"
+import { PageRoutes } from "components/routes"
 
-import "./Footer.css";
+import "./Footer.css"
 
 export default class AnonFooterComponent extends Component {
     render() {
@@ -29,22 +29,22 @@ export default class AnonFooterComponent extends Component {
                             <div className="list">
                                 <ul className="list-unstyled">
                                     <li>
-                                        <a href={reverse(PageRoutes.home)}>Terms of Service</a>
+                                        <a href={reverse(PageRoutes.termsOfService)}>Terms of Service</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(PageRoutes.home)}>Privacy Policy</a>
+                                        <a href={reverse(PageRoutes.privacyPolicy)}>Privacy Policy</a>
                                     </li>
                                     <li>
                                         <a href={reverse(PageRoutes.faq)}>FAQs</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(PageRoutes.home)}>Cookies</a>
+                                        <a href={reverse(PageRoutes.cookiePolicy)}>Cookies</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(PageRoutes.blogs)}>Blog</a>
+                                        <a href={reverse(PageRoutes.blog.base)}>Blog</a>
                                     </li>
                                     <li>
-                                        <a href={reverse(PageRoutes.home)}>About Us</a>
+                                        <a href={reverse(PageRoutes.aboutUs)}>About Us</a>
                                     </li>
                                     <li>
                                         <a href={reverse(PageRoutes.contactUs)}>Help</a>
@@ -97,6 +97,6 @@ export default class AnonFooterComponent extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
