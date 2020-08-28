@@ -8,7 +8,9 @@ const FAQPage = props => {
         <Layout {...props}>
             <SEO
                 title={`FAQ: Rentality: Creating a Global Community for Mid-Term Rental`}
-                description={`Mid term rentals in. Explore from wide range of rentals in today!`}
+                description={`Here are most frequently asked questions about registration, 
+                booking, payment & all about mid-term rentals for rent in Sydney, 
+                Melbourne, Brisbane, Perth, Gold Coast and surrounding areas.`}
                 pathname={props.location.pathname}
             />
             <FAQ {...props} />

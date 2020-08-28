@@ -8,7 +8,8 @@ const ContactUsPage = props => {
         <Layout {...props}>
             <SEO
                 title={`Contact Us: Rentality: Creating a Global Community for Mid-Term Rental`}
-                description={`Mid term rentals in. Explore from wide range of rentals in today!`}
+                description={`If you have any questions, concerns or issues 
+                regarding renting home or want to list your home reach us at admin@rentality.com.au`}
                 pathname={props.location.pathname}
             />
             <ContactUs {...props} />

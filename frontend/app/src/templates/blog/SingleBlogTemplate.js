@@ -9,7 +9,7 @@ const SingleBlogTemplate = props => {
     return (
         <Layout {...props}>
             <SEO
-                title={`${article.title}: Rentality`}
+                title={`${article.title}: Rentality: Creating a Global Community for Mid-Term Rental`}
                 description={article.description}
                 image={article.thumbnail}
                 imageAlt={article.thumbnail_alt_tags}

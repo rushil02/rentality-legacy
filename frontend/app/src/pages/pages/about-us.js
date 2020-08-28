@@ -8,7 +8,9 @@ const AboutPage = props => {
         <Layout {...props}>
             <SEO
                 title={`About Us: Rentality: Creating a Global Community for Mid-Term Rental`}
-                description={`Mid term rentals in. Explore from wide range of rentals in today!`}
+                description={`At Rentality, we offer a marketplace that solves the problem 
+                of finding affordable mid-term home rentals for rent in Melbourne, Sydney,
+                Brisbane, Perth, Gold Coast and surrounding areas.`}
                 pathname={props.location.pathname}
             />
             <AboutUs {...props} />

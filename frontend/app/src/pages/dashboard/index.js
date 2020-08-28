@@ -7,7 +7,7 @@ const DashboardPage = props => (
     <Layout {...props}>
         <SEO
             title="Dashboard: Rentality: Creating a Global Community for Mid-Term Rental"
-            description=""
+            description="Quickly review your booking and property listing details"
             pathname={props.location.pathname}
         />
         <DashboardContainer {...props} />
