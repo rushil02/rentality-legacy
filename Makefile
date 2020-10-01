@@ -118,3 +118,18 @@ publish:  ## Push all containers to registry
 	COMMIT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)" GIT_HEAD_HASH="$$(git rev-parse --short HEAD)" docker-compose -f docker-compose.prod-build.yml push
 
 release: ci-build publish ## Make a release by building and publishing images as per docker-compose.prod-build.yml
+
+
+###### Other ######
+
+
+### Stripe ###
+
+# Stripe WebHook container
+stripe-webhook:  ## Start the stripe CLI webHook
+	@cd ./bin/stripe_cli/webhook && docker run --rm -it $$(docker build -q .)
+
+# Stripe CLI
+stripe-test-cli:  ## Start the stripe CLI via docker
+	@echo "Run 'stripe login' first and 'stripe help' for how to work with it."
+	@docker run --rm -it --entrypoint sh stripe/stripe-cli:latest
