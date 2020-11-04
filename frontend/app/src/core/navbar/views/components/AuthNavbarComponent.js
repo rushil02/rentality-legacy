@@ -1,27 +1,28 @@
 import React, { Component } from "react"
 import { reverse } from "named-urls"
-import routes, {PageRoutes} from "components/routes"
+import routes, { PageRoutes } from "components/routes"
 import styles from "./Navbar.module.css"
-import Dropdown from "react-bootstrap/Dropdown";
+import Dropdown from "react-bootstrap/Dropdown"
+import profilePlaceholderThumbnail from "images/placeholders/profile.png"
 
 export default class AuthNavbarComponent extends Component {
     constructor(props) {
-        super(props);
-        this.state = {};
-        this.liPersonRef = React.createRef();
+        super(props)
+        this.state = {}
+        this.liPersonRef = React.createRef()
     }
 
     handleResize = () => {
-        this.props.handleGrayDiv(this.liPersonRef.current.getBoundingClientRect().x);
-    };
+        this.props.handleGrayDiv(this.liPersonRef.current.getBoundingClientRect().x)
+    }
 
     componentDidMount() {
-        window.addEventListener("resize", this.handleResize);
-        this.handleResize();
+        window.addEventListener("resize", this.handleResize)
+        this.handleResize()
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize);
+        window.removeEventListener("resize", this.handleResize)
     }
 
     render() {
@@ -34,7 +35,7 @@ export default class AuthNavbarComponent extends Component {
                             <Dropdown.Toggle bsPrefix={styles.dropdownToggle} as="a">
                                 Message<span>0</span>
                             </Dropdown.Toggle>
-                            <Dropdown.Menu alignRight/>
+                            <Dropdown.Menu alignRight />
                         </Dropdown>
                     </li>
                     <li className={"list-inline-item " + styles.notification}>
@@ -42,18 +43,14 @@ export default class AuthNavbarComponent extends Component {
                             <Dropdown.Toggle bsPrefix={styles.dropdownToggle} as="a">
                                 Notifications<span>0</span>
                             </Dropdown.Toggle>
-                            <Dropdown.Menu alignRight/>
+                            <Dropdown.Menu alignRight />
                         </Dropdown>
                     </li>
                     <li ref={this.liPersonRef} className={"list-inline-item " + styles.person}>
-                        <a href={reverse(PageRoutes.dashboard.base)} style={{textTransform: "capitalize"}}>
+                        <a href={reverse(PageRoutes.dashboard.base)} style={{ textTransform: "capitalize" }}>
                             <div className={styles.image}>
                                 <img
-                                    src={
-                                        profileImage
-                                            ? profileImage
-                                            : reverse(routes.static_route) + "image/placeholders/profile.png"
-                                    }
+                                    src={profileImage ? profileImage : profilePlaceholderThumbnail}
                                     className="w-100"
                                     alt="Profile"
                                 />
@@ -84,6 +81,6 @@ export default class AuthNavbarComponent extends Component {
                     </li>
                 </ul>
             </React.Fragment>
-        );
+        )
     }
 }

@@ -4,404 +4,402 @@
 {% load thumbnail %}
 
 {% block additional_scripts %}
-    <link href="{% static 'style/auto-comp.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'style/auto-comp.css' %}" rel="stylesheet" type="text/css">
 
 {% endblock %}
 
 
 {% block body %}
-    <!-- mobile menu start -->
-    <div class="mobile-menu"></div>
-    <div class="mobile-menu-content"></div>
-    <!-- mobile menu end -->
-    <!-- menu start -->
-    <div class="menu session">
-        <!-- alert start -->
-        <div class="alerts-holder">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-auto-hide {% if message.tags %} {{ message.tags }} {% endif %}">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <p>{{ message }}</p>
-                    </div>
-                {% endfor %}
-            {% endif %}
+<!-- mobile menu start -->
+<div class="mobile-menu"></div>
+<div class="mobile-menu-content"></div>
+<!-- mobile menu end -->
+<!-- menu start -->
+<div class="menu session">
+    <!-- alert start -->
+    <div class="alerts-holder">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-auto-hide {% if message.tags %} {{ message.tags }} {% endif %}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>{{ message }}</p>
         </div>
-        <!-- alert end -->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-9 col-md-4 col-lg-3 col-xl-4 left">
-                    <a href="{% url 'user:home_page' %}" class="logo"></a>
-                </div>
-                <div class="col-3 col-md-8 col-lg-6 col-xl-5 center align-self-center">
-                    <ul class="list-inline">
-                        <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
-                        <li class="list-inline-item"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="faq/" %}">FAQ</a></li>
-                        <li class="list-inline-item"><a
-                                href="{% url 'django.contrib.flatpages.views.flatpage' url="how-it-works/" %}">How It
+        {% endfor %}
+        {% endif %}
+    </div>
+    <!-- alert end -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-9 col-md-4 col-lg-3 col-xl-4 left">
+                <a href="{% url 'user:home_page' %}" class="logo"></a>
+            </div>
+            <div class="col-3 col-md-8 col-lg-6 col-xl-5 center align-self-center">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
+                    <li class="list-inline-item"><a href="/faq">FAQ</a></li>
+                    <li class="list-inline-item"><a href="/how-it-works">How It
                             Works</a></li>
-                        <li class="list-inline-item"><a href="/rep/house/list/create/">List Your Home</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-12 col-lg-3 col-xl-3 right align-self-center">
-                    <ul class="list-inline">
-                        {% block right_menu %}
-                        {% endblock %}
-                    </ul>
-                </div>
+                    <li class="list-inline-item"><a href="/rep/house/list/create/">List Your Home</a></li>
+                </ul>
+            </div>
+            <div class="col-md-12 col-lg-3 col-xl-3 right align-self-center">
+                <ul class="list-inline">
+                    {% block right_menu %}
+                    {% endblock %}
+                </ul>
             </div>
         </div>
     </div>
-    <!-- menu end -->
-    <!-- header start -->
-    <div class="header d-flex">
-        <div class="w-100 align-self-center">
-            <div class="container">
-                <h1 class="title">Creating a Global Community for <br /> Mid-Term Rental</h1>
-                <h2 class="sub-title">Book your Home for the next few months </h2>
-            </div>
+</div>
+<!-- menu end -->
+<!-- header start -->
+<div class="header d-flex">
+    <div class="w-100 align-self-center">
+        <div class="container">
+            <h1 class="title">Creating a Global Community for <br /> Mid-Term Rental</h1>
+            <h2 class="sub-title">Book your Home for the next few months </h2>
         </div>
-        <div class="search">
-            <div class="container-fluid search-container">
-                <div class="row">
-                    <div class="col-xl-1"></div>
-                    <div class="col-12 col-xl-10">
-                        <form autocomplete="off" action="/rep/search/" method="GET" id="search_form">
-                            {{ search_form.start_date }}
-                            {{ search_form.end_date }}
-                            <div class="detail">
-                                <div class="row" style="padding-left: 10px">
-                                    <div class="col-md-5">
-                                        {{ search_form.location }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div style="position: relative">
-                                            <div class="dropdown">
-                                                <input type="text" id="placeholder-date" class="form-control date"
-                                                       readonly placeholder="Select Dates"
-                                                       data-toggle="dropdown" required>
-                                                <div class="dropdown-menu">
-                                                    <div class="calendar"></div>
-                                                </div>
+    </div>
+    <div class="search">
+        <div class="container-fluid search-container">
+            <div class="row">
+                <div class="col-xl-1"></div>
+                <div class="col-12 col-xl-10">
+                    <form autocomplete="off" action="/rep/search/" method="GET" id="search_form">
+                        {{ search_form.start_date }}
+                        {{ search_form.end_date }}
+                        <div class="detail">
+                            <div class="row" style="padding-left: 10px">
+                                <div class="col-md-5">
+                                    {{ search_form.location }}
+                                </div>
+                                <div class="col-md-4">
+                                    <div style="position: relative">
+                                        <div class="dropdown">
+                                            <input type="text" id="placeholder-date" class="form-control date" readonly
+                                                placeholder="Select Dates" data-toggle="dropdown" required>
+                                            <div class="dropdown-menu">
+                                                <div class="calendar"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-link btn-block">Search</button>
-                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-link btn-block">Search</button>
                                 </div>
                             </div>
-                        </form>
-                        <div class="cities">
-                            <div id="city">
-                                <label class="btn btn-link">
-                                    Melbourne
-                                </label>
-                                <label class="btn btn-link">
-                                    Sydney
-                                </label>
-                                <label class="btn btn-link">
-                                    Brisbane
-                                </label>
-                                <label class="btn btn-link">
-                                    Adelaide
-                                </label>
-                                <label class="btn btn-link">
-                                    Canberra
-                                </label>
-                                <label class="btn btn-link">
-                                    Perth
-                                </label>
-                                <label class="btn btn-link">
-                                    Gold Coast
-                                </label>
-                            </div>
+                        </div>
+                    </form>
+                    <div class="cities">
+                        <div id="city">
+                            <label class="btn btn-link">
+                                Melbourne
+                            </label>
+                            <label class="btn btn-link">
+                                Sydney
+                            </label>
+                            <label class="btn btn-link">
+                                Brisbane
+                            </label>
+                            <label class="btn btn-link">
+                                Adelaide
+                            </label>
+                            <label class="btn btn-link">
+                                Canberra
+                            </label>
+                            <label class="btn btn-link">
+                                Perth
+                            </label>
+                            <label class="btn btn-link">
+                                Gold Coast
+                            </label>
                         </div>
                     </div>
-                    <div class="col-xl-1"></div>
                 </div>
+                <div class="col-xl-1"></div>
             </div>
         </div>
     </div>
-    <!-- header end -->
-    <!-- bests start -->
-    <div class="bests">
-        <div class="container">
-            <h1 class="title">Recommended for you</h1>
+</div>
+<!-- header end -->
+<!-- bests start -->
+<div class="bests">
+    <div class="container">
+        <h1 class="title">Recommended for you</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="sub-title"></h2>
+            </div>
+            <div class="col-md-4 text-right align-self-end">
+                {#                    <a href="{% url 'user:search' %}" class="load-more">Load More</a>#}
+            </div>
+        </div>
+        <div class="lists">
             <div class="row">
-                <div class="col-md-8">
-                    <h2 class="sub-title"></h2>
-                </div>
-                <div class="col-md-4 text-right align-self-end">
-{#                    <a href="{% url 'user:search' %}" class="load-more">Load More</a>#}
-                </div>
-            </div>
-            <div class="lists">
-                <div class="row">
-                    {% static "image/placeholders/property/home-page-small.png" as default_property_small %}
-                    {% for house in house_list|slice:":8" %}
-                        <div class="col-md-4 col-lg-3">
-                            <a href="/rep/apply/property/info/{{house.uuid }}" class="list">
-                                <div class="image">
-                                    <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_small'|default:default_property_small }}"
-                                         class="w-100" alt="" title="">
-                                    <div class="{% if house.is_marked_leased %} leased-img-tag {% else %} d-none {% endif %}">
-                                        LEASED
-                                    </div>
+                {% static "image/placeholders/property/home-page-small.png" as default_property_small %}
+                {% for house in house_list|slice:":8" %}
+                <div class="col-md-4 col-lg-3">
+                    <a href="/rep/apply/property/info/{{house.uuid }}" class="list">
+                        <div class="image">
+                            <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_small'|default:default_property_small }}"
+                                class="w-100" alt="" title="">
+                            <div class="{% if house.is_marked_leased %} leased-img-tag {% else %} d-none {% endif %}">
+                                LEASED
+                            </div>
 
-                                </div>
-                                <h1>{{ house.title|title }}<br/>{{ house.home_type }}</h1>
-                                <h2>{{ house.get_location|title }}</h2>
-                                <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
-                                </div>
-                                <div>Rent<span>{{ house.rent }} AUD/week</span></div>
-                            </a>
                         </div>
-                    {% endfor %}
+                        <h1>{{ house.title|title }}<br />{{ house.home_type }}</h1>
+                        <h2>{{ house.get_location|title }}</h2>
+                        <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
+                        </div>
+                        <div>Rent<span>{{ house.rent }} AUD/week</span></div>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
-    <!-- bests end -->
+</div>
+<!-- bests end -->
 
-    <!-- video demo -->
-    <div class="video-demo">
-        <div class="container">
-            <div class="video-header">
-                <h1 class="title">How does Rentality Work?</h1>
-                <h2 class="sub-title">Check out the video below to see exactly how easy it is to rent with Rentality.</h2>
-            </div>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/2JOkRAdTDNE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
-                style="position:absolute; top:0; left:0;width: 100%; height: 100%;"
-                ></iframe>
-            </div>
+<!-- video demo -->
+<div class="video-demo">
+    <div class="container">
+        <div class="video-header">
+            <h1 class="title">How does Rentality Work?</h1>
+            <h2 class="sub-title">Check out the video below to see exactly how easy it is to rent with Rentality.</h2>
+        </div>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/2JOkRAdTDNE" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+                style="position:absolute; top:0; left:0;width: 100%; height: 100%;"></iframe>
         </div>
     </div>
-    <!-- video demo end -->
+</div>
+<!-- video demo end -->
 
-    <!-- cities start -->
-    <div class="cities">
-        <div class="container">
-            <h1 class="title">Discover Furnished Apartments</h1>
-            <h2 class="sub-title"></h2>
-            <div class="big-lists">
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="/rep/search/?location=Melbourne" class="big-list">
+<!-- cities start -->
+<div class="cities">
+    <div class="container">
+        <h1 class="title">Discover Furnished Apartments</h1>
+        <h2 class="sub-title"></h2>
+        <div class="big-lists">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="/rep/search/?location=Melbourne" class="big-list">
+                        <div class="image">
+                            <img src="{% static 'image/cities/melbourne-home-page.jpg' %}" class="w-100" alt=""
+                                title="">
+                            <div class="bottom">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h1>Melbourne<br>Australia</h1>
+                                    </div>
+                                    <div class="col-6 align-self-center text-right">
+                                        {#                                            34533#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <div class="big-lists-right">
+                        <a href="/rep/search/?location=Perth" class="big-list">
                             <div class="image">
-                                <img src="{% static 'image/cities/melbourne-home-page.jpg' %}" class="w-100" alt=""
-                                     title="">
+                                <img src="{% static 'image/cities/perth-home-page.jpg' %}" class="w-100" alt=""
+                                    title="">
                                 <div class="bottom">
                                     <div class="row">
                                         <div class="col-6">
-                                            <h1>Melbourne<br>Australia</h1>
+                                            <h1>Perth<br>Australia</h1>
                                         </div>
                                         <div class="col-6 align-self-center text-right">
-                                            {#                                            34533#}
+                                            {#                                                1644#}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/rep/search/?location=Sydney" class="big-list">
+                            <div class="image">
+                                <img src="{% static 'image/cities/sydney-home-page.jpg' %}" class="w-100" alt=""
+                                    title="">
+                                <div class="bottom">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h1>Sydney<br>Australia</h1>
+                                        </div>
+                                        <div class="col-6 align-self-center text-right">
+                                            {#                                                2865#}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </a>
                     </div>
-                    <div class="col-md-6">
-                        <div class="big-lists-right">
-                            <a href="/rep/search/?location=Perth" class="big-list">
-                                <div class="image">
-                                    <img src="{% static 'image/cities/perth-home-page.jpg' %}" class="w-100" alt=""
-                                         title="">
-                                    <div class="bottom">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h1>Perth<br>Australia</h1>
-                                            </div>
-                                            <div class="col-6 align-self-center text-right">
-                                                {#                                                1644#}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="/rep/search/?location=Sydney" class="big-list">
-                                <div class="image">
-                                    <img src="{% static 'image/cities/sydney-home-page.jpg' %}" class="w-100" alt=""
-                                         title="">
-                                    <div class="bottom">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h1>Sydney<br>Australia</h1>
-                                            </div>
-                                            <div class="col-6 align-self-center text-right">
-                                                {#                                                2865#}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="/rep/search/" class="load-more">Load More</a>
+            </div>
+        </div>
+        <div class="lists">
             <div class="row">
-                <div class="col-md-8">
-                </div>
-                <div class="col-md-4 text-right">
-                    <a href="/rep/search/" class="load-more">Load More</a>
-                </div>
-            </div>
-            <div class="lists">
-                <div class="row">
-                    {% static "image/placeholders/property/home-page-large.png" as default_property_large %}
-                    {% for house in house_list|slice:"8:11" %}
-                        <div class="col-md-4">
-                            <a href="/rep/apply/property/info/{{ house.uuid }}" class="list">
-                                <div class="image">
-                                    <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_large'|default:default_property_large }}"
-                                         class="w-100" alt="" title="">
-                                </div>
-                                <h1>{{ house.title|title }}<br/>{{ house.home_type }}</h1>
-                                <h2>{{ house.get_location|title }}</h2>
-                                <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
-                                </div>
-                                <div>Rent<span>{{ house.rent }} AUD/week</span></div>
-                            </a>
+                {% static "image/placeholders/property/home-page-large.png" as default_property_large %}
+                {% for house in house_list|slice:"8:11" %}
+                <div class="col-md-4">
+                    <a href="/rep/apply/property/info/{{ house.uuid }}" class="list">
+                        <div class="image">
+                            <img src="{{ house.get_thumbnail|thumbnail_url:'house_home_page_large'|default:default_property_large }}"
+                                class="w-100" alt="" title="">
                         </div>
-                    {% endfor %}
+                        <h1>{{ house.title|title }}<br />{{ house.home_type }}</h1>
+                        <h2>{{ house.get_location|title }}</h2>
+                        <div>Min<span>{{ house.min_stay_weeks }} week{{ house.min_stay_weeks|pluralize }}</span>
+                        </div>
+                        <div>Rent<span>{{ house.rent }} AUD/week</span></div>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
-    <!-- cities end -->
-    <!-- logo start -->
-    <div class="logo">
-        <div class="loop owl-carousel owl-theme">
-            <div class="item">
-                <div class="list">
-                    <img src="{% static 'image/logo/1.png' %}" alt="" title="">
-                </div>
+</div>
+<!-- cities end -->
+<!-- logo start -->
+<div class="logo">
+    <div class="loop owl-carousel owl-theme">
+        <div class="item">
+            <div class="list">
+                <img src="{% static 'image/logo/1.png' %}" alt="" title="">
             </div>
-            <div class="item">
-                <div class="list">
-                    <img src="{% static 'image/logo/3.png' %}" alt="" title="">
-                </div>
+        </div>
+        <div class="item">
+            <div class="list">
+                <img src="{% static 'image/logo/3.png' %}" alt="" title="">
             </div>
-            <div class="item">
-                <div class="list">
-                    <img src="{% static 'image/logo/4.png' %}" alt="" title="">
-                </div>
+        </div>
+        <div class="item">
+            <div class="list">
+                <img src="{% static 'image/logo/4.png' %}" alt="" title="">
             </div>
-            <div class="item">
-                <div class="list">
-                    <img src="{% static 'image/logo/5.png' %}" alt="" title="">
-                </div>
+        </div>
+        <div class="item">
+            <div class="list">
+                <img src="{% static 'image/logo/5.png' %}" alt="" title="">
             </div>
-            <div class="item">
-                <div class="list">
-                    <img src="{% static 'image/logo/6.png' %}" alt="" title="">
-                </div>
+        </div>
+        <div class="item">
+            <div class="list">
+                <img src="{% static 'image/logo/6.png' %}" alt="" title="">
             </div>
         </div>
     </div>
-    <!-- logo end -->
-    <!-- start now start -->
-    <div class="start-now">
-        <div class="container">
-            <div class="lists">
-                <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-4">
-                        <a href="/rep/house/list/create/" class="list left">
-                            <div class="image">
-                                <img src="{% static 'image/start-now/1.png' %}" class="w-100" alt="" title="">
-                            </div>
-                            <h1>Rent your House</h1>
-                            {#                            <p>#}
-                            {#                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor#}
-                            {#                                incididunt#}
-                            {#                                ut labore et dolore magna aliqua.#}
-                            {#                            </p>#}
-                        </a>
-                    </div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-4">
-                        <a href="/rep/search/" class="list right">
-                            <div class="image">
-                                <img src="{% static 'image/start-now/2.png' %}" class="w-100" alt="" title="">
-                            </div>
-                            <h1>Looking for a House</h1>
-                            {#                            <p>#}
-                            {#                                We have a fully functional online query handling system to assist you in using our#}
-                            {#                                online#}
-                            {#                                trading platform.#}
-                            {#                            </p>#}
-                        </a>
-                    </div>
-                    <div class="col-md-1"></div>
+</div>
+<!-- logo end -->
+<!-- start now start -->
+<div class="start-now">
+    <div class="container">
+        <div class="lists">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    <a href="/rep/house/list/create/" class="list left">
+                        <div class="image">
+                            <img src="{% static 'image/start-now/1.png' %}" class="w-100" alt="" title="">
+                        </div>
+                        <h1>Rent your House</h1>
+                        {#                            <p>#}
+                        {#                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor#}
+                        {#                                incididunt#}
+                        {#                                ut labore et dolore magna aliqua.#}
+                        {#                            </p>#}
+                    </a>
                 </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <a href="/rep/search/" class="list right">
+                        <div class="image">
+                            <img src="{% static 'image/start-now/2.png' %}" class="w-100" alt="" title="">
+                        </div>
+                        <h1>Looking for a House</h1>
+                        {#                            <p>#}
+                        {#                                We have a fully functional online query handling system to assist you in using our#}
+                        {#                                online#}
+                        {#                                trading platform.#}
+                        {#                            </p>#}
+                    </a>
+                </div>
+                <div class="col-md-1"></div>
             </div>
         </div>
     </div>
-    <!-- start not end -->
+</div>
+<!-- start not end -->
 
-    <!-- color boxes start -->
-    {#    <div class="color-boxes">#}
-    {#        <div class="container">#}
-    {#            <div class="lists">#}
-    {#                <div class="row">#}
-    {#                    <div class="col-6 col-md-3">#}
-    {#                        <div class="list">#}
-    {#                            <div class="image">#}
-    {#                                <img src="{% static 'image/color-boxes/1.svg' %}" alt="" title="">#}
-    {#                            </div>#}
-    {#                            <h1>Home Listed</h1>#}
-    {#                            <p>#}
-    {#                                <span class="counter">132</span>#}
-    {#                            </p>#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {#                    <div class="col-6 col-md-3">#}
-    {#                        <div class="list">#}
-    {#                            <div class="image">#}
-    {#                                <img src="{% static 'image/color-boxes/2.svg' %}" alt="" title="">#}
-    {#                            </div>#}
-    {#                            <h1>Active User</h1>#}
-    {#                            <p>#}
-    {#                                <span class="counter">1187</span>#}
-    {#                            </p>#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {#                    <div class="col-6 col-md-3">#}
-    {#                        <div class="list">#}
-    {#                            <div class="image">#}
-    {#                                <img src="{% static 'image/color-boxes/3.svg' %}" alt="" title="">#}
-    {#                            </div>#}
-    {#                            <h1>Total Leased</h1>#}
-    {#                            <p>#}
-    {#                                <span class="counter">86</span>#}
-    {#                            </p>#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {#                    <div class="col-6 col-md-3">#}
-    {#                        <div class="list">#}
-    {#                            <div class="image">#}
-    {#                                <img src="{% static 'image/color-boxes/4.svg' %}" alt="" title="">#}
-    {#                            </div>#}
-    {#                            <h1>Satisfied Customer</h1>#}
-    {#                            <p>#}
-    {#                                <span class="counter">97</span>%#}
-    {#                            </p>#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-    <!-- color boxes end -->
+<!-- color boxes start -->
+{#    <div class="color-boxes">#}
+{#        <div class="container">#}
+{#            <div class="lists">#}
+{#                <div class="row">#}
+{#                    <div class="col-6 col-md-3">#}
+{#                        <div class="list">#}
+{#                            <div class="image">#}
+{#                                <img src="{% static 'image/color-boxes/1.svg' %}" alt="" title="">#}
+{#                            </div>#}
+{#                            <h1>Home Listed</h1>#}
+{#                            <p>#}
+{#                                <span class="counter">132</span>#}
+{#                            </p>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-6 col-md-3">#}
+{#                        <div class="list">#}
+{#                            <div class="image">#}
+{#                                <img src="{% static 'image/color-boxes/2.svg' %}" alt="" title="">#}
+{#                            </div>#}
+{#                            <h1>Active User</h1>#}
+{#                            <p>#}
+{#                                <span class="counter">1187</span>#}
+{#                            </p>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-6 col-md-3">#}
+{#                        <div class="list">#}
+{#                            <div class="image">#}
+{#                                <img src="{% static 'image/color-boxes/3.svg' %}" alt="" title="">#}
+{#                            </div>#}
+{#                            <h1>Total Leased</h1>#}
+{#                            <p>#}
+{#                                <span class="counter">86</span>#}
+{#                            </p>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-6 col-md-3">#}
+{#                        <div class="list">#}
+{#                            <div class="image">#}
+{#                                <img src="{% static 'image/color-boxes/4.svg' %}" alt="" title="">#}
+{#                            </div>#}
+{#                            <h1>Satisfied Customer</h1>#}
+{#                            <p>#}
+{#                                <span class="counter">97</span>%#}
+{#                            </p>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+<!-- color boxes end -->
 
-    <!-- comment start
+<!-- comment start
     <div class="comment">
         <div class="capsule">
             <div class="loop owl-carousel owl-theme">
@@ -454,104 +452,107 @@
     </div>
      comment end -->
 
-    {% block subscription_section %}
+{% block subscription_section %}
 
-    {% endblock %}
-    <!-- footer start -->
-    {% block footer %}
+{% endblock %}
+<!-- footer start -->
+{% block footer %}
 
-    {% endblock %}
-    <!-- footer end -->
+{% endblock %}
+<!-- footer end -->
 {% endblock body %}
 
 {% block page_scripts %}
-    <!-- counter start -->
-    <script src="{% static 'script/jquery.waypoints.min.js' %}"></script>
-    <script src="{% static 'script/jquery.counterup.min.js' %}"></script>
-    <script>
-        {#$(document).ready(function () {#}
-        {#    $('.counter').counterUp({#}
-        {#        delay: 10,#}
-        {#        time: 1500#}
-        {#    });#}
-        {#);#}
-    </script>
-    <!-- counter end -->
-
-    <!-- Location Search start -->
-    <script>
-        let curr_search, curr_choice;
-
-        function get_verbose(obj) {
-            return obj['_source']['verbose']
+<!-- counter start -->
+<script src="{% static 'script/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'script/jquery.counterup.min.js' %}"></script>
+<script>
+    {#$(document).ready(function () {# }
+        {
+            #    $('.counter').counterUp({ # }
+        { #        delay: 10, # }
+        { #        time: 1500# }
+        { #    }); #
         }
+        { #);#
+    }
+</script>
+<!-- counter end -->
 
-        function get_parent_verbose(obj) {
-            return obj['_source']['parent_verbose']
+<!-- Location Search start -->
+<script>
+    let curr_search, curr_choice;
+
+    function get_verbose(obj) {
+        return obj['_source']['verbose']
+    }
+
+    function get_parent_verbose(obj) {
+        return obj['_source']['parent_verbose']
+    }
+
+    function closeAllLists(elmnt) {
+        $('#id_js_autocomplete-list').remove();
+    }
+
+    function display_autocomplete(inp, arr) {
+        closeAllLists();
+
+        a = document.createElement("DIV");
+        a.setAttribute("id", "id_js_autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+
+        inp.parentNode.appendChild(a);
+        curr_search = {};
+
+        for (i = 0; i < arr.length; i++) {
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            b.innerHTML = "<strong>" + get_verbose(arr[i]) + "</strong> " + get_parent_verbose(arr[i]);
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML += "<input type='hidden' value='" + arr[i]['_id'] + "'>";
+            curr_search[arr[i]['_id']] = arr[i]['_source'];
+
+            b.addEventListener("click", function (e) {
+                /*insert the value for the autocomplete text field:*/
+                inp.value = curr_search[this.getElementsByTagName("input")[0].value]['verbose'];
+                curr_choice = this.getElementsByTagName("input")[0].value;
+                closeAllLists();
+            });
+            a.appendChild(b);
         }
+    }
 
-        function closeAllLists(elmnt) {
-            $('#id_js_autocomplete-list').remove();
-        }
+    var timeout = null;
+    $('input#id_location').keyup(function (inp) {
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+            $.getJSON("{% url 'es:loc_sugg' %}", { 'location': inp.target.value }, function (data) {
+                display_autocomplete(inp.target, data);
+            })
+        }, 500);
+    });
 
-        function display_autocomplete(inp, arr) {
-            closeAllLists();
+    $('#search_form').submit(function (e) {
+        $('#search_form').append($("<input>").attr("type", "hidden").attr("name", "loc_sugg").val(curr_choice));
+        return true;
+    })
 
-            a = document.createElement("DIV");
-            a.setAttribute("id", "id_js_autocomplete-list");
-            a.setAttribute("class", "autocomplete-items");
+</script>
+<!-- Location Search end -->
 
-            inp.parentNode.appendChild(a);
-            curr_search = {};
+{# FIXME: complete checks before submission #}
+<!-- Datepicker start -->
 
-            for (i = 0; i < arr.length; i++) {
-                /*create a DIV element for each matching element:*/
-                b = document.createElement("DIV");
-                /*make the matching letters bold:*/
-                b.innerHTML = "<strong>" + get_verbose(arr[i]) + "</strong> " + get_parent_verbose(arr[i]);
-                /*insert a input field that will hold the current array item's value:*/
-                b.innerHTML += "<input type='hidden' value='" + arr[i]['_id'] + "'>";
-                curr_search[arr[i]['_id']] = arr[i]['_source'];
+<!-- Datepicker end -->
 
-                b.addEventListener("click", function (e) {
-                    /*insert the value for the autocomplete text field:*/
-                    inp.value = curr_search[this.getElementsByTagName("input")[0].value]['verbose'];
-                    curr_choice = this.getElementsByTagName("input")[0].value;
-                    closeAllLists();
-                });
-                a.appendChild(b);
-            }
-        }
-
-        var timeout = null;
-        $('input#id_location').keyup(function (inp) {
-            clearTimeout(timeout);
-            timeout = setTimeout(function () {
-                $.getJSON("{% url 'es:loc_sugg' %}", {'location': inp.target.value}, function (data) {
-                    display_autocomplete(inp.target, data);
-                })
-            }, 500);
-        });
-
-        $('#search_form').submit(function (e) {
-            $('#search_form').append($("<input>").attr("type", "hidden").attr("name", "loc_sugg").val(curr_choice));
-            return true;
-        })
-
-    </script>
-    <!-- Location Search end -->
-
-    {# FIXME: complete checks before submission #}
-    <!-- Datepicker start -->
-
-    <!-- Datepicker end -->
-
-    <!-- Fast Search labels start -->
-    <script>
-        $('label.btn-link').click(function () {
-            window.location.href = '/rep/search/?location=' + this.innerText.trim();
-        })
-    </script>
-    <!-- Fast Search labels end -->
+<!-- Fast Search labels start -->
+<script>
+    $('label.btn-link').click(function () {
+        window.location.href = '/rep/search/?location=' + this.innerText.trim();
+    })
+</script>
+<!-- Fast Search labels end -->
 
 {% endblock page_scripts %}
