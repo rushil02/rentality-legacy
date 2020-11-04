@@ -113,7 +113,7 @@ class HouseView(APIView):
     def delete(self, request, house_uuid):
         house = self.get_object(house_uuid)
         self.check_object_permissions(request, house)
-        house.set_status('D')
+        house.update_status('D')
         house.save()
         return Response(status=status.HTTP_200_OK)
 
