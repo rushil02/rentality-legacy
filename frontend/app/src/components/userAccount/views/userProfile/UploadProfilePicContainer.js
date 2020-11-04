@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { deleteProfilePic, getProfilePicLink, uploadProfilePic } from "userAccount/services"
+import { deleteProfilePic, getProfilePicLink, uploadProfilePic } from "components/userAccount/services"
 import Dropzone from "react-dropzone"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPortrait, faTimes, faPencilAlt } from "@fortawesome/free-solid-svg-icons"
@@ -61,7 +61,7 @@ export default class UploadProfilePicContainer extends Component {
                                                     style={{
                                                         backgroundImage: `url(${this.state.imagePath})`,
                                                     }}
-                                                ></div>
+                                                />
                                                 <div className={styles.tools}>
                                                     <div className={styles.tool}>
                                                         <FontAwesomeIcon

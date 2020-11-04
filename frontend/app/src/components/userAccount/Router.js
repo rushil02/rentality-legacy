@@ -1,4 +1,4 @@
-import routes from "routes"
+import {PageRoutes} from "components/routes"
 import UserProfileContainer from "./views/userProfile/UserProfileContainer"
 import React, { Component } from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
@@ -17,10 +17,10 @@ export default class Router extends Component {
                         <Switch>
                             <Route
                                 exact
-                                path={routes.pages.user.userProfile}
+                                path={PageRoutes.user.userProfile}
                                 render={props => <UserProfileContainer />}
                             />
-                            <Route path={routes.pages.user.paymentInfo} render={props => <PayoutInfoContainer />} />
+                            <Route path={PageRoutes.user.paymentInfo} render={props => <PayoutInfoContainer />} />
                             <Route render={props => <Error404 />} />
                         </Switch>
                     </BrowserRouter>

@@ -1,7 +1,7 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
 import { reverse } from "named-urls"
-import routes from "routes"
+import {PageRoutes} from "components/routes"
 import styles from "./UserProfile.css"
 import UploadProfilePicContainer from "./UploadProfilePicContainer"
 import Select from "react-select"
@@ -97,7 +97,7 @@ export default function UserProfileComponent(props) {
                                         >
                                             <li className="list-inline-item">
                                                 <NavLink
-                                                    to={reverse(routes.pages.user.userProfile)}
+                                                    to={reverse(PageRoutes.user.userProfile)}
                                                     className={styles.btn + " btn btn-link"}
                                                     activeClassName={styles.active}
                                                 >
@@ -106,7 +106,7 @@ export default function UserProfileComponent(props) {
                                             </li>
                                             <li className="list-inline-item">
                                                 <a
-                                                    href={reverse(routes.pages.user.paymentInfo)}
+                                                    href={reverse(PageRoutes.user.paymentInfo)}
                                                     className={styles.btn + " btn btn-link"}
                                                 >
                                                     Payment Information

@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 
 import UserProfileComponent from "./UserProfileComponent"
-import { UserPII } from "userAccount/models"
-import { patchUserProfileData, getUserProfileData } from "userAccount/services"
+import { UserPII } from "components/userAccount/models"
+import { patchUserProfileData, getUserProfileData } from "components/userAccount/services"
 
 export default class UserProfileContainer extends Component {
     constructor(props) {
