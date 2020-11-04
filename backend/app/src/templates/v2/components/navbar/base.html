@@ -6,26 +6,26 @@
         <div class="col-3 col-md-8 col-lg-8 col-xl-4 center align-self-center">
             <ul class="list-inline">
                 <li class="list-inline-item"><a href="{% url 'user:home_page' %}">Home</a></li>
-                <li class="list-inline-item"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="faq/" %}">FAQ</a></li>
-                <li class="list-inline-item"><a href="{% url 'django.contrib.flatpages.views.flatpage' url="how-it-works/" %}">How It Works</a></li>
+                <li class="list-inline-item"><a href="/faq">FAQ</a></li>
+                <li class="list-inline-item"><a href="/how-it-works">How It Works</a></li>
                 <li class="list-inline-item"><a href="/rep/house/list/create/">List Your Home</a></li>
             </ul>
         </div>
         <div class="col-md-12 col-lg-12 col-xl-4 right align-self-center">
             <ul class="list-inline">
                 {% block user_menu %}
-                    {% if request.user.is_authenticated %}
-                        {% include 'components/navbar/user_menu/auth.html' %}
-                    {% else %}
-                        {% include 'components/navbar/user_menu/anon.html' %}
-                    {% endif %}
+                {% if request.user.is_authenticated %}
+                {% include 'components/navbar/user_menu/auth.html' %}
+                {% else %}
+                {% include 'components/navbar/user_menu/anon.html' %}
+                {% endif %}
                 {% endblock user_menu %}
             </ul>
         </div>
     </div>
 </div>
 {% block gray_element %}
-    {% if request.user.is_authenticated %}
-        <div class="gray"></div>
-    {% endif %}
+{% if request.user.is_authenticated %}
+<div class="gray"></div>
+{% endif %}
 {% endblock %}

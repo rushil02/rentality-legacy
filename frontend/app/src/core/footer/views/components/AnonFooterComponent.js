@@ -65,7 +65,7 @@ export default class AnonFooterComponent extends Component {
                                             </li>
 
                                             <li className="list-inline-item linkedin">
-                                                <a href="https://www.linkedin.com/company/rentality/)">
+                                                <a href="https://www.linkedin.com/company/rentality/">
                                                     <span>Linkedin</span>
                                                 </a>
                                             </li>
