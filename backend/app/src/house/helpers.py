@@ -94,7 +94,7 @@ def date_range_difference_residual(principal_range, *args):
             if sub_ranges['left']:
                 result.append(sub_ranges['left'])
             if sub_ranges['right']:
-                result.append(date_range_difference_residual(sub_ranges['right'], *args[1:]))
+                result.extend(date_range_difference_residual(sub_ranges['right'], *args[1:]))
             return result
     else:
         return [principal_range]
