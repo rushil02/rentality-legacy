@@ -18,7 +18,7 @@ class Action(object):
 
         self._next_state = None
 
-        # `payment_gateway.utils.PaymentGatewayTransaction` object
+        # `payment_gateway.utils.PaymentGatewayTransaction` object #FIXME: payment_gateway.adapters.base.PGTransaction ??? Why is it here?
         self.pgt = None
         # `financials.models.LedgerRecord` object
         self.ledger_record = None
@@ -55,6 +55,8 @@ class Action(object):
         """
         Explicitly override to pass if no function is to be performed.
         Set self.pgt here (None if no PG action)
+        :param payment_gateway: 'payment_gateway.utils.PaymentGateway'
+        :param application_db: 'Application.models.Application'
         """
         raise NotImplementedError
 
@@ -70,6 +72,11 @@ class Action(object):
         raise NotImplementedError
 
     def execute_all(self, application_db, payment_gateway):
+        """
+        :param application_db: 'Application.models.Application'
+        :param payment_gateway: '
+        :return:
+        """
         self.preprocess(application_db)
         self.execute_payment_gateway(payment_gateway, application_db)
         self.create_ledger_record(application_db)

@@ -1,3 +1,4 @@
+from financials.models import LedgerRecord
 from ..base import BehaviourBase, TenantAction, SystemAction
 from django.utils import timezone
 
@@ -43,16 +44,38 @@ class TenantExecuteIntent(TenantAction):
 
 class SystemExecuteIntent(SystemAction):
     """
-    Possible states -> Error, Booked
+    Possible states -> Booked
     """
     def execute_payment_gateway(self, payment_gateway, application_db):
-        self.pgt = payment_gateway.execute_intent(self.application)
+        self.pgt = payment_gateway.perform_pay_in()
 
     def create_ledger_record(self, application_db):
-        return False
+        self.ledger_record = LedgerRecord.objects.create(
+            description="Application - %s" % application_db.ref_code,
+            payment_type='Cr',
+            amount=self.pgt.amount,
+            pg_transaction=self.pgt.db
+        )
 
     def inform_entities(self, application_db):
         pass
+
+    def postprocess(self, application_db):
+        self._next_state = 'Booked'
+
+
+class SystemExecuteError(SystemAction):
+    def execute_payment_gateway(self, payment_gateway, application_db):
+        pass
+
+    def create_ledger_record(self, application_db):
+        pass
+
+    def inform_entities(self, application_db):
+        pass #TODO
+
+    def postprocess(self, application_db):
+        self._next_state = 'Error'
 
 
 class BehaviourA(BehaviourBase):
@@ -84,6 +107,7 @@ class BehaviourA(BehaviourBase):
         'system': {
             'Pending': {
                 'execute_intent': SystemExecuteIntent,
+                'error': SystemExecuteError,
             }
         }
     }

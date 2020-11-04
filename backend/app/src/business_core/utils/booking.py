@@ -21,6 +21,8 @@ class Booking(object):
     # region init
     def __init__(self, application, actor, state):
         """
+        self._payment_gateway - 'payment_gateway.utils.PaymentGateway'
+
         :param application: 'Application' object
         """
         self._application = application
@@ -37,7 +39,14 @@ class Booking(object):
         if self._db:
             return self._db
         else:
-            raise ValueError("DB object is not set for application")
+            raise ValueError("Application DB object is not set for Booking")
+
+    @property
+    def payment_gateway(self):
+        if self._payment_gateway:
+            return self._payment_gateway
+        else:
+            raise AttributeError("Payment Gateway is not set for Booking")
 
     def set_application_db(self, application_obj):
         self._db = application_obj
@@ -127,6 +136,21 @@ class Booking(object):
     def execute_intent(self):
         action = self.business_model.on_event(
             'execute_intent', self._actor
+        )
+        action.execute_all(self.db, self._payment_gateway)
+
+        if action.status_is_updated:
+            self.db.update_status(STATE_REVERSE_MAP_FOR_DB[action.next_state],
+                                  ACTOR_REVERSE_MAP_FOR_DB[self._actor])
+        self.db.update_account(
+            meta_info=action.get_meta_update_info()
+        )
+
+        return action
+
+    def execute_error(self):
+        action = self.business_model.on_event(
+            'execute_error', self._actor
         )
         action.execute_all(self.db, self._payment_gateway)
 

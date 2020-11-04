@@ -6,11 +6,33 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import DateRangeField
 from django.utils.translation import gettext_lazy as _
+from django.core.serializers.json import DjangoJSONEncoder
 
 from house.serializers import HouseAllDetailsSerializer
 from utils.helpers import merge_dicts
 from utils.model_utils import next_ref_code, get_nested_info
 from .utils import STATUS_CHOICES, ACTOR_CHOICES
+
+
+class ApplicationManager(models.Manager):
+    def find_application(self, identifiers):
+        """
+        Look up an application based on given identifiers
+        # TODO: Expand on identifiers as needed
+        :param identifiers: {
+                'meta': { id_key: id_value} # Lookup via `AccountDetail.meta`
+            }
+        :return: application object
+        """
+        lookup_parameters = dict()
+        if 'meta' in identifiers:
+            for meta_key in identifiers['meta']:
+                lookup_parameters["accountdetail__meta__%s" % meta_key] = identifiers['meta'][meta_key]
+
+        if not lookup_parameters:
+            raise AssertionError("Could not process identifiers")
+
+        return self.get_queryset().get(**lookup_parameters)
 
 
 class Application(models.Model):
@@ -29,6 +51,8 @@ class Application(models.Model):
     promotional_code = models.ManyToManyField('promotions.PromotionalCode', blank=True)  # FIXME: Needs to be plural
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    objects = ApplicationManager()
 
     def __str__(self):
         return "%s: '%s' applied for %s" % (self.ref_code, self.tenant, self.house)
@@ -146,6 +170,8 @@ class AccountDetail(models.Model):
     `tenant` - Freeze tenant information for an application
 
     `home_owner` - Freeze home_owner information for an application
+
+    `meta` - Other details required to process an application
     """
     application = models.OneToOneField('application.Application', on_delete=models.PROTECT)
 
@@ -158,9 +184,10 @@ class AccountDetail(models.Model):
     payment_gateway = models.ForeignKey('payment_gateway.PaymentGateway', on_delete=models.PROTECT)
 
     tenant = JSONField(default=dict)
+
     home_owner = JSONField(default=dict)
 
-    meta = JSONField(default=dict)
+    meta = JSONField(default=dict, encoder=DjangoJSONEncoder)
 
     def __str__(self):
         return "%s" % self.application
@@ -184,4 +211,3 @@ class AccountDetail(models.Model):
 
     def get_meta_info(self, key):
         return get_nested_info(self.meta, key)
-
