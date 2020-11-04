@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
+from application.models import Application
 from financials.models import PaymentGatewayTransaction
 from .adapters import get_adaptor_class
 from .models import LocationRestriction, Profile
@@ -35,6 +36,9 @@ class User(object):
 
         self.user_data = None  # Contains serialized request details
         self.http_request = None
+
+    def __str__(self):
+        return self.first_name
 
     def get_user_db_object(self):
         return self._user_db
@@ -79,8 +83,29 @@ class User(object):
             raise AssertionError("Request object is not loaded")
 
 
+class SystemActor(object):
+    """
+    Provides interface for inter-controller and/or intra-system communication.
+    Like information received from payment gateway outside of existing process example via webhook.
+    """
+
+    def __init__(self, event, data=None, http_request=None):
+        """
+        :param event:
+        :param data:
+        :param http_request:
+        """
+        self.event = event
+        self.data = data
+        self.http_request = http_request
+
+    def __str__(self):
+        return self.event
+
+
 class PaymentGateway(object):
     """
+    Payment Gateway Controller
     Models all the payment gateway processes used by the system.
     """
 
@@ -95,6 +120,7 @@ class PaymentGateway(object):
         self._homeowner = None
         self._tenant = None
         self._application_db = None
+        self._system_actor = None
 
     @property
     def db(self):
@@ -194,6 +220,16 @@ class PaymentGateway(object):
         )
         return cls(profile)
 
+    @classmethod
+    def process_webhook(cls, request, pg_code):
+        """
+        :param request:
+        :param pg_code:
+        :return:
+        """
+        event, data, application_identifier_info = get_adaptor_class(pg_code)().process_webhook_event(request)
+        return SystemActor(event, data=data), application_identifier_info
+
     def set_homeowner_user(self, user, user_request=None, request=None):
         """
         :param user: 'user_custom.models.User' object
@@ -231,6 +267,9 @@ class PaymentGateway(object):
 
     def set_application(self, application_db):
         self._application_db = application_db
+
+    def set_system_actor(self, sys_actor):
+        self._system_actor = sys_actor
 
     # endregion init
 
@@ -293,14 +332,23 @@ class PaymentGateway(object):
             self._payment_gateway.create_intent(self.homeowner, self.tenant, application)
         )
 
-    def perform_pay_in(self, amount):
-        self._payment_gateway.process_pay_in(amount)
+    def _set_attrs(self):
+        self._payment_gateway.set_attrs(
+            homeowner=self.homeowner,
+            tenant=self.tenant,
+            application_db=self.application,
+            sys_actor=self._system_actor
+        )
 
-    def perform_pay_out(self, amount):
-        self._payment_gateway.process_pay_out(amount)
+    def perform_pay_in(self):
+        self._set_attrs()
+        return self.record_monetary_transaction(self._payment_gateway.process_pay_in())
 
-    def perform_refund(self, amount):
-        self._payment_gateway.process_refund(amount)
+    def perform_pay_out(self):
+        self._payment_gateway.process_pay_out()
+
+    def perform_refund(self):
+        self._payment_gateway.process_refund()
 
     def create_pay_in_account(self, user, **kwargs):
         self._payment_gateway.create_home_owner_account()

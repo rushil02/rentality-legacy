@@ -6,7 +6,7 @@ Basic Expected behaviour    [Updated - 16 March 2019]
     - PCI compliance only affects card and bank information handing.
     - Accounts can be created without interfacing with PG (due to PCI) on frontend
       by user. This doesn't mean they necessarily have to; but are only equipped to
-      do so. On contrary, some PG's might constraint account creation by mandatory
+      do so. On contrary, some PGs might constraint account creation by mandatory
       association with Bank Account / Debit Card Details.
     - Payment Charges follow
     - Home Owner Accounts
@@ -19,6 +19,9 @@ class PGTransactionError(Exception):
     def __init__(self, user_message=None, meta_store=None):
         self.user_message = user_message
         self.meta_store = meta_store
+
+    def __str__(self):
+        return self.user_message
 
 
 class PGTransaction(object):
@@ -74,6 +77,15 @@ class PGTransaction(object):
         self._db = pgt_obj
 
     def record(self, user_type, tr_type, tr_id, amount):
+        """
+        Call if the transaction needs to be recorded in the DB - `financials.models.PaymentGatewayTransaction`.
+
+        :param user_type: `tenant` or homeowner`
+        :param tr_type: options listed in `PaymentGatewayTransaction.CORE_TRANSACTION_TYPES` and `PaymentGatewayTransaction.VIRTUAL_TRANSACTIONS`
+        :param tr_id: transaction id from payment gateway
+        :param amount: Amount
+        :return:
+        """
         self.tr_details = dict(
             user_type=user_type,
             tr_type=tr_type,
@@ -101,6 +113,28 @@ class PaymentGatewayBase(object):
 
     TRANSACTION_TYPES = ()
 
+    def __init__(self):
+        self._homeowner = None
+        self._tenant = None
+        self._application_db = None
+        self._sys_actor = None
+
+    def set_attrs(self, homeowner=None, tenant=None, application_db=None, sys_actor=None):
+        self._homeowner = homeowner
+        self._tenant = tenant
+        self._sys_actor = sys_actor
+        self._application_db = application_db
+
+    def process_webhook_event(self, request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        raise NotImplementedError
+
     # region Payout Account Methods required to be implemented in each payment gateway wrapper
 
     def create_payout_account(self, homeowner):
@@ -122,5 +156,8 @@ class PaymentGatewayBase(object):
 
     # region
     def create_intent(self, homeowner, tenant, application):
+        raise NotImplementedError
+
+    def process_pay_in(self):
         raise NotImplementedError
     # endregion

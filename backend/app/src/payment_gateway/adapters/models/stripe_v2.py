@@ -58,6 +58,37 @@ class StripePaymentGateway(PaymentGatewayBase):
         idempotency_key = str(uuid.uuid4())
         return self._execute_request(request, idempotency_key=idempotency_key, *args, **kwargs)
 
+    def process_webhook_event(self, request, *args, **kwargs):
+        """
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: sys_event, stripe_event, application_identifier_info
+        """
+        try:
+            stripe_event = stripe.Event.construct_from(
+                request.data, self.STRIPE_SECRET_KEY, stripe_version=self.STRIPE_VERSION
+            )
+        except ValueError as e:
+            # Invalid payload
+            raise PGTransactionError(user_message="Payload error")
+
+        # TODO: Increase the scope of stripe's event handling as required here
+        # Handle the event
+        if stripe_event.type == 'payment_intent.succeeded':
+            identifier = {'meta': {'stripe__payment_intent_id': stripe_event.data.object['id']}}
+            sys_event = 'execute_intent'
+
+        elif stripe_event.type == 'payment_intent.cancelled':
+            identifier = {'meta': {'stripe__payment_intent_id': stripe_event.data.object['id']}}
+            sys_event = 'cancel'
+
+        else:
+            # Unexpected event type
+            return None, stripe_event, None
+
+        return sys_event, stripe_event, identifier
+
     # region Pay-in Methods
     def create_intent(self, homeowner, tenant, application):
         # Convert to nearest integer in smallest currency unit
@@ -74,6 +105,18 @@ class StripePaymentGateway(PaymentGatewayBase):
             response=response,
             user_response={'client_secret': response['client_secret']},
             meta={'stripe': {'payment_intent_id': response['id']}}
+        )
+        return pgt
+
+    def process_pay_in(self):
+        """
+        Stripe does not have any post actions after intent. It only sets PGTransaction object
+        for recording successful PaymentGatewayTransaction in database.
+        """
+        pgt = PGTransaction(response=None)
+        pgt.record(
+            user_type='tenant', tr_type='C', tr_id=self._sys_actor.data.data.object['id'],
+            amount=(self._sys_actor.data.data.object['amount_received']/100)
         )
         return pgt
 
