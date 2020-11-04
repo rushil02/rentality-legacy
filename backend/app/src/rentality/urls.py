@@ -47,8 +47,6 @@ urlpatterns = [
     path('ess/', include('essentials.urls')),
     path('cities/', include('cities_custom.urls')),
 
-    re_path(r'^rep/', TemplateView.as_view(template_name='react/base.html')),
-
     # TODO: no individual messaging urls needed ?
     path('messaging/', include('messaging.urls')),
 

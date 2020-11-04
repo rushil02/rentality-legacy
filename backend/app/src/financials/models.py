@@ -78,7 +78,7 @@ class LedgerRecord(models.Model):
 
     def _create_ref_code(self):
         try:
-            obj = LedgerRecord.objects.latest('created_on')
+            obj = LedgerRecord.objects.latest('create_time')
         except LedgerRecord.DoesNotExist:
             ref_code = 'AA0001'
         else:
