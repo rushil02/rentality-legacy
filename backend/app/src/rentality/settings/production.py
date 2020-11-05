@@ -21,7 +21,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "static_root
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_dev", "media_root")
 
 # FIXME: update before final
-ALLOWED_HOSTS = ['.rentality.com.au', '178.128.99.241']
+ALLOWED_HOSTS = ['.rentality.com.au', '178.128.99.241', 'web']
 
 
 # Logging information [External logger - Sentry]

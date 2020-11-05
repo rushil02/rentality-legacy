@@ -20,8 +20,7 @@ async function main() {
                 waiting = false
                 console.log("Backend service is available!");
             } else {
-                waiting = false
-                console.log(res)
+                console.log("!WARNING! Error : " + res.statusCode + " | " + res.statusMessage)
             }
         }).on('error', function (e) {
             console.log("Backend Service is not reachable yet : " + e.message);
