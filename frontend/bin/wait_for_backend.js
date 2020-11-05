@@ -19,6 +19,9 @@ async function main() {
             if (res.statusCode === 200) {
                 waiting = false
                 console.log("Backend service is available!");
+            } else {
+                waiting = false
+                console.log(res)
             }
         }).on('error', function (e) {
             console.log("Backend Service is not reachable yet : " + e.message);
