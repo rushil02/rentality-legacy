@@ -10,14 +10,14 @@ const ApplyPage = props => {
     return (
         <Layout {...props}>
             <SEO
-                title="Page 32332"
-                description="About the property truncated to 160 characters"
+                title="Rentality: Creating a Global Community for Mid-Term Rental"
+                description="Rent your home for the next few months on Rentality, the leading marketplace for monthly rental in Australia"
                 pathname={props.location.pathname}
             />
             <ComponentErrorBoundary>
                 <Router basepath={"/apply/info"}>
-                    <HouseDetailPage path={"/:houseUUID"}/>
-                    <Error404 default/>
+                    <HouseDetailPage path={"/:houseUUID"} />
+                    <Error404 default />
                 </Router>
             </ComponentErrorBoundary>
         </Layout>
