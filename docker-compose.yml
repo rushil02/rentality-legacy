@@ -9,8 +9,8 @@ services:
       - './nginx/config/localhost.conf:/home/bin/online.conf'
       - './nginx/config/maintenance.dev.conf:/home/bin/maintenance.conf'
       - './nginx/bin/maintenance_site:/var/www/maintenance'
-      - './static_dev/static_root:/static'
-      - './static_dev/media_root:/media'
+      - './static_dev/static_root:/var/www/static'
+      - './static_dev/media_root:/var/www/media'
       - 'frontend_data:/var/www/rentality.com.au'
   postgres:
     image: 'mdillon/postgis:10-alpine'
